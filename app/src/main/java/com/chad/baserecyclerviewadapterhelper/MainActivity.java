@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
+import com.chad.baserecyclerviewadapterhelper.adapter.DefAdpater;
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
@@ -19,7 +20,9 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         recyclerView = (RecyclerView) findViewById(R.id.rv_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//      recyclerView.setAdapter(new DefAdpater(this));
+        // def adapter
+        //RecyclerView.Adapter adapter = new DefAdpater(this);
+        // quick adapter
         QuickAdapter quickAdapter = new QuickAdapter(this);
         quickAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
