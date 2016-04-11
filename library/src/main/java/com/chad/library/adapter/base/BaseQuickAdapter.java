@@ -31,7 +31,7 @@ import java.util.List;
  *
  * @param <T> The type of the items in the list.
  */
-public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
+public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     protected static final String TAG = BaseQuickAdapter.class.getSimpleName();
 
@@ -98,10 +98,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<BaseViewH
     }
 
     @Override
-    public void onBindViewHolder(BaseViewHolder holder, final int position) {
-        convert(holder, data.get(position));
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        BaseViewHolder baseViewHolder = (BaseViewHolder) holder;
+        convert(baseViewHolder, data.get(position));
         if (onRecyclerViewItemClickListener != null) {
-            holder.getView().setOnClickListener(new View.OnClickListener() {
+            baseViewHolder.getView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onRecyclerViewItemClickListener.onItemClick(v, position);
