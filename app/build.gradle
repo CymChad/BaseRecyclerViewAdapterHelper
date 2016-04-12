@@ -22,6 +22,6 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.2.1'
-
     compile project(path: ':library')
+    compile project(':material-spinner-1.0.5')
 }

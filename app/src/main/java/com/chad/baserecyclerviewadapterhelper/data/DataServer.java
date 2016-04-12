@@ -15,7 +15,7 @@ import java.util.List;
 public class DataServer {
     public static List<Status> getSampleData() {
         List<Status> list = new ArrayList<>();
-        for (int i = 1; i <= 12; i++) {
+        for (int i = 1; i <= 102; i++) {
             Status status = new Status();
             status.setUserName("Chad"+i);
             status.setCreatedAt("04/05/"+i);

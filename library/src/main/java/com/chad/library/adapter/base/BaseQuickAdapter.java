@@ -15,12 +15,25 @@
  */
 package com.chad.library.adapter.base;
 
+import android.animation.Animator;
 import android.content.Context;
+import android.support.annotation.IntDef;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 
+import com.chad.library.adapter.base.animation.AlphaInAnimation;
+import com.chad.library.adapter.base.animation.BaseAnimation;
+import com.chad.library.adapter.base.animation.ScaleInAnimation;
+import com.chad.library.adapter.base.animation.SlideInBottomAnimation;
+import com.chad.library.adapter.base.animation.SlideInLeftAnimation;
+import com.chad.library.adapter.base.animation.SlideInRightAnimation;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +46,33 @@ import java.util.List;
  */
 public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    @IntDef({ALPHAIN, SCALEIN, SLIDEIN_BOTTOM, SLIDEIN_LEFT, SLIDEIN_RIGHT})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface AnimationType {
+    }
+
+    /**
+     * Use with {@link #openLoadAnimation}
+     */
+    public static final int ALPHAIN = 0;
+    /**
+     * Use with {@link #openLoadAnimation}
+     */
+    public static final int SCALEIN = 1;
+    /**
+     * Use with {@link #openLoadAnimation}
+     */
+    public static final int SLIDEIN_BOTTOM = 2;
+    /**
+     * Use with {@link #openLoadAnimation}
+     */
+    public static final int SLIDEIN_LEFT = 3;
+    /**
+     * Use with {@link #openLoadAnimation}
+     */
+    public static final int SLIDEIN_RIGHT = 4;
+
+
     protected static final String TAG = BaseQuickAdapter.class.getSimpleName();
 
     protected final Context context;
@@ -41,7 +81,20 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     protected final List<T> data;
 
+    private Interpolator mInterpolator = new LinearInterpolator();
+
+    private int mDuration = 300;
+
+    private int mLastPosition = -1;
+
+    private boolean isFirstOnly = true;
+
     private OnRecyclerViewItemClickListener onRecyclerViewItemClickListener;
+
+    private int animationType = ALPHAIN;
+    private BaseAnimation customAnimation = null;
+
+    private boolean isOpenAnimation = false;
 
     public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener) {
         this.onRecyclerViewItemClickListener = onRecyclerViewItemClickListener;
@@ -90,6 +143,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public int getItemCount() {
         return data.size();
     }
+
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View item = LayoutInflater.from(parent.getContext()).inflate(
@@ -101,6 +155,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         BaseViewHolder baseViewHolder = (BaseViewHolder) holder;
         convert(baseViewHolder, data.get(position));
+
         if (onRecyclerViewItemClickListener != null) {
             baseViewHolder.getView().setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -109,7 +164,70 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 }
             });
         }
+        if (isOpenAnimation) {
+            if (!isFirstOnly || position > mLastPosition) {
+                BaseAnimation animation = null;
+                if (customAnimation == null) {
+                    animation = new AlphaInAnimation();
+                    switch (animationType) {
+                        case ALPHAIN:
+                            animation = new AlphaInAnimation();
+                            break;
+                        case SCALEIN:
+                            animation = new ScaleInAnimation();
+                            break;
+                        case SLIDEIN_BOTTOM:
+                            animation = new SlideInBottomAnimation();
+                            break;
+                        case SLIDEIN_LEFT:
+                            animation = new SlideInLeftAnimation();
+                            break;
+                        case SLIDEIN_RIGHT:
+                            animation = new SlideInRightAnimation();
+                            break;
+                    }
+                }else{
+                    animation = customAnimation;
+                }
+                for (Animator anim : animation.getAnimators(holder.itemView)) {
+                    anim.setDuration(mDuration).start();
+                    anim.setInterpolator(mInterpolator);
+                }
+                mLastPosition = position;
+            }
+        }
     }
+
+    /**
+     * Set the view animation type.
+     *
+     * @param animationType One of {@link #ALPHAIN}, {@link #SCALEIN}, {@link #SLIDEIN_BOTTOM}, {@link #SLIDEIN_LEFT}, {@link #SLIDEIN_RIGHT}.
+     */
+    public void openLoadAnimation(@AnimationType int animationType) {
+        this.isOpenAnimation = true;
+        this.animationType = animationType;
+        customAnimation = null;
+    }
+
+    /**
+     * Set Custom ObjectAnimator
+     *
+     * @param animation ObjectAnimator
+     */
+    public void openLoadAnimation(BaseAnimation animation) {
+        this.isOpenAnimation = true;
+        this.customAnimation = animation;
+    }
+
+    public void openLoadAnimation() {
+        this.isOpenAnimation = true;
+    }
+
+
+    public void setFirstOnly(boolean firstOnly) {
+        isFirstOnly = firstOnly;
+    }
+
     /**
      * Implement this method and use the helper to adapt the view to the given item.
      *
@@ -123,12 +241,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public long getItemId(int position) {
         return position;
     }
-
-
-
-
-
-
 
 
 }

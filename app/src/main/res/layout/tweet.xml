@@ -47,4 +47,5 @@
         android:layout_height="wrap_content"
         android:text="04/06/13"/>
 
+    <TextView style="@style/line_style" />
 </RelativeLayout>
