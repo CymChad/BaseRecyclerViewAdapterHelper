@@ -3,7 +3,13 @@
 ![AlphaIn_ScaleIn.gif](http://upload-images.jianshu.io/upload_images/972352-3f1e75657fe6e501.gif?imageMogr2/auto-orient/strip)
 ![SlideInBottom_SlideInLeft.gif](http://upload-images.jianshu.io/upload_images/972352-78a905bee10243e8.gif?imageMogr2/auto-orient/strip)
 
-##[中文介绍](http://www.jianshu.com/p/411ab861034f)
+|版本|介绍|
+| ---- |:----:|
+|v1.0|[优化Adpater](http://www.jianshu.com/p/411ab861034f)|
+|v1.1|修复bug|
+|v1.2|新增动画，待写文章|
+|v1.3|修复bug|
+
 # Get it
 
 Add it in your root build.gradle at the end of repositories:
