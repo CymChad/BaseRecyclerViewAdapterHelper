@@ -18,7 +18,7 @@ Add it in your root build.gradle at the end of repositories:
 Add the dependency
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.1'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.2'
 	}
 ```
 
