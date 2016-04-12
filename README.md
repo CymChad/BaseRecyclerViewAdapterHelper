@@ -1,5 +1,7 @@
 # BaseRecyclerViewAdapterHelper
-![列表.png](http://upload-images.jianshu.io/upload_images/972352-13b1f76ee8190734.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![Custom.gif](http://upload-images.jianshu.io/upload_images/972352-fa0a573a979ef2c2.gif?imageMogr2/auto-orient/strip)
+![AlphaIn_ScaleIn.gif](http://upload-images.jianshu.io/upload_images/972352-3f1e75657fe6e501.gif?imageMogr2/auto-orient/strip)
+![SlideInBottom_SlideInLeft.gif](http://upload-images.jianshu.io/upload_images/972352-78a905bee10243e8.gif?imageMogr2/auto-orient/strip)
 
 ##[中文介绍](http://www.jianshu.com/p/411ab861034f)
 # Get it
@@ -39,12 +41,30 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
     }
 }
 ```
+#Use Animation
+```
+// Turn animation
+quickAdapter.openLoadAnimation();
+// Turn animation and set animate
+quickAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
+// Turn animation and set custom animate
+quickAdapter.openLoadAnimation(new BaseAnimation() {
+                            @Override
+                            public Animator[] getAnimators(View view) {
+                                return new Animator[]{
+                                        ObjectAnimator.ofFloat(view, "scaleY", 1, 1.1f, 1),
+                                        ObjectAnimator.ofFloat(view, "scaleX", 1, 1.1f, 1)
+                                };
+                            }
+                        });
+```
 #Features
 ## BaseQuickAdapter
 * ```setOnRecyclerViewItemClickListener()```
+* ```openLoadAnimation()```
+* ```setFirstOnly()```
 
 ## BaseViewHolder
-
 * ```setText()``` Calls ```setText(String)``` on any TextView.
 * ```setAlpha()``` Calls ```setAlpha(float)``` on any View.
 * ```setVisible()``` Calls ```setVisibility(int)``` on any View.
