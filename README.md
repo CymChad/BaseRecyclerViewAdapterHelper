@@ -1,5 +1,27 @@
 # BaseRecyclerViewAdapterHelper
 ![列表.png](http://upload-images.jianshu.io/upload_images/972352-13b1f76ee8190734.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+##[中文介绍](http://www.jianshu.com/p/411ab861034f)
+# Get it
+
+Add it in your root build.gradle at the end of repositories:
+```
+	allprojects {
+		repositories {
+			...
+			maven { url "https://jitpack.io" }
+		}
+	}
+```
+Add the dependency
+```
+	dependencies {
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.1'
+	}
+```
+
+#Use it
+
 ```
 public class QuickAdapter extends BaseQuickAdapter<Status> {
     public QuickAdapter(Context context) {
