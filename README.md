@@ -1,7 +1,7 @@
 # BaseRecyclerViewAdapterHelper
-![Custom.gif](http://upload-images.jianshu.io/upload_images/972352-fa0a573a979ef2c2.gif?imageMogr2/auto-orient/strip)
-![AlphaIn_ScaleIn.gif](http://upload-images.jianshu.io/upload_images/972352-3f1e75657fe6e501.gif?imageMogr2/auto-orient/strip)
-![SlideInBottom_SlideInLeft.gif](http://upload-images.jianshu.io/upload_images/972352-78a905bee10243e8.gif?imageMogr2/auto-orient/strip)
+![Custom.gif](http://upload-images.jianshu.io/upload_images/972352-60dff17fc9b0491f.gif?imageMogr2/auto-orient/strip)
+![AlphaIn_ScaleIn.gif](http://upload-images.jianshu.io/upload_images/972352-3613112a80016b61.gif?imageMogr2/auto-orient/strip)
+![SlideInBottom_SlideInLeft.gif](http://upload-images.jianshu.io/upload_images/972352-59c9865417032c00.gif?imageMogr2/auto-orient/strip)
 # Get it
 
 Add it in your root build.gradle at the end of repositories:
