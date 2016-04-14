@@ -1,9 +1,11 @@
 # BaseRecyclerViewAdapterHelper
-![Custom.gif](http://upload-images.jianshu.io/upload_images/972352-60dff17fc9b0491f.gif?imageMogr2/auto-orient/strip)
-![AlphaIn_ScaleIn.gif](http://upload-images.jianshu.io/upload_images/972352-3613112a80016b61.gif?imageMogr2/auto-orient/strip)
-![SlideInBottom_SlideInLeft.gif](http://upload-images.jianshu.io/upload_images/972352-59c9865417032c00.gif?imageMogr2/auto-orient/strip)
-# Get it
+BaseRecyclerViewAdapterHelper is an Android library that allows developers to easily create RecyclerView with animations and with RecyclerAdapter.
+Please feel free to use this.
+#Features
+- **Reduce lot of code.easily create RecyclerAdapter**
+- **easily add RecyclerAdapter animations**
 
+# Get it
 Add it in your root build.gradle at the end of repositories:
 ```
 	allprojects {
@@ -20,7 +22,8 @@ Add the dependency
 	}
 ```
 
-#Use it
+#Use it create RecyclerAdapter
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.png)
 
 ```
 public class QuickAdapter extends BaseQuickAdapter<Status> {
@@ -39,12 +42,22 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
     }
 }
 ```
-#Use Animation
+#Use it add adaptar Animation
+![Custom.gif](http://upload-images.jianshu.io/upload_images/972352-60dff17fc9b0491f.gif?imageMogr2/auto-orient/strip)
+![AlphaIn_ScaleIn.gif](http://upload-images.jianshu.io/upload_images/972352-3613112a80016b61.gif?imageMogr2/auto-orient/strip)
+![SlideInBottom_SlideInLeft.gif](http://upload-images.jianshu.io/upload_images/972352-59c9865417032c00.gif?imageMogr2/auto-orient/strip)
 ```
+
 // Turn animation
 quickAdapter.openLoadAnimation();
+```
+or
+```
 // Turn animation and set animate
 quickAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
+```
+or
+```
 // Turn animation and set custom animate
 quickAdapter.openLoadAnimation(new BaseAnimation() {
                             @Override
@@ -56,7 +69,7 @@ quickAdapter.openLoadAnimation(new BaseAnimation() {
                             }
                         });
 ```
-#Features
+#Method
 ## BaseQuickAdapter
 * ```setOnRecyclerViewItemClickListener()```
 * ```openLoadAnimation()```
