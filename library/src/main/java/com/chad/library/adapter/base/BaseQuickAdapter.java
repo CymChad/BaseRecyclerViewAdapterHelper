@@ -91,8 +91,9 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     private OnRecyclerViewItemClickListener onRecyclerViewItemClickListener;
 
-    private int animationType = ALPHAIN;
+    @AnimationType int animationType = ALPHAIN;
     private BaseAnimation customAnimation = null;
+    private BaseAnimation selectAnimation = new AlphaInAnimation();
 
     private boolean isOpenAnimation = false;
 
@@ -167,27 +168,10 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         if (isOpenAnimation) {
             if (!isFirstOnly || position > mLastPosition) {
                 BaseAnimation animation = null;
-                if (customAnimation == null) {
-                    animation = new AlphaInAnimation();
-                    switch (animationType) {
-                        case ALPHAIN:
-                            animation = new AlphaInAnimation();
-                            break;
-                        case SCALEIN:
-                            animation = new ScaleInAnimation();
-                            break;
-                        case SLIDEIN_BOTTOM:
-                            animation = new SlideInBottomAnimation();
-                            break;
-                        case SLIDEIN_LEFT:
-                            animation = new SlideInLeftAnimation();
-                            break;
-                        case SLIDEIN_RIGHT:
-                            animation = new SlideInRightAnimation();
-                            break;
-                    }
-                }else{
+                if (customAnimation != null) {
                     animation = customAnimation;
+                }else{
+                    animation = selectAnimation;
                 }
                 for (Animator anim : animation.getAnimators(holder.itemView)) {
                     anim.setDuration(mDuration).start();
@@ -205,8 +189,24 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      */
     public void openLoadAnimation(@AnimationType int animationType) {
         this.isOpenAnimation = true;
-        this.animationType = animationType;
         customAnimation = null;
+        switch (animationType) {
+            case ALPHAIN:
+                selectAnimation = new AlphaInAnimation();
+                break;
+            case SCALEIN:
+                selectAnimation = new ScaleInAnimation();
+                break;
+            case SLIDEIN_BOTTOM:
+                selectAnimation = new SlideInBottomAnimation();
+                break;
+            case SLIDEIN_LEFT:
+                selectAnimation = new SlideInLeftAnimation();
+                break;
+            case SLIDEIN_RIGHT:
+                selectAnimation = new SlideInRightAnimation();
+                break;
+        }
     }
 
     /**

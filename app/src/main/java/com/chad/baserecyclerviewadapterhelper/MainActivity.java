@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickAdapter;
+import com.chad.baserecyclerviewadapterhelper.animation.CustomAnimation;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import com.chad.library.adapter.base.animation.BaseAnimation;
@@ -65,15 +66,7 @@ public class MainActivity extends Activity {
                         quickAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_RIGHT);
                         break;
                     case 5:
-                        quickAdapter.openLoadAnimation(new BaseAnimation() {
-                            @Override
-                            public Animator[] getAnimators(View view) {
-                                return new Animator[]{
-                                        ObjectAnimator.ofFloat(view, "scaleY", 1, 1.1f, 1),
-                                        ObjectAnimator.ofFloat(view, "scaleX", 1, 1.1f, 1)
-                                };
-                            }
-                        });
+                        quickAdapter.openLoadAnimation(new CustomAnimation());
                         break;
 
                 }
