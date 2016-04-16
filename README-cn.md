@@ -3,7 +3,10 @@ BaseRecyclerViewAdapterHelper,能够减少Adapter的代码以及轻松的添加�
 #它能做什么？
 - **它可以大量减少你Adapter写的代码（和正常的Adapter相比至少三分之二的）**
 - **它可以很轻松的添加RecyclerView加载动画**
+- **新增添加头部、添加尾部**
+- **新增下拉刷新、上拉加载更多**
 
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.gif)
 #如何使用它？
 先在 build.gradle 的 repositories 添加:
 ```
@@ -21,8 +24,7 @@ BaseRecyclerViewAdapterHelper,能够减少Adapter的代码以及轻松的添加�
 	}
 ```
 
-#如何使用它来创建Adapter？
-![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.png)
+#如何使用它来创建Adapter？（减少三分之二的代码量！）
 
 ```
 public class QuickAdapter extends BaseQuickAdapter<Status> {
@@ -43,10 +45,6 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
 ```
 **这么复杂的布局只需要15行代码即可**
 #如何使用它添加动画？
-
-![Custom.gif](http://upload-images.jianshu.io/upload_images/972352-60dff17fc9b0491f.gif?imageMogr2/auto-orient/strip)
-![AlphaIn_ScaleIn.gif](http://upload-images.jianshu.io/upload_images/972352-3613112a80016b61.gif?imageMogr2/auto-orient/strip)
-![SlideInBottom_SlideInLeft.gif](http://upload-images.jianshu.io/upload_images/972352-59c9865417032c00.gif?imageMogr2/auto-orient/strip)
 
 ```
 // 一行代码搞定（默认为渐显效果）
@@ -70,11 +68,39 @@ quickAdapter.openLoadAnimation(new BaseAnimation() {
                             }
                         });
 ```
-#方法
+#使用它添加头部添加尾部
+```
+mQuickAdapter.addHeaderView(getView());
+mQuickAdapter.addFooterView(getView());
+```
+#使用它加载更多
+```
+mQuickAdapter.setOnLoadMoreListener(PAGE_SIZE, new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                if (mCurrentCounter >= TOTAL_COUNTER) {
+                    mRecyclerView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mQuickAdapter.isNextLoad(false);
+                        }
+                    });
+                } else {
+                    // reqData
+                    mCurrentCounter = mQuickAdapter.getItemCount();
+                    mQuickAdapter.isNextLoad(true);
+                }
+            }
+        });
+```
+#Method
 ## BaseQuickAdapter
-* ```setOnRecyclerViewItemClickListener()```设置点击事件
-* ```openLoadAnimation()```开启动画
-* ```setFirstOnly()```设置动画是否只显示一次
+* ```setOnRecyclerViewItemClickListener()```
+* ```openLoadAnimation()```
+* ```setFirstOnly()```
+* ```addHeaderView()```
+* ```addFooterView()```
+* ```setOnLoadMoreListener()```
 
 ## BaseViewHolder
 * ```setText()``` Calls ```setText(String)``` on any TextView.
