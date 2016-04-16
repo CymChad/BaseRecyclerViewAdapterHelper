@@ -1,7 +1,7 @@
 # BaseRecyclerViewAdapterHelper（[中文版文档](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/README-cn.md)）
 Powerful and flexible RecyclerAdapter 
 Please feel free to use this.(Love can be a **Star**)
-#Features
+#Features（[download apk](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/raw/master/demo_res/demo.apk)）
 - **Reduce lot of code.easily create RecyclerAdapter**
 - **easily add RecyclerAdapter animations**
 - **add HeadView and add FooterView**
@@ -123,3 +123,6 @@ mQuickAdapter.setOnLoadMoreListener(PAGE_SIZE, new BaseQuickAdapter.RequestLoadM
 * ```setTag()```
 * ```setChecked()```
 * ```setAdapter()```
+
+#Thanks
+[JoanZapata / base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper)
