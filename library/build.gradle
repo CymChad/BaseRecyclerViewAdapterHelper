@@ -21,6 +21,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:cardview-v7:23.1.0'
     compile 'com.android.support:recyclerview-v7:24.0.0-alpha1'
     compile files('libs/picasso-2.5.2.jar')
 }

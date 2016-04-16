@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
+import com.chad.library.R;
 import com.chad.library.adapter.base.animation.AlphaInAnimation;
 import com.chad.library.adapter.base.animation.BaseAnimation;
 import com.chad.library.adapter.base.animation.ScaleInAnimation;
@@ -37,14 +38,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Abstraction class of a BaseAdapter in which you only need
- * to provide the convert() implementation.<br/>
- * Using the provided BaseViewHolder, your code is minimalist.
- *
- * @param <T> The type of the items in the list.
- */
+
 public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+
+    private boolean mNextLoad;
+    private boolean mIsLoadingMore;
 
     @IntDef({ALPHAIN, SCALEIN, SLIDEIN_BOTTOM, SLIDEIN_LEFT, SLIDEIN_RIGHT})
     @Retention(RetentionPolicy.SOURCE)
@@ -89,13 +88,25 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     private boolean isFirstOnly = true;
 
+
     private OnRecyclerViewItemClickListener onRecyclerViewItemClickListener;
 
-    @AnimationType int animationType = ALPHAIN;
+    private RequestLoadMoreListener requestLoadMoreListener;
+
+    @AnimationType
+    int animationType = ALPHAIN;
     private BaseAnimation customAnimation = null;
     private BaseAnimation selectAnimation = new AlphaInAnimation();
 
     private boolean isOpenAnimation = false;
+
+    public void setOnLoadMoreListener(int pageSize, RequestLoadMoreListener requestLoadMoreListener) {
+        if (getItemCount() < pageSize) {
+            return;
+        }
+        mNextLoad = true;
+        this.requestLoadMoreListener = requestLoadMoreListener;
+    }
 
     public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener) {
         this.onRecyclerViewItemClickListener = onRecyclerViewItemClickListener;
@@ -104,6 +115,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public interface OnRecyclerViewItemClickListener {
         public void onItemClick(View view, int position);
     }
+
 
     /**
      * Create a QuickAdapter.
@@ -140,47 +152,149 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         notifyItemInserted(position);
     }
 
+    public List getData() {
+        return data;
+    }
+
+    public int getHeaderViewsCount() {
+        return mHeaderViews.size();
+    }
+
+    public int getFooterViewsCount() {
+        return mFooterViews.size();
+    }
+
     @Override
     public int getItemCount() {
-        return data.size();
+        int i = mNextLoad ? 1 : 0;
+        return data.size() + i + getHeaderViewsCount() + getFooterViewsCount();
+    }
+
+    private static final int HEADER_VIEW = 2;
+    private static final int LOADING_VIEW = 1;
+    private static final int FOOTER_VIEW = 3;
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position < getHeaderViewsCount()) {
+            return HEADER_VIEW;
+        } else if (position == data.size() + getHeaderViewsCount()) {
+            if (mNextLoad)
+                return LOADING_VIEW;
+            else
+                return FOOTER_VIEW;
+        }
+        return super.getItemViewType(position);
     }
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View item = LayoutInflater.from(parent.getContext()).inflate(
-                layoutResId, parent, false);
-        return new BaseViewHolder(context, item);
+        View item = null;
+        if (viewType == LOADING_VIEW) {
+            item = LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.def_loading, parent, false);
+            return new FooterViewHolder(item);
+        } else if (viewType == HEADER_VIEW) {
+            return new HeadViewHolder(mHeaderViews.get(0));
+        } else if (viewType == FOOTER_VIEW) {
+            return new HeadViewHolder(mFooterViews.get(0));
+        } else {
+            item = LayoutInflater.from(parent.getContext()).inflate(
+                    layoutResId, parent, false);
+            return new BaseViewHolder(context, item);
+        }
+
     }
+
+    public class FooterViewHolder extends BaseViewHolder {
+
+        public FooterViewHolder(View itemView) {
+            super(itemView.getContext(), itemView);
+        }
+    }
+
+    public class HeadViewHolder extends BaseViewHolder {
+
+        public HeadViewHolder(View itemView) {
+            super(itemView.getContext(), itemView);
+        }
+    }
+
+    private ArrayList<View> mHeaderViews = new ArrayList<>();
+    private ArrayList<View> mFooterViews = new ArrayList<>();
+
+    public void addHeaderView(View header) {
+        if (header == null) {
+            throw new RuntimeException("header is null");
+        }
+        if (mHeaderViews.size() == 0)
+            mHeaderViews.add(header);
+        this.notifyDataSetChanged();
+    }
+
+    public void addFooterView(View header) {
+        mNextLoad = false;
+        if (header == null) {
+            throw new RuntimeException("header is null");
+        }
+        if (mFooterViews.size() == 0)
+            mFooterViews.add(header);
+        this.notifyDataSetChanged();
+    }
+
+    public void isNextLoad(boolean isNextLoad) {
+        mNextLoad = isNextLoad;
+        mIsLoadingMore = false;
+        notifyDataSetChanged();
+
+    }
+
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         BaseViewHolder baseViewHolder = (BaseViewHolder) holder;
-        convert(baseViewHolder, data.get(position));
-
-        if (onRecyclerViewItemClickListener != null) {
-            baseViewHolder.getView().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onRecyclerViewItemClickListener.onItemClick(v, position);
-                }
-            });
-        }
-        if (isOpenAnimation) {
-            if (!isFirstOnly || position > mLastPosition) {
-                BaseAnimation animation = null;
-                if (customAnimation != null) {
-                    animation = customAnimation;
-                }else{
-                    animation = selectAnimation;
-                }
-                for (Animator anim : animation.getAnimators(holder.itemView)) {
-                    anim.setDuration(mDuration).start();
-                    anim.setInterpolator(mInterpolator);
-                }
-                mLastPosition = position;
+        int type = getItemViewType(position);
+        int index;
+        if (type == 0) {
+            index = position - getHeaderViewsCount();
+            convert(baseViewHolder, data.get(index));
+            if (onRecyclerViewItemClickListener != null) {
+                baseViewHolder.getView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onRecyclerViewItemClickListener.onItemClick(v, position - getHeaderViewsCount());
+                    }
+                });
             }
+            if (isOpenAnimation) {
+                if (!isFirstOnly || position > mLastPosition) {
+                    BaseAnimation animation = null;
+                    if (customAnimation != null) {
+                        animation = customAnimation;
+                    } else {
+                        animation = selectAnimation;
+                    }
+                    for (Animator anim : animation.getAnimators(holder.itemView)) {
+                        anim.setDuration(mDuration).start();
+                        anim.setInterpolator(mInterpolator);
+                    }
+                    mLastPosition = position;
+                }
+            }
+        } else if (type == LOADING_VIEW) {
+            if (mNextLoad && !mIsLoadingMore && requestLoadMoreListener != null) {
+                mIsLoadingMore = true;
+                requestLoadMoreListener.onLoadMoreRequested();
+            }
+
         }
     }
+
+    public interface RequestLoadMoreListener {
+
+        void onLoadMoreRequested();
+    }
+
 
     /**
      * Set the view animation type.
