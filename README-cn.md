@@ -1,6 +1,6 @@
 # BaseRecyclerViewAdapterHelper
 一个强大并且灵活的RecyclerViewAdapter，欢迎使用。（喜欢的可以**Star**一下）
-#它能做什么？
+#它能做什么？（[下载 apk](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/raw/master/demo_res/demo.apk)）
 - **它可以大量减少你Adapter写的代码（和正常的Adapter相比至少三分之二的）**
 - **它可以很轻松的添加RecyclerView加载动画**
 - **新增添加头部、添加尾部**
@@ -93,7 +93,7 @@ mQuickAdapter.setOnLoadMoreListener(PAGE_SIZE, new BaseQuickAdapter.RequestLoadM
             }
         });
 ```
-#Method
+#方法
 ## BaseQuickAdapter
 * ```setOnRecyclerViewItemClickListener()```
 * ```openLoadAnimation()```
@@ -122,3 +122,6 @@ mQuickAdapter.setOnLoadMoreListener(PAGE_SIZE, new BaseQuickAdapter.RequestLoadM
 * ```setTag()```
 * ```setChecked()```
 * ```setAdapter()```
+
+#感谢
+[JoanZapata / base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper)
