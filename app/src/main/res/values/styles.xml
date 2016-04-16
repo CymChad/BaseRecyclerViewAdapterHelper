@@ -34,7 +34,11 @@
     <style name="line_style">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
-        <item name="android:background">@android:color/darker_gray</item>
-        <item name="android:layout_below">@id/tweetAvatar</item>
+        <item name="android:background">#eff0f1</item>
+        <item name="android:layout_alignParentBottom">true</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 </resources>

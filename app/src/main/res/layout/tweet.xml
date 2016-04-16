@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/smallSpace">
+    android:layout_height="100dip"
+    android:layout_gravity="center"
+    android:foreground="?android:attr/selectableItemBackground"
+    card_view:cardBackgroundColor="@color/cardview_light_background"
+    card_view:cardCornerRadius="8dp"
+    card_view:cardElevation="4dp"
+    card_view:cardUseCompatPadding="true">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="85dp"
+    android:paddingLeft="@dimen/smallSpace"
+    android:paddingRight="@dimen/smallSpace"
+    android:paddingTop="@dimen/smallSpace">
 
     <ImageView
         android:id="@+id/tweetAvatar"
         android:layout_margin="@dimen/smallSpace"
         android:layout_width="@dimen/avatarSize"
         android:layout_height="@dimen/avatarSize"
+        android:layout_centerInParent="true"
         android:layout_alignParentLeft="true"
-        android:src="@mipmap/ic_launcher"/>
+        android:src="@mipmap/ic_launcher"
+      />
 
     <ImageView
         android:id="@+id/tweetRT"
@@ -36,6 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tweetName"
+        android:textColor="@android:color/darker_gray"
         android:text="Hello world!"/>
 
     <TextView
@@ -47,5 +64,5 @@
         android:layout_height="wrap_content"
         android:text="04/06/13"/>
 
-    <TextView style="@style/line_style" />
 </RelativeLayout>
+    </android.support.v7.widget.CardView>

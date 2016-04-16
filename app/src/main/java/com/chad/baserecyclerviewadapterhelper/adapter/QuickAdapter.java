@@ -16,7 +16,11 @@ import com.chad.library.adapter.base.BaseViewHolder;
  */
 public class QuickAdapter extends BaseQuickAdapter<Status> {
     public QuickAdapter(Context context) {
-        super(context, R.layout.tweet, DataServer.getSampleData());
+        super(context, R.layout.tweet, DataServer.getSampleData(100));
+    }
+
+    public QuickAdapter(Context context, int dataSize) {
+        super(context, R.layout.tweet, DataServer.getSampleData(dataSize));
     }
 
     @Override

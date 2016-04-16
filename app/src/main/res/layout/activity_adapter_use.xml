@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <com.jaredrummler.materialspinner.MaterialSpinner
+            android:id="@+id/spinner"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ms_arrow_tint="@android:color/white"
+            app:ms_background_color="@android:color/white"
+            app:ms_text_color="@android:color/darker_gray"
+            app:ms_hide_arrow="true"
+            />
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#eff0f1"/>
+        <com.jaredrummler.materialspinner.MaterialSpinner
+            android:id="@+id/spinner_first_only"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ms_arrow_tint="@android:color/white"
+            app:ms_background_color="@android:color/white"
+            app:ms_hide_arrow="true"
+            app:ms_text_color="@android:color/darker_gray"
+            />
+    </LinearLayout>
+
+    <TextView style="@style/line_style"/>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

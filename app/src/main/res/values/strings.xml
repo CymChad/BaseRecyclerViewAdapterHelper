@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BaseRecyclerViewAdapterHelper</string>
+    <string name="title_activity_header_and_footer_use">HeaderAndFooterUseActivity</string>
 </resources>
