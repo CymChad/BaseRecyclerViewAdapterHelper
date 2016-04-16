@@ -1,10 +1,13 @@
 # BaseRecyclerViewAdapterHelper（[中文版文档](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/README-cn.md)）
-BaseRecyclerViewAdapterHelper is an Android library that allows developers to easily create RecyclerView with animations and with RecyclerAdapter.
-Please feel free to use this.(Love can be a Star)
+Powerful and flexible RecyclerAdapter 
+Please feel free to use this.(Love can be a **Star**)
 #Features
 - **Reduce lot of code.easily create RecyclerAdapter**
 - **easily add RecyclerAdapter animations**
+- **add HeadView and add FooterView**
+- **add The drop-down refresh, load more**
 
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.gif)
 # Get it
 Add it in your root build.gradle at the end of repositories:
 ```
@@ -23,7 +26,6 @@ Add the dependency
 ```
 
 #Use it create RecyclerAdapter
-![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.png)
 
 ```
 public class QuickAdapter extends BaseQuickAdapter<Status> {
@@ -43,9 +45,7 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
 }
 ```
 #Use it add adaptar Animation
-![Custom.gif](http://upload-images.jianshu.io/upload_images/972352-60dff17fc9b0491f.gif?imageMogr2/auto-orient/strip)
-![AlphaIn_ScaleIn.gif](http://upload-images.jianshu.io/upload_images/972352-3613112a80016b61.gif?imageMogr2/auto-orient/strip)
-![SlideInBottom_SlideInLeft.gif](http://upload-images.jianshu.io/upload_images/972352-59c9865417032c00.gif?imageMogr2/auto-orient/strip)
+
 ```
 
 // Turn animation
@@ -69,11 +69,39 @@ quickAdapter.openLoadAnimation(new BaseAnimation() {
                             }
                         });
 ```
+#Use it add header and footer
+```
+mQuickAdapter.addHeaderView(getView());
+mQuickAdapter.addFooterView(getView());
+```
+#Use it load more
+```
+mQuickAdapter.setOnLoadMoreListener(PAGE_SIZE, new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                if (mCurrentCounter >= TOTAL_COUNTER) {
+                    mRecyclerView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mQuickAdapter.isNextLoad(false);
+                        }
+                    });
+                } else {
+                    // reqData
+                    mCurrentCounter = mQuickAdapter.getItemCount();
+                    mQuickAdapter.isNextLoad(true);
+                }
+            }
+        });
+```
 #Method
 ## BaseQuickAdapter
 * ```setOnRecyclerViewItemClickListener()```
 * ```openLoadAnimation()```
 * ```setFirstOnly()```
+* ```addHeaderView()```
+* ```addFooterView()```
+* ```setOnLoadMoreListener()```
 
 ## BaseViewHolder
 * ```setText()``` Calls ```setText(String)``` on any TextView.
