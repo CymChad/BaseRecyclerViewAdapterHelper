@@ -1,6 +1,6 @@
-# BaseRecyclerViewAdapterHelper
+# BaseRecyclerViewAdapterHelper（[中文版文档](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/README-cn.md)）
 BaseRecyclerViewAdapterHelper is an Android library that allows developers to easily create RecyclerView with animations and with RecyclerAdapter.
-Please feel free to use this.
+Please feel free to use this.(Love can be a Star)
 #Features
 - **Reduce lot of code.easily create RecyclerAdapter**
 - **easily add RecyclerAdapter animations**
