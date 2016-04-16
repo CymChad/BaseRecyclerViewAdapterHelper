@@ -1,5 +1,5 @@
 # BaseRecyclerViewAdapterHelper
-BaseRecyclerViewAdapterHelper,能够减少Adapter的代码以及轻松的添加动画。（喜欢的可以**Star**一下）
+一个强大并且灵活的RecyclerViewAdapter，欢迎使用。（喜欢的可以**Star**一下）
 #它能做什么？
 - **它可以大量减少你Adapter写的代码（和正常的Adapter相比至少三分之二的）**
 - **它可以很轻松的添加RecyclerView加载动画**
