@@ -1,5 +1,5 @@
 # BaseRecyclerViewAdapterHelper
-BaseRecyclerViewAdapterHelper,能够减少Adapter的代码以及轻松的添加动画。（喜欢的可以Star一下）
+BaseRecyclerViewAdapterHelper,能够减少Adapter的代码以及轻松的添加动画。（喜欢的可以**Star**一下）
 #它能做什么？
 - **它可以大量减少你Adapter写的代码（和正常的Adapter相比至少三分之二的）**
 - **它可以很轻松的添加RecyclerView加载动画**
@@ -24,7 +24,7 @@ BaseRecyclerViewAdapterHelper,能够减少Adapter的代码以及轻松的添加�
 	}
 ```
 
-#如何使用它来创建Adapter？（减少三分之二的代码量！）
+#如何使用它来创建Adapter？
 
 ```
 public class QuickAdapter extends BaseQuickAdapter<Status> {
@@ -43,7 +43,7 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
     }
 }
 ```
-**这么复杂的布局只需要15行代码即可**
+**这么复杂的布局只需要15行代码即可！**
 #如何使用它添加动画？
 
 ```
