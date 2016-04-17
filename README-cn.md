@@ -1,3 +1,5 @@
+>由于最近用RecyclerView用的比较多所以最近写的一个开源项目，写了一个集成了RecyclerViewAdapter的常用功能的基类，希望能够帮助到大家，如果使用上遇到什么问题或想加入开发，把这个项目一起做的更好，可加Q群558178792，但是前提要Star我的项目，申请的时候把GitHub的账号名字告诉我即可。中国有句古话叫“授人以鱼不如授人以渔”，不仅仅提供使用，还写了如何实现的原理：「[RecyclerView.Adapter优化了吗？](http://blog.csdn.net/cym492224103/article/details/51113321)」「[BaseRecyclerAdapter之添加动画](http://blog.csdn.net/cym492224103/article/details/51150108)」
+
 # BaseRecyclerViewAdapterHelper
 一个强大并且灵活的RecyclerViewAdapter，欢迎使用。（喜欢的可以**Star**一下）
 #它能做什么？（[下载 apk](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/raw/master/demo_res/demo.apk)）
