@@ -9,10 +9,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
 /**
- * 项目名称：RecyclerAdapterViewDemo
- * 类描述：快速写法
- * 创建人：Chad
- * 创建时间：16/4/9 下午10:31
+ * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 public class QuickAdapter extends BaseQuickAdapter<Status> {
     public QuickAdapter(Context context) {

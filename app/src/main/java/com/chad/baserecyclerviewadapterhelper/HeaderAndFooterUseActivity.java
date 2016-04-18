@@ -12,6 +12,9 @@ import android.widget.Toast;
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
+/**
+ * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+ */
 public class HeaderAndFooterUseActivity extends Activity {
 
     private RecyclerView mRecyclerView;

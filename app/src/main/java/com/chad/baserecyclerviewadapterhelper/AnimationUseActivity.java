@@ -12,6 +12,9 @@ import com.chad.baserecyclerviewadapterhelper.animation.CustomAnimation;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
+/**
+ * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+ */
 public class AnimationUseActivity extends Activity {
     private RecyclerView mRecyclerView;
     private QuickAdapter mQuickAdapter;

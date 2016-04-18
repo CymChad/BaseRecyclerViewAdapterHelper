@@ -16,6 +16,9 @@ import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 
+/**
+ * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+ */
 public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
     private RecyclerView mRecyclerView;
     private QuickAdapter mQuickAdapter;

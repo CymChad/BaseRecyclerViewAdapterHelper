@@ -20,9 +20,9 @@
         </activity>
         <activity android:name=".AnimationUseActivity">
         </activity>
-        <activity
-            android:name=".HeaderAndFooterUseActivity"
-           >
+        <activity android:name=".HeaderAndFooterUseActivity">
+        </activity>
+        <activity android:name=".SectionUerActivity">
         </activity>
     </application>
 

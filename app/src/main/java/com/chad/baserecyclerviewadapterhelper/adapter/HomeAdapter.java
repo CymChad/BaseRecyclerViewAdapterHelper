@@ -10,10 +10,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import java.util.List;
 
 /**
- * 项目名称：BaseRecyclerViewAdapterHelper
- * 类描述：
- * 创建人：Chad
- * 创建时间：16/4/16 下午7:39
+ * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 public class HomeAdapter extends BaseQuickAdapter<HomeItem> {
     public HomeAdapter(Context context, int layoutResId, List data) {

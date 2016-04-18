@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
-
+/**
+ * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+ */
 public abstract class BaseAnimation {
 
     public abstract Animator[] getAnimators(View view);

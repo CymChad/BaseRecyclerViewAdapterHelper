@@ -18,6 +18,7 @@ import com.chad.library.adapter.base.animation.ScaleInAnimation;
 import com.chad.library.adapter.base.animation.SlideInBottomAnimation;
 import com.chad.library.adapter.base.animation.SlideInLeftAnimation;
 import com.chad.library.adapter.base.animation.SlideInRightAnimation;
+import com.chad.library.adapter.base.entity.SectionEntity;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -27,7 +28,7 @@ import java.util.List;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     private boolean mNextLoad;
@@ -103,21 +104,21 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public interface OnRecyclerViewItemClickListener {
         public void onItemClick(View view, int position);
     }
-
-
-
+    private int sectionHeadResId;
 
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.
-     *  @param context     The context.
+     *
+     * @param context     The context.
      * @param layoutResId The layout resource id of each item.
      * @param data        A new list is created out of this one to avoid mutable list
      */
-    public BaseQuickAdapter(Context context, int layoutResId, List<T> data) {
+    public BaseSectionQuickAdapter(Context context, int layoutResId, int sectionHeadResId, List<T> data) {
         this.data = data == null ? new ArrayList<T>() : new ArrayList<T>(data);
         this.context = context;
         this.layoutResId = layoutResId;
+        this.sectionHeadResId = sectionHeadResId;
     }
 
     public void remove(int position) {
@@ -152,6 +153,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     private static final int HEADER_VIEW = 2;
     private static final int LOADING_VIEW = 1;
     private static final int FOOTER_VIEW = 3;
+    private static final int SECTION_HEADER_VIEW = 4;
 
     @Override
     public int getItemViewType(int position) {
@@ -163,7 +165,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             else
                 return FOOTER_VIEW;
         }
-        return super.getItemViewType(position);
+        return data.get(position).isHeader ? SECTION_HEADER_VIEW : 0;
     }
 
     @Override
@@ -176,7 +178,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         } else if (viewType == HEADER_VIEW) {
             return new HeadViewHolder(mHeaderViews.get(0));
         } else if (viewType == FOOTER_VIEW) {
-            return new HeadViewHolder(mFooterViews.get(0));
+            return new FooterViewHolder(mFooterViews.get(0));
+        } else if (viewType == SECTION_HEADER_VIEW) {
+            item = LayoutInflater.from(parent.getContext()).inflate(
+                    sectionHeadResId, parent, false);
+            return new SectionHeadViewHolder(item);
         } else {
             item = LayoutInflater.from(parent.getContext()).inflate(
                     layoutResId, parent, false);
@@ -188,6 +194,13 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public class FooterViewHolder extends BaseViewHolder {
 
         public FooterViewHolder(View itemView) {
+            super(itemView.getContext(), itemView);
+        }
+    }
+
+    public class SectionHeadViewHolder extends BaseViewHolder {
+
+        public SectionHeadViewHolder(View itemView) {
             super(itemView.getContext(), itemView);
         }
     }
@@ -211,10 +224,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         this.notifyDataSetChanged();
     }
 
+
     public void addFooterView(View header) {
         mNextLoad = false;
         if (header == null) {
-            throw new RuntimeException("header is null");
+            throw new RuntimeException("footer is null");
         }
         if (mFooterViews.size() == 0)
             mFooterViews.add(header);
@@ -270,6 +284,13 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 }
             }
 
+        } else if (type == SECTION_HEADER_VIEW) {
+            index = position - getHeaderViewsCount();
+            convertHead(baseViewHolder, data.get(index));
+            if (holder.itemView.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams) {
+                StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
+                params.setFullSpan(true);
+            }
         }
     }
 
@@ -325,13 +346,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         isFirstOnly = firstOnly;
     }
 
-    /**
-     * Implement this method and use the helper to adapt the view to the given item.
-     *
-     * @param helper A fully initialized helper.
-     * @param item   The item that needs to be displayed.
-     */
+
     protected abstract void convert(BaseViewHolder helper, T item);
+
+    protected abstract void convertHead(BaseViewHolder helper, T item);
+
 
 
     @Override

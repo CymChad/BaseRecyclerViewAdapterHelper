@@ -1,16 +1,14 @@
 package com.chad.baserecyclerviewadapterhelper.data;
 
 
+import com.chad.baserecyclerviewadapterhelper.entity.MySection;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 项目名称：RecyclerAdapterViewDemo
- * 类描述：模拟数据
- * 创建人：Chad
- * 创建时间：16/4/9 下午9:32
+ * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 public class DataServer {
     public static List<Status> getSampleData(int lenth) {
@@ -36,6 +34,22 @@ public class DataServer {
             status.setText("Powerful and flexible RecyclerAdapter https://github.com/CymChad/BaseRecyclerViewAdapterHelper");
             list.add(status);
         }
+        return list;
+    }
+    public static List<MySection> getSampleData() {
+        List<MySection> list = new ArrayList<>();
+        list.add(new MySection(true,"2016年4月8号",true));
+        list.add(new MySection("https://avatars1.githubusercontent.com/u/7698209?v=3&s=460"));
+        list.add(new MySection("https://avatars1.githubusercontent.com/u/7698209?v=3&s=460"));
+        list.add(new MySection("https://avatars1.githubusercontent.com/u/7698209?v=3&s=460"));
+        list.add(new MySection("https://avatars1.githubusercontent.com/u/7698209?v=3&s=460"));
+        list.add(new MySection(true,"2016年4月7号",false));
+        list.add(new MySection("https://avatars1.githubusercontent.com/u/7698209?v=3&s=460"));
+        list.add(new MySection("https://avatars1.githubusercontent.com/u/7698209?v=3&s=460"));
+        list.add(new MySection("https://avatars1.githubusercontent.com/u/7698209?v=3&s=460"));
+        list.add(new MySection(true,"2016年4月6号",false));
+        list.add(new MySection("https://avatars1.githubusercontent.com/u/7698209?v=3&s=460"));
+        list.add(new MySection("https://avatars1.githubusercontent.com/u/7698209?v=3&s=460"));
         return list;
     }
 
