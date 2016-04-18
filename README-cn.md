@@ -7,8 +7,10 @@
 - **它可以很轻松的添加RecyclerView加载动画**
 - **新增添加头部、添加尾部**
 - **新增下拉刷新、上拉加载更多**
+- **新增分组**
 
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.gif)
+![分组](http://upload-images.jianshu.io/upload_images/972352-3e7ffedcf559cc9d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 #如何使用它？
 先在 build.gradle 的 repositories 添加:
 ```
@@ -95,35 +97,29 @@ mQuickAdapter.setOnLoadMoreListener(PAGE_SIZE, new BaseQuickAdapter.RequestLoadM
             }
         });
 ```
-#方法
-## BaseQuickAdapter
-* ```setOnRecyclerViewItemClickListener()```
-* ```openLoadAnimation()```
-* ```setFirstOnly()```
-* ```addHeaderView()```
-* ```addFooterView()```
-* ```setOnLoadMoreListener()```
-
-## BaseViewHolder
-* ```setText()``` Calls ```setText(String)``` on any TextView.
-* ```setAlpha()``` Calls ```setAlpha(float)``` on any View.
-* ```setVisible()``` Calls ```setVisibility(int)``` on any View.
-* ```linkify()``` Calls ```Linkify.addLinks(view, ALL)``` on any TextView.
-* ```setTypeface()``` Calls ```setTypeface(Typeface)``` on any TextView.
-* ```setProgress()``` Calls ```setProgress(int)``` on any ProgressBar.
-* ```setMax()``` Calls ```setMax(int)``` on any ProgressBar.
-* ```setRating()``` Calls ```setRating(int)``` on any RatingBar.
-* ```setImageResource()``` Calls ```setImageResource(int)``` on any ImageView.
-* ```setImageDrawable()``` Calls ```setImageDrawable(Drawable)``` on any ImageView.
-* ```setImageBitmap()``` Calls ```setImageBitmap(Bitmap)``` on any ImageView.
-* ```setImageUrl()``` Uses [Square's Picasso](http://square.github.io/picasso/) to download the image and put it in an ImageView.
-* ```setImageBuilder()``` Associates a [Square's Picasso](http://square.github.io/picasso/) RequestBuilder to an ImageView.
-* ```setOnClickListener()```
-* ```setOnTouchListener()```
-* ```setOnLongClickListener()```
-* ```setTag()```
-* ```setChecked()```
-* ```setAdapter()```
-
+#使用分组
+```
+public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
+     public SectionAdapter(Context context, int layoutResId, int sectionHeadResId, List data) {
+        super(context, layoutResId, sectionHeadResId, data);
+    }
+    @Override
+    protected void convert(BaseViewHolder helper, MySection item) {
+        helper.setImageUrl(R.id.iv, (String) item.t);
+    }
+    @Override
+    protected void convertHead(BaseViewHolder helper,final MySection item) {
+        helper.setText(R.id.header, item.header);
+        if(!item.isMroe)helper.setVisible(R.id.more,false);
+        else
+        helper.setOnClickListener(R.id.more, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context,item.header+"more..",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+```
+>**持续更新!，所以推荐Star项目**
 #感谢
 [JoanZapata / base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper)
