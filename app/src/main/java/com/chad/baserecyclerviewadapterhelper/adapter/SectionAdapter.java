@@ -23,6 +23,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
      * some initialization data.
      *
      * @param context     The context.
+     * @param sectionHeadResId The section head layout id for each item
      * @param layoutResId The layout resource id of each item.
      * @param data        A new list is created out of this one to avoid mutable list
      */
