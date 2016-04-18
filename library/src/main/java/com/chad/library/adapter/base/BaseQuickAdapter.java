@@ -88,9 +88,9 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     private boolean isOpenAnimation = false;
 
-    protected static final int HEADER_VIEW = 2;
-    protected static final int LOADING_VIEW = 1;
-    protected static final int FOOTER_VIEW = 3;
+    protected static final int HEADER_VIEW = 0x00000001;
+    protected static final int LOADING_VIEW = 0x00000002;
+    protected static final int FOOTER_VIEW = 0x00000003;
 
     private ArrayList<View> mHeaderViews = new ArrayList<>();
     private ArrayList<View> mFooterViews = new ArrayList<>();

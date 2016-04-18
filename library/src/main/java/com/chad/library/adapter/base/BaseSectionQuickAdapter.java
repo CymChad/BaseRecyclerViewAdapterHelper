@@ -20,7 +20,7 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends B
 
     protected int sectionHeadResId;
     protected List<T> data;
-    protected static final int SECTION_HEADER_VIEW = 4;
+    protected static final int SECTION_HEADER_VIEW = 0x00000004;
 
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
