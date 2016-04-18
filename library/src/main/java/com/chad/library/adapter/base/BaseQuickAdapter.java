@@ -30,8 +30,8 @@ import java.util.List;
 public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
-    private boolean mNextLoad;
-    private boolean mIsLoadingMore;
+    protected boolean mNextLoad;
+    protected boolean mIsLoadingMore;
 
     @IntDef({ALPHAIN, SCALEIN, SLIDEIN_BOTTOM, SLIDEIN_LEFT, SLIDEIN_RIGHT})
     @Retention(RetentionPolicy.SOURCE)
@@ -62,11 +62,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     protected static final String TAG = BaseQuickAdapter.class.getSimpleName();
 
-    protected final Context context;
+    protected Context context;
 
-    protected final int layoutResId;
+    protected int layoutResId;
 
-    protected final List<T> data;
+    protected List<T> data;
 
     private Interpolator mInterpolator = new LinearInterpolator();
 
@@ -88,6 +88,13 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     private boolean isOpenAnimation = false;
 
+    protected static final int HEADER_VIEW = 2;
+    protected static final int LOADING_VIEW = 1;
+    protected static final int FOOTER_VIEW = 3;
+
+    private ArrayList<View> mHeaderViews = new ArrayList<>();
+    private ArrayList<View> mFooterViews = new ArrayList<>();
+
     public void setOnLoadMoreListener(int pageSize, RequestLoadMoreListener requestLoadMoreListener) {
         if (getItemCount() < pageSize) {
             return;
@@ -105,12 +112,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
 
-
-
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.
-     *  @param context     The context.
+     *
+     * @param context     The context.
      * @param layoutResId The layout resource id of each item.
      * @param data        A new list is created out of this one to avoid mutable list
      */
@@ -149,9 +155,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         return data.size() + i + getHeaderViewsCount() + getFooterViewsCount();
     }
 
-    private static final int HEADER_VIEW = 2;
-    private static final int LOADING_VIEW = 1;
-    private static final int FOOTER_VIEW = 3;
 
     @Override
     public int getItemViewType(int position) {
@@ -163,6 +166,10 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             else
                 return FOOTER_VIEW;
         }
+        return getDefItemViewType(position);
+    }
+
+    protected int getDefItemViewType(int position){
         return super.getItemViewType(position);
     }
 
@@ -176,13 +183,16 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         } else if (viewType == HEADER_VIEW) {
             return new HeadViewHolder(mHeaderViews.get(0));
         } else if (viewType == FOOTER_VIEW) {
-            return new HeadViewHolder(mFooterViews.get(0));
+            return new FooterViewHolder(mFooterViews.get(0));
         } else {
-            item = LayoutInflater.from(parent.getContext()).inflate(
-                    layoutResId, parent, false);
-            return new BaseViewHolder(context, item);
+            return onCreateDefViewHolder(parent,viewType);
         }
 
+    }
+    public BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
+        View item = LayoutInflater.from(parent.getContext()).inflate(
+                layoutResId, parent, false);
+        return new BaseViewHolder(context, item);
     }
 
     public class FooterViewHolder extends BaseViewHolder {
@@ -199,8 +209,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
     }
 
-    private ArrayList<View> mHeaderViews = new ArrayList<>();
-    private ArrayList<View> mFooterViews = new ArrayList<>();
 
     public void addHeaderView(View header) {
         if (header == null) {
@@ -270,7 +278,13 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 }
             }
 
+        }else{
+            onBindDefViewHolder(holder,position);
         }
+    }
+
+    public void onBindDefViewHolder(RecyclerView.ViewHolder holder, final int position) {
+
     }
 
     public interface RequestLoadMoreListener {

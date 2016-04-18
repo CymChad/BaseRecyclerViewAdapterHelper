@@ -32,11 +32,6 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, MySection item) {
-        helper.setImageUrl(R.id.iv, (String) item.t);
-    }
-
-    @Override
     protected void convertHead(BaseViewHolder helper,final MySection item) {
         helper.setText(R.id.header, item.header);
         if(!item.isMroe)helper.setVisible(R.id.more,false);
@@ -47,5 +42,11 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
                 Toast.makeText(context,item.header+"more..",Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+
+    @Override
+    protected void convert(BaseViewHolder helper, MySection item) {
+        helper.setImageUrl(R.id.iv, (String) item.t);
     }
 }
