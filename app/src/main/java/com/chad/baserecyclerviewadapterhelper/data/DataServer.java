@@ -38,16 +38,16 @@ public class DataServer {
     }
     public static List<MySection> getSampleData() {
         List<MySection> list = new ArrayList<>();
-        list.add(new MySection(true,"2016年4月8号",true));
+        list.add(new MySection(true,"2016/4/8",true));
         list.add(new MySection("https://avatars1.githubusercontent.com/u/7698209?v=3&s=460"));
         list.add(new MySection("https://avatars1.githubusercontent.com/u/7698209?v=3&s=460"));
         list.add(new MySection("https://avatars1.githubusercontent.com/u/7698209?v=3&s=460"));
         list.add(new MySection("https://avatars1.githubusercontent.com/u/7698209?v=3&s=460"));
-        list.add(new MySection(true,"2016年4月7号",false));
+        list.add(new MySection(true,"2016/4/7",false));
         list.add(new MySection("https://avatars1.githubusercontent.com/u/7698209?v=3&s=460"));
         list.add(new MySection("https://avatars1.githubusercontent.com/u/7698209?v=3&s=460"));
         list.add(new MySection("https://avatars1.githubusercontent.com/u/7698209?v=3&s=460"));
-        list.add(new MySection(true,"2016年4月6号",false));
+        list.add(new MySection(true,"2016/4/6",false));
         list.add(new MySection("https://avatars1.githubusercontent.com/u/7698209?v=3&s=460"));
         list.add(new MySection("https://avatars1.githubusercontent.com/u/7698209?v=3&s=460"));
         return list;
