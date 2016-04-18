@@ -3,6 +3,7 @@ Powerful and flexible RecyclerAdapter
 Please feel free to use this.(Love can be a **Star**)
 #Features（[download apk](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/raw/master/demo_res/demo.apk)）
 - **Reduce lot of code.easily create RecyclerAdapter**
+- **add item click**
 - **easily add RecyclerAdapter animations**
 - **add HeadView and add FooterView**
 - **add The drop-down refresh, load more**
@@ -45,6 +46,15 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
                 .linkify(R.id.tweetText);
     }
 }
+```
+#Use it item click
+```
+mQuickAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                //..
+            }
+        });
 ```
 #Use it add adaptar Animation
 

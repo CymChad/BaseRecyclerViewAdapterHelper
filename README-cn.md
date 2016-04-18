@@ -4,6 +4,7 @@
 一个强大并且灵活的RecyclerViewAdapter，欢迎使用。（喜欢的可以**Star**一下）
 #它能做什么？（[下载 apk](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/raw/master/demo_res/demo.apk)）
 - **它可以大量减少你Adapter写的代码（和正常的Adapter相比至少三分之二的）**
+- **可以添加点击事件**
 - **它可以很轻松的添加RecyclerView加载动画**
 - **新增添加头部、添加尾部**
 - **新增下拉刷新、上拉加载更多**
@@ -48,6 +49,15 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
 }
 ```
 **这么复杂的布局只需要15行代码即可！**
+#如何添加item点击事件
+```
+mQuickAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                //..
+            }
+        });
+```
 #如何使用它添加动画？
 
 ```
