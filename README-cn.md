@@ -121,5 +121,6 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
     }
 ```
 >**持续更新!，所以推荐Star项目**
+
 #感谢
 [JoanZapata / base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper)
