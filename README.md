@@ -8,6 +8,7 @@ Please feel free to use this.(Love can be a **Star**)
 - **add HeadView and add FooterView**
 - **add The drop-down refresh, load more**
 - **easily create section headers**
+- **custom item view type**
 
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.gif)
 ![分组](http://upload-images.jianshu.io/upload_images/972352-3e7ffedcf559cc9d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
@@ -24,7 +25,7 @@ Add it in your root build.gradle at the end of repositories:
 Add the dependency
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.4'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.5'
 	}
 ```
 
@@ -128,6 +129,28 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
             }
         });
     }
+```
+#Use it custom item view type
+```
+public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends BaseQuickAdapter {
+	/..
+    @Override
+    public int getDefItemViewType(int position) {
+        /..
+    }
+
+    @Override
+    public BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
+       	/..
+
+    }
+
+    @Override
+    public void onBindDefViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        /..
+    }
+
+}
 ```
 #Thanks
 [JoanZapata / base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper)

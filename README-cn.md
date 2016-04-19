@@ -9,6 +9,7 @@
 - **新增添加头部、添加尾部**
 - **新增下拉刷新、上拉加载更多**
 - **新增分组**
+- **自定义item类型**
 
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.gif)
 ![分组](http://upload-images.jianshu.io/upload_images/972352-3e7ffedcf559cc9d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
@@ -25,7 +26,7 @@
 然后在dependencies添加:
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.4'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.5'
 	}
 ```
 
@@ -129,6 +130,28 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
             }
         });
     }
+```
+#自定义item类型
+```
+public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends BaseQuickAdapter {
+    /..
+    @Override
+    public int getDefItemViewType(int position) {
+        /..
+    }
+
+    @Override
+    public BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
+        /..
+
+    }
+
+    @Override
+    public void onBindDefViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        /..
+    }
+
+}
 ```
 >**持续更新!，所以推荐Star项目**
 
