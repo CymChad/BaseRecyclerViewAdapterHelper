@@ -132,22 +132,21 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
 ```
 #Use it custom item view type
 ```
-public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends BaseQuickAdapter {
-	/..
+public class XXXXXXAdapter extends BaseQuickAdapter { 
+    /...
     @Override
-    public int getDefItemViewType(int position) {
-        /..
+    protected int getDefItemViewType(int position) {
+        /...
     }
 
     @Override
-    public BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
-       	/..
-
+    protected BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
+        /...
     }
 
     @Override
-    public void onBindDefViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        /..
+    protected void onBindDefViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        /...
     }
 
 }
