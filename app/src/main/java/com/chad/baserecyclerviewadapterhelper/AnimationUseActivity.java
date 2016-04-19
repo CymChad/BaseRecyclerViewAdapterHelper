@@ -73,17 +73,17 @@ public class AnimationUseActivity extends Activity {
             }
         });
         MaterialSpinner spinnerFirstOnly = (MaterialSpinner) findViewById(R.id.spinner_first_only);
-        spinnerFirstOnly.setItems("setFirstOnly(true)", "setFirstOnly(false)");
+        spinnerFirstOnly.setItems("isFirstOnly(true)", "isFirstOnly(false)");
         spinnerFirstOnly.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                 switch (position) {
                     case 0:
-                        mQuickAdapter.setFirstOnly(true);
+                        mQuickAdapter.isFirstOnly(true);
                         break;
                     case 1:
-                        mQuickAdapter.setFirstOnly(false);
+                        mQuickAdapter.isFirstOnly(false);
                         break;
                 }
                 mQuickAdapter.notifyDataSetChanged();

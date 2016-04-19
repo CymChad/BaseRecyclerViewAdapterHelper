@@ -1,10 +1,7 @@
 package com.chad.baserecyclerviewadapterhelper.entity;
 
 /**
- * 项目名称：RecyclerAdapterViewDemo
- * 类描述：状态实体类
- * 创建人：Chad
- * 创建时间：16/4/9 下午8:41
+ * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 public class Status {
     private boolean isRetweet;

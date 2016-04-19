@@ -12,10 +12,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import java.util.List;
 
 /**
- * 项目名称：BaseRecyclerViewAdapterHelper
- * 类描述：
- * 创建人：Chad
- * 创建时间：16/4/17 下午8:49
+ * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
     /**
@@ -39,7 +36,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
         helper.setOnClickListener(R.id.more, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,item.header+"more..",Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext,item.header+"more..",Toast.LENGTH_LONG).show();
             }
         });
     }

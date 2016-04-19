@@ -10,6 +10,9 @@ import com.chad.baserecyclerviewadapterhelper.adapter.SectionAdapter;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.decoration.GridItemDecoration;
 
+/**
+ * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+ */
 public class SectionUerActivity extends Activity {
     private RecyclerView mRecyclerView;
     @Override

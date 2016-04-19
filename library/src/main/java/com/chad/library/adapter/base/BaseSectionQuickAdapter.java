@@ -18,8 +18,8 @@ import java.util.List;
 public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends BaseQuickAdapter {
 
 
-    protected int sectionHeadResId;
-    protected List<T> data;
+    protected int mSectionHeadResId;
+    protected List<T> mData;
     protected static final int SECTION_HEADER_VIEW = 0x00000004;
 
     /**
@@ -33,28 +33,28 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends B
      */
     public BaseSectionQuickAdapter(Context context, int layoutResId, int sectionHeadResId, List<T> data) {
         super(context, layoutResId, data);
-        this.data = data == null ? new ArrayList<T>() : new ArrayList<T>(data);
-        this.context = context;
-        this.layoutResId = layoutResId;
-        this.sectionHeadResId = sectionHeadResId;
+        this.mData = data == null ? new ArrayList<T>() : new ArrayList<T>(data);
+        this.mContext = context;
+        this.mLayoutResId = layoutResId;
+        this.mSectionHeadResId = sectionHeadResId;
     }
 
     @Override
-    public int getDefItemViewType(int position) {
-        return data.get(position).isHeader ? SECTION_HEADER_VIEW : 0;
+    protected int getDefItemViewType(int position) {
+        return mData.get(position).isHeader ? SECTION_HEADER_VIEW : 0;
     }
 
     @Override
-    public BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
+    protected BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
         View item = null;
         if (viewType == SECTION_HEADER_VIEW) {
             item = LayoutInflater.from(parent.getContext()).inflate(
-                    sectionHeadResId, parent, false);
+                    mSectionHeadResId, parent, false);
             return new SectionHeadViewHolder(item);
         } else {
             item = LayoutInflater.from(parent.getContext()).inflate(
-                    layoutResId, parent, false);
-            return new BaseViewHolder(context, item);
+                    mLayoutResId, parent, false);
+            return new BaseViewHolder(mContext, item);
         }
 
     }
@@ -68,12 +68,12 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends B
 
 
     @Override
-    public void onBindDefViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    protected void onBindDefViewHolder(RecyclerView.ViewHolder holder, final int position) {
         BaseViewHolder baseViewHolder = (BaseViewHolder) holder;
         int type = getItemViewType(position);
         if (type == SECTION_HEADER_VIEW) {
             int index = position - getHeaderViewsCount();
-            convertHead(baseViewHolder, data.get(index));
+            convertHead(baseViewHolder, mData.get(index));
             if (holder.itemView.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams) {
                 StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
                 params.setFullSpan(true);

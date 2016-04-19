@@ -29,9 +29,10 @@ import java.util.List;
  */
 public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-
-    protected boolean mNextLoad;
-    protected boolean mIsLoadingMore;
+    private boolean mNextLoadEnable;
+    private boolean mLoadingMoreEnable;
+    private boolean mFirstOnlyEnable = true;
+    private boolean mOpenAnimationEnable = false;
 
     @IntDef({ALPHAIN, SCALEIN, SLIDEIN_BOTTOM, SLIDEIN_LEFT, SLIDEIN_RIGHT})
     @Retention(RetentionPolicy.SOURCE)
@@ -41,32 +42,32 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     /**
      * Use with {@link #openLoadAnimation}
      */
-    public static final int ALPHAIN = 0;
+    public static final int ALPHAIN = 0x00000001;
     /**
      * Use with {@link #openLoadAnimation}
      */
-    public static final int SCALEIN = 1;
+    public static final int SCALEIN = 0x00000002;
     /**
      * Use with {@link #openLoadAnimation}
      */
-    public static final int SLIDEIN_BOTTOM = 2;
+    public static final int SLIDEIN_BOTTOM = 0x00000003;
     /**
      * Use with {@link #openLoadAnimation}
      */
-    public static final int SLIDEIN_LEFT = 3;
+    public static final int SLIDEIN_LEFT = 0x00000004;
     /**
      * Use with {@link #openLoadAnimation}
      */
-    public static final int SLIDEIN_RIGHT = 4;
+    public static final int SLIDEIN_RIGHT = 0x00000005;
 
 
     protected static final String TAG = BaseQuickAdapter.class.getSimpleName();
 
-    protected Context context;
+    protected Context mContext;
 
-    protected int layoutResId;
+    protected int mLayoutResId;
 
-    protected List<T> data;
+    protected List<T> mData;
 
     private Interpolator mInterpolator = new LinearInterpolator();
 
@@ -74,33 +75,29 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     private int mLastPosition = -1;
 
-    private boolean isFirstOnly = true;
-
 
     private OnRecyclerViewItemClickListener onRecyclerViewItemClickListener;
 
-    private RequestLoadMoreListener requestLoadMoreListener;
+    private RequestLoadMoreListener mRequestLoadMoreListener;
 
     @AnimationType
-    int animationType = ALPHAIN;
-    private BaseAnimation customAnimation = null;
-    private BaseAnimation selectAnimation = new AlphaInAnimation();
+    private BaseAnimation mCustomAnimation;
+    private BaseAnimation mSelectAnimation = new AlphaInAnimation();
 
-    private boolean isOpenAnimation = false;
 
     protected static final int HEADER_VIEW = 0x00000001;
     protected static final int LOADING_VIEW = 0x00000002;
     protected static final int FOOTER_VIEW = 0x00000003;
 
-    private ArrayList<View> mHeaderViews = new ArrayList<>();
-    private ArrayList<View> mFooterViews = new ArrayList<>();
+    private View mHeaderView;
+    private View mFooterView;
 
     public void setOnLoadMoreListener(int pageSize, RequestLoadMoreListener requestLoadMoreListener) {
         if (getItemCount() < pageSize) {
             return;
         }
-        mNextLoad = true;
-        this.requestLoadMoreListener = requestLoadMoreListener;
+        mNextLoadEnable = true;
+        this.mRequestLoadMoreListener = requestLoadMoreListener;
     }
 
     public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener) {
@@ -121,38 +118,38 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * @param data        A new list is created out of this one to avoid mutable list
      */
     public BaseQuickAdapter(Context context, int layoutResId, List<T> data) {
-        this.data = data == null ? new ArrayList<T>() : new ArrayList<T>(data);
-        this.context = context;
-        this.layoutResId = layoutResId;
+        this.mData = data == null ? new ArrayList<T>() : new ArrayList<T>(data);
+        this.mContext = context;
+        this.mLayoutResId = layoutResId;
     }
 
     public void remove(int position) {
-        data.remove(position);
+        mData.remove(position);
         notifyItemRemoved(position);
 
     }
 
     public void add(int position, T item) {
-        data.add(position, item);
+        mData.add(position, item);
         notifyItemInserted(position);
     }
 
     public List getData() {
-        return data;
+        return mData;
     }
 
     public int getHeaderViewsCount() {
-        return mHeaderViews.size();
+        return mHeaderView == null ? 0 : 1;
     }
 
     public int getFooterViewsCount() {
-        return mFooterViews.size();
+        return mFooterView == null ? 0 : 1;
     }
 
     @Override
     public int getItemCount() {
-        int i = mNextLoad ? 1 : 0;
-        return data.size() + i + getHeaderViewsCount() + getFooterViewsCount();
+        int i = mNextLoadEnable ? 1 : 0;
+        return mData.size() + i + getHeaderViewsCount() + getFooterViewsCount();
     }
 
 
@@ -160,8 +157,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public int getItemViewType(int position) {
         if (position < getHeaderViewsCount()) {
             return HEADER_VIEW;
-        } else if (position == data.size() + getHeaderViewsCount()) {
-            if (mNextLoad)
+        } else if (position == mData.size() + getHeaderViewsCount()) {
+            if (mNextLoadEnable)
                 return LOADING_VIEW;
             else
                 return FOOTER_VIEW;
@@ -169,7 +166,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         return getDefItemViewType(position);
     }
 
-    protected int getDefItemViewType(int position){
+    protected int getDefItemViewType(int position) {
         return super.getItemViewType(position);
     }
 
@@ -181,18 +178,19 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                     R.layout.def_loading, parent, false);
             return new FooterViewHolder(item);
         } else if (viewType == HEADER_VIEW) {
-            return new HeadViewHolder(mHeaderViews.get(0));
+            return new HeadViewHolder(mHeaderView);
         } else if (viewType == FOOTER_VIEW) {
-            return new FooterViewHolder(mFooterViews.get(0));
+            return new FooterViewHolder(mFooterView);
         } else {
-            return onCreateDefViewHolder(parent,viewType);
+            return onCreateDefViewHolder(parent, viewType);
         }
 
     }
-    public BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
+
+    protected BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
         View item = LayoutInflater.from(parent.getContext()).inflate(
-                layoutResId, parent, false);
-        return new BaseViewHolder(context, item);
+                mLayoutResId, parent, false);
+        return new BaseViewHolder(mContext, item);
     }
 
     public class FooterViewHolder extends BaseViewHolder {
@@ -214,24 +212,22 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         if (header == null) {
             throw new RuntimeException("header is null");
         }
-        if (mHeaderViews.size() == 0)
-            mHeaderViews.add(header);
+        this.mHeaderView = header;
         this.notifyDataSetChanged();
     }
 
-    public void addFooterView(View header) {
-        mNextLoad = false;
-        if (header == null) {
-            throw new RuntimeException("header is null");
+    public void addFooterView(View footer) {
+        mNextLoadEnable = false;
+        if (footer == null) {
+            throw new RuntimeException("footer is null");
         }
-        if (mFooterViews.size() == 0)
-            mFooterViews.add(header);
+        this.mFooterView = footer;
         this.notifyDataSetChanged();
     }
 
     public void isNextLoad(boolean isNextLoad) {
-        mNextLoad = isNextLoad;
-        mIsLoadingMore = false;
+        mNextLoadEnable = isNextLoad;
+        mLoadingMoreEnable = false;
         notifyDataSetChanged();
 
     }
@@ -244,7 +240,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         int index;
         if (type == 0) {
             index = position - getHeaderViewsCount();
-            convert(baseViewHolder, data.get(index));
+            convert(baseViewHolder, mData.get(index));
             if (onRecyclerViewItemClickListener != null) {
                 baseViewHolder.getView().setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -253,13 +249,13 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                     }
                 });
             }
-            if (isOpenAnimation) {
-                if (!isFirstOnly || position > mLastPosition) {
+            if (mOpenAnimationEnable) {
+                if (!mFirstOnlyEnable || position > mLastPosition) {
                     BaseAnimation animation = null;
-                    if (customAnimation != null) {
-                        animation = customAnimation;
+                    if (mCustomAnimation != null) {
+                        animation = mCustomAnimation;
                     } else {
-                        animation = selectAnimation;
+                        animation = mSelectAnimation;
                     }
                     for (Animator anim : animation.getAnimators(holder.itemView)) {
                         anim.setDuration(mDuration).start();
@@ -269,21 +265,21 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 }
             }
         } else if (type == LOADING_VIEW) {
-            if (mNextLoad && !mIsLoadingMore && requestLoadMoreListener != null) {
-                mIsLoadingMore = true;
-                requestLoadMoreListener.onLoadMoreRequested();
+            if (mNextLoadEnable && !mLoadingMoreEnable && mRequestLoadMoreListener != null) {
+                mLoadingMoreEnable = true;
+                mRequestLoadMoreListener.onLoadMoreRequested();
                 if (holder.itemView.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams) {
                     StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
                     params.setFullSpan(true);
                 }
             }
 
-        }else{
-            onBindDefViewHolder(holder,position);
+        } else {
+            onBindDefViewHolder(holder, position);
         }
     }
 
-    public void onBindDefViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    protected void onBindDefViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
     }
 
@@ -299,23 +295,23 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * @param animationType One of {@link #ALPHAIN}, {@link #SCALEIN}, {@link #SLIDEIN_BOTTOM}, {@link #SLIDEIN_LEFT}, {@link #SLIDEIN_RIGHT}.
      */
     public void openLoadAnimation(@AnimationType int animationType) {
-        this.isOpenAnimation = true;
-        customAnimation = null;
+        this.mOpenAnimationEnable = true;
+        mCustomAnimation = null;
         switch (animationType) {
             case ALPHAIN:
-                selectAnimation = new AlphaInAnimation();
+                mSelectAnimation = new AlphaInAnimation();
                 break;
             case SCALEIN:
-                selectAnimation = new ScaleInAnimation();
+                mSelectAnimation = new ScaleInAnimation();
                 break;
             case SLIDEIN_BOTTOM:
-                selectAnimation = new SlideInBottomAnimation();
+                mSelectAnimation = new SlideInBottomAnimation();
                 break;
             case SLIDEIN_LEFT:
-                selectAnimation = new SlideInLeftAnimation();
+                mSelectAnimation = new SlideInLeftAnimation();
                 break;
             case SLIDEIN_RIGHT:
-                selectAnimation = new SlideInRightAnimation();
+                mSelectAnimation = new SlideInRightAnimation();
                 break;
         }
     }
@@ -326,17 +322,17 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * @param animation ObjectAnimator
      */
     public void openLoadAnimation(BaseAnimation animation) {
-        this.isOpenAnimation = true;
-        this.customAnimation = animation;
+        this.mOpenAnimationEnable = true;
+        this.mCustomAnimation = animation;
     }
 
     public void openLoadAnimation() {
-        this.isOpenAnimation = true;
+        this.mOpenAnimationEnable = true;
     }
 
 
-    public void setFirstOnly(boolean firstOnly) {
-        isFirstOnly = firstOnly;
+    public void isFirstOnly(boolean firstOnly) {
+        this.mFirstOnlyEnable = firstOnly;
     }
 
     /**
