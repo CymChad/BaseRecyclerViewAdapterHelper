@@ -20,7 +20,6 @@
             android:ellipsize="end"
             android:padding="10dp"
             android:singleLine="true"
-            android:text="头部"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             />
@@ -32,7 +31,7 @@
             android:layout_weight="1"
             android:gravity="right|center"
             android:padding="5dp"
-            android:text="更多"
+            android:text="more"
             android:textSize="18sp"/>
     </LinearLayout>
 

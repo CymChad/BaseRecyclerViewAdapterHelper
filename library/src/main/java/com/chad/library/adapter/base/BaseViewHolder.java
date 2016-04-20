@@ -20,8 +20,8 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestCreator;
+import com.bumptech.glide.Glide;
+
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
@@ -35,7 +35,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     private final Context context;
 
-    private View convertView;
+    public View convertView;
 
     /**
      * Package private field to retain the associated user object and detect a change
@@ -154,22 +154,10 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      */
     public BaseViewHolder setImageUrl(int viewId, String imageUrl) {
         ImageView view = retrieveView(viewId);
-        Picasso.with(context).load(imageUrl).into(view);
+        Glide.with(context).load(imageUrl).crossFade().into(view);
         return this;
     }
 
-    /**
-     * Will download an image from a URL and put it in an ImageView.<br/>
-     *
-     * @param viewId         The view id.
-     * @param requestBuilder The Picasso request builder. (e.g. Picasso.with(context).load(imageUrl))
-     * @return The BaseViewHolder for chaining.
-     */
-    public BaseViewHolder setImageBuilder(int viewId, RequestCreator requestBuilder) {
-        ImageView view = retrieveView(viewId);
-        requestBuilder.into(view);
-        return this;
-    }
 
     /**
      * Add an action to set the image of an image view. Can be called multiple times.
@@ -460,13 +448,6 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         AdapterView view = retrieveView(viewId);
         view.setAdapter(adapter);
         return this;
-    }
-
-    /**
-     * Retrieve the convertView
-     */
-    public View getView() {
-        return convertView;
     }
 
 

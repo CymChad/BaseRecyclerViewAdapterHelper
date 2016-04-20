@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.MySection;
+import com.chad.baserecyclerviewadapterhelper.entity.Video;
 import com.chad.library.adapter.base.BaseSectionQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -44,6 +45,8 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
 
     @Override
     protected void convert(BaseViewHolder helper, MySection item) {
-        helper.setImageUrl(R.id.iv, (String) item.t);
+        Video video = (Video) item.t;
+        helper.setImageUrl(R.id.iv, video.img);
+        helper.setText(R.id.tv, video.name);
     }
 }

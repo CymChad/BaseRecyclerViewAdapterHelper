@@ -14,23 +14,25 @@
 
         <com.jaredrummler.materialspinner.MaterialSpinner
             android:id="@+id/spinner"
-            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             app:ms_arrow_tint="@android:color/white"
             app:ms_background_color="@android:color/white"
-            app:ms_text_color="@android:color/darker_gray"
             app:ms_hide_arrow="true"
+            app:ms_text_color="@android:color/darker_gray"
             />
+
         <TextView
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="#eff0f1"/>
+
         <com.jaredrummler.materialspinner.MaterialSpinner
             android:id="@+id/spinner_first_only"
-            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             app:ms_arrow_tint="@android:color/white"
             app:ms_background_color="@android:color/white"
             app:ms_hide_arrow="true"
@@ -44,6 +46,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:fadingEdge="none"/>
 
 </LinearLayout>

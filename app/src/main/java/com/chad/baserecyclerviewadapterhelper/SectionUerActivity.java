@@ -21,7 +21,7 @@ public class SectionUerActivity extends Activity {
         setContentView(R.layout.activity_section_uer);
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        SectionAdapter sectionAdapter = new SectionAdapter(this, R.layout.image_view, R.layout.def_section_head, DataServer.getSampleData());
+        SectionAdapter sectionAdapter = new SectionAdapter(this, R.layout.head_view, R.layout.def_section_head, DataServer.getSampleData());
         mRecyclerView.addItemDecoration(new GridItemDecoration(this,R.drawable.list_divider));
         mRecyclerView.setAdapter(sectionAdapter);
     }

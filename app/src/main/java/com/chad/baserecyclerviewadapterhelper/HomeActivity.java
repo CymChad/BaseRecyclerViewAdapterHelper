@@ -17,8 +17,8 @@ import java.util.ArrayList;
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 public class HomeActivity extends Activity {
-    private static final Class<?>[] ACTIVITY = {AnimationUseActivity.class, HeaderAndFooterUseActivity.class, PullToRefreshUseActivity.class, SectionUerActivity.class};
-    private static final String[] TITLE = {"Animation Use", "HeaderAndFooter Use", "PullToRefresh Use", "Section Use"};
+    private static final Class<?>[] ACTIVITY = {AnimationUseActivity.class, MultipleItemUseActivity.class, HeaderAndFooterUseActivity.class, PullToRefreshUseActivity.class, SectionUerActivity.class};
+    private static final String[] TITLE = {"Animation Use", "MultipleItem Use", "HeaderAndFooter Use", "PullToRefresh Use", "Section Use"};
     private ArrayList<HomeItem> mDataList;
     private RecyclerView mRecyclerView;
 

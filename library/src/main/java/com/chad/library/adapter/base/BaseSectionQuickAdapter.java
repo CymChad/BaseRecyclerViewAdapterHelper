@@ -1,9 +1,7 @@
 package com.chad.library.adapter.base;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -46,34 +44,24 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends B
 
     @Override
     protected BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
-        View item = null;
-        if (viewType == SECTION_HEADER_VIEW) {
-            item = LayoutInflater.from(parent.getContext()).inflate(
-                    mSectionHeadResId, parent, false);
-            return new SectionHeadViewHolder(item);
-        } else {
-            item = LayoutInflater.from(parent.getContext()).inflate(
-                    mLayoutResId, parent, false);
-            return new BaseViewHolder(mContext, item);
-        }
+        if (viewType == SECTION_HEADER_VIEW)
+            return new SectionHeadViewHolder(getItemView(mSectionHeadResId,parent));
+
+        return super.onCreateDefViewHolder(parent, viewType);
 
     }
 
-    public class SectionHeadViewHolder extends BaseViewHolder {
+    public static class SectionHeadViewHolder extends BaseViewHolder {
 
         public SectionHeadViewHolder(View itemView) {
             super(itemView.getContext(), itemView);
         }
     }
 
-
     @Override
-    protected void onBindDefViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        BaseViewHolder baseViewHolder = (BaseViewHolder) holder;
-        int type = getItemViewType(position);
-        if (type == SECTION_HEADER_VIEW) {
-            int index = position - getHeaderViewsCount();
-            convertHead(baseViewHolder, mData.get(index));
+    protected void onBindDefViewHolder(BaseViewHolder holder, Object item) {
+        if (holder instanceof SectionHeadViewHolder) {
+            convertHead(holder, (T) item);
             if (holder.itemView.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams) {
                 StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
                 params.setFullSpan(true);

@@ -24,6 +24,7 @@ public class AnimationUseActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adapter_use);
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
+        mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         initAdapter();
         initMenu();

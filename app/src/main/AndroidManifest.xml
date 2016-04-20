@@ -24,6 +24,8 @@
         </activity>
         <activity android:name=".SectionUerActivity">
         </activity>
+        <activity android:name=".MultipleItemUseActivity">
+        </activity>
     </application>
 
 </manifest>
