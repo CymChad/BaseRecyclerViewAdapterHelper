@@ -12,7 +12,6 @@
 - **自定义item类型**
 
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.gif)
-![分组](http://upload-images.jianshu.io/upload_images/972352-3e7ffedcf559cc9d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 #如何使用它？
 先在 build.gradle 的 repositories 添加:
 ```
