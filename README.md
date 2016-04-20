@@ -11,7 +11,6 @@ Please feel free to use this.(Love can be a **Star**)
 - **custom item view type**
 
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.gif)
-![分组](http://upload-images.jianshu.io/upload_images/972352-3e7ffedcf559cc9d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 # Get it
 Add it in your root build.gradle at the end of repositories:
 ```
