@@ -12,6 +12,9 @@ import java.util.List;
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 public class DataServer {
+
+    private DataServer() {}
+
     public static List<Status> getSampleData(int lenth) {
         List<Status> list = new ArrayList<>();
         for (int i = 0; i < lenth; i++) {

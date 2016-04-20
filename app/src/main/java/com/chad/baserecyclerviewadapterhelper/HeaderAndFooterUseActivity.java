@@ -52,7 +52,7 @@ public class HeaderAndFooterUseActivity extends Activity {
         mQuickAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(HeaderAndFooterUseActivity.this, "" + position, Toast.LENGTH_LONG).show();
+                Toast.makeText(HeaderAndFooterUseActivity.this, "" + Integer.toString(position), Toast.LENGTH_LONG).show();
             }
         });
     }
