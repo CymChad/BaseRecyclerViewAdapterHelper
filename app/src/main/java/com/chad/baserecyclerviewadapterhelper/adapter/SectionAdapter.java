@@ -32,7 +32,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
     @Override
     protected void convertHead(BaseViewHolder helper,final MySection item) {
         helper.setText(R.id.header, item.header);
-        if(!item.isMroe)helper.setVisible(R.id.more,false);
+        if(!item.isMroe())helper.setVisible(R.id.more,false);
         else
         helper.setOnClickListener(R.id.more, new View.OnClickListener() {
             @Override
@@ -46,7 +46,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
     @Override
     protected void convert(BaseViewHolder helper, MySection item) {
         Video video = (Video) item.t;
-        helper.setImageUrl(R.id.iv, video.img);
-        helper.setText(R.id.tv, video.name);
+        helper.setImageUrl(R.id.iv, video.getImg());
+        helper.setText(R.id.tv, video.getName());
     }
 }
