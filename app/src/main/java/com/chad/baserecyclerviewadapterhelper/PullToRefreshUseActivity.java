@@ -28,6 +28,8 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
 
     private static final int PAGE_SIZE = 6;
 
+    private int delayMillis = 1000;
+
     private int mCurrentCounter = 0;
 
     @Override
@@ -54,7 +56,7 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
         });
         mQuickAdapter.addHeaderView(headView);
     }
-    private int delayMillis = 1000;
+
     @Override
     public void onLoadMoreRequested() {
         if (mCurrentCounter >= TOTAL_COUNTER) {
@@ -100,7 +102,7 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
         mQuickAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(PullToRefreshUseActivity.this, "" + position, Toast.LENGTH_LONG).show();
+                Toast.makeText(PullToRefreshUseActivity.this, Integer.toString(position), Toast.LENGTH_LONG).show();
             }
         });
     }
