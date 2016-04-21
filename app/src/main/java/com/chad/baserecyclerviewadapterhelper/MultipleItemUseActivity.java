@@ -7,7 +7,9 @@ import android.support.v7.widget.RecyclerView;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.MultipleItemAdapter;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
-
+/**
+ * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+ */
 public class MultipleItemUseActivity extends Activity {
     private RecyclerView mRecyclerView;
     @Override

@@ -60,9 +60,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      */
     public static final int SLIDEIN_RIGHT = 0x00000005;
 
-
-    protected static final String TAG = BaseQuickAdapter.class.getSimpleName();
-
     protected Context mContext;
 
     protected int mLayoutResId;
@@ -290,10 +287,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 layoutResId, parent, false);
     }
 
-    protected View getBaseViewHolder(int layoutResId, ViewGroup parent) {
-        return LayoutInflater.from(parent.getContext()).inflate(
-                layoutResId, parent, false);
-    }
 
     /**
      * Two item type can override it
@@ -302,7 +295,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * @param item
      */
     protected void onBindDefViewHolder(BaseViewHolder holder, T item) {
-
     }
 
     public interface RequestLoadMoreListener {
