@@ -30,7 +30,7 @@ import java.util.List;
 public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private boolean mNextLoadEnable;
-    private boolean mLoadingMoreEnable;
+    private boolean mLoadingMoreEnable = false;
     private boolean mFirstOnlyEnable = true;
     private boolean mOpenAnimationEnable = false;
 
@@ -42,23 +42,23 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     /**
      * Use with {@link #openLoadAnimation}
      */
-    public static final int ALPHAIN = 0x00000001;
+    public static final int ALPHAIN = 1 << 1;
     /**
      * Use with {@link #openLoadAnimation}
      */
-    public static final int SCALEIN = 0x00000002;
+    public static final int SCALEIN = 1 << 2;
     /**
      * Use with {@link #openLoadAnimation}
      */
-    public static final int SLIDEIN_BOTTOM = 0x00000003;
+    public static final int SLIDEIN_BOTTOM = 1 << 3;
     /**
      * Use with {@link #openLoadAnimation}
      */
-    public static final int SLIDEIN_LEFT = 0x00000004;
+    public static final int SLIDEIN_LEFT = 1 << 4;
     /**
      * Use with {@link #openLoadAnimation}
      */
-    public static final int SLIDEIN_RIGHT = 0x00000005;
+    public static final int SLIDEIN_RIGHT = 1 << 5;
 
 
     protected static final String TAG = BaseQuickAdapter.class.getSimpleName();
@@ -85,17 +85,21 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     private BaseAnimation mSelectAnimation = new AlphaInAnimation();
 
 
-    protected static final int HEADER_VIEW = 0x00000111;
-    protected static final int LOADING_VIEW = 0x00000222;
-    protected static final int FOOTER_VIEW = 0x00000333;
+    protected static final int HEADER_VIEW = 1 << 6;
+    protected static final int LOADING_VIEW = 1 << 7;
+    protected static final int FOOTER_VIEW = 1 << 8;
 
     private View mHeaderView;
     private View mFooterView;
 
+    @Deprecated
     public void setOnLoadMoreListener(int pageSize, RequestLoadMoreListener requestLoadMoreListener) {
-        if (getItemCount() < pageSize) {
-            return;
-        }
+
+        setOnLoadMoreListener(requestLoadMoreListener);
+    }
+
+    public void setOnLoadMoreListener(RequestLoadMoreListener requestLoadMoreListener) {
+
         mNextLoadEnable = true;
         this.mRequestLoadMoreListener = requestLoadMoreListener;
     }
@@ -172,7 +176,9 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == LOADING_VIEW) {
+        if (viewType == 0) {
+            return onCreateDefViewHolder(parent, viewType);
+        } else if (viewType == LOADING_VIEW) {
             return new FooterViewHolder(getItemView(R.layout.def_loading, parent));
         } else if (viewType == HEADER_VIEW) {
             return new HeadViewHolder(mHeaderView);
@@ -183,7 +189,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
 
     }
-
 
     protected BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
         return new ContentViewHolder(getItemView(mLayoutResId, parent));
