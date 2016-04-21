@@ -14,7 +14,9 @@ import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 
 import java.util.List;
-
+/**
+ * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+ */
 public class DefAdpater extends RecyclerView.Adapter<DefAdpater.ViewHolder> {
     private final List<Status> sampleData = DataServer.getSampleData(100);
     private Context mContext;

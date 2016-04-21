@@ -1,3 +1,4 @@
+
 package com.chad.library.adapter.base;
 
 import android.animation.Animator;
@@ -24,6 +25,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
@@ -46,6 +49,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     /**
      * Use with {@link #openLoadAnimation}
      */
+<<<<<<< HEAD
     public static final int SCALEIN = 1 << 2;
     /**
      * Use with {@link #openLoadAnimation}
@@ -59,6 +63,21 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * Use with {@link #openLoadAnimation}
      */
     public static final int SLIDEIN_RIGHT = 1 << 5;
+=======
+    public static final int SCALEIN = 0x00000010;
+    /**
+     * Use with {@link #openLoadAnimation}
+     */
+    public static final int SLIDEIN_BOTTOM = 0x00000011;
+    /**
+     * Use with {@link #openLoadAnimation}
+     */
+    public static final int SLIDEIN_LEFT = 0x00000100;
+    /**
+     * Use with {@link #openLoadAnimation}
+     */
+    public static final int SLIDEIN_RIGHT = 0x00000101;
+>>>>>>> CymChad/master
 
 
     protected static final String TAG = BaseQuickAdapter.class.getSimpleName();
@@ -85,9 +104,15 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     private BaseAnimation mSelectAnimation = new AlphaInAnimation();
 
 
+<<<<<<< HEAD
     protected static final int HEADER_VIEW = 1 << 6;
     protected static final int LOADING_VIEW = 1 << 7;
     protected static final int FOOTER_VIEW = 1 << 8;
+=======
+    protected static final int HEADER_VIEW = 0x00000110;
+    protected static final int LOADING_VIEW = 0x00000111;
+    protected static final int FOOTER_VIEW = 0x00001000;
+>>>>>>> CymChad/master
 
     private View mHeaderView;
     private View mFooterView;
@@ -295,10 +320,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 layoutResId, parent, false);
     }
 
-    protected View getBaseViewHolder(int layoutResId, ViewGroup parent) {
-        return LayoutInflater.from(parent.getContext()).inflate(
-                layoutResId, parent, false);
-    }
 
     /**
      * Two item type can override it
@@ -307,7 +328,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * @param item
      */
     protected void onBindDefViewHolder(BaseViewHolder holder, T item) {
-
     }
 
     public interface RequestLoadMoreListener {

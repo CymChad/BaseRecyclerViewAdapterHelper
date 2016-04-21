@@ -36,7 +36,7 @@ public class AnimationUseActivity extends Activity {
         mQuickAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(AnimationUseActivity.this, "" + position, Toast.LENGTH_LONG).show();
+                Toast.makeText(AnimationUseActivity.this, Integer.toString(position), Toast.LENGTH_LONG).show();
             }
         });
         mRecyclerView.setAdapter(mQuickAdapter);
@@ -68,7 +68,8 @@ public class AnimationUseActivity extends Activity {
                     case 5:
                         mQuickAdapter.openLoadAnimation(new CustomAnimation());
                         break;
-
+                    default:
+                        break;
                 }
                 mRecyclerView.setAdapter(mQuickAdapter);
             }
@@ -85,6 +86,8 @@ public class AnimationUseActivity extends Activity {
                         break;
                     case 1:
                         mQuickAdapter.isFirstOnly(false);
+                        break;
+                    default:
                         break;
                 }
                 mQuickAdapter.notifyDataSetChanged();
