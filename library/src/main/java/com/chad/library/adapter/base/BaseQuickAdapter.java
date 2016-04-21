@@ -1,3 +1,4 @@
+
 package com.chad.library.adapter.base;
 
 import android.animation.Animator;
@@ -24,6 +25,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
@@ -46,19 +49,22 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     /**
      * Use with {@link #openLoadAnimation}
      */
-    public static final int SCALEIN = 0x00000002;
+    public static final int SCALEIN = 0x00000010;
     /**
      * Use with {@link #openLoadAnimation}
      */
-    public static final int SLIDEIN_BOTTOM = 0x00000003;
+    public static final int SLIDEIN_BOTTOM = 0x00000011;
     /**
      * Use with {@link #openLoadAnimation}
      */
-    public static final int SLIDEIN_LEFT = 0x00000004;
+    public static final int SLIDEIN_LEFT = 0x00000100;
     /**
      * Use with {@link #openLoadAnimation}
      */
-    public static final int SLIDEIN_RIGHT = 0x00000005;
+    public static final int SLIDEIN_RIGHT = 0x00000101;
+
+
+    protected static final String TAG = BaseQuickAdapter.class.getSimpleName();
 
     protected Context mContext;
 
@@ -82,9 +88,9 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     private BaseAnimation mSelectAnimation = new AlphaInAnimation();
 
 
-    protected static final int HEADER_VIEW = 0x00000111;
-    protected static final int LOADING_VIEW = 0x00000222;
-    protected static final int FOOTER_VIEW = 0x00000333;
+    protected static final int HEADER_VIEW = 0x00000110;
+    protected static final int LOADING_VIEW = 0x00000111;
+    protected static final int FOOTER_VIEW = 0x00001000;
 
     private View mHeaderView;
     private View mFooterView;
@@ -169,7 +175,9 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == LOADING_VIEW) {
+        if (viewType == 0) {
+            return onCreateDefViewHolder(parent, viewType);
+        } else if (viewType == LOADING_VIEW) {
             return new FooterViewHolder(getItemView(R.layout.def_loading, parent));
         } else if (viewType == HEADER_VIEW) {
             return new HeadViewHolder(mHeaderView);
