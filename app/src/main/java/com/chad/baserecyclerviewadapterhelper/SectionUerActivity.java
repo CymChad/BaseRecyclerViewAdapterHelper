@@ -36,6 +36,6 @@ public class SectionUerActivity extends Activity implements BaseQuickAdapter.OnR
 
     @Override
     public void onItemClick(View view, int position) {
-        Toast.makeText(this,mData.get(position).t.name,Toast.LENGTH_LONG).show();
+        Toast.makeText(this,mData.get(position).t.getName(),Toast.LENGTH_LONG).show();
     }
 }

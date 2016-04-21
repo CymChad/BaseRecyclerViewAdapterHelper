@@ -22,11 +22,11 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
 
     @Override
     protected void convert(BaseViewHolder helper, Status item) {
-        helper.setText(R.id.tweetName, item.userName)
-                .setText(R.id.tweetText, item.text)
-                .setText(R.id.tweetDate, item.createdAt)
-                .setImageUrl(R.id.tweetAvatar, item.userAvatar)
-                .setVisible(R.id.tweetRT, item.isRetweet)
+        helper.setText(R.id.tweetName, item.getUserName())
+                .setText(R.id.tweetText, item.getText())
+                .setText(R.id.tweetDate, item.getCreatedAt())
+                .setImageUrl(R.id.tweetAvatar, item.getUserAvatar())
+                .setVisible(R.id.tweetRT, item.isRetweet())
                 .linkify(R.id.tweetText);
     }
 }
