@@ -24,7 +24,7 @@ Add it in your root build.gradle at the end of repositories:
 Add the dependency
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.5.2'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.5.3'
 	}
 ```
 
@@ -81,6 +81,30 @@ quickAdapter.openLoadAnimation(new BaseAnimation() {
                             }
                         });
 ```
+#Use it custom item view type
+```
+public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem> {
+
+    public MultipleItemQuickAdapter(Context context, List data) {
+        super(context, data);
+        addItmeType(MultipleItem.TEXT, R.layout.text_view);
+        addItmeType(MultipleItem.IMG, R.layout.image_view);
+    }
+
+    @Override
+    protected void convert(BaseViewHolder helper, MultipleItem item) {
+        switch (helper.getItemViewType()) {
+            case MultipleItem.TEXT:
+                helper.setImageUrl(R.id.tv, item.getContent());
+                break;
+            case MultipleItem.IMG:
+                helper.setImageUrl(R.id.iv, item.getContent());
+                break;
+        }
+    }
+
+}
+```
 #Use it add header and footer
 ```
 mQuickAdapter.addHeaderView(getView());
@@ -128,27 +152,6 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
             }
         });
     }
-```
-#Use it custom item view type
-```
-public class XXXXXXAdapter extends BaseQuickAdapter { 
-    /...
-    @Override
-    protected int getDefItemViewType(int position) {
-        /...
-    }
-
-    @Override
-    protected BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
-        /...
-    }
-
-    @Override
-    protected void onBindDefViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        /...
-    }
-
-}
 ```
 #Thanks
 [JoanZapata / base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper)
