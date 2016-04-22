@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.chad.baserecyclerviewadapterhelper.adapter.MultipleItemAdapter;
+import com.chad.baserecyclerviewadapterhelper.adapter.MultipleItemQuickAdapter;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
@@ -18,7 +18,7 @@ public class MultipleItemUseActivity extends Activity {
         setContentView(R.layout.activity_multiple_item_use);
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        MultipleItemAdapter multipleItemAdapter = new MultipleItemAdapter(this,DataServer.getStrData(),R.layout.image_view,R.layout.text_view);
+        MultipleItemQuickAdapter multipleItemAdapter = new MultipleItemQuickAdapter(this,DataServer.getMultipleItemData());
         mRecyclerView.setAdapter(multipleItemAdapter);
     }
 }

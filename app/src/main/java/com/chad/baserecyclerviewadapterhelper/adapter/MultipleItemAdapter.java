@@ -13,6 +13,7 @@ import java.util.List;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
+@Deprecated
 public class MultipleItemAdapter extends BaseQuickAdapter<String> {
     private static final int TEXT_TYPE = 1;
     private int mTextLayoutResId;
@@ -49,7 +50,6 @@ public class MultipleItemAdapter extends BaseQuickAdapter<String> {
     }
 
     public class TextViewHolder extends BaseViewHolder {
-
         public TextViewHolder(View itemView) {
             super(itemView.getContext(), itemView);
         }
