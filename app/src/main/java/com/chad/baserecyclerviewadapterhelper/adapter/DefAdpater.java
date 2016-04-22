@@ -31,11 +31,11 @@ public class DefAdpater extends RecyclerView.Adapter<DefAdpater.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Status status = sampleData.get(position);
-        holder.name.setText(status.userName);
-        holder.text.setText(status.text);
-        holder.date.setText(status.createdAt);
-        Glide.with(mContext).load(status.userAvatar).into(holder.avatar);
-        holder.rt.setVisibility(status.isRetweet ? View.VISIBLE : View.GONE);
+        holder.name.setText(status.getUserName());
+        holder.text.setText(status.getText());
+        holder.date.setText(status.getCreatedAt());
+        Glide.with(mContext).load(status.getUserAvatar()).into(holder.avatar);
+        holder.rt.setVisibility(status.isRetweet() ? View.VISIBLE : View.GONE);
     }
     @Override
     public int getItemCount() {

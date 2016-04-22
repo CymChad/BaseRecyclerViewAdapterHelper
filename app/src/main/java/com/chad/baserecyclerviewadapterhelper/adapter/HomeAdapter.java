@@ -19,6 +19,6 @@ public class HomeAdapter extends BaseQuickAdapter<HomeItem> {
 
     @Override
     protected void convert(BaseViewHolder helper, HomeItem item) {
-        helper.setText(R.id.info_text, item.title);
+        helper.setText(R.id.info_text, item.getTitle());
     }
 }

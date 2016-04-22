@@ -45,8 +45,8 @@ public class HomeActivity extends Activity {
         mDataList = new ArrayList<>();
         for (int i = 0; i < TITLE.length; i++) {
             HomeItem item = new HomeItem();
-            item.title = TITLE[i];
-            item.activity = ACTIVITY[i];
+            item.setTitle(TITLE[i]);
+            item.setActivity(ACTIVITY[i]);
             mDataList.add(item);
         }
     }

@@ -51,10 +51,6 @@
   <component name="ProjectType">
     <option name="id" value="Android" />
   </component>
-  <component name="SvnConfiguration">
-    <configuration>$USER_HOME$/.subversion</configuration>
-    <option name="runUnderTerminal" value="true" />
-  </component>
   <component name="masterDetails">
     <states>
       <state key="ProjectJDKs.UI">

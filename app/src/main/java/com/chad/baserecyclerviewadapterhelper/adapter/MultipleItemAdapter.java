@@ -14,7 +14,7 @@ import java.util.List;
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 public class MultipleItemAdapter extends BaseQuickAdapter<String> {
-    private final int TEXT_TYPE = 1;
+    private static final int TEXT_TYPE = 1;
     private int mTextLayoutResId;
 
 
