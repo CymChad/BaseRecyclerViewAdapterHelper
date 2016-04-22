@@ -59,7 +59,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setText(int viewId, CharSequence value) {
-        TextView view = retrieveView(viewId);
+        TextView view = getView(viewId);
         view.setText(value);
         return this;
     }
@@ -72,7 +72,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setImageResource(int viewId, int imageResId) {
-        ImageView view = retrieveView(viewId);
+        ImageView view = getView(viewId);
         view.setImageResource(imageResId);
         return this;
     }
@@ -85,7 +85,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setBackgroundColor(int viewId, int color) {
-        View view = retrieveView(viewId);
+        View view = getView(viewId);
         view.setBackgroundColor(color);
         return this;
     }
@@ -98,7 +98,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setBackgroundRes(int viewId, int backgroundRes) {
-        View view = retrieveView(viewId);
+        View view = getView(viewId);
         view.setBackgroundResource(backgroundRes);
         return this;
     }
@@ -111,7 +111,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setTextColor(int viewId, int textColor) {
-        TextView view = retrieveView(viewId);
+        TextView view = getView(viewId);
         view.setTextColor(textColor);
         return this;
     }
@@ -124,7 +124,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setTextColorRes(int viewId, int textColorRes) {
-        TextView view = retrieveView(viewId);
+        TextView view = getView(viewId);
         view.setTextColor(context.getResources().getColor(textColorRes));
         return this;
     }
@@ -137,7 +137,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setImageDrawable(int viewId, Drawable drawable) {
-        ImageView view = retrieveView(viewId);
+        ImageView view = getView(viewId);
         view.setImageDrawable(drawable);
         return this;
     }
@@ -153,7 +153,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setImageUrl(int viewId, String imageUrl) {
-        ImageView view = retrieveView(viewId);
+        ImageView view = getView(viewId);
         Glide.with(context).load(imageUrl).crossFade().into(view);
         return this;
     }
@@ -163,7 +163,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * Add an action to set the image of an image view. Can be called multiple times.
      */
     public BaseViewHolder setImageBitmap(int viewId, Bitmap bitmap) {
-        ImageView view = retrieveView(viewId);
+        ImageView view = getView(viewId);
         view.setImageBitmap(bitmap);
         return this;
     }
@@ -174,13 +174,13 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      */
     public BaseViewHolder setAlpha(int viewId, float value) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            retrieveView(viewId).setAlpha(value);
+            getView(viewId).setAlpha(value);
         } else {
             // Pre-honeycomb hack to set Alpha value
             AlphaAnimation alpha = new AlphaAnimation(value, value);
             alpha.setDuration(0);
             alpha.setFillAfter(true);
-            retrieveView(viewId).startAnimation(alpha);
+            getView(viewId).startAnimation(alpha);
         }
         return this;
     }
@@ -193,7 +193,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setVisible(int viewId, boolean visible) {
-        View view = retrieveView(viewId);
+        View view = getView(viewId);
         view.setVisibility(visible ? View.VISIBLE : View.GONE);
         return this;
     }
@@ -205,7 +205,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder linkify(int viewId) {
-        TextView view = retrieveView(viewId);
+        TextView view = getView(viewId);
         Linkify.addLinks(view, Linkify.ALL);
         return this;
     }
@@ -214,7 +214,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * Apply the typeface to the given viewId, and enable subpixel rendering.
      */
     public BaseViewHolder setTypeface(int viewId, Typeface typeface) {
-        TextView view = retrieveView(viewId);
+        TextView view = getView(viewId);
         view.setTypeface(typeface);
         view.setPaintFlags(view.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG);
         return this;
@@ -225,7 +225,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      */
     public BaseViewHolder setTypeface(Typeface typeface, int... viewIds) {
         for (int viewId : viewIds) {
-            TextView view = retrieveView(viewId);
+            TextView view = getView(viewId);
             view.setTypeface(typeface);
             view.setPaintFlags(view.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG);
         }
@@ -240,7 +240,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setProgress(int viewId, int progress) {
-        ProgressBar view = retrieveView(viewId);
+        ProgressBar view = getView(viewId);
         view.setProgress(progress);
         return this;
     }
@@ -254,7 +254,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setProgress(int viewId, int progress, int max) {
-        ProgressBar view = retrieveView(viewId);
+        ProgressBar view = getView(viewId);
         view.setMax(max);
         view.setProgress(progress);
         return this;
@@ -268,7 +268,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setMax(int viewId, int max) {
-        ProgressBar view = retrieveView(viewId);
+        ProgressBar view = getView(viewId);
         view.setMax(max);
         return this;
     }
@@ -281,7 +281,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setRating(int viewId, float rating) {
-        RatingBar view = retrieveView(viewId);
+        RatingBar view = getView(viewId);
         view.setRating(rating);
         return this;
     }
@@ -295,7 +295,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setRating(int viewId, float rating, int max) {
-        RatingBar view = retrieveView(viewId);
+        RatingBar view = getView(viewId);
         view.setMax(max);
         view.setRating(rating);
         return this;
@@ -309,7 +309,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setOnClickListener(int viewId, View.OnClickListener listener) {
-        View view = retrieveView(viewId);
+        View view = getView(viewId);
         view.setOnClickListener(listener);
         return this;
     }
@@ -322,7 +322,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setOnTouchListener(int viewId, View.OnTouchListener listener) {
-        View view = retrieveView(viewId);
+        View view = getView(viewId);
         view.setOnTouchListener(listener);
         return this;
     }
@@ -335,7 +335,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setOnLongClickListener(int viewId, View.OnLongClickListener listener) {
-        View view = retrieveView(viewId);
+        View view = getView(viewId);
         view.setOnLongClickListener(listener);
         return this;
     }
@@ -348,7 +348,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setOnItemClickListener(int viewId, AdapterView.OnItemClickListener listener) {
-        AdapterView view = retrieveView(viewId);
+        AdapterView view = getView(viewId);
         view.setOnItemClickListener(listener);
         return this;
     }
@@ -361,7 +361,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setOnItemLongClickListener(int viewId, AdapterView.OnItemLongClickListener listener) {
-        AdapterView view = retrieveView(viewId);
+        AdapterView view = getView(viewId);
         view.setOnItemLongClickListener(listener);
         return this;
     }
@@ -374,7 +374,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setOnItemSelectedClickListener(int viewId, AdapterView.OnItemSelectedListener listener) {
-        AdapterView view = retrieveView(viewId);
+        AdapterView view = getView(viewId);
         view.setOnItemSelectedListener(listener);
         return this;
     }
@@ -387,7 +387,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setOnCheckedChangeListener(int viewId, CompoundButton.OnCheckedChangeListener listener) {
-        CompoundButton view = retrieveView(viewId);
+        CompoundButton view = getView(viewId);
         view.setOnCheckedChangeListener(listener);
         return this;
     }
@@ -400,7 +400,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setTag(int viewId, Object tag) {
-        View view = retrieveView(viewId);
+        View view = getView(viewId);
         view.setTag(tag);
         return this;
     }
@@ -414,7 +414,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setTag(int viewId, int key, Object tag) {
-        View view = retrieveView(viewId);
+        View view = getView(viewId);
         view.setTag(key, tag);
         return this;
     }
@@ -427,7 +427,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setChecked(int viewId, boolean checked) {
-        View view = retrieveView(viewId);
+        View view = getView(viewId);
         // View unable cast to Checkable
         if (view instanceof CompoundButton) {
             ((CompoundButton) view).setChecked(checked);
@@ -445,14 +445,13 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setAdapter(int viewId, Adapter adapter) {
-        AdapterView view = retrieveView(viewId);
+        AdapterView view = getView(viewId);
         view.setAdapter(adapter);
         return this;
     }
 
-
     @SuppressWarnings("unchecked")
-    protected <T extends View> T retrieveView(int viewId) {
+    public  <T extends View> T getView(int viewId) {
         View view = views.get(viewId);
         if (view == null) {
             view = convertView.findViewById(viewId);
@@ -460,6 +459,8 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         }
         return (T) view;
     }
+
+
 
     /**
      * Retrieves the last converted object on this view.
