@@ -25,7 +25,7 @@
 然后在dependencies添加:
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.5.2'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.5.3'
 	}
 ```
 
@@ -82,6 +82,30 @@ quickAdapter.openLoadAnimation(new BaseAnimation() {
                             }
                         });
 ```
+#如何添加多种类型item？
+```
+public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem> {
+
+    public MultipleItemQuickAdapter(Context context, List data) {
+        super(context, data);
+        addItmeType(MultipleItem.TEXT, R.layout.text_view);
+        addItmeType(MultipleItem.IMG, R.layout.image_view);
+    }
+
+    @Override
+    protected void convert(BaseViewHolder helper, MultipleItem item) {
+        switch (helper.getItemViewType()) {
+            case MultipleItem.TEXT:
+                helper.setImageUrl(R.id.tv, item.getContent());
+                break;
+            case MultipleItem.IMG:
+                helper.setImageUrl(R.id.iv, item.getContent());
+                break;
+        }
+    }
+
+}
+```
 #使用它添加头部添加尾部
 ```
 mQuickAdapter.addHeaderView(getView());
@@ -129,27 +153,6 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
             }
         });
     }
-```
-#自定义item类型
-```
-public class XXXXXXAdapter extends BaseQuickAdapter { 
-    /...
-    @Override
-    protected int getDefItemViewType(int position) {
-        /...
-    }
-
-    @Override
-    protected BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
-        /...
-    }
-
-    @Override
-    protected void onBindDefViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        /...
-    }
-
-}
 ```
 >**持续更新!，所以推荐Star项目**
 
