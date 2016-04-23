@@ -1,6 +1,7 @@
 package com.chad.baserecyclerviewadapterhelper.data;
 
 
+import com.chad.baserecyclerviewadapterhelper.entity.MultipleItem;
 import com.chad.baserecyclerviewadapterhelper.entity.MySection;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.baserecyclerviewadapterhelper.entity.Video;
@@ -77,6 +78,21 @@ public class DataServer {
                 str = CYM_CHAD;
             }
             list.add(str);
+        }
+        return list;
+    }
+    public static List<MultipleItem> getMultipleItemData() {
+        List<MultipleItem> list = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            MultipleItem multipleItem = new MultipleItem();
+            String str = HTTPS_AVATARS1_GITHUBUSERCONTENT_COM_LINK;
+            multipleItem.setItemType(MultipleItem.IMG);
+            if (i % 2 == 0) {
+                str = CYM_CHAD;
+                multipleItem.setItemType(MultipleItem.TEXT);
+            }
+            multipleItem.setContent(str);
+            list.add(multipleItem);
         }
         return list;
     }

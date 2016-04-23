@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
@@ -45,24 +44,23 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     /**
      * Use with {@link #openLoadAnimation}
      */
-    public static final int ALPHAIN = 1 << 1;
+    public static final int ALPHAIN = 0x00000001;
     /**
      * Use with {@link #openLoadAnimation}
      */
-    public static final int SCALEIN = 1 << 2;
+    public static final int SCALEIN = 0x00000002;
     /**
      * Use with {@link #openLoadAnimation}
      */
-    public static final int SLIDEIN_BOTTOM = 1 << 3;
+    public static final int SLIDEIN_BOTTOM = 0x00000003;
     /**
      * Use with {@link #openLoadAnimation}
      */
-    public static final int SLIDEIN_LEFT = 1 << 4;
+    public static final int SLIDEIN_LEFT = 0x00000004;
     /**
      * Use with {@link #openLoadAnimation}
      */
-    public static final int SLIDEIN_RIGHT = 1 << 5;
-
+    public static final int SLIDEIN_RIGHT = 0x00000005;
 
 
     protected static final String TAG = BaseQuickAdapter.class.getSimpleName();
@@ -87,9 +85,9 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     @AnimationType
     private BaseAnimation mCustomAnimation;
     private BaseAnimation mSelectAnimation = new AlphaInAnimation();
-    protected static final int HEADER_VIEW = 1 << 6;
-    protected static final int LOADING_VIEW = 1 << 7;
-    protected static final int FOOTER_VIEW = 1 << 8;
+    protected static final int HEADER_VIEW = 0x00000111;
+    protected static final int LOADING_VIEW = 0x00000222;
+    protected static final int FOOTER_VIEW = 0x00000333;
     private View mHeaderView;
     private View mFooterView;
 
@@ -126,6 +124,10 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         this.mData = data == null ? new ArrayList<T>() : new ArrayList<T>(data);
         this.mContext = context;
         this.mLayoutResId = layoutResId;
+    }
+    public BaseQuickAdapter(Context context, List<T> data) {
+        this.mData = data == null ? new ArrayList<T>() : new ArrayList<T>(data);
+        this.mContext = context;
     }
 
     public void remove(int position) {
