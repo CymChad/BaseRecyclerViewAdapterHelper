@@ -1,4 +1,4 @@
->由于最近用RecyclerView用的比较多所以最近写的一个开源项目，写了一个集成了RecyclerViewAdapter的常用功能的基类，希望能够帮助到大家，如果使用上遇到什么问题或想加入开发，把这个项目一起做的更好，**Star我的项目可加Q群558178792，申请的时候把GitHub的账号名字备注上否则不予通过，谢谢配合。**中国有句古话叫“授人以鱼不如授人以渔”，不仅仅提供使用，还写了如何实现的原理：
+>RecyclerView作为Android最常用的控件，受益群体几乎是所有Android开发者，希望更多开发者能够一起来维护这个项目，把这个项目做得更好，帮助更多人。**Star我的项目可加Q群558178792，申请的时候把GitHub的账号名字备注上否则不予通过，谢谢配合。**中国有句古话叫“授人以鱼不如授人以渔”，不仅仅提供使用，还写了如何实现的原理：
 - 「[RecyclerView.Adapter优化了吗？](http://www.jianshu.com/p/411ab861034f)」
 - 「[BaseRecyclerAdapter之添加动画](http://www.jianshu.com/p/fa3f97c19263)」
 - 「[BaseRecyclerAdapter之添加不同布局（头部尾部）](http://www.jianshu.com/p/9d75c22f0964)」
@@ -15,6 +15,7 @@
 - **新增下拉刷新、上拉加载更多**
 - **新增分组**
 - **自定义item类型**
+- **添加setEmptyView方法**
 
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.gif)
 #如何使用它？
@@ -159,6 +160,11 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
         });
     }
 ```
+#使用setEmptyView
+```
+mQuickAdapter.setEmptyView(getView());
+```
+
 >**持续更新!，所以推荐Star项目**
 
 #感谢
