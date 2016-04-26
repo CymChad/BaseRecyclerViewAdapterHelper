@@ -88,8 +88,13 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     protected static final int HEADER_VIEW = 0x00000111;
     protected static final int LOADING_VIEW = 0x00000222;
     protected static final int FOOTER_VIEW = 0x00000333;
+    protected static final int EMPTY_VIEW = 0x00000555;
     private View mHeaderView;
     private View mFooterView;
+    /**
+     * View to show if there are no items to show.
+     */
+    private View mEmptyView;
 
     @Deprecated
     public void setOnLoadMoreListener(int pageSize, RequestLoadMoreListener requestLoadMoreListener) {
@@ -125,6 +130,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         this.mContext = context;
         this.mLayoutResId = layoutResId;
     }
+
     public BaseQuickAdapter(Context context, List<T> data) {
         this.mData = data == null ? new ArrayList<T>() : new ArrayList<T>(data);
         this.mContext = context;
@@ -153,10 +159,18 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         return mFooterView == null ? 0 : 1;
     }
 
+    public int getmEmptyViewCount() {
+        return mEmptyView == null ? 0 : 1;
+    }
+
     @Override
     public int getItemCount() {
         int i = mNextLoadEnable ? 1 : 0;
-        return mData.size() + i + getHeaderViewsCount() + getFooterViewsCount();
+        int count = mData.size() + i + getHeaderViewsCount() + getFooterViewsCount();
+        if (count == 0) {
+            count += getmEmptyViewCount();
+        }
+        return count;
     }
 
 
@@ -164,6 +178,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public int getItemViewType(int position) {
         if (mHeaderView != null && position == 0) {
             return HEADER_VIEW;
+        } else if (mEmptyView != null && getItemCount() == 1) {
+            return EMPTY_VIEW;
         } else if (position == mData.size() + getHeaderViewsCount()) {
             if (mNextLoadEnable)
                 return LOADING_VIEW;
@@ -187,6 +203,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             return new HeadViewHolder(mHeaderView);
         } else if (viewType == FOOTER_VIEW) {
             return new FooterViewHolder(mFooterView);
+        } else if (viewType == EMPTY_VIEW) {
+            return new EmptyViewHolder(mEmptyView);
         } else {
             return onCreateDefViewHolder(parent, viewType);
         }
@@ -218,6 +236,13 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
     }
 
+    public static class EmptyViewHolder extends BaseViewHolder {
+
+        public EmptyViewHolder(View itemView) {
+            super(itemView.getContext(), itemView);
+        }
+    }
+
 
     public void addHeaderView(View header) {
         if (header == null) {
@@ -234,6 +259,24 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
         this.mFooterView = footer;
         this.notifyDataSetChanged();
+    }
+
+    /**
+     * Sets the view to show if the adapter is empty
+     */
+    public void setEmptyView(View emptyView) {
+        mEmptyView = emptyView;
+    }
+
+    /**
+     * When the current adapter is empty, the BaseQuickAdapter can display a special view
+     * called the empty view. The empty view is used to provide feedback to the user
+     * that no data is available in this AdapterView.
+     *
+     * @return The view to show if the adapter is empty.
+     */
+    public View getEmptyView() {
+        return mEmptyView;
     }
 
     public void isNextLoad(boolean isNextLoad) {
@@ -285,6 +328,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             }
 
         } else if (holder instanceof HeadViewHolder) {
+
+        } else if (holder instanceof EmptyViewHolder) {
 
         } else {
             int index = position - getHeaderViewsCount();
