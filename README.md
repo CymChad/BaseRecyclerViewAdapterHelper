@@ -9,6 +9,7 @@ Please feel free to use this.(Love can be a **Star**)
 - **add The drop-down refresh, load more**
 - **easily create section headers**
 - **custom item view type**
+- **add setEmptyView methods**
 
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.gif)
 # Get it
@@ -24,7 +25,7 @@ Add it in your root build.gradle at the end of repositories:
 Add the dependency
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.5.3'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.5.5'
 	}
 ```
 
@@ -152,6 +153,10 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
             }
         });
     }
+```
+#Use it setEmptyView
+```
+mQuickAdapter.setEmptyView(getView());
 ```
 #Thanks
 [JoanZapata / base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper)

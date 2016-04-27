@@ -22,9 +22,11 @@
         </activity>
         <activity android:name=".HeaderAndFooterUseActivity">
         </activity>
-        <activity android:name=".SectionUerActivity">
+        <activity android:name=".SectionUseActivity">
         </activity>
         <activity android:name=".MultipleItemUseActivity">
+        </activity>
+        <activity android:name=".EmptyViewUseActivity">
         </activity>
     </application>
 

@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class SectionUerActivity extends Activity implements BaseQuickAdapter.OnRecyclerViewItemClickListener {
+public class SectionUseActivity extends Activity implements BaseQuickAdapter.OnRecyclerViewItemClickListener {
     private RecyclerView mRecyclerView;
     private List<MySection> mData;
     @Override
