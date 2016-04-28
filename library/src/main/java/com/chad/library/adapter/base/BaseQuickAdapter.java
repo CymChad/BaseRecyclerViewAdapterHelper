@@ -116,6 +116,25 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         public void onItemClick(View view, int position);
     }
 
+    private OnRecyclerViewItemChildClickListener mChildClickListener;
+
+    public void setOnRecyclerViewItemChildClickListener(OnRecyclerViewItemChildClickListener childClickListener) {
+        this.mChildClickListener = childClickListener;
+    }
+
+    public interface OnRecyclerViewItemChildClickListener {
+        void onItemChildClick(BaseQuickAdapter adapter, View view, int position);
+    }
+
+    public class OnItemChildClickListener implements View.OnClickListener {
+        public int position;
+        @Override
+        public void onClick(View v) {
+            if (mChildClickListener != null)
+                mChildClickListener.onItemChildClick(BaseQuickAdapter.this, v, position - getHeaderViewsCount());
+        }
+    }
+
 
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
@@ -150,6 +169,17 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public List getData() {
         return mData;
     }
+
+    /**
+     * Get the data item associated with the specified position in the data set.
+     *
+     * @param position Position of the item whose data we want within the adapter's
+     * data set.
+     * @return The data at the specified position.
+     */
+    public T getItem(int position){
+        return mData.get(position);
+    };
 
     public int getHeaderViewsCount() {
         return mHeaderView == null ? 0 : 1;
