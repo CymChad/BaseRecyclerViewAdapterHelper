@@ -10,6 +10,7 @@ Please feel free to use this.(Love can be a **Star**)
 - **easily create section headers**
 - **custom item view type**
 - **add setEmptyView methods**
+- **add item chlid click**
 
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.gif)
 # Get it
@@ -25,7 +26,7 @@ Add it in your root build.gradle at the end of repositories:
 Add the dependency
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.5.5'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.5.7'
 	}
 ```
 
@@ -158,5 +159,33 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
 ```
 mQuickAdapter.setEmptyView(getView());
 ```
+#Use it item chlid click
+Adapter
+```
+ protected void convert(BaseViewHolder helper, Status item) {
+    helper.setOnClickListener(R.id.tweetAvatar, new OnItemChildClickListener())
+      .setOnClickListener(R.id.tweetName, new OnItemChildClickListener());
+      }
+```
+Activity
+```
+mQuickAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                String content = null;
+                Status status = (Status) adapter.getItem(position);
+                switch (view.getId()) {
+                    case R.id.tweetAvatar:
+                        content = "img:" + status.getUserAvatar();
+                        break;
+                    case R.id.tweetName:
+                        content = "name:" + status.getUserName();
+                        break;
+                }
+                Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
+            }
+        });
+```
+
 #Thanks
 [JoanZapata / base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper)

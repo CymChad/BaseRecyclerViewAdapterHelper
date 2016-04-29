@@ -25,8 +25,12 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
         helper.setText(R.id.tweetName, item.getUserName())
                 .setText(R.id.tweetText, item.getText())
                 .setText(R.id.tweetDate, item.getCreatedAt())
-                .setImageUrl(R.id.tweetAvatar, item.getUserAvatar())
+                .setImageUrl(R.id.tweetAvatar, item.getUserAvatar(), R.mipmap.ic_launcher)
                 .setVisible(R.id.tweetRT, item.isRetweet())
+                .setOnClickListener(R.id.tweetAvatar, new OnItemChildClickListener())
+                .setOnClickListener(R.id.tweetName, new OnItemChildClickListener())
                 .linkify(R.id.tweetText);
     }
+
+
 }

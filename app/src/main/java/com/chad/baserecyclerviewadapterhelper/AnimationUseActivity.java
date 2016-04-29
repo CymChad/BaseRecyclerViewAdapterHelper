@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickAdapter;
 import com.chad.baserecyclerviewadapterhelper.animation.CustomAnimation;
+import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
@@ -33,10 +34,20 @@ public class AnimationUseActivity extends Activity {
     private void initAdapter() {
         mQuickAdapter = new QuickAdapter(this);
         mQuickAdapter.openLoadAnimation();
-        mQuickAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+        mQuickAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
-                Toast.makeText(AnimationUseActivity.this, Integer.toString(position), Toast.LENGTH_LONG).show();
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                String content = null;
+                Status status = (Status) adapter.getItem(position);
+                switch (view.getId()) {
+                    case R.id.tweetAvatar:
+                        content = "img:" + status.getUserAvatar();
+                        break;
+                    case R.id.tweetName:
+                        content = "name:" + status.getUserName();
+                        break;
+                }
+                Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
             }
         });
         mRecyclerView.setAdapter(mQuickAdapter);

@@ -16,6 +16,7 @@
 - **新增分组**
 - **自定义item类型**
 - **添加setEmptyView方法**
+- **新增添加子布局多个控件的点击事件**
 
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.gif)
 #如何使用它？
@@ -31,7 +32,7 @@
 然后在dependencies添加:
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.5.5'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.5.7'
 	}
 ```
 
@@ -163,6 +164,33 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
 #使用setEmptyView
 ```
 mQuickAdapter.setEmptyView(getView());
+```
+#新增添加子布局多个控件的点击事件
+Adapter
+```
+ protected void convert(BaseViewHolder helper, Status item) {
+    helper.setOnClickListener(R.id.tweetAvatar, new OnItemChildClickListener())
+      .setOnClickListener(R.id.tweetName, new OnItemChildClickListener());
+      }
+```
+Activity
+```
+mQuickAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                String content = null;
+                Status status = (Status) adapter.getItem(position);
+                switch (view.getId()) {
+                    case R.id.tweetAvatar:
+                        content = "img:" + status.getUserAvatar();
+                        break;
+                    case R.id.tweetName:
+                        content = "name:" + status.getUserName();
+                        break;
+                }
+                Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
+            }
+        });
 ```
 
 >**持续更新!，所以推荐Star项目**
