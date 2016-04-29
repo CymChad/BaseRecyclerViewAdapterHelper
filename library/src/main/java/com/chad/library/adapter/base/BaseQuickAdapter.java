@@ -35,6 +35,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     private boolean mLoadingMoreEnable = false;
     private boolean mFirstOnlyEnable = true;
     private boolean mOpenAnimationEnable = false;
+    private boolean mEmptyEnable;
 
     @IntDef({ALPHAIN, SCALEIN, SLIDEIN_BOTTOM, SLIDEIN_LEFT, SLIDEIN_RIGHT})
     @Retention(RetentionPolicy.SOURCE)
@@ -128,6 +129,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     public class OnItemChildClickListener implements View.OnClickListener {
         public int position;
+
         @Override
         public void onClick(View v) {
             if (mChildClickListener != null)
@@ -174,12 +176,14 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * Get the data item associated with the specified position in the data set.
      *
      * @param position Position of the item whose data we want within the adapter's
-     * data set.
+     *                 data set.
      * @return The data at the specified position.
      */
-    public T getItem(int position){
+    public T getItem(int position) {
         return mData.get(position);
-    };
+    }
+
+    ;
 
     public int getHeaderViewsCount() {
         return mHeaderView == null ? 0 : 1;
@@ -197,7 +201,9 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public int getItemCount() {
         int i = mNextLoadEnable ? 1 : 0;
         int count = mData.size() + i + getHeaderViewsCount() + getFooterViewsCount();
+        mEmptyEnable = false;
         if (count == 0) {
+            mEmptyEnable = true;
             count += getmEmptyViewCount();
         }
         return count;
@@ -208,7 +214,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public int getItemViewType(int position) {
         if (mHeaderView != null && position == 0) {
             return HEADER_VIEW;
-        } else if (mEmptyView != null && getItemCount() == 1) {
+        } else if (mEmptyView != null && getItemCount() == 1 && mEmptyEnable) {
             return EMPTY_VIEW;
         } else if (position == mData.size() + getHeaderViewsCount()) {
             if (mNextLoadEnable)
