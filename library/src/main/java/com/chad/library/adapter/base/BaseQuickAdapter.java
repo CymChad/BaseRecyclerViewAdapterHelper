@@ -23,6 +23,7 @@ import com.chad.library.adapter.base.animation.SlideInRightAnimation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -31,7 +32,7 @@ import java.util.List;
  */
 public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private boolean mNextLoadEnable;
+    private boolean mNextLoadEnable = false;
     private boolean mLoadingMoreEnable = false;
     private boolean mFirstOnlyEnable = true;
     private boolean mOpenAnimationEnable = false;
@@ -92,11 +93,19 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     protected static final int EMPTY_VIEW = 0x00000555;
     private View mHeaderView;
     private View mFooterView;
+    private int pageSize = -1;
     /**
      * View to show if there are no items to show.
      */
     private View mEmptyView;
 
+    /**
+     * call the method will not enable the loadMore funcation and the params pageSize is invalid
+     * more infomation see{@link  public void openLoadMore(int pageSize, boolean enable),@link  public void setOnLoadMoreListener(RequestLoadMoreListener requestLoadMoreListener)} method
+     *
+     * @param pageSize
+     * @param requestLoadMoreListener
+     */
     @Deprecated
     public void setOnLoadMoreListener(int pageSize, RequestLoadMoreListener requestLoadMoreListener) {
 
@@ -104,9 +113,49 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     public void setOnLoadMoreListener(RequestLoadMoreListener requestLoadMoreListener) {
-
-        mNextLoadEnable = true;
         this.mRequestLoadMoreListener = requestLoadMoreListener;
+    }
+
+    /**
+     * when adapter's data size than pageSize and enable is true,the loading more function is enable,or disable
+     *
+     * @param pageSize
+     * @param enable
+     */
+    public void openLoadMore(int pageSize, boolean enable) {
+        this.pageSize = pageSize;
+        mNextLoadEnable = enable;
+
+    }
+
+    /**
+     * call the method before you should call setPageSize() method to setting up the enablePagerSize value,whether it will  invalid
+     * enable the loading more data function if enable's value is true,or disable
+     *
+     * @param enable
+     */
+    public void openLoadMore(boolean enable) {
+        mNextLoadEnable = enable;
+
+    }
+
+    /**
+     * setting up the size to decide the loading more data funcation whether enable
+     * enable if the data size than pageSize,or diable
+     *
+     * @param pageSize
+     */
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    /**
+     * return the value of pageSize
+     *
+     * @return
+     */
+    public int getPageSize() {
+        return this.pageSize;
     }
 
     public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener) {
@@ -149,12 +198,17 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public BaseQuickAdapter(Context context, int layoutResId, List<T> data) {
         this.mData = data == null ? new ArrayList<T>() : new ArrayList<T>(data);
         this.mContext = context;
-        this.mLayoutResId = layoutResId;
+        if (layoutResId != 0) {
+            this.mLayoutResId = layoutResId;
+        }
     }
 
     public BaseQuickAdapter(Context context, List<T> data) {
-        this.mData = data == null ? new ArrayList<T>() : new ArrayList<T>(data);
-        this.mContext = context;
+        this(context, 0, data);
+    }
+
+    public BaseQuickAdapter(Context context) {
+        this(context, null);
     }
 
     public void remove(int position) {
@@ -167,6 +221,32 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         mData.add(position, item);
         notifyItemInserted(position);
     }
+
+    /**
+     * After clear the adapter's data, add new collection
+     *
+     * @param collection
+     */
+    public void addAfterClear(Collection<? extends T> collection) {
+        try {
+            mData.clear();
+            mData.addAll(collection);
+            notifyDataSetChanged();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * setting up a new instance to data;
+     *
+     * @param data
+     */
+    public void setNewData(List<T> data) {
+        this.mData = data;
+        notifyDataSetChanged();
+    }
+
 
     public List getData() {
         return mData;
@@ -199,7 +279,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     @Override
     public int getItemCount() {
-        int i = mNextLoadEnable ? 1 : 0;
+        int i = isLoadMore() ? 1 : 0;
         int count = mData.size() + i + getHeaderViewsCount() + getFooterViewsCount();
         mEmptyEnable = false;
         if (count == 0) {
@@ -315,7 +395,20 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         return mEmptyView;
     }
 
+    /**
+     * see more {@link  public void notifyDataChangedAfterLoadMore(boolean isNextLoad)}
+     *
+     * @param isNextLoad
+     */
+    @Deprecated
     public void isNextLoad(boolean isNextLoad) {
+        mNextLoadEnable = isNextLoad;
+        mLoadingMoreEnable = false;
+        notifyDataSetChanged();
+
+    }
+
+    public void notifyDataChangedAfterLoadMore(boolean isNextLoad) {
         mNextLoadEnable = isNextLoad;
         mLoadingMoreEnable = false;
         notifyDataSetChanged();
@@ -354,7 +447,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 }
             }
         } else if (holder instanceof FooterViewHolder) {
-            if (mNextLoadEnable && !mLoadingMoreEnable && mRequestLoadMoreListener != null) {
+            if (isLoadMore()) {
                 mLoadingMoreEnable = true;
                 mRequestLoadMoreListener.onLoadMoreRequested();
                 if (holder.itemView.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams) {
@@ -372,6 +465,10 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             BaseViewHolder baseViewHolder = (BaseViewHolder) holder;
             onBindDefViewHolder(baseViewHolder, mData.get(index));
         }
+    }
+
+    private boolean isLoadMore() {
+        return mNextLoadEnable && pageSize != -1 && !mLoadingMoreEnable && mRequestLoadMoreListener != null && mData.size() >= pageSize;
     }
 
     protected View getItemView(int layoutResId, ViewGroup parent) {
