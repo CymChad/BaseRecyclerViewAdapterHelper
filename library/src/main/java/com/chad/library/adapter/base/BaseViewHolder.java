@@ -21,6 +21,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.Transformation;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 
 
 /**
@@ -161,6 +163,12 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     public BaseViewHolder setImageUrl(int viewId, String imageUrl, int defResourceId) {
         ImageView view = getView(viewId);
         Glide.with(context).load(imageUrl).crossFade().placeholder(defResourceId).into(view);
+        return this;
+    }
+
+    public BaseViewHolder setImageUrl(int viewId, String imageUrl, int defResourceId, BitmapTransformation... transformations) {
+        ImageView view = getView(viewId);
+        Glide.with(context).load(imageUrl).crossFade().placeholder(defResourceId).transform(transformations).into(view);
         return this;
     }
 
