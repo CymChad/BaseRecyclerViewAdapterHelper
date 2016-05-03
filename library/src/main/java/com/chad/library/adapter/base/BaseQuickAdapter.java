@@ -93,7 +93,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     protected static final int EMPTY_VIEW = 0x00000555;
     private View mHeaderView;
     private View mFooterView;
-    private int enablePageSize = -1;//数据大于等于该值才启动loadMore功能
+    private int pageSize = -1;
     /**
      * View to show if there are no items to show.
      */
@@ -123,13 +123,13 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * @param enable
      */
     public void openLoadMore(int pageSize, boolean enable) {
-        this.enablePageSize = pageSize;
+        this.pageSize = pageSize;
         mNextLoadEnable = enable;
 
     }
 
     /**
-     * call the method before you should call setEnablePageSize() method to setting up the enablePagerSize value,whether it will  invalid
+     * call the method before you should call setPageSize() method to setting up the enablePagerSize value,whether it will  invalid
      * enable the loading more data function if enable's value is true,or disable
      *
      * @param enable
@@ -141,21 +141,21 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     /**
      * setting up the size to decide the loading more data funcation whether enable
-     * enable if the data size than enablePageSize,or diable
+     * enable if the data size than pageSize,or diable
      *
-     * @param enablePageSize
+     * @param pageSize
      */
-    public void setEnablePageSize(int enablePageSize) {
-        this.enablePageSize = enablePageSize;
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 
     /**
-     * return the value of enablePageSize
+     * return the value of pageSize
      *
      * @return
      */
-    public int getEnablePageSize() {
-        return this.enablePageSize;
+    public int getPageSize() {
+        return this.pageSize;
     }
 
     public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener) {
@@ -279,7 +279,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     @Override
     public int getItemCount() {
-        int i = mNextLoadEnable ? 1 : 0;
+        int i = isLoadMore() ? 1 : 0;
         int count = mData.size() + i + getHeaderViewsCount() + getFooterViewsCount();
         mEmptyEnable = false;
         if (count == 0) {
@@ -468,7 +468,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     private boolean isLoadMore() {
-        return mNextLoadEnable && enablePageSize != -1 && !mLoadingMoreEnable && mRequestLoadMoreListener != null && mData.size() >= enablePageSize;
+        return mNextLoadEnable && pageSize != -1 && !mLoadingMoreEnable && mRequestLoadMoreListener != null && mData.size() >= pageSize;
     }
 
     protected View getItemView(int layoutResId, ViewGroup parent) {
