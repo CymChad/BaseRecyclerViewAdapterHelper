@@ -17,7 +17,6 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends B
 
 
     protected int mSectionHeadResId;
-    protected List<T> mData;
     protected static final int SECTION_HEADER_VIEW = 0x00000444;
 
     /**
@@ -39,7 +38,7 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends B
 
     @Override
     protected int getDefItemViewType(int position) {
-        return mData.get(position).isHeader ? SECTION_HEADER_VIEW : 0;
+        return ((SectionEntity)mData.get(position)).isHeader ? SECTION_HEADER_VIEW : 0;
     }
 
     @Override
@@ -68,6 +67,7 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends B
             }
         }
     }
+
 
     @Override
     protected void convert(BaseViewHolder helper, Object item) {

@@ -71,6 +71,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     protected int mLayoutResId;
 
+    protected LayoutInflater mLayoutInflater;
+
     protected List<T> mData;
 
     private Interpolator mInterpolator = new LinearInterpolator();
@@ -198,6 +200,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public BaseQuickAdapter(Context context, int layoutResId, List<T> data) {
         this.mData = data == null ? new ArrayList<T>() : new ArrayList<T>(data);
         this.mContext = context;
+        this.mLayoutInflater = LayoutInflater.from(context);
         if (layoutResId != 0) {
             this.mLayoutResId = layoutResId;
         }
@@ -417,22 +420,22 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int positions) {
 
         if (holder instanceof ContentViewHolder) {
-            int index = position - getHeaderViewsCount();
+            int index = holder.getLayoutPosition() - getHeaderViewsCount();
             BaseViewHolder baseViewHolder = (BaseViewHolder) holder;
             convert(baseViewHolder, mData.get(index));
             if (onRecyclerViewItemClickListener != null) {
                 baseViewHolder.convertView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        onRecyclerViewItemClickListener.onItemClick(v, position - getHeaderViewsCount());
+                        onRecyclerViewItemClickListener.onItemClick(v, holder.getLayoutPosition() - getHeaderViewsCount());
                     }
                 });
             }
             if (mOpenAnimationEnable) {
-                if (!mFirstOnlyEnable || position > mLastPosition) {
+                if (!mFirstOnlyEnable || holder.getLayoutPosition() > mLastPosition) {
                     BaseAnimation animation = null;
                     if (mCustomAnimation != null) {
                         animation = mCustomAnimation;
@@ -443,7 +446,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                         anim.setDuration(mDuration).start();
                         anim.setInterpolator(mInterpolator);
                     }
-                    mLastPosition = position;
+                    mLastPosition = holder.getLayoutPosition();
                 }
             }
         } else if (holder instanceof FooterViewHolder) {
@@ -461,7 +464,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         } else if (holder instanceof EmptyViewHolder) {
 
         } else {
-            int index = position - getHeaderViewsCount();
+            int index = holder.getLayoutPosition() - getHeaderViewsCount();
             BaseViewHolder baseViewHolder = (BaseViewHolder) holder;
             onBindDefViewHolder(baseViewHolder, mData.get(index));
         }
@@ -472,8 +475,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     protected View getItemView(int layoutResId, ViewGroup parent) {
-        return LayoutInflater.from(parent.getContext()).inflate(
-                layoutResId, parent, false);
+        return mLayoutInflater.inflate(layoutResId, parent, false);
     }
 
 

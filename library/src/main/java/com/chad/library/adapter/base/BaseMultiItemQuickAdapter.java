@@ -15,7 +15,6 @@ import java.util.List;
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity> extends BaseQuickAdapter {
-    protected List<T> mData;
     private SparseArray<Integer> layouts;
 
     /**
@@ -32,7 +31,7 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity> exten
 
     @Override
     protected int getDefItemViewType(int position) {
-        return mData.get(position).getItemType();
+        return ((MultiItemEntity)mData.get(position)).getItemType();
     }
 
 
@@ -53,6 +52,8 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity> exten
         }
         layouts.put(type, layoutResId);
     }
+
+
 
     @Override
     protected void convert(BaseViewHolder helper, Object item) {
