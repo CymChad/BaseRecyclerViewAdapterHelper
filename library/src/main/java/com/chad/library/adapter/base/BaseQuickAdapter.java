@@ -37,6 +37,31 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     private boolean mFirstOnlyEnable = true;
     private boolean mOpenAnimationEnable = false;
     private boolean mEmptyEnable;
+    private Interpolator mInterpolator = new LinearInterpolator();
+    private int mDuration = 300;
+    private int mLastPosition = -1;
+    private OnRecyclerViewItemClickListener onRecyclerViewItemClickListener;
+    private RequestLoadMoreListener mRequestLoadMoreListener;
+    @AnimationType
+    private BaseAnimation mCustomAnimation;
+    private BaseAnimation mSelectAnimation = new AlphaInAnimation();
+    private View mHeaderView;
+    private View mFooterView;
+    private int pageSize = -1;
+    /**
+     * View to show if there are no items to show.
+     */
+    private View mEmptyView;
+
+    protected static final String TAG = BaseQuickAdapter.class.getSimpleName();
+    protected Context mContext;
+    protected int mLayoutResId;
+    protected LayoutInflater mLayoutInflater;
+    protected List<T> mData;
+    protected static final int HEADER_VIEW = 0x00000111;
+    protected static final int LOADING_VIEW = 0x00000222;
+    protected static final int FOOTER_VIEW = 0x00000333;
+    protected static final int EMPTY_VIEW = 0x00000555;
 
     @IntDef({ALPHAIN, SCALEIN, SLIDEIN_BOTTOM, SLIDEIN_LEFT, SLIDEIN_RIGHT})
     @Retention(RetentionPolicy.SOURCE)
@@ -64,40 +89,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      */
     public static final int SLIDEIN_RIGHT = 0x00000005;
 
-
-    protected static final String TAG = BaseQuickAdapter.class.getSimpleName();
-
-    protected Context mContext;
-
-    protected int mLayoutResId;
-
-    protected List<T> mData;
-
-    private Interpolator mInterpolator = new LinearInterpolator();
-
-    private int mDuration = 300;
-
-    private int mLastPosition = -1;
-
-
-    private OnRecyclerViewItemClickListener onRecyclerViewItemClickListener;
-
-    private RequestLoadMoreListener mRequestLoadMoreListener;
-
-    @AnimationType
-    private BaseAnimation mCustomAnimation;
-    private BaseAnimation mSelectAnimation = new AlphaInAnimation();
-    protected static final int HEADER_VIEW = 0x00000111;
-    protected static final int LOADING_VIEW = 0x00000222;
-    protected static final int FOOTER_VIEW = 0x00000333;
-    protected static final int EMPTY_VIEW = 0x00000555;
-    private View mHeaderView;
-    private View mFooterView;
-    private int pageSize = -1;
-    /**
-     * View to show if there are no items to show.
-     */
-    private View mEmptyView;
 
     /**
      * call the method will not enable the loadMore funcation and the params pageSize is invalid
@@ -198,6 +189,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public BaseQuickAdapter(Context context, int layoutResId, List<T> data) {
         this.mData = data == null ? new ArrayList<T>() : new ArrayList<T>(data);
         this.mContext = context;
+        this.mLayoutInflater = LayoutInflater.from(context);
         if (layoutResId != 0) {
             this.mLayoutResId = layoutResId;
         }
@@ -263,8 +255,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         return mData.get(position);
     }
 
-    ;
-
     public int getHeaderViewsCount() {
         return mHeaderView == null ? 0 : 1;
     }
@@ -311,52 +301,55 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == 0) {
-            return onCreateDefViewHolder(parent, viewType);
-        } else if (viewType == LOADING_VIEW) {
-            return new FooterViewHolder(getItemView(R.layout.def_loading, parent));
-        } else if (viewType == HEADER_VIEW) {
-            return new HeadViewHolder(mHeaderView);
-        } else if (viewType == FOOTER_VIEW) {
-            return new FooterViewHolder(mFooterView);
-        } else if (viewType == EMPTY_VIEW) {
-            return new EmptyViewHolder(mEmptyView);
-        } else {
-            return onCreateDefViewHolder(parent, viewType);
+        BaseViewHolder baseViewHolder = onCreateDefViewHolder(parent, viewType);
+        switch (viewType) {
+            case LOADING_VIEW:
+                baseViewHolder = createBaseViewHolder(parent, R.layout.def_loading);
+                break;
+            case HEADER_VIEW:
+                baseViewHolder = new BaseViewHolder(mContext, mHeaderView);
+                break;
+            case EMPTY_VIEW:
+                baseViewHolder = new BaseViewHolder(mContext, mEmptyView);
+                break;
+            case FOOTER_VIEW:
+                baseViewHolder = new BaseViewHolder(mContext, mFooterView);
+                break;
+        }
+        return baseViewHolder;
+
+    }
+
+    @Override
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int positions) {
+
+        switch (holder.getItemViewType()) {
+            case 0:
+                convert((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderViewsCount()));
+                initItemClickListener(holder, (BaseViewHolder) holder);
+                addAnimation(holder);
+                break;
+            case LOADING_VIEW:
+                addLoadMore(holder);
+                break;
+            case HEADER_VIEW:
+            case EMPTY_VIEW:
+            case FOOTER_VIEW:
+                break;
+            default:
+                convert((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderViewsCount()));
+                onBindDefViewHolder((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderViewsCount()));
+                break;
         }
 
     }
 
     protected BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
-        return new ContentViewHolder(getItemView(mLayoutResId, parent));
+        return createBaseViewHolder(parent, mLayoutResId);
     }
 
-    public static class FooterViewHolder extends BaseViewHolder {
-
-        public FooterViewHolder(View itemView) {
-            super(itemView.getContext(), itemView);
-        }
-    }
-
-    public static class HeadViewHolder extends BaseViewHolder {
-
-        public HeadViewHolder(View itemView) {
-            super(itemView.getContext(), itemView);
-        }
-    }
-
-    public static class ContentViewHolder extends BaseViewHolder {
-
-        public ContentViewHolder(View itemView) {
-            super(itemView.getContext(), itemView);
-        }
-    }
-
-    public static class EmptyViewHolder extends BaseViewHolder {
-
-        public EmptyViewHolder(View itemView) {
-            super(itemView.getContext(), itemView);
-        }
+    protected BaseViewHolder createBaseViewHolder(ViewGroup parent, int layoutResId) {
+        return new BaseViewHolder(mContext, getItemView(layoutResId, parent));
     }
 
 
@@ -416,54 +409,43 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
 
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-
-        if (holder instanceof ContentViewHolder) {
-            int index = position - getHeaderViewsCount();
-            BaseViewHolder baseViewHolder = (BaseViewHolder) holder;
-            convert(baseViewHolder, mData.get(index));
-            if (onRecyclerViewItemClickListener != null) {
-                baseViewHolder.convertView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onRecyclerViewItemClickListener.onItemClick(v, position - getHeaderViewsCount());
-                    }
-                });
+    private void addLoadMore(RecyclerView.ViewHolder holder) {
+        if (isLoadMore()) {
+            mLoadingMoreEnable = true;
+            mRequestLoadMoreListener.onLoadMoreRequested();
+            if (holder.itemView.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams) {
+                StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
+                params.setFullSpan(true);
             }
-            if (mOpenAnimationEnable) {
-                if (!mFirstOnlyEnable || position > mLastPosition) {
-                    BaseAnimation animation = null;
-                    if (mCustomAnimation != null) {
-                        animation = mCustomAnimation;
-                    } else {
-                        animation = mSelectAnimation;
-                    }
-                    for (Animator anim : animation.getAnimators(holder.itemView)) {
-                        anim.setDuration(mDuration).start();
-                        anim.setInterpolator(mInterpolator);
-                    }
-                    mLastPosition = position;
+        }
+    }
+
+    private void initItemClickListener(final RecyclerView.ViewHolder holder, BaseViewHolder baseViewHolder) {
+        if (onRecyclerViewItemClickListener != null) {
+            baseViewHolder.convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onRecyclerViewItemClickListener.onItemClick(v, holder.getLayoutPosition() - getHeaderViewsCount());
                 }
-            }
-        } else if (holder instanceof FooterViewHolder) {
-            if (isLoadMore()) {
-                mLoadingMoreEnable = true;
-                mRequestLoadMoreListener.onLoadMoreRequested();
-                if (holder.itemView.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams) {
-                    StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
-                    params.setFullSpan(true);
+            });
+        }
+    }
+
+    private void addAnimation(RecyclerView.ViewHolder holder) {
+        if (mOpenAnimationEnable) {
+            if (!mFirstOnlyEnable || holder.getLayoutPosition() > mLastPosition) {
+                BaseAnimation animation = null;
+                if (mCustomAnimation != null) {
+                    animation = mCustomAnimation;
+                } else {
+                    animation = mSelectAnimation;
                 }
+                for (Animator anim : animation.getAnimators(holder.itemView)) {
+                    anim.setDuration(mDuration).start();
+                    anim.setInterpolator(mInterpolator);
+                }
+                mLastPosition = holder.getLayoutPosition();
             }
-
-        } else if (holder instanceof HeadViewHolder) {
-
-        } else if (holder instanceof EmptyViewHolder) {
-
-        } else {
-            int index = position - getHeaderViewsCount();
-            BaseViewHolder baseViewHolder = (BaseViewHolder) holder;
-            onBindDefViewHolder(baseViewHolder, mData.get(index));
         }
     }
 
@@ -472,8 +454,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     protected View getItemView(int layoutResId, ViewGroup parent) {
-        return LayoutInflater.from(parent.getContext()).inflate(
-                layoutResId, parent, false);
+        return mLayoutInflater.inflate(layoutResId, parent, false);
     }
 
 
@@ -483,6 +464,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * @param holder
      * @param item
      */
+    @Deprecated
     protected void onBindDefViewHolder(BaseViewHolder holder, T item) {
     }
 

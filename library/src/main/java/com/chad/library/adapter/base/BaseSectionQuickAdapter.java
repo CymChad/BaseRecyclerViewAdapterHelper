@@ -2,12 +2,10 @@ package com.chad.library.adapter.base;
 
 import android.content.Context;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.entity.SectionEntity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +15,6 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends B
 
 
     protected int mSectionHeadResId;
-    protected List<T> mData;
     protected static final int SECTION_HEADER_VIEW = 0x00000444;
 
     /**
@@ -31,47 +28,40 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends B
      */
     public BaseSectionQuickAdapter(Context context, int layoutResId, int sectionHeadResId, List<T> data) {
         super(context, layoutResId, data);
-        this.mData = data == null ? new ArrayList<T>() : new ArrayList<T>(data);
-        this.mContext = context;
-        this.mLayoutResId = layoutResId;
         this.mSectionHeadResId = sectionHeadResId;
     }
 
     @Override
     protected int getDefItemViewType(int position) {
-        return mData.get(position).isHeader ? SECTION_HEADER_VIEW : 0;
+        return ((SectionEntity) mData.get(position)).isHeader ? SECTION_HEADER_VIEW : 0;
     }
 
     @Override
     protected BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
         if (viewType == SECTION_HEADER_VIEW)
-            return new SectionHeadViewHolder(getItemView(mSectionHeadResId,parent));
+            return new BaseViewHolder(mContext, getItemView(mSectionHeadResId, parent));
 
         return super.onCreateDefViewHolder(parent, viewType);
-
     }
 
-    public static class SectionHeadViewHolder extends BaseViewHolder {
-
-        public SectionHeadViewHolder(View itemView) {
-            super(itemView.getContext(), itemView);
-        }
-    }
-
+    /**
+     * @param holder A fully initialized helper.
+     * @param item   The item that needs to be displayed.
+     */
     @Override
-    protected void onBindDefViewHolder(BaseViewHolder holder, Object item) {
-        if (holder instanceof SectionHeadViewHolder) {
-            convertHead(holder, (T) item);
-            if (holder.itemView.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams) {
-                StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
-                params.setFullSpan(true);
-            }
+    protected void convert(BaseViewHolder holder, Object item) {
+        switch (holder.getItemViewType()) {
+            case SECTION_HEADER_VIEW:
+                if (holder.itemView.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams) {
+                    StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
+                    params.setFullSpan(true);
+                }
+                convertHead(holder, (T) item);
+                break;
+            default:
+                convert(holder, (T) item);
+                break;
         }
-    }
-
-    @Override
-    protected void convert(BaseViewHolder helper, Object item) {
-        convert(helper, (T) item);
     }
 
     protected abstract void convertHead(BaseViewHolder helper, T item);

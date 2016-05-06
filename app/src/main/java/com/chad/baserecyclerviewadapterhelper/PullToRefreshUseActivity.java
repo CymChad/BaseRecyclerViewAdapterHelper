@@ -63,7 +63,6 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
             mRecyclerView.post(new Runnable() {
                 @Override
                 public void run() {
-                   // mQuickAdapter.isNextLoad(false);
                     mQuickAdapter.notifyDataChangedAfterLoadMore(false);
                 }
             });
@@ -74,7 +73,6 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
                 public void run() {
                     DataServer.addData(mQuickAdapter.getData(), PAGE_SIZE);
                     mCurrentCounter = mQuickAdapter.getItemCount();
-                  //  mQuickAdapter.isNextLoad(true);
                     mQuickAdapter.notifyDataChangedAfterLoadMore(true);
 
                 }
@@ -99,7 +97,6 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
         mQuickAdapter.openLoadAnimation();
         mRecyclerView.setAdapter(mQuickAdapter);
         mCurrentCounter = mQuickAdapter.getItemCount();
-       // mQuickAdapter.setOnLoadMoreListener(PAGE_SIZE, this);
         mQuickAdapter.setOnLoadMoreListener(this);
         mQuickAdapter.openLoadMore(PAGE_SIZE,true);//or call mQuickAdapter.setPageSize(PAGE_SIZE);  mQuickAdapter.openLoadMore(true);
         addHeadView();

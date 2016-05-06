@@ -8,7 +8,7 @@ import android.view.View;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class ScaleInAnimation extends BaseAnimation {
+public class ScaleInAnimation implements BaseAnimation {
 
   private static final float DEFAULT_SCALE_FROM = .5f;
   private final float mFrom;

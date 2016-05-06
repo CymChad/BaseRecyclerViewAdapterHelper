@@ -24,7 +24,7 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
     protected void convert(BaseViewHolder helper, MultipleItem item) {
         switch (helper.getItemViewType()) {
             case MultipleItem.TEXT:
-                helper.setImageUrl(R.id.tv, item.getContent());
+                helper.setText(R.id.tv, item.getContent());
                 break;
             case MultipleItem.IMG:
                 helper.setImageUrl(R.id.iv, item.getContent());

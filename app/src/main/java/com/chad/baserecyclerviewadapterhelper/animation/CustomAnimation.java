@@ -9,7 +9,7 @@ import com.chad.library.adapter.base.animation.BaseAnimation;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class CustomAnimation extends BaseAnimation {
+public class CustomAnimation implements BaseAnimation {
 
     @Override
     public Animator[] getAnimators(View view) {
