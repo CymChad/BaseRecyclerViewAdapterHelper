@@ -2,44 +2,42 @@ package com.chad.library.adapter.base;
 
 import android.content.Context;
 import android.util.SparseArray;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity> extends BaseQuickAdapter {
+
+    /**
+     * layouts indexed with their types
+     */
     private SparseArray<Integer> layouts;
 
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.
+     *
      * @param context The context.
      * @param data    A new list is created out of this one to avoid mutable list
      */
     public BaseMultiItemQuickAdapter(Context context, List<T> data) {
         super(context, data);
-        this.mData = data == null ? new ArrayList<T>() : new ArrayList<T>(data);
-        this.mContext = context;
     }
 
     @Override
     protected int getDefItemViewType(int position) {
-        return ((MultiItemEntity)mData.get(position)).getItemType();
+        return ((MultiItemEntity) mData.get(position)).getItemType();
     }
 
 
     @Override
     protected BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
-        int layoutId = getLayoutId(viewType);
-        View view = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
-        return new BaseViewHolder(mContext, view);
+        return createBaseViewHolder(parent, getLayoutId(viewType));
     }
 
     private int getLayoutId(int viewType) {
@@ -52,7 +50,6 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity> exten
         }
         layouts.put(type, layoutResId);
     }
-
 
 
     @Override

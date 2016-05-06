@@ -8,7 +8,7 @@ import android.view.View;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class AlphaInAnimation extends BaseAnimation {
+public class AlphaInAnimation implements BaseAnimation {
 
     private static final float DEFAULT_ALPHA_FROM = 0f;
     private final float mFrom;
