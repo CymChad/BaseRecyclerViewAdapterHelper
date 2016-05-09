@@ -15,7 +15,7 @@
 - **添加下拉刷新、上拉加载**
 - **添加分组**
 - **自定义不同item类型**
-- **设置空布局**
+- **设置setEmptyView**
 - **添加子布局控件的点击事件**
 
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.gif)
