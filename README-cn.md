@@ -8,15 +8,15 @@
 # BaseRecyclerViewAdapterHelper
 一个强大并且灵活的RecyclerViewAdapter，欢迎使用。（喜欢的可以**Star**一下）
 #它能做什么？（[下载 apk](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/raw/master/demo_res/demo.apk)）
-- **它可以大量减少你Adapter写的代码（和正常的Adapter相比至少三分之二的）**
-- **可以添加点击事件**
-- **它可以很轻松的添加RecyclerView加载动画**
-- **新增添加头部、添加尾部**
-- **新增下拉刷新、上拉加载更多**
-- **新增分组**
-- **自定义item类型**
-- **添加setEmptyView方法**
-- **新增添加子布局多个控件的点击事件**
+- **优化Adapter代码**
+- **添加点击事件**
+- **添加列表加载动画**
+- **添加添加头部、添加尾部**
+- **添加下拉刷新、上拉加载**
+- **添加分组**
+- **自定义不同item类型**
+- **设置空布局**
+- **添加子布局控件的点击事件**
 
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.gif)
 #如何使用它？
