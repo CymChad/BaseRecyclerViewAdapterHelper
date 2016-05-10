@@ -1,22 +1,21 @@
 >RecyclerView作为Android最常用的控件，受益群体几乎是所有Android开发者，希望更多开发者能够一起来维护这个项目，把这个项目做得更好，帮助更多人。**Star我的项目可加Q群558178792，申请的时候把GitHub的账号名字备注上否则不予通过，谢谢配合。**中国有句古话叫“授人以鱼不如授人以渔”，不仅仅提供使用，还写了如何实现的原理：
-- 「[RecyclerView.Adapter优化了吗？](http://www.jianshu.com/p/411ab861034f)」
-- 「[BaseRecyclerAdapter之添加动画](http://www.jianshu.com/p/fa3f97c19263)」
-- 「[BaseRecyclerAdapter之添加不同布局（头部尾部）](http://www.jianshu.com/p/9d75c22f0964)」
-- 「[BaseRecyclerAdapter之添加不同布局（优化篇）](http://www.jianshu.com/p/cf29d4e45536)」
+- 「[RecyclerView.Adapter优化了吗？](http://blog.csdn.net/cym492224103/article/details/51113321)」
+-  「[BaseRecyclerAdapter之添加动画](http://blog.csdn.net/cym492224103/article/details/51150108)」
+-  「[BaseRecyclerAdapter之添加不同布局（头部尾部）](http://blog.csdn.net/cym492224103/article/details/51214362)」
+-  「[BaseRecyclerAdapter之添加不同布局（优化篇）](http://blog.csdn.net/cym492224103/article/details/51222414)」
 
 
 # BaseRecyclerViewAdapterHelper
 一个强大并且灵活的RecyclerViewAdapter，欢迎使用。（喜欢的可以**Star**一下）
 #它能做什么？（[下载 apk](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/raw/master/demo_res/demo.apk)）
-- **它可以大量减少你Adapter写的代码（和正常的Adapter相比至少三分之二的）**
-- **可以添加点击事件**
-- **它可以很轻松的添加RecyclerView加载动画**
-- **新增添加头部、添加尾部**
-- **新增下拉刷新、上拉加载更多**
-- **新增分组**
-- **自定义item类型**
-- **添加setEmptyView方法**
-- **新增添加子布局多个控件的点击事件**
+- **优化Adapter代码（减少百分之70%代码）**
+- **添加点击item点击事件、以及item子控件的点击事件**
+- **添加加载动画（一行代码轻松切换5种默认动画）**
+- **添加头部、尾部、下拉刷新、上拉加载（感觉又回到ListView时代）**
+- **添加分组（随心定义分组头部）**
+- **自定义不同的item类型（简单配置、无需重写额外方法）**
+- **设置空布局（比Listview的setEmptyView还要好用！）**
+
 
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.gif)
 #如何使用它？
@@ -32,7 +31,7 @@
 然后在dependencies添加:
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.6.2'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.6.3'
 	}
 ```
 
@@ -65,6 +64,33 @@ mQuickAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecycler
             }
         });
 ```
+#新增添加子布局多个控件的点击事件
+Adapter
+```
+ protected void convert(BaseViewHolder helper, Status item) {
+    helper.setOnClickListener(R.id.tweetAvatar, new OnItemChildClickListener())
+      .setOnClickListener(R.id.tweetName, new OnItemChildClickListener());
+      }
+```
+Activity
+```
+mQuickAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                String content = null;
+                Status status = (Status) adapter.getItem(position);
+                switch (view.getId()) {
+                    case R.id.tweetAvatar:
+                        content = "img:" + status.getUserAvatar();
+                        break;
+                    case R.id.tweetName:
+                        content = "name:" + status.getUserName();
+                        break;
+                }
+                Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
+            }
+        });
+```
 #如何使用它添加动画？
 
 ```
@@ -88,30 +114,6 @@ quickAdapter.openLoadAnimation(new BaseAnimation() {
                                 };
                             }
                         });
-```
-#如何添加多种类型item？
-```
-public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem> {
-
-    public MultipleItemQuickAdapter(Context context, List data) {
-        super(context, data);
-        addItmeType(MultipleItem.TEXT, R.layout.text_view);
-        addItmeType(MultipleItem.IMG, R.layout.image_view);
-    }
-
-    @Override
-    protected void convert(BaseViewHolder helper, MultipleItem item) {
-        switch (helper.getItemViewType()) {
-            case MultipleItem.TEXT:
-                helper.setImageUrl(R.id.tv, item.getContent());
-                break;
-            case MultipleItem.IMG:
-                helper.setImageUrl(R.id.iv, item.getContent());
-                break;
-        }
-    }
-
-}
 ```
 #使用它添加头部添加尾部
 ```
@@ -161,36 +163,33 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
         });
     }
 ```
+#如何添加多种类型item？
+```
+public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem> {
+
+    public MultipleItemQuickAdapter(Context context, List data) {
+        super(context, data);
+        addItmeType(MultipleItem.TEXT, R.layout.text_view);
+        addItmeType(MultipleItem.IMG, R.layout.image_view);
+    }
+
+    @Override
+    protected void convert(BaseViewHolder helper, MultipleItem item) {
+        switch (helper.getItemViewType()) {
+            case MultipleItem.TEXT:
+                helper.setImageUrl(R.id.tv, item.getContent());
+                break;
+            case MultipleItem.IMG:
+                helper.setImageUrl(R.id.iv, item.getContent());
+                break;
+        }
+    }
+
+}
+```
 #使用setEmptyView
 ```
 mQuickAdapter.setEmptyView(getView());
-```
-#新增添加子布局多个控件的点击事件
-Adapter
-```
- protected void convert(BaseViewHolder helper, Status item) {
-    helper.setOnClickListener(R.id.tweetAvatar, new OnItemChildClickListener())
-      .setOnClickListener(R.id.tweetName, new OnItemChildClickListener());
-      }
-```
-Activity
-```
-mQuickAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                String content = null;
-                Status status = (Status) adapter.getItem(position);
-                switch (view.getId()) {
-                    case R.id.tweetAvatar:
-                        content = "img:" + status.getUserAvatar();
-                        break;
-                    case R.id.tweetName:
-                        content = "name:" + status.getUserName();
-                        break;
-                }
-                Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
-            }
-        });
 ```
 
 >**持续更新!，所以推荐Star项目**

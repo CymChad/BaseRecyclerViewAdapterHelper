@@ -301,7 +301,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        BaseViewHolder baseViewHolder = onCreateDefViewHolder(parent, viewType);
+        BaseViewHolder baseViewHolder = null;
         switch (viewType) {
             case LOADING_VIEW:
                 baseViewHolder = createBaseViewHolder(parent, R.layout.def_loading);
@@ -315,6 +315,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             case FOOTER_VIEW:
                 baseViewHolder = new BaseViewHolder(mContext, mFooterView);
                 break;
+            default:
+                baseViewHolder = onCreateDefViewHolder(parent, viewType);
         }
         return baseViewHolder;
 
@@ -333,7 +335,9 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 addLoadMore(holder);
                 break;
             case HEADER_VIEW:
+                break;
             case EMPTY_VIEW:
+                break;
             case FOOTER_VIEW:
                 break;
             default:
@@ -497,6 +501,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 break;
             case SLIDEIN_RIGHT:
                 mSelectAnimation = new SlideInRightAnimation();
+                break;
+            default:
                 break;
         }
     }
