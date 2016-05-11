@@ -121,25 +121,24 @@ mQuickAdapter.addHeaderView(getView());
 mQuickAdapter.addFooterView(getView());
 ```
 #使用它加载更多
-设置加载更多的监听
 ```
-mQuickAdapter.setOnLoadMoreListener(this);
-```
-实现加载更多监听的方法
-```
-@Override
-public void onLoadMoreRequested() {
-        mRecyclerView.post(new Runnable() {
-        @Override
-        public void run() {
-        if (mCurrentCounter >= TOTAL_COUNTER) {
-                    mQuickAdapter.notifyDataChangedAfterLoadMore(false);
-                }
-        } else {
-                    mQuickAdapter.notifyDataChangedAfterLoadMore(DataServer.getSampleData(PAGE_SIZE),true);
-                    mCurrentCounter = mQuickAdapter.getItemCount();
-        }});
-    }
+mQuickAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                mRecyclerView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mCurrentCounter >= TOTAL_COUNTER) {
+                            mQuickAdapter.notifyDataChangedAfterLoadMore(false);
+                        } else {
+                            mQuickAdapter.notifyDataChangedAfterLoadMore(DataServer.getSampleData(PAGE_SIZE), true);
+                            mCurrentCounter = mQuickAdapter.getItemCount();
+                        }
+                    }
+
+                });
+            }
+        });
 ```
 #使用分组
 ```
