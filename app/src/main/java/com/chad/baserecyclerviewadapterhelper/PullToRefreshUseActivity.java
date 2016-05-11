@@ -71,10 +71,8 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    DataServer.addData(mQuickAdapter.getData(), PAGE_SIZE);
+                    mQuickAdapter.notifyDataChangedAfterLoadMore(DataServer.getSampleData(PAGE_SIZE),true);
                     mCurrentCounter = mQuickAdapter.getItemCount();
-                    mQuickAdapter.notifyDataChangedAfterLoadMore(true);
-
                 }
             }, delayMillis);
         }
@@ -86,7 +84,8 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                initAdapter();
+                mQuickAdapter.setNewData(DataServer.getSampleData(PAGE_SIZE));
+                mCurrentCounter = PAGE_SIZE;
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         }, delayMillis);

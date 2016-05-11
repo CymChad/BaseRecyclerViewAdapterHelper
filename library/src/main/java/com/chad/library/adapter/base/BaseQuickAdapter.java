@@ -23,7 +23,6 @@ import com.chad.library.adapter.base.animation.SlideInRightAnimation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 
@@ -214,20 +213,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         notifyItemInserted(position);
     }
 
-    /**
-     * After clear the adapter's data, add new collection
-     *
-     * @param collection
-     */
-    public void addAfterClear(Collection<? extends T> collection) {
-        try {
-            mData.clear();
-            mData.addAll(collection);
-            notifyDataSetChanged();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * setting up a new instance to data;
@@ -236,6 +221,17 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      */
     public void setNewData(List<T> data) {
         this.mData = data;
+        if (mRequestLoadMoreListener != null) mNextLoadEnable = true;
+        notifyDataSetChanged();
+    }
+
+    /**
+     * additional data;
+     *
+     * @param data
+     */
+    public void addData(List<T> data) {
+        this.mData.addAll(data);
         notifyDataSetChanged();
     }
 
@@ -409,6 +405,12 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         mNextLoadEnable = isNextLoad;
         mLoadingMoreEnable = false;
         notifyDataSetChanged();
+
+    }
+
+    public void notifyDataChangedAfterLoadMore(List<T> data, boolean isNextLoad) {
+        mData.addAll(data);
+        notifyDataChangedAfterLoadMore(isNextLoad);
 
     }
 

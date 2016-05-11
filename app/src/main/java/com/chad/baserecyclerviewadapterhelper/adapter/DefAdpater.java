@@ -21,14 +21,15 @@ import java.util.List;
 public class DefAdpater extends RecyclerView.Adapter<DefAdpater.ViewHolder> {
     private final List<Status> sampleData = DataServer.getSampleData(100);
     private Context mContext;
-
+    private LayoutInflater mLayoutInflater;
     public DefAdpater(Context context) {
         mContext = context;
+        mLayoutInflater = LayoutInflater.from(context);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.tweet, parent, false);
+        View item = mLayoutInflater.inflate(R.layout.tweet, parent, false);
         return new ViewHolder(item);
     }
 
