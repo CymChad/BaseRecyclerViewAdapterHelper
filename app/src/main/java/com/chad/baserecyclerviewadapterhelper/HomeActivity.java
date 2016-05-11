@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.HomeAdapter;
 import com.chad.baserecyclerviewadapterhelper.entity.HomeItem;
@@ -35,6 +36,13 @@ public class HomeActivity extends Activity {
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(HomeActivity.this, ACTIVITY[position]);
                 startActivity(intent);
+            }
+        });
+        homeAdapter.setOnRecyclerViewItemLongClickListener(new BaseQuickAdapter.OnRecyclerViewItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(View view, int position) {
+                Toast.makeText(HomeActivity.this,"onItemLongClick",Toast.LENGTH_LONG).show();
+                return true;
             }
         });
         mRecyclerView.setAdapter(homeAdapter);

@@ -40,6 +40,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     private int mDuration = 300;
     private int mLastPosition = -1;
     private OnRecyclerViewItemClickListener onRecyclerViewItemClickListener;
+    private OnRecyclerViewItemLongClickListener onRecyclerViewItemLongClickListener;
     private RequestLoadMoreListener mRequestLoadMoreListener;
     @AnimationType
     private BaseAnimation mCustomAnimation;
@@ -154,6 +155,13 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     public interface OnRecyclerViewItemClickListener {
         public void onItemClick(View view, int position);
+    }
+    public void setOnRecyclerViewItemLongClickListener(OnRecyclerViewItemLongClickListener onRecyclerViewItemLongClickListener) {
+        this.onRecyclerViewItemLongClickListener = onRecyclerViewItemLongClickListener;
+    }
+
+    public interface OnRecyclerViewItemLongClickListener {
+        public boolean onItemLongClick(View view, int position);
     }
 
     private OnRecyclerViewItemChildClickListener mChildClickListener;
@@ -432,6 +440,14 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 @Override
                 public void onClick(View v) {
                     onRecyclerViewItemClickListener.onItemClick(v, holder.getLayoutPosition() - getHeaderViewsCount());
+                }
+            });
+        }
+        if (onRecyclerViewItemLongClickListener != null) {
+            baseViewHolder.convertView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    return onRecyclerViewItemLongClickListener.onItemLongClick(v, holder.getLayoutPosition() - getHeaderViewsCount());
                 }
             });
         }
