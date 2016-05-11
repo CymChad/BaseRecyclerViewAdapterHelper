@@ -22,8 +22,8 @@ import com.chad.library.adapter.base.animation.SlideInRightAnimation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -187,7 +187,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * @param data        A new list is created out of this one to avoid mutable list
      */
     public BaseQuickAdapter(Context context, int layoutResId, List<T> data) {
-        this.mData = data == null ? new ArrayList<T>() : new ArrayList<T>(data);
+        this.mData = data == null ? Collections.<T>emptyList() : data;  // 去除new ArrayList，以便可以直接引用数据
         this.mContext = context;
         this.mLayoutInflater = LayoutInflater.from(context);
         if (layoutResId != 0) {
