@@ -54,7 +54,6 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
     }
 }
 ```
-**这么复杂的布局只需要15行代码即可！**
 #如何添加item点击事件
 ```
 mQuickAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
