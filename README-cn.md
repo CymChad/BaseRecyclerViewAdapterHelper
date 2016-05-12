@@ -9,7 +9,7 @@
 一个强大并且灵活的RecyclerViewAdapter，欢迎使用。（喜欢的可以**Star**一下）
 #它能做什么？（[下载 apk](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/raw/master/demo_res/demo.apk)）
 - **优化Adapter代码（减少百分之70%代码）**
-- **添加点击item点击事件、以及item子控件的点击事件**
+- **添加点击item点击、长按事件、以及item子控件的点击事件**
 - **添加加载动画（一行代码轻松切换5种默认动画）**
 - **添加头部、尾部、下拉刷新、上拉加载（感觉又回到ListView时代）**
 - **添加分组（随心定义分组头部）**
@@ -31,12 +31,12 @@
 然后在dependencies添加:
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.6.3'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.6.4'
 	}
 ```
 
 #如何使用它来创建Adapter？
-
+![demo](http://upload-images.jianshu.io/upload_images/972352-54bd17d3680a4cf9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 ```
 public class QuickAdapter extends BaseQuickAdapter<Status> {
     public QuickAdapter(Context context) {
@@ -54,7 +54,6 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
     }
 }
 ```
-**这么复杂的布局只需要15行代码即可！**
 #如何添加item点击事件
 ```
 mQuickAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
@@ -122,21 +121,21 @@ mQuickAdapter.addFooterView(getView());
 ```
 #使用它加载更多
 ```
-mQuickAdapter.setOnLoadMoreListener(PAGE_SIZE, new BaseQuickAdapter.RequestLoadMoreListener() {
+mQuickAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-                if (mCurrentCounter >= TOTAL_COUNTER) {
-                    mRecyclerView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mQuickAdapter.isNextLoad(false);
+                mRecyclerView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mCurrentCounter >= TOTAL_COUNTER) {
+                            mQuickAdapter.notifyDataChangedAfterLoadMore(false);
+                        } else {
+                            mQuickAdapter.notifyDataChangedAfterLoadMore(DataServer.getSampleData(PAGE_SIZE), true);
+                            mCurrentCounter = mQuickAdapter.getItemCount();
                         }
-                    });
-                } else {
-                    // reqData
-                    mCurrentCounter = mQuickAdapter.getItemCount();
-                    mQuickAdapter.isNextLoad(true);
-                }
+                    }
+
+                });
             }
         });
 ```

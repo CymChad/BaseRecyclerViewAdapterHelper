@@ -3,7 +3,7 @@ Powerful and flexible RecyclerAdapter
 Please feel free to use this.(Love can be a **Star**)
 #Features（[download apk](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/raw/master/demo_res/demo.apk)）
 - **Reduce lot of code.easily create RecyclerAdapter**
-- **add item click**
+- **add item click and add item long click**
 - **easily add RecyclerAdapter animations**
 - **add HeadView and add FooterView**
 - **add The drop-down refresh, load more**
@@ -26,7 +26,7 @@ Add it in your root build.gradle at the end of repositories:
 Add the dependency
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.6.3'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.6.4'
 	}
 ```
 
@@ -113,24 +113,25 @@ mQuickAdapter.addHeaderView(getView());
 mQuickAdapter.addFooterView(getView());
 ```
 #Use it load more
+setOnLoadMoreListener
 ```
-mQuickAdapter.setOnLoadMoreListener(PAGE_SIZE, new BaseQuickAdapter.RequestLoadMoreListener() {
-            @Override
-            public void onLoadMoreRequested() {
-                if (mCurrentCounter >= TOTAL_COUNTER) {
-                    mRecyclerView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mQuickAdapter.isNextLoad(false);
-                        }
-                    });
-                } else {
-                    // reqData
-                    mCurrentCounter = mQuickAdapter.getItemCount();
-                    mQuickAdapter.isNextLoad(true);
+mQuickAdapter.setOnLoadMoreListener(this);
+```
+Override onLoadMoreRequested()
+```
+@Override
+public void onLoadMoreRequested() {
+        mRecyclerView.post(new Runnable() {
+        @Override
+        public void run() {
+        if (mCurrentCounter >= TOTAL_COUNTER) {
+                    mQuickAdapter.notifyDataChangedAfterLoadMore(false);
                 }
-            }
-        });
+        } else {
+                    mQuickAdapter.notifyDataChangedAfterLoadMore(DataServer.getSampleData(PAGE_SIZE),true);
+                    mCurrentCounter = mQuickAdapter.getItemCount();
+        }});
+    }
 ```
 #Use it create section headers
 ```
