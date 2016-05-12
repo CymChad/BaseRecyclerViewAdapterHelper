@@ -48,6 +48,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     private View mHeaderView;
     private View mFooterView;
     private int pageSize = -1;
+    private View mContentView;
     /**
      * View to show if there are no items to show.
      */
@@ -156,6 +157,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public interface OnRecyclerViewItemClickListener {
         public void onItemClick(View view, int position);
     }
+
     public void setOnRecyclerViewItemLongClickListener(OnRecyclerViewItemLongClickListener onRecyclerViewItemLongClickListener) {
         this.onRecyclerViewItemLongClickListener = onRecyclerViewItemLongClickListener;
     }
@@ -204,6 +206,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     public BaseQuickAdapter(Context context, List<T> data) {
         this(context, 0, data);
+    }
+
+    public BaseQuickAdapter(Context context, View contentView, List<T> data) {
+        this(context, 0, data);
+        mContentView = contentView;
     }
 
     public BaseQuickAdapter(Context context) {
@@ -357,7 +364,10 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     protected BaseViewHolder createBaseViewHolder(ViewGroup parent, int layoutResId) {
-        return new BaseViewHolder(mContext, getItemView(layoutResId, parent));
+        if (mContentView == null) {
+            return new BaseViewHolder(mContext, getItemView(layoutResId, parent));
+        }
+        return new BaseViewHolder(mContext, mContentView);
     }
 
 

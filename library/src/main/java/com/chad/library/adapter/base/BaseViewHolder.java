@@ -53,6 +53,10 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     }
 
+    public View getConvertView() {
+        return convertView;
+    }
+
     /**
      * Will set the text of a TextView.
      *
@@ -327,6 +331,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         view.setOnClickListener(listener);
         return this;
     }
+
     public BaseViewHolder setOnClickListener(int viewId, BaseQuickAdapter.OnItemChildClickListener listener) {
         View view = getView(viewId);
         listener.position = getAdapterPosition();
@@ -471,7 +476,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     @SuppressWarnings("unchecked")
-    public  <T extends View> T getView(int viewId) {
+    public <T extends View> T getView(int viewId) {
         View view = views.get(viewId);
         if (view == null) {
             view = convertView.findViewById(viewId);
@@ -479,7 +484,6 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         }
         return (T) view;
     }
-
 
 
     /**

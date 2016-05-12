@@ -59,23 +59,27 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
 
     @Override
     public void onLoadMoreRequested() {
-        if (mCurrentCounter >= TOTAL_COUNTER) {
-            mRecyclerView.post(new Runnable() {
-                @Override
-                public void run() {
-                    mQuickAdapter.notifyDataChangedAfterLoadMore(false);
-                }
-            });
+        mRecyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mCurrentCounter >= TOTAL_COUNTER) {
 
-        } else {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mQuickAdapter.notifyDataChangedAfterLoadMore(DataServer.getSampleData(PAGE_SIZE),true);
-                    mCurrentCounter = mQuickAdapter.getItemCount();
+                    mQuickAdapter.notifyDataChangedAfterLoadMore(false);
+
+
+                } else {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mQuickAdapter.notifyDataChangedAfterLoadMore(DataServer.getSampleData(PAGE_SIZE), true);
+                            mCurrentCounter = mQuickAdapter.getItemCount();
+                        }
+                    }, delayMillis);
                 }
-            }, delayMillis);
-        }
+            }
+
+
+        });
     }
 
 
@@ -85,7 +89,7 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
             @Override
             public void run() {
                 mQuickAdapter.setNewData(DataServer.getSampleData(PAGE_SIZE));
-                mCurrentCounter = PAGE_SIZE;
+                mQuickAdapter.openLoadMore(PAGE_SIZE, true);
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         }, delayMillis);
@@ -97,7 +101,7 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
         mRecyclerView.setAdapter(mQuickAdapter);
         mCurrentCounter = mQuickAdapter.getItemCount();
         mQuickAdapter.setOnLoadMoreListener(this);
-        mQuickAdapter.openLoadMore(PAGE_SIZE,true);//or call mQuickAdapter.setPageSize(PAGE_SIZE);  mQuickAdapter.openLoadMore(true);
+        mQuickAdapter.openLoadMore(PAGE_SIZE, true);//or call mQuickAdapter.setPageSize(PAGE_SIZE);  mQuickAdapter.openLoadMore(true);
         addHeadView();
         mQuickAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
