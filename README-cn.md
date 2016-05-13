@@ -54,14 +54,10 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
     }
 }
 ```
-#如何添加item点击事件
+#如何添加item点击、长按事件
 ```
-mQuickAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                //..
-            }
-        });
+mQuickAdapter.setOnRecyclerViewItemClickListener();
+mQuickAdapter.setOnRecyclerViewItemLongClickListener();
 ```
 #新增添加子布局多个控件的点击事件
 Adapter
