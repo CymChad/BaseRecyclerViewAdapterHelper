@@ -63,6 +63,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     protected static final int LOADING_VIEW = 0x00000222;
     protected static final int FOOTER_VIEW = 0x00000333;
     protected static final int EMPTY_VIEW = 0x00000555;
+    private View mLoadingView;
 
     @IntDef({ALPHAIN, SCALEIN, SLIDEIN_BOTTOM, SLIDEIN_LEFT, SLIDEIN_RIGHT})
     @Retention(RetentionPolicy.SOURCE)
@@ -250,6 +251,9 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         notifyDataSetChanged();
     }
 
+    public void setLoadingView(View loadingView) {
+        this.mLoadingView = loadingView;
+    }
 
     public List getData() {
         return mData;
@@ -315,7 +319,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         BaseViewHolder baseViewHolder = null;
         switch (viewType) {
             case LOADING_VIEW:
-                baseViewHolder = createBaseViewHolder(parent, R.layout.def_loading);
+                baseViewHolder = getLoadingView(parent);
                 break;
             case HEADER_VIEW:
                 baseViewHolder = new BaseViewHolder(mContext, mHeaderView);
@@ -331,6 +335,13 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
         return baseViewHolder;
 
+    }
+
+    private BaseViewHolder getLoadingView(ViewGroup parent) {
+        if (mLoadingView == null) {
+            return createBaseViewHolder(parent, R.layout.def_loading);
+        }
+        return new BaseViewHolder(mContext, mLoadingView);
     }
 
     @Override
@@ -492,10 +503,9 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
 
     /**
-     * Two item type can override it
-     *
-     * @param holder
-     * @param item
+     * @see #convert(BaseViewHolder, Object) ()
+     * @deprecated This method is deprecated
+     * {@link #convert(BaseViewHolder, Object)} depending on your use case.
      */
     @Deprecated
     protected void onBindDefViewHolder(BaseViewHolder holder, T item) {

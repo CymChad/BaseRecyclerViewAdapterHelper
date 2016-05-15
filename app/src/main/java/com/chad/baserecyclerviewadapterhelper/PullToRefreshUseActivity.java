@@ -3,12 +3,12 @@ package com.chad.baserecyclerviewadapterhelper;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickAdapter;
@@ -46,12 +46,15 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
     }
 
     private void addHeadView() {
-        View headView = getLayoutInflater().inflate(R.layout.head_view, null);
-        headView.setLayoutParams(new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        View headView = getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false);
+        ((TextView)headView.findViewById(R.id.tv)).setText("click use custom loading view!");
+        final View customLoading = getLayoutInflater().inflate(R.layout.custom_loading, (ViewGroup) mRecyclerView.getParent(), false);
         headView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(PullToRefreshUseActivity.this, "click HeadView", Toast.LENGTH_LONG).show();
+                mQuickAdapter.setLoadingView(customLoading);
+                mRecyclerView.setAdapter(mQuickAdapter);
+                Toast.makeText(PullToRefreshUseActivity.this,"use ok!",Toast.LENGTH_LONG).show();
             }
         });
         mQuickAdapter.addHeaderView(headView);
@@ -90,6 +93,7 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
             public void run() {
                 mQuickAdapter.setNewData(DataServer.getSampleData(PAGE_SIZE));
                 mQuickAdapter.openLoadMore(PAGE_SIZE, true);
+                mCurrentCounter = PAGE_SIZE;
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         }, delayMillis);

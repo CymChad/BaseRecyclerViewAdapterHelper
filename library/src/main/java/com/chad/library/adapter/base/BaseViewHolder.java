@@ -54,6 +54,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     public View getConvertView() {
+
         return convertView;
     }
 
