@@ -3,7 +3,7 @@
 -  「[BaseRecyclerAdapter之添加动画](http://blog.csdn.net/cym492224103/article/details/51150108)」
 -  「[BaseRecyclerAdapter之添加不同布局（头部尾部）](http://blog.csdn.net/cym492224103/article/details/51214362)」
 -  「[BaseRecyclerAdapter之添加不同布局（优化篇）](http://blog.csdn.net/cym492224103/article/details/51222414)」
-
+-  「[我的简书](http://www.jianshu.com/users/f958e66439f0/latest_articles)」
 
 # BaseRecyclerViewAdapterHelper
 一个强大并且灵活的RecyclerViewAdapter，欢迎使用。（喜欢的可以**Star**一下）
