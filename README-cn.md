@@ -3,7 +3,7 @@
 -  「[BaseRecyclerAdapter之添加动画](http://blog.csdn.net/cym492224103/article/details/51150108)」
 -  「[BaseRecyclerAdapter之添加不同布局（头部尾部）](http://blog.csdn.net/cym492224103/article/details/51214362)」
 -  「[BaseRecyclerAdapter之添加不同布局（优化篇）](http://blog.csdn.net/cym492224103/article/details/51222414)」
-
+-  「[我的简书](http://www.jianshu.com/users/f958e66439f0/latest_articles)」
 
 # BaseRecyclerViewAdapterHelper
 一个强大并且灵活的RecyclerViewAdapter，欢迎使用。（喜欢的可以**Star**一下）
@@ -12,6 +12,7 @@
 - **添加点击item点击、长按事件、以及item子控件的点击事件**
 - **添加加载动画（一行代码轻松切换5种默认动画）**
 - **添加头部、尾部、下拉刷新、上拉加载（感觉又回到ListView时代）**
+- **设置自定义的加载更多布局**
 - **添加分组（随心定义分组头部）**
 - **自定义不同的item类型（简单配置、无需重写额外方法）**
 - **设置空布局（比Listview的setEmptyView还要好用！）**
@@ -31,7 +32,7 @@
 然后在dependencies添加:
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.6.6'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.6.7'
 	}
 ```
 
@@ -134,6 +135,10 @@ mQuickAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener
                 });
             }
         });
+```
+#设置自定义加载更多布局
+```
+mQuickAdapter.setLoadingView(customView);
 ```
 #使用分组
 ```
