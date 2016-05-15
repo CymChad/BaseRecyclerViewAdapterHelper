@@ -7,6 +7,7 @@ Please feel free to use this.(Love can be a **Star**)
 - **easily add RecyclerAdapter animations**
 - **add HeadView and add FooterView**
 - **add The drop-down refresh, load more**
+- **set custom loading view**
 - **easily create section headers**
 - **custom item view type**
 - **add setEmptyView methods**
@@ -26,7 +27,7 @@ Add it in your root build.gradle at the end of repositories:
 Add the dependency
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.6.6'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.6.7'
 	}
 ```
 
@@ -132,6 +133,10 @@ public void onLoadMoreRequested() {
                     mCurrentCounter = mQuickAdapter.getItemCount();
         }});
     }
+```
+#Set custom loading view
+```
+mQuickAdapter.setLoadingView(customView);
 ```
 #Use it create section headers
 ```
