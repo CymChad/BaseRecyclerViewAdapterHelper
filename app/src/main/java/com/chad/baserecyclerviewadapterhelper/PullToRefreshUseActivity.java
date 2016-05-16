@@ -66,10 +66,9 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
             @Override
             public void run() {
                 if (mCurrentCounter >= TOTAL_COUNTER) {
-
                     mQuickAdapter.notifyDataChangedAfterLoadMore(false);
-
-
+                    View view = getLayoutInflater().inflate(R.layout.not_loading, (ViewGroup) mRecyclerView.getParent(), false);
+                    mQuickAdapter.addFooterView(view);
                 } else {
                     new Handler().postDelayed(new Runnable() {
                         @Override

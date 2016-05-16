@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Library</string>
-    <string name="loading">正在加载中...</string>
+    <string name="loading">Loading...</string>
 </resources>
