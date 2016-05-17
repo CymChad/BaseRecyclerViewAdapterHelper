@@ -323,6 +323,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         switch (viewType) {
             case LOADING_VIEW:
                 baseViewHolder = getLoadingView(parent);
+                initItemClickListener(baseViewHolder);
                 break;
             case HEADER_VIEW:
                 baseViewHolder = new BaseViewHolder(mContext, mHeaderView);
@@ -335,6 +336,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 break;
             default:
                 baseViewHolder = onCreateDefViewHolder(parent, viewType);
+                initItemClickListener(baseViewHolder);
         }
         return baseViewHolder;
 
@@ -353,7 +355,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         switch (holder.getItemViewType()) {
             case 0:
                 convert((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderViewsCount()));
-                initItemClickListener(holder, (BaseViewHolder) holder);
                 addAnimation(holder);
                 break;
             case LOADING_VIEW:
@@ -368,7 +369,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             default:
                 convert((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderViewsCount()));
                 onBindDefViewHolder((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderViewsCount()));
-                initItemClickListener(holder, (BaseViewHolder) holder);
                 break;
         }
 
@@ -459,20 +459,20 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
     }
 
-    private void initItemClickListener(final RecyclerView.ViewHolder holder, BaseViewHolder baseViewHolder) {
+    private void initItemClickListener(final BaseViewHolder baseViewHolder) {
         if (onRecyclerViewItemClickListener != null) {
-            baseViewHolder.convertView.setOnClickListener(new View.OnClickListener() {
+            baseViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onRecyclerViewItemClickListener.onItemClick(v, holder.getLayoutPosition() - getHeaderViewsCount());
+                    onRecyclerViewItemClickListener.onItemClick(v, baseViewHolder.getLayoutPosition() - getHeaderViewsCount());
                 }
             });
         }
         if (onRecyclerViewItemLongClickListener != null) {
-            baseViewHolder.convertView.setOnLongClickListener(new View.OnLongClickListener() {
+            baseViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    return onRecyclerViewItemLongClickListener.onItemLongClick(v, holder.getLayoutPosition() - getHeaderViewsCount());
+                    return onRecyclerViewItemLongClickListener.onItemLongClick(v, baseViewHolder.getLayoutPosition() - getHeaderViewsCount());
                 }
             });
         }
