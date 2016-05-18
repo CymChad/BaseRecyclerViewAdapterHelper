@@ -1,7 +1,6 @@
 package com.chad.library.adapter.base;
 
 import android.content.Context;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.entity.SectionEntity;
@@ -52,10 +51,7 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends B
     protected void convert(BaseViewHolder holder, Object item) {
         switch (holder.getItemViewType()) {
             case SECTION_HEADER_VIEW:
-                if (holder.itemView.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams) {
-                    StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
-                    params.setFullSpan(true);
-                }
+                setFullSpan(holder);
                 convertHead(holder, (T) item);
                 break;
             default:
