@@ -350,6 +350,17 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     @Override
+    public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        if (holder.getItemViewType() == EMPTY_VIEW) {
+            if (holder.itemView.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams) {
+                StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
+                params.setFullSpan(true);
+            }
+        }
+    }
+
+    @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int positions) {
 
         switch (holder.getItemViewType()) {
