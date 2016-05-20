@@ -36,6 +36,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     private boolean mFirstOnlyEnable = true;
     private boolean mOpenAnimationEnable = false;
     private boolean mEmptyEnable;
+    private boolean mHeadAndEmptyEnable;
     private Interpolator mInterpolator = new LinearInterpolator();
     private int mDuration = 300;
     private int mLastPosition = -1;
@@ -107,6 +108,10 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     public void setOnLoadMoreListener(RequestLoadMoreListener requestLoadMoreListener) {
         this.mRequestLoadMoreListener = requestLoadMoreListener;
+    }
+
+    public void setDuration(int duration) {
+        mDuration = duration;
     }
 
     /**
@@ -290,7 +295,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         int i = isLoadMore() ? 1 : 0;
         int count = mData.size() + i + getHeaderViewsCount() + getFooterViewsCount();
         mEmptyEnable = false;
-        if (count == 0) {
+        if ((mHeadAndEmptyEnable && getHeaderViewsCount() == 1 && count == 1) || count == 0) {
             mEmptyEnable = true;
             count += getmEmptyViewCount();
         }
@@ -302,7 +307,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public int getItemViewType(int position) {
         if (mHeaderView != null && position == 0) {
             return HEADER_VIEW;
-        } else if (mEmptyView != null && getItemCount() == 1 && mEmptyEnable) {
+        } else if (mEmptyView != null && getItemCount() == (mHeadAndEmptyEnable ? 2 : 1) && mEmptyEnable) {
             return EMPTY_VIEW;
         } else if (position == mData.size() + getHeaderViewsCount()) {
             if (mNextLoadEnable)
@@ -423,6 +428,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * Sets the view to show if the adapter is empty
      */
     public void setEmptyView(View emptyView) {
+        setEmptyView(false, emptyView);
+    }
+
+    public void setEmptyView(boolean isHeadAndEmpty, View emptyView) {
+        mHeadAndEmptyEnable = isHeadAndEmpty;
         mEmptyView = emptyView;
     }
 
