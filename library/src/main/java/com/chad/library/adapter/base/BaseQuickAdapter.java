@@ -408,18 +408,12 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
 
     public void addHeaderView(View header) {
-        if (header == null) {
-            throw new RuntimeException("header is null");
-        }
         this.mHeaderView = header;
         this.notifyDataSetChanged();
     }
 
     public void addFooterView(View footer) {
         mNextLoadEnable = false;
-        if (footer == null) {
-            throw new RuntimeException("footer is null");
-        }
         this.mFooterView = footer;
         this.notifyDataSetChanged();
     }
@@ -510,12 +504,16 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                     animation = mSelectAnimation;
                 }
                 for (Animator anim : animation.getAnimators(holder.itemView)) {
-                    anim.setDuration(mDuration).start();
-                    anim.setInterpolator(mInterpolator);
+                    startAnim(anim, holder.getLayoutPosition());
                 }
                 mLastPosition = holder.getLayoutPosition();
             }
         }
+    }
+
+    protected void startAnim(Animator anim, int index) {
+        anim.setDuration(mDuration).start();
+        anim.setInterpolator(mInterpolator);
     }
 
     private boolean isLoadMore() {
