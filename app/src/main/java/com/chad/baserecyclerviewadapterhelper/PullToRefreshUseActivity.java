@@ -47,7 +47,7 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
 
     private void addHeadView() {
         View headView = getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false);
-        ((TextView)headView.findViewById(R.id.tv)).setText("click use custom loading view!");
+        ((TextView)headView.findViewById(R.id.tv)).setText("click use custom loading view");
         final View customLoading = getLayoutInflater().inflate(R.layout.custom_loading, (ViewGroup) mRecyclerView.getParent(), false);
         headView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +74,7 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
                         @Override
                         public void run() {
                             mQuickAdapter.notifyDataChangedAfterLoadMore(DataServer.getSampleData(PAGE_SIZE), true);
-                            mCurrentCounter = mQuickAdapter.getItemCount();
+                            mCurrentCounter = mQuickAdapter.getData().size();
                         }
                     }, delayMillis);
                 }
@@ -102,7 +102,7 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
         mQuickAdapter = new QuickAdapter(PullToRefreshUseActivity.this, PAGE_SIZE);
         mQuickAdapter.openLoadAnimation();
         mRecyclerView.setAdapter(mQuickAdapter);
-        mCurrentCounter = mQuickAdapter.getItemCount();
+        mCurrentCounter = mQuickAdapter.getData().size();
         mQuickAdapter.setOnLoadMoreListener(this);
         mQuickAdapter.openLoadMore(PAGE_SIZE, true);//or call mQuickAdapter.setPageSize(PAGE_SIZE);  mQuickAdapter.openLoadMore(true);
         addHeadView();

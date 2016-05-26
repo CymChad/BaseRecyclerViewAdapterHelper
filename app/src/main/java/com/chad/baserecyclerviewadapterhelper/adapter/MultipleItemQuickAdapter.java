@@ -16,8 +16,9 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
 
     public MultipleItemQuickAdapter(Context context, List data) {
         super(context, data);
-        addItmeType(MultipleItem.TEXT, R.layout.text_view);
-        addItmeType(MultipleItem.IMG, R.layout.image_view);
+        addItmeType(MultipleItem.TEXT, R.layout.item_text_view);
+        addItmeType(MultipleItem.IMG, R.layout.item_image_view);
+        addItmeType(MultipleItem.IMGS, R.layout.item_image_views);
     }
 
     @Override
@@ -27,7 +28,10 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
                 helper.setText(R.id.tv, item.getContent());
                 break;
             case MultipleItem.IMG:
-                helper.setImageUrl(R.id.iv, item.getContent());
+                // set img data
+                break;
+            case MultipleItem.IMGS:
+                // set imgs data
                 break;
         }
     }

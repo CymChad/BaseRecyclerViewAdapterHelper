@@ -4,19 +4,20 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="100dip"
+    android:layout_height="130dip"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
     android:layout_gravity="center"
     android:foreground="?android:attr/selectableItemBackground"
-    card_view:cardBackgroundColor="@color/cardview_light_background"
-    card_view:cardCornerRadius="8dp"
-    card_view:cardElevation="4dp"
+    card_view:cardBackgroundColor="@color/item_bg"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="2dp"
     card_view:cardUseCompatPadding="true">
 <RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="85dp"
-    android:paddingLeft="@dimen/smallSpace"
-    android:paddingRight="@dimen/smallSpace"
-    android:paddingTop="@dimen/smallSpace">
+    android:layout_height="110dp"
+    android:padding="10dp"
+    android:layout_gravity="center">
 
     <ImageView
         android:id="@+id/tweetAvatar"
@@ -25,7 +26,7 @@
         android:layout_height="@dimen/avatarSize"
         android:layout_centerInParent="true"
         android:layout_alignParentLeft="true"
-        android:src="@mipmap/ic_launcher"
+        android:src="@mipmap/def_head"
       />
 
     <ImageView
@@ -48,6 +49,7 @@
     <TextView
         android:id="@+id/tweetText"
         style="@style/tweetText"
+        android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/tweetAvatar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

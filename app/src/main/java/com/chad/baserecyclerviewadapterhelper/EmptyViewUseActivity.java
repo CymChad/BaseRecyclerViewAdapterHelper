@@ -27,6 +27,7 @@ public class EmptyViewUseActivity extends Activity {
         mQuickAdapter = new QuickAdapter(this, 0);
         View emptyView = getLayoutInflater().inflate(R.layout.empty_view, (ViewGroup) mRecyclerView.getParent(), false);
         mQuickAdapter.setEmptyView(emptyView);
+        View view = getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false);
         mRecyclerView.setAdapter(mQuickAdapter);
     }
 }

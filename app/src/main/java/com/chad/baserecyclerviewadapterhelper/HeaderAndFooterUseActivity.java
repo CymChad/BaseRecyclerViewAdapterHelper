@@ -35,6 +35,7 @@ public class HeaderAndFooterUseActivity extends Activity {
 
     private View getView() {
         View view = getLayoutInflater().inflate(R.layout.head_view, null);
+        view.findViewById(R.id.tv).setVisibility(View.GONE);
         view.setLayoutParams(new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         view.setOnClickListener(new View.OnClickListener() {
             @Override

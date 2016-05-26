@@ -45,7 +45,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
     @Override
     protected void convert(BaseViewHolder helper, MySection item) {
         Video video = (Video) item.t;
-        helper.setImageUrl(R.id.iv, video.getImg());
+        //helper.setImageUrl(R.id.iv, video.getImg());
         helper.setText(R.id.tv, video.getName());
     }
 }
