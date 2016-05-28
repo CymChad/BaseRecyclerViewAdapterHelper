@@ -1,9 +1,9 @@
 >RecyclerView作为Android最常用的控件，受益群体几乎是所有Android开发者，希望更多开发者能够一起来维护这个项目，把这个项目做得更好，帮助更多人。**Star我的项目可加Q群558178792，申请的时候把GitHub的账号名字备注上否则不予通过，谢谢配合。**中国有句古话叫“授人以鱼不如授人以渔”，不仅仅提供使用，还写了如何实现的原理：
-- 「[RecyclerView.Adapter优化了吗？](http://blog.csdn.net/cym492224103/article/details/51113321)」
--  「[BaseRecyclerAdapter之添加动画](http://blog.csdn.net/cym492224103/article/details/51150108)」
--  「[BaseRecyclerAdapter之添加不同布局（头部尾部）](http://blog.csdn.net/cym492224103/article/details/51214362)」
--  「[BaseRecyclerAdapter之添加不同布局（优化篇）](http://blog.csdn.net/cym492224103/article/details/51222414)」
--  「[我的简书](http://www.jianshu.com/users/f958e66439f0/latest_articles)」
+- 「[RecyclerView.Adapter优化了吗？](http://www.jianshu.com/p/411ab861034f)」
+- 「[BaseRecyclerAdapter之添加动画](http://www.jianshu.com/p/fa3f97c19263)」
+- 「[BaseRecyclerAdapter之添加不同布局（头部尾部）](http://www.jianshu.com/p/9d75c22f0964)」
+- 「[BaseRecyclerAdapter之添加不同布局（优化篇）](http://www.jianshu.com/p/cf29d4e45536)」
+
 
 # BaseRecyclerViewAdapterHelper
 ![logo](http://upload-images.jianshu.io/upload_images/972352-1d77e0a75a4a7c0a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)  
