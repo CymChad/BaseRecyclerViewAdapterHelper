@@ -200,6 +200,7 @@ mQuickAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRec
 #Thanks
 [JoanZapata / base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper)
 
+#License
 ```
 Copyright 2016 CymChad
 
