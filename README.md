@@ -21,24 +21,24 @@ Please feel free to use this.(Love can be a **Star**)
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.gif)
 # Get it
 Add it in your root build.gradle at the end of repositories:
-```
-	allprojects {
-		repositories {
-			...
-			maven { url "https://jitpack.io" }
-		}
+```groovy
+allprojects {
+	repositories {
+		...
+		maven { url "https://jitpack.io" }
 	}
+}
 ```
 Add the dependency
-```
-	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.7.2'
-	}
+```groovy
+dependencies {
+        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.7.2'
+}
 ```
 
 #Use it create RecyclerAdapter
 
-```
+```java
 public class QuickAdapter extends BaseQuickAdapter<Status> {
     public QuickAdapter(Context context) {
         super(context, R.layout.tweet, DataServer.getSampleData());
@@ -56,28 +56,27 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
 }
 ```
 #Use it item click
-```
+```java
 mQuickAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                //..
-            }
-        });
+    @Override
+    public void onItemClick(View view, int position) {
+        //..
+    }
+});
 ```
+
 #Use it add adaptar Animation
-
-```
-
+```java
 // Turn animation
 quickAdapter.openLoadAnimation();
 ```
 or
-```
+```java
 // Turn animation and set animate
 quickAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
 ```
 or
-```
+```java
 // Turn animation and set custom animate
 quickAdapter.openLoadAnimation(new BaseAnimation() {
                             @Override
@@ -90,7 +89,7 @@ quickAdapter.openLoadAnimation(new BaseAnimation() {
                         });
 ```
 #Use it custom item view type
-```
+```java
 public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem> {
 
     public MultipleItemQuickAdapter(Context context, List data) {
@@ -114,17 +113,17 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
 }
 ```
 #Use it add header and footer
-```
+```java
 mQuickAdapter.addHeaderView(getView());
 mQuickAdapter.addFooterView(getView());
 ```
 #Use it load more
 setOnLoadMoreListener
-```
+```java
 mQuickAdapter.setOnLoadMoreListener(this);
 ```
 Override onLoadMoreRequested()
-```
+```java
 @Override
 public void onLoadMoreRequested() {
         mRecyclerView.post(new Runnable() {
@@ -140,11 +139,11 @@ public void onLoadMoreRequested() {
     }
 ```
 #Set custom loading view
-```
+```java
 mQuickAdapter.setLoadingView(customView);
 ```
 #Use it create section headers
-```
+```java
 public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
      public SectionAdapter(Context context, int layoutResId, int sectionHeadResId, List data) {
         super(context, layoutResId, sectionHeadResId, data);
@@ -167,19 +166,19 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
     }
 ```
 #Use it setEmptyView
-```
+```java
 mQuickAdapter.setEmptyView(getView());
 ```
 #Use it item chlid click
 Adapter
-```
- protected void convert(BaseViewHolder helper, Status item) {
-    helper.setOnClickListener(R.id.tweetAvatar, new OnItemChildClickListener())
-      .setOnClickListener(R.id.tweetName, new OnItemChildClickListener());
-      }
+```java
+protected void convert(BaseViewHolder helper, Status item) {
+	helper.setOnClickListener(R.id.tweetAvatar, new OnItemChildClickListener())
+		.setOnClickListener(R.id.tweetName, new OnItemChildClickListener());
+}
 ```
 Activity
-```
+```java
 mQuickAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
