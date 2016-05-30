@@ -315,7 +315,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             else
                 return FOOTER_VIEW;
         }
-        return getDefItemViewType(position);
+        return getDefItemViewType(position - getHeaderViewsCount());
     }
 
     protected int getDefItemViewType(int position) {
