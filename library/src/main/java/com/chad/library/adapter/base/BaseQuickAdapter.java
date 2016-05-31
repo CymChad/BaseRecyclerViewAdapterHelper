@@ -602,5 +602,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         return position;
     }
 
-
+    private void resetLastPosition(){
+        this.mLastPosition = -1;
+    }
 }
