@@ -246,6 +246,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             mNextLoadEnable = true;
             mFooterView = null;
         }
+        mLastPosition = -1;
         notifyDataSetChanged();
     }
 
