@@ -32,7 +32,7 @@ allprojects {
 Add the dependency
 ```groovy
 dependencies {
-        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.7.2'
+        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.7.4'
 }
 ```
 
