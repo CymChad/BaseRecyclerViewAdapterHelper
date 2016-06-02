@@ -202,7 +202,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * @param data        A new list is created out of this one to avoid mutable list
      */
     public BaseQuickAdapter(Context context, int layoutResId, List<T> data) {
-        this.mData = data == null ? new ArrayList<T>() : new ArrayList<T>(data);
+        this.mData = data == null ? new ArrayList<T>() : data;
         this.mContext = context;
         this.mLayoutInflater = LayoutInflater.from(context);
         if (layoutResId != 0) {
