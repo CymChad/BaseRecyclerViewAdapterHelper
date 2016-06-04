@@ -28,6 +28,8 @@
         </activity>
         <activity android:name=".EmptyViewUseActivity">
         </activity>
+        <activity android:name=".LoadMoreActivity">
+        </activity>
     </application>
 
 </manifest>
