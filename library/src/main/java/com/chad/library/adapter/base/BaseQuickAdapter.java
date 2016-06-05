@@ -541,7 +541,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
 
     private void addLoadMore(RecyclerView.ViewHolder holder) {
-        if (isLoadMore()) {
+        if (isLoadMore() && !mLoadingMoreEnable) {
             mLoadingMoreEnable = true;
             mRequestLoadMoreListener.onLoadMoreRequested();
         }
@@ -589,7 +589,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     private boolean isLoadMore() {
-        return mNextLoadEnable && pageSize != -1 && !mLoadingMoreEnable && mRequestLoadMoreListener != null && mData.size() >= pageSize;
+        return mNextLoadEnable && pageSize != -1 && mRequestLoadMoreListener != null && mData.size() >= pageSize;
     }
 
     protected View getItemView(int layoutResId, ViewGroup parent) {
