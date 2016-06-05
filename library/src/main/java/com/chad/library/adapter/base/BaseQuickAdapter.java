@@ -225,7 +225,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     public void remove(int position) {
         mData.remove(position);
-        notifyItemRemoved(position);
+        notifyItemRemoved(position + getHeaderViewsCount());
 
     }
 
