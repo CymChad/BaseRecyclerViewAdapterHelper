@@ -1,8 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
 import android.content.Context;
-import android.view.View;
-import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.MySection;
@@ -33,12 +31,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
     protected void convertHead(BaseViewHolder helper,final MySection item) {
         helper.setText(R.id.header, item.header);
         helper.setVisible(R.id.more,item.isMroe());
-        helper.setOnClickListener(R.id.more, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext,item.header+"more..",Toast.LENGTH_LONG).show();
-            }
-        });
+        helper.setOnClickListener(R.id.more,new OnItemChildClickListener());
     }
 
 

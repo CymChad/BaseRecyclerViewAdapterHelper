@@ -44,7 +44,7 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity> exten
         return layouts.get(viewType);
     }
 
-    protected void addItmeType(int type, int layoutResId) {
+    protected void addItemType(int type, int layoutResId) {
         if (layouts == null) {
             layouts = new SparseArray<>();
         }
