@@ -4,6 +4,7 @@ package com.chad.library.adapter.base;
 import android.animation.Animator;
 import android.content.Context;
 import android.support.annotation.IntDef;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -337,12 +338,12 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 /**
                  * if user want to show headview and footview and emptyView but not add headview
                  */
-                if (mHeaderView == null && mEmptyView != null && mFooterView != null) {
+                if (mHeaderView == null && mFooterView != null) {
                     return FOOTER_VIEW;
                     /**
                      * add headview
                      */
-                } else if (mHeaderView != null && mEmptyView != null) {
+                } else if (mHeaderView != null) {
                     return EMPTY_VIEW;
                 }
             } else if (position == 0) {
@@ -356,7 +357,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                     return EMPTY_VIEW;
 
 
-            } else if (position == 2 && (mFootAndEmptyEnable || mHeadAndEmptyEnable) && mHeaderView != null && mEmptyView != null) {
+            } else if (position == 2 && (mFootAndEmptyEnable || mHeadAndEmptyEnable) && mHeaderView != null) {
                 return FOOTER_VIEW;
 
             } /**
@@ -382,7 +383,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        BaseViewHolder baseViewHolder = null;
+        BaseViewHolder baseViewHolder;
         switch (viewType) {
             case LOADING_VIEW:
                 baseViewHolder = getLoadingView(parent);
@@ -422,9 +423,25 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     protected void setFullSpan(RecyclerView.ViewHolder holder) {
-        if (holder.itemView.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams) {
-            StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
+        if (layoutParams != null && layoutParams instanceof StaggeredGridLayoutManager.LayoutParams && holder.getLayoutPosition() == 0) {
+            StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) layoutParams;
             params.setFullSpan(true);
+        }
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+        if (manager instanceof GridLayoutManager) {
+            final GridLayoutManager gridManager = ((GridLayoutManager) manager);
+            gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    return (getItemViewType(position) == HEADER_VIEW || getItemViewType(position) == FOOTER_VIEW) ? gridManager.getSpanCount() : 1;
+                }
+            });
         }
     }
 
@@ -672,6 +689,5 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public long getItemId(int position) {
         return position;
     }
-
 
 }
