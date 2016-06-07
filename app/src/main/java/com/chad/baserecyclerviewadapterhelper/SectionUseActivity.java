@@ -20,6 +20,7 @@ import java.util.List;
 public class SectionUseActivity extends Activity implements BaseQuickAdapter.OnRecyclerViewItemClickListener {
     private RecyclerView mRecyclerView;
     private List<MySection> mData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,15 +30,21 @@ public class SectionUseActivity extends Activity implements BaseQuickAdapter.OnR
         mData = DataServer.getSampleData();
         SectionAdapter sectionAdapter = new SectionAdapter(this, R.layout.item_section_content, R.layout.def_section_head, mData);
         sectionAdapter.setOnRecyclerViewItemClickListener(this);
+        sectionAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(SectionUseActivity.this, "onItemChildClick", Toast.LENGTH_LONG).show();
+            }
+        });
         mRecyclerView.setAdapter(sectionAdapter);
     }
 
     @Override
     public void onItemClick(View view, int position) {
         MySection mySection = mData.get(position);
-        if(mySection.isHeader)
-            Toast.makeText(this,mySection.header ,Toast.LENGTH_LONG).show();
+        if (mySection.isHeader)
+            Toast.makeText(this, mySection.header, Toast.LENGTH_LONG).show();
         else
-            Toast.makeText(this,mySection.t.getName(),Toast.LENGTH_LONG).show();
+            Toast.makeText(this, mySection.t.getName(), Toast.LENGTH_LONG).show();
     }
 }
