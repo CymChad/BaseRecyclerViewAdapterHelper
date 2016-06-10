@@ -37,6 +37,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     private boolean mOpenAnimationEnable = false;
     private boolean mEmptyEnable;
     private boolean mHeadAndEmptyEnable;
+    private boolean mFootAndEmptyEnable;
     private Interpolator mInterpolator = new LinearInterpolator();
     private int mDuration = 300;
     private int mLastPosition = -1;
@@ -225,7 +226,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     public void remove(int position) {
         mData.remove(position);
-        notifyItemRemoved(position);
+        notifyItemRemoved(position + getHeaderViewsCount());
 
     }
 
@@ -295,19 +296,75 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public int getItemCount() {
         int i = isLoadMore() ? 1 : 0;
         int count = mData.size() + i + getHeaderViewsCount() + getFooterViewsCount();
-        mEmptyEnable = false;
-        if ((mHeadAndEmptyEnable && getHeaderViewsCount() == 1 && count == 1) || count == 0) {
-            mEmptyEnable = true;
-            count += getmEmptyViewCount();
+        if (mData.size() == 0 && mEmptyView != null) {
+            /**
+             *  setEmptyView(false) and add emptyView
+             */
+            if (count == 0 && (!mHeadAndEmptyEnable || !mFootAndEmptyEnable)) {
+                count += getmEmptyViewCount();
+                /**
+                 * {@link #setEmptyView(true, true, View)}
+                 */
+            } else if (mHeadAndEmptyEnable || mFootAndEmptyEnable) {
+                count += getmEmptyViewCount();
+            }
+
+            if ((mHeadAndEmptyEnable && getHeaderViewsCount() == 1 && count == 1) || count == 0) {
+                mEmptyEnable = true;
+                count += getmEmptyViewCount();
+            }
+
         }
         return count;
     }
 
-
     @Override
     public int getItemViewType(int position) {
+        /**
+         * if set headView and positon =0
+         */
         if (mHeaderView != null && position == 0) {
             return HEADER_VIEW;
+        }
+        /**
+         * if user has no data and add emptyView and position <2{(headview +emptyView)}
+         */
+        if (mData.size() == 0 && mEmptyEnable && mEmptyView != null && position <= 2) {
+            /**
+             * if set {@link #setEmptyView(boolean, boolean, View)}  position = 1
+             */
+            if ((mHeadAndEmptyEnable || mFootAndEmptyEnable) && position == 1) {
+                /**
+                 * if user want to show headview and footview and emptyView but not add headview
+                 */
+                if (mHeaderView == null && mEmptyView != null && mFooterView != null) {
+                    return FOOTER_VIEW;
+                    /**
+                     * add headview
+                     */
+                } else if (mHeaderView != null && mEmptyView != null) {
+                    return EMPTY_VIEW;
+                }
+            } else if (position == 0) {
+                /**
+                 * has no emptyView just add emptyview
+                 */
+                if (mHeaderView == null) {
+                    return EMPTY_VIEW;
+                } else if (mFooterView != null)
+
+                    return EMPTY_VIEW;
+
+
+            } else if (position == 2 && (mFootAndEmptyEnable || mHeadAndEmptyEnable) && mHeaderView != null && mEmptyView != null) {
+                return FOOTER_VIEW;
+
+            } /**
+             * user forget to set {@link #setEmptyView(boolean, boolean, View)}  but add footview and headview and emptyview
+             */
+            else if ((!mFootAndEmptyEnable || !mHeadAndEmptyEnable) && position == 1 && mFooterView != null) {
+                return FOOTER_VIEW;
+            }
         } else if (mEmptyView != null && getItemCount() == (mHeadAndEmptyEnable ? 2 : 1) && mEmptyEnable) {
             return EMPTY_VIEW;
         } else if (position == mData.size() + getHeaderViewsCount()) {
@@ -423,12 +480,25 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * Sets the view to show if the adapter is empty
      */
     public void setEmptyView(View emptyView) {
-        setEmptyView(false, emptyView);
+        setEmptyView(false, false, emptyView);
     }
 
     public void setEmptyView(boolean isHeadAndEmpty, View emptyView) {
+        setEmptyView(isHeadAndEmpty, false, emptyView);
+    }
+
+    /**
+     * set emptyView show if adapter is empty and want to show headview and footview
+     *
+     * @param isHeadAndEmpty
+     * @param isFootAndEmpty
+     * @param emptyView
+     */
+    public void setEmptyView(boolean isHeadAndEmpty, boolean isFootAndEmpty, View emptyView) {
         mHeadAndEmptyEnable = isHeadAndEmpty;
+        mFootAndEmptyEnable = isFootAndEmpty;
         mEmptyView = emptyView;
+        mEmptyEnable = true;
     }
 
     /**
@@ -470,7 +540,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
 
     private void addLoadMore(RecyclerView.ViewHolder holder) {
-        if (isLoadMore()) {
+        if (isLoadMore() && !mLoadingMoreEnable) {
             mLoadingMoreEnable = true;
             mRequestLoadMoreListener.onLoadMoreRequested();
         }
@@ -518,7 +588,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     private boolean isLoadMore() {
-        return mNextLoadEnable && pageSize != -1 && !mLoadingMoreEnable && mRequestLoadMoreListener != null && mData.size() >= pageSize;
+        return mNextLoadEnable && pageSize != -1 && mRequestLoadMoreListener != null && mData.size() >= pageSize;
     }
 
     protected View getItemView(int layoutResId, ViewGroup parent) {

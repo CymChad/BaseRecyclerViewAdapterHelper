@@ -32,7 +32,7 @@ allprojects {
 Add the dependency
 ```groovy
 dependencies {
-        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.7.4'
+        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.7.9'
 }
 ```
 
@@ -49,9 +49,9 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
         helper.setText(R.id.tweetName, item.getUserName())
                 .setText(R.id.tweetText, item.getText())
                 .setText(R.id.tweetDate, item.getCreatedAt())
-                .setImageUrl(R.id.tweetAvatar, item.getUserAvatar())
                 .setVisible(R.id.tweetRT, item.isRetweet())
                 .linkify(R.id.tweetText);
+                Glide.with(mContext).load(item.getUserAvatar()).crossFade().into((ImageView) helper.getView(R.id.iv));
     }
 }
 ```
@@ -120,6 +120,7 @@ mQuickAdapter.addFooterView(getView());
 #Use it load more
 setOnLoadMoreListener
 ```java
+mQuickAdapter.openLoadMore(PAGE_SIZE, true);
 mQuickAdapter.setOnLoadMoreListener(this);
 ```
 Override onLoadMoreRequested()
