@@ -198,31 +198,25 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.
      *
-     * @param context     The context.
      * @param layoutResId The layout resource id of each item.
      * @param data        A new list is created out of this one to avoid mutable list
      */
-    public BaseQuickAdapter(Context context, int layoutResId, List<T> data) {
+    public BaseQuickAdapter( int layoutResId, List<T> data) {
         this.mData = data == null ? new ArrayList<T>() : data;
-        this.mContext = context;
-        this.mLayoutInflater = LayoutInflater.from(context);
         if (layoutResId != 0) {
             this.mLayoutResId = layoutResId;
         }
     }
 
-    public BaseQuickAdapter(Context context, List<T> data) {
-        this(context, 0, data);
+    public BaseQuickAdapter( List<T> data) {
+        this(0, data);
     }
 
-    public BaseQuickAdapter(Context context, View contentView, List<T> data) {
-        this(context, 0, data);
+    public BaseQuickAdapter(View contentView, List<T> data) {
+        this( 0, data);
         mContentView = contentView;
     }
 
-    public BaseQuickAdapter(Context context) {
-        this(context, null);
-    }
 
     public void remove(int position) {
         mData.remove(position);
@@ -383,6 +377,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         BaseViewHolder baseViewHolder = null;
+        this.mContext = parent.getContext();
+        this.mLayoutInflater = LayoutInflater.from(mContext);
         switch (viewType) {
             case LOADING_VIEW:
                 baseViewHolder = getLoadingView(parent);
