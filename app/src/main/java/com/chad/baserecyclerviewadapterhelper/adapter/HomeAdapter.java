@@ -1,7 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
 import android.animation.Animator;
-import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 
@@ -16,8 +15,8 @@ import java.util.List;
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 public class HomeAdapter extends BaseQuickAdapter<HomeItem> {
-    public HomeAdapter(Context context, int layoutResId, List data) {
-        super(context, layoutResId, data);
+    public HomeAdapter(int layoutResId, List data) {
+        super(layoutResId, data);
     }
 
     @Override

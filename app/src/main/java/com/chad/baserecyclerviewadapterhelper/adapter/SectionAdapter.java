@@ -1,7 +1,5 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
-import android.content.Context;
-
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.MySection;
 import com.chad.baserecyclerviewadapterhelper.entity.Video;
@@ -18,13 +16,12 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.
      *
-     * @param context     The context.
      * @param sectionHeadResId The section head layout id for each item
      * @param layoutResId The layout resource id of each item.
      * @param data        A new list is created out of this one to avoid mutable list
      */
-    public SectionAdapter(Context context, int layoutResId, int sectionHeadResId, List data) {
-        super(context, layoutResId, sectionHeadResId, data);
+    public SectionAdapter( int layoutResId, int sectionHeadResId, List data) {
+        super( layoutResId, sectionHeadResId, data);
     }
 
     @Override

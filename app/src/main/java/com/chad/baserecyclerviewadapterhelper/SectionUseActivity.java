@@ -28,7 +28,7 @@ public class SectionUseActivity extends Activity implements BaseQuickAdapter.OnR
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mData = DataServer.getSampleData();
-        SectionAdapter sectionAdapter = new SectionAdapter(this, R.layout.item_section_content, R.layout.def_section_head, mData);
+        SectionAdapter sectionAdapter = new SectionAdapter(R.layout.item_section_content, R.layout.def_section_head, mData);
         sectionAdapter.setOnRecyclerViewItemClickListener(this);
         sectionAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
             @Override
