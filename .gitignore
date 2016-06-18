@@ -28,3 +28,9 @@ proguard/
 .gradle
 .idea
 build
+/build.gradle
+/.idea/
+
+build.gradle
+
+.idea/misc.xml
