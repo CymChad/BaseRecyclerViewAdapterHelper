@@ -3,6 +3,16 @@
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
+<<<<<<< HEAD
+=======
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Bundled (Maven 3)" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+>>>>>>> CymChad/master
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="android.support.annotation.Nullable" />
     <option name="myDefaultNotNull" value="android.support.annotation.NonNull" />
@@ -35,15 +45,32 @@
             <id />
           </State>
           <State>
+<<<<<<< HEAD
             <id>Java</id>
           </State>
           <State>
             <id>Serialization issuesJava</id>
+=======
+            <id>Android</id>
+          </State>
+          <State>
+            <id>Android Lint</id>
+          </State>
+          <State>
+            <id>Java</id>
+          </State>
+          <State>
+            <id>Java language level migration aidsJava</id>
+>>>>>>> CymChad/master
           </State>
         </expanded-state>
         <selected-state>
           <State>
+<<<<<<< HEAD
             <id>SerializableHasSerialVersionUIDField</id>
+=======
+            <id>Android</id>
+>>>>>>> CymChad/master
           </State>
         </selected-state>
       </profile-state>
@@ -65,6 +92,7 @@
   <component name="ProjectType">
     <option name="id" value="Android" />
   </component>
+<<<<<<< HEAD
   <component name="masterDetails">
     <states>
       <state key="ProjectJDKs.UI">
@@ -92,4 +120,6 @@
       </state>
     </states>
   </component>
+=======
+>>>>>>> CymChad/master
 </project>

@@ -1,1 +1,13 @@
-/build
+.gradle/
+.DS_Store
+local.properties
+
+# build files
+build/
+bin/
+gen/
+output/
+
+# android studio
+*.iml
+.idea

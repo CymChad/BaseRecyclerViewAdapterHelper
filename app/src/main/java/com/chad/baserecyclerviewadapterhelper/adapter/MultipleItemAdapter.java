@@ -1,6 +1,5 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -21,8 +20,8 @@ public class MultipleItemAdapter extends BaseQuickAdapter<String> {
     private int mTextLayoutResId;
 
 
-    public MultipleItemAdapter(Context context, List data, int... layoutResId) {
-        super(context, layoutResId[0], data);
+    public MultipleItemAdapter( List data, int... layoutResId) {
+        super( layoutResId[0], data);
         mTextLayoutResId = layoutResId[1];
     }
 

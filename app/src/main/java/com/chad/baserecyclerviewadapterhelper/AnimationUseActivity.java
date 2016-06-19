@@ -32,7 +32,7 @@ public class AnimationUseActivity extends Activity {
     }
 
     private void initAdapter() {
-        mQuickAdapter = new QuickAdapter(this);
+        mQuickAdapter = new QuickAdapter();
         mQuickAdapter.openLoadAnimation();
         mQuickAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
             @Override

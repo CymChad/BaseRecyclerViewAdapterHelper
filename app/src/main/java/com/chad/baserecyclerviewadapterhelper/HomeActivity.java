@@ -31,7 +31,7 @@ public class HomeActivity extends Activity {
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         initData();
-        BaseQuickAdapter homeAdapter = new HomeAdapter(this, R.layout.home_item_view, mDataList);
+        BaseQuickAdapter homeAdapter = new HomeAdapter( R.layout.home_item_view, mDataList);
         homeAdapter.openLoadAnimation();
         homeAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
