@@ -52,7 +52,7 @@ public class MultipleItemAdapter extends BaseQuickAdapter<String> {
 
     public class TextViewHolder extends BaseViewHolder {
         public TextViewHolder(View itemView) {
-            super(itemView.getContext(), itemView);
+            super(itemView);
         }
     }
 

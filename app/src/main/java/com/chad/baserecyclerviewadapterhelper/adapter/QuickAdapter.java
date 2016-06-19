@@ -1,6 +1,5 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
-import android.content.Context;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -19,7 +18,7 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
         super( R.layout.tweet, DataServer.getSampleData(100));
     }
 
-    public QuickAdapter(Context context, int dataSize) {
+    public QuickAdapter(int dataSize) {
         super( R.layout.tweet, DataServer.getSampleData(dataSize));
     }
 
@@ -32,6 +31,7 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
                 .setOnClickListener(R.id.tweetAvatar, new OnItemChildClickListener())
                 .setOnClickListener(R.id.tweetName, new OnItemChildClickListener())
                 .linkify(R.id.tweetText);
+
         Glide.with(mContext).load(item.getUserAvatar()).crossFade().placeholder(R.mipmap.def_head).transform(new GlideCircleTransform(mContext)).into((ImageView) helper.getView(R.id.tweetAvatar));
     }
 
