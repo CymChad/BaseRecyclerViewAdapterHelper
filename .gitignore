@@ -28,6 +28,14 @@ proguard/
 .gradle
 .idea
 build
+<<<<<<< HEAD
+/build.gradle
+/.idea/
+
+build.gradle
+
+.idea/misc.xml
+=======
 .DS_Store
 local.properties
 # build files
@@ -35,3 +43,4 @@ output/
 # android studio
 *.iml
 .idea
+>>>>>>> CymChad/master
