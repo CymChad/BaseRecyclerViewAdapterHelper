@@ -99,7 +99,7 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
     }
 
     private void initAdapter() {
-        mQuickAdapter = new QuickAdapter(PullToRefreshUseActivity.this, PAGE_SIZE);
+        mQuickAdapter = new QuickAdapter(PAGE_SIZE);
         mQuickAdapter.openLoadAnimation();
         mRecyclerView.setAdapter(mQuickAdapter);
         mCurrentCounter = mQuickAdapter.getData().size();

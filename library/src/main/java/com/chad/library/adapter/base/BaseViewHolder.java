@@ -1,6 +1,5 @@
 package com.chad.library.adapter.base;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -31,7 +30,6 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      */
     private final SparseArray<View> views;
 
-    private final Context context;
 
     public View convertView;
 
@@ -41,9 +39,8 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     Object associatedObject;
 
 
-    protected BaseViewHolder(Context context, View view) {
+    protected BaseViewHolder(View view) {
         super(view);
-        this.context = context;
         this.views = new SparseArray<View>();
         convertView = view;
 
@@ -119,18 +116,6 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    /**
-     * Will set text color of a TextView.
-     *
-     * @param viewId       The view id.
-     * @param textColorRes The text color resource id.
-     * @return The BaseViewHolder for chaining.
-     */
-    public BaseViewHolder setTextColorRes(int viewId, int textColorRes) {
-        TextView view = getView(viewId);
-        view.setTextColor(context.getResources().getColor(textColorRes));
-        return this;
-    }
 
     /**
      * Will set the image of an ImageView from a drawable.
