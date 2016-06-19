@@ -383,6 +383,15 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         return count;
     }
 
+    /**
+     * Get the type of View that will be created by {@link #getItemView(int, ViewGroup)} for the specified item.
+     *
+     * @param position The position of the item within the adapter's data set whose view type we
+     *        want.
+     * @return An integer representing the type of View. Two views should share the same type if one
+     *         can be converted to the other in {@link #getItemView(int, ViewGroup)}. Note: Integers must be in the
+     *         range 0 to {@link #getItemCount()} - 1.
+     */
     @Override
     public int getItemViewType(int position) {
         /**
@@ -480,6 +489,12 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         return new BaseViewHolder(mLoadingView);
     }
 
+    /**
+     *  Called when a view created by this adapter has been attached to a window.
+     *  simple to solve item will layout using all
+     *  {@link #setFullSpan(RecyclerView.ViewHolder)}
+     * @param holder
+     */
     @Override
     public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
@@ -489,6 +504,13 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
     }
 
+    /**
+     * When set to true, the item will layout using all span area. That means, if orientation
+     * is vertical, the view will have full width; if orientation is horizontal, the view will
+     * have full height.
+     * if the hold view use StaggeredGridLayoutManager they should using all span area
+     * @param holder True if this item should traverse all spans.
+     */
     protected void setFullSpan(RecyclerView.ViewHolder holder) {
         if (holder.itemView.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams) {
             StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
@@ -496,6 +518,12 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
     }
 
+    /**
+     * To bind different types of holder and solve different the bind events
+     * @see #getDefItemViewType(int)
+     * @param holder
+     * @param positions
+     */
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int positions) {
 
@@ -532,12 +560,18 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         return new BaseViewHolder(mContentView);
     }
 
-
+    /**
+     * easy to show a simple headView
+     * @param header
+     */
     public void addHeaderView(View header) {
         this.mHeaderView = header;
         this.notifyDataSetChanged();
     }
-
+    /**
+     * easy to show a simple footerView
+     * @param footer
+     */
     public void addFooterView(View footer) {
         mNextLoadEnable = false;
         this.mFooterView = footer;
@@ -551,6 +585,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         setEmptyView(false, false, emptyView);
     }
 
+    /**
+     *
+     * @param isHeadAndEmpty false will not show headView if the data is empty true will show emptyView and headView
+     * @param emptyView
+     */
     public void setEmptyView(boolean isHeadAndEmpty, View emptyView) {
         setEmptyView(isHeadAndEmpty, false, emptyView);
     }
@@ -593,6 +632,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     }
 
+    /**
+     * @param isNextLoad true
+     * if true when loading more data can show loadingView
+
+     */
     public void notifyDataChangedAfterLoadMore(boolean isNextLoad) {
         mNextLoadEnable = isNextLoad;
         mLoadingMoreEnable = false;
@@ -600,6 +644,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     }
 
+    /**
+     * add more data
+     * @param data
+     * @param isNextLoad
+     */
     public void notifyDataChangedAfterLoadMore(List<T> data, boolean isNextLoad) {
         mData.addAll(data);
         notifyDataChangedAfterLoadMore(isNextLoad);
@@ -614,6 +663,10 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
     }
 
+    /**
+     * init the baseViewHolder to register onRecyclerViewItemClickListener and onRecyclerViewItemLongClickListener
+     * @param baseViewHolder
+     */
     private void initItemClickListener(final BaseViewHolder baseViewHolder) {
         if (onRecyclerViewItemClickListener != null) {
             baseViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -633,6 +686,10 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
     }
 
+    /**
+     * add animation when you want to show time
+     * @param holder
+     */
     private void addAnimation(RecyclerView.ViewHolder holder) {
         if (mOpenAnimationEnable) {
             if (!mFirstOnlyEnable || holder.getLayoutPosition() > mLastPosition) {
@@ -651,7 +708,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     *
+     * set anim to start when loading
      * @param anim
      * @param index
      */
