@@ -111,6 +111,10 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         this.mRequestLoadMoreListener = requestLoadMoreListener;
     }
 
+    /**
+     * Sets the duration of the animation.
+     * @param duration The length of the animation, in milliseconds.
+     */
     public void setDuration(int duration) {
         mDuration = duration;
     }
@@ -156,25 +160,61 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public int getPageSize() {
         return this.pageSize;
     }
-
+    /**
+     * Register a callback to be invoked when an item in this AdapterView has
+     * been clicked.
+     *
+     * @param onRecyclerViewItemClickListener The callback that will be invoked.
+     */
     public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener) {
         this.onRecyclerViewItemClickListener = onRecyclerViewItemClickListener;
     }
-
+    /**
+     * Interface definition for a callback to be invoked when an item in this
+     * AdapterView has been clicked.
+     */
     public interface OnRecyclerViewItemClickListener {
+        /**
+         * Callback method to be invoked when an item in this AdapterView has
+         * been clicked.
+         * @param view The view within the AdapterView that was clicked (this
+         *            will be a view provided by the adapter)
+         * @param position The position of the view in the adapter.
+         */
         public void onItemClick(View view, int position);
     }
-
+    /**
+     * Register a callback to be invoked when an item in this AdapterView has
+     * been clicked and held
+     *
+     * @param onRecyclerViewItemLongClickListener The callback that will run
+     */
     public void setOnRecyclerViewItemLongClickListener(OnRecyclerViewItemLongClickListener onRecyclerViewItemLongClickListener) {
         this.onRecyclerViewItemLongClickListener = onRecyclerViewItemLongClickListener;
     }
 
+    /**
+     * Interface definition for a callback to be invoked when an item in this
+     * view has been clicked and held
+     */
     public interface OnRecyclerViewItemLongClickListener {
+        /**
+         * callback method to be invoked when an item in this view has been
+         * click and held
+         * @param view The view whihin the AbsListView that was clicked
+         * @param position The position of the view int the adapter
+         * @return true if the callback consumed the long click ,false otherwise
+         */
         public boolean onItemLongClick(View view, int position);
     }
 
     private OnRecyclerViewItemChildClickListener mChildClickListener;
-
+    /**
+     * Register a callback to be invoked when childView in this AdapterView has
+     * been clicked and held
+     * {@link OnRecyclerViewItemChildClickListener}
+     * @param childClickListener The callback that will run
+     */
     public void setOnRecyclerViewItemChildClickListener(OnRecyclerViewItemChildClickListener childClickListener) {
         this.mChildClickListener = childClickListener;
     }
@@ -217,13 +257,21 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         mContentView = contentView;
     }
 
-
+    /**
+     * remove the item associated with the specified position of adapter
+     * @param position
+     */
     public void remove(int position) {
         mData.remove(position);
         notifyItemRemoved(position + getHeaderViewsCount());
 
     }
 
+    /**
+     *  insert  a item associated with the specified position of adapter
+     * @param position
+     * @param item
+     */
     public void add(int position, T item) {
         mData.add(position, item);
         notifyItemInserted(position);
@@ -255,10 +303,18 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         notifyDataSetChanged();
     }
 
+    /**
+     * set a loadingView
+     * @param loadingView
+     */
     public void setLoadingView(View loadingView) {
         this.mLoadingView = loadingView;
     }
 
+    /**
+     * Get the data of list
+     * @return
+     */
     public List getData() {
         return mData;
     }
@@ -274,18 +330,33 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         return mData.get(position);
     }
 
+    /**
+     * if setHeadView will be return 1 if not will be return 0
+     * @return
+     */
     public int getHeaderViewsCount() {
         return mHeaderView == null ? 0 : 1;
     }
-
+    /**
+     * if mFooterView will be return 1 or not will be return 0
+     * @return
+     */
     public int getFooterViewsCount() {
         return mFooterView == null ? 0 : 1;
     }
-
+    /**
+     * if mEmptyView will be return 1 or not will be return 0
+     * @return
+     */
     public int getmEmptyViewCount() {
         return mEmptyView == null ? 0 : 1;
     }
 
+    /**
+     * returns the number of item that will be created
+     *
+     * @return
+     */
     @Override
     public int getItemCount() {
         int i = isLoadMore() ? 1 : 0;
@@ -359,7 +430,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             else if ((!mFootAndEmptyEnable || !mHeadAndEmptyEnable) && position == 1 && mFooterView != null) {
                 return FOOTER_VIEW;
             }
-        } else if (mEmptyView != null && getItemCount() == (mHeadAndEmptyEnable ? 2 : 1) && mEmptyEnable) {
+        } else if (mData.size() == 0 &&mEmptyView != null && getItemCount() == (mHeadAndEmptyEnable ? 2 : 1) && mEmptyEnable) {
             return EMPTY_VIEW;
         } else if (position == mData.size() + getHeaderViewsCount()) {
             if (mNextLoadEnable)
@@ -578,15 +649,32 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
     }
 
+    /**
+     *
+     * @param anim
+     * @param index
+     */
     protected void startAnim(Animator anim, int index) {
         anim.setDuration(mDuration).start();
         anim.setInterpolator(mInterpolator);
     }
 
+    /**
+     * Determine whether it is loaded more
+     * @return
+     */
     private boolean isLoadMore() {
         return mNextLoadEnable && pageSize != -1 && mRequestLoadMoreListener != null && mData.size() >= pageSize;
     }
 
+    /**
+     *
+     * @param layoutResId ID for an XML layout resource to load
+     * @param parent Optional view to be the parent of the generated hierarchy or else simply an object that
+     *        provides a set of LayoutParams values for root of the returned
+     *        hierarchy
+     * @return  view will be return
+     */
     protected View getItemView(int layoutResId, ViewGroup parent) {
         return mLayoutInflater.inflate(layoutResId, parent, false);
     }
@@ -646,11 +734,17 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         this.mCustomAnimation = animation;
     }
 
+    /**
+     * To open the animation when loading
+     */
     public void openLoadAnimation() {
         this.mOpenAnimationEnable = true;
     }
 
-
+    /**
+     * {@link #addAnimation(RecyclerView.ViewHolder)}
+     * @param firstOnly true just show anim when first loading false show anim when load the data every time
+     */
     public void isFirstOnly(boolean firstOnly) {
         this.mFirstOnlyEnable = firstOnly;
     }
@@ -663,7 +757,12 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      */
     protected abstract void convert(BaseViewHolder helper, T item);
 
-
+    /**
+     * Get the row id associated with the specified position in the list.
+     *
+     * @param position The position of the item within the adapter's data set whose row id we want.
+     * @return The id of the item at the specified position.
+     */
     @Override
     public long getItemId(int position) {
         return position;
