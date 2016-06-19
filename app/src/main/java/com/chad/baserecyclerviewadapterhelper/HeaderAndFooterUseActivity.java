@@ -47,7 +47,7 @@ public class HeaderAndFooterUseActivity extends Activity {
     }
 
     private void initAdapter() {
-        mQuickAdapter = new QuickAdapter(HeaderAndFooterUseActivity.this, PAGE_SIZE);
+        mQuickAdapter = new QuickAdapter(PAGE_SIZE);
         mQuickAdapter.openLoadAnimation();
         mRecyclerView.setAdapter(mQuickAdapter);
         mQuickAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
