@@ -255,9 +255,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         notifyDataSetChanged();
     }
 
-    public void setLoadingView(View loadingView) {
-        this.mLoadingView = loadingView;
-    }
 
     public List getData() {
         return mData;
@@ -399,6 +396,10 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
         return baseViewHolder;
 
+    }
+
+    public void setLoadingView(View loadingView) {
+        this.mLoadingView = loadingView;
     }
 
     private BaseViewHolder getLoadingView(ViewGroup parent) {
