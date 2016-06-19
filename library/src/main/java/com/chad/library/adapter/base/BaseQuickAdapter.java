@@ -385,13 +385,13 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 initItemClickListener(baseViewHolder);
                 break;
             case HEADER_VIEW:
-                baseViewHolder = new BaseViewHolder(mContext, mHeaderView);
+                baseViewHolder = new BaseViewHolder(mHeaderView);
                 break;
             case EMPTY_VIEW:
-                baseViewHolder = new BaseViewHolder(mContext, mEmptyView);
+                baseViewHolder = new BaseViewHolder(mEmptyView);
                 break;
             case FOOTER_VIEW:
-                baseViewHolder = new BaseViewHolder(mContext, mFooterView);
+                baseViewHolder = new BaseViewHolder(mFooterView);
                 break;
             default:
                 baseViewHolder = onCreateDefViewHolder(parent, viewType);
@@ -405,7 +405,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         if (mLoadingView == null) {
             return createBaseViewHolder(parent, R.layout.def_loading);
         }
-        return new BaseViewHolder(mContext, mLoadingView);
+        return new BaseViewHolder(mLoadingView);
     }
 
     @Override
@@ -455,9 +455,9 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     protected BaseViewHolder createBaseViewHolder(ViewGroup parent, int layoutResId) {
         if (mContentView == null) {
-            return new BaseViewHolder(mContext, getItemView(layoutResId, parent));
+            return new BaseViewHolder(getItemView(layoutResId, parent));
         }
-        return new BaseViewHolder(mContext, mContentView);
+        return new BaseViewHolder(mContentView);
     }
 
 

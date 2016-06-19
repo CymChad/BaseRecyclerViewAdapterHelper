@@ -36,7 +36,7 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends B
     @Override
     protected BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
         if (viewType == SECTION_HEADER_VIEW)
-            return new BaseViewHolder(mContext, getItemView(mSectionHeadResId, parent));
+            return new BaseViewHolder(getItemView(mSectionHeadResId, parent));
 
         return super.onCreateDefViewHolder(parent, viewType);
     }
