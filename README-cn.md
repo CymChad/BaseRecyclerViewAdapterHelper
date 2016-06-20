@@ -44,8 +44,8 @@
 ![demo](http://upload-images.jianshu.io/upload_images/972352-54bd17d3680a4cf9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 ```
 public class QuickAdapter extends BaseQuickAdapter<Status> {
-    public QuickAdapter(Context context) {
-        super(context, R.layout.tweet, DataServer.getSampleData());
+    public QuickAdapter() {
+        super(R.layout.tweet, DataServer.getSampleData());
     }
 
     @Override

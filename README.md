@@ -40,8 +40,8 @@ dependencies {
 
 ```java
 public class QuickAdapter extends BaseQuickAdapter<Status> {
-    public QuickAdapter(Context context) {
-        super(context, R.layout.tweet, DataServer.getSampleData());
+    public QuickAdapter() {
+        super(R.layout.tweet, DataServer.getSampleData());
     }
 
     @Override
