@@ -224,12 +224,12 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     public class OnItemChildClickListener implements View.OnClickListener {
-        public int position;
+        public RecyclerView.ViewHolder mViewHolder;
 
         @Override
         public void onClick(View v) {
             if (mChildClickListener != null)
-                mChildClickListener.onItemChildClick(BaseQuickAdapter.this, v, position - getHeaderViewsCount());
+                mChildClickListener.onItemChildClick(BaseQuickAdapter.this, v, mViewHolder.getLayoutPosition() - getHeaderViewsCount());
         }
     }
 
