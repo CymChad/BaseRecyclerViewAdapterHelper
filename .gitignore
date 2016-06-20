@@ -28,11 +28,3 @@ proguard/
 .gradle
 .idea
 build
-.DS_Store
-local.properties
-# build files
-output/
-# android studio
-*.iml
-.idea
-

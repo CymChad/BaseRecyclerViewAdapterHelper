@@ -148,8 +148,8 @@ mQuickAdapter.setLoadingView(customView);
 #使用分组
 ```
 public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
-     public SectionAdapter(Context context, int layoutResId, int sectionHeadResId, List data) {
-        super(context, layoutResId, sectionHeadResId, data);
+     public SectionAdapter(int layoutResId, int sectionHeadResId, List data) {
+        super(layoutResId, sectionHeadResId, data);
     }
     @Override
     protected void convert(BaseViewHolder helper, MySection item) {
@@ -172,8 +172,8 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
 ```
 public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem> {
 
-    public MultipleItemQuickAdapter(Context context, List data) {
-        super(context, data);
+    public MultipleItemQuickAdapter(List data) {
+        super(data);
         addItmeType(MultipleItem.TEXT, R.layout.text_view);
         addItmeType(MultipleItem.IMG, R.layout.image_view);
     }
