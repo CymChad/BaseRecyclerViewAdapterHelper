@@ -196,7 +196,21 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
 ```
 mQuickAdapter.setEmptyView(getView());
 ```
-
+#使用DragItem
+```java
+OnItemDragListener listener = new OnItemDragListener() {
+    @Override
+    public void onItemDragStart(RecyclerView.ViewHolder viewHolder){}
+    @Override
+    public void onItemDragMoving(RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {}
+    @Override
+    public void onItemDragEnd(RecyclerView.ViewHolder viewHolder) {}
+}
+ItemDraggableCallback itemDraggableCallback = new ItemDraggableCallback(mAdapter);
+ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDraggableCallback);
+mAdapter.enableDragItem(mItemTouchHelper, R.id.textView, true);
+mAdapter.setOnItemDragListener(listener);
+```
 >**持续更新!，所以推荐Star项目**
 
 #感谢

@@ -198,6 +198,23 @@ mQuickAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRec
         });
 ```
 
+#Use it drag item
+```java
+OnItemDragListener listener = new OnItemDragListener() {
+    @Override
+    public void onItemDragStart(RecyclerView.ViewHolder viewHolder){}
+    @Override
+    public void onItemDragMoving(RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {}
+    @Override
+    public void onItemDragEnd(RecyclerView.ViewHolder viewHolder) {}
+}
+ItemDraggableCallback itemDraggableCallback = new ItemDraggableCallback(mAdapter);
+ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDraggableCallback);
+mAdapter.enableDragItem(mItemTouchHelper, R.id.textView, true);
+mAdapter.setOnItemDragListener(listener);
+```
+
+
 #Thanks
 [JoanZapata / base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper)
 
