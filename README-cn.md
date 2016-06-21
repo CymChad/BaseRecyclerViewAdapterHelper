@@ -20,7 +20,7 @@
 - **添加分组（随心定义分组头部）**
 - **自定义不同的item类型（简单配置、无需重写额外方法）**
 - **设置空布局（比Listview的setEmptyView还要好用！）**
-
+- **添加拖拽item**
 
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.gif)
 #如何使用它？
@@ -36,7 +36,7 @@
 然后在dependencies添加:
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.8.0'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.8.1'
 	}
 ```
 
@@ -44,8 +44,8 @@
 ![demo](http://upload-images.jianshu.io/upload_images/972352-54bd17d3680a4cf9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 ```
 public class QuickAdapter extends BaseQuickAdapter<Status> {
-    public QuickAdapter(Context context) {
-        super(context, R.layout.tweet, DataServer.getSampleData());
+    public QuickAdapter() {
+        super(R.layout.tweet, DataServer.getSampleData());
     }
 
     @Override
@@ -148,8 +148,8 @@ mQuickAdapter.setLoadingView(customView);
 #使用分组
 ```
 public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
-     public SectionAdapter(Context context, int layoutResId, int sectionHeadResId, List data) {
-        super(context, layoutResId, sectionHeadResId, data);
+     public SectionAdapter(int layoutResId, int sectionHeadResId, List data) {
+        super(layoutResId, sectionHeadResId, data);
     }
     @Override
     protected void convert(BaseViewHolder helper, MySection item) {
@@ -172,8 +172,8 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
 ```
 public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem> {
 
-    public MultipleItemQuickAdapter(Context context, List data) {
-        super(context, data);
+    public MultipleItemQuickAdapter(List data) {
+        super(data);
         addItmeType(MultipleItem.TEXT, R.layout.text_view);
         addItmeType(MultipleItem.IMG, R.layout.image_view);
     }
@@ -196,7 +196,21 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
 ```
 mQuickAdapter.setEmptyView(getView());
 ```
-
+#使用DragItem
+```java
+OnItemDragListener listener = new OnItemDragListener() {
+    @Override
+    public void onItemDragStart(RecyclerView.ViewHolder viewHolder){}
+    @Override
+    public void onItemDragMoving(RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {}
+    @Override
+    public void onItemDragEnd(RecyclerView.ViewHolder viewHolder) {}
+}
+ItemDraggableCallback itemDraggableCallback = new ItemDraggableCallback(mAdapter);
+ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDraggableCallback);
+mAdapter.enableDragItem(mItemTouchHelper, R.id.textView, true);
+mAdapter.setOnItemDragListener(listener);
+```
 >**持续更新!，所以推荐Star项目**
 
 #感谢

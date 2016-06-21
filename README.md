@@ -17,6 +17,7 @@ Please feel free to use this.(Love can be a **Star**)
 - **custom item view type**
 - **add setEmptyView methods**
 - **add item chlid click**
+- **add drag item**
 
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.gif)
 # Get it
@@ -32,7 +33,7 @@ allprojects {
 Add the dependency
 ```groovy
 dependencies {
-        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.8.0'
+        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.8.1'
 }
 ```
 
@@ -40,8 +41,8 @@ dependencies {
 
 ```java
 public class QuickAdapter extends BaseQuickAdapter<Status> {
-    public QuickAdapter(Context context) {
-        super(context, R.layout.tweet, DataServer.getSampleData());
+    public QuickAdapter() {
+        super(R.layout.tweet, DataServer.getSampleData());
     }
 
     @Override
@@ -92,8 +93,8 @@ quickAdapter.openLoadAnimation(new BaseAnimation() {
 ```java
 public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem> {
 
-    public MultipleItemQuickAdapter(Context context, List data) {
-        super(context, data);
+    public MultipleItemQuickAdapter(List data) {
+        super(data);
         addItmeType(MultipleItem.TEXT, R.layout.text_view);
         addItmeType(MultipleItem.IMG, R.layout.image_view);
     }
@@ -146,8 +147,8 @@ mQuickAdapter.setLoadingView(customView);
 #Use it create section headers
 ```java
 public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
-     public SectionAdapter(Context context, int layoutResId, int sectionHeadResId, List data) {
-        super(context, layoutResId, sectionHeadResId, data);
+     public SectionAdapter(int layoutResId, int sectionHeadResId, List data) {
+        super(layoutResId, sectionHeadResId, data);
     }
     @Override
     protected void convert(BaseViewHolder helper, MySection item) {
@@ -197,6 +198,23 @@ mQuickAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRec
             }
         });
 ```
+
+#Use it drag item
+```java
+OnItemDragListener listener = new OnItemDragListener() {
+    @Override
+    public void onItemDragStart(RecyclerView.ViewHolder viewHolder){}
+    @Override
+    public void onItemDragMoving(RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {}
+    @Override
+    public void onItemDragEnd(RecyclerView.ViewHolder viewHolder) {}
+}
+ItemDraggableCallback itemDraggableCallback = new ItemDraggableCallback(mAdapter);
+ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDraggableCallback);
+mAdapter.enableDragItem(mItemTouchHelper, R.id.textView, true);
+mAdapter.setOnItemDragListener(listener);
+```
+
 
 #Thanks
 [JoanZapata / base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper)

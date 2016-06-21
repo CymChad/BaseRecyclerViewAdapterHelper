@@ -4,9 +4,12 @@ package com.chad.library.adapter.base;
 import android.animation.Animator;
 import android.content.Context;
 import android.support.annotation.IntDef;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
@@ -19,10 +22,12 @@ import com.chad.library.adapter.base.animation.ScaleInAnimation;
 import com.chad.library.adapter.base.animation.SlideInBottomAnimation;
 import com.chad.library.adapter.base.animation.SlideInLeftAnimation;
 import com.chad.library.adapter.base.animation.SlideInRightAnimation;
+import com.chad.library.adapter.base.listener.OnItemDragListener;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -93,6 +98,14 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      */
     public static final int SLIDEIN_RIGHT = 0x00000005;
 
+    private static final int NO_TOGGLE_VIEW = 0;
+    private int mToggleViewId = NO_TOGGLE_VIEW;
+    private ItemTouchHelper mItemTouchHelper;
+    private OnItemDragListener mOnItemDragListener;
+    private boolean mDragOnLongPress = true;
+
+    private View.OnTouchListener mOnToggleViewTouchListener;
+    private View.OnLongClickListener mOnToggleViewLongClickListener;
 
     /**
      * call the method will not enable the loadMore funcation and the params pageSize is invalid
@@ -224,12 +237,12 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     public class OnItemChildClickListener implements View.OnClickListener {
-        public int position;
+        public RecyclerView.ViewHolder mViewHolder;
 
         @Override
         public void onClick(View v) {
             if (mChildClickListener != null)
-                mChildClickListener.onItemChildClick(BaseQuickAdapter.this, v, position - getHeaderViewsCount());
+                mChildClickListener.onItemChildClick(BaseQuickAdapter.this, v, mViewHolder.getLayoutPosition() - getHeaderViewsCount());
         }
     }
 
@@ -526,8 +539,9 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      */
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int positions) {
+        int viewType = holder.getItemViewType();
 
-        switch (holder.getItemViewType()) {
+        switch (viewType) {
             case 0:
                 convert((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderViewsCount()));
                 addAnimation(holder);
@@ -547,6 +561,23 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 break;
         }
 
+        if (mItemTouchHelper != null && viewType != LOADING_VIEW && viewType != HEADER_VIEW
+                && viewType != EMPTY_VIEW && viewType != FOOTER_VIEW) {
+            if (mToggleViewId != NO_TOGGLE_VIEW) {
+                View toggleView = ((BaseViewHolder)holder).getView(mToggleViewId);
+                if (toggleView != null) {
+                    toggleView.setTag(holder);
+                    if (mDragOnLongPress) {
+                        toggleView.setOnLongClickListener(mOnToggleViewLongClickListener);
+                    } else {
+                        toggleView.setOnTouchListener(mOnToggleViewTouchListener);
+                    }
+                }
+            } else {
+                holder.itemView.setTag(holder);
+                holder.itemView.setOnLongClickListener(mOnToggleViewLongClickListener);
+            }
+        }
     }
 
     protected BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
@@ -826,5 +857,125 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         return position;
     }
 
+    /**
+     * Set the toggle view's id which will trigger drag event.
+     * If the toggle view id is not set, drag event will be triggered when the item is long pressed.
+     *
+     * @param toggleViewId the toggle view's id
+     */
+    public void setToggleViewId(int toggleViewId) {
+        mToggleViewId = toggleViewId;
+    }
+
+    /**
+     * Set the drag event should be trigger on long press.
+     * Work when the toggleViewId has been set.
+     *
+     * @param longPress by default is true.
+     */
+    public void setToggleDragOnLongPress(boolean longPress) {
+        mDragOnLongPress = longPress;
+        if (mDragOnLongPress) {
+            mOnToggleViewTouchListener = null;
+            mOnToggleViewLongClickListener = new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (mItemTouchHelper != null) {
+                        mItemTouchHelper.startDrag((RecyclerView.ViewHolder) v.getTag());
+                    }
+                    return true;
+                }
+            };
+        } else {
+            mOnToggleViewTouchListener = new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN
+                            && !mDragOnLongPress) {
+                        if (mItemTouchHelper != null) {
+                            mItemTouchHelper.startDrag((RecyclerView.ViewHolder) v.getTag());
+                        }
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            };
+            mOnToggleViewLongClickListener = null;
+        }
+    }
+
+    public boolean shouldToggleOnLongPress() {
+        return mToggleViewId == NO_TOGGLE_VIEW || mDragOnLongPress;
+    }
+
+    /**
+     * Enable drag items.
+     * Use itemView as the toggleView when long pressed.
+     * @param itemTouchHelper {@link ItemTouchHelper}
+     */
+    public void enableDragItem(ItemTouchHelper itemTouchHelper) {
+        enableDragItem(itemTouchHelper, NO_TOGGLE_VIEW, true);
+    }
+
+    /**
+     * Enable drag items. Use the specified view as toggle.
+     * @param itemTouchHelper {@link ItemTouchHelper}
+     * @param toggleViewId The toggle view's id.
+     * @param dragOnLongPress If true the drag event will be trigger on long press, otherwise on touch down.
+     */
+    public void enableDragItem(ItemTouchHelper itemTouchHelper, int toggleViewId, boolean dragOnLongPress) {
+        mItemTouchHelper = itemTouchHelper;
+        setToggleViewId(toggleViewId);
+        setToggleDragOnLongPress(dragOnLongPress);
+    }
+
+    /**
+     * Disable drag items.
+     */
+    public void disableDragItem() {
+        mItemTouchHelper = null;
+    }
+
+    /**
+     * @param onItemDragListener Register a callback to be invoked when drag event happen.
+     */
+    public void setOnItemDragListener(OnItemDragListener onItemDragListener) {
+        mOnItemDragListener = onItemDragListener;
+    }
+
+
+    public void onItemDragStart(RecyclerView.ViewHolder viewHolder) {
+        if (mOnItemDragListener != null) {
+            mOnItemDragListener.onItemDragStart(viewHolder);
+        }
+    }
+
+    public void onItemDragMoving(RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {
+        int from = source.getAdapterPosition() - getHeaderViewsCount();
+        int to = target.getAdapterPosition() - getHeaderViewsCount();
+
+        if (from < to) {
+            for (int i = from; i < to; i++) {
+                Collections.swap(mData, i, i + 1);
+            }
+        } else {
+            for (int i = from; i > to; i--) {
+                Collections.swap(mData, i, i - 1);
+            }
+        }
+        notifyItemMoved(source.getAdapterPosition(), target.getAdapterPosition());
+
+        if (mOnItemDragListener != null) {
+            mOnItemDragListener.onItemDragMoving(source, target);
+        }
+    }
+
+    public void onItemDragEnd(RecyclerView.ViewHolder holder) {
+
+        if (mOnItemDragListener != null) {
+            mOnItemDragListener.onItemDragEnd(holder);
+        }
+    }
 
 }
