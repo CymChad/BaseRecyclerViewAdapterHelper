@@ -20,7 +20,7 @@
 - **添加分组（随心定义分组头部）**
 - **自定义不同的item类型（简单配置、无需重写额外方法）**
 - **设置空布局（比Listview的setEmptyView还要好用！）**
-
+- **添加拖拽item**
 
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.gif)
 #如何使用它？
