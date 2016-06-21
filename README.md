@@ -17,6 +17,7 @@ Please feel free to use this.(Love can be a **Star**)
 - **custom item view type**
 - **add setEmptyView methods**
 - **add item chlid click**
+- **add drag item**
 
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.gif)
 # Get it
