@@ -38,3 +38,4 @@ build.gradle
 =======
 .DS_Store
 
+/app/.gitignore
