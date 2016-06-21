@@ -94,8 +94,8 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
 
     public MultipleItemQuickAdapter(Context context, List data) {
         super(context, data);
-        addItmeType(MultipleItem.TEXT, R.layout.text_view);
-        addItmeType(MultipleItem.IMG, R.layout.image_view);
+        addItemType(MultipleItem.TEXT, R.layout.text_view);
+        addItemType(MultipleItem.IMG, R.layout.image_view);
     }
 
     @Override
