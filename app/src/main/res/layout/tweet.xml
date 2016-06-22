@@ -4,7 +4,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="130dip"
+    android:layout_height="wrap_content"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
     android:layout_gravity="center"
@@ -15,7 +15,7 @@
     card_view:cardUseCompatPadding="true">
 <RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="110dp"
+    android:layout_height="wrap_content"
     android:padding="10dp"
     android:layout_gravity="center">
 
