@@ -1,9 +1,10 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -19,8 +20,8 @@ public class MultipleItemAdapter extends BaseQuickAdapter<String> {
     private int mTextLayoutResId;
 
 
-    public MultipleItemAdapter(Context context, List data, int... layoutResId) {
-        super(context, layoutResId[0], data);
+    public MultipleItemAdapter( List data, int... layoutResId) {
+        super( layoutResId[0], data);
         mTextLayoutResId = layoutResId[1];
     }
 
@@ -46,12 +47,12 @@ public class MultipleItemAdapter extends BaseQuickAdapter<String> {
 
     @Override
     protected void convert(BaseViewHolder helper, String item) {
-        helper.setImageUrl(R.id.iv, item);
+        Glide.with(mContext).load(item).crossFade().into((ImageView) helper.getView(R.id.iv));
     }
 
     public class TextViewHolder extends BaseViewHolder {
         public TextViewHolder(View itemView) {
-            super(itemView.getContext(), itemView);
+            super(itemView);
         }
     }
 

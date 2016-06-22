@@ -6,7 +6,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:supportsRtl="true">
         <activity android:name=".PullToRefreshUseActivity">
@@ -27,6 +27,8 @@
         <activity android:name=".MultipleItemUseActivity">
         </activity>
         <activity android:name=".EmptyViewUseActivity">
+        </activity>
+        <activity android:name=".ItemDragUseActivity">
         </activity>
     </application>
 

@@ -6,12 +6,13 @@
               android:layout_height="wrap_content">
 <ImageView
     android:id="@+id/iv"
-    android:layout_width="@dimen/def_height"
-    android:layout_height="@dimen/def_height"
-    android:src="@mipmap/ic_launcher"/>
+    android:layout_marginTop="5dp"
+    android:layout_width="@dimen/avatarSize"
+    android:layout_height="@dimen/avatarSize"
+    android:src="@mipmap/smalllogo_gray"/>
     <TextView
         android:id="@+id/tv"
-        android:textColor="@android:color/darker_gray"
+        android:textColor="@color/txt_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"/>

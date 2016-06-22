@@ -1,6 +1,5 @@
 package com.chad.library.adapter.base;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -20,10 +19,6 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.Transformation;
-import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
-
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
@@ -35,7 +30,6 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      */
     private final SparseArray<View> views;
 
-    private final Context context;
 
     public View convertView;
 
@@ -45,9 +39,8 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     Object associatedObject;
 
 
-    protected BaseViewHolder(Context context, View view) {
+    protected BaseViewHolder(View view) {
         super(view);
-        this.context = context;
         this.views = new SparseArray<View>();
         convertView = view;
 
@@ -123,18 +116,6 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    /**
-     * Will set text color of a TextView.
-     *
-     * @param viewId       The view id.
-     * @param textColorRes The text color resource id.
-     * @return The BaseViewHolder for chaining.
-     */
-    public BaseViewHolder setTextColorRes(int viewId, int textColorRes) {
-        TextView view = getView(viewId);
-        view.setTextColor(context.getResources().getColor(textColorRes));
-        return this;
-    }
 
     /**
      * Will set the image of an ImageView from a drawable.
@@ -148,35 +129,6 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         view.setImageDrawable(drawable);
         return this;
     }
-
-    /**
-     * Will download an image from a URL and put it in an ImageView.<br/>
-     * It uses Square's Picasso library to download the image asynchronously and put the result into the ImageView.<br/>
-     * Picasso manages recycling of views in a ListView.<br/>
-     * If you need more control over the Picasso settings, use {BaseViewHolder#setImageBuilder}.
-     *
-     * @param viewId   The view id.
-     * @param imageUrl The image URL.
-     * @return The BaseViewHolder for chaining.
-     */
-    public BaseViewHolder setImageUrl(int viewId, String imageUrl) {
-        ImageView view = getView(viewId);
-        Glide.with(context).load(imageUrl).crossFade().into(view);
-        return this;
-    }
-
-    public BaseViewHolder setImageUrl(int viewId, String imageUrl, int defResourceId) {
-        ImageView view = getView(viewId);
-        Glide.with(context).load(imageUrl).crossFade().placeholder(defResourceId).into(view);
-        return this;
-    }
-
-    public BaseViewHolder setImageUrl(int viewId, String imageUrl, int defResourceId, BitmapTransformation... transformations) {
-        ImageView view = getView(viewId);
-        Glide.with(context).load(imageUrl).crossFade().placeholder(defResourceId).transform(transformations).into(view);
-        return this;
-    }
-
 
     /**
      * Add an action to set the image of an image view. Can be called multiple times.
@@ -335,7 +287,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     public BaseViewHolder setOnClickListener(int viewId, BaseQuickAdapter.OnItemChildClickListener listener) {
         View view = getView(viewId);
-        listener.position = getAdapterPosition();
+        listener.mViewHolder = this;
         view.setOnClickListener(listener);
         return this;
     }

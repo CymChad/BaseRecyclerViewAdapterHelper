@@ -6,6 +6,15 @@ package com.chad.baserecyclerviewadapterhelper.entity;
 public class HomeItem {
     private String title;
     private Class<?> activity;
+    private String colorStr;
+
+    public String getColorStr() {
+        return colorStr;
+    }
+
+    public void setColorStr(String colorStr) {
+        this.colorStr = colorStr;
+    }
 
     public String getTitle() {
         return title;

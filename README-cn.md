@@ -1,13 +1,16 @@
 >RecyclerView作为Android最常用的控件，受益群体几乎是所有Android开发者，希望更多开发者能够一起来维护这个项目，把这个项目做得更好，帮助更多人。**Star我的项目可加Q群558178792，申请的时候把GitHub的账号名字备注上否则不予通过，谢谢配合。**中国有句古话叫“授人以鱼不如授人以渔”，不仅仅提供使用，还写了如何实现的原理：
-- 「[RecyclerView.Adapter优化了吗？](http://blog.csdn.net/cym492224103/article/details/51113321)」
--  「[BaseRecyclerAdapter之添加动画](http://blog.csdn.net/cym492224103/article/details/51150108)」
--  「[BaseRecyclerAdapter之添加不同布局（头部尾部）](http://blog.csdn.net/cym492224103/article/details/51214362)」
--  「[BaseRecyclerAdapter之添加不同布局（优化篇）](http://blog.csdn.net/cym492224103/article/details/51222414)」
--  「[我的简书](http://www.jianshu.com/users/f958e66439f0/latest_articles)」
+- 「[RecyclerView.Adapter优化了吗？](http://www.jianshu.com/p/411ab861034f)」
+- 「[BaseRecyclerAdapter之添加动画](http://www.jianshu.com/p/fa3f97c19263)」
+- 「[BaseRecyclerAdapter之添加不同布局（头部尾部）](http://www.jianshu.com/p/9d75c22f0964)」
+- 「[BaseRecyclerAdapter之添加不同布局（优化篇）](http://www.jianshu.com/p/cf29d4e45536)」
 
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-BaseRecyclerViewAdapterHelper-green.svg?style=true)](https://android-arsenal.com/details/1/3644)
 # BaseRecyclerViewAdapterHelper
 ![logo](http://upload-images.jianshu.io/upload_images/972352-1d77e0a75a4a7c0a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)  
 一个强大并且灵活的RecyclerViewAdapter，欢迎使用。（喜欢的可以**Star**一下）
+## Goolge Play Demo
+
+[![Get it on Google Play](https://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=com.chad.baserecyclerviewadapterhelper)
 #它能做什么？（[下载 apk](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/raw/master/demo_res/demo.apk)）
 - **优化Adapter代码（减少百分之70%代码）**
 - **添加点击item点击、长按事件、以及item子控件的点击事件**
@@ -17,7 +20,7 @@
 - **添加分组（随心定义分组头部）**
 - **自定义不同的item类型（简单配置、无需重写额外方法）**
 - **设置空布局（比Listview的setEmptyView还要好用！）**
-
+- **添加拖拽item**
 
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.gif)
 #如何使用它？
@@ -33,7 +36,7 @@
 然后在dependencies添加:
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.7.0'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.8.2'
 	}
 ```
 
@@ -41,8 +44,8 @@
 ![demo](http://upload-images.jianshu.io/upload_images/972352-54bd17d3680a4cf9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 ```
 public class QuickAdapter extends BaseQuickAdapter<Status> {
-    public QuickAdapter(Context context) {
-        super(context, R.layout.tweet, DataServer.getSampleData());
+    public QuickAdapter() {
+        super(R.layout.tweet, DataServer.getSampleData());
     }
 
     @Override
@@ -50,9 +53,9 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
         helper.setText(R.id.tweetName, item.getUserName())
                 .setText(R.id.tweetText, item.getText())
                 .setText(R.id.tweetDate, item.getCreatedAt())
-                .setImageUrl(R.id.tweetAvatar, item.getUserAvatar())
                 .setVisible(R.id.tweetRT, item.isRetweet())
                 .linkify(R.id.tweetText);
+                 Glide.with(mContext).load(item.getUserAvatar()).crossFade().into((ImageView) helper.getView(R.id.iv));
     }
 }
 ```
@@ -119,6 +122,7 @@ mQuickAdapter.addFooterView(getView());
 ```
 #使用它加载更多
 ```
+mQuickAdapter.openLoadMore(PAGE_SIZE, true);
 mQuickAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
@@ -144,8 +148,8 @@ mQuickAdapter.setLoadingView(customView);
 #使用分组
 ```
 public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
-     public SectionAdapter(Context context, int layoutResId, int sectionHeadResId, List data) {
-        super(context, layoutResId, sectionHeadResId, data);
+     public SectionAdapter(int layoutResId, int sectionHeadResId, List data) {
+        super(layoutResId, sectionHeadResId, data);
     }
     @Override
     protected void convert(BaseViewHolder helper, MySection item) {
@@ -154,7 +158,6 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
     @Override
     protected void convertHead(BaseViewHolder helper,final MySection item) {
         helper.setText(R.id.header, item.header);
-        if(!item.isMroe)helper.setVisible(R.id.more,false);
         else
         helper.setOnClickListener(R.id.more, new View.OnClickListener() {
             @Override
@@ -168,10 +171,10 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
 ```
 public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem> {
 
-    public MultipleItemQuickAdapter(Context context, List data) {
-        super(context, data);
-        addItmeType(MultipleItem.TEXT, R.layout.text_view);
-        addItmeType(MultipleItem.IMG, R.layout.image_view);
+    public MultipleItemQuickAdapter(List data) {
+        super(data);
+        addItemType(MultipleItem.TEXT, R.layout.text_view);
+        addItemType(MultipleItem.IMG, R.layout.image_view);
     }
 
     @Override
@@ -192,7 +195,21 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
 ```
 mQuickAdapter.setEmptyView(getView());
 ```
-
+#使用DragItem
+```java
+OnItemDragListener listener = new OnItemDragListener() {
+    @Override
+    public void onItemDragStart(RecyclerView.ViewHolder viewHolder){}
+    @Override
+    public void onItemDragMoving(RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {}
+    @Override
+    public void onItemDragEnd(RecyclerView.ViewHolder viewHolder) {}
+}
+ItemDraggableCallback itemDraggableCallback = new ItemDraggableCallback(mAdapter);
+ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDraggableCallback);
+mAdapter.enableDragItem(mItemTouchHelper, R.id.textView, true);
+mAdapter.setOnItemDragListener(listener);
+```
 >**持续更新!，所以推荐Star项目**
 
 #感谢

@@ -1,6 +1,5 @@
 package com.chad.library.adapter.base;
 
-import android.content.Context;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
@@ -22,11 +21,10 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity> exten
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.
      *
-     * @param context The context.
      * @param data    A new list is created out of this one to avoid mutable list
      */
-    public BaseMultiItemQuickAdapter(Context context, List<T> data) {
-        super(context, data);
+    public BaseMultiItemQuickAdapter( List<T> data) {
+        super( data);
     }
 
     @Override
@@ -44,7 +42,7 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity> exten
         return layouts.get(viewType);
     }
 
-    protected void addItmeType(int type, int layoutResId) {
+    protected void addItemType(int type, int layoutResId) {
         if (layouts == null) {
             layouts = new SparseArray<>();
         }

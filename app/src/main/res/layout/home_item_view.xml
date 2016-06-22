@@ -11,7 +11,7 @@
         android:layout_height="120dp"
         android:layout_gravity="center"
         android:foreground="?android:attr/selectableItemBackground"
-        card_view:cardBackgroundColor="@color/cardview_light_background"
+        card_view:cardBackgroundColor="#0dddb8"
         card_view:cardCornerRadius="8dp"
         card_view:cardElevation="4dp"
         card_view:cardUseCompatPadding="true">
@@ -21,8 +21,10 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="@android:color/darker_gray"
-            android:gravity="center" />
+            android:textSize="25sp"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            />
     </android.support.v7.widget.CardView>
 </LinearLayout>
 

@@ -1,6 +1,5 @@
 package com.chad.library.adapter.base;
 
-import android.content.Context;
 import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.entity.SectionEntity;
@@ -20,13 +19,12 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends B
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.
      *
-     * @param context          The context.
      * @param sectionHeadResId The section head layout id for each item
      * @param layoutResId      The layout resource id of each item.
      * @param data             A new list is created out of this one to avoid mutable list
      */
-    public BaseSectionQuickAdapter(Context context, int layoutResId, int sectionHeadResId, List<T> data) {
-        super(context, layoutResId, data);
+    public BaseSectionQuickAdapter( int layoutResId, int sectionHeadResId, List<T> data) {
+        super(layoutResId, data);
         this.mSectionHeadResId = sectionHeadResId;
     }
 
@@ -38,7 +36,7 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends B
     @Override
     protected BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
         if (viewType == SECTION_HEADER_VIEW)
-            return new BaseViewHolder(mContext, getItemView(mSectionHeadResId, parent));
+            return new BaseViewHolder(getItemView(mSectionHeadResId, parent));
 
         return super.onCreateDefViewHolder(parent, viewType);
     }
