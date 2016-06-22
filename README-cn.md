@@ -58,8 +58,8 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
     }
 }
 ```
-![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/chlid_click.gif)
 #如何添加item点击、长按事件
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/chlid_click.gif)
 ```
 mQuickAdapter.setOnRecyclerViewItemClickListener();
 mQuickAdapter.setOnRecyclerViewItemLongClickListener();
@@ -91,9 +91,8 @@ mQuickAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRec
             }
         });
 ```
-![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/animation.gif)
 #如何使用它添加动画？
-
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/animation.gif)
 ```
 // 一行代码搞定（默认为渐显效果）
 quickAdapter.openLoadAnimation();
@@ -116,14 +115,14 @@ quickAdapter.openLoadAnimation(new BaseAnimation() {
                             }
                         });
 ```
-![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/header_footer.gif)
 #使用它添加头部添加尾部
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/header_footer.gif)
 ```
 mQuickAdapter.addHeaderView(getView());
 mQuickAdapter.addFooterView(getView());
 ```
-![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/load_more.gif)
 #使用它加载更多
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/load_more.gif)
 ```
 mQuickAdapter.openLoadMore(PAGE_SIZE, true);
 mQuickAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
@@ -148,8 +147,8 @@ mQuickAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener
 ```
 mQuickAdapter.setLoadingView(customView);
 ```
-![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/section_headers.gif)
 #使用分组
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/section_headers.gif)
 ```
 public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
      public SectionAdapter(int layoutResId, int sectionHeadResId, List data) {
@@ -171,8 +170,8 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
         });
     }
 ```
-![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/multiple_item.gif)
 #如何添加多种类型item？
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/multiple_item.gif)
 ```
 public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem> {
 
@@ -196,13 +195,13 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
 
 }
 ```
-![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/empty_view.gif)
 #使用setEmptyView
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/empty_view.gif)
 ```
 mQuickAdapter.setEmptyView(getView());
 ```
-![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/drag_item.gif)
 #使用DragItem
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/drag_item.gif)
 ```java
 OnItemDragListener listener = new OnItemDragListener() {
     @Override
