@@ -8,7 +8,7 @@ Please feel free to use this.(Love can be a **Star**)
 [![Get it on Google Play](https://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=com.chad.baserecyclerviewadapterhelper)
 #Features（[download apk](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/raw/master/demo_res/demo.apk)）
 - **Reduce lot of code.easily create RecyclerAdapter**
-- **add item click and add item long click**
+- **add item click and add item long click and item chlid click**
 - **easily add RecyclerAdapter animations**
 - **add HeadView and add FooterView**
 - **add The drop-down refresh, load more**
@@ -16,10 +16,8 @@ Please feel free to use this.(Love can be a **Star**)
 - **easily create section headers**
 - **custom item view type**
 - **add setEmptyView methods**
-- **add item chlid click**
 - **add drag item**
 
-![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.gif)
 # Get it
 Add it in your root build.gradle at the end of repositories:
 ```groovy
@@ -33,12 +31,12 @@ allprojects {
 Add the dependency
 ```groovy
 dependencies {
-        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.8.1'
+        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.8.2'
 }
 ```
 
 #Use it create RecyclerAdapter
-
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/item_view.png)
 ```java
 public class QuickAdapter extends BaseQuickAdapter<Status> {
     public QuickAdapter() {
@@ -56,7 +54,8 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
     }
 }
 ```
-#Use it item click
+#Use it item click and item chlid click
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/chlid_click.gif)
 ```java
 mQuickAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
     @Override
@@ -64,112 +63,6 @@ mQuickAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecycler
         //..
     }
 });
-```
-
-#Use it add adaptar Animation
-```java
-// Turn animation
-quickAdapter.openLoadAnimation();
-```
-or
-```java
-// Turn animation and set animate
-quickAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
-```
-or
-```java
-// Turn animation and set custom animate
-quickAdapter.openLoadAnimation(new BaseAnimation() {
-                            @Override
-                            public Animator[] getAnimators(View view) {
-                                return new Animator[]{
-                                        ObjectAnimator.ofFloat(view, "scaleY", 1, 1.1f, 1),
-                                        ObjectAnimator.ofFloat(view, "scaleX", 1, 1.1f, 1)
-                                };
-                            }
-                        });
-```
-#Use it custom item view type
-```java
-public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem> {
-
-    public MultipleItemQuickAdapter(List data) {
-        super(data);
-        addItmeType(MultipleItem.TEXT, R.layout.text_view);
-        addItmeType(MultipleItem.IMG, R.layout.image_view);
-    }
-
-    @Override
-    protected void convert(BaseViewHolder helper, MultipleItem item) {
-        switch (helper.getItemViewType()) {
-            case MultipleItem.TEXT:
-                helper.setImageUrl(R.id.tv, item.getContent());
-                break;
-            case MultipleItem.IMG:
-                helper.setImageUrl(R.id.iv, item.getContent());
-                break;
-        }
-    }
-
-}
-```
-#Use it add header and footer
-```java
-mQuickAdapter.addHeaderView(getView());
-mQuickAdapter.addFooterView(getView());
-```
-#Use it load more
-setOnLoadMoreListener
-```java
-mQuickAdapter.openLoadMore(PAGE_SIZE, true);
-mQuickAdapter.setOnLoadMoreListener(this);
-```
-Override onLoadMoreRequested()
-```java
-@Override
-public void onLoadMoreRequested() {
-        mRecyclerView.post(new Runnable() {
-        @Override
-        public void run() {
-        if (mCurrentCounter >= TOTAL_COUNTER) {
-                    mQuickAdapter.notifyDataChangedAfterLoadMore(false);
-                }
-        } else {
-                    mQuickAdapter.notifyDataChangedAfterLoadMore(DataServer.getSampleData(PAGE_SIZE),true);
-                    mCurrentCounter = mQuickAdapter.getItemCount();
-        }});
-    }
-```
-#Set custom loading view
-```java
-mQuickAdapter.setLoadingView(customView);
-```
-#Use it create section headers
-```java
-public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
-     public SectionAdapter(int layoutResId, int sectionHeadResId, List data) {
-        super(layoutResId, sectionHeadResId, data);
-    }
-    @Override
-    protected void convert(BaseViewHolder helper, MySection item) {
-        helper.setImageUrl(R.id.iv, (String) item.t);
-    }
-    @Override
-    protected void convertHead(BaseViewHolder helper,final MySection item) {
-        helper.setText(R.id.header, item.header);
-        if(!item.isMroe)helper.setVisible(R.id.more,false);
-        else
-        helper.setOnClickListener(R.id.more, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context,item.header+"more..",Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-```
-#Use it setEmptyView
-```java
-mQuickAdapter.setEmptyView(getView());
 ```
 #Use it item chlid click
 Adapter
@@ -199,7 +92,118 @@ mQuickAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRec
         });
 ```
 
+#Use it add adaptar Animation
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/animation.gif)
+```java
+// Turn animation
+quickAdapter.openLoadAnimation();
+```
+or
+```java
+// Turn animation and set animate
+quickAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
+```
+or
+```java
+// Turn animation and set custom animate
+quickAdapter.openLoadAnimation(new BaseAnimation() {
+                            @Override
+                            public Animator[] getAnimators(View view) {
+                                return new Animator[]{
+                                        ObjectAnimator.ofFloat(view, "scaleY", 1, 1.1f, 1),
+                                        ObjectAnimator.ofFloat(view, "scaleX", 1, 1.1f, 1)
+                                };
+                            }
+                        });
+```
+#Use it custom item view type
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/multiple_item.gif)
+```java
+public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem> {
+
+    public MultipleItemQuickAdapter(List data) {
+        super(data);
+        addItemType(MultipleItem.TEXT, R.layout.text_view);
+        addItemType(MultipleItem.IMG, R.layout.image_view);
+    }
+
+    @Override
+    protected void convert(BaseViewHolder helper, MultipleItem item) {
+        switch (helper.getItemViewType()) {
+            case MultipleItem.TEXT:
+                helper.setImageUrl(R.id.tv, item.getContent());
+                break;
+            case MultipleItem.IMG:
+                helper.setImageUrl(R.id.iv, item.getContent());
+                break;
+        }
+    }
+
+}
+```
+#Use it add header and footer
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/header_footer.gif)
+```java
+mQuickAdapter.addHeaderView(getView());
+mQuickAdapter.addFooterView(getView());
+```
+#Use it load more
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/load_more.gif)
+setOnLoadMoreListener
+```java
+mQuickAdapter.openLoadMore(PAGE_SIZE, true);
+mQuickAdapter.setOnLoadMoreListener(this);
+```
+Override onLoadMoreRequested()
+```java
+@Override
+public void onLoadMoreRequested() {
+        mRecyclerView.post(new Runnable() {
+        @Override
+        public void run() {
+        if (mCurrentCounter >= TOTAL_COUNTER) {
+                    mQuickAdapter.notifyDataChangedAfterLoadMore(false);
+                }
+        } else {
+                    mQuickAdapter.notifyDataChangedAfterLoadMore(DataServer.getSampleData(PAGE_SIZE),true);
+                    mCurrentCounter = mQuickAdapter.getItemCount();
+        }});
+    }
+```
+#Set custom loading view
+```java
+mQuickAdapter.setLoadingView(customView);
+```
+#Use it create section headers
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/section_headers.gif)
+```java
+public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
+     public SectionAdapter(int layoutResId, int sectionHeadResId, List data) {
+        super(layoutResId, sectionHeadResId, data);
+    }
+    @Override
+    protected void convert(BaseViewHolder helper, MySection item) {
+        helper.setImageUrl(R.id.iv, (String) item.t);
+    }
+    @Override
+    protected void convertHead(BaseViewHolder helper,final MySection item) {
+        helper.setText(R.id.header, item.header);
+        else
+        helper.setOnClickListener(R.id.more, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context,item.header+"more..",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+```
+#Use it setEmptyView
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/empty_view.gif)
+```java
+mQuickAdapter.setEmptyView(getView());
+```
 #Use it drag item
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/drag_item.gif)
 ```java
 OnItemDragListener listener = new OnItemDragListener() {
     @Override

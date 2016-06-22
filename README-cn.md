@@ -22,7 +22,6 @@
 - **设置空布局（比Listview的setEmptyView还要好用！）**
 - **添加拖拽item**
 
-![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/demo.gif)
 #如何使用它？
 先在 build.gradle 的 repositories 添加:
 ```
@@ -36,12 +35,12 @@
 然后在dependencies添加:
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.8.1'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.8.2'
 	}
 ```
 
 #如何使用它来创建Adapter？
-![demo](http://upload-images.jianshu.io/upload_images/972352-54bd17d3680a4cf9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/item_view.png)
 ```
 public class QuickAdapter extends BaseQuickAdapter<Status> {
     public QuickAdapter() {
@@ -60,6 +59,7 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
 }
 ```
 #如何添加item点击、长按事件
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/chlid_click.gif)
 ```
 mQuickAdapter.setOnRecyclerViewItemClickListener();
 mQuickAdapter.setOnRecyclerViewItemLongClickListener();
@@ -92,7 +92,7 @@ mQuickAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRec
         });
 ```
 #如何使用它添加动画？
-
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/animation.gif)
 ```
 // 一行代码搞定（默认为渐显效果）
 quickAdapter.openLoadAnimation();
@@ -116,11 +116,13 @@ quickAdapter.openLoadAnimation(new BaseAnimation() {
                         });
 ```
 #使用它添加头部添加尾部
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/header_footer.gif)
 ```
 mQuickAdapter.addHeaderView(getView());
 mQuickAdapter.addFooterView(getView());
 ```
 #使用它加载更多
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/load_more.gif)
 ```
 mQuickAdapter.openLoadMore(PAGE_SIZE, true);
 mQuickAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
@@ -146,6 +148,7 @@ mQuickAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener
 mQuickAdapter.setLoadingView(customView);
 ```
 #使用分组
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/section_headers.gif)
 ```
 public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
      public SectionAdapter(int layoutResId, int sectionHeadResId, List data) {
@@ -158,7 +161,6 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
     @Override
     protected void convertHead(BaseViewHolder helper,final MySection item) {
         helper.setText(R.id.header, item.header);
-        if(!item.isMroe)helper.setVisible(R.id.more,false);
         else
         helper.setOnClickListener(R.id.more, new View.OnClickListener() {
             @Override
@@ -169,13 +171,14 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
     }
 ```
 #如何添加多种类型item？
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/multiple_item.gif)
 ```
 public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem> {
 
     public MultipleItemQuickAdapter(List data) {
         super(data);
-        addItmeType(MultipleItem.TEXT, R.layout.text_view);
-        addItmeType(MultipleItem.IMG, R.layout.image_view);
+        addItemType(MultipleItem.TEXT, R.layout.text_view);
+        addItemType(MultipleItem.IMG, R.layout.image_view);
     }
 
     @Override
@@ -193,10 +196,12 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
 }
 ```
 #使用setEmptyView
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/empty_view.gif)
 ```
 mQuickAdapter.setEmptyView(getView());
 ```
 #使用DragItem
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/drag_item.gif)
 ```java
 OnItemDragListener listener = new OnItemDragListener() {
     @Override
