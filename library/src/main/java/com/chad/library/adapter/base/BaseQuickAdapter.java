@@ -475,7 +475,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         switch (viewType) {
             case LOADING_VIEW:
                 baseViewHolder = getLoadingView(parent);
-                initItemClickListener(baseViewHolder);
                 break;
             case HEADER_VIEW:
                 baseViewHolder = new BaseViewHolder(mHeaderView);
