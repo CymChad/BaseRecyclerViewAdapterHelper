@@ -36,7 +36,7 @@
 然后在dependencies添加:
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.8.1'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.8.2'
 	}
 ```
 
@@ -158,7 +158,6 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
     @Override
     protected void convertHead(BaseViewHolder helper,final MySection item) {
         helper.setText(R.id.header, item.header);
-        if(!item.isMroe)helper.setVisible(R.id.more,false);
         else
         helper.setOnClickListener(R.id.more, new View.OnClickListener() {
             @Override
@@ -174,8 +173,8 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
 
     public MultipleItemQuickAdapter(List data) {
         super(data);
-        addItmeType(MultipleItem.TEXT, R.layout.text_view);
-        addItmeType(MultipleItem.IMG, R.layout.image_view);
+        addItemType(MultipleItem.TEXT, R.layout.text_view);
+        addItemType(MultipleItem.IMG, R.layout.image_view);
     }
 
     @Override
