@@ -200,22 +200,40 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
 ```
 mQuickAdapter.setEmptyView(getView());
 ```
-#使用DragItem
+#使用拖拽与滑动删除
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/drag_item.gif)
 ```java
-OnItemDragListener listener = new OnItemDragListener() {
+OnItemDragListener onItemDragListener = new OnItemDragListener() {
     @Override
-    public void onItemDragStart(RecyclerView.ViewHolder viewHolder){}
+    public void onItemDragStart(RecyclerView.ViewHolder viewHolder, int pos){}
     @Override
-    public void onItemDragMoving(RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {}
+    public void onItemDragMoving(RecyclerView.ViewHolder source, int from, RecyclerView.ViewHolder target, int to) {}
     @Override
-    public void onItemDragEnd(RecyclerView.ViewHolder viewHolder) {}
+    public void onItemDragEnd(RecyclerView.ViewHolder viewHolder, int pos) {}
 }
+
+OnItemSwipedListener onItemSwipedListener = new OnItemSwipedListener() {
+    @Override
+    public void onItemSwipedStart(RecyclerView.ViewHolder viewHolder, int pos) {}
+    @Override
+    public void clearView(RecyclerView.ViewHolder viewHolder, int pos) {}
+    @Override
+    public void onItemSwiped(RecyclerView.ViewHolder viewHolder, int pos) {}
+};
+
 ItemDraggableCallback itemDraggableCallback = new ItemDraggableCallback(mAdapter);
 ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDraggableCallback);
+mItemTouchHelper.attachToRecyclerView(mRecyclerView);
+
+// 开启拖拽
 mAdapter.enableDragItem(mItemTouchHelper, R.id.textView, true);
-mAdapter.setOnItemDragListener(listener);
+mAdapter.setOnItemDragListener(onItemDragListener);
+
+// 开启滑动删除
+mAdapter.enableSwipeItem();
+mAdapter.setOnItemSwipedListener(onItemSwipedListener);
 ```
+
 >**持续更新!，所以推荐Star项目**
 
 #感谢
