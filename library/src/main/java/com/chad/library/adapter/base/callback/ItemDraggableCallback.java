@@ -10,10 +10,14 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
  */
 public class ItemDraggableCallback extends ItemTouchHelper.Callback {
 
+    private static final String TAG = "ItemDraggableCallback";
+
     private BaseQuickAdapter mAdapter;
 
-    private static final float THRESHOLD_SWIPE = 0.9f;
+    private static final float THRESHOLD_SWIPE = 0.7f;
     private static final float THRESHOLD_MOVE = 0.1f;
+
+    private int mActionState = ItemTouchHelper.ACTION_STATE_IDLE;
 
     public ItemDraggableCallback(BaseQuickAdapter adapter) {
         mAdapter = adapter;
@@ -26,13 +30,17 @@ public class ItemDraggableCallback extends ItemTouchHelper.Callback {
 
     @Override
     public boolean isItemViewSwipeEnabled() {
-        return false;
+        return mAdapter.isItemSwipeEnable();
     }
 
     @Override
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
-        if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
+        if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
             mAdapter.onItemDragStart(viewHolder);
+            mActionState = actionState;
+        } else if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+            mAdapter.onItemSwipeStart(viewHolder);
+            mActionState = actionState;
         }
         super.onSelectedChanged(viewHolder, actionState);
     }
@@ -40,7 +48,13 @@ public class ItemDraggableCallback extends ItemTouchHelper.Callback {
     @Override
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
-        mAdapter.onItemDragEnd(viewHolder);
+
+        if (mActionState == ItemTouchHelper.ACTION_STATE_DRAG) {
+            mAdapter.onItemDragEnd(viewHolder);
+        } else if (mActionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+            mAdapter.onItemSwipeClear(viewHolder);
+        }
+        mActionState = ItemTouchHelper.ACTION_STATE_IDLE;
     }
 
     @Override
@@ -66,6 +80,7 @@ public class ItemDraggableCallback extends ItemTouchHelper.Callback {
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+        mAdapter.onItemSwiped(viewHolder);
     }
 
     @Override

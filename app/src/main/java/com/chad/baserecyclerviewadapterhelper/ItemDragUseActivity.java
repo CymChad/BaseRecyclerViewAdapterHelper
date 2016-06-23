@@ -14,6 +14,7 @@ import com.chad.baserecyclerviewadapterhelper.adapter.ItemDragAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.callback.ItemDraggableCallback;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
+import com.chad.library.adapter.base.listener.OnItemSwipedListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,11 +36,11 @@ public class ItemDragUseActivity extends Activity {
         setContentView(R.layout.activity_item_touch_use);
 
         mRecyclerView = (RecyclerView)findViewById(R.id.rv_list);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         mData = generateData(50);
         OnItemDragListener listener = new OnItemDragListener() {
             @Override
-            public void onItemDragStart(RecyclerView.ViewHolder viewHolder) {
+            public void onItemDragStart(RecyclerView.ViewHolder viewHolder, int pos) {
                 Log.d(TAG, "drag start");
                 BaseViewHolder holder = ((BaseViewHolder)viewHolder);
                 holder.setTextColor(R.id.tv, Color.WHITE);
@@ -47,21 +48,47 @@ public class ItemDragUseActivity extends Activity {
             }
 
             @Override
-            public void onItemDragMoving(RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {
+            public void onItemDragMoving(RecyclerView.ViewHolder source, int from, RecyclerView.ViewHolder target, int to) {
                 Log.d(TAG, "move from: " + source.getAdapterPosition() + " to: " + target.getAdapterPosition());
             }
 
             @Override
-            public void onItemDragEnd(RecyclerView.ViewHolder viewHolder) {
+            public void onItemDragEnd(RecyclerView.ViewHolder viewHolder, int pos) {
                 Log.d(TAG, "drag end");
                 BaseViewHolder holder = ((BaseViewHolder)viewHolder);
                 holder.setTextColor(R.id.tv, Color.BLACK);
                 ((CardView)viewHolder.itemView).setCardBackgroundColor(Color.WHITE);
             }
         };
+        OnItemSwipedListener onItemSwipedListener = new OnItemSwipedListener() {
+            @Override
+            public void onItemSwipedStart(RecyclerView.ViewHolder viewHolder, int pos) {
+                Log.d(TAG, "view swiped start: " + pos);
+                BaseViewHolder holder = ((BaseViewHolder)viewHolder);
+                holder.setTextColor(R.id.tv, Color.WHITE);
+                ((CardView)viewHolder.itemView).setCardBackgroundColor(Color.YELLOW);
+            }
+
+            @Override
+            public void clearView(RecyclerView.ViewHolder viewHolder, int pos) {
+                Log.d(TAG, "View reset: " + pos);
+                Log.d(TAG, "clearView holder pos: " + viewHolder.getAdapterPosition());
+                BaseViewHolder holder = ((BaseViewHolder)viewHolder);
+                holder.setTextColor(R.id.tv, Color.BLACK);
+                ((CardView)viewHolder.itemView).setCardBackgroundColor(Color.WHITE);
+            }
+
+            @Override
+            public void onItemSwiped(RecyclerView.ViewHolder viewHolder, int pos) {
+                Log.d(TAG, "View Swiped: " + pos);
+                Log.d(TAG, "Swiped holder pos: " + viewHolder.getAdapterPosition());
+            }
+        };
         mAdapter = new ItemDragAdapter(mData);
         mItemDraggableCallback = new ItemDraggableCallback(mAdapter);
         mItemTouchHelper = new ItemTouchHelper(mItemDraggableCallback);
+        mAdapter.enableSwipeItem();
+        mAdapter.setOnItemSwipedListener(onItemSwipedListener);
         mAdapter.enableDragItem(mItemTouchHelper);
         mAdapter.setOnItemDragListener(listener);
         mRecyclerView.setAdapter(mAdapter);
