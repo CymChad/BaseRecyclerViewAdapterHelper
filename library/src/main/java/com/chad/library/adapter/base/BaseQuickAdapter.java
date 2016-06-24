@@ -23,8 +23,9 @@ import com.chad.library.adapter.base.animation.ScaleInAnimation;
 import com.chad.library.adapter.base.animation.SlideInBottomAnimation;
 import com.chad.library.adapter.base.animation.SlideInLeftAnimation;
 import com.chad.library.adapter.base.animation.SlideInRightAnimation;
+import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
-import com.chad.library.adapter.base.listener.OnItemSwipedListener;
+import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -106,7 +107,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     private boolean itemDragEnabled = false;
     private boolean itemSwipeEnabled = false;
     private OnItemDragListener mOnItemDragListener;
-    private OnItemSwipedListener mOnItemSwipedListener;
+    private OnItemSwipeListener mOnItemSwipeListener;
     private boolean mDragOnLongPress = true;
 
     private View.OnTouchListener mOnToggleViewTouchListener;
@@ -945,6 +946,10 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         return itemDragEnabled;
     }
 
+    /**
+     * <p>Enable swipe items.</p>
+     * You should attach {@link ItemTouchHelper} which construct with {@link ItemDragAndSwipeCallback} to the Recycler when you enable this.
+     */
     public void enableSwipeItem() {
         itemSwipeEnabled = true;
     }
@@ -1000,25 +1005,25 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
     }
 
-    public void setOnItemSwipedListener(OnItemSwipedListener listener) {
-        mOnItemSwipedListener = listener;
+    public void setOnItemSwipeListener(OnItemSwipeListener listener) {
+        mOnItemSwipeListener = listener;
     }
 
     public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder) {
-        if (mOnItemSwipedListener != null && itemSwipeEnabled) {
-            mOnItemSwipedListener.onItemSwipedStart(viewHolder, getViewHolderPosition(viewHolder));
+        if (mOnItemSwipeListener != null && itemSwipeEnabled) {
+            mOnItemSwipeListener.onItemSwipeStart(viewHolder, getViewHolderPosition(viewHolder));
         }
     }
 
     public void onItemSwipeClear(RecyclerView.ViewHolder viewHolder) {
-        if (mOnItemSwipedListener != null && itemSwipeEnabled) {
-            mOnItemSwipedListener.clearView(viewHolder, getViewHolderPosition(viewHolder));
+        if (mOnItemSwipeListener != null && itemSwipeEnabled) {
+            mOnItemSwipeListener.clearView(viewHolder, getViewHolderPosition(viewHolder));
         }
     }
 
     public void onItemSwiped(RecyclerView.ViewHolder viewHolder) {
-        if (mOnItemSwipedListener != null && itemSwipeEnabled) {
-            mOnItemSwipedListener.onItemSwiped(viewHolder, getViewHolderPosition(viewHolder));
+        if (mOnItemSwipeListener != null && itemSwipeEnabled) {
+            mOnItemSwipeListener.onItemSwiped(viewHolder, getViewHolderPosition(viewHolder));
         }
 
         int pos = getViewHolderPosition(viewHolder);
