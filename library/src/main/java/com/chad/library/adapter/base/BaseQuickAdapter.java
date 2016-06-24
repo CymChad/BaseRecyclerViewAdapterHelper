@@ -6,6 +6,7 @@ import android.content.Context;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.v4.view.MotionEventCompat;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -134,6 +135,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     /**
      * Sets the duration of the animation.
+     *
      * @param duration The length of the animation, in milliseconds.
      */
     public void setDuration(int duration) {
@@ -181,6 +183,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public int getPageSize() {
         return this.pageSize;
     }
+
     /**
      * Register a callback to be invoked when an item in this AdapterView has
      * been clicked.
@@ -190,6 +193,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener) {
         this.onRecyclerViewItemClickListener = onRecyclerViewItemClickListener;
     }
+
     /**
      * Interface definition for a callback to be invoked when an item in this
      * AdapterView has been clicked.
@@ -198,12 +202,14 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         /**
          * Callback method to be invoked when an item in this AdapterView has
          * been clicked.
-         * @param view The view within the AdapterView that was clicked (this
-         *            will be a view provided by the adapter)
+         *
+         * @param view     The view within the AdapterView that was clicked (this
+         *                 will be a view provided by the adapter)
          * @param position The position of the view in the adapter.
          */
         public void onItemClick(View view, int position);
     }
+
     /**
      * Register a callback to be invoked when an item in this AdapterView has
      * been clicked and held
@@ -222,7 +228,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         /**
          * callback method to be invoked when an item in this view has been
          * click and held
-         * @param view The view whihin the AbsListView that was clicked
+         *
+         * @param view     The view whihin the AbsListView that was clicked
          * @param position The position of the view int the adapter
          * @return true if the callback consumed the long click ,false otherwise
          */
@@ -230,10 +237,12 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     private OnRecyclerViewItemChildClickListener mChildClickListener;
+
     /**
      * Register a callback to be invoked when childView in this AdapterView has
      * been clicked and held
      * {@link OnRecyclerViewItemChildClickListener}
+     *
      * @param childClickListener The callback that will run
      */
     public void setOnRecyclerViewItemChildClickListener(OnRecyclerViewItemChildClickListener childClickListener) {
@@ -262,24 +271,25 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * @param layoutResId The layout resource id of each item.
      * @param data        A new list is created out of this one to avoid mutable list
      */
-    public BaseQuickAdapter( int layoutResId, List<T> data) {
+    public BaseQuickAdapter(int layoutResId, List<T> data) {
         this.mData = data == null ? new ArrayList<T>() : data;
         if (layoutResId != 0) {
             this.mLayoutResId = layoutResId;
         }
     }
 
-    public BaseQuickAdapter( List<T> data) {
+    public BaseQuickAdapter(List<T> data) {
         this(0, data);
     }
 
     public BaseQuickAdapter(View contentView, List<T> data) {
-        this( 0, data);
+        this(0, data);
         mContentView = contentView;
     }
 
     /**
      * remove the item associated with the specified position of adapter
+     *
      * @param position
      */
     public void remove(int position) {
@@ -289,7 +299,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     *  insert  a item associated with the specified position of adapter
+     * insert  a item associated with the specified position of adapter
+     *
      * @param position
      * @param item
      */
@@ -326,6 +337,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     /**
      * set a loadingView
+     *
      * @param loadingView
      */
     public void setLoadingView(View loadingView) {
@@ -334,6 +346,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     /**
      * Get the data of list
+     *
      * @return
      */
     public List getData() {
@@ -353,20 +366,25 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     /**
      * if setHeadView will be return 1 if not will be return 0
+     *
      * @return
      */
     public int getHeaderViewsCount() {
         return mHeaderView == null ? 0 : 1;
     }
+
     /**
      * if mFooterView will be return 1 or not will be return 0
+     *
      * @return
      */
     public int getFooterViewsCount() {
         return mFooterView == null ? 0 : 1;
     }
+
     /**
      * if mEmptyView will be return 1 or not will be return 0
+     *
      * @return
      */
     public int getmEmptyViewCount() {
@@ -408,10 +426,10 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * Get the type of View that will be created by {@link #getItemView(int, ViewGroup)} for the specified item.
      *
      * @param position The position of the item within the adapter's data set whose view type we
-     *        want.
+     *                 want.
      * @return An integer representing the type of View. Two views should share the same type if one
-     *         can be converted to the other in {@link #getItemView(int, ViewGroup)}. Note: Integers must be in the
-     *         range 0 to {@link #getItemCount()} - 1.
+     * can be converted to the other in {@link #getItemView(int, ViewGroup)}. Note: Integers must be in the
+     * range 0 to {@link #getItemCount()} - 1.
      */
     @Override
     public int getItemViewType(int position) {
@@ -460,7 +478,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             else if ((!mFootAndEmptyEnable || !mHeadAndEmptyEnable) && position == 1 && mFooterView != null) {
                 return FOOTER_VIEW;
             }
-        } else if (mData.size() == 0 &&mEmptyView != null && getItemCount() == (mHeadAndEmptyEnable ? 2 : 1) && mEmptyEnable) {
+        } else if (mData.size() == 0 && mEmptyView != null && getItemCount() == (mHeadAndEmptyEnable ? 2 : 1) && mEmptyEnable) {
             return EMPTY_VIEW;
         } else if (position == mData.size() + getHeaderViewsCount()) {
             if (mNextLoadEnable)
@@ -510,9 +528,10 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     *  Called when a view created by this adapter has been attached to a window.
-     *  simple to solve item will layout using all
-     *  {@link #setFullSpan(RecyclerView.ViewHolder)}
+     * Called when a view created by this adapter has been attached to a window.
+     * simple to solve item will layout using all
+     * {@link #setFullSpan(RecyclerView.ViewHolder)}
+     *
      * @param holder
      */
     @Override
@@ -529,6 +548,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * is vertical, the view will have full width; if orientation is horizontal, the view will
      * have full height.
      * if the hold view use StaggeredGridLayoutManager they should using all span area
+     *
      * @param holder True if this item should traverse all spans.
      */
     protected void setFullSpan(RecyclerView.ViewHolder holder) {
@@ -538,11 +558,28 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
     }
 
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+        if (manager instanceof GridLayoutManager) {
+            final GridLayoutManager gridManager = ((GridLayoutManager) manager);
+            gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    int type = getItemViewType(position);
+                    return (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW) ? gridManager.getSpanCount() : 1;
+                }
+            });
+        }
+    }
+
     /**
      * To bind different types of holder and solve different the bind events
-     * @see #getDefItemViewType(int)
+     *
      * @param holder
      * @param positions
+     * @see #getDefItemViewType(int)
      */
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int positions) {
@@ -571,7 +608,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         if (mItemTouchHelper != null && itemDragEnabled && viewType != LOADING_VIEW && viewType != HEADER_VIEW
                 && viewType != EMPTY_VIEW && viewType != FOOTER_VIEW) {
             if (mToggleViewId != NO_TOGGLE_VIEW) {
-                View toggleView = ((BaseViewHolder)holder).getView(mToggleViewId);
+                View toggleView = ((BaseViewHolder) holder).getView(mToggleViewId);
                 if (toggleView != null) {
                     toggleView.setTag(holder);
                     if (mDragOnLongPress) {
@@ -600,14 +637,17 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     /**
      * easy to show a simple headView
+     *
      * @param header
      */
     public void addHeaderView(View header) {
         this.mHeaderView = header;
         this.notifyDataSetChanged();
     }
+
     /**
      * easy to show a simple footerView
+     *
      * @param footer
      */
     public void addFooterView(View footer) {
@@ -624,7 +664,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     *
      * @param isHeadAndEmpty false will not show headView if the data is empty true will show emptyView and headView
      * @param emptyView
      */
@@ -672,8 +711,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     /**
      * @param isNextLoad true
-     * if true when loading more data can show loadingView
-
+     *                   if true when loading more data can show loadingView
      */
     public void notifyDataChangedAfterLoadMore(boolean isNextLoad) {
         mNextLoadEnable = isNextLoad;
@@ -684,6 +722,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     /**
      * add more data
+     *
      * @param data
      * @param isNextLoad
      */
@@ -703,6 +742,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     /**
      * init the baseViewHolder to register onRecyclerViewItemClickListener and onRecyclerViewItemLongClickListener
+     *
      * @param baseViewHolder
      */
     private void initItemClickListener(final BaseViewHolder baseViewHolder) {
@@ -726,6 +766,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     /**
      * add animation when you want to show time
+     *
      * @param holder
      */
     private void addAnimation(RecyclerView.ViewHolder holder) {
@@ -747,6 +788,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     /**
      * set anim to start when loading
+     *
      * @param anim
      * @param index
      */
@@ -757,6 +799,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     /**
      * Determine whether it is loaded more
+     *
      * @return
      */
     private boolean isLoadMore() {
@@ -764,12 +807,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     *
      * @param layoutResId ID for an XML layout resource to load
-     * @param parent Optional view to be the parent of the generated hierarchy or else simply an object that
-     *        provides a set of LayoutParams values for root of the returned
-     *        hierarchy
-     * @return  view will be return
+     * @param parent      Optional view to be the parent of the generated hierarchy or else simply an object that
+     *                    provides a set of LayoutParams values for root of the returned
+     *                    hierarchy
+     * @return view will be return
      */
     protected View getItemView(int layoutResId, ViewGroup parent) {
         return mLayoutInflater.inflate(layoutResId, parent, false);
@@ -839,6 +881,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     /**
      * {@link #addAnimation(RecyclerView.ViewHolder)}
+     *
      * @param firstOnly true just show anim when first loading false show anim when load the data every time
      */
     public void isFirstOnly(boolean firstOnly) {
@@ -915,6 +958,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     /**
      * Enable drag items.
      * Use itemView as the toggleView when long pressed.
+     *
      * @param itemTouchHelper {@link ItemTouchHelper}
      */
     public void enableDragItem(@NonNull ItemTouchHelper itemTouchHelper) {
@@ -923,8 +967,9 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     /**
      * Enable drag items. Use the specified view as toggle.
+     *
      * @param itemTouchHelper {@link ItemTouchHelper}
-     * @param toggleViewId The toggle view's id.
+     * @param toggleViewId    The toggle view's id.
      * @param dragOnLongPress If true the drag event will be trigger on long press, otherwise on touch down.
      */
     public void enableDragItem(@NonNull ItemTouchHelper itemTouchHelper, int toggleViewId, boolean dragOnLongPress) {
