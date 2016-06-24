@@ -214,26 +214,26 @@ OnItemDragListener onItemDragListener = new OnItemDragListener() {
     public void onItemDragEnd(RecyclerView.ViewHolder viewHolder, int pos) {}
 }
 
-OnItemSwipedListener onItemSwipedListener = new OnItemSwipedListener() {
+OnItemSwipeListener onItemSwipeListener = new OnItemSwipeListener() {
     @Override
-    public void onItemSwipedStart(RecyclerView.ViewHolder viewHolder, int pos) {}
+    public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int pos) {}
     @Override
     public void clearView(RecyclerView.ViewHolder viewHolder, int pos) {}
     @Override
     public void onItemSwiped(RecyclerView.ViewHolder viewHolder, int pos) {}
 };
 
-ItemDraggableCallback itemDraggableCallback = new ItemDraggableCallback(mAdapter);
-ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDraggableCallback);
-mItemTouchHelper.attachToRecyclerView(mRecyclerView);
+ItemDragAndSwipeCallback itemDragAndSwipeCallback = new ItemDragAndSwipeCallback(mAdapter);
+ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDragAndSwipeCallback);
+itemTouchHelper.attachToRecyclerView(mRecyclerView);
 
 // enable drag items
-mAdapter.enableDragItem(mItemTouchHelper, R.id.textView, true);
+mAdapter.enableDragItem(itemTouchHelper, R.id.textView, true);
 mAdapter.setOnItemDragListener(onItemDragListener);
 
 // enable swipe items
 mAdapter.enableSwipeItem();
-mAdapter.setOnItemSwipedListener(onItemSwipedListener);
+mAdapter.setOnItemSwipeListener(onItemSwipeListener);
 ```
 
 #Thanks

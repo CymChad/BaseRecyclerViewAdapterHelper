@@ -28,7 +28,7 @@
         </activity>
         <activity android:name=".EmptyViewUseActivity">
         </activity>
-        <activity android:name=".ItemDragUseActivity">
+        <activity android:name=".ItemDragAndSwipeUseActivity">
         </activity>
     </application>
 

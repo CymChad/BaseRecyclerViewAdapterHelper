@@ -5,12 +5,12 @@ import android.support.v7.widget.RecyclerView;
 /**
  * Created by luoxw on 2016/6/23.
  */
-public interface OnItemSwipedListener {
+public interface OnItemSwipeListener {
 
     /**
      * Called when the swipe action start.
      */
-    void onItemSwipedStart(RecyclerView.ViewHolder viewHolder, int pos);
+    void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int pos);
 
     /**
      * Called when the swipe action is over.
