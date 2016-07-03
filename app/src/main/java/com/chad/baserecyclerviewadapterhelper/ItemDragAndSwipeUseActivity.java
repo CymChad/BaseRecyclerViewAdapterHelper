@@ -1,7 +1,9 @@
 package com.chad.baserecyclerviewadapterhelper;
 
 import android.app.Activity;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -60,6 +62,10 @@ public class ItemDragAndSwipeUseActivity extends Activity {
                 ((CardView)viewHolder.itemView).setCardBackgroundColor(Color.WHITE);
             }
         };
+        final Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setTextSize(20);
+        paint.setColor(Color.BLACK);
         OnItemSwipeListener onItemSwipeListener = new OnItemSwipeListener() {
             @Override
             public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int pos) {
@@ -81,16 +87,27 @@ public class ItemDragAndSwipeUseActivity extends Activity {
             public void onItemSwiped(RecyclerView.ViewHolder viewHolder, int pos) {
                 Log.d(TAG, "View Swiped: " + pos);
             }
+
+            @Override
+            public void onItemSwipeMoving(Canvas canvas, RecyclerView.ViewHolder viewHolder, float dX, float dY, boolean isCurrentlyActive) {
+                canvas.drawColor(ContextCompat.getColor(ItemDragAndSwipeUseActivity.this, R.color.color_light_blue));
+                canvas.drawText("Just some text", 0, 40, paint);
+            }
         };
+
         mAdapter = new ItemDragAdapter(mData);
         mItemDragAndSwipeCallback = new ItemDragAndSwipeCallback(mAdapter);
         mItemTouchHelper = new ItemTouchHelper(mItemDragAndSwipeCallback);
+        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
+
+        //mItemDragAndSwipeCallback.setDragMoveFlags(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.UP | ItemTouchHelper.DOWN);
+        mItemDragAndSwipeCallback.setSwipeMoveFlags(ItemTouchHelper.START | ItemTouchHelper.END);
         mAdapter.enableSwipeItem();
         mAdapter.setOnItemSwipeListener(onItemSwipeListener);
         mAdapter.enableDragItem(mItemTouchHelper);
         mAdapter.setOnItemDragListener(listener);
+
         mRecyclerView.setAdapter(mAdapter);
-        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
     }
 
     private List<String> generateData(int size) {

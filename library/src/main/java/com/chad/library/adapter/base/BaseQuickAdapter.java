@@ -3,6 +3,7 @@ package com.chad.library.adapter.base;
 
 import android.animation.Animator;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.v4.view.MotionEventCompat;
@@ -1075,6 +1076,12 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
         mData.remove(pos);
         notifyItemRemoved(viewHolder.getAdapterPosition());
+    }
+
+    public void onItemSwiping(Canvas canvas, RecyclerView.ViewHolder viewHolder, float dX, float dY, boolean isCurrentlyActive) {
+        if (mOnItemSwipeListener != null && itemSwipeEnabled) {
+            mOnItemSwipeListener.onItemSwipeMoving(canvas, viewHolder, dX, dY, isCurrentlyActive);
+        }
     }
 
 }
