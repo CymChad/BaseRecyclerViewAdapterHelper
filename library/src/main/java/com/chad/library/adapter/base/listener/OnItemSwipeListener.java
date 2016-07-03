@@ -1,5 +1,6 @@
 package com.chad.library.adapter.base.listener;
 
+import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
 
 /**
@@ -23,5 +24,16 @@ public interface OnItemSwipeListener {
      */
     void onItemSwiped(RecyclerView.ViewHolder viewHolder, int pos);
 
+    /**
+     * Draw on the empty edge when swipe moving
+     * @param canvas the empty edge's canvas
+     * @param viewHolder The ViewHolder which is being interacted by the User or it was
+     *                   interacted and simply animating to its original position
+     * @param dX The amount of horizontal displacement caused by user's action
+     * @param dY The amount of vertical displacement caused by user's action
+     * @param isCurrentlyActive True if this view is currently being controlled by the user or
+     *                          false it is simply animating back to its original state.
+     */
+    void onItemSwipeMoving(Canvas canvas, RecyclerView.ViewHolder viewHolder, float dX, float dY, boolean isCurrentlyActive);
 
 }

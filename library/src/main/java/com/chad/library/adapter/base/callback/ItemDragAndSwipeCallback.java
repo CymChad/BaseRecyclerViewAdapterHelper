@@ -1,7 +1,9 @@
 package com.chad.library.adapter.base.callback;
 
+import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
@@ -139,5 +141,27 @@ public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
      */
     public void setSwipeMoveFlags(int swipeMoveFlags) {
         mSwipeMoveFlags = swipeMoveFlags;
+    }
+
+    @Override
+    public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+        super.onChildDrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
+        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+            View itemView = viewHolder.itemView;
+
+            c.save();
+            if (dX > 0) {
+                c.clipRect(itemView.getLeft(), itemView.getTop(), itemView.getLeft() + dX, itemView.getBottom());
+                c.translate(itemView.getLeft(), itemView.getTop());
+            } else {
+                c.clipRect(itemView.getRight() + dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                c.translate(itemView.getRight() + dX, itemView.getTop());
+            }
+
+            mAdapter.onItemSwiping(c, viewHolder, dX, dY, isCurrentlyActive);
+            c.restore();
+
+        }
     }
 }
