@@ -611,7 +611,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             if (mToggleViewId != NO_TOGGLE_VIEW) {
                 View toggleView = ((BaseViewHolder) holder).getView(mToggleViewId);
                 if (toggleView != null) {
-                    toggleView.setTag(holder);
+                    toggleView.setTag(R.id.BaseQuickAdapter_viewholder_support, holder);
                     if (mDragOnLongPress) {
                         toggleView.setOnLongClickListener(mOnToggleViewLongClickListener);
                     } else {
@@ -619,7 +619,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                     }
                 }
             } else {
-                holder.itemView.setTag(holder);
+                holder.itemView.setTag(R.id.BaseQuickAdapter_viewholder_support, holder);
                 holder.itemView.setOnLongClickListener(mOnToggleViewLongClickListener);
             }
         }
@@ -932,7 +932,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 @Override
                 public boolean onLongClick(View v) {
                     if (mItemTouchHelper != null && itemDragEnabled) {
-                        mItemTouchHelper.startDrag((RecyclerView.ViewHolder) v.getTag());
+                        mItemTouchHelper.startDrag((RecyclerView.ViewHolder) v.getTag(R.id.BaseQuickAdapter_viewholder_support));
                     }
                     return true;
                 }
@@ -944,7 +944,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                     if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN
                             && !mDragOnLongPress) {
                         if (mItemTouchHelper != null && itemDragEnabled) {
-                            mItemTouchHelper.startDrag((RecyclerView.ViewHolder) v.getTag());
+                            mItemTouchHelper.startDrag((RecyclerView.ViewHolder) v.getTag(R.id.BaseQuickAdapter_viewholder_support));
                         }
                         return true;
                     } else {

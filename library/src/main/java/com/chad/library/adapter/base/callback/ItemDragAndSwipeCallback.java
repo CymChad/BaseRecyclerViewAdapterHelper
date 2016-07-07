@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
+import com.chad.library.R;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 /**
@@ -21,8 +22,6 @@ public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
 
     int mDragMoveFlags =  ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
     int mSwipeMoveFlags = ItemTouchHelper.END;
-
-    int mActionState = ItemTouchHelper.ACTION_STATE_IDLE;
 
     public ItemDragAndSwipeCallback(BaseQuickAdapter adapter) {
         mAdapter = adapter;
@@ -42,10 +41,10 @@ public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
             mAdapter.onItemDragStart(viewHolder);
-            mActionState = actionState;
+            viewHolder.itemView.setTag(R.id.BaseQuickAdapter_dragging_support, true);
         } else if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
             mAdapter.onItemSwipeStart(viewHolder);
-            mActionState = actionState;
+            viewHolder.itemView.setTag(R.id.BaseQuickAdapter_swiping_support, true);
         }
         super.onSelectedChanged(viewHolder, actionState);
     }
@@ -54,12 +53,16 @@ public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
 
-        if (mActionState == ItemTouchHelper.ACTION_STATE_DRAG) {
+        if (viewHolder.itemView.getTag(R.id.BaseQuickAdapter_dragging_support) != null
+                && (Boolean)viewHolder.itemView.getTag(R.id.BaseQuickAdapter_dragging_support)) {
             mAdapter.onItemDragEnd(viewHolder);
-        } else if (mActionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-            mAdapter.onItemSwipeClear(viewHolder);
+            viewHolder.itemView.setTag(R.id.BaseQuickAdapter_dragging_support, false);
         }
-        mActionState = ItemTouchHelper.ACTION_STATE_IDLE;
+        if (viewHolder.itemView.getTag(R.id.BaseQuickAdapter_swiping_support) != null
+                && (Boolean)viewHolder.itemView.getTag(R.id.BaseQuickAdapter_swiping_support)) {
+            mAdapter.onItemSwipeClear(viewHolder);
+            viewHolder.itemView.setTag(R.id.BaseQuickAdapter_swiping_support, false);
+        }
     }
 
     @Override
