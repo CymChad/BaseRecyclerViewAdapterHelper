@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.v4.view.MotionEventCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
+import android.widget.LinearLayout;
 
 import com.chad.library.R;
 import com.chad.library.adapter.base.animation.AlphaInAnimation;
@@ -57,8 +59,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     @AnimationType
     private BaseAnimation mCustomAnimation;
     private BaseAnimation mSelectAnimation = new AlphaInAnimation();
-    private View mHeaderView;
-    private View mFooterView;
+    private LinearLayout mHeaderView;
+    private LinearLayout mFooterView;
     private int pageSize = -1;
     private View mContentView;
     /**
@@ -642,8 +644,20 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * @param header
      */
     public void addHeaderView(View header) {
-        this.mHeaderView = header;
+        if(mHeaderView==null){
+            initHeaderView(header.getContext());
+        }
+        mHeaderView.addView(header);
+        ViewGroup.LayoutParams params = header.getLayoutParams();
+        params.height= ViewGroup.LayoutParams.WRAP_CONTENT;
+        params.width= ViewGroup.LayoutParams.MATCH_PARENT;
         this.notifyDataSetChanged();
+    }
+
+    private void initHeaderView(Context context){
+        mHeaderView=new LinearLayout(context);
+        mHeaderView.setLayoutParams(new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        mHeaderView.setOrientation(LinearLayout.VERTICAL);
     }
 
     /**
@@ -653,8 +667,20 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      */
     public void addFooterView(View footer) {
         mNextLoadEnable = false;
-        this.mFooterView = footer;
+        if(mFooterView==null) {
+            initFooterView(footer.getContext());
+        }
+        mFooterView.addView(footer);
+        ViewGroup.LayoutParams params = footer.getLayoutParams();
+        params.height= ViewGroup.LayoutParams.WRAP_CONTENT;
+        params.width= ViewGroup.LayoutParams.MATCH_PARENT;
         this.notifyDataSetChanged();
+    }
+
+    private void initFooterView(Context context){
+        mFooterView=new LinearLayout(context);
+        mFooterView.setLayoutParams(new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        mFooterView.setOrientation(LinearLayout.VERTICAL);
     }
 
     /**

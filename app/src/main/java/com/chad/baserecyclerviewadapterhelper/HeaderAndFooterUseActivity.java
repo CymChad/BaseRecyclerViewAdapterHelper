@@ -30,13 +30,15 @@ public class HeaderAndFooterUseActivity extends Activity {
         initAdapter();
         mQuickAdapter.addHeaderView(getView());
         mQuickAdapter.addFooterView(getView());
+        mQuickAdapter.addHeaderView(getView());
+        mQuickAdapter.addFooterView(getView());
         mRecyclerView.setAdapter(mQuickAdapter);
     }
 
     private View getView() {
         View view = getLayoutInflater().inflate(R.layout.head_view, null);
         view.findViewById(R.id.tv).setVisibility(View.GONE);
-        view.setLayoutParams(new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        //view.setLayoutParams(new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,6 +58,17 @@ public class HeaderAndFooterUseActivity extends Activity {
                 Toast.makeText(HeaderAndFooterUseActivity.this, "" + Integer.toString(position), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void add(View view){
+        switch (view.getId()){
+            case R.id.btn_add_header:
+                mQuickAdapter.addHeaderView(getView());
+                break;
+            case R.id.btn_add_footer:
+                mQuickAdapter.addFooterView(getView());
+                break;
+        }
     }
 
 }
