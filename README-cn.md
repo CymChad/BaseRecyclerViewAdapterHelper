@@ -37,7 +37,7 @@
 然后在dependencies添加:
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.8.8'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.9.0'
 	}
 ```
 
