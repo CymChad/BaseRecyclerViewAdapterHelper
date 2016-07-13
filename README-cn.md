@@ -223,6 +223,19 @@ OnItemSwipeListener onItemSwipeListener = new OnItemSwipeListener() {
     public void onItemSwiped(RecyclerView.ViewHolder viewHolder, int pos) {}
 };
 
+public class ItemDragAdapter extends BaseItemDraggableAdapter<String> {
+    public ItemDragAdapter(List data) {
+        super(R.layout.item_draggable_view, data);
+    }
+
+    @Override
+    protected void convert(BaseViewHolder helper, String item) {
+        helper.setText(R.id.tv, item);
+    }
+}
+
+mAdapter = new ItemDragAdapter(mData);
+
 ItemDragAndSwipeCallback itemDragAndSwipeCallback = new ItemDragAndSwipeCallback(mAdapter);
 ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDragAndSwipeCallback);
 itemTouchHelper.attachToRecyclerView(mRecyclerView);
