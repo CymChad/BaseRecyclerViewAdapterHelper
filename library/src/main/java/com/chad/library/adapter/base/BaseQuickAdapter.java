@@ -350,7 +350,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      *
      * @return
      */
-    public List getData() {
+    public List<T> getData() {
         return mData;
     }
 
