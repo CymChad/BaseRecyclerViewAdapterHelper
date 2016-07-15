@@ -660,6 +660,13 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         mHeaderView.setOrientation(LinearLayout.VERTICAL);
     }
 
+    public void removeHeaderView(View headerView){
+        if(mHeaderView==null){
+            return;
+        }
+        mHeaderView.removeView(headerView);
+    }
+
     /**
      * easy to show a simple footerView
      *
@@ -681,6 +688,13 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         mFooterView=new LinearLayout(context);
         mFooterView.setLayoutParams(new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         mFooterView.setOrientation(LinearLayout.VERTICAL);
+    }
+
+    public void removeFooterView(View footerView){
+        if(mFooterView==null){
+            return;
+        }
+        mFooterView.removeView(footerView);
     }
 
     /**
