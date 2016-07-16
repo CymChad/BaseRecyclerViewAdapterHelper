@@ -6,12 +6,14 @@ import android.content.Context;
 import android.support.annotation.IntDef;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.LayoutParams;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
+import android.widget.LinearLayout;
 
 import com.chad.library.R;
 import com.chad.library.adapter.base.animation.AlphaInAnimation;
@@ -25,6 +27,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 
 /**
@@ -48,8 +53,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     @AnimationType
     private BaseAnimation mCustomAnimation;
     private BaseAnimation mSelectAnimation = new AlphaInAnimation();
-    private View mHeaderView;
-    private View mFooterView;
+    private LinearLayout mHeaderLayout;
+    private LinearLayout mFooterLayout;
     private int pageSize = -1;
     private View mContentView;
     /**
@@ -297,7 +302,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         this.mData = data;
         if (mRequestLoadMoreListener != null) {
             mNextLoadEnable = true;
-            mFooterView = null;
+            mFooterLayout = null;
         }
         mLastPosition = -1;
         notifyDataSetChanged();
@@ -347,17 +352,37 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      *
      * @return
      */
+    @Deprecated
     public int getHeaderViewsCount() {
-        return mHeaderView == null ? 0 : 1;
+        return mHeaderLayout == null ? 0 : 1;
     }
 
     /**
-     * if mFooterView will be return 1 or not will be return 0
+     * if mFooterLayout will be return 1 or not will be return 0
      *
      * @return
      */
+    @Deprecated
     public int getFooterViewsCount() {
-        return mFooterView == null ? 0 : 1;
+        return mFooterLayout == null ? 0 : 1;
+    }
+
+    /**
+     * if mHeaderLayout is null will be return false or not will be true
+     *
+     * @return
+     */
+    public boolean hasHeaderLayout() {
+        return mHeaderLayout != null;
+    }
+
+    /**
+     * if mFooterLayout is null will be return false or not will be true
+     *
+     * @return
+     */
+    public boolean hasFooterLayout() {
+        return mFooterLayout != null;
     }
 
     /**
@@ -414,7 +439,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         /**
          * if set headView and positon =0
          */
-        if (mHeaderView != null && position == 0) {
+        if (mHeaderLayout != null && position == 0) {
             return HEADER_VIEW;
         }
         /**
@@ -428,32 +453,32 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 /**
                  * if user want to show headview and footview and emptyView but not add headview
                  */
-                if (mHeaderView == null && mEmptyView != null && mFooterView != null) {
+                if (mHeaderLayout == null && mEmptyView != null && mFooterLayout != null) {
                     return FOOTER_VIEW;
                     /**
                      * add headview
                      */
-                } else if (mHeaderView != null && mEmptyView != null) {
+                } else if (mHeaderLayout != null && mEmptyView != null) {
                     return EMPTY_VIEW;
                 }
             } else if (position == 0) {
                 /**
                  * has no emptyView just add emptyview
                  */
-                if (mHeaderView == null) {
+                if (mHeaderLayout == null) {
                     return EMPTY_VIEW;
-                } else if (mFooterView != null)
+                } else if (mFooterLayout != null)
 
                     return EMPTY_VIEW;
 
 
-            } else if (position == 2 && (mFootAndEmptyEnable || mHeadAndEmptyEnable) && mHeaderView != null && mEmptyView != null) {
+            } else if (position == 2 && (mFootAndEmptyEnable || mHeadAndEmptyEnable) && mHeaderLayout != null && mEmptyView != null) {
                 return FOOTER_VIEW;
 
             } /**
              * user forget to set {@link #setEmptyView(boolean, boolean, View)}  but add footview and headview and emptyview
              */
-            else if ((!mFootAndEmptyEnable || !mHeadAndEmptyEnable) && position == 1 && mFooterView != null) {
+            else if ((!mFootAndEmptyEnable || !mHeadAndEmptyEnable) && position == 1 && mFooterLayout != null) {
                 return FOOTER_VIEW;
             }
         } else if (mData.size() == 0 && mEmptyView != null && getItemCount() == (mHeadAndEmptyEnable ? 2 : 1) && mEmptyEnable) {
@@ -481,13 +506,13 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 baseViewHolder = getLoadingView(parent);
                 break;
             case HEADER_VIEW:
-                baseViewHolder = new BaseViewHolder(mHeaderView);
+                baseViewHolder = new BaseViewHolder(mHeaderLayout);
                 break;
             case EMPTY_VIEW:
                 baseViewHolder = new BaseViewHolder(mEmptyView);
                 break;
             case FOOTER_VIEW:
-                baseViewHolder = new BaseViewHolder(mFooterView);
+                baseViewHolder = new BaseViewHolder(mFooterLayout);
                 break;
             default:
                 baseViewHolder = onCreateDefViewHolder(parent, viewType);
@@ -597,24 +622,106 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     * easy to show a simple headView
+     * easy to show a simple headView to mHeaderLayout
      *
      * @param header
      */
     public void addHeaderView(View header) {
-        this.mHeaderView = header;
+        addHeaderView(header, -1);
+    }
+
+    /**
+     * add header view to mHeaderLayout and set header view position in mHeaderLayout
+     *
+     * @param header
+     * @param index  header view position in mHeaderLayout
+     */
+    public void addHeaderView(View header, int index) {
+        if (mHeaderLayout == null) {
+            mHeaderLayout = new LinearLayout(header.getContext());
+            mHeaderLayout.setOrientation(LinearLayout.VERTICAL);
+            mHeaderLayout.setLayoutParams(new LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+        }
+        index = index >= mHeaderLayout.getChildCount() ? -1 : index;
+        mHeaderLayout.addView(header, index);
         this.notifyDataSetChanged();
     }
 
     /**
-     * easy to show a simple footerView
+     * easy to show a simple footerView in mFooterLayout
      *
      * @param footer
      */
     public void addFooterView(View footer) {
+        addFooterView(footer, -1);
+    }
+
+    /**
+     * add footer view to mFooterLayout and set footer view position in mFooterLayout
+     *
+     * @param footer
+     * @param index  footer view position in mFooterLayout
+     */
+    public void addFooterView(View footer, int index) {
         mNextLoadEnable = false;
-        this.mFooterView = footer;
+        if (mFooterLayout == null) {
+            mFooterLayout = new LinearLayout(footer.getContext());
+            mFooterLayout.setOrientation(LinearLayout.VERTICAL);
+            mFooterLayout.setLayoutParams(new LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+        }
+        index = index >= mFooterLayout.getChildCount() ? -1 : index;
+        mFooterLayout.addView(footer, index);
         this.notifyDataSetChanged();
+    }
+
+    /**
+     * remove header view from mHeaderLayout
+     *
+     * @param header
+     */
+    public void removeHeaderView(View header) {
+        if (mHeaderLayout == null) return;
+
+        mHeaderLayout.removeView(header);
+        if (mHeaderLayout.getChildCount() == 0) {
+            mHeaderLayout = null;
+        }
+        this.notifyDataSetChanged();
+    }
+
+    /**
+     * remove footer view from mFooterLayout
+     *
+     * @param footer
+     */
+    public void removeFooterView(View footer) {
+        if (mFooterLayout == null) return;
+
+        mFooterLayout.removeView(footer);
+        if (mFooterLayout.getChildCount() == 0) {
+            mFooterLayout = null;
+        }
+        this.notifyDataSetChanged();
+    }
+
+    /**
+     * remove all header view from mHeaderLayout and set null to mHeaderLayout
+     */
+    public void removeAllHeaderView() {
+        if (mFooterLayout == null) return;
+
+        mHeaderLayout.removeAllViews();
+        mHeaderLayout = null;
+    }
+
+    /**
+     * remove all footer view from mFooterLayout and set null to mFooterLayout
+     */
+    public void removeAllFooterView() {
+        if (mFooterLayout == null) return;
+
+        mFooterLayout.removeAllViews();
+        mFooterLayout = null;
     }
 
     /**
