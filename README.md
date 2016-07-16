@@ -145,8 +145,15 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
 #Use it add header and footer
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/header_footer.gif)
 ```java
+// add
 mQuickAdapter.addHeaderView(getView());
 mQuickAdapter.addFooterView(getView());
+// remove
+removeHeaderView(getView);
+removeFooterView(getView);
+// or
+removeAllHeaderView();
+removeAllFooterView();
 ```
 #Use it load more
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/load_more.gif)
