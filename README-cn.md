@@ -37,13 +37,13 @@
 然后在dependencies添加:
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.9.0'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.9.3'
 	}
 ```
 
 #如何使用它来创建Adapter？
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/item_view.png)
-```
+```java
 public class QuickAdapter extends BaseQuickAdapter<Status> {
     public QuickAdapter() {
         super(R.layout.tweet, DataServer.getSampleData());
@@ -62,20 +62,20 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
 ```
 #如何添加item点击、长按事件
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/chlid_click.gif)
-```
+```java
 mQuickAdapter.setOnRecyclerViewItemClickListener();
 mQuickAdapter.setOnRecyclerViewItemLongClickListener();
 ```
 #新增添加子布局多个控件的点击事件
 Adapter
-```
+```java
  protected void convert(BaseViewHolder helper, Status item) {
     helper.setOnClickListener(R.id.tweetAvatar, new OnItemChildClickListener())
       .setOnClickListener(R.id.tweetName, new OnItemChildClickListener());
       }
 ```
 Activity
-```
+```java
 mQuickAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -95,17 +95,17 @@ mQuickAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRec
 ```
 #如何使用它添加动画？
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/animation.gif)
-```
+```java
 // 一行代码搞定（默认为渐显效果）
 quickAdapter.openLoadAnimation();
 ```
 不喜欢渐显动画可以这样更换
-```
+```java
 // 默认提供5种方法（渐显、缩放、从下到上，从左到右、从右到左）
 quickAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
 ```
 还是没你喜欢的，你可以自定义
-```
+```java
 // 自定义动画如此轻松
 quickAdapter.openLoadAnimation(new BaseAnimation() {
                             @Override
@@ -119,13 +119,20 @@ quickAdapter.openLoadAnimation(new BaseAnimation() {
 ```
 #使用它添加头部添加尾部
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/header_footer.gif)
-```
+```java
+// add
 mQuickAdapter.addHeaderView(getView());
 mQuickAdapter.addFooterView(getView());
+// remove
+removeHeaderView(getView);
+removeFooterView(getView);
+// or
+removeAllHeaderView();
+removeAllFooterView();
 ```
 #使用它加载更多
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/load_more.gif)
-```
+```java
 mQuickAdapter.openLoadMore(PAGE_SIZE, true);
 mQuickAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
@@ -146,12 +153,12 @@ mQuickAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener
         });
 ```
 #设置自定义加载更多布局
-```
+```java
 mQuickAdapter.setLoadingView(customView);
 ```
 #使用分组
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/section_headers.gif)
-```
+```java
 public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
      public SectionAdapter(int layoutResId, int sectionHeadResId, List data) {
         super(layoutResId, sectionHeadResId, data);
@@ -174,7 +181,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
 ```
 #如何添加多种类型item？
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/multiple_item.gif)
-```
+```java
 public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem> {
 
     public MultipleItemQuickAdapter(List data) {
@@ -199,7 +206,7 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
 ```
 #使用setEmptyView
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/empty_view.gif)
-```
+```java
 mQuickAdapter.setEmptyView(getView());
 ```
 #使用拖拽与滑动删除
