@@ -622,7 +622,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     * easy to show a simple headView to mHeaderLayout
+     * Append header to the rear of the mHeaderLayout.
      *
      * @param header
      */
@@ -631,10 +631,14 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     * add header view to mHeaderLayout and set header view position in mHeaderLayout
+     * Add header view to mHeaderLayout and set header view position in mHeaderLayout.
+     * When index = -1 or index >= child count in mHeaderLayout,
+     * the effect of this method is the same as that of {@link #addHeaderView(View)}.
      *
      * @param header
-     * @param index  header view position in mHeaderLayout
+     * @param index  the position in mHeaderLayout of this header.
+     *               When index = -1 or index >= child count in mHeaderLayout,
+     *               the effect of this method is the same as that of {@link #addHeaderView(View)}.
      */
     public void addHeaderView(View header, int index) {
         if (mHeaderLayout == null) {
@@ -648,7 +652,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     * easy to show a simple footerView in mFooterLayout
+     * Append footer to the rear of the mFooterLayout.
      *
      * @param footer
      */
@@ -657,10 +661,14 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     * add footer view to mFooterLayout and set footer view position in mFooterLayout
+     * Add footer view to mFooterLayout and set footer view position in mFooterLayout.
+     * When index = -1 or index >= child count in mFooterLayout,
+     * the effect of this method is the same as that of {@link #addFooterView(View)}.
      *
      * @param footer
-     * @param index  footer view position in mFooterLayout
+     * @param index  the position in mFooterLayout of this footer.
+     *               When index = -1 or index >= child count in mFooterLayout,
+     *               the effect of this method is the same as that of {@link #addFooterView(View)}.
      */
     public void addFooterView(View footer, int index) {
         mNextLoadEnable = false;
@@ -675,7 +683,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     * remove header view from mHeaderLayout
+     * remove header view from mHeaderLayout.
+     * When the child count of mHeaderLayout is 0, mHeaderLayout will be set to null.
      *
      * @param header
      */
@@ -690,7 +699,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     * remove footer view from mFooterLayout
+     * remove footer view from mFooterLayout,
+     * When the child count of mFooterLayout is 0, mFooterLayout will be set to null.
      *
      * @param footer
      */
