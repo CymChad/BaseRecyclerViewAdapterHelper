@@ -221,6 +221,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     private OnRecyclerViewItemChildClickListener mChildClickListener;
 
+    private OnRecyclerViewItemChildLongClickListener mChildLongClickListener;
+
     /**
      * Register a callback to be invoked when childView in this AdapterView has
      * been clicked and held
@@ -243,6 +245,35 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         public void onClick(View v) {
             if (mChildClickListener != null)
                 mChildClickListener.onItemChildClick(BaseQuickAdapter.this, v, mViewHolder.getLayoutPosition() - getHeaderViewsCount());
+        }
+    }
+
+    /**
+     * Register a callback to be invoked when childView in this AdapterView has
+     * been longClicked and held
+     * {@link OnRecyclerViewItemChildLongClickListener}
+     *
+     * @param childLongClickListener The callback that will run
+     */
+    public void setOnRecyclerViewItemChildLongClickListener(OnRecyclerViewItemChildLongClickListener childLongClickListener) {
+        this.mChildLongClickListener = childLongClickListener;
+    }
+
+    /**
+     * Interface for ItemChildLongClick
+     */
+    public interface OnRecyclerViewItemChildLongClickListener {
+        boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position);
+    }
+
+    public class OnItemChildLongClickListener implements View.OnLongClickListener {
+        public RecyclerView.ViewHolder mViewHolder;
+        @Override
+        public boolean onLongClick(View v) {
+            if (mChildLongClickListener != null) {
+                return mChildLongClickListener.onItemChildLongClick(BaseQuickAdapter.this, v, mViewHolder.getLayoutPosition() - getHeaderViewsCount());
+            }
+            return false;
         }
     }
 
