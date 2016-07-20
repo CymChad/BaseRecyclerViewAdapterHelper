@@ -55,6 +55,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     private BaseAnimation mSelectAnimation = new AlphaInAnimation();
     private LinearLayout mHeaderLayout;
     private LinearLayout mFooterLayout;
+    private LinearLayout mCopyHeaderLayout = null;
+    private LinearLayout mCopyFooterLayout = null;
     private int pageSize = -1;
     private View mContentView;
     /**
@@ -244,7 +246,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         @Override
         public void onClick(View v) {
             if (mChildClickListener != null)
-                mChildClickListener.onItemChildClick(BaseQuickAdapter.this, v, mViewHolder.getLayoutPosition() - getHeaderViewsCount());
+                mChildClickListener.onItemChildClick(BaseQuickAdapter.this, v, mViewHolder.getLayoutPosition() - getHeaderLayoutCount());
         }
     }
 
@@ -308,7 +310,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      */
     public void remove(int position) {
         mData.remove(position);
-        notifyItemRemoved(position + getHeaderViewsCount());
+        notifyItemRemoved(position + getHeaderLayoutCount());
 
     }
 
@@ -379,7 +381,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     * if setHeadView will be return 1 if not will be return 0
+     * if setHeadView will be return 1 if not will be return 0.
+     * notice: Deprecated! Use {@link ViewGroup#getChildCount()} of {@link #getHeaderLayout()} to replace.
      *
      * @return
      */
@@ -389,7 +392,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     * if mFooterLayout will be return 1 or not will be return 0
+     * if mFooterLayout will be return 1 or not will be return 0.
+     * notice: Deprecated! Use {@link ViewGroup#getChildCount()} of {@link #getFooterLayout()} to replace.
      *
      * @return
      */
@@ -399,21 +403,17 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     * if mHeaderLayout is null will be return false or not will be true
-     *
-     * @return
+     * if addHeaderView will be return 1, if not will be return 0
      */
-    public boolean hasHeaderLayout() {
-        return mHeaderLayout != null;
+    public int getHeaderLayoutCount() {
+        return mHeaderLayout == null ? 0 : 1;
     }
 
     /**
-     * if mFooterLayout is null will be return false or not will be true
-     *
-     * @return
+     * if addFooterView will be return 1, if not will be return 0
      */
-    public boolean hasFooterLayout() {
-        return mFooterLayout != null;
+    public int getFooterLayoutCount() {
+        return mFooterLayout == null ? 0 : 1;
     }
 
     /**
@@ -433,7 +433,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     @Override
     public int getItemCount() {
         int i = isLoadMore() ? 1 : 0;
-        int count = mData.size() + i + getHeaderViewsCount() + getFooterViewsCount();
+        int count = mData.size() + i + getHeaderLayoutCount() + getFooterLayoutCount();
         if (mData.size() == 0 && mEmptyView != null) {
             /**
              *  setEmptyView(false) and add emptyView
@@ -447,7 +447,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 count += getmEmptyViewCount();
             }
 
-            if ((mHeadAndEmptyEnable && getHeaderViewsCount() == 1 && count == 1) || count == 0) {
+            if ((mHeadAndEmptyEnable && getHeaderLayoutCount() == 1 && count == 1) || count == 0) {
                 mEmptyEnable = true;
                 count += getmEmptyViewCount();
             }
@@ -514,13 +514,13 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             }
         } else if (mData.size() == 0 && mEmptyView != null && getItemCount() == (mHeadAndEmptyEnable ? 2 : 1) && mEmptyEnable) {
             return EMPTY_VIEW;
-        } else if (position == mData.size() + getHeaderViewsCount()) {
+        } else if (position == mData.size() + getHeaderLayoutCount()) {
             if (mNextLoadEnable)
                 return LOADING_VIEW;
             else
                 return FOOTER_VIEW;
         }
-        return getDefItemViewType(position - getHeaderViewsCount());
+        return getDefItemViewType(position - getHeaderLayoutCount());
     }
 
     protected int getDefItemViewType(int position) {
@@ -621,7 +621,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
         switch (viewType) {
             case 0:
-                convert((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderViewsCount()));
+                convert((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
                 addAnimation(holder);
                 break;
             case LOADING_VIEW:
@@ -634,8 +634,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             case FOOTER_VIEW:
                 break;
             default:
-                convert((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderViewsCount()));
-                onBindDefViewHolder((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderViewsCount()));
+                convert((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
+                onBindDefViewHolder((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
                 break;
         }
 
@@ -650,6 +650,20 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             return new BaseViewHolder(getItemView(layoutResId, parent));
         }
         return new BaseViewHolder(mContentView);
+    }
+
+    /**
+     * Return root layout of header
+     */
+    public LinearLayout getHeaderLayout() {
+        return mHeaderLayout;
+    }
+
+    /**
+     * Return root layout of footer
+     */
+    public LinearLayout getFooterLayout() {
+        return mFooterLayout;
     }
 
     /**
@@ -673,9 +687,14 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      */
     public void addHeaderView(View header, int index) {
         if (mHeaderLayout == null) {
-            mHeaderLayout = new LinearLayout(header.getContext());
-            mHeaderLayout.setOrientation(LinearLayout.VERTICAL);
-            mHeaderLayout.setLayoutParams(new LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+            if (mCopyHeaderLayout == null) {
+                mHeaderLayout = new LinearLayout(header.getContext());
+                mHeaderLayout.setOrientation(LinearLayout.VERTICAL);
+                mHeaderLayout.setLayoutParams(new LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+                mCopyHeaderLayout = mHeaderLayout;
+            } else {
+                mHeaderLayout = mCopyHeaderLayout;
+            }
         }
         index = index >= mHeaderLayout.getChildCount() ? -1 : index;
         mHeaderLayout.addView(header, index);
@@ -704,9 +723,14 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public void addFooterView(View footer, int index) {
         mNextLoadEnable = false;
         if (mFooterLayout == null) {
-            mFooterLayout = new LinearLayout(footer.getContext());
-            mFooterLayout.setOrientation(LinearLayout.VERTICAL);
-            mFooterLayout.setLayoutParams(new LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+            if (mCopyFooterLayout == null) {
+                mFooterLayout = new LinearLayout(footer.getContext());
+                mFooterLayout.setOrientation(LinearLayout.VERTICAL);
+                mFooterLayout.setLayoutParams(new LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+                mCopyFooterLayout = mFooterLayout;
+            } else {
+                mFooterLayout = mCopyFooterLayout;
+            }
         }
         index = index >= mFooterLayout.getChildCount() ? -1 : index;
         mFooterLayout.addView(footer, index);
@@ -859,7 +883,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             baseViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onRecyclerViewItemClickListener.onItemClick(v, baseViewHolder.getLayoutPosition() - getHeaderViewsCount());
+                    onRecyclerViewItemClickListener.onItemClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
                 }
             });
         }
@@ -867,7 +891,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             baseViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    return onRecyclerViewItemLongClickListener.onItemLongClick(v, baseViewHolder.getLayoutPosition() - getHeaderViewsCount());
+                    return onRecyclerViewItemLongClickListener.onItemLongClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
                 }
             });
         }

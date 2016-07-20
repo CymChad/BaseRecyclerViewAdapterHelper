@@ -190,7 +190,7 @@ public abstract class BaseItemDraggableAdapter<T> extends BaseQuickAdapter<T> {
     }
 
     public int getViewHolderPosition(RecyclerView.ViewHolder viewHolder) {
-        return viewHolder.getAdapterPosition() - getHeaderViewsCount();
+        return viewHolder.getAdapterPosition() - getHeaderLayoutCount();
     }
 
     public void onItemDragStart(RecyclerView.ViewHolder viewHolder) {
