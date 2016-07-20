@@ -293,6 +293,19 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     /**
+     * Sets the on longClick listener of the view.
+     * @param viewId
+     * @param listener
+     * @return
+     */
+    public BaseViewHolder setOnLongClickListener(int viewId, BaseQuickAdapter.OnItemChildLongClickListener listener) {
+        View view = getView(viewId);
+        listener.mViewHolder = this;
+        view.setOnLongClickListener(listener);
+        return this;
+    }
+
+    /**
      * Sets the on touch listener of the view.
      *
      * @param viewId   The view id.
