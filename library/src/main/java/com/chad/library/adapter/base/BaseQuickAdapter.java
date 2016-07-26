@@ -336,7 +336,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         this.mData = data;
         if (mRequestLoadMoreListener != null) {
             mNextLoadEnable = true;
-            mFooterLayout = null;
+            // mFooterLayout = null;
         }
         mLastPosition = -1;
         notifyDataSetChanged();
@@ -520,6 +520,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 return LOADING_VIEW;
             else
                 return FOOTER_VIEW;
+        } else if (position > mData.size() + getHeaderLayoutCount()) {
+            return FOOTER_VIEW;
         }
         return getDefItemViewType(position - getHeaderLayoutCount());
     }
@@ -775,7 +777,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * remove all header view from mHeaderLayout and set null to mHeaderLayout
      */
     public void removeAllHeaderView() {
-        if (mFooterLayout == null) return;
+        if (mHeaderLayout == null) return;
 
         mHeaderLayout.removeAllViews();
         mHeaderLayout = null;
