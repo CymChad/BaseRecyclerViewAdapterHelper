@@ -270,6 +270,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     public class OnItemChildLongClickListener implements View.OnLongClickListener {
         public RecyclerView.ViewHolder mViewHolder;
+
         @Override
         public boolean onLongClick(View v) {
             if (mChildLongClickListener != null) {
@@ -574,6 +575,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         int type = holder.getItemViewType();
         if (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW) {
             setFullSpan(holder);
+        } else {
+            addAnimation(holder);
         }
     }
 
@@ -622,7 +625,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         switch (viewType) {
             case 0:
                 convert((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
-                addAnimation(holder);
                 break;
             case LOADING_VIEW:
                 addLoadMore(holder);
