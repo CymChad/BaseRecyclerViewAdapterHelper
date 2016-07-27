@@ -170,7 +170,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
     @Override
     protected void convertHead(BaseViewHolder helper,final MySection item) {
         helper.setText(R.id.header, item.header);
-        else
+       
         helper.setOnClickListener(R.id.more, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
