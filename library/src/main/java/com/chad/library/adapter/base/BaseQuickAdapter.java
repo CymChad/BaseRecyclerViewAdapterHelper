@@ -270,6 +270,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     public class OnItemChildLongClickListener implements View.OnLongClickListener {
         public RecyclerView.ViewHolder mViewHolder;
+
         @Override
         public boolean onLongClick(View v) {
             if (mChildLongClickListener != null) {
@@ -335,7 +336,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         this.mData = data;
         if (mRequestLoadMoreListener != null) {
             mNextLoadEnable = true;
-            mFooterLayout = null;
+            // mFooterLayout = null;
         }
         mLastPosition = -1;
         notifyDataSetChanged();
@@ -519,6 +520,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 return LOADING_VIEW;
             else
                 return FOOTER_VIEW;
+        } else if (position > mData.size() + getHeaderLayoutCount()) {
+            return FOOTER_VIEW;
         }
         return getDefItemViewType(position - getHeaderLayoutCount());
     }
@@ -574,6 +577,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         int type = holder.getItemViewType();
         if (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW) {
             setFullSpan(holder);
+        } else {
+            addAnimation(holder);
         }
     }
 
@@ -622,7 +627,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         switch (viewType) {
             case 0:
                 convert((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
-                addAnimation(holder);
                 break;
             case LOADING_VIEW:
                 addLoadMore(holder);
@@ -773,7 +777,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * remove all header view from mHeaderLayout and set null to mHeaderLayout
      */
     public void removeAllHeaderView() {
-        if (mFooterLayout == null) return;
+        if (mHeaderLayout == null) return;
 
         mHeaderLayout.removeAllViews();
         mHeaderLayout = null;
