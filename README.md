@@ -1,9 +1,10 @@
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-BaseRecyclerViewAdapterHelper-green.svg?style=true)](https://android-arsenal.com/details/1/3644)
+[![](https://jitpack.io/v/CymChad/BaseRecyclerViewAdapterHelper.svg)](https://jitpack.io/#CymChad/BaseRecyclerViewAdapterHelper)
 # BaseRecyclerViewAdapterHelper（[中文版文档](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/README-cn.md)）
 ![Paste_Image.png](http://upload-images.jianshu.io/upload_images/972352-1d77e0a75a4a7c0a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)  
 Powerful and flexible RecyclerAdapter 
 Please feel free to use this.(Love can be a **Star**)
-## Goolge Play Demo
+## Google Play Demo
 
 [![Get it on Google Play](https://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=com.chad.baserecyclerviewadapterhelper)
 #Features（[download apk](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/raw/master/demo_res/demo.apk)）
@@ -31,7 +32,7 @@ allprojects {
 Add the dependency
 ```groovy
 dependencies {
-        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.8.2'
+        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.8.8'
 }
 ```
 
@@ -202,23 +203,39 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
 ```java
 mQuickAdapter.setEmptyView(getView());
 ```
-#Use it drag item
+#Use it drag and swipe item
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/drag_item.gif)
 ```java
-OnItemDragListener listener = new OnItemDragListener() {
+OnItemDragListener onItemDragListener = new OnItemDragListener() {
     @Override
-    public void onItemDragStart(RecyclerView.ViewHolder viewHolder){}
+    public void onItemDragStart(RecyclerView.ViewHolder viewHolder, int pos){}
     @Override
-    public void onItemDragMoving(RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {}
+    public void onItemDragMoving(RecyclerView.ViewHolder source, int from, RecyclerView.ViewHolder target, int to) {}
     @Override
-    public void onItemDragEnd(RecyclerView.ViewHolder viewHolder) {}
+    public void onItemDragEnd(RecyclerView.ViewHolder viewHolder, int pos) {}
 }
-ItemDraggableCallback itemDraggableCallback = new ItemDraggableCallback(mAdapter);
-ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDraggableCallback);
-mAdapter.enableDragItem(mItemTouchHelper, R.id.textView, true);
-mAdapter.setOnItemDragListener(listener);
-```
 
+OnItemSwipeListener onItemSwipeListener = new OnItemSwipeListener() {
+    @Override
+    public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int pos) {}
+    @Override
+    public void clearView(RecyclerView.ViewHolder viewHolder, int pos) {}
+    @Override
+    public void onItemSwiped(RecyclerView.ViewHolder viewHolder, int pos) {}
+};
+
+ItemDragAndSwipeCallback itemDragAndSwipeCallback = new ItemDragAndSwipeCallback(mAdapter);
+ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDragAndSwipeCallback);
+itemTouchHelper.attachToRecyclerView(mRecyclerView);
+
+// enable drag items
+mAdapter.enableDragItem(itemTouchHelper, R.id.textView, true);
+mAdapter.setOnItemDragListener(onItemDragListener);
+
+// enable swipe items
+mAdapter.enableSwipeItem();
+mAdapter.setOnItemSwipeListener(onItemSwipeListener);
+```
 
 #Thanks
 [JoanZapata / base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper)

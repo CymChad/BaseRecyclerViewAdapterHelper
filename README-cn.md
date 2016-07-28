@@ -3,12 +3,14 @@
 - 「[BaseRecyclerAdapter之添加动画](http://www.jianshu.com/p/fa3f97c19263)」
 - 「[BaseRecyclerAdapter之添加不同布局（头部尾部）](http://www.jianshu.com/p/9d75c22f0964)」
 - 「[BaseRecyclerAdapter之添加不同布局（优化篇）](http://www.jianshu.com/p/cf29d4e45536)」
+- 「[分析整合版](http://www.jianshu.com/p/b1ad50633732)」
 
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-BaseRecyclerViewAdapterHelper-green.svg?style=true)](https://android-arsenal.com/details/1/3644)
+[![](https://jitpack.io/v/CymChad/BaseRecyclerViewAdapterHelper.svg)](https://jitpack.io/#CymChad/BaseRecyclerViewAdapterHelper)
 # BaseRecyclerViewAdapterHelper
 ![logo](http://upload-images.jianshu.io/upload_images/972352-1d77e0a75a4a7c0a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)  
 一个强大并且灵活的RecyclerViewAdapter，欢迎使用。（喜欢的可以**Star**一下）
-## Goolge Play Demo
+## Google Play Demo
 
 [![Get it on Google Play](https://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=com.chad.baserecyclerviewadapterhelper)
 #它能做什么？（[下载 apk](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/raw/master/demo_res/demo.apk)）
@@ -35,7 +37,7 @@
 然后在dependencies添加:
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.8.2'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.8.8'
 	}
 ```
 
@@ -200,22 +202,40 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
 ```
 mQuickAdapter.setEmptyView(getView());
 ```
-#使用DragItem
+#使用拖拽与滑动删除
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/drag_item.gif)
 ```java
-OnItemDragListener listener = new OnItemDragListener() {
+OnItemDragListener onItemDragListener = new OnItemDragListener() {
     @Override
-    public void onItemDragStart(RecyclerView.ViewHolder viewHolder){}
+    public void onItemDragStart(RecyclerView.ViewHolder viewHolder, int pos){}
     @Override
-    public void onItemDragMoving(RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {}
+    public void onItemDragMoving(RecyclerView.ViewHolder source, int from, RecyclerView.ViewHolder target, int to) {}
     @Override
-    public void onItemDragEnd(RecyclerView.ViewHolder viewHolder) {}
+    public void onItemDragEnd(RecyclerView.ViewHolder viewHolder, int pos) {}
 }
-ItemDraggableCallback itemDraggableCallback = new ItemDraggableCallback(mAdapter);
-ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDraggableCallback);
-mAdapter.enableDragItem(mItemTouchHelper, R.id.textView, true);
-mAdapter.setOnItemDragListener(listener);
+
+OnItemSwipeListener onItemSwipeListener = new OnItemSwipeListener() {
+    @Override
+    public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int pos) {}
+    @Override
+    public void clearView(RecyclerView.ViewHolder viewHolder, int pos) {}
+    @Override
+    public void onItemSwiped(RecyclerView.ViewHolder viewHolder, int pos) {}
+};
+
+ItemDragAndSwipeCallback itemDragAndSwipeCallback = new ItemDragAndSwipeCallback(mAdapter);
+ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDragAndSwipeCallback);
+itemTouchHelper.attachToRecyclerView(mRecyclerView);
+
+// 开启拖拽
+mAdapter.enableDragItem(itemTouchHelper, R.id.textView, true);
+mAdapter.setOnItemDragListener(onItemDragListener);
+
+// 开启滑动删除
+mAdapter.enableSwipeItem();
+mAdapter.setOnItemSwipeListener(onItemSwipeListener);
 ```
+
 >**持续更新!，所以推荐Star项目**
 
 #感谢
