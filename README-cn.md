@@ -4,9 +4,10 @@
 - 「[BaseRecyclerAdapter之添加不同布局（头部尾部）](http://www.jianshu.com/p/9d75c22f0964)」
 - 「[BaseRecyclerAdapter之添加不同布局（优化篇）](http://www.jianshu.com/p/cf29d4e45536)」
 - 「[BaseRecyclerAdapter之分组功能原理分析](http://www.jianshu.com/p/87a49f732724)」
-- 「[RecyclerView相关优秀文集](https://github.com/CymChad/CymChad.github.io)」
+- 「[RecyclerView相关优秀文集](https://github.com/CymChad/CymChad.github.io)」  
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-BaseRecyclerViewAdapterHelper-green.svg?style=true)](https://android-arsenal.com/details/1/3644)
 [![](https://jitpack.io/v/CymChad/BaseRecyclerViewAdapterHelper.svg)](https://jitpack.io/#CymChad/BaseRecyclerViewAdapterHelper)
+
 # BaseRecyclerViewAdapterHelper
 ![logo](http://upload-images.jianshu.io/upload_images/972352-1d77e0a75a4a7c0a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)  
 一个强大并且灵活的RecyclerViewAdapter，欢迎使用。（喜欢的可以**Star**一下）
