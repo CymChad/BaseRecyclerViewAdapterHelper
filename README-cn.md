@@ -61,6 +61,43 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
     }
 }
 ```
+# 如何添加 item 的点击事件
+```java
+  mRecyclerView.addOnItemTouchListener(new OnRecyclerViewClickHelper(mRecyclerView,mQuickAdapter){
+            @Override
+            public void onItemClick(View view, int position) {
+                Log.e(TAG, "onItemClick: 收到点击事件 "+position);
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onItemChildClickHelper(View view, int position) {
+                super.onItemChildClickHelper(view, position);
+                Log.w(TAG, "onItemChildClickHelper: ");
+                Log.d(TAG, "onItemChildClickHelper: "+view.getId());
+                switch (view.getId()){
+                    case R.id.tweetAvatar:
+                        Log.e(TAG, "R.id.tweetAvatar: 收到点击事件 "+position);
+                        Toast.makeText(RecyclerClickItemActivity.this, "R.id.tweetAvatar: 收到点击事件" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.tweetName:
+                        Log.e(TAG, "R.id.tweetName: 收到点击事件 "+position);
+                        Toast.makeText(RecyclerClickItemActivity.this, "R.id.tweetName: 收到点击事件" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+            @Override
+            public void onItemLongClickHelper(View view, int position) {
+                super.onItemLongClickHelper(view, position);
+                Log.e(TAG, "R.id.tweetName: 收到点击事件 "+position);
+                Toast.makeText(RecyclerClickItemActivity.this, "收到长按事件" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+            }
+```
+
+#如果需要给 childView 设置点击事件
+```
+ helper.addOnClickListener(R.id.tweetAvatar)
+       .addOnClickListener(R.id.tweetName);
+```
 #如何添加item点击、长按事件
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/chlid_click.gif)
 ```java

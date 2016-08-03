@@ -6,8 +6,13 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 /**
- * 作者: allen on 16/8/2.
- */
+ * Created by AllenCoder on 2016/8/03.
+ *
+ * A convenience class to extend when you only want to OnRecyclerViewClickHelper for a subset
+ * of all the OnRecyclerItemClickListener. This implements all methods in the
+ * {@link OnRecyclerItemClickListener}
+ *
+ **/
 
 public abstract class OnRecyclerViewClickHelper extends OnRecyclerItemClickListener{
     public OnRecyclerViewClickHelper(RecyclerView recyclerView, BaseQuickAdapter baseQuickAdapter) {

@@ -2,8 +2,6 @@ package com.chad.baserecyclerviewadapterhelper;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,29 +14,15 @@ import android.widget.Toast;
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickClickAdapter;
 import com.chad.library.adapter.base.helper.OnRecyclerViewClickHelper;
 
-import static android.util.Log.d;
-
 /**
- * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+ * create by AllenCoder
  */
 public class RecyclerClickItemActivity extends Activity {
 
     private RecyclerView mRecyclerView;
     private QuickClickAdapter mQuickAdapter;
     private static final int PAGE_SIZE = 30000;
-    private Handler mHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            d(TAG,"handleMessage");
-            if (!RecyclerClickItemActivity.this.isFinishing()){
-                mHandler.sendEmptyMessageDelayed(1000,100);
-                mQuickAdapter.notifyDataSetChanged();
-            }
-
-        }
-    };
-    private static String TAG ="HeaderAndFooterUseActivity";
+    private static String TAG ="RecyclerClickItemActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,32 +54,22 @@ public class RecyclerClickItemActivity extends Activity {
                 switch (view.getId()){
                     case R.id.tweetAvatar:
                         Log.e(TAG, "R.id.tweetAvatar: 收到点击事件 "+position);
-                        Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RecyclerClickItemActivity.this, "R.id.tweetAvatar: 收到点击事件" + Integer.toString(position), Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.tweetName:
                         Log.e(TAG, "R.id.tweetName: 收到点击事件 "+position);
-                        Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RecyclerClickItemActivity.this, "R.id.tweetName: 收到点击事件" + Integer.toString(position), Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
+
+            @Override
+            public void onItemLongClickHelper(View view, int position) {
+                super.onItemLongClickHelper(view, position);
+                Log.e(TAG, "R.id.tweetName: 收到点击事件 "+position);
+                Toast.makeText(RecyclerClickItemActivity.this, "收到长按事件" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+            }
         });
-//        mRecyclerView.addOnItemTouchListener(new OnRecyclerViewClickHelper(mRecyclerView,mQuickAdapter){
-//
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                Log.e(TAG, "onItemClick: 收到点击事件 "+position);
-//                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        mRecyclerView.addOnItemTouchListener(new on(mRecyclerView,mQuickAdapter){
-//
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                Log.e(TAG, "onItemClick: 收到点击事件 "+position);
-//                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        mHandler.sendEmptyMessageDelayed(1000,100);
     }
 
     private View getView() {
