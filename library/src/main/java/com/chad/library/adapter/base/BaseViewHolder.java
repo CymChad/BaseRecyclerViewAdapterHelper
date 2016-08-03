@@ -19,6 +19,8 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import java.util.HashSet;
+
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
@@ -29,6 +31,8 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * Views indexed with their IDs
      */
     private final SparseArray<View> views;
+
+    private final HashSet<Integer> childClickViewIds;
 
 
     public View convertView;
@@ -42,8 +46,13 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     protected BaseViewHolder(View view) {
         super(view);
         this.views = new SparseArray<View>();
+        this.childClickViewIds = new HashSet<>();
         convertView = view;
 
+    }
+
+    public HashSet<Integer> getChildClickViewIds() {
+        return  childClickViewIds;
     }
 
     public View getConvertView() {
@@ -282,6 +291,11 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     public BaseViewHolder setOnClickListener(int viewId, View.OnClickListener listener) {
         View view = getView(viewId);
         view.setOnClickListener(listener);
+        return this;
+    }
+
+    public BaseViewHolder addOnClickListener(int viewId) {
+        childClickViewIds.add(viewId);
         return this;
     }
 
