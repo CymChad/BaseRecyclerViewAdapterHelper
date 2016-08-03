@@ -25,6 +25,8 @@
 - **设置空布局（比Listview的setEmptyView还要好用！）**
 - **添加拖拽item**
 
+#扩展库
+[PinnedSectionItemDecoration](https://github.com/oubowu/PinnedSectionItemDecoration)
 #如何使用它？
 先在 build.gradle 的 repositories 添加:
 ```
