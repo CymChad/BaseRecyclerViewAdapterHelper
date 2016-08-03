@@ -48,6 +48,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     private final SparseArray<View> views;
 
     private final HashSet<Integer> childClickViewIds;
+    private final HashSet<Integer> itemChildLongClickViewIds;
 
 
     public View convertView;
@@ -62,8 +63,13 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         super(view);
         this.views = new SparseArray<View>();
         this.childClickViewIds = new HashSet<>();
+        this.itemChildLongClickViewIds = new HashSet<>();
         convertView = view;
 
+    }
+
+    public HashSet<Integer> getItemChildLongClickViewIds() {
+        return itemChildLongClickViewIds;
     }
 
     public HashSet<Integer> getChildClickViewIds() {
@@ -319,6 +325,15 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
+    /**
+     * add long click view id
+     * @param viewId
+     * @return
+     */
+    public BaseViewHolder addOnLongClickListener(int viewId){
+        itemChildLongClickViewIds.add(viewId);
+        return this;
+    }
     /**
      * {@link #addOnClickListener}
      * @param viewId

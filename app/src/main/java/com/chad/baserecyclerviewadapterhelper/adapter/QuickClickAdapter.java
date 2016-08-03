@@ -31,6 +31,7 @@ public class QuickClickAdapter extends BaseQuickAdapter<Status> {
                 .setVisible(R.id.tweetRT, item.isRetweet())
                 .addOnClickListener(R.id.tweetAvatar)
                 .addOnClickListener(R.id.tweetName)
+                .addOnLongClickListener(R.id.tweetText)
                 .linkify(R.id.tweetText);
         Log.d(TAG, "convert: "+R.id.tweetAvatar);
         Log.d(TAG, "convert: "+R.id.tweetName);

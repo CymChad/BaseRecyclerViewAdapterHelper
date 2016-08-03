@@ -1,4 +1,4 @@
-package com.chad.library.adapter.base.helper;
+package com.chad.library.adapter.base.listener;
 
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.RecyclerView;
@@ -16,24 +16,26 @@ import java.util.Set;
  * Created by AllenCoder on 2016/8/03.
  *
  * This can be useful for applications that wish to implement various forms of click and longclick and childView click
- * manipulation of item views within the RecyclerView. OnRecyclerItemClickListener may intercept
- * a touch interaction already in progress even if the OnRecyclerItemClickListener is already handling that
+ * manipulation of item views within the RecyclerView. SimpleRecyclerViewClickListener may intercept
+ * a touch interaction already in progress even if the SimpleRecyclerViewClickListener is already handling that
  * gesture stream itself for the purposes of scrolling.
  *
  * @see RecyclerView.OnItemTouchListener
  */
-public abstract class OnRecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
+public abstract class SimpleRecyclerViewClickListener implements RecyclerView.OnItemTouchListener {
     private GestureDetectorCompat mGestureDetector;
     private RecyclerView recyclerView;
     private Set<Integer> childClickViewIds;
+    private Set<Integer> longClickViewIds;
     protected BaseQuickAdapter baseQuickAdapter;
-    public static String TAG = "OnRecyclerItemClickListener";
+    public static String TAG = "SimpleRecyclerViewClickListener";
 
     /**
      * @param recyclerView     the parent recycleView
      * @param baseQuickAdapter this helper need the BaseQuickAdapter
      */
-    public OnRecyclerItemClickListener(RecyclerView recyclerView, BaseQuickAdapter baseQuickAdapter) {
+
+    public SimpleRecyclerViewClickListener(RecyclerView recyclerView, BaseQuickAdapter baseQuickAdapter) {
         this.recyclerView = recyclerView;
         this.baseQuickAdapter = baseQuickAdapter;
         mGestureDetector = new GestureDetectorCompat(recyclerView.getContext(), new ItemTouchHelperGestureListener());
@@ -67,14 +69,14 @@ public abstract class OnRecyclerItemClickListener implements RecyclerView.OnItem
                     for (Iterator it = childClickViewIds.iterator(); it.hasNext(); ) {
                         View childView = child.findViewById((Integer) it.next());
                         if (inRangeOfView(childView, e)) {
-                            onItemChildClickHelper(childView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
+                            onItemChildClick(baseQuickAdapter,childView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
                             return true;
                         }
                     }
 
-                    onItemClickHelper(child, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
+                    onItemClick(baseQuickAdapter,child, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
                 } else {
-                    onItemClickHelper(child, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
+                    onItemClick(baseQuickAdapter,child, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
                 }
 
 
@@ -86,8 +88,18 @@ public abstract class OnRecyclerItemClickListener implements RecyclerView.OnItem
         public void onLongPress(MotionEvent e) {
             View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
             if (child != null) {
-                RecyclerView.ViewHolder vh = recyclerView.getChildViewHolder(child);
-                onItemLongClickHelper(child, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
+                BaseViewHolder vh = (BaseViewHolder) recyclerView.getChildViewHolder(child);
+                longClickViewIds =vh.getItemChildLongClickViewIds();
+                if (longClickViewIds!=null&&longClickViewIds.size()>0){
+                    for (Iterator it = longClickViewIds.iterator(); it.hasNext(); ) {
+                        View childView = child.findViewById((Integer) it.next());
+                        if (inRangeOfView(childView, e)) {
+                            onItemChildLongClick(baseQuickAdapter,childView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
+                            return ;
+                        }
+                    }
+                }
+                onItemLongClick(baseQuickAdapter,child, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
             }
         }
 
@@ -95,15 +107,26 @@ public abstract class OnRecyclerItemClickListener implements RecyclerView.OnItem
     }
 
     /**
-     * @param view
-     * @param position
+     * Callback method to be invoked when an item in this AdapterView has
+     * been clicked.
+     *
+     * @param view     The view within the AdapterView that was clicked (this
+     *                 will be a view provided by the adapter)
+     * @param position The position of the view in the adapter.
      */
-    public abstract void onItemClickHelper(View view, int position);
+    public abstract void onItemClick(BaseQuickAdapter adapter,View view, int position);
 
-    public abstract void onItemLongClickHelper(View view, int position);
-
-    public abstract void onItemChildClickHelper(View view, int position);
-
+    /**
+     * callback method to be invoked when an item in this view has been
+     * click and held
+     *
+     * @param view     The view whihin the AbsListView that was clicked
+     * @param position The position of the view int the adapter
+     * @return true if the callback consumed the long click ,false otherwise
+     */
+    public abstract void onItemLongClick(BaseQuickAdapter adapter,View view, int position);
+    public abstract void onItemChildClick(BaseQuickAdapter adapter, View view, int position);
+    public abstract void onItemChildLongClick(BaseQuickAdapter adapter, View view, int position);
 
     public boolean inRangeOfView(View view, MotionEvent ev) {
         int[] location = new int[2];
