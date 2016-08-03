@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickAdapter;
@@ -28,8 +29,23 @@ public class HeaderAndFooterUseActivity extends Activity {
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         initAdapter();
-        mQuickAdapter.addHeaderView(getView());
-        mQuickAdapter.addFooterView(getView());
+
+        View headerView = getView(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mQuickAdapter.addHeaderView(getView(getRemoveHeaderListener(), "click me to remove me"), 0);
+            }
+        }, "click me to add new header");
+        mQuickAdapter.addHeaderView(headerView);
+
+        View footerView = getView(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mQuickAdapter.addFooterView(getView(getRemoveFooterListener(), "click me to remove me"));
+            }
+        }, "click me to add new footer");
+        mQuickAdapter.addFooterView(footerView, 0);
+
         mRecyclerView.setAdapter(mQuickAdapter);
     }
 
@@ -44,6 +60,32 @@ public class HeaderAndFooterUseActivity extends Activity {
             }
         });
         return view;
+    }
+
+    private View getView(View.OnClickListener listener, String text) {
+        View view = getLayoutInflater().inflate(R.layout.head_view, null);
+        view.setLayoutParams(new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        ((TextView) view.findViewById(R.id.tv)).setText(text);
+        view.setOnClickListener(listener);
+        return view;
+    }
+
+    private View.OnClickListener getRemoveHeaderListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mQuickAdapter.removeHeaderView(v);
+            }
+        };
+    }
+
+    private View.OnClickListener getRemoveFooterListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mQuickAdapter.removeFooterView(v);
+            }
+        };
     }
 
     private void initAdapter() {

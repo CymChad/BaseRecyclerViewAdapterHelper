@@ -1,22 +1,33 @@
-
+/**
+ * Copyright 2013 Joan Zapata
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.chad.library.adapter.base;
 
 import android.animation.Animator;
 import android.content.Context;
-import android.graphics.Canvas;
 import android.support.annotation.IntDef;
-import android.support.annotation.NonNull;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.LayoutParams;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
+import android.widget.LinearLayout;
 
 import com.chad.library.R;
 import com.chad.library.adapter.base.animation.AlphaInAnimation;
@@ -25,15 +36,14 @@ import com.chad.library.adapter.base.animation.ScaleInAnimation;
 import com.chad.library.adapter.base.animation.SlideInBottomAnimation;
 import com.chad.library.adapter.base.animation.SlideInLeftAnimation;
 import com.chad.library.adapter.base.animation.SlideInRightAnimation;
-import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
-import com.chad.library.adapter.base.listener.OnItemDragListener;
-import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 
 /**
@@ -57,8 +67,10 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     @AnimationType
     private BaseAnimation mCustomAnimation;
     private BaseAnimation mSelectAnimation = new AlphaInAnimation();
-    private View mHeaderView;
-    private View mFooterView;
+    private LinearLayout mHeaderLayout;
+    private LinearLayout mFooterLayout;
+    private LinearLayout mCopyHeaderLayout = null;
+    private LinearLayout mCopyFooterLayout = null;
     private int pageSize = -1;
     private View mContentView;
     /**
@@ -71,10 +83,10 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     protected int mLayoutResId;
     protected LayoutInflater mLayoutInflater;
     protected List<T> mData;
-    protected static final int HEADER_VIEW = 0x00000111;
-    protected static final int LOADING_VIEW = 0x00000222;
-    protected static final int FOOTER_VIEW = 0x00000333;
-    protected static final int EMPTY_VIEW = 0x00000555;
+    public static final int HEADER_VIEW = 0x00000111;
+    public static final int LOADING_VIEW = 0x00000222;
+    public static final int FOOTER_VIEW = 0x00000333;
+    public static final int EMPTY_VIEW = 0x00000555;
     private View mLoadingView;
 
     @IntDef({ALPHAIN, SCALEIN, SLIDEIN_BOTTOM, SLIDEIN_LEFT, SLIDEIN_RIGHT})
@@ -102,20 +114,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * Use with {@link #openLoadAnimation}
      */
     public static final int SLIDEIN_RIGHT = 0x00000005;
-
-    private static final int NO_TOGGLE_VIEW = 0;
-    private int mToggleViewId = NO_TOGGLE_VIEW;
-    private ItemTouchHelper mItemTouchHelper;
-    private boolean itemDragEnabled = false;
-    private boolean itemSwipeEnabled = false;
-    private OnItemDragListener mOnItemDragListener;
-    private OnItemSwipeListener mOnItemSwipeListener;
-    private boolean mDragOnLongPress = true;
-
-    private View.OnTouchListener mOnToggleViewTouchListener;
-    private View.OnLongClickListener mOnToggleViewLongClickListener;
-
-    private static final String ERROR_NOT_SAME_ITEMTOUCHHELPER = "Item drag and item swipe should pass the same ItemTouchHelper";
 
     /**
      * call the method will not enable the loadMore funcation and the params pageSize is invalid
@@ -239,6 +237,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     private OnRecyclerViewItemChildClickListener mChildClickListener;
 
+    private OnRecyclerViewItemChildLongClickListener mChildLongClickListener;
+
     /**
      * Register a callback to be invoked when childView in this AdapterView has
      * been clicked and held
@@ -260,7 +260,37 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         @Override
         public void onClick(View v) {
             if (mChildClickListener != null)
-                mChildClickListener.onItemChildClick(BaseQuickAdapter.this, v, mViewHolder.getLayoutPosition() - getHeaderViewsCount());
+                mChildClickListener.onItemChildClick(BaseQuickAdapter.this, v, mViewHolder.getLayoutPosition() - getHeaderLayoutCount());
+        }
+    }
+
+    /**
+     * Register a callback to be invoked when childView in this AdapterView has
+     * been longClicked and held
+     * {@link OnRecyclerViewItemChildLongClickListener}
+     *
+     * @param childLongClickListener The callback that will run
+     */
+    public void setOnRecyclerViewItemChildLongClickListener(OnRecyclerViewItemChildLongClickListener childLongClickListener) {
+        this.mChildLongClickListener = childLongClickListener;
+    }
+
+    /**
+     * Interface for ItemChildLongClick
+     */
+    public interface OnRecyclerViewItemChildLongClickListener {
+        boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position);
+    }
+
+    public class OnItemChildLongClickListener implements View.OnLongClickListener {
+        public RecyclerView.ViewHolder mViewHolder;
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (mChildLongClickListener != null) {
+                return mChildLongClickListener.onItemChildLongClick(BaseQuickAdapter.this, v, mViewHolder.getLayoutPosition() - getHeaderViewsCount());
+            }
+            return false;
         }
     }
 
@@ -295,7 +325,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      */
     public void remove(int position) {
         mData.remove(position);
-        notifyItemRemoved(position + getHeaderViewsCount());
+        notifyItemRemoved(position + getHeaderLayoutCount());
 
     }
 
@@ -320,7 +350,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         this.mData = data;
         if (mRequestLoadMoreListener != null) {
             mNextLoadEnable = true;
-            mFooterView = null;
+            // mFooterLayout = null;
         }
         mLastPosition = -1;
         notifyDataSetChanged();
@@ -350,7 +380,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      *
      * @return
      */
-    public List getData() {
+    public List<T> getData() {
         return mData;
     }
 
@@ -366,21 +396,39 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     * if setHeadView will be return 1 if not will be return 0
+     * if setHeadView will be return 1 if not will be return 0.
+     * notice: Deprecated! Use {@link ViewGroup#getChildCount()} of {@link #getHeaderLayout()} to replace.
      *
      * @return
      */
+    @Deprecated
     public int getHeaderViewsCount() {
-        return mHeaderView == null ? 0 : 1;
+        return mHeaderLayout == null ? 0 : 1;
     }
 
     /**
-     * if mFooterView will be return 1 or not will be return 0
+     * if mFooterLayout will be return 1 or not will be return 0.
+     * notice: Deprecated! Use {@link ViewGroup#getChildCount()} of {@link #getFooterLayout()} to replace.
      *
      * @return
      */
+    @Deprecated
     public int getFooterViewsCount() {
-        return mFooterView == null ? 0 : 1;
+        return mFooterLayout == null ? 0 : 1;
+    }
+
+    /**
+     * if addHeaderView will be return 1, if not will be return 0
+     */
+    public int getHeaderLayoutCount() {
+        return mHeaderLayout == null ? 0 : 1;
+    }
+
+    /**
+     * if addFooterView will be return 1, if not will be return 0
+     */
+    public int getFooterLayoutCount() {
+        return mFooterLayout == null ? 0 : 1;
     }
 
     /**
@@ -400,7 +448,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     @Override
     public int getItemCount() {
         int i = isLoadMore() ? 1 : 0;
-        int count = mData.size() + i + getHeaderViewsCount() + getFooterViewsCount();
+        int count = mData.size() + i + getHeaderLayoutCount() + getFooterLayoutCount();
         if (mData.size() == 0 && mEmptyView != null) {
             /**
              *  setEmptyView(false) and add emptyView
@@ -414,7 +462,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 count += getmEmptyViewCount();
             }
 
-            if ((mHeadAndEmptyEnable && getHeaderViewsCount() == 1 && count == 1) || count == 0) {
+            if ((mHeadAndEmptyEnable && getHeaderLayoutCount() == 1 && count == 1) || count == 0) {
                 mEmptyEnable = true;
                 count += getmEmptyViewCount();
             }
@@ -437,7 +485,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         /**
          * if set headView and positon =0
          */
-        if (mHeaderView != null && position == 0) {
+        if (mHeaderLayout != null && position == 0) {
             return HEADER_VIEW;
         }
         /**
@@ -451,43 +499,45 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 /**
                  * if user want to show headview and footview and emptyView but not add headview
                  */
-                if (mHeaderView == null && mEmptyView != null && mFooterView != null) {
+                if (mHeaderLayout == null && mEmptyView != null && mFooterLayout != null) {
                     return FOOTER_VIEW;
                     /**
                      * add headview
                      */
-                } else if (mHeaderView != null && mEmptyView != null) {
+                } else if (mHeaderLayout != null && mEmptyView != null) {
                     return EMPTY_VIEW;
                 }
             } else if (position == 0) {
                 /**
                  * has no emptyView just add emptyview
                  */
-                if (mHeaderView == null) {
+                if (mHeaderLayout == null) {
                     return EMPTY_VIEW;
-                } else if (mFooterView != null)
+                } else if (mFooterLayout != null)
 
                     return EMPTY_VIEW;
 
 
-            } else if (position == 2 && (mFootAndEmptyEnable || mHeadAndEmptyEnable) && mHeaderView != null && mEmptyView != null) {
+            } else if (position == 2 && (mFootAndEmptyEnable || mHeadAndEmptyEnable) && mHeaderLayout != null && mEmptyView != null) {
                 return FOOTER_VIEW;
 
             } /**
              * user forget to set {@link #setEmptyView(boolean, boolean, View)}  but add footview and headview and emptyview
              */
-            else if ((!mFootAndEmptyEnable || !mHeadAndEmptyEnable) && position == 1 && mFooterView != null) {
+            else if ((!mFootAndEmptyEnable || !mHeadAndEmptyEnable) && position == 1 && mFooterLayout != null) {
                 return FOOTER_VIEW;
             }
         } else if (mData.size() == 0 && mEmptyView != null && getItemCount() == (mHeadAndEmptyEnable ? 2 : 1) && mEmptyEnable) {
             return EMPTY_VIEW;
-        } else if (position == mData.size() + getHeaderViewsCount()) {
+        } else if (position == mData.size() + getHeaderLayoutCount()) {
             if (mNextLoadEnable)
                 return LOADING_VIEW;
             else
                 return FOOTER_VIEW;
+        } else if (position > mData.size() + getHeaderLayoutCount()) {
+            return FOOTER_VIEW;
         }
-        return getDefItemViewType(position - getHeaderViewsCount());
+        return getDefItemViewType(position - getHeaderLayoutCount());
     }
 
     protected int getDefItemViewType(int position) {
@@ -504,13 +554,13 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 baseViewHolder = getLoadingView(parent);
                 break;
             case HEADER_VIEW:
-                baseViewHolder = new BaseViewHolder(mHeaderView);
+                baseViewHolder = new BaseViewHolder(mHeaderLayout);
                 break;
             case EMPTY_VIEW:
                 baseViewHolder = new BaseViewHolder(mEmptyView);
                 break;
             case FOOTER_VIEW:
-                baseViewHolder = new BaseViewHolder(mFooterView);
+                baseViewHolder = new BaseViewHolder(mFooterLayout);
                 break;
             default:
                 baseViewHolder = onCreateDefViewHolder(parent, viewType);
@@ -541,6 +591,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         int type = holder.getItemViewType();
         if (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW) {
             setFullSpan(holder);
+        } else {
+            addAnimation(holder);
         }
     }
 
@@ -588,8 +640,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
         switch (viewType) {
             case 0:
-                convert((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderViewsCount()));
-                addAnimation(holder);
+                convert((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
                 break;
             case LOADING_VIEW:
                 addLoadMore(holder);
@@ -601,28 +652,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             case FOOTER_VIEW:
                 break;
             default:
-                convert((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderViewsCount()));
-                onBindDefViewHolder((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderViewsCount()));
+                convert((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
+                onBindDefViewHolder((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
                 break;
         }
 
-        if (mItemTouchHelper != null && itemDragEnabled && viewType != LOADING_VIEW && viewType != HEADER_VIEW
-                && viewType != EMPTY_VIEW && viewType != FOOTER_VIEW) {
-            if (mToggleViewId != NO_TOGGLE_VIEW) {
-                View toggleView = ((BaseViewHolder) holder).getView(mToggleViewId);
-                if (toggleView != null) {
-                    toggleView.setTag(R.id.BaseQuickAdapter_viewholder_support, holder);
-                    if (mDragOnLongPress) {
-                        toggleView.setOnLongClickListener(mOnToggleViewLongClickListener);
-                    } else {
-                        toggleView.setOnTouchListener(mOnToggleViewTouchListener);
-                    }
-                }
-            } else {
-                holder.itemView.setTag(R.id.BaseQuickAdapter_viewholder_support, holder);
-                holder.itemView.setOnLongClickListener(mOnToggleViewLongClickListener);
-            }
-        }
     }
 
     protected BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
@@ -637,24 +671,140 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     * easy to show a simple headView
+     * Return root layout of header
+     */
+    public LinearLayout getHeaderLayout() {
+        return mHeaderLayout;
+    }
+
+    /**
+     * Return root layout of footer
+     */
+    public LinearLayout getFooterLayout() {
+        return mFooterLayout;
+    }
+
+    /**
+     * Append header to the rear of the mHeaderLayout.
      *
      * @param header
      */
     public void addHeaderView(View header) {
-        this.mHeaderView = header;
+        addHeaderView(header, -1);
+    }
+
+    /**
+     * Add header view to mHeaderLayout and set header view position in mHeaderLayout.
+     * When index = -1 or index >= child count in mHeaderLayout,
+     * the effect of this method is the same as that of {@link #addHeaderView(View)}.
+     *
+     * @param header
+     * @param index  the position in mHeaderLayout of this header.
+     *               When index = -1 or index >= child count in mHeaderLayout,
+     *               the effect of this method is the same as that of {@link #addHeaderView(View)}.
+     */
+    public void addHeaderView(View header, int index) {
+        if (mHeaderLayout == null) {
+            if (mCopyHeaderLayout == null) {
+                mHeaderLayout = new LinearLayout(header.getContext());
+                mHeaderLayout.setOrientation(LinearLayout.VERTICAL);
+                mHeaderLayout.setLayoutParams(new LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+                mCopyHeaderLayout = mHeaderLayout;
+            } else {
+                mHeaderLayout = mCopyHeaderLayout;
+            }
+        }
+        index = index >= mHeaderLayout.getChildCount() ? -1 : index;
+        mHeaderLayout.addView(header, index);
         this.notifyDataSetChanged();
     }
 
     /**
-     * easy to show a simple footerView
+     * Append footer to the rear of the mFooterLayout.
      *
      * @param footer
      */
     public void addFooterView(View footer) {
+        addFooterView(footer, -1);
+    }
+
+    /**
+     * Add footer view to mFooterLayout and set footer view position in mFooterLayout.
+     * When index = -1 or index >= child count in mFooterLayout,
+     * the effect of this method is the same as that of {@link #addFooterView(View)}.
+     *
+     * @param footer
+     * @param index  the position in mFooterLayout of this footer.
+     *               When index = -1 or index >= child count in mFooterLayout,
+     *               the effect of this method is the same as that of {@link #addFooterView(View)}.
+     */
+    public void addFooterView(View footer, int index) {
         mNextLoadEnable = false;
-        this.mFooterView = footer;
+        if (mFooterLayout == null) {
+            if (mCopyFooterLayout == null) {
+                mFooterLayout = new LinearLayout(footer.getContext());
+                mFooterLayout.setOrientation(LinearLayout.VERTICAL);
+                mFooterLayout.setLayoutParams(new LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+                mCopyFooterLayout = mFooterLayout;
+            } else {
+                mFooterLayout = mCopyFooterLayout;
+            }
+        }
+        index = index >= mFooterLayout.getChildCount() ? -1 : index;
+        mFooterLayout.addView(footer, index);
         this.notifyDataSetChanged();
+    }
+
+    /**
+     * remove header view from mHeaderLayout.
+     * When the child count of mHeaderLayout is 0, mHeaderLayout will be set to null.
+     *
+     * @param header
+     */
+    public void removeHeaderView(View header) {
+        if (mHeaderLayout == null) return;
+
+        mHeaderLayout.removeView(header);
+        if (mHeaderLayout.getChildCount() == 0) {
+            mHeaderLayout = null;
+        }
+        this.notifyDataSetChanged();
+    }
+
+    /**
+     * remove footer view from mFooterLayout,
+     * When the child count of mFooterLayout is 0, mFooterLayout will be set to null.
+     *
+     * @param footer
+     */
+    public void removeFooterView(View footer) {
+        if (mFooterLayout == null) return;
+
+        mFooterLayout.removeView(footer);
+        if (mFooterLayout.getChildCount() == 0) {
+            mFooterLayout = null;
+        }
+        this.notifyDataSetChanged();
+    }
+
+    /**
+     * remove all header view from mHeaderLayout and set null to mHeaderLayout
+     */
+    public void removeAllHeaderView() {
+        if (mHeaderLayout == null) return;
+
+        mHeaderLayout.removeAllViews();
+        mHeaderLayout = null;
+    }
+
+    /**
+     * remove all footer view from mFooterLayout and set null to mFooterLayout
+     */
+    public void removeAllFooterView() {
+        if (mFooterLayout == null) return;
+
+        mFooterLayout.removeAllViews();
+        mFooterLayout = null;
     }
 
     /**
@@ -751,7 +901,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             baseViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onRecyclerViewItemClickListener.onItemClick(v, baseViewHolder.getLayoutPosition() - getHeaderViewsCount());
+                    onRecyclerViewItemClickListener.onItemClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
                 }
             });
         }
@@ -759,7 +909,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             baseViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    return onRecyclerViewItemLongClickListener.onItemLongClick(v, baseViewHolder.getLayoutPosition() - getHeaderViewsCount());
+                    return onRecyclerViewItemLongClickListener.onItemLongClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
                 }
             });
         }
@@ -906,182 +1056,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     @Override
     public long getItemId(int position) {
         return position;
-    }
-
-    /**
-     * Set the toggle view's id which will trigger drag event.
-     * If the toggle view id is not set, drag event will be triggered when the item is long pressed.
-     *
-     * @param toggleViewId the toggle view's id
-     */
-    public void setToggleViewId(int toggleViewId) {
-        mToggleViewId = toggleViewId;
-    }
-
-    /**
-     * Set the drag event should be trigger on long press.
-     * Work when the toggleViewId has been set.
-     *
-     * @param longPress by default is true.
-     */
-    public void setToggleDragOnLongPress(boolean longPress) {
-        mDragOnLongPress = longPress;
-        if (mDragOnLongPress) {
-            mOnToggleViewTouchListener = null;
-            mOnToggleViewLongClickListener = new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (mItemTouchHelper != null && itemDragEnabled) {
-                        mItemTouchHelper.startDrag((RecyclerView.ViewHolder) v.getTag(R.id.BaseQuickAdapter_viewholder_support));
-                    }
-                    return true;
-                }
-            };
-        } else {
-            mOnToggleViewTouchListener = new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN
-                            && !mDragOnLongPress) {
-                        if (mItemTouchHelper != null && itemDragEnabled) {
-                            mItemTouchHelper.startDrag((RecyclerView.ViewHolder) v.getTag(R.id.BaseQuickAdapter_viewholder_support));
-                        }
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            };
-            mOnToggleViewLongClickListener = null;
-        }
-    }
-
-    /**
-     * Enable drag items.
-     * Use itemView as the toggleView when long pressed.
-     *
-     * @param itemTouchHelper {@link ItemTouchHelper}
-     */
-    public void enableDragItem(@NonNull ItemTouchHelper itemTouchHelper) {
-        enableDragItem(itemTouchHelper, NO_TOGGLE_VIEW, true);
-    }
-
-    /**
-     * Enable drag items. Use the specified view as toggle.
-     *
-     * @param itemTouchHelper {@link ItemTouchHelper}
-     * @param toggleViewId    The toggle view's id.
-     * @param dragOnLongPress If true the drag event will be trigger on long press, otherwise on touch down.
-     */
-    public void enableDragItem(@NonNull ItemTouchHelper itemTouchHelper, int toggleViewId, boolean dragOnLongPress) {
-        itemDragEnabled = true;
-        mItemTouchHelper = itemTouchHelper;
-        setToggleViewId(toggleViewId);
-        setToggleDragOnLongPress(dragOnLongPress);
-    }
-
-    /**
-     * Disable drag items.
-     */
-    public void disableDragItem() {
-        itemDragEnabled = false;
-        mItemTouchHelper = null;
-    }
-
-    public boolean isItemDraggable() {
-        return itemDragEnabled;
-    }
-
-    /**
-     * <p>Enable swipe items.</p>
-     * You should attach {@link ItemTouchHelper} which construct with {@link ItemDragAndSwipeCallback} to the Recycler when you enable this.
-     */
-    public void enableSwipeItem() {
-        itemSwipeEnabled = true;
-    }
-
-    public void disableSwipeItem() {
-        itemSwipeEnabled = false;
-    }
-
-    public boolean isItemSwipeEnable() {
-        return itemSwipeEnabled;
-    }
-
-    /**
-     * @param onItemDragListener Register a callback to be invoked when drag event happen.
-     */
-    public void setOnItemDragListener(OnItemDragListener onItemDragListener) {
-        mOnItemDragListener = onItemDragListener;
-    }
-
-    public int getViewHolderPosition(RecyclerView.ViewHolder viewHolder) {
-        return viewHolder.getAdapterPosition() - getHeaderViewsCount();
-    }
-
-    public void onItemDragStart(RecyclerView.ViewHolder viewHolder) {
-        if (mOnItemDragListener != null && itemDragEnabled) {
-            mOnItemDragListener.onItemDragStart(viewHolder, getViewHolderPosition(viewHolder));
-        }
-    }
-
-    public void onItemDragMoving(RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {
-        int from = getViewHolderPosition(source);
-        int to = getViewHolderPosition(target);
-
-        if (from < to) {
-            for (int i = from; i < to; i++) {
-                Collections.swap(mData, i, i + 1);
-            }
-        } else {
-            for (int i = from; i > to; i--) {
-                Collections.swap(mData, i, i - 1);
-            }
-        }
-        notifyItemMoved(source.getAdapterPosition(), target.getAdapterPosition());
-
-        if (mOnItemDragListener != null && itemDragEnabled) {
-            mOnItemDragListener.onItemDragMoving(source, from, target, to);
-        }
-    }
-
-    public void onItemDragEnd(RecyclerView.ViewHolder viewHolder) {
-        if (mOnItemDragListener != null && itemDragEnabled) {
-            mOnItemDragListener.onItemDragEnd(viewHolder, getViewHolderPosition(viewHolder));
-        }
-    }
-
-    public void setOnItemSwipeListener(OnItemSwipeListener listener) {
-        mOnItemSwipeListener = listener;
-    }
-
-    public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder) {
-        if (mOnItemSwipeListener != null && itemSwipeEnabled) {
-            mOnItemSwipeListener.onItemSwipeStart(viewHolder, getViewHolderPosition(viewHolder));
-        }
-    }
-
-    public void onItemSwipeClear(RecyclerView.ViewHolder viewHolder) {
-        if (mOnItemSwipeListener != null && itemSwipeEnabled) {
-            mOnItemSwipeListener.clearView(viewHolder, getViewHolderPosition(viewHolder));
-        }
-    }
-
-    public void onItemSwiped(RecyclerView.ViewHolder viewHolder) {
-        if (mOnItemSwipeListener != null && itemSwipeEnabled) {
-            mOnItemSwipeListener.onItemSwiped(viewHolder, getViewHolderPosition(viewHolder));
-        }
-
-        int pos = getViewHolderPosition(viewHolder);
-
-        mData.remove(pos);
-        notifyItemRemoved(viewHolder.getAdapterPosition());
-    }
-
-    public void onItemSwiping(Canvas canvas, RecyclerView.ViewHolder viewHolder, float dX, float dY, boolean isCurrentlyActive) {
-        if (mOnItemSwipeListener != null && itemSwipeEnabled) {
-            mOnItemSwipeListener.onItemSwipeMoving(canvas, viewHolder, dX, dY, isCurrentlyActive);
-        }
     }
 
 }

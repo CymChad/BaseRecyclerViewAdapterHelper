@@ -6,11 +6,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.ItemDragAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -107,6 +110,8 @@ public class ItemDragAndSwipeUseActivity extends Activity {
         mAdapter.enableDragItem(mItemTouchHelper);
         mAdapter.setOnItemDragListener(listener);
 
+        mAdapter.addHeaderView(getView());
+        mAdapter.addFooterView(getView());
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -116,6 +121,13 @@ public class ItemDragAndSwipeUseActivity extends Activity {
             data.add("item " + i);
         }
         return data;
+    }
+
+    private View getView() {
+        View view = getLayoutInflater().inflate(R.layout.head_view, null);
+        view.findViewById(R.id.tv).setVisibility(View.GONE);
+        view.setLayoutParams(new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        return view;
     }
 
 }

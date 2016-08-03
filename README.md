@@ -32,7 +32,7 @@ allprojects {
 Add the dependency
 ```groovy
 dependencies {
-        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.8.8'
+        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.9.7'
 }
 ```
 
@@ -145,8 +145,15 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
 #Use it add header and footer
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/header_footer.gif)
 ```java
+// add
 mQuickAdapter.addHeaderView(getView());
 mQuickAdapter.addFooterView(getView());
+// remove
+removeHeaderView(getView);
+removeFooterView(getView);
+// or
+removeAllHeaderView();
+removeAllFooterView();
 ```
 #Use it load more
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/load_more.gif)
@@ -189,7 +196,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
     @Override
     protected void convertHead(BaseViewHolder helper,final MySection item) {
         helper.setText(R.id.header, item.header);
-        else
+        
         helper.setOnClickListener(R.id.more, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -223,6 +230,19 @@ OnItemSwipeListener onItemSwipeListener = new OnItemSwipeListener() {
     @Override
     public void onItemSwiped(RecyclerView.ViewHolder viewHolder, int pos) {}
 };
+
+public class ItemDragAdapter extends BaseItemDraggableAdapter<String> {
+    public ItemDragAdapter(List data) {
+        super(R.layout.item_draggable_view, data);
+    }
+
+    @Override
+    protected void convert(BaseViewHolder helper, String item) {
+        helper.setText(R.id.tv, item);
+    }
+}
+
+mAdapter = new ItemDragAdapter(mData);
 
 ItemDragAndSwipeCallback itemDragAndSwipeCallback = new ItemDragAndSwipeCallback(mAdapter);
 ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDragAndSwipeCallback);

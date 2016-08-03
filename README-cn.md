@@ -3,10 +3,11 @@
 - 「[BaseRecyclerAdapter之添加动画](http://www.jianshu.com/p/fa3f97c19263)」
 - 「[BaseRecyclerAdapter之添加不同布局（头部尾部）](http://www.jianshu.com/p/9d75c22f0964)」
 - 「[BaseRecyclerAdapter之添加不同布局（优化篇）](http://www.jianshu.com/p/cf29d4e45536)」
-- 「[分析整合版](http://www.jianshu.com/p/b1ad50633732)」
-
+- 「[BaseRecyclerAdapter之分组功能原理分析](http://www.jianshu.com/p/87a49f732724)」
+- 「[RecyclerView相关优秀文集](https://github.com/CymChad/CymChad.github.io)」  
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-BaseRecyclerViewAdapterHelper-green.svg?style=true)](https://android-arsenal.com/details/1/3644)
 [![](https://jitpack.io/v/CymChad/BaseRecyclerViewAdapterHelper.svg)](https://jitpack.io/#CymChad/BaseRecyclerViewAdapterHelper)
+
 # BaseRecyclerViewAdapterHelper
 ![logo](http://upload-images.jianshu.io/upload_images/972352-1d77e0a75a4a7c0a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)  
 一个强大并且灵活的RecyclerViewAdapter，欢迎使用。（喜欢的可以**Star**一下）
@@ -37,13 +38,13 @@
 然后在dependencies添加:
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.8.8'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.9.7'
 	}
 ```
 
 #如何使用它来创建Adapter？
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/item_view.png)
-```
+```java
 public class QuickAdapter extends BaseQuickAdapter<Status> {
     public QuickAdapter() {
         super(R.layout.tweet, DataServer.getSampleData());
@@ -62,20 +63,20 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
 ```
 #如何添加item点击、长按事件
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/chlid_click.gif)
-```
+```java
 mQuickAdapter.setOnRecyclerViewItemClickListener();
 mQuickAdapter.setOnRecyclerViewItemLongClickListener();
 ```
 #新增添加子布局多个控件的点击事件
 Adapter
-```
+```java
  protected void convert(BaseViewHolder helper, Status item) {
     helper.setOnClickListener(R.id.tweetAvatar, new OnItemChildClickListener())
       .setOnClickListener(R.id.tweetName, new OnItemChildClickListener());
       }
 ```
 Activity
-```
+```java
 mQuickAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -95,17 +96,17 @@ mQuickAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRec
 ```
 #如何使用它添加动画？
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/animation.gif)
-```
+```java
 // 一行代码搞定（默认为渐显效果）
 quickAdapter.openLoadAnimation();
 ```
 不喜欢渐显动画可以这样更换
-```
+```java
 // 默认提供5种方法（渐显、缩放、从下到上，从左到右、从右到左）
 quickAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
 ```
 还是没你喜欢的，你可以自定义
-```
+```java
 // 自定义动画如此轻松
 quickAdapter.openLoadAnimation(new BaseAnimation() {
                             @Override
@@ -119,13 +120,20 @@ quickAdapter.openLoadAnimation(new BaseAnimation() {
 ```
 #使用它添加头部添加尾部
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/header_footer.gif)
-```
+```java
+// add
 mQuickAdapter.addHeaderView(getView());
 mQuickAdapter.addFooterView(getView());
+// remove
+removeHeaderView(getView);
+removeFooterView(getView);
+// or
+removeAllHeaderView();
+removeAllFooterView();
 ```
 #使用它加载更多
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/load_more.gif)
-```
+```java
 mQuickAdapter.openLoadMore(PAGE_SIZE, true);
 mQuickAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
@@ -146,12 +154,12 @@ mQuickAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener
         });
 ```
 #设置自定义加载更多布局
-```
+```java
 mQuickAdapter.setLoadingView(customView);
 ```
 #使用分组
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/section_headers.gif)
-```
+```java
 public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
      public SectionAdapter(int layoutResId, int sectionHeadResId, List data) {
         super(layoutResId, sectionHeadResId, data);
@@ -163,7 +171,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
     @Override
     protected void convertHead(BaseViewHolder helper,final MySection item) {
         helper.setText(R.id.header, item.header);
-        else
+       
         helper.setOnClickListener(R.id.more, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,7 +182,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
 ```
 #如何添加多种类型item？
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/multiple_item.gif)
-```
+```java
 public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem> {
 
     public MultipleItemQuickAdapter(List data) {
@@ -199,7 +207,7 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
 ```
 #使用setEmptyView
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/empty_view.gif)
-```
+```java
 mQuickAdapter.setEmptyView(getView());
 ```
 #使用拖拽与滑动删除
@@ -222,6 +230,19 @@ OnItemSwipeListener onItemSwipeListener = new OnItemSwipeListener() {
     @Override
     public void onItemSwiped(RecyclerView.ViewHolder viewHolder, int pos) {}
 };
+
+public class ItemDragAdapter extends BaseItemDraggableAdapter<String> {
+    public ItemDragAdapter(List data) {
+        super(R.layout.item_draggable_view, data);
+    }
+
+    @Override
+    protected void convert(BaseViewHolder helper, String item) {
+        helper.setText(R.id.tv, item);
+    }
+}
+
+mAdapter = new ItemDragAdapter(mData);
 
 ItemDragAndSwipeCallback itemDragAndSwipeCallback = new ItemDragAndSwipeCallback(mAdapter);
 ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDragAndSwipeCallback);

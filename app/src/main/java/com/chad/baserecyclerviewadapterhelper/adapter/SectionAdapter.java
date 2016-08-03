@@ -27,7 +27,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
     @Override
     protected void convertHead(BaseViewHolder helper,final MySection item) {
         helper.setText(R.id.header, item.header);
-        helper.setVisible(R.id.more,item.isMroe());
+        helper.setVisible(R.id.more,item.isMore());
         helper.setOnClickListener(R.id.more,new OnItemChildClickListener());
     }
 
