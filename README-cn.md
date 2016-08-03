@@ -92,7 +92,7 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
                 Toast.makeText(RecyclerClickItemActivity.this, "收到长按事件" + Integer.toString(position), Toast.LENGTH_SHORT).show();
             }
 ```
-
+![addOnItemTouchListener](http://7xs9qs.com1.z0.glb.clouddn.com/B001F6D5-E057-4202-9312-8953D9B60E18.png)
 #如果需要给 childView 设置点击事件
 ```
  helper.addOnClickListener(R.id.tweetAvatar)
