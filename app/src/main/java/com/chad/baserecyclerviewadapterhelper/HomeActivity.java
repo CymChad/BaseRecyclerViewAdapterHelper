@@ -18,9 +18,9 @@ import java.util.ArrayList;
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 public class HomeActivity extends Activity {
-    private static final Class<?>[] ACTIVITY = {AnimationUseActivity.class, MultipleItemUseActivity.class, HeaderAndFooterUseActivity.class, PullToRefreshUseActivity.class, SectionUseActivity.class, EmptyViewUseActivity.class, ItemDragAndSwipeUseActivity.class};
-    private static final String[] TITLE = {"Animation Use", "MultipleItem Use", "HeaderAndFooter Use", "PullToRefresh Use", "Section Use", "EmptyView Use", "ItemDragAndSwipe Use"};
-    private static final String[] COLOR_STR = {"#0dddb8","#0bd4c3","#03cdcd","#00b1c5","#04b2d1","#04b2d1","#04b2d1"};
+    private static final Class<?>[] ACTIVITY = {AnimationUseActivity.class, MultipleItemUseActivity.class, HeaderAndFooterUseActivity.class, PullToRefreshUseActivity.class, SectionUseActivity.class, EmptyViewUseActivity.class, ItemDragAndSwipeUseActivity.class,RecyclerClickItemActivity.class};
+    private static final String[] TITLE = {"Animation Use", "MultipleItem Use", "HeaderAndFooter Use", "PullToRefresh Use", "Section Use", "EmptyView Use", "ItemDragAndSwipe Use","RecyclerClickItemActivity"};
+    private static final String[] COLOR_STR = {"#0dddb8","#0bd4c3","#03cdcd","#00b1c5","#04b2d1","#04b2d1","#04b2d1","#04b2d1"};
     private ArrayList<HomeItem> mDataList;
     private RecyclerView mRecyclerView;
 
@@ -43,7 +43,7 @@ public class HomeActivity extends Activity {
         homeAdapter.setOnRecyclerViewItemLongClickListener(new BaseQuickAdapter.OnRecyclerViewItemLongClickListener() {
             @Override
             public boolean onItemLongClick(View view, int position) {
-                Toast.makeText(HomeActivity.this,"onItemLongClick",Toast.LENGTH_LONG).show();
+                Toast.makeText(HomeActivity.this,"onItemLongClickHelper",Toast.LENGTH_LONG).show();
                 return true;
             }
         });
