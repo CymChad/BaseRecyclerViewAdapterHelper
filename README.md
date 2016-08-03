@@ -19,6 +19,8 @@ Please feel free to use this.(Love can be a **Star**)
 - **add setEmptyView methods**
 - **add drag item**
 
+#Extension library
+[PinnedSectionItemDecoration](https://github.com/oubowu/PinnedSectionItemDecoration)
 # Get it
 Add it in your root build.gradle at the end of repositories:
 ```groovy
