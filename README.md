@@ -57,14 +57,106 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
 ```
 #Use it item click and item chlid click
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/chlid_click.gif)
+#Use it item  click 
+Adapter
 ```java
-mQuickAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
-    @Override
-    public void onItemClick(View view, int position) {
-        //..
-    }
-});
+mRecyclerView.addOnItemTouchListener(new OnItemClickListener(mRecyclerView,mQuickAdapter){
+
+            @Override
+            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+                
+            }
+        });
+        
 ```
+#Use it item child click
+first you should add child view id
+``` 
+ @Override
+    protected void convert(BaseViewHolder helper, Status item) {
+        helper.setText(R.id.tweetName, item.getUserName())
+                .setText(R.id.tweetText, item.getText())
+                .setText(R.id.tweetDate, item.getCreatedAt())
+                .setVisible(R.id.tweetRT, item.isRetweet())
+                .addOnClickListener(R.id.tweetAvatar)
+                .addOnClickListener(R.id.tweetName)
+                .addOnLongClickListener(R.id.tweetText)
+                .linkify(R.id.tweetText);
+        Glide.with(mContext).load(item.getUserAvatar()).crossFade().placeholder(R.mipmap.def_head).transform(new GlideCircleTransform(mContext)).into((ImageView) helper.getView(R.id.tweetAvatar));
+    }
+```
+and then
+
+```java
+   mRecyclerView.addOnItemTouchListener(new OnItemChildClickListener(mRecyclerView,mQuickAdapter) {
+            @Override
+            public void SimpleOnItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+```
+#Use it item long click
+```java
+ mRecyclerView.addOnItemTouchListener(new OnItemLongClickListener(mRecyclerView,mQuickAdapter) {
+            @Override
+            public void SimpleOnItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+```
+#use it item child long click
+first you should add child view id
+``` 
+ @Override
+    protected void convert(BaseViewHolder helper, Status item) {
+        helper.setText(R.id.tweetName, item.getUserName())
+                .setText(R.id.tweetText, item.getText())
+                .setText(R.id.tweetDate, item.getCreatedAt())
+                .setVisible(R.id.tweetRT, item.isRetweet())
+                .addOnClickListener(R.id.tweetAvatar)
+                .addOnClickListener(R.id.tweetName)
+                .addOnLongClickListener(R.id.tweetText)
+                .linkify(R.id.tweetText);
+        Glide.with(mContext).load(item.getUserAvatar()).crossFade().placeholder(R.mipmap.def_head).transform(new GlideCircleTransform(mContext)).into((ImageView) helper.getView(R.id.tweetAvatar));
+    }
+```
+and then
+```java
+ mRecyclerView.addOnItemTouchListener(new OnItemChildLongClickListener(mRecyclerView,mQuickAdapter) {
+            @Override
+            public void SimpleOnItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+            }
+        });
+```
+#if you wish to implement various forms of click
+```java
+ mRecyclerView.addOnItemTouchListener(new SimpleClickListener(mRecyclerView, mQuickAdapter) {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+            }
+        });
+``` 
+
 #Use it item chlid click
 Adapter
 ```java

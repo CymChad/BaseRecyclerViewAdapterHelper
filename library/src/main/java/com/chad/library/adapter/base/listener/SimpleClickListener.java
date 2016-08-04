@@ -12,30 +12,35 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import java.util.Iterator;
 import java.util.Set;
 
+import static com.chad.library.adapter.base.BaseQuickAdapter.EMPTY_VIEW;
+import static com.chad.library.adapter.base.BaseQuickAdapter.FOOTER_VIEW;
+import static com.chad.library.adapter.base.BaseQuickAdapter.HEADER_VIEW;
+import static com.chad.library.adapter.base.BaseQuickAdapter.LOADING_VIEW;
+
 /**
  * Created by AllenCoder on 2016/8/03.
  *
  * This can be useful for applications that wish to implement various forms of click and longclick and childView click
- * manipulation of item views within the RecyclerView. SimpleRecyclerViewClickListener may intercept
- * a touch interaction already in progress even if the SimpleRecyclerViewClickListener is already handling that
+ * manipulation of item views within the RecyclerView. SimpleClickListener may intercept
+ * a touch interaction already in progress even if the SimpleClickListener is already handling that
  * gesture stream itself for the purposes of scrolling.
  *
  * @see RecyclerView.OnItemTouchListener
  */
-public abstract class SimpleRecyclerViewClickListener implements RecyclerView.OnItemTouchListener {
+public abstract class SimpleClickListener implements RecyclerView.OnItemTouchListener {
     private GestureDetectorCompat mGestureDetector;
     private RecyclerView recyclerView;
     private Set<Integer> childClickViewIds;
     private Set<Integer> longClickViewIds;
     protected BaseQuickAdapter baseQuickAdapter;
-    public static String TAG = "SimpleRecyclerViewClickListener";
+    public static String TAG = "SimpleClickListener";
 
     /**
      * @param recyclerView     the parent recycleView
      * @param baseQuickAdapter this helper need the BaseQuickAdapter
      */
 
-    public SimpleRecyclerViewClickListener(RecyclerView recyclerView, BaseQuickAdapter baseQuickAdapter) {
+    public SimpleClickListener(RecyclerView recyclerView, BaseQuickAdapter baseQuickAdapter) {
         this.recyclerView = recyclerView;
         this.baseQuickAdapter = baseQuickAdapter;
         mGestureDetector = new GestureDetectorCompat(recyclerView.getContext(), new ItemTouchHelperGestureListener());
@@ -63,6 +68,14 @@ public abstract class SimpleRecyclerViewClickListener implements RecyclerView.On
 
             if (child != null) {
                 BaseViewHolder vh = (BaseViewHolder) recyclerView.getChildViewHolder(child);
+
+                /**
+                 *  have a headview and EMPTY_VIEW FOOTER_VIEW LOADING_VIEW
+                 */
+                int type= baseQuickAdapter.getItemViewType(vh.getLayoutPosition());
+                if (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW){
+                    return false;
+                }
                 childClickViewIds = vh.getChildClickViewIds();
 
                 if (childClickViewIds != null && childClickViewIds.size() > 0) {
@@ -73,6 +86,7 @@ public abstract class SimpleRecyclerViewClickListener implements RecyclerView.On
                             return true;
                         }
                     }
+
 
                     onItemClick(baseQuickAdapter,child, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
                 } else {
@@ -89,6 +103,7 @@ public abstract class SimpleRecyclerViewClickListener implements RecyclerView.On
             View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
             if (child != null) {
                 BaseViewHolder vh = (BaseViewHolder) recyclerView.getChildViewHolder(child);
+
                 longClickViewIds =vh.getItemChildLongClickViewIds();
                 if (longClickViewIds!=null&&longClickViewIds.size()>0){
                     for (Iterator it = longClickViewIds.iterator(); it.hasNext(); ) {

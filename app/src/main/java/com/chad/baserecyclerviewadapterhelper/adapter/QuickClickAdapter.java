@@ -1,6 +1,5 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -33,8 +32,6 @@ public class QuickClickAdapter extends BaseQuickAdapter<Status> {
                 .addOnClickListener(R.id.tweetName)
                 .addOnLongClickListener(R.id.tweetText)
                 .linkify(R.id.tweetText);
-        Log.d(TAG, "convert: "+R.id.tweetAvatar);
-        Log.d(TAG, "convert: "+R.id.tweetName);
         Glide.with(mContext).load(item.getUserAvatar()).crossFade().placeholder(R.mipmap.def_head).transform(new GlideCircleTransform(mContext)).into((ImageView) helper.getView(R.id.tweetAvatar));
     }
 

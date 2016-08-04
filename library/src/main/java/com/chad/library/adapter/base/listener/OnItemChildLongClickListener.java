@@ -6,20 +6,21 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 /**
- * create by: allen on 16/8/3.
- */
-
-public abstract class OnRecyclerViewItemLongClickListener extends SimpleRecyclerViewClickListener {
+ * Created by AllenCoder on 2016/8/03.
+ * A convenience class to extend when you only want to OnItemChildLongClickListener for a subset
+ * of all the SimpleClickListener. This implements all methods in the
+ * {@link SimpleClickListener}
+ **/
+public abstract class OnItemChildLongClickListener extends SimpleClickListener {
 
 
     /**
      * @param recyclerView     the parent recycleView
      * @param baseQuickAdapter this helper need the BaseQuickAdapter
      */
-    public OnRecyclerViewItemLongClickListener(RecyclerView recyclerView, BaseQuickAdapter baseQuickAdapter) {
+    public OnItemChildLongClickListener(RecyclerView recyclerView, BaseQuickAdapter baseQuickAdapter) {
         super(recyclerView, baseQuickAdapter);
     }
-
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -28,7 +29,7 @@ public abstract class OnRecyclerViewItemLongClickListener extends SimpleRecycler
 
     @Override
     public void onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-        SimpleOnItemLongClick( adapter,  view,  position);
+
     }
 
     @Override
@@ -38,6 +39,7 @@ public abstract class OnRecyclerViewItemLongClickListener extends SimpleRecycler
 
     @Override
     public void onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
+        SimpleOnItemChildLongClick(adapter,view,position);
     }
-    public abstract void SimpleOnItemLongClick(BaseQuickAdapter adapter, View view, int position);
+    public abstract void SimpleOnItemChildLongClick(BaseQuickAdapter adapter, View view, int position);
 }
