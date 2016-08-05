@@ -6,6 +6,7 @@
 - 「[BaseRecyclerAdapter之分组功能原理分析](http://www.jianshu.com/p/87a49f732724)」
 - 「[RecyclerView相关优秀文集](https://github.com/CymChad/CymChad.github.io)」
 - 「[BRVAH分享吧](https://github.com/CymChad/BRVAHST)」  
+
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-BaseRecyclerViewAdapterHelper-green.svg?style=true)](https://android-arsenal.com/details/1/3644)
 [![](https://jitpack.io/v/CymChad/BaseRecyclerViewAdapterHelper.svg)](https://jitpack.io/#CymChad/BaseRecyclerViewAdapterHelper)
 
