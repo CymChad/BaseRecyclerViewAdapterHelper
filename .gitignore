@@ -28,3 +28,14 @@ proguard/
 .gradle
 .idea
 build
+<<<<<<< HEAD
+/build.gradle
+/.idea/
+
+build.gradle
+
+.idea/misc.xml
+=======
+.DS_Store
+
+/app/.gitignore
