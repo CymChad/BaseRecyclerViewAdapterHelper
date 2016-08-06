@@ -21,7 +21,7 @@ public class RecyclerClickItemActivity extends Activity {
 
     private RecyclerView mRecyclerView;
     private QuickClickAdapter mQuickAdapter;
-    private static final int PAGE_SIZE = 100;
+    private static final int PAGE_SIZE = 10;
     private static String TAG = "RecyclerClickItemActivity";
 
     @Override
@@ -31,8 +31,8 @@ public class RecyclerClickItemActivity extends Activity {
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         initAdapter();
-        mQuickAdapter.addHeaderView(getView());
-        mQuickAdapter.addFooterView(getView());
+        mQuickAdapter.addHeaderView(getHeadView());
+        mQuickAdapter.addFooterView(getFootView());
         mRecyclerView.setAdapter(mQuickAdapter);
         /**
          * Item  clcik
@@ -50,10 +50,10 @@ public class RecyclerClickItemActivity extends Activity {
                 super.onItemChildClick(adapter, view, position);
                 switch (view.getId()) {
                     case R.id.tweetAvatar:
-                        Toast.makeText(RecyclerClickItemActivity.this, "R.id.tweetAvatar click" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RecyclerClickItemActivity.this, "The " + Integer.toString(position)+" tweetAvatar  is clicked", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.tweetName:
-                        Toast.makeText(RecyclerClickItemActivity.this, "R.id.tweetName click" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RecyclerClickItemActivity.this, "The " + Integer.toString(position)+" tweetName  is clicked", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         break;
@@ -64,14 +64,14 @@ public class RecyclerClickItemActivity extends Activity {
             @Override
             public void onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
                 super.onItemLongClick(adapter, view, position);
-                Toast.makeText(RecyclerClickItemActivity.this, "ItemLongClick" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+                Toast.makeText(RecyclerClickItemActivity.this,"The " + Integer.toString(position)+ " Item is LongClick ", Toast.LENGTH_SHORT).show();
 
             }
 
             @Override
             public void onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
                 super.onItemChildLongClick(adapter, view, position);
-                Toast.makeText(RecyclerClickItemActivity.this, view.getId() + " getLongClick" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+                Toast.makeText(RecyclerClickItemActivity.this, "The "+ Integer.toString(position)+"  view itemchild " + "is LongClick " + Integer.toString(position), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -122,19 +122,30 @@ public class RecyclerClickItemActivity extends Activity {
         });*/
     }
 
-    private View getView() {
+    private View getHeadView() {
         View view = getLayoutInflater().inflate(R.layout.head_view, null);
         view.findViewById(R.id.tv).setVisibility(View.GONE);
         view.setLayoutParams(new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(RecyclerClickItemActivity.this, "click View", Toast.LENGTH_LONG).show();
+                Toast.makeText(RecyclerClickItemActivity.this, "click headView", Toast.LENGTH_LONG).show();
             }
         });
         return view;
     }
-
+    private View getFootView() {
+        View view = getLayoutInflater().inflate(R.layout.head_view, null);
+        view.findViewById(R.id.tv).setVisibility(View.GONE);
+        view.setLayoutParams(new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(RecyclerClickItemActivity.this, "click FootView", Toast.LENGTH_LONG).show();
+            }
+        });
+        return view;
+    }
     private void initAdapter() {
         mQuickAdapter = new QuickClickAdapter(PAGE_SIZE);
         mQuickAdapter.openLoadAnimation();

@@ -63,7 +63,6 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
     }
 }
 ```
-#设置 item  click 
 Adapter
 ```java
 mRecyclerView.addOnItemTouchListener(new OnItemClickListener(mRecyclerView,mQuickAdapter){
@@ -76,6 +75,7 @@ mRecyclerView.addOnItemTouchListener(new OnItemClickListener(mRecyclerView,mQuic
         });
         
 ```
+#设置 item  click  新增添加子布局多个控件的点击事件
 #设置 it item child click
 首先需要添加需要点击触发的 childview id 
 ``` 
@@ -92,7 +92,7 @@ mRecyclerView.addOnItemTouchListener(new OnItemClickListener(mRecyclerView,mQuic
         Glide.with(mContext).load(item.getUserAvatar()).crossFade().placeholder(R.mipmap.def_head).transform(new GlideCircleTransform(mContext)).into((ImageView) helper.getView(R.id.tweetAvatar));
     }
 ```
-然后
+Activity
 ```java
    mRecyclerView.addOnItemTouchListener(new OnItemChildClickListener(mRecyclerView,mQuickAdapter) {
             @Override
@@ -162,45 +162,7 @@ mRecyclerView.addOnItemTouchListener(new OnItemClickListener(mRecyclerView,mQuic
         });
 ``` 
 
-![addOnItemTouchListener](http://7xs9qs.com1.z0.glb.clouddn.com/B001F6D5-E057-4202-9312-8953D9B60E18.png)
-#如果需要给 childView 设置点击事件
-```
- helper.addOnClickListener(R.id.tweetAvatar)
-       .addOnClickListener(R.id.tweetName);
-```
-#如何添加item点击、长按事件
-![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/chlid_click.gif)
-```java
-mQuickAdapter.setOnRecyclerViewItemClickListener();
-mQuickAdapter.setOnRecyclerViewItemLongClickListener();
-```
-#新增添加子布局多个控件的点击事件
-Adapter
-```java
- protected void convert(BaseViewHolder helper, Status item) {
-    helper.setOnClickListener(R.id.tweetAvatar, new OnItemChildClickListener())
-      .setOnClickListener(R.id.tweetName, new OnItemChildClickListener());
-      }
-```
-Activity
-```java
-mQuickAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                String content = null;
-                Status status = (Status) adapter.getItem(position);
-                switch (view.getId()) {
-                    case R.id.tweetAvatar:
-                        content = "img:" + status.getUserAvatar();
-                        break;
-                    case R.id.tweetName:
-                        content = "name:" + status.getUserName();
-                        break;
-                }
-                Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
-            }
-        });
-```
+
 #如何使用它添加动画？
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/animation.gif)
 ```java

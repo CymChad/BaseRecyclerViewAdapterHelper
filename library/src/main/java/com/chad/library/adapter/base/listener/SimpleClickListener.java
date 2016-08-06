@@ -103,18 +103,21 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
             View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
             if (child != null) {
                 BaseViewHolder vh = (BaseViewHolder) recyclerView.getChildViewHolder(child);
-
-                longClickViewIds =vh.getItemChildLongClickViewIds();
-                if (longClickViewIds!=null&&longClickViewIds.size()>0){
-                    for (Iterator it = longClickViewIds.iterator(); it.hasNext(); ) {
-                        View childView = child.findViewById((Integer) it.next());
-                        if (inRangeOfView(childView, e)) {
-                            onItemChildLongClick(baseQuickAdapter,childView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
-                            return ;
+                int type= baseQuickAdapter.getItemViewType(vh.getLayoutPosition());
+                if (type != EMPTY_VIEW && type != HEADER_VIEW && type != FOOTER_VIEW && type != LOADING_VIEW){
+                    longClickViewIds =vh.getItemChildLongClickViewIds();
+                    if (longClickViewIds!=null&&longClickViewIds.size()>0){
+                        for (Iterator it = longClickViewIds.iterator(); it.hasNext(); ) {
+                            View childView = child.findViewById((Integer) it.next());
+                            if (inRangeOfView(childView, e)) {
+                                onItemChildLongClick(baseQuickAdapter,childView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
+                                return ;
+                            }
                         }
                     }
+                    onItemLongClick(baseQuickAdapter,child, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
                 }
-                onItemLongClick(baseQuickAdapter,child, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
+
             }
         }
 

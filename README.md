@@ -3,7 +3,7 @@
 # BaseRecyclerViewAdapterHelper（[中文版文档](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/README-cn.md)）
 ![Paste_Image.png](http://upload-images.jianshu.io/upload_images/972352-1d77e0a75a4a7c0a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)  
 Powerful and flexible RecyclerAdapter 
-Please feel free to use this.(Love can be a **Star**)
+Please feel free to use this.(Welcome to **Star** and **Fork**)
 ## Google Play Demo
 
 [![Get it on Google Play](https://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=com.chad.baserecyclerviewadapterhelper)
@@ -73,7 +73,7 @@ mRecyclerView.addOnItemTouchListener(new OnItemClickListener(mRecyclerView,mQuic
         
 ```
 #Use it item child click
-first you should add child view id
+first you should register child view id 
 ``` 
  @Override
     protected void convert(BaseViewHolder helper, Status item) {
@@ -110,7 +110,7 @@ and then
         });
 ```
 #use it item child long click
-first you should add child view id
+Adapter
 ``` 
  @Override
     protected void convert(BaseViewHolder helper, Status item) {
@@ -125,7 +125,7 @@ first you should add child view id
         Glide.with(mContext).load(item.getUserAvatar()).crossFade().placeholder(R.mipmap.def_head).transform(new GlideCircleTransform(mContext)).into((ImageView) helper.getView(R.id.tweetAvatar));
     }
 ```
-and then
+Activity
 ```java
  mRecyclerView.addOnItemTouchListener(new OnItemChildLongClickListener(mRecyclerView,mQuickAdapter) {
             @Override
@@ -135,6 +135,7 @@ and then
         });
 ```
 #if you wish to implement various forms of click
+Activity
 ```java
  mRecyclerView.addOnItemTouchListener(new SimpleClickListener(mRecyclerView, mQuickAdapter) {
             @Override
@@ -159,33 +160,7 @@ and then
         });
 ``` 
 
-#Use it item chlid click
-Adapter
-```java
-protected void convert(BaseViewHolder helper, Status item) {
-	helper.setOnClickListener(R.id.tweetAvatar, new OnItemChildClickListener())
-		.setOnClickListener(R.id.tweetName, new OnItemChildClickListener());
-}
-```
-Activity
-```java
-mQuickAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                String content = null;
-                Status status = (Status) adapter.getItem(position);
-                switch (view.getId()) {
-                    case R.id.tweetAvatar:
-                        content = "img:" + status.getUserAvatar();
-                        break;
-                    case R.id.tweetName:
-                        content = "name:" + status.getUserName();
-                        break;
-                }
-                Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
-            }
-        });
-```
+
 
 #Use it add adaptar Animation
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/animation.gif)
