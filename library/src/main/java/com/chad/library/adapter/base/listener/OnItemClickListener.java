@@ -1,6 +1,5 @@
 package com.chad.library.adapter.base.listener;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -14,9 +13,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
  * {@link SimpleClickListener}
  */
 public abstract   class OnItemClickListener extends SimpleClickListener {
-    public OnItemClickListener(RecyclerView recyclerView, BaseQuickAdapter baseQuickAdapter) {
-        super(recyclerView, baseQuickAdapter);
-    }
+
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {

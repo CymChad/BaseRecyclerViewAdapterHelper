@@ -2,6 +2,7 @@ package com.chad.library.adapter.base.listener;
 
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,7 +20,7 @@ import static com.chad.library.adapter.base.BaseQuickAdapter.LOADING_VIEW;
 
 /**
  * Created by AllenCoder on 2016/8/03.
- *
+ * <p>
  * This can be useful for applications that wish to implement various forms of click and longclick and childView click
  * manipulation of item views within the RecyclerView. SimpleClickListener may intercept
  * a touch interaction already in progress even if the SimpleClickListener is already handling that
@@ -35,25 +36,21 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
     protected BaseQuickAdapter baseQuickAdapter;
     public static String TAG = "SimpleClickListener";
 
-    /**
-     * @param recyclerView     the parent recycleView
-     * @param baseQuickAdapter this helper need the BaseQuickAdapter
-     */
-
-    public SimpleClickListener(RecyclerView recyclerView, BaseQuickAdapter baseQuickAdapter) {
-        this.recyclerView = recyclerView;
-        this.baseQuickAdapter = baseQuickAdapter;
-        mGestureDetector = new GestureDetectorCompat(recyclerView.getContext(), new ItemTouchHelperGestureListener());
-    }
 
     @Override
     public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+        if (recyclerView == null) {
+            this.recyclerView = rv;
+            this.baseQuickAdapter = (BaseQuickAdapter) recyclerView.getAdapter();
+            mGestureDetector = new GestureDetectorCompat(recyclerView.getContext(), new ItemTouchHelperGestureListener(recyclerView));
+        }
         mGestureDetector.onTouchEvent(e);
         return false;
     }
 
     @Override
     public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+        Log.e(TAG, "onTouchEvent: ");
         mGestureDetector.onTouchEvent(e);
     }
 
@@ -62,6 +59,12 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
     }
 
     private class ItemTouchHelperGestureListener extends GestureDetector.SimpleOnGestureListener {
+        private RecyclerView recyclerView;
+
+        public ItemTouchHelperGestureListener(RecyclerView recyclerView) {
+            this.recyclerView = recyclerView;
+        }
+
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
@@ -69,11 +72,7 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
             if (child != null) {
                 BaseViewHolder vh = (BaseViewHolder) recyclerView.getChildViewHolder(child);
 
-                /**
-                 *  have a headview and EMPTY_VIEW FOOTER_VIEW LOADING_VIEW
-                 */
-                int type= baseQuickAdapter.getItemViewType(vh.getLayoutPosition());
-                if (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW){
+                if (isHeaderOrFooterPosition(vh.getLayoutPosition())) {
                     return false;
                 }
                 childClickViewIds = vh.getChildClickViewIds();
@@ -82,15 +81,15 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
                     for (Iterator it = childClickViewIds.iterator(); it.hasNext(); ) {
                         View childView = child.findViewById((Integer) it.next());
                         if (inRangeOfView(childView, e)) {
-                            onItemChildClick(baseQuickAdapter,childView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
+                            onItemChildClick(baseQuickAdapter, childView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
                             return true;
                         }
                     }
 
 
-                    onItemClick(baseQuickAdapter,child, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
+                    onItemClick(baseQuickAdapter, child, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
                 } else {
-                    onItemClick(baseQuickAdapter,child, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
+                    onItemClick(baseQuickAdapter, child, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
                 }
 
 
@@ -103,19 +102,18 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
             View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
             if (child != null) {
                 BaseViewHolder vh = (BaseViewHolder) recyclerView.getChildViewHolder(child);
-                int type= baseQuickAdapter.getItemViewType(vh.getLayoutPosition());
-                if (type != EMPTY_VIEW && type != HEADER_VIEW && type != FOOTER_VIEW && type != LOADING_VIEW){
-                    longClickViewIds =vh.getItemChildLongClickViewIds();
-                    if (longClickViewIds!=null&&longClickViewIds.size()>0){
+                if (!isHeaderOrFooterPosition(vh.getLayoutPosition())) {
+                    longClickViewIds = vh.getItemChildLongClickViewIds();
+                    if (longClickViewIds != null && longClickViewIds.size() > 0) {
                         for (Iterator it = longClickViewIds.iterator(); it.hasNext(); ) {
                             View childView = child.findViewById((Integer) it.next());
                             if (inRangeOfView(childView, e)) {
-                                onItemChildLongClick(baseQuickAdapter,childView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
-                                return ;
+                                onItemChildLongClick(baseQuickAdapter, childView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
+                                return;
                             }
                         }
                     }
-                    onItemLongClick(baseQuickAdapter,child, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
+                    onItemLongClick(baseQuickAdapter, child, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
                 }
 
             }
@@ -132,7 +130,7 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
      *                 will be a view provided by the adapter)
      * @param position The position of the view in the adapter.
      */
-    public abstract void onItemClick(BaseQuickAdapter adapter,View view, int position);
+    public abstract void onItemClick(BaseQuickAdapter adapter, View view, int position);
 
     /**
      * callback method to be invoked when an item in this view has been
@@ -142,8 +140,10 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
      * @param position The position of the view int the adapter
      * @return true if the callback consumed the long click ,false otherwise
      */
-    public abstract void onItemLongClick(BaseQuickAdapter adapter,View view, int position);
+    public abstract void onItemLongClick(BaseQuickAdapter adapter, View view, int position);
+
     public abstract void onItemChildClick(BaseQuickAdapter adapter, View view, int position);
+
     public abstract void onItemChildLongClick(BaseQuickAdapter adapter, View view, int position);
 
     public boolean inRangeOfView(View view, MotionEvent ev) {
@@ -160,6 +160,13 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
         return true;
     }
 
+    private boolean isHeaderOrFooterPosition(int position) {
+        /**
+         *  have a headview and EMPTY_VIEW FOOTER_VIEW LOADING_VIEW
+         */
+        int type = baseQuickAdapter.getItemViewType(position);
+        return (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW);
+    }
 
 }
 

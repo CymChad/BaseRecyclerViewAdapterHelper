@@ -1,6 +1,5 @@
 package com.chad.library.adapter.base.listener;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -12,13 +11,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 public abstract class OnItemLongClickListener extends SimpleClickListener {
 
 
-    /**
-     * @param recyclerView     the parent recycleView
-     * @param baseQuickAdapter this helper need the BaseQuickAdapter
-     */
-    public OnItemLongClickListener(RecyclerView recyclerView, BaseQuickAdapter baseQuickAdapter) {
-        super(recyclerView, baseQuickAdapter);
-    }
 
 
     @Override

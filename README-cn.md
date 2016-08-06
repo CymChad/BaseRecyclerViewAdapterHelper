@@ -65,7 +65,7 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
 ```
 Adapter
 ```java
-mRecyclerView.addOnItemTouchListener(new OnItemClickListener(mRecyclerView,mQuickAdapter){
+mRecyclerView.addOnItemTouchListener(new OnItemClickListener( ){
 
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -94,7 +94,7 @@ mRecyclerView.addOnItemTouchListener(new OnItemClickListener(mRecyclerView,mQuic
 ```
 Activity
 ```java
-   mRecyclerView.addOnItemTouchListener(new OnItemChildClickListener(mRecyclerView,mQuickAdapter) {
+   mRecyclerView.addOnItemTouchListener(new OnItemChildClickListener( ) {
             @Override
             public void SimpleOnItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
@@ -104,7 +104,7 @@ Activity
 ```
 #设置 it item long click
 ```java
- mRecyclerView.addOnItemTouchListener(new OnItemLongClickListener(mRecyclerView,mQuickAdapter) {
+ mRecyclerView.addOnItemTouchListener(new OnItemLongClickListener( ) {
             @Override
             public void SimpleOnItemLongClick(BaseQuickAdapter adapter, View view, int position) {
                 Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
@@ -130,7 +130,7 @@ Activity
 ```
 然后
 ```java
- mRecyclerView.addOnItemTouchListener(new OnItemChildLongClickListener(mRecyclerView,mQuickAdapter) {
+ mRecyclerView.addOnItemTouchListener(new OnItemChildLongClickListener( ) {
             @Override
             public void SimpleOnItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
                 Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
@@ -139,7 +139,7 @@ Activity
 ```
 # 如果你想实现多种点击事件，你可以实现 SimpleClickListener类。提供了丰富的事件点击封装
 ```java
- mRecyclerView.addOnItemTouchListener(new SimpleClickListener(mRecyclerView, mQuickAdapter) {
+ mRecyclerView.addOnItemTouchListener(new SimpleClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();

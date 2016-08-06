@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickClickAdapter;
@@ -23,7 +24,7 @@ public class RecyclerClickItemActivity extends Activity {
     private QuickClickAdapter mQuickAdapter;
     private static final int PAGE_SIZE = 10;
     private static String TAG = "RecyclerClickItemActivity";
-
+    private ListView mListView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,11 +35,12 @@ public class RecyclerClickItemActivity extends Activity {
         mQuickAdapter.addHeaderView(getHeadView());
         mQuickAdapter.addFooterView(getFootView());
         mRecyclerView.setAdapter(mQuickAdapter);
+
         /**
          * Item  clcik
          */
 
-        mRecyclerView.addOnItemTouchListener(new OnItemClickListener(mRecyclerView, mQuickAdapter) {
+        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
 
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -78,7 +80,7 @@ public class RecyclerClickItemActivity extends Activity {
         /**
          * this is sample code
          */
-       /* mRecyclerView.addOnItemTouchListener(new OnItemChildClickListener(mRecyclerView,mQuickAdapter) {
+   /*     mRecyclerView.addOnItemTouchListener(new OnItemChildClickListener() {
             @Override
             public void SimpleOnItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
@@ -86,20 +88,20 @@ public class RecyclerClickItemActivity extends Activity {
             }
         });
 
-        mRecyclerView.addOnItemTouchListener(new OnItemLongClickListener(mRecyclerView,mQuickAdapter) {
+        mRecyclerView.addOnItemTouchListener(new OnItemLongClickListener() {
             @Override
             public void SimpleOnItemLongClick(BaseQuickAdapter adapter, View view, int position) {
                 Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
 
             }
         });
-        mRecyclerView.addOnItemTouchListener(new OnItemChildLongClickListener(mRecyclerView,mQuickAdapter) {
+        mRecyclerView.addOnItemTouchListener(new OnItemChildLongClickListener() {
             @Override
             public void SimpleOnItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
                 Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
             }
         });
-        mRecyclerView.addOnItemTouchListener(new SimpleClickListener(mRecyclerView, mQuickAdapter) {
+        mRecyclerView.addOnItemTouchListener(new SimpleClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
