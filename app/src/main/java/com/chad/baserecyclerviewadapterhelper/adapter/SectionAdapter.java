@@ -5,6 +5,7 @@ import com.chad.baserecyclerviewadapterhelper.entity.MySection;
 import com.chad.baserecyclerviewadapterhelper.entity.Video;
 import com.chad.library.adapter.base.BaseSectionQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
     protected void convertHead(BaseViewHolder helper,final MySection item) {
         helper.setText(R.id.header, item.header);
         helper.setVisible(R.id.more,item.isMore());
-        helper.setOnClickListener(R.id.more,new OnItemChildClickListener());
+        helper.addOnClickListener(R.id.more);
     }
 
 

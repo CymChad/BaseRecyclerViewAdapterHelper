@@ -6,11 +6,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.HomeAdapter;
 import com.chad.baserecyclerviewadapterhelper.entity.HomeItem;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 import java.util.ArrayList;
 
@@ -31,22 +31,16 @@ public class HomeActivity extends Activity {
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         initData();
-        BaseQuickAdapter homeAdapter = new HomeAdapter( R.layout.home_item_view, mDataList);
+        BaseQuickAdapter homeAdapter = new HomeAdapter(R.layout.home_item_view, mDataList);
         homeAdapter.openLoadAnimation();
-        homeAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(HomeActivity.this, ACTIVITY[position]);
                 startActivity(intent);
             }
         });
-        homeAdapter.setOnRecyclerViewItemLongClickListener(new BaseQuickAdapter.OnRecyclerViewItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(View view, int position) {
-                Toast.makeText(HomeActivity.this,"onItemLongClickHelper",Toast.LENGTH_LONG).show();
-                return true;
-            }
-        });
+
         mRecyclerView.setAdapter(homeAdapter);
     }
 

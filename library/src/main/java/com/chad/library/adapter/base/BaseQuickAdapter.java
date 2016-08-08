@@ -61,8 +61,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     private Interpolator mInterpolator = new LinearInterpolator();
     private int mDuration = 300;
     private int mLastPosition = -1;
-    private OnRecyclerViewItemClickListener onRecyclerViewItemClickListener;
-    private OnRecyclerViewItemLongClickListener onRecyclerViewItemLongClickListener;
     private RequestLoadMoreListener mRequestLoadMoreListener;
     @AnimationType
     private BaseAnimation mCustomAnimation;
@@ -115,19 +113,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      */
     public static final int SLIDEIN_RIGHT = 0x00000005;
 
-    /**
-     * call the method will not enable the loadMore funcation and the params pageSize is invalid
-     * more infomation see{@link  public void openLoadMore(int pageSize, boolean enable),@link  public void setOnLoadMoreListener(RequestLoadMoreListener requestLoadMoreListener)} method
-     *
-     * @param pageSize
-     * @param requestLoadMoreListener
-     */
-    @Deprecated
-    public void setOnLoadMoreListener(int pageSize, RequestLoadMoreListener requestLoadMoreListener) {
-
-        setOnLoadMoreListener(requestLoadMoreListener);
-    }
-
     public void setOnLoadMoreListener(RequestLoadMoreListener requestLoadMoreListener) {
         this.mRequestLoadMoreListener = requestLoadMoreListener;
     }
@@ -154,144 +139,12 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     * call the method before you should call setPageSize() method to setting up the enablePagerSize value,whether it will  invalid
-     * enable the loading more data function if enable's value is true,or disable
-     *
-     * @param enable
-     */
-    public void openLoadMore(boolean enable) {
-        mNextLoadEnable = enable;
-
-    }
-
-    /**
-     * setting up the size to decide the loading more data funcation whether enable
-     * enable if the data size than pageSize,or diable
-     *
-     * @param pageSize
-     */
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    /**
      * return the value of pageSize
      *
      * @return
      */
     public int getPageSize() {
         return this.pageSize;
-    }
-
-    /**
-     * Register a callback to be invoked when an item in this AdapterView has
-     * been clicked.
-     *
-     * @param onRecyclerViewItemClickListener The callback that will be invoked.
-     */
-    public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener) {
-        this.onRecyclerViewItemClickListener = onRecyclerViewItemClickListener;
-    }
-
-    /**
-     * Interface definition for a callback to be invoked when an item in this
-     * AdapterView has been clicked.
-     */
-    public interface OnRecyclerViewItemClickListener {
-        /**
-         * Callback method to be invoked when an item in this AdapterView has
-         * been clicked.
-         *
-         * @param view     The view within the AdapterView that was clicked (this
-         *                 will be a view provided by the adapter)
-         * @param position The position of the view in the adapter.
-         */
-        public void onItemClick(View view, int position);
-    }
-
-    /**
-     * Register a callback to be invoked when an item in this AdapterView has
-     * been clicked and held
-     *
-     * @param onRecyclerViewItemLongClickListener The callback that will run
-     */
-    public void setOnRecyclerViewItemLongClickListener(OnRecyclerViewItemLongClickListener onRecyclerViewItemLongClickListener) {
-        this.onRecyclerViewItemLongClickListener = onRecyclerViewItemLongClickListener;
-    }
-
-    /**
-     * Interface definition for a callback to be invoked when an item in this
-     * view has been clicked and held
-     */
-    public interface OnRecyclerViewItemLongClickListener {
-        /**
-         * callback method to be invoked when an item in this view has been
-         * click and held
-         *
-         * @param view     The view whihin the AbsListView that was clicked
-         * @param position The position of the view int the adapter
-         * @return true if the callback consumed the long click ,false otherwise
-         */
-        public boolean onItemLongClick(View view, int position);
-    }
-
-    private OnRecyclerViewItemChildClickListener mChildClickListener;
-
-    private OnRecyclerViewItemChildLongClickListener mChildLongClickListener;
-
-    /**
-     * Register a callback to be invoked when childView in this AdapterView has
-     * been clicked and held
-     * {@link OnRecyclerViewItemChildClickListener}
-     *
-     * @param childClickListener The callback that will run
-     */
-    public void setOnRecyclerViewItemChildClickListener(OnRecyclerViewItemChildClickListener childClickListener) {
-        this.mChildClickListener = childClickListener;
-    }
-
-    public interface OnRecyclerViewItemChildClickListener {
-        void onItemChildClick(BaseQuickAdapter adapter, View view, int position);
-    }
-
-    public class OnItemChildClickListener implements View.OnClickListener {
-        public RecyclerView.ViewHolder mViewHolder;
-
-        @Override
-        public void onClick(View v) {
-            if (mChildClickListener != null)
-                mChildClickListener.onItemChildClick(BaseQuickAdapter.this, v, mViewHolder.getLayoutPosition() - getHeaderLayoutCount());
-        }
-    }
-
-    /**
-     * Register a callback to be invoked when childView in this AdapterView has
-     * been longClicked and held
-     * {@link OnRecyclerViewItemChildLongClickListener}
-     *
-     * @param childLongClickListener The callback that will run
-     */
-    public void setOnRecyclerViewItemChildLongClickListener(OnRecyclerViewItemChildLongClickListener childLongClickListener) {
-        this.mChildLongClickListener = childLongClickListener;
-    }
-
-    /**
-     * Interface for ItemChildLongClick
-     */
-    public interface OnRecyclerViewItemChildLongClickListener {
-        boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position);
-    }
-
-    public class OnItemChildLongClickListener implements View.OnLongClickListener {
-        public RecyclerView.ViewHolder mViewHolder;
-
-        @Override
-        public boolean onLongClick(View v) {
-            if (mChildLongClickListener != null) {
-                return mChildLongClickListener.onItemChildLongClick(BaseQuickAdapter.this, v, mViewHolder.getLayoutPosition() - getHeaderViewsCount());
-            }
-            return false;
-        }
     }
 
 
@@ -564,7 +417,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 break;
             default:
                 baseViewHolder = onCreateDefViewHolder(parent, viewType);
-                initItemClickListener(baseViewHolder);
         }
         return baseViewHolder;
 
@@ -621,10 +473,26 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 @Override
                 public int getSpanSize(int position) {
                     int type = getItemViewType(position);
-                    return (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW) ? gridManager.getSpanCount() : 1;
+                    if (mSpanSizeLookup == null)
+                        return (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW) ? gridManager.getSpanCount() : 1;
+                    else
+                        return (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW) ? gridManager.getSpanCount() : mSpanSizeLookup.getSpanSize(gridManager, position - getHeaderLayoutCount());
                 }
             });
         }
+    }
+
+    private SpanSizeLookup mSpanSizeLookup;
+
+    public interface SpanSizeLookup {
+        int getSpanSize(GridLayoutManager gridLayoutManager, int position);
+    }
+
+    /**
+     * @param spanSizeLookup instance to be used to query number of spans occupied by each item
+     */
+    public void setSpanSizeLookup(SpanSizeLookup spanSizeLookup) {
+        this.mSpanSizeLookup = spanSizeLookup;
     }
 
     /**
@@ -891,29 +759,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
     }
 
-    /**
-     * init the baseViewHolder to register onRecyclerViewItemClickListener and onRecyclerViewItemLongClickListener
-     *
-     * @param baseViewHolder
-     */
-    private void initItemClickListener(final BaseViewHolder baseViewHolder) {
-        if (onRecyclerViewItemClickListener != null) {
-            baseViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onRecyclerViewItemClickListener.onItemClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
-                }
-            });
-        }
-        if (onRecyclerViewItemLongClickListener != null) {
-            baseViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    return onRecyclerViewItemLongClickListener.onItemLongClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
-                }
-            });
-        }
-    }
 
     /**
      * add animation when you want to show time
