@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickAdapter;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 
 /**
@@ -107,10 +108,10 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
         mRecyclerView.setAdapter(mQuickAdapter);
         mCurrentCounter = mQuickAdapter.getData().size();
         mQuickAdapter.setOnLoadMoreListener(this);
-        mQuickAdapter.openLoadMore(PAGE_SIZE, true);//or call mQuickAdapter.setPageSize(PAGE_SIZE);  mQuickAdapter.openLoadMore(true);
-        mQuickAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+        mQuickAdapter.openLoadMore(PAGE_SIZE, true);
+        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Toast.makeText(PullToRefreshUseActivity.this, Integer.toString(position), Toast.LENGTH_LONG).show();
             }
         });

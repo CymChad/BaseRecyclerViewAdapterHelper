@@ -28,8 +28,8 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
                 .setText(R.id.tweetText, item.getText())
                 .setText(R.id.tweetDate, item.getCreatedAt())
                 .setVisible(R.id.tweetRT, item.isRetweet())
-                .setOnClickListener(R.id.tweetAvatar, new OnItemChildClickListener())
-                .setOnClickListener(R.id.tweetName, new OnItemChildClickListener())
+                .addOnClickListener(R.id.tweetAvatar)
+                .addOnClickListener(R.id.tweetName)
                 .linkify(R.id.tweetText);
 
         Glide.with(mContext).load(item.getUserAvatar()).crossFade().placeholder(R.mipmap.def_head).transform(new GlideCircleTransform(mContext)).into((ImageView) helper.getView(R.id.tweetAvatar));
