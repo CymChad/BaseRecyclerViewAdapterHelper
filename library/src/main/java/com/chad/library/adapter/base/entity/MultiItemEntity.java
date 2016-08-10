@@ -5,9 +5,8 @@ import java.io.Serializable;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public interface MultiItemEntity extends Serializable {
+public interface MultiItemEntity {
 
     public int getItemType();
 
-    public void setItemType(int itemType);
 }
