@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +27,10 @@ public class MultipleItemUseActivity extends Activity {
         setContentView(R.layout.activity_multiple_item_use);
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         final List<MultipleItem> data = DataServer.getMultipleItemData();
+        final MultipleItemQuickAdapter multipleItemAdapter = new MultipleItemQuickAdapter(this, data);
         final GridLayoutManager manager = new GridLayoutManager(this, 3);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        MultipleItemQuickAdapter multipleItemAdapter = new MultipleItemQuickAdapter(this, DataServer.getMultipleItemData());
         multipleItemAdapter.addHeaderView(getView());
+        mRecyclerView.setLayoutManager(manager);
         multipleItemAdapter.setSpanSizeLookup(new BaseQuickAdapter.SpanSizeLookup() {
             @Override
             public int getSpanSize(GridLayoutManager gridLayoutManager, int position) {

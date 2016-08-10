@@ -15,7 +15,7 @@ import java.util.List;
 public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem> {
 
     public MultipleItemQuickAdapter(Context context, List data) {
-        super( data);
+        super(data);
         addItemType(MultipleItem.TEXT, R.layout.item_text_view);
         addItemType(MultipleItem.IMG, R.layout.item_image_view);
     }
