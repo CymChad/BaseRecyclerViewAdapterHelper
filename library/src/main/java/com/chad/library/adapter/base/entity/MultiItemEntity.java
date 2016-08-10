@@ -7,6 +7,6 @@ import java.io.Serializable;
  */
 public interface MultiItemEntity {
 
-    public int getItemType();
+    int getItemType();
 
 }
