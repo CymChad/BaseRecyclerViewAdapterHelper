@@ -47,9 +47,4 @@ public class MultipleItem implements MultiItemEntity {
     public int getItemType() {
         return itemType;
     }
-
-    @Override
-    public void setItemType(int itemType) {
-
-    }
 }

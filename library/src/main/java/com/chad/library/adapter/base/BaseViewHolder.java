@@ -20,6 +20,8 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
 import android.text.util.Linkify;
 import android.util.SparseArray;
@@ -94,6 +96,12 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
+    public BaseViewHolder setText(int viewId, @StringRes int strId) {
+        TextView view = getView(viewId);
+        view.setText(strId);
+        return this;
+    }
+
     /**
      * Will set the image of an ImageView from a resource id.
      *
@@ -101,7 +109,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @param imageResId The image resource id.
      * @return The BaseViewHolder for chaining.
      */
-    public BaseViewHolder setImageResource(int viewId, int imageResId) {
+    public BaseViewHolder setImageResource(int viewId,@DrawableRes int imageResId) {
         ImageView view = getView(viewId);
         view.setImageResource(imageResId);
         return this;
@@ -127,7 +135,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @param backgroundRes A resource to use as a background.
      * @return The BaseViewHolder for chaining.
      */
-    public BaseViewHolder setBackgroundRes(int viewId, int backgroundRes) {
+    public BaseViewHolder setBackgroundRes(int viewId, @DrawableRes int backgroundRes) {
         View view = getView(viewId);
         view.setBackgroundResource(backgroundRes);
         return this;

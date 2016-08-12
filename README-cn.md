@@ -326,6 +326,80 @@ mAdapter.enableSwipeItem();
 mAdapter.setOnItemSwipeListener(onItemSwipeListener);
 ```
 
+#Expandable Item
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/expandable_item.gif)
+```Java
+// 如果不想使用继承，可以只实现IExpandable接口
+// AbstractExpandableItem只是个帮助类
+public class Level0Item extends AbstractExpandableItem<Level1Item> {...}
+public class Level1Item extends AbstractExpandableItem<Person> {...}
+public class Person {...}
+```
+in adapter code
+```Java
+
+public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity> { 
+    public ExpandableItemAdapter(List<MultiItemEntity> data) {    
+        super(data);
+        addItemType(TYPE_LEVEL_0, R.layout.item_expandable_lv0);   
+        addItemType(TYPE_LEVEL_1, R.layout.item_expandable_lv1);    
+        addItemType(TYPE_PERSON, R.layout.item_text_view);
+    }
+    @Override
+    protected void convert(final BaseViewHolder holder, final MultiItemEntity item) {
+        switch (holder.getItemViewType()) {
+        case TYPE_LEVEL_0:
+            ....
+            //set view content
+           holder.itemView.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   int pos = holder.getAdapterPosition();
+                   if (lv0.isExpanded()) { 
+                       collapse(pos);
+                   } else {
+                       expand(pos);
+                   }
+           }});
+           break;
+        case TYPE_LEVEL_1:
+           // similar with level 0
+           break;
+        case TYPE_PERSON:
+           //just set the content
+           break;
+    }
+}
+```
+In activity code
+```Java
+public class ExpandableUseActivity extends Activity {
+    @Override
+    protected  void onCreate(Bundle savedInstanceState) {
+        ...
+        ArrayList<MultiItemEntity> list = generateData();
+        ExpandableItemAdapter adapter = new ExpandableItemAdapter(list);
+        mRecyclerView.setAdapter(adapter);
+    }
+
+    private ArrayList<MultiItemEntity> generateData() {
+        ArrayList<MultiItemEntity> res = new ArrayList<>();
+        for (int i = 0; i < lv0Count; i++) {
+            Level0Item lv0 = new Level0Item(...);
+            for (int j = 0; j < lv1Count; j++) {
+                Level1Item lv1 = new Level1Item(...);
+                for (int k = 0; k < personCount; k++) {
+                    lv1.addSubItem(new Person());
+                }
+                lv0.addSubItem(lv1);
+            }
+            res.add(lv0);
+        }
+        return res;
+    }
+}
+```
+
 >**持续更新!，所以推荐Star项目**
 
 #感谢

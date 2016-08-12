@@ -32,6 +32,8 @@
         </activity>
         <activity android:name=".RecyclerClickItemActivity">
         </activity>
+        <activity android:name=".ExpandableUseActivity">
+        </activity>
     </application>
 
 </manifest>

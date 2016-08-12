@@ -18,6 +18,8 @@ package com.chad.library.adapter.base;
 import android.animation.Animator;
 import android.content.Context;
 import android.support.annotation.IntDef;
+import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutParams;
@@ -36,6 +38,7 @@ import com.chad.library.adapter.base.animation.ScaleInAnimation;
 import com.chad.library.adapter.base.animation.SlideInBottomAnimation;
 import com.chad.library.adapter.base.animation.SlideInLeftAnimation;
 import com.chad.library.adapter.base.animation.SlideInRightAnimation;
+import com.chad.library.adapter.base.entity.IExpandable;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -901,6 +904,108 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    private int recursiveExpand(int position, @NonNull List list) {
+        int count = 0;
+        int pos = position + list.size() - 1;
+        for (int i = list.size() - 1; i >= 0; i--, pos--) {
+            if (list.get(i) instanceof IExpandable) {
+                IExpandable item = (IExpandable)list.get(i);
+                if (item.isExpanded() && hasSubItems(item)) {
+                    List subList = item.getSubItems();
+                    mData.addAll(pos + 1, subList);
+                    int subItemCount = recursiveExpand(pos + 1, subList);
+                    count += subItemCount;
+                }
+            }
+        }
+        return count;
+
+    }
+
+    /**
+     * Expand an expandable item
+     * @param position position of the item
+     * @return the number of items that have been added.
+     */
+    public int expand(@IntRange(from = 0) int position) {
+        T item = getItem(position);
+        if (!isExpandable(item)) {
+            return 0;
+        }
+
+        IExpandable expandable = (IExpandable)item;
+        if (!hasSubItems(expandable)) {
+            expandable.setExpanded(false);
+            return 0;
+        }
+        int subItemCount = 0;
+        if (!expandable.isExpanded()) {
+            List list = expandable.getSubItems();
+            mData.addAll(position + 1, list);
+            subItemCount += recursiveExpand(position + 1, list);
+
+            expandable.setExpanded(true);
+            subItemCount += list.size();
+        }
+        notifyItemRangeInserted(position + 1, subItemCount);
+        return subItemCount;
+    }
+
+    private int recursiveCollapse(@IntRange(from = 0) int position) {
+        T item = getItem(position);
+        if (!isExpandable(item)) {
+            return 0;
+        }
+        IExpandable expandable = (IExpandable)item;
+        int subItemCount = 0;
+        if (expandable.isExpanded()) {
+            List<T> subItems = expandable.getSubItems();
+            for (int i = subItems.size() - 1; i >= 0; i--) {
+                T subItem = subItems.get(i);
+                int pos = getItemPosition(subItem);
+                if (pos < 0) {
+                    continue;
+                }
+                if (subItem instanceof IExpandable) {
+                    subItemCount += recursiveCollapse(pos);
+                }
+                mData.remove(pos);
+                subItemCount ++;
+            }
+        }
+        return subItemCount;
+    }
+
+    /**
+     * Collapse an expandable item that has been expanded..
+     * @param position the position of the item
+     * @return the number of subItems collapsed.
+     */
+    public int collapse(@IntRange(from = 0) int position) {
+        T item = getItem(position);
+        if (!isExpandable(item)) {
+            return 0;
+        }
+        IExpandable expandable = (IExpandable)item;
+        int subItemCount = recursiveCollapse(position);
+        expandable.setExpanded(false);
+        notifyItemRangeRemoved(position + 1, subItemCount);
+        return subItemCount;
+    }
+
+    private int getItemPosition(T item) {
+        return item != null && mData != null && !mData.isEmpty() ? mData.indexOf(item) : -1;
+    }
+
+    private boolean hasSubItems(IExpandable item) {
+        List list = item.getSubItems();
+        return list != null && list.size() > 0;
+    }
+
+    private boolean isExpandable(T item) {
+        return item != null && item instanceof IExpandable;
     }
 
 }
