@@ -971,7 +971,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 if (subItem instanceof IExpandable) {
                     subItemCount += recursiveCollapse(pos);
                 }
-                mData.remove(pos);
+                mData.remove(subItem);
                 subItemCount ++;
             }
         }
