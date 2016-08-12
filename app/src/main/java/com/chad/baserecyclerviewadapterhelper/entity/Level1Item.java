@@ -1,6 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.entity;
 
-import com.chad.baserecyclerviewadapterhelper.AbstractExpandableItem;
+import com.chad.library.adapter.base.entity.AbstractExpandableItem;
 import com.chad.baserecyclerviewadapterhelper.adapter.ExpandableItemAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
@@ -19,6 +19,6 @@ public class Level1Item extends AbstractExpandableItem<Person> implements MultiI
 
     @Override
     public int getItemType() {
-        return ExpandableItemAdapter.TYPE_Level1;
+        return ExpandableItemAdapter.TYPE_LEVEL_1;
     }
 }

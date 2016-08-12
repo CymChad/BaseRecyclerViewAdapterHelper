@@ -19,8 +19,8 @@ import java.util.List;
 public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity> {
     private static final String TAG = ExpandableItemAdapter.class.getSimpleName();
 
-    public static final int TYPE_Level0 = 0;
-    public static final int TYPE_Level1 = 1;
+    public static final int TYPE_LEVEL_0 = 0;
+    public static final int TYPE_LEVEL_1 = 1;
     public static final int TYPE_PERSON = 2;
 
     /**
@@ -31,15 +31,15 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
      */
     public ExpandableItemAdapter(List<MultiItemEntity> data) {
         super(data);
-        addItemType(TYPE_Level0, R.layout.item_expandable_lv0);
-        addItemType(TYPE_Level1, R.layout.item_expandable_lv1);
+        addItemType(TYPE_LEVEL_0, R.layout.item_expandable_lv0);
+        addItemType(TYPE_LEVEL_1, R.layout.item_expandable_lv1);
         addItemType(TYPE_PERSON, R.layout.item_text_view);
     }
 
     @Override
     protected void convert(final BaseViewHolder holder, final MultiItemEntity item) {
         switch (holder.getItemViewType()) {
-            case TYPE_Level0:
+            case TYPE_LEVEL_0:
                 final Level0Item lv0 = (Level0Item)item;
                 holder.setText(R.id.title, lv0.title)
                         .setText(R.id.sub_title, lv0.subTitle)
@@ -57,7 +57,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                     }
                 });
                 break;
-            case TYPE_Level1:
+            case TYPE_LEVEL_1:
                 final Level1Item lv1 = (Level1Item)item;
                 holder.setText(R.id.title, lv1.title)
                         .setText(R.id.sub_title, lv1.subTitle)

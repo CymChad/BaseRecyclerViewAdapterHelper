@@ -1,6 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.entity;
 
-import com.chad.baserecyclerviewadapterhelper.AbstractExpandableItem;
+import com.chad.library.adapter.base.entity.AbstractExpandableItem;
 import com.chad.baserecyclerviewadapterhelper.adapter.ExpandableItemAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
@@ -16,9 +16,8 @@ public class Level0Item extends AbstractExpandableItem<Level1Item> implements Mu
         this.title = title;
     }
 
-
     @Override
     public int getItemType() {
-        return ExpandableItemAdapter.TYPE_Level0;
+        return ExpandableItemAdapter.TYPE_LEVEL_0;
     }
 }

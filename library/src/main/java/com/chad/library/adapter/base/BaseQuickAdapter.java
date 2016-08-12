@@ -38,6 +38,7 @@ import com.chad.library.adapter.base.animation.ScaleInAnimation;
 import com.chad.library.adapter.base.animation.SlideInBottomAnimation;
 import com.chad.library.adapter.base.animation.SlideInLeftAnimation;
 import com.chad.library.adapter.base.animation.SlideInRightAnimation;
+import com.chad.library.adapter.base.entity.IExpandable;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -923,6 +924,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     }
 
+    /**
+     * Expand an expandable item
+     * @param position position of the item
+     * @return the number of items that have been added.
+     */
     public int expand(@IntRange(from = 0) int position) {
         T item = getItem(position);
         if (!isExpandable(item)) {
@@ -972,6 +978,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         return subItemCount;
     }
 
+    /**
+     * Collapse an expandable item that has been expanded..
+     * @param position the position of the item
+     * @return the number of subItems collapsed.
+     */
     public int collapse(@IntRange(from = 0) int position) {
         T item = getItem(position);
         if (!isExpandable(item)) {
