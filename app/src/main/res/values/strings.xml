@@ -2,4 +2,6 @@
     <string name="app_name">BaseRecyclerViewAdapterHelper</string>
     <string name="title_activity_header_and_footer_use">HeaderAndFooterUseActivity</string>
     <string name="no_data">There is no data</string>
+    <string name="expanded">expanded</string>
+    <string name="collapsed">collapsed</string>
 </resources>
