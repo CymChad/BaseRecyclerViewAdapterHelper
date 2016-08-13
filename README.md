@@ -18,6 +18,7 @@ Please feel free to use this.(Welcome to **Star** and **Fork**)
 - **custom item view type**
 - **add setEmptyView methods**
 - **add drag item**
+- **Expandable Item**
 
 #Extension library
 [PinnedSectionItemDecoration](https://github.com/oubowu/PinnedSectionItemDecoration)
