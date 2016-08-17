@@ -79,6 +79,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      */
     private View mEmptyView;
 
+    /**
+     * View to show if load more failed.
+     */
+    private View loadMoreFailedView;
+
     protected static final String TAG = BaseQuickAdapter.class.getSimpleName();
     protected Context mContext;
     protected int mLayoutResId;
@@ -207,6 +212,9 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         if (mRequestLoadMoreListener != null) {
             mNextLoadEnable = true;
             // mFooterLayout = null;
+        }
+        if (loadMoreFailedView != null) {
+            removeFooterView(loadMoreFailedView);
         }
         mLastPosition = -1;
         notifyDataSetChanged();
@@ -676,6 +684,38 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
         mFooterLayout.removeAllViews();
         mFooterLayout = null;
+    }
+
+    /**
+     * Set the view to show when load more failed.
+     */
+    public void setLoadMoreFailedView(View view) {
+        loadMoreFailedView = view;
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeFooterView(loadMoreFailedView);
+                openLoadMore(pageSize, true);
+            }
+        });
+    }
+
+    /**
+     * Call this method when load more failed.
+     */
+    public void showLoadMoreFailedView() {
+        notifyDataChangedAfterLoadMore(false);
+        if (loadMoreFailedView == null) {
+            loadMoreFailedView = mLayoutInflater.inflate(R.layout.def_load_more_failed, null);
+            loadMoreFailedView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    removeFooterView(loadMoreFailedView);
+                    openLoadMore(pageSize, true);
+                }
+            });
+        }
+        addFooterView(loadMoreFailedView);
     }
 
     /**
