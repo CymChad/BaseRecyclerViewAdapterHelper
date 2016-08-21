@@ -140,7 +140,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * when adapter's data size than pageSize and enable is true,the loading more function is enable,or disable
      *
      * @param pageSize
-     * @param enable
      */
     public void openLoadMore(int pageSize) {
         this.pageSize = pageSize;

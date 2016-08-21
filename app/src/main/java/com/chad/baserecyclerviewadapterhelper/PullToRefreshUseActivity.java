@@ -81,7 +81,6 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
                     mQuickAdapter.addFooterView(notLoadingView);
                 } else {
                     if (isErr) {
-
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -91,7 +90,7 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
                         }, delayMillis);
                     } else {
                         isErr = true;
-                        Toast.makeText(PullToRefreshUseActivity.this, "模拟网络异常", Toast.LENGTH_LONG).show();
+                        Toast.makeText(PullToRefreshUseActivity.this, R.string.network_err, Toast.LENGTH_LONG).show();
                         mQuickAdapter.showLoadMoreFailedView();
 
                     }
@@ -111,6 +110,7 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
                 mQuickAdapter.removeAllFooterView();
                 mCurrentCounter = PAGE_SIZE;
                 mSwipeRefreshLayout.setRefreshing(false);
+                isErr = false;
             }
         }, delayMillis);
     }

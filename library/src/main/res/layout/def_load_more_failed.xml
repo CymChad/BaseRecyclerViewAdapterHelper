@@ -10,6 +10,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="10dp"
-        android:text="加载失败，请点我重试"/>
+        android:text="@string/load_failed"/>
 
 </LinearLayout>

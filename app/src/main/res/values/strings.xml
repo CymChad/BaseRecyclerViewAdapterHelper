@@ -4,4 +4,5 @@
     <string name="no_data">There is no data</string>
     <string name="expanded">expanded</string>
     <string name="collapsed">collapsed</string>
+    <string name="network_err">Simulation network error</string>
 </resources>
