@@ -6,7 +6,7 @@ Please feel free to use this.(Welcome to **Star** and **Fork**)
 [![Get it on Google Play](https://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=com.chad.baserecyclerviewadapterhelper)
 #Document
 ##v1.9.8
-- [English]https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki/old_doc)
+- [English](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki/old_doc)
 - [中文](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki/old_doc-cn)
 
 ##v2.0.0
