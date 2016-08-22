@@ -13,12 +13,12 @@ import com.chad.library.adapter.base.BaseViewHolder;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class QuickAdapter extends BaseQuickAdapter<Status> {
-    public QuickAdapter() {
+public class QuickClickAdapter extends BaseQuickAdapter<Status> {
+    public QuickClickAdapter() {
         super( R.layout.tweet, DataServer.getSampleData(100));
     }
 
-    public QuickAdapter(int dataSize) {
+    public QuickClickAdapter(int dataSize) {
         super( R.layout.tweet, DataServer.getSampleData(dataSize));
     }
 
@@ -30,8 +30,8 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
                 .setVisible(R.id.tweetRT, item.isRetweet())
                 .addOnClickListener(R.id.tweetAvatar)
                 .addOnClickListener(R.id.tweetName)
+                .addOnLongClickListener(R.id.tweetText)
                 .linkify(R.id.tweetText);
-
         Glide.with(mContext).load(item.getUserAvatar()).crossFade().placeholder(R.mipmap.def_head).transform(new GlideCircleTransform(mContext)).into((ImageView) helper.getView(R.id.tweetAvatar));
     }
 

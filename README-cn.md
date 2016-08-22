@@ -65,39 +65,106 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
     }
 }
 ```
-#如何添加item点击、长按事件
-![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/chlid_click.gif)
-```java
-mQuickAdapter.setOnRecyclerViewItemClickListener();
-mQuickAdapter.setOnRecyclerViewItemLongClickListener();
-```
-#新增添加子布局多个控件的点击事件
 Adapter
 ```java
- protected void convert(BaseViewHolder helper, Status item) {
-    helper.setOnClickListener(R.id.tweetAvatar, new OnItemChildClickListener())
-      .setOnClickListener(R.id.tweetName, new OnItemChildClickListener());
-      }
+mRecyclerView.addOnItemTouchListener(new OnItemClickListener( ){
+
+            @Override
+            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+                
+            }
+        });
+        
+```
+#设置 item  click  新增添加子布局多个控件的点击事件
+#设置 it item child click
+首先需要添加需要点击触发的 childview id 
+``` 
+ @Override
+    protected void convert(BaseViewHolder helper, Status item) {
+        helper.setText(R.id.tweetName, item.getUserName())
+                .setText(R.id.tweetText, item.getText())
+                .setText(R.id.tweetDate, item.getCreatedAt())
+                .setVisible(R.id.tweetRT, item.isRetweet())
+                .addOnClickListener(R.id.tweetAvatar)
+                .addOnClickListener(R.id.tweetName)
+                .addOnLongClickListener(R.id.tweetText)
+                .linkify(R.id.tweetText);
+        Glide.with(mContext).load(item.getUserAvatar()).crossFade().placeholder(R.mipmap.def_head).transform(new GlideCircleTransform(mContext)).into((ImageView) helper.getView(R.id.tweetAvatar));
+    }
 ```
 Activity
 ```java
-mQuickAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
+   mRecyclerView.addOnItemTouchListener(new OnItemChildClickListener( ) {
             @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                String content = null;
-                Status status = (Status) adapter.getItem(position);
-                switch (view.getId()) {
-                    case R.id.tweetAvatar:
-                        content = "img:" + status.getUserAvatar();
-                        break;
-                    case R.id.tweetName:
-                        content = "name:" + status.getUserName();
-                        break;
-                }
-                Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
+            public void SimpleOnItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+
             }
         });
 ```
+#设置 it item long click
+```java
+ mRecyclerView.addOnItemTouchListener(new OnItemLongClickListener( ) {
+            @Override
+            public void SimpleOnItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+```
+#设置 it item child long click
+首先需要添加需要点击触发的 childview id 
+``` 
+ @Override
+    protected void convert(BaseViewHolder helper, Status item) {
+        helper.setText(R.id.tweetName, item.getUserName())
+                .setText(R.id.tweetText, item.getText())
+                .setText(R.id.tweetDate, item.getCreatedAt())
+                .setVisible(R.id.tweetRT, item.isRetweet())
+                .addOnClickListener(R.id.tweetAvatar)
+                .addOnClickListener(R.id.tweetName)
+                .addOnLongClickListener(R.id.tweetText)
+                .linkify(R.id.tweetText);
+        Glide.with(mContext).load(item.getUserAvatar()).crossFade().placeholder(R.mipmap.def_head).transform(new GlideCircleTransform(mContext)).into((ImageView) helper.getView(R.id.tweetAvatar));
+    }
+```
+然后
+```java
+ mRecyclerView.addOnItemTouchListener(new OnItemChildLongClickListener( ) {
+            @Override
+            public void SimpleOnItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+            }
+        });
+```
+# 如果你想实现多种点击事件，你可以实现 SimpleClickListener类。提供了丰富的事件点击封装
+```java
+ mRecyclerView.addOnItemTouchListener(new SimpleClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+            }
+        });
+``` 
+
+
 #如何使用它添加动画？
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/animation.gif)
 ```java
@@ -259,6 +326,80 @@ mAdapter.setOnItemDragListener(onItemDragListener);
 // 开启滑动删除
 mAdapter.enableSwipeItem();
 mAdapter.setOnItemSwipeListener(onItemSwipeListener);
+```
+
+#Expandable Item
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/expandable_item.gif)
+```Java
+// 如果不想使用继承，可以只实现IExpandable接口
+// AbstractExpandableItem只是个帮助类
+public class Level0Item extends AbstractExpandableItem<Level1Item> {...}
+public class Level1Item extends AbstractExpandableItem<Person> {...}
+public class Person {...}
+```
+in adapter code
+```Java
+
+public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity> { 
+    public ExpandableItemAdapter(List<MultiItemEntity> data) {    
+        super(data);
+        addItemType(TYPE_LEVEL_0, R.layout.item_expandable_lv0);   
+        addItemType(TYPE_LEVEL_1, R.layout.item_expandable_lv1);    
+        addItemType(TYPE_PERSON, R.layout.item_text_view);
+    }
+    @Override
+    protected void convert(final BaseViewHolder holder, final MultiItemEntity item) {
+        switch (holder.getItemViewType()) {
+        case TYPE_LEVEL_0:
+            ....
+            //set view content
+           holder.itemView.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   int pos = holder.getAdapterPosition();
+                   if (lv0.isExpanded()) { 
+                       collapse(pos);
+                   } else {
+                       expand(pos);
+                   }
+           }});
+           break;
+        case TYPE_LEVEL_1:
+           // similar with level 0
+           break;
+        case TYPE_PERSON:
+           //just set the content
+           break;
+    }
+}
+```
+In activity code
+```Java
+public class ExpandableUseActivity extends Activity {
+    @Override
+    protected  void onCreate(Bundle savedInstanceState) {
+        ...
+        ArrayList<MultiItemEntity> list = generateData();
+        ExpandableItemAdapter adapter = new ExpandableItemAdapter(list);
+        mRecyclerView.setAdapter(adapter);
+    }
+
+    private ArrayList<MultiItemEntity> generateData() {
+        ArrayList<MultiItemEntity> res = new ArrayList<>();
+        for (int i = 0; i < lv0Count; i++) {
+            Level0Item lv0 = new Level0Item(...);
+            for (int j = 0; j < lv1Count; j++) {
+                Level1Item lv1 = new Level1Item(...);
+                for (int k = 0; k < personCount; k++) {
+                    lv1.addSubItem(new Person());
+                }
+                lv0.addSubItem(lv1);
+            }
+            res.add(lv0);
+        }
+        return res;
+    }
+}
 ```
 
 >**持续更新!，所以推荐Star项目**

@@ -1,9 +1,9 @@
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-BaseRecyclerViewAdapterHelper-green.svg?style=true)](https://android-arsenal.com/details/1/3644)
 [![](https://jitpack.io/v/CymChad/BaseRecyclerViewAdapterHelper.svg)](https://jitpack.io/#CymChad/BaseRecyclerViewAdapterHelper)
 # BaseRecyclerViewAdapterHelper（[中文版文档](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/README-cn.md)）
-![Paste_Image.png](http://upload-images.jianshu.io/upload_images/972352-1d77e0a75a4a7c0a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)  
+![Paste_Image.png](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/develop/demo_res/logo.jpg)  
 Powerful and flexible RecyclerAdapter 
-Please feel free to use this.(Love can be a **Star**)
+Please feel free to use this.(Welcome to **Star** and **Fork**)
 ## Google Play Demo
 
 [![Get it on Google Play](https://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=com.chad.baserecyclerviewadapterhelper)
@@ -18,6 +18,7 @@ Please feel free to use this.(Love can be a **Star**)
 - **custom item view type**
 - **add setEmptyView methods**
 - **add drag item**
+- **Expandable Item**
 
 #Extension library
 [PinnedSectionItemDecoration](https://github.com/oubowu/PinnedSectionItemDecoration)
@@ -59,41 +60,108 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
 ```
 #Use it item click and item chlid click
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/chlid_click.gif)
-```java
-mQuickAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
-    @Override
-    public void onItemClick(View view, int position) {
-        //..
-    }
-});
-```
-#Use it item chlid click
+#Use it item  click 
 Adapter
 ```java
-protected void convert(BaseViewHolder helper, Status item) {
-	helper.setOnClickListener(R.id.tweetAvatar, new OnItemChildClickListener())
-		.setOnClickListener(R.id.tweetName, new OnItemChildClickListener());
-}
-```
-Activity
-```java
-mQuickAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
+mRecyclerView.addOnItemTouchListener(new OnItemClickListener( ){
+
             @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                String content = null;
-                Status status = (Status) adapter.getItem(position);
-                switch (view.getId()) {
-                    case R.id.tweetAvatar:
-                        content = "img:" + status.getUserAvatar();
-                        break;
-                    case R.id.tweetName:
-                        content = "name:" + status.getUserName();
-                        break;
-                }
-                Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
+            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+                
+            }
+        });
+        
+```
+#Use it item child click
+first you should register child view id 
+``` 
+ @Override
+    protected void convert(BaseViewHolder helper, Status item) {
+        helper.setText(R.id.tweetName, item.getUserName())
+                .setText(R.id.tweetText, item.getText())
+                .setText(R.id.tweetDate, item.getCreatedAt())
+                .setVisible(R.id.tweetRT, item.isRetweet())
+                .addOnClickListener(R.id.tweetAvatar)
+                .addOnClickListener(R.id.tweetName)
+                .addOnLongClickListener(R.id.tweetText)
+                .linkify(R.id.tweetText);
+        Glide.with(mContext).load(item.getUserAvatar()).crossFade().placeholder(R.mipmap.def_head).transform(new GlideCircleTransform(mContext)).into((ImageView) helper.getView(R.id.tweetAvatar));
+    }
+```
+and then
+
+```java
+   mRecyclerView.addOnItemTouchListener(new OnItemChildClickListener( ) {
+            @Override
+            public void SimpleOnItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+
             }
         });
 ```
+#Use it item long click
+```java
+ mRecyclerView.addOnItemTouchListener(new OnItemLongClickListener( ) {
+            @Override
+            public void SimpleOnItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+```
+#use it item child long click
+Adapter
+``` 
+ @Override
+    protected void convert(BaseViewHolder helper, Status item) {
+        helper.setText(R.id.tweetName, item.getUserName())
+                .setText(R.id.tweetText, item.getText())
+                .setText(R.id.tweetDate, item.getCreatedAt())
+                .setVisible(R.id.tweetRT, item.isRetweet())
+                .addOnClickListener(R.id.tweetAvatar)
+                .addOnClickListener(R.id.tweetName)
+                .addOnLongClickListener(R.id.tweetText)
+                .linkify(R.id.tweetText);
+        Glide.with(mContext).load(item.getUserAvatar()).crossFade().placeholder(R.mipmap.def_head).transform(new GlideCircleTransform(mContext)).into((ImageView) helper.getView(R.id.tweetAvatar));
+    }
+```
+Activity
+```java
+ mRecyclerView.addOnItemTouchListener(new OnItemChildLongClickListener( ) {
+            @Override
+            public void SimpleOnItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+            }
+        });
+```
+#if you wish to implement various forms of click
+Activity
+```java
+ mRecyclerView.addOnItemTouchListener(new SimpleClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+            }
+        });
+``` 
+
+
 
 #Use it add adaptar Animation
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/animation.gif)
@@ -257,6 +325,80 @@ mAdapter.setOnItemDragListener(onItemDragListener);
 // enable swipe items
 mAdapter.enableSwipeItem();
 mAdapter.setOnItemSwipeListener(onItemSwipeListener);
+```
+
+#Expandable Item
+![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/expandable_item.gif)
+```Java
+// if you don't want to extent a class, you can also use the interface IExpandable.
+// AbstractExpandableItem is just a helper class.
+public class Level0Item extends AbstractExpandableItem<Level1Item> {...}
+public class Level1Item extends AbstractExpandableItem<Person> {...}
+public class Person {...}
+```
+in adapter code
+```Java
+
+public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity> { 
+    public ExpandableItemAdapter(List<MultiItemEntity> data) {    
+        super(data);
+        addItemType(TYPE_LEVEL_0, R.layout.item_expandable_lv0);   
+        addItemType(TYPE_LEVEL_1, R.layout.item_expandable_lv1);    
+        addItemType(TYPE_PERSON, R.layout.item_text_view);
+    }
+    @Override
+    protected void convert(final BaseViewHolder holder, final MultiItemEntity item) {
+        switch (holder.getItemViewType()) {
+        case TYPE_LEVEL_0:
+            ....
+            //set view content
+           holder.itemView.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   int pos = holder.getAdapterPosition();
+                   if (lv0.isExpanded()) { 
+                       collapse(pos);
+                   } else {
+                       expand(pos);
+                   }
+           }});
+           break;
+        case TYPE_LEVEL_1:
+           // similar with level 0
+           break;
+        case TYPE_PERSON:
+           //just set the content
+           break;
+    }
+}
+```
+In activity code
+```Java
+public class ExpandableUseActivity extends Activity {
+    @Override
+    protected  void onCreate(Bundle savedInstanceState) {
+        ...
+        ArrayList<MultiItemEntity> list = generateData();
+        ExpandableItemAdapter adapter = new ExpandableItemAdapter(list);
+        mRecyclerView.setAdapter(adapter);
+    }
+
+    private ArrayList<MultiItemEntity> generateData() {
+        ArrayList<MultiItemEntity> res = new ArrayList<>();
+        for (int i = 0; i < lv0Count; i++) {
+            Level0Item lv0 = new Level0Item(...);
+            for (int j = 0; j < lv1Count; j++) {
+                Level1Item lv1 = new Level1Item(...);
+                for (int k = 0; k < personCount; k++) {
+                    lv1.addSubItem(new Person());
+                }
+                lv0.addSubItem(lv1);
+            }
+            res.add(lv0);
+        }
+        return res;
+    }
+}
 ```
 
 #Thanks

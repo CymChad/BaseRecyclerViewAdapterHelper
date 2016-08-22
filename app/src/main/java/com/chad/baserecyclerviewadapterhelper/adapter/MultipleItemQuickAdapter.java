@@ -15,10 +15,9 @@ import java.util.List;
 public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem> {
 
     public MultipleItemQuickAdapter(Context context, List data) {
-        super( data);
+        super(data);
         addItemType(MultipleItem.TEXT, R.layout.item_text_view);
         addItemType(MultipleItem.IMG, R.layout.item_image_view);
-        addItemType(MultipleItem.IMGS, R.layout.item_image_views);
     }
 
     @Override
@@ -29,9 +28,6 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
                 break;
             case MultipleItem.IMG:
                 // set img data
-                break;
-            case MultipleItem.IMGS:
-                // set imgs data
                 break;
         }
     }

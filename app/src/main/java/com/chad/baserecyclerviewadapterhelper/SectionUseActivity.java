@@ -11,13 +11,14 @@ import com.chad.baserecyclerviewadapterhelper.adapter.SectionAdapter;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.MySection;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 import java.util.List;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class SectionUseActivity extends Activity implements BaseQuickAdapter.OnRecyclerViewItemClickListener {
+public class SectionUseActivity extends Activity {
     private RecyclerView mRecyclerView;
     private List<MySection> mData;
 
@@ -29,22 +30,26 @@ public class SectionUseActivity extends Activity implements BaseQuickAdapter.OnR
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mData = DataServer.getSampleData();
         SectionAdapter sectionAdapter = new SectionAdapter(R.layout.item_section_content, R.layout.def_section_head, mData);
-        sectionAdapter.setOnRecyclerViewItemClickListener(this);
-        sectionAdapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
+        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
+
+            @Override
+            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
+                MySection mySection = mData.get(position);
+                if (mySection.isHeader)
+                    Toast.makeText(SectionUseActivity.this, mySection.header, Toast.LENGTH_LONG).show();
+                else
+                    Toast.makeText(SectionUseActivity.this, mySection.t.getName(), Toast.LENGTH_LONG).show();
+            }
+
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                Toast.makeText(SectionUseActivity.this, "onItemChildClick", Toast.LENGTH_LONG).show();
+                Toast.makeText(SectionUseActivity.this, "onItemChildClick" + position, Toast.LENGTH_LONG).show();
             }
+
+
         });
         mRecyclerView.setAdapter(sectionAdapter);
     }
 
-    @Override
-    public void onItemClick(View view, int position) {
-        MySection mySection = mData.get(position);
-        if (mySection.isHeader)
-            Toast.makeText(this, mySection.header, Toast.LENGTH_LONG).show();
-        else
-            Toast.makeText(this, mySection.t.getName(), Toast.LENGTH_LONG).show();
-    }
+
 }

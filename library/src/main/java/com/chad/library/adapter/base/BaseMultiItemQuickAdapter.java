@@ -1,5 +1,6 @@
 package com.chad.library.adapter.base;
 
+import android.support.annotation.LayoutRes;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
@@ -17,6 +18,8 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity> exten
      */
     private SparseArray<Integer> layouts;
 
+    private static final int DEFAULT_VIEW_TYPE = -0xff;
+
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.
@@ -29,9 +32,16 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity> exten
 
     @Override
     protected int getDefItemViewType(int position) {
-        return ((MultiItemEntity) mData.get(position)).getItemType();
+        Object item = mData.get(position);
+        if (item instanceof MultiItemEntity) {
+            return ((MultiItemEntity)item).getItemType();
+        }
+        return DEFAULT_VIEW_TYPE;
     }
 
+    protected void setDefaultViewTypeLayout(@LayoutRes int layoutResId) {
+        addItemType(DEFAULT_VIEW_TYPE, layoutResId);
+    }
 
     @Override
     protected BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
@@ -42,7 +52,7 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity> exten
         return layouts.get(viewType);
     }
 
-    protected void addItemType(int type, int layoutResId) {
+    protected void addItemType(int type, @LayoutRes int layoutResId) {
         if (layouts == null) {
             layouts = new SparseArray<>();
         }

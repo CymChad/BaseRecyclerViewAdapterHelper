@@ -1,12 +1,12 @@
 /**
  * Copyright 2013 Joan Zapata
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,10 +18,14 @@ package com.chad.library.adapter.base;
 import android.animation.Animator;
 import android.content.Context;
 import android.support.annotation.IntDef;
+import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutParams;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +40,7 @@ import com.chad.library.adapter.base.animation.ScaleInAnimation;
 import com.chad.library.adapter.base.animation.SlideInBottomAnimation;
 import com.chad.library.adapter.base.animation.SlideInLeftAnimation;
 import com.chad.library.adapter.base.animation.SlideInRightAnimation;
+import com.chad.library.adapter.base.entity.IExpandable;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -61,8 +66,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     private Interpolator mInterpolator = new LinearInterpolator();
     private int mDuration = 300;
     private int mLastPosition = -1;
-    private OnRecyclerViewItemClickListener onRecyclerViewItemClickListener;
-    private OnRecyclerViewItemLongClickListener onRecyclerViewItemLongClickListener;
     private RequestLoadMoreListener mRequestLoadMoreListener;
     @AnimationType
     private BaseAnimation mCustomAnimation;
@@ -77,6 +80,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * View to show if there are no items to show.
      */
     private View mEmptyView;
+
+    /**
+     * View to show if load more failed.
+     */
+    private View loadMoreFailedView;
 
     protected static final String TAG = BaseQuickAdapter.class.getSimpleName();
     protected Context mContext;
@@ -115,19 +123,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      */
     public static final int SLIDEIN_RIGHT = 0x00000005;
 
-    /**
-     * call the method will not enable the loadMore funcation and the params pageSize is invalid
-     * more infomation see{@link  public void openLoadMore(int pageSize, boolean enable),@link  public void setOnLoadMoreListener(RequestLoadMoreListener requestLoadMoreListener)} method
-     *
-     * @param pageSize
-     * @param requestLoadMoreListener
-     */
-    @Deprecated
-    public void setOnLoadMoreListener(int pageSize, RequestLoadMoreListener requestLoadMoreListener) {
-
-        setOnLoadMoreListener(requestLoadMoreListener);
-    }
-
     public void setOnLoadMoreListener(RequestLoadMoreListener requestLoadMoreListener) {
         this.mRequestLoadMoreListener = requestLoadMoreListener;
     }
@@ -145,33 +140,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * when adapter's data size than pageSize and enable is true,the loading more function is enable,or disable
      *
      * @param pageSize
-     * @param enable
      */
-    public void openLoadMore(int pageSize, boolean enable) {
+    public void openLoadMore(int pageSize) {
         this.pageSize = pageSize;
-        mNextLoadEnable = enable;
+        mNextLoadEnable = true;
 
-    }
-
-    /**
-     * call the method before you should call setPageSize() method to setting up the enablePagerSize value,whether it will  invalid
-     * enable the loading more data function if enable's value is true,or disable
-     *
-     * @param enable
-     */
-    public void openLoadMore(boolean enable) {
-        mNextLoadEnable = enable;
-
-    }
-
-    /**
-     * setting up the size to decide the loading more data funcation whether enable
-     * enable if the data size than pageSize,or diable
-     *
-     * @param pageSize
-     */
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
     }
 
     /**
@@ -181,117 +154,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      */
     public int getPageSize() {
         return this.pageSize;
-    }
-
-    /**
-     * Register a callback to be invoked when an item in this AdapterView has
-     * been clicked.
-     *
-     * @param onRecyclerViewItemClickListener The callback that will be invoked.
-     */
-    public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener) {
-        this.onRecyclerViewItemClickListener = onRecyclerViewItemClickListener;
-    }
-
-    /**
-     * Interface definition for a callback to be invoked when an item in this
-     * AdapterView has been clicked.
-     */
-    public interface OnRecyclerViewItemClickListener {
-        /**
-         * Callback method to be invoked when an item in this AdapterView has
-         * been clicked.
-         *
-         * @param view     The view within the AdapterView that was clicked (this
-         *                 will be a view provided by the adapter)
-         * @param position The position of the view in the adapter.
-         */
-        public void onItemClick(View view, int position);
-    }
-
-    /**
-     * Register a callback to be invoked when an item in this AdapterView has
-     * been clicked and held
-     *
-     * @param onRecyclerViewItemLongClickListener The callback that will run
-     */
-    public void setOnRecyclerViewItemLongClickListener(OnRecyclerViewItemLongClickListener onRecyclerViewItemLongClickListener) {
-        this.onRecyclerViewItemLongClickListener = onRecyclerViewItemLongClickListener;
-    }
-
-    /**
-     * Interface definition for a callback to be invoked when an item in this
-     * view has been clicked and held
-     */
-    public interface OnRecyclerViewItemLongClickListener {
-        /**
-         * callback method to be invoked when an item in this view has been
-         * click and held
-         *
-         * @param view     The view whihin the AbsListView that was clicked
-         * @param position The position of the view int the adapter
-         * @return true if the callback consumed the long click ,false otherwise
-         */
-        public boolean onItemLongClick(View view, int position);
-    }
-
-    private OnRecyclerViewItemChildClickListener mChildClickListener;
-
-    private OnRecyclerViewItemChildLongClickListener mChildLongClickListener;
-
-    /**
-     * Register a callback to be invoked when childView in this AdapterView has
-     * been clicked and held
-     * {@link OnRecyclerViewItemChildClickListener}
-     *
-     * @param childClickListener The callback that will run
-     */
-    public void setOnRecyclerViewItemChildClickListener(OnRecyclerViewItemChildClickListener childClickListener) {
-        this.mChildClickListener = childClickListener;
-    }
-
-    public interface OnRecyclerViewItemChildClickListener {
-        void onItemChildClick(BaseQuickAdapter adapter, View view, int position);
-    }
-
-    public class OnItemChildClickListener implements View.OnClickListener {
-        public RecyclerView.ViewHolder mViewHolder;
-
-        @Override
-        public void onClick(View v) {
-            if (mChildClickListener != null)
-                mChildClickListener.onItemChildClick(BaseQuickAdapter.this, v, mViewHolder.getLayoutPosition() - getHeaderLayoutCount());
-        }
-    }
-
-    /**
-     * Register a callback to be invoked when childView in this AdapterView has
-     * been longClicked and held
-     * {@link OnRecyclerViewItemChildLongClickListener}
-     *
-     * @param childLongClickListener The callback that will run
-     */
-    public void setOnRecyclerViewItemChildLongClickListener(OnRecyclerViewItemChildLongClickListener childLongClickListener) {
-        this.mChildLongClickListener = childLongClickListener;
-    }
-
-    /**
-     * Interface for ItemChildLongClick
-     */
-    public interface OnRecyclerViewItemChildLongClickListener {
-        boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position);
-    }
-
-    public class OnItemChildLongClickListener implements View.OnLongClickListener {
-        public RecyclerView.ViewHolder mViewHolder;
-
-        @Override
-        public boolean onLongClick(View v) {
-            if (mChildLongClickListener != null) {
-                return mChildLongClickListener.onItemChildLongClick(BaseQuickAdapter.this, v, mViewHolder.getLayoutPosition() - getHeaderViewsCount());
-            }
-            return false;
-        }
     }
 
 
@@ -352,6 +214,9 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             mNextLoadEnable = true;
             // mFooterLayout = null;
         }
+        if (loadMoreFailedView != null) {
+            removeFooterView(loadMoreFailedView);
+        }
         mLastPosition = -1;
         notifyDataSetChanged();
     }
@@ -359,10 +224,13 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     /**
      * additional data;
      *
-     * @param data
+     * @param newData
      */
-    public void addData(List<T> data) {
-        this.mData.addAll(data);
+    public void addData(List<T> newData) {
+        this.mData.addAll(newData);
+        if (mNextLoadEnable) {
+            mLoadingMoreEnable = false;
+        }
         notifyDataSetChanged();
     }
 
@@ -564,7 +432,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 break;
             default:
                 baseViewHolder = onCreateDefViewHolder(parent, viewType);
-                initItemClickListener(baseViewHolder);
         }
         return baseViewHolder;
 
@@ -612,7 +479,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(final RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
         if (manager instanceof GridLayoutManager) {
@@ -621,10 +488,38 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 @Override
                 public int getSpanSize(int position) {
                     int type = getItemViewType(position);
-                    return (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW) ? gridManager.getSpanCount() : 1;
+                    if (mSpanSizeLookup == null)
+                        return (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW) ? gridManager.getSpanCount() : 1;
+                    else
+                        return (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW) ? gridManager.getSpanCount() : mSpanSizeLookup.getSpanSize(gridManager, position - getHeaderLayoutCount());
                 }
             });
         }
+        recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mRequestLoadMoreListener != null && pageSize == -1) {
+                    RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                    int visibleItemCount = layoutManager.getChildCount();
+                    openLoadMore(visibleItemCount);
+                }
+            }
+        });
+
+    }
+
+    private boolean flag = true;
+    private SpanSizeLookup mSpanSizeLookup;
+
+    public interface SpanSizeLookup {
+        int getSpanSize(GridLayoutManager gridLayoutManager, int position);
+    }
+
+    /**
+     * @param spanSizeLookup instance to be used to query number of spans occupied by each item
+     */
+    public void setSpanSizeLookup(SpanSizeLookup spanSizeLookup) {
+        this.mSpanSizeLookup = spanSizeLookup;
     }
 
     /**
@@ -808,6 +703,38 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
+     * Set the view to show when load more failed.
+     */
+    public void setLoadMoreFailedView(View view) {
+        loadMoreFailedView = view;
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeFooterView(loadMoreFailedView);
+                openLoadMore(pageSize);
+            }
+        });
+    }
+
+    /**
+     * Call this method when load more failed.
+     */
+    public void showLoadMoreFailedView() {
+        loadComplete();
+        if (loadMoreFailedView == null) {
+            loadMoreFailedView = mLayoutInflater.inflate(R.layout.def_load_more_failed, null);
+            loadMoreFailedView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    removeFooterView(loadMoreFailedView);
+                    openLoadMore(pageSize);
+                }
+            });
+        }
+        addFooterView(loadMoreFailedView);
+    }
+
+    /**
      * Sets the view to show if the adapter is empty
      */
     public void setEmptyView(View emptyView) {
@@ -847,39 +774,14 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         return mEmptyView;
     }
 
+
     /**
-     * see more {@link  public void notifyDataChangedAfterLoadMore(boolean isNextLoad)}
      *
-     * @param isNextLoad
      */
-    @Deprecated
-    public void isNextLoad(boolean isNextLoad) {
-        mNextLoadEnable = isNextLoad;
+    public void loadComplete() {
+        mNextLoadEnable = false;
         mLoadingMoreEnable = false;
         notifyDataSetChanged();
-
-    }
-
-    /**
-     * @param isNextLoad true
-     *                   if true when loading more data can show loadingView
-     */
-    public void notifyDataChangedAfterLoadMore(boolean isNextLoad) {
-        mNextLoadEnable = isNextLoad;
-        mLoadingMoreEnable = false;
-        notifyDataSetChanged();
-
-    }
-
-    /**
-     * add more data
-     *
-     * @param data
-     * @param isNextLoad
-     */
-    public void notifyDataChangedAfterLoadMore(List<T> data, boolean isNextLoad) {
-        mData.addAll(data);
-        notifyDataChangedAfterLoadMore(isNextLoad);
 
     }
 
@@ -891,29 +793,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
     }
 
-    /**
-     * init the baseViewHolder to register onRecyclerViewItemClickListener and onRecyclerViewItemLongClickListener
-     *
-     * @param baseViewHolder
-     */
-    private void initItemClickListener(final BaseViewHolder baseViewHolder) {
-        if (onRecyclerViewItemClickListener != null) {
-            baseViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onRecyclerViewItemClickListener.onItemClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
-                }
-            });
-        }
-        if (onRecyclerViewItemLongClickListener != null) {
-            baseViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    return onRecyclerViewItemLongClickListener.onItemLongClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
-                }
-            });
-        }
-    }
 
     /**
      * add animation when you want to show time
@@ -981,6 +860,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public interface RequestLoadMoreListener {
 
         void onLoadMoreRequested();
+
     }
 
 
@@ -1056,6 +936,110 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    private int recursiveExpand(int position, @NonNull List list) {
+        int count = 0;
+        int pos = position + list.size() - 1;
+        for (int i = list.size() - 1; i >= 0; i--, pos--) {
+            if (list.get(i) instanceof IExpandable) {
+                IExpandable item = (IExpandable) list.get(i);
+                if (item.isExpanded() && hasSubItems(item)) {
+                    List subList = item.getSubItems();
+                    mData.addAll(pos + 1, subList);
+                    int subItemCount = recursiveExpand(pos + 1, subList);
+                    count += subItemCount;
+                }
+            }
+        }
+        return count;
+
+    }
+
+    /**
+     * Expand an expandable item
+     *
+     * @param position position of the item
+     * @return the number of items that have been added.
+     */
+    public int expand(@IntRange(from = 0) int position) {
+        T item = getItem(position);
+        if (!isExpandable(item)) {
+            return 0;
+        }
+
+        IExpandable expandable = (IExpandable) item;
+        if (!hasSubItems(expandable)) {
+            expandable.setExpanded(false);
+            return 0;
+        }
+        int subItemCount = 0;
+        if (!expandable.isExpanded()) {
+            List list = expandable.getSubItems();
+            mData.addAll(position + 1, list);
+            subItemCount += recursiveExpand(position + 1, list);
+
+            expandable.setExpanded(true);
+            subItemCount += list.size();
+        }
+        notifyItemRangeInserted(position + 1, subItemCount);
+        return subItemCount;
+    }
+
+    private int recursiveCollapse(@IntRange(from = 0) int position) {
+        T item = getItem(position);
+        if (!isExpandable(item)) {
+            return 0;
+        }
+        IExpandable expandable = (IExpandable) item;
+        int subItemCount = 0;
+        if (expandable.isExpanded()) {
+            List<T> subItems = expandable.getSubItems();
+            for (int i = subItems.size() - 1; i >= 0; i--) {
+                T subItem = subItems.get(i);
+                int pos = getItemPosition(subItem);
+                if (pos < 0) {
+                    continue;
+                }
+                if (subItem instanceof IExpandable) {
+                    subItemCount += recursiveCollapse(pos);
+                }
+                mData.remove(pos);
+                subItemCount++;
+            }
+        }
+        return subItemCount;
+    }
+
+    /**
+     * Collapse an expandable item that has been expanded..
+     *
+     * @param position the position of the item
+     * @return the number of subItems collapsed.
+     */
+    public int collapse(@IntRange(from = 0) int position) {
+        T item = getItem(position);
+        if (!isExpandable(item)) {
+            return 0;
+        }
+        IExpandable expandable = (IExpandable) item;
+        int subItemCount = recursiveCollapse(position);
+        expandable.setExpanded(false);
+        notifyItemRangeRemoved(position + 1, subItemCount);
+        return subItemCount;
+    }
+
+    private int getItemPosition(T item) {
+        return item != null && mData != null && !mData.isEmpty() ? mData.indexOf(item) : -1;
+    }
+
+    private boolean hasSubItems(IExpandable item) {
+        List list = item.getSubItems();
+        return list != null && list.size() > 0;
+    }
+
+    private boolean isExpandable(T item) {
+        return item != null && item instanceof IExpandable;
     }
 
 }
