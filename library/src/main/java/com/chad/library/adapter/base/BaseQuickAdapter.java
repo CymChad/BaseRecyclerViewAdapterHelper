@@ -1,12 +1,12 @@
 /**
  * Copyright 2013 Joan Zapata
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,9 +21,11 @@ import android.support.annotation.IntDef;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutParams;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,6 +81,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      */
     private View mEmptyView;
 
+    /**
+     * View to show if load more failed.
+     */
+    private View loadMoreFailedView;
+
     protected static final String TAG = BaseQuickAdapter.class.getSimpleName();
     protected Context mContext;
     protected int mLayoutResId;
@@ -133,11 +140,10 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * when adapter's data size than pageSize and enable is true,the loading more function is enable,or disable
      *
      * @param pageSize
-     * @param enable
      */
-    public void openLoadMore(int pageSize, boolean enable) {
+    public void openLoadMore(int pageSize) {
         this.pageSize = pageSize;
-        mNextLoadEnable = enable;
+        mNextLoadEnable = true;
 
     }
 
@@ -208,6 +214,9 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             mNextLoadEnable = true;
             // mFooterLayout = null;
         }
+        if (loadMoreFailedView != null) {
+            removeFooterView(loadMoreFailedView);
+        }
         mLastPosition = -1;
         notifyDataSetChanged();
     }
@@ -215,10 +224,13 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     /**
      * additional data;
      *
-     * @param data
+     * @param newData
      */
-    public void addData(List<T> data) {
-        this.mData.addAll(data);
+    public void addData(List<T> newData) {
+        this.mData.addAll(newData);
+        if (mNextLoadEnable) {
+            mLoadingMoreEnable = false;
+        }
         notifyDataSetChanged();
     }
 
@@ -467,7 +479,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(final RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
         if (manager instanceof GridLayoutManager) {
@@ -483,8 +495,20 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 }
             });
         }
+        recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mRequestLoadMoreListener != null && pageSize == -1) {
+                    RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                    int visibleItemCount = layoutManager.getChildCount();
+                    openLoadMore(visibleItemCount);
+                }
+            }
+        });
+
     }
 
+    private boolean flag = true;
     private SpanSizeLookup mSpanSizeLookup;
 
     public interface SpanSizeLookup {
@@ -679,6 +703,38 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
+     * Set the view to show when load more failed.
+     */
+    public void setLoadMoreFailedView(View view) {
+        loadMoreFailedView = view;
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeFooterView(loadMoreFailedView);
+                openLoadMore(pageSize);
+            }
+        });
+    }
+
+    /**
+     * Call this method when load more failed.
+     */
+    public void showLoadMoreFailedView() {
+        loadComplete();
+        if (loadMoreFailedView == null) {
+            loadMoreFailedView = mLayoutInflater.inflate(R.layout.def_load_more_failed, null);
+            loadMoreFailedView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    removeFooterView(loadMoreFailedView);
+                    openLoadMore(pageSize);
+                }
+            });
+        }
+        addFooterView(loadMoreFailedView);
+    }
+
+    /**
      * Sets the view to show if the adapter is empty
      */
     public void setEmptyView(View emptyView) {
@@ -718,39 +774,14 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         return mEmptyView;
     }
 
+
     /**
-     * see more {@link  public void notifyDataChangedAfterLoadMore(boolean isNextLoad)}
      *
-     * @param isNextLoad
      */
-    @Deprecated
-    public void isNextLoad(boolean isNextLoad) {
-        mNextLoadEnable = isNextLoad;
+    public void loadComplete() {
+        mNextLoadEnable = false;
         mLoadingMoreEnable = false;
         notifyDataSetChanged();
-
-    }
-
-    /**
-     * @param isNextLoad true
-     *                   if true when loading more data can show loadingView
-     */
-    public void notifyDataChangedAfterLoadMore(boolean isNextLoad) {
-        mNextLoadEnable = isNextLoad;
-        mLoadingMoreEnable = false;
-        notifyDataSetChanged();
-
-    }
-
-    /**
-     * add more data
-     *
-     * @param data
-     * @param isNextLoad
-     */
-    public void notifyDataChangedAfterLoadMore(List<T> data, boolean isNextLoad) {
-        mData.addAll(data);
-        notifyDataChangedAfterLoadMore(isNextLoad);
 
     }
 
@@ -829,6 +860,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public interface RequestLoadMoreListener {
 
         void onLoadMoreRequested();
+
     }
 
 
@@ -911,7 +943,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         int pos = position + list.size() - 1;
         for (int i = list.size() - 1; i >= 0; i--, pos--) {
             if (list.get(i) instanceof IExpandable) {
-                IExpandable item = (IExpandable)list.get(i);
+                IExpandable item = (IExpandable) list.get(i);
                 if (item.isExpanded() && hasSubItems(item)) {
                     List subList = item.getSubItems();
                     mData.addAll(pos + 1, subList);
@@ -926,6 +958,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     /**
      * Expand an expandable item
+     *
      * @param position position of the item
      * @return the number of items that have been added.
      */
@@ -935,7 +968,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             return 0;
         }
 
-        IExpandable expandable = (IExpandable)item;
+        IExpandable expandable = (IExpandable) item;
         if (!hasSubItems(expandable)) {
             expandable.setExpanded(false);
             return 0;
@@ -958,7 +991,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         if (!isExpandable(item)) {
             return 0;
         }
-        IExpandable expandable = (IExpandable)item;
+        IExpandable expandable = (IExpandable) item;
         int subItemCount = 0;
         if (expandable.isExpanded()) {
             List<T> subItems = expandable.getSubItems();
@@ -971,8 +1004,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 if (subItem instanceof IExpandable) {
                     subItemCount += recursiveCollapse(pos);
                 }
-                mData.remove(subItem);
-                subItemCount ++;
+                mData.remove(pos);
+                subItemCount++;
             }
         }
         return subItemCount;
@@ -980,6 +1013,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     /**
      * Collapse an expandable item that has been expanded..
+     *
      * @param position the position of the item
      * @return the number of subItems collapsed.
      */
@@ -988,7 +1022,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         if (!isExpandable(item)) {
             return 0;
         }
-        IExpandable expandable = (IExpandable)item;
+        IExpandable expandable = (IExpandable) item;
         int subItemCount = recursiveCollapse(position);
         expandable.setExpanded(false);
         notifyItemRangeRemoved(position + 1, subItemCount);
