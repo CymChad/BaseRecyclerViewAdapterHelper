@@ -15,15 +15,16 @@ import com.chad.library.adapter.base.BaseViewHolder;
  */
 public class QuickClickAdapter extends BaseQuickAdapter<Status> {
     public QuickClickAdapter() {
-        super( R.layout.tweet, DataServer.getSampleData(100));
+        super( R.layout.item, DataServer.getSampleData(100));
     }
 
     public QuickClickAdapter(int dataSize) {
-        super( R.layout.tweet, DataServer.getSampleData(dataSize));
+        super( R.layout.item, DataServer.getSampleData(dataSize));
     }
 
     @Override
     protected void convert(BaseViewHolder helper, Status item) {
+//        helper.getConvertView().setBackgroundResource(R.drawable.card_click);
         helper.setText(R.id.tweetName, item.getUserName())
                 .setText(R.id.tweetText, item.getText())
                 .setText(R.id.tweetDate, item.getCreatedAt())
@@ -31,7 +32,7 @@ public class QuickClickAdapter extends BaseQuickAdapter<Status> {
                 .addOnClickListener(R.id.tweetAvatar)
                 .addOnClickListener(R.id.tweetName)
                 .addOnLongClickListener(R.id.tweetText)
-                .linkify(R.id.tweetText);
+               ;
         Glide.with(mContext).load(item.getUserAvatar()).crossFade().placeholder(R.mipmap.def_head).transform(new GlideCircleTransform(mContext)).into((ImageView) helper.getView(R.id.tweetAvatar));
     }
 
