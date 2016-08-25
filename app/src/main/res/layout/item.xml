@@ -1,0 +1,35 @@
+<LinearLayout
+    android:background="@drawable/card_click"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_marginLeft="@dimen/dp_14"
+            android:layout_marginRight="@dimen/dp_14"
+            android:layout_marginTop="10dp"
+            android:id="@+id/iv_botImg"
+            android:src="@drawable/retweet"
+            android:layout_width="45dp"
+            android:layout_height="45dp" />
+        <TextView
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/tv_botText"
+            android:layout_gravity="center"
+            android:text="Test"
+            android:textSize="12dp"
+            android:textColor="#ffffff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+
+</LinearLayout>
