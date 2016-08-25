@@ -5,11 +5,9 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickClickAdapter;
@@ -159,28 +157,4 @@ public class RecyclerClickItemActivity extends Activity {
         return super.dispatchTouchEvent(ev);
     }
 
-    private class CustomAdapter extends BaseAdapter {
-        @Override
-        public int getCount() {
-            return 100;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView==null){
-                convertView = LayoutInflater.from(RecyclerClickItemActivity.this).inflate(R.layout.item,null);
-            }
-            return convertView;
-        }
-    }
 }
