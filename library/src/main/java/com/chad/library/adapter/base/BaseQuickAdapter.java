@@ -21,7 +21,6 @@ import android.support.annotation.IntDef;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutParams;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -80,6 +79,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * View to show if there are no items to show.
      */
     private View mEmptyView;
+    private View mCopyEmptyLayout;
 
     /**
      * View to show if load more failed.
@@ -425,7 +425,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 baseViewHolder = new BaseViewHolder(mHeaderLayout);
                 break;
             case EMPTY_VIEW:
-                baseViewHolder = new BaseViewHolder(mEmptyView);
+                baseViewHolder = new BaseViewHolder(mEmptyView == mCopyEmptyLayout ? mCopyEmptyLayout : mEmptyView);
                 break;
             case FOOTER_VIEW:
                 baseViewHolder = new BaseViewHolder(mFooterLayout);
@@ -501,6 +501,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 if (mRequestLoadMoreListener != null && pageSize == -1) {
                     RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
                     int visibleItemCount = layoutManager.getChildCount();
+                    Log.e("visibleItemCount", visibleItemCount + "");
                     openLoadMore(visibleItemCount);
                 }
             }
@@ -760,6 +761,9 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         mHeadAndEmptyEnable = isHeadAndEmpty;
         mFootAndEmptyEnable = isFootAndEmpty;
         mEmptyView = emptyView;
+        if (mCopyEmptyLayout == null) {
+            mCopyEmptyLayout = emptyView;
+        }
         mEmptyEnable = true;
     }
 
