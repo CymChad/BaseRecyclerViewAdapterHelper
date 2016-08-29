@@ -50,20 +50,23 @@ public class EmptyViewUseActivity extends Activity implements View.OnClickListen
     public void onClick(View v) {
         View view;
         if (!isNotData) {
-            view = notDataView;
             isNotData = true;
-            if(mQuickAdapter.getEmptyView() != notDataView){
-                mQuickAdapter.setEmptyView(view);
-                mQuickAdapter.notifyItemChanged(0);
-            }
+            if (isEmptyView(notDataView))
+                changedView(notDataView);
         } else {
-            view = errorView;
             isNotData = false;
-            if(mQuickAdapter.getEmptyView() != errorView){
-                mQuickAdapter.setEmptyView(view);
-                mQuickAdapter.notifyItemChanged(0);
-            }
+            if (isEmptyView(errorView))
+                changedView(errorView);
         }
 
+    }
+
+    private boolean isEmptyView(View view) {
+        return mQuickAdapter.getEmptyView() != view;
+    }
+
+    private void changedView(View view) {
+        mQuickAdapter.setEmptyView(view);
+        mQuickAdapter.notifyItemChanged(0);
     }
 }
