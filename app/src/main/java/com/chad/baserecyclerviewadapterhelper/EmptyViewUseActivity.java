@@ -23,12 +23,19 @@ public class EmptyViewUseActivity extends Activity implements View.OnClickListen
         setContentView(R.layout.activity_empty_view_use);
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         Button btnSwuich = (Button) findViewById(R.id.btn_switch);
+        Button btnSetError = (Button) findViewById(R.id.btn_set_error);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         initAdapter();
         btnSwuich.setOnClickListener(this);
         notDataView = getLayoutInflater().inflate(R.layout.empty_view, (ViewGroup) mRecyclerView.getParent(), false);
         errorView = getLayoutInflater().inflate(R.layout.error_view, (ViewGroup) mRecyclerView.getParent(), false);
+        btnSetError.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isNotData = true;
+            }
+        });
     }
 
     private void initAdapter() {
@@ -45,11 +52,18 @@ public class EmptyViewUseActivity extends Activity implements View.OnClickListen
         if (!isNotData) {
             view = notDataView;
             isNotData = true;
+            if(mQuickAdapter.getEmptyView() != notDataView){
+                mQuickAdapter.setEmptyView(view);
+                mQuickAdapter.notifyItemChanged(0);
+            }
         } else {
             view = errorView;
             isNotData = false;
+            if(mQuickAdapter.getEmptyView() != errorView){
+                mQuickAdapter.setEmptyView(view);
+                mQuickAdapter.notifyItemChanged(0);
+            }
         }
-        mQuickAdapter.setEmptyView(view);
-        mQuickAdapter.notifyItemChanged(0);
+
     }
 }
