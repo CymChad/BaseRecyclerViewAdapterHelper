@@ -228,8 +228,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      */
     public void addData(List<T> newData) {
         this.mData.addAll(newData);
-        if (mRequestLoadMoreListener != null) {
-            mNextLoadEnable = true;
+        if (mNextLoadEnable) {
             mLoadingMoreEnable = false;
         }
         notifyDataSetChanged();
