@@ -3,6 +3,7 @@ package com.chad.baserecyclerviewadapterhelper.adapter;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
@@ -42,6 +44,12 @@ public class QuickClickAdapter extends BaseQuickAdapter<Status> {
         final ChildQuickClickAdapter adapter = new ChildQuickClickAdapter(3);
         adapter.addHeaderView(getHeadView());
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnItemTouchListener(new OnItemClickListener() {
+            @Override
+            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Log.e(TAG, "recyclerview 点击的位置: "+position);
+            }
+        });
     }
 
     private View getHeadView() {
