@@ -41,7 +41,6 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
 
     @Override
     public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-
         if (recyclerView == null) {
             this.recyclerView = rv;
             this.baseQuickAdapter = (BaseQuickAdapter) recyclerView.getAdapter();
@@ -65,6 +64,7 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
 
     @Override
     public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        Log.d(TAG, "onRequestDisallowInterceptTouchEvent: "+disallowIntercept);
     }
 
     private class ItemTouchHelperGestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -73,6 +73,7 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
 
         @Override
         public boolean onDown(MotionEvent e) {
+            Log.e(TAG, "onDown: " );
             mIsPrepressed = true;
             mPressedView = recyclerView.findChildViewUnder(e.getX(), e.getY());
             super.onDown(e);
@@ -81,6 +82,7 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
 
         @Override
         public void onShowPress(MotionEvent e) {
+
             if (mIsPrepressed && mPressedView != null) {
                 mPressedView.setPressed(true);
                 mIsShowPress = true;
@@ -114,9 +116,10 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
                         }
                     }
 
-
+                    Log.e(TAG, "onSingleTapUp: "+childClickViewIds);
                     onItemClick(baseQuickAdapter, pressedView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
                 } else {
+                    Log.e(TAG, "onSingleTapUp: ");
                     onItemClick(baseQuickAdapter, pressedView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
                 }
                 resetPressedView(pressedView);
