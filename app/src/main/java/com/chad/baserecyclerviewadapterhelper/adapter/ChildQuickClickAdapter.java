@@ -1,12 +1,5 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
@@ -16,13 +9,13 @@ import com.chad.library.adapter.base.BaseViewHolder;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class QuickClickAdapter extends BaseQuickAdapter<Status> {
-    public QuickClickAdapter() {
-        super( R.layout.item_1, DataServer.getSampleData(100));
+public class ChildQuickClickAdapter extends BaseQuickAdapter<Status> {
+    public ChildQuickClickAdapter() {
+        super( R.layout.item, DataServer.getSampleData(3));
     }
 
-    public QuickClickAdapter(int dataSize) {
-        super( R.layout.item_1, DataServer.getSampleData(dataSize));
+    public ChildQuickClickAdapter(int dataSize) {
+        super( R.layout.item, DataServer.getSampleData(dataSize));
     }
 
     @Override
@@ -37,17 +30,10 @@ public class QuickClickAdapter extends BaseQuickAdapter<Status> {
 //                .addOnLongClickListener(R.id.tweetText)
 //               ;
 //        Glide.with(mContext).load(item.getUserAvatar()).crossFade().placeholder(R.mipmap.def_head).transform(new GlideCircleTransform(mContext)).into((ImageView) helper.getView(R.id.tweetAvatar));
-       RecyclerView recyclerView = helper.getView(R.id.recyclerview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        final ChildQuickClickAdapter adapter = new ChildQuickClickAdapter(3);
-        adapter.addHeaderView(getHeadView());
-        recyclerView.setAdapter(adapter);
+//       RecyclerView recyclerView = helper.getView(R.id.recyclerview);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+//        recyclerView.setAdapter();
     }
 
-    private View getHeadView() {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.head_view, null);
-        view.findViewById(R.id.tv).setVisibility(View.GONE);
-        view.setLayoutParams(new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        return view;
-    }
+
 }

@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickClickAdapter;
@@ -21,14 +23,16 @@ public class RecyclerClickItemActivity extends Activity {
 
     private RecyclerView mRecyclerView;
     private QuickClickAdapter mQuickAdapter;
-    private static final int PAGE_SIZE = 10;
+    private static final int PAGE_SIZE = 100;
+    private ListView mListView;
     private static String TAG = "RecyclerClickItemActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler_click);
         mRecyclerView = (RecyclerView) findViewById(R.id.list);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(layoutManager);
         initAdapter();
         mQuickAdapter.addHeaderView(getHeadView());
         mQuickAdapter.addFooterView(getFootView());
@@ -41,22 +45,42 @@ public class RecyclerClickItemActivity extends Activity {
 
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onItemChildClick: ");
+                RecyclerView recyclerView= (RecyclerView) view.findViewById(R.id.recyclerview);
+                recyclerView.addOnItemTouchListener(new OnItemClickListener() {
+                    @Override
+                    public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
+                        Log.e(TAG, "recyclerview: "+position);
+                    }
+                });
             }
 
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 super.onItemChildClick(adapter, view, position);
-                switch (view.getId()) {
-                    case R.id.tweetAvatar:
-                        Toast.makeText(RecyclerClickItemActivity.this, "The " + Integer.toString(position)+" tweetAvatar  is clicked", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.tweetName:
-                        Toast.makeText(RecyclerClickItemActivity.this, "The " + Integer.toString(position)+" tweetName  is clicked", Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
-                        break;
-                }
+
+//                switch (view.getId()) {
+//
+//                    case R.id.recyclerview:
+//
+//                        if(view.getVisibility()==View.VISIBLE){
+////                            adapter.getItem(position)
+////                            view.setVisibility(View.INVISIBLE);
+//                            layoutManager.getChildAt(position).findViewById(R.id.tweetAvatar).setVisibility(View.INVISIBLE);
+//                        }else {
+//                            layoutManager.getChildAt(position).findViewById(R.id.tweetAvatar).setVisibility(View.VISIBLE);
+//
+////                            view.setVisibility(View.VISIBLE);
+//                        }
+//
+//                        Toast.makeText(RecyclerClickItemActivity.this, "The " + Integer.toString(position)+" tweetAvatar  is clicked", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    case R.id.tweetName:
+//                        Toast.makeText(RecyclerClickItemActivity.this, "The " + Integer.toString(position)+" tweetName  is clicked", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    default:
+//                        break;
+//                }
             }
 
 
