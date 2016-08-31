@@ -48,10 +48,13 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
             mGestureDetector = new GestureDetectorCompat(recyclerView.getContext(), new ItemTouchHelperGestureListener(recyclerView));
         }
         if (!mGestureDetector.onTouchEvent(e) && e.getActionMasked() == MotionEvent.ACTION_UP && mIsShowPress) {
-            mPressedView.setPressed(false);
+            if (mPressedView!=null){
+                mPressedView.setPressed(false);
+                mPressedView = null;
+            }
             mIsShowPress = false;
             mIsPrepressed = false;
-            mPressedView = null;
+
 
         }
         return false;
@@ -59,7 +62,7 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
 
     @Override
     public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-        Log.e(TAG, "onTouchEvent: ");
+//        Log.e(TAG, "onTouchEvent: ");
         mGestureDetector.onTouchEvent(e);
     }
 
@@ -126,12 +129,18 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
         }
 
         private void resetPressedView(final View pressedView) {
-            pressedView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    pressedView.setPressed(false);
-                }
-            }, 100);
+            if (pressedView!=null){
+                pressedView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (pressedView!=null){
+                            pressedView.setPressed(false);
+                        }
+
+                    }
+                }, 100);
+            }
+
             mIsPrepressed = false;
             mPressedView = null;
         }
@@ -216,5 +225,3 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
     }
 
 }
-
-
