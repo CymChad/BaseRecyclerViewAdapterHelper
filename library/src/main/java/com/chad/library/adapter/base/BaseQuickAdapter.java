@@ -233,6 +233,16 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
         notifyDataSetChanged();
     }
+    
+    /**
+     *  same as addData(List<T>) but for when data is manually added to the adapter
+     */
+    public void dataAdded() {
+        if (mNextLoadEnable) {
+            mLoadingMoreEnable = false;
+        }
+        notifyDataSetChanged();
+    }
 
     /**
      * set a loadingView
