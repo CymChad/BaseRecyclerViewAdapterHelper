@@ -4,8 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".EmptyViewUseActivity">
-
+    <Button
+        android:id="@+id/btn_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="switch empty view"/>
+    <Button
+        android:id="@+id/btn_set_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="set error flag"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_list"
         android:layout_width="match_parent"

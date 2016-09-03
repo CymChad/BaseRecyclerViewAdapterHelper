@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickClickAdapter;
@@ -24,22 +23,20 @@ public class RecyclerClickItemActivity extends Activity {
     private QuickClickAdapter mQuickAdapter;
     private static final int PAGE_SIZE = 10;
     private static String TAG = "RecyclerClickItemActivity";
-    private ListView mListView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_header_and_footer_use);
-        mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
+        setContentView(R.layout.activity_recycler_click);
+        mRecyclerView = (RecyclerView) findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         initAdapter();
         mQuickAdapter.addHeaderView(getHeadView());
         mQuickAdapter.addFooterView(getFootView());
-        mRecyclerView.setAdapter(mQuickAdapter);
 
-        /**
-         * Item  clcik
-         */
-
+//        /**
+//         * Item  clcik
+//         */
+//
         mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
 
             @Override
@@ -159,4 +156,5 @@ public class RecyclerClickItemActivity extends Activity {
     public boolean dispatchTouchEvent(MotionEvent ev) {
         return super.dispatchTouchEvent(ev);
     }
+
 }

@@ -35,22 +35,34 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
     private Set<Integer> longClickViewIds;
     protected BaseQuickAdapter baseQuickAdapter;
     public static String TAG = "SimpleClickListener";
-
+    private boolean mIsPrepressed = false;
+    private boolean mIsShowPress = false;
+    private View mPressedView = null;
 
     @Override
     public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+
         if (recyclerView == null) {
             this.recyclerView = rv;
             this.baseQuickAdapter = (BaseQuickAdapter) recyclerView.getAdapter();
             mGestureDetector = new GestureDetectorCompat(recyclerView.getContext(), new ItemTouchHelperGestureListener(recyclerView));
         }
-        mGestureDetector.onTouchEvent(e);
+        if (!mGestureDetector.onTouchEvent(e) && e.getActionMasked() == MotionEvent.ACTION_UP && mIsShowPress) {
+            if (mPressedView!=null){
+                mPressedView.setPressed(false);
+                mPressedView = null;
+            }
+            mIsShowPress = false;
+            mIsPrepressed = false;
+
+
+        }
         return false;
     }
 
     @Override
     public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-        Log.e(TAG, "onTouchEvent: ");
+//        Log.e(TAG, "onTouchEvent: ");
         mGestureDetector.onTouchEvent(e);
     }
 
@@ -59,7 +71,25 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
     }
 
     private class ItemTouchHelperGestureListener extends GestureDetector.SimpleOnGestureListener {
+
         private RecyclerView recyclerView;
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            mIsPrepressed = true;
+            mPressedView = recyclerView.findChildViewUnder(e.getX(), e.getY());
+            super.onDown(e);
+            return false;
+        }
+
+        @Override
+        public void onShowPress(MotionEvent e) {
+            if (mIsPrepressed && mPressedView != null) {
+                mPressedView.setPressed(true);
+                mIsShowPress = true;
+            }
+            super.onShowPress(e);
+        }
 
         public ItemTouchHelperGestureListener(RecyclerView recyclerView) {
             this.recyclerView = recyclerView;
@@ -67,10 +97,10 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
-            View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-
-            if (child != null) {
-                BaseViewHolder vh = (BaseViewHolder) recyclerView.getChildViewHolder(child);
+            if (mIsPrepressed && mPressedView != null) {
+                mPressedView.setPressed(true);
+                final View pressedView = mPressedView;
+                BaseViewHolder vh = (BaseViewHolder) recyclerView.getChildViewHolder(pressedView);
 
                 if (isHeaderOrFooterPosition(vh.getLayoutPosition())) {
                     return false;
@@ -79,41 +109,67 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
 
                 if (childClickViewIds != null && childClickViewIds.size() > 0) {
                     for (Iterator it = childClickViewIds.iterator(); it.hasNext(); ) {
-                        View childView = child.findViewById((Integer) it.next());
+                        View childView = pressedView.findViewById((Integer) it.next());
                         if (inRangeOfView(childView, e)) {
                             onItemChildClick(baseQuickAdapter, childView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
+                            resetPressedView(pressedView);
                             return true;
                         }
                     }
 
 
-                    onItemClick(baseQuickAdapter, child, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
+                    onItemClick(baseQuickAdapter, pressedView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
                 } else {
-                    onItemClick(baseQuickAdapter, child, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
+                    onItemClick(baseQuickAdapter, pressedView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
                 }
-
+                resetPressedView(pressedView);
 
             }
             return true;
         }
 
+        private void resetPressedView(final View pressedView) {
+            if (pressedView!=null){
+                pressedView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (pressedView!=null){
+                            pressedView.setPressed(false);
+                        }
+
+                    }
+                }, 100);
+            }
+
+            mIsPrepressed = false;
+            mPressedView = null;
+        }
+
         @Override
         public void onLongPress(MotionEvent e) {
-            View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-            if (child != null) {
-                BaseViewHolder vh = (BaseViewHolder) recyclerView.getChildViewHolder(child);
+            boolean isChildLongClick =false;
+            if (mIsPrepressed && mPressedView != null) {
+                BaseViewHolder vh = (BaseViewHolder) recyclerView.getChildViewHolder(mPressedView);
                 if (!isHeaderOrFooterPosition(vh.getLayoutPosition())) {
                     longClickViewIds = vh.getItemChildLongClickViewIds();
                     if (longClickViewIds != null && longClickViewIds.size() > 0) {
                         for (Iterator it = longClickViewIds.iterator(); it.hasNext(); ) {
-                            View childView = child.findViewById((Integer) it.next());
+                            View childView = mPressedView.findViewById((Integer) it.next());
                             if (inRangeOfView(childView, e)) {
                                 onItemChildLongClick(baseQuickAdapter, childView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
-                                return;
+                                mPressedView.setPressed(true);
+                                mIsShowPress = true;
+                                isChildLongClick =true;
+                                break;
                             }
                         }
                     }
-                    onItemLongClick(baseQuickAdapter, child, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
+                    if (!isChildLongClick){
+                        onItemLongClick(baseQuickAdapter, mPressedView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
+                        mPressedView.setPressed(true);
+                        mIsShowPress = true;
+                    }
+
                 }
 
             }
@@ -169,5 +225,3 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
     }
 
 }
-
-

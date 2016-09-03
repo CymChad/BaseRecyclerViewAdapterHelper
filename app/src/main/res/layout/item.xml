@@ -1,0 +1,64 @@
+<LinearLayout
+    android:background="@drawable/card_click"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+
+    android:layout_height="wrap_content">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_gravity="center">
+
+        <ImageView
+            android:id="@+id/tweetAvatar"
+            android:layout_margin="@dimen/smallSpace"
+            android:layout_width="@dimen/avatarSize"
+            android:layout_height="@dimen/avatarSize"
+            android:layout_centerInParent="true"
+            android:layout_alignParentLeft="true"
+            android:src="@mipmap/def_head"
+            />
+
+        <ImageView
+            android:id="@+id/tweetRT"
+            android:layout_toLeftOf="@+id/tweetDate"
+            android:layout_alignBottom="@+id/tweetDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/retweet" />
+
+        <TextView
+            android:id="@+id/tweetName"
+            style="@style/tweetName"
+            android:layout_marginBottom="1dp"
+            android:layout_toRightOf="@+id/tweetAvatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chad"/>
+
+        <TextView
+            android:id="@+id/tweetText"
+            style="@style/tweetText"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/tweetAvatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tweetName"
+            android:textColor="@android:color/darker_gray"
+            android:text="Hello world!"/>
+
+        <TextView
+            android:id="@+id/tweetDate"
+            style="@style/tweetDate"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="04/06/13"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
