@@ -231,11 +231,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         if (mNextLoadEnable) {
             mLoadingMoreEnable = false;
         }
-        notifyDataSetChanged();
+        notifyItemRangeChanged(getItemCount(), newData.size());
     }
-    
+
     /**
-     *  same as addData(List<T>) but for when data is manually added to the adapter
+     * same as addData(List<T>) but for when data is manually added to the adapter
      */
     public void dataAdded() {
         if (mNextLoadEnable) {
@@ -658,7 +658,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
         index = index >= mFooterLayout.getChildCount() ? -1 : index;
         mFooterLayout.addView(footer, index);
-        this.notifyDataSetChanged();
+        this.notifyItemChanged(getItemCount());
     }
 
     /**
@@ -795,8 +795,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public void loadComplete() {
         mNextLoadEnable = false;
         mLoadingMoreEnable = false;
-        notifyDataSetChanged();
-
+        this.notifyItemChanged(getItemCount());
     }
 
 
