@@ -19,6 +19,7 @@
             android:layout_height="@dimen/avatarSize"
             android:layout_centerInParent="true"
             android:layout_alignParentLeft="true"
+            android:background="@drawable/card_click"
             android:src="@mipmap/def_head"
             />
 

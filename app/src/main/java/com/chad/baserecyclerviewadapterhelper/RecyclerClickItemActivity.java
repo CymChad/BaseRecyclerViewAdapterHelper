@@ -21,7 +21,7 @@ public class RecyclerClickItemActivity extends Activity {
 
     private RecyclerView mRecyclerView;
     private QuickClickAdapter mQuickAdapter;
-    private static final int PAGE_SIZE = 10;
+    private static final int PAGE_SIZE = 100;
     private static String TAG = "RecyclerClickItemActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {

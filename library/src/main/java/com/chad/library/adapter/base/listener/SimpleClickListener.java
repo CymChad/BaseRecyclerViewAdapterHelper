@@ -110,7 +110,7 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
                 if (childClickViewIds != null && childClickViewIds.size() > 0) {
                     for (Iterator it = childClickViewIds.iterator(); it.hasNext(); ) {
                         View childView = pressedView.findViewById((Integer) it.next());
-                        if (inRangeOfView(childView, e)) {
+                        if (inRangeOfView(childView, e)&&childView.isEnabled()) {
                             onItemChildClick(baseQuickAdapter, childView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
                             resetPressedView(pressedView);
                             return true;
@@ -155,7 +155,7 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
                     if (longClickViewIds != null && longClickViewIds.size() > 0) {
                         for (Iterator it = longClickViewIds.iterator(); it.hasNext(); ) {
                             View childView = mPressedView.findViewById((Integer) it.next());
-                            if (inRangeOfView(childView, e)) {
+                            if (inRangeOfView(childView, e)&&childView.isEnabled()) {
                                 onItemChildLongClick(baseQuickAdapter, childView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
                                 mPressedView.setPressed(true);
                                 mIsShowPress = true;
