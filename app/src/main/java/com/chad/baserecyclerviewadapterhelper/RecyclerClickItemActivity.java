@@ -8,10 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickClickAdapter;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 /**
  * create by AllenCoder
@@ -21,15 +22,13 @@ public class RecyclerClickItemActivity extends Activity {
     private RecyclerView mRecyclerView;
     private QuickClickAdapter mQuickAdapter;
     private static final int PAGE_SIZE = 100;
-    private ListView mListView;
     private static String TAG = "RecyclerClickItemActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler_click);
         mRecyclerView = (RecyclerView) findViewById(R.id.list);
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         initAdapter();
         mQuickAdapter.addHeaderView(getHeadView());
         mQuickAdapter.addFooterView(getFootView());
@@ -38,58 +37,43 @@ public class RecyclerClickItemActivity extends Activity {
 //         * Item  clcik
 //         */
 //
-//        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
-//
-//            @Override
-//            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                Log.d(TAG, "onItemChildClick: ");
-//                RecyclerView recyclerView= (RecyclerView) view.findViewById(R.id.recyclerview);
-//
-//            }
-//
-//            @Override
-//            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-//                super.onItemChildClick(adapter, view, position);
-//
-////                switch (view.getId()) {
-////
-////                    case R.id.recyclerview:
-////
-////                        if(view.getVisibility()==View.VISIBLE){
-//////                            adapter.getItem(position)
-//////                            view.setVisibility(View.INVISIBLE);
-////                            layoutManager.getChildAt(position).findViewById(R.id.tweetAvatar).setVisibility(View.INVISIBLE);
-////                        }else {
-////                            layoutManager.getChildAt(position).findViewById(R.id.tweetAvatar).setVisibility(View.VISIBLE);
-////
-//////                            view.setVisibility(View.VISIBLE);
-////                        }
-////
-////                        Toast.makeText(RecyclerClickItemActivity.this, "The " + Integer.toString(position)+" tweetAvatar  is clicked", Toast.LENGTH_SHORT).show();
-////                        break;
-////                    case R.id.tweetName:
-////                        Toast.makeText(RecyclerClickItemActivity.this, "The " + Integer.toString(position)+" tweetName  is clicked", Toast.LENGTH_SHORT).show();
-////                        break;
-////                    default:
-////                        break;
-////                }
-//            }
-//
-//
-//            @Override
-//            public void onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-//                super.onItemLongClick(adapter, view, position);
-//                Toast.makeText(RecyclerClickItemActivity.this,"The " + Integer.toString(position)+ " Item is LongClick ", Toast.LENGTH_SHORT).show();
-//
-//            }
-//
-//            @Override
-//            public void onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
-//                super.onItemChildLongClick(adapter, view, position);
-//                Toast.makeText(RecyclerClickItemActivity.this, "The "+ Integer.toString(position)+"  view itemchild " + "is LongClick " + Integer.toString(position), Toast.LENGTH_SHORT).show();
-//
-//            }
-//        });
+        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
+
+            @Override
+            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                super.onItemChildClick(adapter, view, position);
+                switch (view.getId()) {
+                    case R.id.tweetAvatar:
+                        Toast.makeText(RecyclerClickItemActivity.this, "The " + Integer.toString(position)+" tweetAvatar  is clicked", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.tweetName:
+                        Toast.makeText(RecyclerClickItemActivity.this, "The " + Integer.toString(position)+" tweetName  is clicked", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+
+            @Override
+            public void onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                super.onItemLongClick(adapter, view, position);
+                Toast.makeText(RecyclerClickItemActivity.this,"The " + Integer.toString(position)+ " Item is LongClick ", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
+                super.onItemChildLongClick(adapter, view, position);
+                Toast.makeText(RecyclerClickItemActivity.this, "The "+ Integer.toString(position)+"  view itemchild " + "is LongClick " + Integer.toString(position), Toast.LENGTH_SHORT).show();
+
+            }
+        });
         /**
          * this is sample code
          */
