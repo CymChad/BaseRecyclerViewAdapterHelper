@@ -37,6 +37,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 
 /**
@@ -49,8 +50,8 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      */
     private final SparseArray<View> views;
 
-    private final HashSet<Integer> childClickViewIds;
-    private final HashSet<Integer> itemChildLongClickViewIds;
+    private final LinkedHashSet<Integer> childClickViewIds;
+    private final LinkedHashSet<Integer> itemChildLongClickViewIds;
 
 
     public View convertView;
@@ -64,8 +65,8 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     protected BaseViewHolder(View view) {
         super(view);
         this.views = new SparseArray<View>();
-        this.childClickViewIds = new HashSet<>();
-        this.itemChildLongClickViewIds = new HashSet<>();
+        this.childClickViewIds = new LinkedHashSet<>();
+        this.itemChildLongClickViewIds = new LinkedHashSet<>();
         convertView = view;
 
     }
