@@ -9,15 +9,6 @@ public class Status {
     private String userName;
     private String userAvatar;
     private String createdAt;
-    private boolean isShow=true;
-
-    public boolean isShow() {
-        return isShow;
-    }
-
-    public void setShow(boolean show) {
-        isShow = show;
-    }
 
     public boolean isRetweet() {
         return isRetweet;
