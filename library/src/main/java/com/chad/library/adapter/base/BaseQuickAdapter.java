@@ -973,9 +973,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * Expand an expandable item
      *
      * @param position position of the item
+     * @param animate expand items with animation
+     * @param shouldNotify notify the RecyclerView to rebind items, <strong>false</strong> if you want to do it yourself.
      * @return the number of items that have been added.
      */
-    public int expand(@IntRange(from = 0) int position) {
+    public int expand(@IntRange(from = 0) int position, boolean animate, boolean shouldNotify) {
         position -= getHeaderLayoutCount();
 
         T item = getItem(position);
@@ -997,8 +999,37 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             expandable.setExpanded(true);
             subItemCount += list.size();
         }
-        notifyItemRangeInserted(position + 1 + getHeaderLayoutCount(), subItemCount);
+        int parentPos = position + getHeaderLayoutCount();
+        if (shouldNotify) {
+            if (animate) {
+                notifyItemChanged(parentPos);
+                notifyItemRangeInserted(parentPos + 1, subItemCount);
+            } else {
+                notifyDataSetChanged();
+            }
+        }
         return subItemCount;
+    }
+
+    /**
+     * Expand an expandable item
+     *
+     * @param position position of the item
+     * @param animate expand items with animation
+     * @return the number of items that have been added.
+     */
+    public int expand(@IntRange(from = 0) int position, boolean animate) {
+        return expand(position, animate, true);
+    }
+
+    /**
+     * Expand an expandable item with animation.
+     *
+     * @param position position of the item
+     * @return the number of items that have been added.
+     */
+    public int expand(@IntRange(from = 0) int position) {
+        return expand(position, true, true);
     }
 
     private int recursiveCollapse(@IntRange(from = 0) int position) {
@@ -1032,7 +1063,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * @param position the position of the item
      * @return the number of subItems collapsed.
      */
-    public int collapse(@IntRange(from = 0) int position) {
+    public int collapse(@IntRange(from = 0) int position, boolean animate) {
         position -= getHeaderLayoutCount();
         T item = getItem(position);
         if (!isExpandable(item)) {
@@ -1041,8 +1072,18 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         IExpandable expandable = (IExpandable) item;
         int subItemCount = recursiveCollapse(position);
         expandable.setExpanded(false);
-        notifyItemRangeRemoved(position + 1 + getHeaderLayoutCount(), subItemCount);
+        int parentPos = position + getHeaderLayoutCount();
+        if (animate) {
+            notifyItemChanged(parentPos);
+            notifyItemRangeRemoved(parentPos + 1, subItemCount);
+        } else {
+            notifyDataSetChanged();
+        }
         return subItemCount;
+    }
+
+    public int collapse(@IntRange(from = 0) int position) {
+        return collapse(position, true);
     }
 
     private int getItemPosition(T item) {
