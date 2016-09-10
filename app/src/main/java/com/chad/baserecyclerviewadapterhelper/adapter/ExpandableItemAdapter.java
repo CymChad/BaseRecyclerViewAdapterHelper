@@ -68,9 +68,9 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                         int pos = holder.getAdapterPosition();
                         Log.d(TAG, "Level 1 item pos: " + pos);
                         if (lv1.isExpanded()) {
-                            collapse(pos);
+                            collapse(pos, false);
                         } else {
-                            expand(pos);
+                            expand(pos, false);
                         }
                     }
                 });

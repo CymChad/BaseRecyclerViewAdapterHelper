@@ -72,7 +72,7 @@ public class ExpandableUseActivity extends Activity {
         for (int i = 0; i < lv0Count; i++) {
             Level0Item lv0 = new Level0Item("This is " + i + "th item in Level 0", "subtitle of " + i);
             for (int j = 0; j < lv1Count; j++) {
-                Level1Item lv1 = new Level1Item("Level 1 item: " + j, "just subtitle");
+                Level1Item lv1 = new Level1Item("Level 1 item: " + j, "(no animation)");
                 for (int k = 0; k < personCount; k++) {
                     lv1.addSubItem(new Person(nameList[k], random.nextInt(40)));
                 }
