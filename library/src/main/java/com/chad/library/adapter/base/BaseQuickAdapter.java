@@ -231,7 +231,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         if (mNextLoadEnable) {
             mLoadingMoreEnable = false;
         }
-        notifyItemRangeChanged(getItemCount(), newData.size());
+        notifyItemRangeChanged(mData.size()-newData.size(), newData.size());
     }
 
     /**
@@ -377,12 +377,12 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 /**
                  * if user want to show headview and footview and emptyView but not add headview
                  */
-                if (mHeaderLayout == null && mEmptyView != null && mFooterLayout != null) {
+                if (mHeaderLayout == null && mFooterLayout != null) {
                     return FOOTER_VIEW;
                     /**
                      * add headview
                      */
-                } else if (mHeaderLayout != null && mEmptyView != null) {
+                } else if (mHeaderLayout != null) {
                     return EMPTY_VIEW;
                 }
             } else if (position == 0) {
