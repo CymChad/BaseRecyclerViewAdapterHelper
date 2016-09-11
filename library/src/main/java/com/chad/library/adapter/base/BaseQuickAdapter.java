@@ -235,6 +235,14 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
+     * @return Whether the Adapter is actively showing load
+     *         progress.
+     */
+    public boolean isLoading() {
+        return mLoadingMoreEnable;
+    }
+
+    /**
      * same as addData(List<T>) but for when data is manually added to the adapter
      */
     public void dataAdded() {
