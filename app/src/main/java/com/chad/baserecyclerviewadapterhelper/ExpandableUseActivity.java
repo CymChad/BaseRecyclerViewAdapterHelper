@@ -43,6 +43,7 @@ public class ExpandableUseActivity extends Activity {
 
         mRecyclerView.setAdapter(adapter);
 
+        adapter.expandAll(3, true);
     }
 
 

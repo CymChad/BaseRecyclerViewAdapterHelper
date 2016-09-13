@@ -988,12 +988,10 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public int expand(@IntRange(from = 0) int position, boolean animate, boolean shouldNotify) {
         position -= getHeaderLayoutCount();
 
-        T item = getItem(position);
-        if (!isExpandable(item)) {
+        IExpandable expandable = getExpandableItem(position);
+        if (expandable == null) {
             return 0;
         }
-
-        IExpandable expandable = (IExpandable) item;
         if (!hasSubItems(expandable)) {
             expandable.setExpanded(false);
             return 0;
@@ -1022,7 +1020,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     /**
      * Expand an expandable item
      *
-     * @param position position of the item
+     * @param position position of the item, which includes the header layout count.
      * @param animate  expand items with animation
      * @return the number of items that have been added.
      */
@@ -1033,11 +1031,57 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     /**
      * Expand an expandable item with animation.
      *
-     * @param position position of the item
+     * @param position position of the item, which includes the header layout count.
      * @return the number of items that have been added.
      */
     public int expand(@IntRange(from = 0) int position) {
         return expand(position, true, true);
+    }
+
+    public int expandAll(int position, boolean animate, boolean notify) {
+        position -= getHeaderLayoutCount();
+
+        T endItem = null;
+        if (position + 1 < getItemCount()) {
+            endItem = getItem(position + 1);
+        }
+
+        IExpandable expandable = getExpandableItem(position);
+        if (!hasSubItems(expandable)) {
+            return 0;
+        }
+
+        int count = expand(position + getHeaderLayoutCount(), false, false);
+        for (int i = position + 1; i < getItemCount(); i++) {
+            T item = getItem(i);
+
+            if (item == endItem) {
+                break;
+            }
+            if (isExpandable(item)) {
+                count += expand(i + getHeaderLayoutCount(), false, false);
+            }
+        }
+
+        if (notify) {
+            if (animate) {
+                notifyItemRangeInserted(position + getHeaderLayoutCount() + 1, count);
+            } else {
+                notifyDataSetChanged();
+            }
+        }
+        return count;
+    }
+
+    /**
+     * expand the item and all its subItems
+     * @param position position of the item, which includes the header layout count.
+     * @param init whether you are initializing the recyclerView or not.
+     *             if <strong>true</strong>, it won't notify recyclerView to redraw UI.
+     * @return the number of items that have been added to the adapter.
+     */
+    public int expandAll(int position, boolean init) {
+        return expandAll(position, true, !init);
     }
 
     private int recursiveCollapse(@IntRange(from = 0) int position) {
@@ -1068,30 +1112,50 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     /**
      * Collapse an expandable item that has been expanded..
      *
-     * @param position the position of the item
+     * @param position the position of the item, which includes the header layout count.
+     * @param animate collapse with animation or not.
+     * @param notify notify the recyclerView refresh UI or not.
      * @return the number of subItems collapsed.
      */
-    public int collapse(@IntRange(from = 0) int position, boolean animate) {
+    public int collapse(@IntRange(from = 0) int position, boolean animate, boolean notify) {
         position -= getHeaderLayoutCount();
-        T item = getItem(position);
-        if (!isExpandable(item)) {
+
+        IExpandable expandable = getExpandableItem(position);
+        if (expandable == null) {
             return 0;
         }
-        IExpandable expandable = (IExpandable) item;
         int subItemCount = recursiveCollapse(position);
         expandable.setExpanded(false);
         int parentPos = position + getHeaderLayoutCount();
-        if (animate) {
-            notifyItemChanged(parentPos);
-            notifyItemRangeRemoved(parentPos + 1, subItemCount);
-        } else {
-            notifyDataSetChanged();
+        if (notify) {
+            if (animate) {
+                notifyItemChanged(parentPos);
+                notifyItemRangeRemoved(parentPos + 1, subItemCount);
+            } else {
+                notifyDataSetChanged();
+            }
         }
         return subItemCount;
     }
 
+    /**
+     * Collapse an expandable item that has been expanded..
+     *
+     * @param position the position of the item, which includes the header layout count.
+     * @return the number of subItems collapsed.
+     */
     public int collapse(@IntRange(from = 0) int position) {
-        return collapse(position, true);
+        return collapse(position, true, true);
+    }
+
+    /**
+     * Collapse an expandable item that has been expanded..
+     *
+     * @param position the position of the item, which includes the header layout count.
+     * @return the number of subItems collapsed.
+     */
+    public int collapse(@IntRange(from = 0) int position, boolean animate) {
+        return collapse(position, animate, true);
     }
 
     private int getItemPosition(T item) {
@@ -1107,4 +1171,12 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         return item != null && item instanceof IExpandable;
     }
 
+    private IExpandable getExpandableItem(int position) {
+        T item = getItem(position);
+        if (isExpandable(item)) {
+            return (IExpandable)item;
+        } else {
+            return null;
+        }
+    }
 }
