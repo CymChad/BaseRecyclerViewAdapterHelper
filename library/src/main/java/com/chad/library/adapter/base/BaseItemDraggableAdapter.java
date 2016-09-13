@@ -22,16 +22,16 @@ import java.util.List;
 public abstract class BaseItemDraggableAdapter<T> extends BaseQuickAdapter<T> {
 
     private static final int NO_TOGGLE_VIEW = 0;
-    private int mToggleViewId = NO_TOGGLE_VIEW;
-    private ItemTouchHelper mItemTouchHelper;
-    private boolean itemDragEnabled = false;
-    private boolean itemSwipeEnabled = false;
-    private OnItemDragListener mOnItemDragListener;
-    private OnItemSwipeListener mOnItemSwipeListener;
-    private boolean mDragOnLongPress = true;
+    protected int mToggleViewId = NO_TOGGLE_VIEW;
+    protected ItemTouchHelper mItemTouchHelper;
+    protected boolean itemDragEnabled = false;
+    protected boolean itemSwipeEnabled = false;
+    protected OnItemDragListener mOnItemDragListener;
+    protected OnItemSwipeListener mOnItemSwipeListener;
+    protected boolean mDragOnLongPress = true;
 
-    private View.OnTouchListener mOnToggleViewTouchListener;
-    private View.OnLongClickListener mOnToggleViewLongClickListener;
+    protected View.OnTouchListener mOnToggleViewTouchListener;
+    protected View.OnLongClickListener mOnToggleViewLongClickListener;
 
     private static final String ERROR_NOT_SAME_ITEMTOUCHHELPER = "Item drag and item swipe should pass the same ItemTouchHelper";
 
