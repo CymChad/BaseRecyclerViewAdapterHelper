@@ -1042,7 +1042,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         position -= getHeaderLayoutCount();
 
         T endItem = null;
-        if (position + 1 < this.mData().size()) {
+        if (position + 1 < this.mData.size()) {
             endItem = getItem(position + 1);
         }
 
