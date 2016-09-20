@@ -222,6 +222,34 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
+     * add one new data in to certain location
+     * @param position
+     */
+    public void addData(int position, T data) {
+        if (0 <= position && position < mData.size()) {
+            mData.add(position, data);
+            notifyItemInserted(position);
+            notifyItemRangeChanged(position, mData.size() - position);
+        } else {
+            throw new ArrayIndexOutOfBoundsException("inserted position most greater than 0 and less than data size");
+        }
+    }
+
+    /**
+     * add new data in to certain location
+     * @param position
+     */
+    public void addData(int position, List<T> data) {
+        if (0 <= position && position < mData.size()) {
+            mData.addAll(position, data);
+            notifyItemInserted(position);
+            notifyItemRangeChanged(position, mData.size() - position - data.size());
+        } else {
+            throw new ArrayIndexOutOfBoundsException("inserted position most greater than 0 and less than data size");
+        }
+    }
+
+    /**
      * additional data;
      *
      * @param newData
