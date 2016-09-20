@@ -209,7 +209,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * @param data
      */
     public void setNewData(List<T> data) {
-        this.mData = data;
+        this.mData = data == null ? new ArrayList<T>() : data;
         if (mRequestLoadMoreListener != null) {
             mNextLoadEnable = true;
             // mFooterLayout = null;
@@ -223,6 +223,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     /**
      * add one new data in to certain location
+     *
      * @param position
      */
     public void addData(int position, T data) {
@@ -237,6 +238,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     /**
      * add new data in to certain location
+     *
      * @param position
      */
     public void addData(int position, List<T> data) {
@@ -1103,9 +1105,10 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     /**
      * expand the item and all its subItems
+     *
      * @param position position of the item, which includes the header layout count.
-     * @param init whether you are initializing the recyclerView or not.
-     *             if <strong>true</strong>, it won't notify recyclerView to redraw UI.
+     * @param init     whether you are initializing the recyclerView or not.
+     *                 if <strong>true</strong>, it won't notify recyclerView to redraw UI.
      * @return the number of items that have been added to the adapter.
      */
     public int expandAll(int position, boolean init) {
@@ -1141,8 +1144,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * Collapse an expandable item that has been expanded..
      *
      * @param position the position of the item, which includes the header layout count.
-     * @param animate collapse with animation or not.
-     * @param notify notify the recyclerView refresh UI or not.
+     * @param animate  collapse with animation or not.
+     * @param notify   notify the recyclerView refresh UI or not.
      * @return the number of subItems collapsed.
      */
     public int collapse(@IntRange(from = 0) int position, boolean animate, boolean notify) {
@@ -1202,7 +1205,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     private IExpandable getExpandableItem(int position) {
         T item = getItem(position);
         if (isExpandable(item)) {
-            return (IExpandable)item;
+            return (IExpandable) item;
         } else {
             return null;
         }
