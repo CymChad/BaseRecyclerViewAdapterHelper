@@ -261,7 +261,9 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         if (mNextLoadEnable) {
             mLoadingMoreEnable = false;
         }
-        notifyItemRangeChanged(mData.size() - newData.size() + getHeaderLayoutCount(), newData.size());
+        // fix autoLoadMore only load one data
+        // notifyItemRangeChanged(mData.size() - newData.size() + getHeaderLayoutCount(), newData.size());
+        notifyDataSetChanged();
     }
 
     /**
@@ -838,6 +840,16 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
 
     private void addLoadMore(RecyclerView.ViewHolder holder) {
+        if (isLoadMore() && !mLoadingMoreEnable) {
+            mLoadingMoreEnable = true;
+            mRequestLoadMoreListener.onLoadMoreRequested();
+        }
+    }
+
+    /**
+     * preload data
+     */
+    public void autoLoadMore(){
         if (isLoadMore() && !mLoadingMoreEnable) {
             mLoadingMoreEnable = true;
             mRequestLoadMoreListener.onLoadMoreRequested();
