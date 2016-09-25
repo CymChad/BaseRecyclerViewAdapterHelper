@@ -237,6 +237,14 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
+     * add one new data
+     */
+    public void addData(T data) {
+        mData.add(data);
+        notifyItemInserted(mData.size());
+    }
+
+    /**
      * add new data in to certain location
      *
      * @param position
