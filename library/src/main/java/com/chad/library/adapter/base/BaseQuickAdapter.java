@@ -21,7 +21,6 @@ import android.support.annotation.IntDef;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutParams;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -80,6 +79,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * View to show if there are no items to show.
      */
     private View mEmptyView;
+    private View mCopyEmptyLayout;
 
     /**
      * View to show if load more failed.
@@ -209,7 +209,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * @param data
      */
     public void setNewData(List<T> data) {
-        this.mData = data;
+        this.mData = data == null ? new ArrayList<T>() : data;
         if (mRequestLoadMoreListener != null) {
             mNextLoadEnable = true;
             // mFooterLayout = null;
@@ -222,12 +222,68 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
+     * add one new data in to certain location
+     *
+     * @param position
+     */
+    public void addData(int position, T data) {
+        if (0 <= position && position < mData.size()) {
+            mData.add(position, data);
+            notifyItemInserted(position);
+            notifyItemRangeChanged(position, mData.size() - position);
+        } else {
+            throw new ArrayIndexOutOfBoundsException("inserted position most greater than 0 and less than data size");
+        }
+    }
+
+    /**
+     * add one new data
+     */
+    public void addData(T data) {
+        mData.add(data);
+        notifyItemInserted(mData.size());
+    }
+
+    /**
+     * add new data in to certain location
+     *
+     * @param position
+     */
+    public void addData(int position, List<T> data) {
+        if (0 <= position && position < mData.size()) {
+            mData.addAll(position, data);
+            notifyItemInserted(position);
+            notifyItemRangeChanged(position, mData.size() - position - data.size());
+        } else {
+            throw new ArrayIndexOutOfBoundsException("inserted position most greater than 0 and less than data size");
+        }
+    }
+
+    /**
      * additional data;
      *
      * @param newData
      */
     public void addData(List<T> newData) {
         this.mData.addAll(newData);
+        if (mNextLoadEnable) {
+            mLoadingMoreEnable = false;
+        }
+        notifyItemRangeChanged(mData.size() - newData.size() + getHeaderLayoutCount(), newData.size());
+    }
+
+    /**
+     * @return Whether the Adapter is actively showing load
+     * progress.
+     */
+    public boolean isLoading() {
+        return mLoadingMoreEnable;
+    }
+
+    /**
+     * same as addData(List<T>) but for when data is manually added to the adapter
+     */
+    public void dataAdded() {
         if (mNextLoadEnable) {
             mLoadingMoreEnable = false;
         }
@@ -367,12 +423,12 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 /**
                  * if user want to show headview and footview and emptyView but not add headview
                  */
-                if (mHeaderLayout == null && mEmptyView != null && mFooterLayout != null) {
+                if (mHeaderLayout == null && mFooterLayout != null) {
                     return FOOTER_VIEW;
                     /**
                      * add headview
                      */
-                } else if (mHeaderLayout != null && mEmptyView != null) {
+                } else if (mHeaderLayout != null) {
                     return EMPTY_VIEW;
                 }
             } else if (position == 0) {
@@ -425,7 +481,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 baseViewHolder = new BaseViewHolder(mHeaderLayout);
                 break;
             case EMPTY_VIEW:
-                baseViewHolder = new BaseViewHolder(mEmptyView);
+                baseViewHolder = new BaseViewHolder(mEmptyView == mCopyEmptyLayout ? mCopyEmptyLayout : mEmptyView);
                 break;
             case FOOTER_VIEW:
                 baseViewHolder = new BaseViewHolder(mFooterLayout);
@@ -501,6 +557,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 if (mRequestLoadMoreListener != null && pageSize == -1) {
                     RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
                     int visibleItemCount = layoutManager.getChildCount();
+                    Log.e("visibleItemCount", visibleItemCount + "");
                     openLoadMore(visibleItemCount);
                 }
             }
@@ -647,7 +704,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
         index = index >= mFooterLayout.getChildCount() ? -1 : index;
         mFooterLayout.addView(footer, index);
-        this.notifyDataSetChanged();
+        this.notifyItemChanged(getItemCount());
     }
 
     /**
@@ -760,6 +817,9 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         mHeadAndEmptyEnable = isHeadAndEmpty;
         mFootAndEmptyEnable = isFootAndEmpty;
         mEmptyView = emptyView;
+        if (mCopyEmptyLayout == null) {
+            mCopyEmptyLayout = emptyView;
+        }
         mEmptyEnable = true;
     }
 
@@ -781,8 +841,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public void loadComplete() {
         mNextLoadEnable = false;
         mLoadingMoreEnable = false;
-        notifyDataSetChanged();
-
+        this.notifyItemChanged(getItemCount());
     }
 
 
@@ -959,16 +1018,18 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     /**
      * Expand an expandable item
      *
-     * @param position position of the item
+     * @param position     position of the item
+     * @param animate      expand items with animation
+     * @param shouldNotify notify the RecyclerView to rebind items, <strong>false</strong> if you want to do it yourself.
      * @return the number of items that have been added.
      */
-    public int expand(@IntRange(from = 0) int position) {
-        T item = getItem(position);
-        if (!isExpandable(item)) {
+    public int expand(@IntRange(from = 0) int position, boolean animate, boolean shouldNotify) {
+        position -= getHeaderLayoutCount();
+
+        IExpandable expandable = getExpandableItem(position);
+        if (expandable == null) {
             return 0;
         }
-
-        IExpandable expandable = (IExpandable) item;
         if (!hasSubItems(expandable)) {
             expandable.setExpanded(false);
             return 0;
@@ -982,8 +1043,84 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             expandable.setExpanded(true);
             subItemCount += list.size();
         }
-        notifyItemRangeInserted(position + 1, subItemCount);
+        int parentPos = position + getHeaderLayoutCount();
+        if (shouldNotify) {
+            if (animate) {
+                notifyItemChanged(parentPos);
+                notifyItemRangeInserted(parentPos + 1, subItemCount);
+            } else {
+                notifyDataSetChanged();
+            }
+        }
         return subItemCount;
+    }
+
+    /**
+     * Expand an expandable item
+     *
+     * @param position position of the item, which includes the header layout count.
+     * @param animate  expand items with animation
+     * @return the number of items that have been added.
+     */
+    public int expand(@IntRange(from = 0) int position, boolean animate) {
+        return expand(position, animate, true);
+    }
+
+    /**
+     * Expand an expandable item with animation.
+     *
+     * @param position position of the item, which includes the header layout count.
+     * @return the number of items that have been added.
+     */
+    public int expand(@IntRange(from = 0) int position) {
+        return expand(position, true, true);
+    }
+
+    public int expandAll(int position, boolean animate, boolean notify) {
+        position -= getHeaderLayoutCount();
+
+        T endItem = null;
+        if (position + 1 < this.mData.size()) {
+            endItem = getItem(position + 1);
+        }
+
+        IExpandable expandable = getExpandableItem(position);
+        if (!hasSubItems(expandable)) {
+            return 0;
+        }
+
+        int count = expand(position + getHeaderLayoutCount(), false, false);
+        for (int i = position + 1; i < this.mData.size(); i++) {
+            T item = getItem(i);
+
+            if (item == endItem) {
+                break;
+            }
+            if (isExpandable(item)) {
+                count += expand(i + getHeaderLayoutCount(), false, false);
+            }
+        }
+
+        if (notify) {
+            if (animate) {
+                notifyItemRangeInserted(position + getHeaderLayoutCount() + 1, count);
+            } else {
+                notifyDataSetChanged();
+            }
+        }
+        return count;
+    }
+
+    /**
+     * expand the item and all its subItems
+     *
+     * @param position position of the item, which includes the header layout count.
+     * @param init     whether you are initializing the recyclerView or not.
+     *                 if <strong>true</strong>, it won't notify recyclerView to redraw UI.
+     * @return the number of items that have been added to the adapter.
+     */
+    public int expandAll(int position, boolean init) {
+        return expandAll(position, true, !init);
     }
 
     private int recursiveCollapse(@IntRange(from = 0) int position) {
@@ -1014,19 +1151,50 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     /**
      * Collapse an expandable item that has been expanded..
      *
-     * @param position the position of the item
+     * @param position the position of the item, which includes the header layout count.
+     * @param animate  collapse with animation or not.
+     * @param notify   notify the recyclerView refresh UI or not.
+     * @return the number of subItems collapsed.
+     */
+    public int collapse(@IntRange(from = 0) int position, boolean animate, boolean notify) {
+        position -= getHeaderLayoutCount();
+
+        IExpandable expandable = getExpandableItem(position);
+        if (expandable == null) {
+            return 0;
+        }
+        int subItemCount = recursiveCollapse(position);
+        expandable.setExpanded(false);
+        int parentPos = position + getHeaderLayoutCount();
+        if (notify) {
+            if (animate) {
+                notifyItemChanged(parentPos);
+                notifyItemRangeRemoved(parentPos + 1, subItemCount);
+            } else {
+                notifyDataSetChanged();
+            }
+        }
+        return subItemCount;
+    }
+
+    /**
+     * Collapse an expandable item that has been expanded..
+     *
+     * @param position the position of the item, which includes the header layout count.
      * @return the number of subItems collapsed.
      */
     public int collapse(@IntRange(from = 0) int position) {
-        T item = getItem(position);
-        if (!isExpandable(item)) {
-            return 0;
-        }
-        IExpandable expandable = (IExpandable) item;
-        int subItemCount = recursiveCollapse(position);
-        expandable.setExpanded(false);
-        notifyItemRangeRemoved(position + 1, subItemCount);
-        return subItemCount;
+        return collapse(position, true, true);
+    }
+
+    /**
+     * Collapse an expandable item that has been expanded..
+     *
+     * @param position the position of the item, which includes the header layout count.
+     * @return the number of subItems collapsed.
+     */
+    public int collapse(@IntRange(from = 0) int position, boolean animate) {
+        return collapse(position, animate, true);
     }
 
     private int getItemPosition(T item) {
@@ -1042,4 +1210,12 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         return item != null && item instanceof IExpandable;
     }
 
+    private IExpandable getExpandableItem(int position) {
+        T item = getItem(position);
+        if (isExpandable(item)) {
+            return (IExpandable) item;
+        } else {
+            return null;
+        }
+    }
 }
