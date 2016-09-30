@@ -209,7 +209,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * @param data
      */
     public void setNewData(List<T> data) {
-        this.mData = data;
+        this.mData = data == null ? new ArrayList<T>() : data;
         if (mRequestLoadMoreListener != null) {
             mNextLoadEnable = true;
             // mFooterLayout = null;
@@ -219,6 +219,44 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
         mLastPosition = -1;
         notifyDataSetChanged();
+    }
+
+    /**
+     * add one new data in to certain location
+     *
+     * @param position
+     */
+    public void addData(int position, T data) {
+        if (0 <= position && position < mData.size()) {
+            mData.add(position, data);
+            notifyItemInserted(position);
+            notifyItemRangeChanged(position, mData.size() - position);
+        } else {
+            throw new ArrayIndexOutOfBoundsException("inserted position most greater than 0 and less than data size");
+        }
+    }
+
+    /**
+     * add one new data
+     */
+    public void addData(T data) {
+        mData.add(data);
+        notifyItemInserted(mData.size());
+    }
+
+    /**
+     * add new data in to certain location
+     *
+     * @param position
+     */
+    public void addData(int position, List<T> data) {
+        if (0 <= position && position < mData.size()) {
+            mData.addAll(position, data);
+            notifyItemInserted(position);
+            notifyItemRangeChanged(position, mData.size() - position - data.size());
+        } else {
+            throw new ArrayIndexOutOfBoundsException("inserted position most greater than 0 and less than data size");
+        }
     }
 
     /**
@@ -1042,7 +1080,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         position -= getHeaderLayoutCount();
 
         T endItem = null;
-        if (position + 1 < getItemCount()) {
+        if (position + 1 < this.mData.size()) {
             endItem = getItem(position + 1);
         }
 
@@ -1052,7 +1090,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
 
         int count = expand(position + getHeaderLayoutCount(), false, false);
-        for (int i = position + 1; i < getItemCount(); i++) {
+        for (int i = position + 1; i < this.mData.size(); i++) {
             T item = getItem(i);
 
             if (item == endItem) {
@@ -1075,9 +1113,10 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     /**
      * expand the item and all its subItems
+     *
      * @param position position of the item, which includes the header layout count.
-     * @param init whether you are initializing the recyclerView or not.
-     *             if <strong>true</strong>, it won't notify recyclerView to redraw UI.
+     * @param init     whether you are initializing the recyclerView or not.
+     *                 if <strong>true</strong>, it won't notify recyclerView to redraw UI.
      * @return the number of items that have been added to the adapter.
      */
     public int expandAll(int position, boolean init) {
@@ -1113,8 +1152,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * Collapse an expandable item that has been expanded..
      *
      * @param position the position of the item, which includes the header layout count.
-     * @param animate collapse with animation or not.
-     * @param notify notify the recyclerView refresh UI or not.
+     * @param animate  collapse with animation or not.
+     * @param notify   notify the recyclerView refresh UI or not.
      * @return the number of subItems collapsed.
      */
     public int collapse(@IntRange(from = 0) int position, boolean animate, boolean notify) {
@@ -1174,7 +1213,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     private IExpandable getExpandableItem(int position) {
         T item = getItem(position);
         if (isExpandable(item)) {
-            return (IExpandable)item;
+            return (IExpandable) item;
         } else {
             return null;
         }
@@ -1193,7 +1232,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             return -1;
         }
 
-        // if the item is IExpandable find a closest IExpandable item whose level smaller than this.
+        // if the item is IExpandable, return a closest IExpandable item position whose level smaller than this.
         // if it is not, return the closest IExpandable item position whose level is not negative
         int level;
         if (item instanceof IExpandable) {
