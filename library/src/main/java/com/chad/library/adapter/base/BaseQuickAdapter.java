@@ -1179,4 +1179,43 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             return null;
         }
     }
+
+    /**
+     * Get the parent item position of the IExpandable item
+     * @return return the closest parent item position of the IExpandable.
+     *         if the IExpandable item's level is 0, return itself position.
+     *         if the item's level is negative which mean do not implement this, return a negative
+     *         if the item is not exist in the data list, return a negative.
+     */
+    public int getParentPosition(@NonNull T item) {
+        int position = getItemPosition(item);
+        if (position == -1) {
+            return -1;
+        }
+
+        // if the item is IExpandable find a closest IExpandable item whose level smaller than this.
+        // if it is not, return the closest IExpandable item position whose level is not negative
+        int level;
+        if (item instanceof IExpandable) {
+            level = ((IExpandable)item).getLevel();
+        } else {
+            level = Integer.MAX_VALUE;
+        }
+        if (level == 0) {
+            return position;
+        } else if (level == -1) {
+            return -1;
+        }
+
+        for (int i = position; i >= 0; i--) {
+            T temp = mData.get(i);
+            if (temp instanceof IExpandable) {
+                IExpandable expandable = (IExpandable)temp;
+                if (expandable.getLevel() >= 0 && expandable.getLevel() < level) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
 }
