@@ -181,29 +181,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     /**
-     * remove the item associated with the specified position of adapter
-     *
-     * @param position
-     */
-    public void remove(int position) {
-        mData.remove(position);
-        notifyItemRemoved(position + getHeaderLayoutCount());
-
-    }
-
-    /**
-     * insert  a item associated with the specified position of adapter
-     *
-     * @param position
-     * @param item
-     */
-    public void add(int position, T item) {
-        mData.add(position, item);
-        notifyItemInserted(position);
-    }
-
-
-    /**
      * setting up a new instance to data;
      *
      * @param data
@@ -221,19 +198,16 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         notifyDataSetChanged();
     }
 
+
     /**
-     * add one new data in to certain location
+     * insert a data associated with the specified position of adapter
      *
      * @param position
+     * @param data
      */
     public void addData(int position, T data) {
-        if (0 <= position && position < mData.size()) {
-            mData.add(position, data);
-            notifyItemInserted(position);
-            notifyItemRangeChanged(position, mData.size() - position);
-        } else {
-            throw new ArrayIndexOutOfBoundsException("inserted position most greater than 0 and less than data size");
-        }
+        mData.add(position, data);
+        notifyItemInserted(position + getHeaderLayoutCount());
     }
 
     /**
@@ -241,22 +215,18 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      */
     public void addData(T data) {
         mData.add(data);
-        notifyItemInserted(mData.size());
+        notifyItemInserted(mData.size() - 1 + getHeaderLayoutCount());
     }
 
     /**
-     * add new data in to certain location
+     * insert data list associated with the specified position of adapter
      *
      * @param position
+     * @param data
      */
     public void addData(int position, List<T> data) {
-        if (0 <= position && position < mData.size()) {
-            mData.addAll(position, data);
-            notifyItemInserted(position);
-            notifyItemRangeChanged(position, mData.size() - position - data.size());
-        } else {
-            throw new ArrayIndexOutOfBoundsException("inserted position most greater than 0 and less than data size");
-        }
+        mData.addAll(position, data);
+        notifyItemRangeInserted(position + getHeaderLayoutCount(), data.size());
     }
 
     /**
@@ -269,7 +239,43 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         if (mNextLoadEnable) {
             mLoadingMoreEnable = false;
         }
-        notifyItemRangeChanged(mData.size() - newData.size() + getHeaderLayoutCount(), newData.size());
+        notifyItemRangeInserted(mData.size() - newData.size() + getHeaderLayoutCount(), newData.size());
+    }
+
+    /**
+     * remove the item associated with the specified position of adapter
+     *
+     * @param position
+     */
+    public void removeData(int position) {
+        mData.remove(position);
+        notifyItemRemoved(position + getHeaderLayoutCount());
+    }
+
+    /**
+     * remove data
+     * @param data
+     * @return
+     */
+    public boolean removeData(T data){
+        if(data==null){
+            for (int i = 0,size=mData.size(); i < size; i++) {
+                if(mData.get(i)==null){
+                    mData.remove(i);
+                    notifyItemRemoved(i + getHeaderLayoutCount());
+                    return true;
+                }
+            }
+        }else {
+            for (int i = 0,size=mData.size(); i < size; i++) {
+                if(data.equals(mData.get(i))){
+                    mData.remove(i);
+                    notifyItemRemoved(i + getHeaderLayoutCount());
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
