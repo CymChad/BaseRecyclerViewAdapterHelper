@@ -377,26 +377,18 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      */
     @Override
     public int getItemCount() {
-        int i = isLoadMore() ? 1 : 0;
-        int count = mData.size() + i + getHeaderLayoutCount() + getFooterLayoutCount();
+        int count;
         if (mData.size() == 0 && mEmptyView != null) {
-            /**
-             *  setEmptyView(false) and add emptyView
-             */
-            if (count == 0 && (!mHeadAndEmptyEnable || !mFootAndEmptyEnable)) {
-                count += getmEmptyViewCount();
-                /**
-                 * {@link #setEmptyView(true, true, View)}
-                 */
-            } else if (mHeadAndEmptyEnable || mFootAndEmptyEnable) {
-                count += getmEmptyViewCount();
+            count = 1;
+            if (mHeadAndEmptyEnable && getHeaderLayoutCount() == 1) {
+                count++;
             }
-
-            if ((mHeadAndEmptyEnable && getHeaderLayoutCount() == 1 && count == 1) || count == 0) {
-                mEmptyEnable = true;
-                count += getmEmptyViewCount();
+            if (mFootAndEmptyEnable && getFooterLayoutCount() == 1) {
+                count++;
             }
-
+        } else {
+            int i = isLoadMore() ? 1 : 0;
+            count = mData.size() + i + getHeaderLayoutCount() + getFooterLayoutCount();
         }
         return count;
     }
@@ -412,62 +404,46 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      */
     @Override
     public int getItemViewType(int position) {
-        /**
-         * if set headView and positon =0
-         */
-        if (mHeaderLayout != null && position == 0) {
-            return HEADER_VIEW;
-        }
-        /**
-         * if user has no data and add emptyView and position <2{(headview +emptyView)}
-         */
-        if (mData.size() == 0 && mEmptyEnable && mEmptyView != null && position <= 2) {
-            /**
-             * if set {@link #setEmptyView(boolean, boolean, View)}  position = 1
-             */
-            if ((mHeadAndEmptyEnable || mFootAndEmptyEnable) && position == 1) {
-                /**
-                 * if user want to show headview and footview and emptyView but not add headview
-                 */
-                if (mHeaderLayout == null && mFooterLayout != null) {
+        if (mData.size() == 0 && mEmptyView != null) {
+            boolean header = mHeadAndEmptyEnable && getHeaderLayoutCount() == 1;
+            switch (position) {
+                case 0:
+                    if (header) {
+                        return HEADER_VIEW;
+                    } else {
+                        return EMPTY_VIEW;
+                    }
+                case 1:
+                    if (header) {
+                        return EMPTY_VIEW;
+                    } else {
+                        return FOOTER_VIEW;
+                    }
+                case 2:
                     return FOOTER_VIEW;
-                    /**
-                     * add headview
-                     */
-                } else if (mHeaderLayout != null) {
+                default://其实不会走这步
                     return EMPTY_VIEW;
-                }
-            } else if (position == 0) {
-                /**
-                 * has no emptyView just add emptyview
-                 */
-                if (mHeaderLayout == null) {
-                    return EMPTY_VIEW;
-                } else if (mFooterLayout != null)
-
-                    return EMPTY_VIEW;
-
-
-            } else if (position == 2 && (mFootAndEmptyEnable || mHeadAndEmptyEnable) && mHeaderLayout != null && mEmptyView != null) {
-                return FOOTER_VIEW;
-
-            } /**
-             * user forget to set {@link #setEmptyView(boolean, boolean, View)}  but add footview and headview and emptyview
-             */
-            else if ((!mFootAndEmptyEnable || !mHeadAndEmptyEnable) && position == 1 && mFooterLayout != null) {
-                return FOOTER_VIEW;
             }
-        } else if (mData.size() == 0 && mEmptyView != null && getItemCount() == (mHeadAndEmptyEnable ? 2 : 1) && mEmptyEnable) {
-            return EMPTY_VIEW;
-        } else if (position == mData.size() + getHeaderLayoutCount()) {
-            if (mNextLoadEnable)
-                return LOADING_VIEW;
-            else
-                return FOOTER_VIEW;
-        } else if (position > mData.size() + getHeaderLayoutCount()) {
-            return FOOTER_VIEW;
         }
-        return getDefItemViewType(position - getHeaderLayoutCount());
+
+        int numHeaders = getHeaderLayoutCount();
+        if (position < numHeaders) {
+            return HEADER_VIEW;
+        } else {
+            int adjPosition = position - numHeaders;
+            int adapterCount = mData.size();
+            if (adjPosition < adapterCount) {
+                return getDefItemViewType(position - getHeaderLayoutCount());
+            } else {
+                adjPosition = adjPosition - adapterCount;
+                int numFooters = getFooterLayoutCount();
+                if (adjPosition < numFooters) {
+                    return FOOTER_VIEW;
+                } else {
+                    return LOADING_VIEW;
+                }
+            }
+        }
     }
 
     protected int getDefItemViewType(int position) {
