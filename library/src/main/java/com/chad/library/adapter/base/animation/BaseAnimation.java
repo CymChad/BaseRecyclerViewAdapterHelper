@@ -1,13 +1,14 @@
 package com.chad.library.adapter.base.animation;
 
-import android.animation.Animator;
 import android.view.View;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public interface  BaseAnimation {
+public interface BaseAnimation {
 
-    Animator[] getAnimators(View view);
+    int DEFAULT_DURATION = 300;
+
+    void startAnimator(View view);
 
 }

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickClickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.animation.AlphaInAnimation;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 /**
@@ -146,8 +147,8 @@ public class RecyclerClickItemActivity extends Activity {
         return view;
     }
     private void initAdapter() {
-        mQuickAdapter = new QuickClickAdapter(PAGE_SIZE);
-        mQuickAdapter.openLoadAnimation();
+        mQuickAdapter = new QuickClickAdapter(this,PAGE_SIZE);
+        mQuickAdapter.openLoadAnimation(new AlphaInAnimation());
         mRecyclerView.setAdapter(mQuickAdapter);
     }
 

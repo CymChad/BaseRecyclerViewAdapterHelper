@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.chad.library.adapter.base;
+package com.chad.library.adapter.base.vh;
 
 import android.graphics.Bitmap;
 import android.graphics.Paint;
@@ -62,7 +62,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     Object associatedObject;
 
 
-    protected BaseViewHolder(View view) {
+    public BaseViewHolder(View view) {
         super(view);
         this.views = new SparseArray<View>();
         this.childClickViewIds = new LinkedHashSet<>();

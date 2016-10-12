@@ -90,7 +90,7 @@ public class HeaderAndFooterUseActivity extends Activity {
     }
 
     private void initAdapter() {
-        mQuickAdapter = new QuickAdapter(PAGE_SIZE);
+        mQuickAdapter = new QuickAdapter(this,PAGE_SIZE);
         mQuickAdapter.openLoadAnimation();
         mRecyclerView.setAdapter(mQuickAdapter);
         mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {

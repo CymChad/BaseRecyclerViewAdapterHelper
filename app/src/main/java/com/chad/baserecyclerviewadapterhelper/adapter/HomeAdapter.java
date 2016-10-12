@@ -1,13 +1,13 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
-import android.animation.Animator;
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.HomeItem;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.vh.BaseViewHolder;
 
 import java.util.List;
 
@@ -15,15 +15,12 @@ import java.util.List;
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 public class HomeAdapter extends BaseQuickAdapter<HomeItem> {
-    public HomeAdapter(int layoutResId, List data) {
-        super(layoutResId, data);
+    public HomeAdapter(Context context, List data) {
+        super(context, data);
     }
 
-    @Override
-    protected void startAnim(Animator anim, int index) {
-        super.startAnim(anim, index);
-        if (index < 5)
-        anim.setStartDelay(index * 150);
+    @Override protected int getLayoutResId() {
+        return R.layout.home_item_view;
     }
 
     @Override
@@ -32,4 +29,5 @@ public class HomeAdapter extends BaseQuickAdapter<HomeItem> {
         CardView cardView = helper.getView(R.id.card_view);
         cardView.setCardBackgroundColor(Color.parseColor(item.getColorStr()));
     }
+
 }

@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickAdapter;
 
@@ -39,11 +40,24 @@ public class EmptyViewUseActivity extends Activity implements View.OnClickListen
     }
 
     private void initAdapter() {
-        mQuickAdapter = new QuickAdapter(0);
+        mQuickAdapter = new QuickAdapter(this,0);
+        addHeadView();
+//        addFooterView();
         View emptyView = getLayoutInflater().inflate(R.layout.empty_view, (ViewGroup) mRecyclerView.getParent(), false);
         mQuickAdapter.setEmptyView(emptyView);
         View view = getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false);
         mRecyclerView.setAdapter(mQuickAdapter);
+    }
+
+    private void addHeadView() {
+        View headView = getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false);
+        ((TextView) headView.findViewById(R.id.tv)).setText("click use custom loading view");
+        mQuickAdapter.addHeaderView(headView);
+    }
+    private void addFooterView() {
+        View headView = getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false);
+        ((TextView) headView.findViewById(R.id.tv)).setText("click use custom loading view");
+        mQuickAdapter.addFooterView(headView);
     }
 
     @Override
@@ -67,6 +81,7 @@ public class EmptyViewUseActivity extends Activity implements View.OnClickListen
 
     private void changedView(View view) {
         mQuickAdapter.setEmptyView(view);
-        mQuickAdapter.notifyItemChanged(0);
+//        mQuickAdapter.notifyItemChanged(0);
+        mQuickAdapter.notifyDataSetChanged();
     }
 }

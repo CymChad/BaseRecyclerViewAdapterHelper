@@ -3,6 +3,11 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               style="@style/bg">
 
+    <Button
+        android:text="click"
+        android:onClick="click"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

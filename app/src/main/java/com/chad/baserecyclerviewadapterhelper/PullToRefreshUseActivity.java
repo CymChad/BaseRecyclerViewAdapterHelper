@@ -4,11 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -17,6 +14,7 @@ import android.widget.Toast;
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickAdapter;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.animation.AlphaInAnimation;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 
@@ -50,6 +48,7 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         initAdapter();
         addHeadView();
+
         mRecyclerView.setAdapter(mQuickAdapter);
     }
 
@@ -60,12 +59,17 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
         headView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mQuickAdapter.setLoadingView(customLoading);
                 mRecyclerView.setAdapter(mQuickAdapter);
                 Toast.makeText(PullToRefreshUseActivity.this, "use ok!", Toast.LENGTH_LONG).show();
             }
         });
         mQuickAdapter.addHeaderView(headView);
+    }
+
+    private void addFooterView() {
+        View footerView = getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false);
+        ((TextView) footerView.findViewById(R.id.tv)).setText("footer view");
+        mQuickAdapter.addFooterView(footerView);
     }
 
     @Override
@@ -74,11 +78,8 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
             @Override
             public void run() {
                 if (mCurrentCounter >= TOTAL_COUNTER) {
-                    mQuickAdapter.loadComplete();
-                    if (notLoadingView == null) {
-                        notLoadingView = getLayoutInflater().inflate(R.layout.not_loading, (ViewGroup) mRecyclerView.getParent(), false);
-                    }
-                    mQuickAdapter.addFooterView(notLoadingView);
+//                    mQuickAdapter.loadComplete();
+                    mQuickAdapter.loadMoreEnd();
                 } else {
                     if (isErr) {
                         new Handler().postDelayed(new Runnable() {
@@ -86,12 +87,13 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
                             public void run() {
                                 mQuickAdapter.addData(DataServer.getSampleData(PAGE_SIZE));
                                 mCurrentCounter = mQuickAdapter.getData().size();
+                                mQuickAdapter.loadMoreComplete();
                             }
                         }, delayMillis);
                     } else {
                         isErr = true;
                         Toast.makeText(PullToRefreshUseActivity.this, R.string.network_err, Toast.LENGTH_LONG).show();
-                        mQuickAdapter.showLoadMoreFailedView();
+                        mQuickAdapter.loadMoreError();
 
                     }
                 }
@@ -106,19 +108,25 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
             @Override
             public void run() {
                 mQuickAdapter.setNewData(DataServer.getSampleData(PAGE_SIZE));
-                mQuickAdapter.openLoadMore(PAGE_SIZE);
-                mQuickAdapter.removeAllFooterView();
+//                mQuickAdapter.removeAllFooterView();
                 mCurrentCounter = PAGE_SIZE;
                 mSwipeRefreshLayout.setRefreshing(false);
+                mQuickAdapter.enableLoadMore(true);
                 isErr = false;
             }
         }, delayMillis);
     }
 
     private void initAdapter() {
-        mQuickAdapter = new QuickAdapter(PAGE_SIZE);
-        mQuickAdapter.openLoadAnimation();
-        mQuickAdapter.openLoadMore(PAGE_SIZE);
+        mQuickAdapter = new QuickAdapter(this,PAGE_SIZE);
+
+        addFooterView();
+        mQuickAdapter.openLoadAnimation(new AlphaInAnimation());
+
+
+        View emptyView = getLayoutInflater().inflate(R.layout.empty_view, (ViewGroup) mRecyclerView.getParent(), false);
+        mQuickAdapter.setEmptyView(emptyView);
+
         mRecyclerView.setAdapter(mQuickAdapter);
         mCurrentCounter = mQuickAdapter.getData().size();
         mQuickAdapter.setOnLoadMoreListener(this);
@@ -127,6 +135,10 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Toast.makeText(PullToRefreshUseActivity.this, Integer.toString(position), Toast.LENGTH_LONG).show();
+            }
+
+            @Override public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                super.onItemChildClick(adapter, view, position);
             }
         });
     }

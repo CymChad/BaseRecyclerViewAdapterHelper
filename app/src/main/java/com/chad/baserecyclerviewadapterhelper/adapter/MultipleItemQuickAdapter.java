@@ -1,11 +1,12 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.GridLayoutManager;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.MultipleItem;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.vh.BaseViewHolder;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
 public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem> {
 
     public MultipleItemQuickAdapter(Context context, List data) {
-        super(data);
+        super(context, data);
         addItemType(MultipleItem.TEXT, R.layout.item_text_view);
         addItemType(MultipleItem.IMG, R.layout.item_image_view);
     }
@@ -32,4 +33,7 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
         }
     }
 
+    @Override protected int getGridLayoutManagerSpanSize(GridLayoutManager gridLayoutManager, int position) {
+        return getItem(position).getSpanSize();
+    }
 }

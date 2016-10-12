@@ -5,14 +5,24 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickAdapter;
 import com.chad.baserecyclerviewadapterhelper.animation.CustomAnimation;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemChildClickListener;
+import com.chad.library.adapter.base.animation.AlphaInAnimation;
+import com.chad.library.adapter.base.animation.ScaleInAnimation;
+import com.chad.library.adapter.base.animation.SlideInBottomAnimation;
+import com.chad.library.adapter.base.animation.SlideInLeftAnimation;
+import com.chad.library.adapter.base.animation.SlideInRightAnimation;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.jaredrummler.materialspinner.MaterialSpinner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
@@ -33,25 +43,34 @@ public class AnimationUseActivity extends Activity {
     }
 
     private void initAdapter() {
-        mQuickAdapter = new QuickAdapter();
-        mQuickAdapter.openLoadAnimation();
-        mRecyclerView.addOnItemTouchListener(new OnItemChildClickListener() {
+        mQuickAdapter = new QuickAdapter(this);
+//        addHeadView();
+        addFooterView();
+        mQuickAdapter.openLoadAnimation(new AlphaInAnimation());
+//        mRecyclerView.addOnItemTouchListener(new OnItemChildClickListener() {
+//            @Override
+//            public void SimpleOnItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+//                String content = null;
+//                Status status = (Status) adapter.getItem(position);
+//                switch (view.getId()) {
+//                    case R.id.tweetAvatar:
+//                        content = "img:" + status.getUserAvatar();
+//                        break;
+//                    case R.id.tweetName:
+//                        content = "name:" + status.getUserName();
+//                        break;
+//                }
+//                Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
+//            }
+//        });
+        mRecyclerView.setAdapter(mQuickAdapter);
+        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
-            public void SimpleOnItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                String content = null;
-                Status status = (Status) adapter.getItem(position);
-                switch (view.getId()) {
-                    case R.id.tweetAvatar:
-                        content = "img:" + status.getUserAvatar();
-                        break;
-                    case R.id.tweetName:
-                        content = "name:" + status.getUserName();
-                        break;
-                }
-                Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
+            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Toast.makeText(AnimationUseActivity.this, mQuickAdapter.getData().get(position).getUserName() + "-" + Integer.toString(position), Toast.LENGTH_LONG).show();
             }
         });
-        mRecyclerView.setAdapter(mQuickAdapter);
+
     }
 
     private void initMenu() {
@@ -63,19 +82,19 @@ public class AnimationUseActivity extends Activity {
             public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                 switch (position) {
                     case 0:
-                        mQuickAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
+                        mQuickAdapter.openLoadAnimation(new AlphaInAnimation());
                         break;
                     case 1:
-                        mQuickAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
+                        mQuickAdapter.openLoadAnimation(new ScaleInAnimation());
                         break;
                     case 2:
-                        mQuickAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_BOTTOM);
+                        mQuickAdapter.openLoadAnimation(new SlideInBottomAnimation());
                         break;
                     case 3:
-                        mQuickAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
+                        mQuickAdapter.openLoadAnimation(new SlideInLeftAnimation());
                         break;
                     case 4:
-                        mQuickAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_RIGHT);
+                        mQuickAdapter.openLoadAnimation(new SlideInRightAnimation());
                         break;
                     case 5:
                         mQuickAdapter.openLoadAnimation(new CustomAnimation());
@@ -107,4 +126,40 @@ public class AnimationUseActivity extends Activity {
         });
     }
 
+    private void addHeadView() {
+        View headView = getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false);
+        ((TextView) headView.findViewById(R.id.tv)).setText("header");
+        mQuickAdapter.addHeaderView(headView);
+    }
+
+    private void addFooterView() {
+        View headView = getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false);
+        ((TextView) headView.findViewById(R.id.tv)).setText("footer");
+        mQuickAdapter.addFooterView(headView);
+    }
+
+    public void click(View view) {
+        i++;
+        List<Status> list = new ArrayList<>();
+        Status status = new Status();
+        status.setUserName("Chad" + i);
+        status.setCreatedAt("04/05/" + i);
+        status.setRetweet(i % 2 == 0);
+        status.setUserAvatar("https://avatars1.githubusercontent.com/u/7698209?v=3&s=460");
+        status.setText("BaseRecyclerViewAdpaterHelper https://www.recyclerview.org");
+        list.add(status);
+
+//        i++;
+//        status = new Status();
+//        status.setUserName("Chad" + i);
+//        status.setCreatedAt("04/05/" + i);
+//        status.setRetweet(i % 2 == 0);
+//        status.setUserAvatar("https://avatars1.githubusercontent.com/u/7698209?v=3&s=460");
+//        status.setText("BaseRecyclerViewAdpaterHelper https://www.recyclerview.org");
+//        list.add(status);
+
+        mQuickAdapter.addData(0, list);
+    }
+
+    int i = 0;
 }

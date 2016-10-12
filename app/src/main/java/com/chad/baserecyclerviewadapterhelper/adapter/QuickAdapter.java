@@ -1,5 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
+import android.content.Context;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -8,18 +9,22 @@ import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.baserecyclerviewadapterhelper.transform.GlideCircleTransform;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.vh.BaseViewHolder;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 public class QuickAdapter extends BaseQuickAdapter<Status> {
-    public QuickAdapter() {
-        super( R.layout.tweet, DataServer.getSampleData(100));
+    public QuickAdapter(Context context) {
+        super(context, DataServer.getSampleData(1));
     }
 
-    public QuickAdapter(int dataSize) {
-        super( R.layout.tweet, DataServer.getSampleData(dataSize));
+    public QuickAdapter(Context context, int dataSize) {
+        super(context, DataServer.getSampleData(dataSize));
+    }
+
+    @Override protected int getLayoutResId() {
+        return R.layout.tweet;
     }
 
     @Override

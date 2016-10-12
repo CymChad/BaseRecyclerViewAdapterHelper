@@ -1,5 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.View;
 
@@ -7,16 +8,16 @@ import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.Level0Item;
 import com.chad.baserecyclerviewadapterhelper.entity.Level1Item;
 import com.chad.baserecyclerviewadapterhelper.entity.Person;
-import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.BaseExpandableItemQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.chad.library.adapter.base.vh.BaseViewHolder;
 
 import java.util.List;
 
 /**
  * Created by luoxw on 2016/8/9.
  */
-public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity> {
+public class ExpandableItemAdapter extends BaseExpandableItemQuickAdapter<MultiItemEntity> {
     private static final String TAG = ExpandableItemAdapter.class.getSimpleName();
 
     public static final int TYPE_LEVEL_0 = 0;
@@ -29,8 +30,8 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
      *
      * @param data A new list is created out of this one to avoid mutable list
      */
-    public ExpandableItemAdapter(List<MultiItemEntity> data) {
-        super(data);
+    public ExpandableItemAdapter(Context context,List<MultiItemEntity> data) {
+        super(context,data);
         addItemType(TYPE_LEVEL_0, R.layout.item_expandable_lv0);
         addItemType(TYPE_LEVEL_1, R.layout.item_expandable_lv1);
         addItemType(TYPE_PERSON, R.layout.item_text_view);
@@ -72,9 +73,9 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                         int pos = holder.getAdapterPosition();
                         Log.d(TAG, "Level 1 item pos: " + pos);
                         if (lv1.isExpanded()) {
-                            collapse(pos, false);
+                            collapse(pos, true);
                         } else {
-                            expand(pos, false);
+                            expand(pos, true);
                         }
                     }
                 });

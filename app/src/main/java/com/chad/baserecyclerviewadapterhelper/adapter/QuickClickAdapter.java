@@ -1,5 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
+import android.content.Context;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -8,18 +9,22 @@ import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.baserecyclerviewadapterhelper.transform.GlideCircleTransform;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.vh.BaseViewHolder;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 public class QuickClickAdapter extends BaseQuickAdapter<Status> {
-    public QuickClickAdapter() {
-        super( R.layout.item, DataServer.getSampleData(100));
+    public QuickClickAdapter(Context context) {
+        super(context, DataServer.getSampleData(100));
     }
 
-    public QuickClickAdapter(int dataSize) {
-        super( R.layout.item, DataServer.getSampleData(dataSize));
+    public QuickClickAdapter(Context context, int dataSize) {
+        super(context, DataServer.getSampleData(dataSize));
+    }
+
+    @Override protected int getLayoutResId() {
+        return R.layout.item;
     }
 
     @Override
@@ -32,7 +37,7 @@ public class QuickClickAdapter extends BaseQuickAdapter<Status> {
                 .addOnClickListener(R.id.tweetAvatar)
                 .addOnClickListener(R.id.tweetName)
                 .addOnLongClickListener(R.id.tweetText)
-               ;
+        ;
         Glide.with(mContext).load(item.getUserAvatar()).crossFade().placeholder(R.mipmap.def_head).transform(new GlideCircleTransform(mContext)).into((ImageView) helper.getView(R.id.tweetAvatar));
     }
 

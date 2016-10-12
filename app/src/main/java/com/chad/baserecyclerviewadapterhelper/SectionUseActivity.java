@@ -29,7 +29,7 @@ public class SectionUseActivity extends Activity {
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mData = DataServer.getSampleData();
-        SectionAdapter sectionAdapter = new SectionAdapter(R.layout.item_section_content, R.layout.def_section_head, mData);
+        SectionAdapter sectionAdapter = new SectionAdapter(this, mData);
         mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
 
             @Override
