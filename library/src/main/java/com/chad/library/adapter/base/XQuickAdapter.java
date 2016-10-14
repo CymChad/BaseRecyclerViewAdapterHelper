@@ -30,21 +30,20 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 public abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
 
     public static final int VIEW_TYPE_HEADER_VIEW = 0x10000111;
-    public static final int VIEW_TYPE_EMPTY_VIEW = 0x10000222;
-    public static final int VIEW_TYPE_FOOTER_VIEW = 0x10000333;
-    public static final int VIEW_TYPE_LOADING_VIEW = 0x10000444;
+    public static final int VIEW_TYPE_FOOTER_VIEW = 0x10000222;
+    public static final int VIEW_TYPE_LOADING_VIEW = 0x10000333;
 
-    protected List<T> mData;
     protected Context mContext;
+    protected List<T> mData;
     //header and footer
     private LinearLayout mHeaderLayout;
     private LinearLayout mFooterLayout;
-    //empty view
-    private View mEmptyView;
     //load more
     private boolean mEnableLoadMore = false;
     private LoadMoreView mLoadMoreView = new SimpleLoadMoreView();
-    private BaseQuickAdapter.RequestLoadMoreListener mRequestLoadMoreListener;
+    private OnLoadMoreListener mOnLoadMoreListener;
+    private boolean mLoadMoreEnd = false;//是否再加完所有的
+    private boolean loading;
     //animation
     private int mLastPosition = -1;
     private boolean mFirstOnlyEnable = true;
@@ -71,8 +70,9 @@ public abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHold
         return mOnItemClickListener;
     }
 
-    public void setOnLoadMoreListener(BaseQuickAdapter.RequestLoadMoreListener requestLoadMoreListener) {
-        this.mRequestLoadMoreListener = requestLoadMoreListener;
+    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
+        mOnLoadMoreListener = onLoadMoreListener;
+        mEnableLoadMore = true;
     }
 
     /**
@@ -83,6 +83,7 @@ public abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHold
     public void setNewData(List<T> data) {
         this.mData = data == null ? new ArrayList<T>() : data;
         mLastPosition = -1;
+        mLoadMoreEnd = false;
         notifyDataSetChanged();
     }
 
@@ -199,15 +200,9 @@ public abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHold
     }
 
     public int getLoadMoreViewCount() {
-        return mEnableLoadMore ? 1 : 0;
-    }
-
-    public boolean isEnableEmptyView() {
-        if (getDataViewCount() == 0) {
-            return mEmptyView != null;
-        } else {
-            return false;
-        }
+        return mEnableLoadMore
+                && (!mLoadMoreEnd || !mLoadMoreView.isLoadEndGone())
+                && getDataViewCount() != 0 ? 1 : 0;
     }
 
     /**
@@ -233,20 +228,19 @@ public abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHold
         this.mLoadMoreView = loadMoreView;
     }
 
-    public void enableLoadMore(boolean enableLoadMore) {
-        if (mLoadMoreView == null) {
-            throw new RuntimeException("请先调用setOnLoadMoreListener(BaseQuickAdapter.RequestLoadMoreListener)方法设置监听");
-        }
-        if (enableLoadMore) {
-            if (!mEnableLoadMore) {
-                mEnableLoadMore = enableLoadMore;//这句话会造成getItemCount改变
-                mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_LOAD_DEFAULT);
-                notifyItemInserted(getItemCount() - 1);
+    public void setEnableLoadMore(boolean enableLoadMore) {
+        int oldLoadMoreCount = getLoadMoreViewCount();
+        mEnableLoadMore = enableLoadMore;
+        int newLoadMoreCount = getLoadMoreViewCount();
+
+        if (oldLoadMoreCount == 1) {
+            if (newLoadMoreCount == 0) {
+                notifyItemRemoved(getHeaderViewCount() + getDataViewCount() + getFooterViewCount());
             }
         } else {
-            if (mEnableLoadMore) {
-                mEnableLoadMore = enableLoadMore;//这句话会造成getItemCount改变
-                notifyItemRemoved(getItemCount());
+            if (newLoadMoreCount == 1) {
+                mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_LOAD_DEFAULT);
+                notifyItemInserted(getHeaderViewCount() + getDataViewCount() + getFooterViewCount());
             }
         }
     }
@@ -255,29 +249,44 @@ public abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHold
      * 加载更多数据后调用下
      */
     public void loadMoreComplete() {
+        if (getLoadMoreViewCount() == 0) {
+            return;
+        }
         mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_LOAD_DEFAULT);
-        notifyItemChanged(getItemCount() - 1);
+        notifyItemChanged(getHeaderViewCount() + getDataViewCount() + getFooterViewCount());
     }
 
     /**
      * 加载更多失败
      */
     public void loadMoreError() {
+        if (getLoadMoreViewCount() == 0) {
+            return;
+        }
         mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_LOAD_ERROR);
-        notifyItemChanged(getItemCount() - 1);
+        notifyItemChanged(getHeaderViewCount() + getDataViewCount() + getFooterViewCount());
     }
 
     /**
      * 加载更多完成（没有更多数据）
      */
     public void loadMoreEnd() {
-        if (mLoadMoreView.isLoadEndGone()) {
-            mEnableLoadMore = false;
-            notifyItemRemoved(getItemCount() - 1);
-        } else {
-            mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_LOAD_END);
-            notifyItemChanged(getItemCount() - 1);
+        if (getLoadMoreViewCount() == 0) {
+            return;
         }
+        if (!mLoadMoreEnd) {
+            mLoadMoreEnd = true;
+            if (mLoadMoreView.isLoadEndGone()) {
+                notifyItemRemoved(getHeaderViewCount() + getDataViewCount() + getFooterViewCount());
+            } else {
+                mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_LOAD_END);
+                notifyItemChanged(getHeaderViewCount() + getDataViewCount() + getFooterViewCount());
+            }
+        }
+    }
+
+    public void setLoading(boolean loading) {
+        this.loading = loading;
     }
 
     /**
@@ -287,36 +296,26 @@ public abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHold
      */
     @Override
     public int getItemCount() {
-        int count;
-        if (isEnableEmptyView()) {
-            count = 1;
-        } else {
-            count = getHeaderViewCount() + getFooterViewCount() + getDataViewCount() + getLoadMoreViewCount();
-        }
-        return count;
+        return getHeaderViewCount() + getDataViewCount() + getFooterViewCount() + getLoadMoreViewCount();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (isEnableEmptyView()) {
-            return VIEW_TYPE_EMPTY_VIEW;
+        int numHeaders = getHeaderViewCount();
+        if (position < numHeaders) {
+            return VIEW_TYPE_HEADER_VIEW;
         } else {
-            int numHeaders = getHeaderViewCount();
-            if (position < numHeaders) {
-                return VIEW_TYPE_HEADER_VIEW;
+            int adjPosition = position - numHeaders;
+            int adapterCount = getDataViewCount();
+            if (adjPosition < adapterCount) {
+                return getDefItemViewType(position - getHeaderViewCount());
             } else {
-                int adjPosition = position - numHeaders;
-                int adapterCount = getDataViewCount();
-                if (adjPosition < adapterCount) {
-                    return getDefItemViewType(position - getHeaderViewCount());
+                adjPosition = adjPosition - adapterCount;
+                int numFooters = getFooterViewCount();
+                if (adjPosition < numFooters) {
+                    return VIEW_TYPE_FOOTER_VIEW;
                 } else {
-                    adjPosition = adjPosition - adapterCount;
-                    int numFooters = getFooterViewCount();
-                    if (adjPosition < numFooters) {
-                        return VIEW_TYPE_FOOTER_VIEW;
-                    } else {
-                        return VIEW_TYPE_LOADING_VIEW;
-                    }
+                    return VIEW_TYPE_LOADING_VIEW;
                 }
             }
         }
@@ -338,13 +337,10 @@ public abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHold
                     @Override public void onClick(View v) {
                         if (mLoadMoreView.getLoadMoreStatus() == LoadMoreView.STATUS_LOAD_ERROR) {
                             mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_LOAD_DEFAULT);
-                            notifyItemChanged(getItemCount() - 1);
+                            notifyItemChanged(getHeaderViewCount() + getDataViewCount() + getFooterViewCount());
                         }
                     }
                 });
-                break;
-            case VIEW_TYPE_EMPTY_VIEW:
-                baseViewHolder = new BaseViewHolder(mEmptyView, mViewHolderListener);
                 break;
             default:
                 baseViewHolder = onCreateDefViewHolder(parent, viewType);
@@ -369,13 +365,11 @@ public abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHold
                 break;
             case VIEW_TYPE_FOOTER_VIEW:
                 break;
-            case VIEW_TYPE_EMPTY_VIEW:
-                break;
             case VIEW_TYPE_LOADING_VIEW:
                 if (mLoadMoreView.getLoadMoreStatus() == LoadMoreView.STATUS_LOAD_DEFAULT) {
                     mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_LOADING);
-                    if (mRequestLoadMoreListener != null) {
-                        mRequestLoadMoreListener.onLoadMoreRequested();
+                    if (mOnLoadMoreListener != null) {
+                        mOnLoadMoreListener.onLoadMoreRequested();
                     }
                 }
                 mLoadMoreView.onStatusChanged(holder);
@@ -418,13 +412,12 @@ public abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHold
     public void onViewAttachedToWindow(BaseViewHolder holder) {
         super.onViewAttachedToWindow(holder);
         int type = holder.getItemViewType();
-        if (type == VIEW_TYPE_EMPTY_VIEW || type == VIEW_TYPE_HEADER_VIEW || type == VIEW_TYPE_FOOTER_VIEW || type == VIEW_TYPE_LOADING_VIEW) {
+        if (type == VIEW_TYPE_HEADER_VIEW || type == VIEW_TYPE_FOOTER_VIEW || type == VIEW_TYPE_LOADING_VIEW) {
             setFullSpan(holder);
         } else {
             addAnimation(holder);
         }
     }
-
 
     @Override
     public void onAttachedToRecyclerView(final RecyclerView recyclerView) {
@@ -438,7 +431,6 @@ public abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHold
                     int type = getItemViewType(position);
                     int spanCount;
                     switch (type) {
-                        case VIEW_TYPE_EMPTY_VIEW:
                         case VIEW_TYPE_HEADER_VIEW:
                         case VIEW_TYPE_FOOTER_VIEW:
                         case VIEW_TYPE_LOADING_VIEW:
@@ -478,14 +470,18 @@ public abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHold
      *               the effect of this method is the same as that of {@link #addHeaderView(View)}.
      */
     public void addHeaderView(View header, int index) {
+        boolean isInsert = false;
         if (mHeaderLayout == null) {
             mHeaderLayout = new LinearLayout(header.getContext());
             mHeaderLayout.setOrientation(LinearLayout.VERTICAL);
             mHeaderLayout.setLayoutParams(new RecyclerView.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+            isInsert = true;
         }
         index = index > mHeaderLayout.getChildCount() ? -1 : index;
         mHeaderLayout.addView(header, index);
-        notifyDataSetChanged();
+        if (isInsert) {
+            notifyItemInserted(0);
+        }
     }
 
     /**
@@ -508,14 +504,18 @@ public abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHold
      *               the effect of this method is the same as that of {@link #addFooterView(View)}.
      */
     public void addFooterView(View footer, int index) {
+        boolean isInsert = false;
         if (mFooterLayout == null) {
             mFooterLayout = new LinearLayout(footer.getContext());
             mFooterLayout.setOrientation(LinearLayout.VERTICAL);
             mFooterLayout.setLayoutParams(new RecyclerView.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+            isInsert = true;
         }
         index = index > mFooterLayout.getChildCount() ? -1 : index;
         mFooterLayout.addView(footer, index);
-        notifyDataSetChanged();
+        if (isInsert) {
+            notifyItemInserted(getHeaderViewCount() + getDataViewCount());
+        }
     }
 
     /**
@@ -530,8 +530,8 @@ public abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHold
         mHeaderLayout.removeView(header);
         if (mHeaderLayout.getChildCount() == 0) {
             mHeaderLayout = null;
+            notifyItemRemoved(0);
         }
-        notifyDataSetChanged();
     }
 
     /**
@@ -546,8 +546,8 @@ public abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHold
         mFooterLayout.removeView(footer);
         if (mFooterLayout.getChildCount() == 0) {
             mFooterLayout = null;
+            notifyItemRemoved(getHeaderViewCount() + getDataViewCount());
         }
-        notifyDataSetChanged();
     }
 
     /**
@@ -558,7 +558,7 @@ public abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHold
 
         mHeaderLayout.removeAllViews();
         mHeaderLayout = null;
-        notifyDataSetChanged();
+        notifyItemRemoved(0);
     }
 
     /**
@@ -569,27 +569,7 @@ public abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHold
 
         mFooterLayout.removeAllViews();
         mFooterLayout = null;
-        notifyDataSetChanged();
-    }
-
-    /**
-     * set emptyView show if adapter is empty and want to show headview and footview
-     *
-     * @param emptyView
-     */
-    public void setEmptyView(View emptyView) {
-        mEmptyView = emptyView;
-    }
-
-    /**
-     * When the current adapter is empty, the BaseQuickAdapter can display a special view
-     * called the empty view. The empty view is used to provide feedback to the user
-     * that no data is available in this AdapterView.
-     *
-     * @return The view to show if the adapter is empty.
-     */
-    public View getEmptyView() {
-        return mEmptyView;
+        notifyItemRemoved(getHeaderViewCount() + getDataViewCount());
     }
 
     /**
@@ -642,7 +622,7 @@ public abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHold
      */
     protected abstract void onBindViewHolder(BaseViewHolder holder, T item);
 
-    public interface RequestLoadMoreListener {
+    public interface OnLoadMoreListener {
         void onLoadMoreRequested();
     }
 }

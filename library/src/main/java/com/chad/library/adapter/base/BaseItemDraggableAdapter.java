@@ -55,7 +55,7 @@ public abstract class BaseItemDraggableAdapter<T> extends BaseQuickAdapter<T> {
         int viewType = holder.getItemViewType();
 
         if (mItemTouchHelper != null && itemDragEnabled && viewType != VIEW_TYPE_LOADING_VIEW && viewType != VIEW_TYPE_HEADER_VIEW
-                && viewType != VIEW_TYPE_EMPTY_VIEW && viewType != VIEW_TYPE_FOOTER_VIEW) {
+                && viewType != VIEW_TYPE_FOOTER_VIEW) {
             if (mToggleViewId != NO_TOGGLE_VIEW) {
                 View toggleView = ( holder).getView(mToggleViewId);
                 if (toggleView != null) {

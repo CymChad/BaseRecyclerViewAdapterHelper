@@ -6,7 +6,7 @@ package com.chad.library.adapter.base.vh;
 
 public abstract class LoadMoreView {
 
-    public static final int STATUS_LOAD_DEFAULT = 1;//上拉加载更多
+    public static final int STATUS_LOAD_DEFAULT = 1;//默认状态用于判断用
     public static final int STATUS_LOADING = 2;//正在加载更多数据
     public static final int STATUS_LOAD_ERROR = 3;//加载更多失败
     public static final int STATUS_LOAD_END = 4;//上拉加载，再没有数据了
@@ -21,16 +21,33 @@ public abstract class LoadMoreView {
         this.mLoadMoreStatus = loadMoreStatus;
     }
 
+    public abstract int getLoadMoreViewLayoutId();
+
     /**
      * 没有更多数据的时候是否隐藏
      *
      * @return
      */
-    public boolean isLoadEndGone() {
-        return false;
+    public abstract boolean isLoadEndGone();
+
+
+    public void onStatusChanged(BaseViewHolder holder){
+        switch (mLoadMoreStatus){
+            case STATUS_LOADING:
+                onLoading(holder);
+                break;
+            case STATUS_LOAD_ERROR:
+                onLoadError(holder);
+                break;
+            case STATUS_LOAD_END:
+                onLoadEnd(holder);
+                break;
+        }
     }
 
-    public abstract int getLoadMoreViewLayoutId();
+    protected abstract void onLoading(BaseViewHolder holder);
 
-    public abstract void onStatusChanged(BaseViewHolder holder);
+    protected abstract void onLoadError(BaseViewHolder holder);
+
+    protected abstract void onLoadEnd(BaseViewHolder holder);
 }
