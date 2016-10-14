@@ -37,11 +37,14 @@ public class ExpandableItemAdapter extends BaseExpandableItemQuickAdapter<MultiI
         addItemType(TYPE_PERSON, R.layout.item_text_view);
     }
 
-    @Override
-    protected void convert(final BaseViewHolder holder, final MultiItemEntity item) {
+    @Override protected void onCreateListener(BaseViewHolder holder) {
+
+    }
+
+    @Override protected void onBindViewHolder(final BaseViewHolder holder, MultiItemEntity item) {
         switch (holder.getItemViewType()) {
             case TYPE_LEVEL_0:
-                final Level0Item lv0 = (Level0Item)item;
+                final Level0Item lv0 = (Level0Item) item;
                 holder.setText(R.id.title, lv0.title)
                         .setText(R.id.sub_title, lv0.subTitle)
                         .setText(R.id.expand_state, lv0.isExpanded() ? R.string.expanded : R.string.collapsed);
@@ -63,7 +66,7 @@ public class ExpandableItemAdapter extends BaseExpandableItemQuickAdapter<MultiI
                 });
                 break;
             case TYPE_LEVEL_1:
-                final Level1Item lv1 = (Level1Item)item;
+                final Level1Item lv1 = (Level1Item) item;
                 holder.setText(R.id.title, lv1.title)
                         .setText(R.id.sub_title, lv1.subTitle)
                         .setText(R.id.expand_state, lv1.isExpanded() ? R.string.expanded : R.string.collapsed);
@@ -81,7 +84,7 @@ public class ExpandableItemAdapter extends BaseExpandableItemQuickAdapter<MultiI
                 });
                 break;
             case TYPE_PERSON:
-                final Person person = (Person)item;
+                final Person person = (Person) item;
                 holder.setText(R.id.tv, person.name + " parent pos: " + getParentPosition(person));
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

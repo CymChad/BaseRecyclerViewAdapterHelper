@@ -12,13 +12,13 @@ import android.widget.Toast;
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickAdapter;
 import com.chad.baserecyclerviewadapterhelper.animation.CustomAnimation;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
-import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.XQuickAdapter;
 import com.chad.library.adapter.base.animation.AlphaInAnimation;
 import com.chad.library.adapter.base.animation.ScaleInAnimation;
 import com.chad.library.adapter.base.animation.SlideInBottomAnimation;
 import com.chad.library.adapter.base.animation.SlideInLeftAnimation;
 import com.chad.library.adapter.base.animation.SlideInRightAnimation;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.chad.library.adapter.base.listener.SimpleOnItemClickListener;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.util.ArrayList;
@@ -47,27 +47,24 @@ public class AnimationUseActivity extends Activity {
 //        addHeadView();
         addFooterView();
         mQuickAdapter.openLoadAnimation(new AlphaInAnimation());
-//        mRecyclerView.addOnItemTouchListener(new OnItemChildClickListener() {
-//            @Override
-//            public void SimpleOnItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-//                String content = null;
-//                Status status = (Status) adapter.getItem(position);
-//                switch (view.getId()) {
-//                    case R.id.tweetAvatar:
-//                        content = "img:" + status.getUserAvatar();
-//                        break;
-//                    case R.id.tweetName:
-//                        content = "name:" + status.getUserName();
-//                        break;
-//                }
-//                Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
-//            }
-//        });
         mRecyclerView.setAdapter(mQuickAdapter);
-        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
-            @Override
-            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
+        mQuickAdapter.setOnItemClickListener(new SimpleOnItemClickListener() {
+            @Override public void onItemClick(XQuickAdapter adapter, View view, int position) {
                 Toast.makeText(AnimationUseActivity.this, mQuickAdapter.getData().get(position).getUserName() + "-" + Integer.toString(position), Toast.LENGTH_LONG).show();
+            }
+
+            @Override public void onItemChildClick(XQuickAdapter adapter, View view, int position) {
+                String content = null;
+                Status status = (Status) adapter.getItem(position);
+                switch (view.getId()) {
+                    case R.id.tweetAvatar:
+                        content = "img:" + status.getUserAvatar();
+                        break;
+                    case R.id.tweetName:
+                        content = "name:" + status.getUserName();
+                        break;
+                }
+                Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -158,7 +155,8 @@ public class AnimationUseActivity extends Activity {
 //        status.setText("BaseRecyclerViewAdpaterHelper https://www.recyclerview.org");
 //        list.add(status);
 
-        mQuickAdapter.addData(0, list);
+//        mQuickAdapter.addData(0, list);
+        mRecyclerView.setAdapter(mQuickAdapter);
     }
 
     int i = 0;

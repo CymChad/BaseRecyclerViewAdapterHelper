@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +11,11 @@ import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.animation.AlphaInAnimation;
 import com.chad.library.adapter.base.animation.BaseAnimation;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.chad.library.adapter.base.listener.ViewHolderListener;
 import com.chad.library.adapter.base.vh.BaseViewHolder;
-import com.chad.library.adapter.base.vh.LoadMoreViewHolder;
-import com.chad.library.adapter.base.vh.SimpleLoadMoreViewHolder;
+import com.chad.library.adapter.base.vh.LoadMoreView;
+import com.chad.library.adapter.base.vh.SimpleLoadMoreView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * Created by BlingBling on 2016/10/12.
  */
 
-abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
+public abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
 
     public static final int VIEW_TYPE_HEADER_VIEW = 0x10000111;
     public static final int VIEW_TYPE_EMPTY_VIEW = 0x10000222;
@@ -42,16 +43,32 @@ abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
     private View mEmptyView;
     //load more
     private boolean mEnableLoadMore = false;
-    private LoadMoreViewHolder mLoadMoreViewHolder = new SimpleLoadMoreViewHolder();
+    private LoadMoreView mLoadMoreView = new SimpleLoadMoreView();
     private BaseQuickAdapter.RequestLoadMoreListener mRequestLoadMoreListener;
     //animation
     private int mLastPosition = -1;
     private boolean mFirstOnlyEnable = true;
     private BaseAnimation mSelectAnimation;
+    //onClick
+    private ViewHolderListener mViewHolderListener;
+    private OnItemClickListener mOnItemClickListener;
 
     public XQuickAdapter(Context context, List<T> data) {
         this.mContext = context;
         this.mData = data == null ? new ArrayList<T>() : data;
+        mViewHolderListener = new ViewHolderListener(this);
+    }
+
+    public Context getContext() {
+        return mContext;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.mOnItemClickListener = onItemClickListener;
+    }
+
+    public OnItemClickListener getOnItemClickListener() {
+        return mOnItemClickListener;
     }
 
     public void setOnLoadMoreListener(BaseQuickAdapter.RequestLoadMoreListener requestLoadMoreListener) {
@@ -210,38 +227,55 @@ abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
     /**
      * set a loadingView
      *
-     * @param loadMoreViewHolder
+     * @param loadMoreView
      */
-    public void setLoadMoreViewHolder(LoadMoreViewHolder loadMoreViewHolder) {
-        this.mLoadMoreViewHolder = loadMoreViewHolder;
+    public void setLoadMoreView(LoadMoreView loadMoreView) {
+        this.mLoadMoreView = loadMoreView;
     }
 
     public void enableLoadMore(boolean enableLoadMore) {
-        this.mEnableLoadMore = enableLoadMore;//这句话会造成getItemCount改变
+        if (mLoadMoreView == null) {
+            throw new RuntimeException("请先调用setOnLoadMoreListener(BaseQuickAdapter.RequestLoadMoreListener)方法设置监听");
+        }
         if (enableLoadMore) {
-            mLoadMoreViewHolder.setLoadMoreStatus(LoadMoreViewHolder.STATUS_LOAD_DEFAULT);
-            notifyItemInserted(getItemCount() - 1);
+            if (!mEnableLoadMore) {
+                mEnableLoadMore = enableLoadMore;//这句话会造成getItemCount改变
+                mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_LOAD_DEFAULT);
+                notifyItemInserted(getItemCount() - 1);
+            }
         } else {
-            notifyItemRemoved(getItemCount());
+            if (mEnableLoadMore) {
+                mEnableLoadMore = enableLoadMore;//这句话会造成getItemCount改变
+                notifyItemRemoved(getItemCount());
+            }
         }
     }
 
+    /**
+     * 加载更多数据后调用下
+     */
     public void loadMoreComplete() {
-        mLoadMoreViewHolder.setLoadMoreStatus(LoadMoreViewHolder.STATUS_LOAD_DEFAULT);
+        mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_LOAD_DEFAULT);
         notifyItemChanged(getItemCount() - 1);
     }
 
+    /**
+     * 加载更多失败
+     */
     public void loadMoreError() {
-        mLoadMoreViewHolder.setLoadMoreStatus(LoadMoreViewHolder.STATUS_LOAD_ERROR);
+        mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_LOAD_ERROR);
         notifyItemChanged(getItemCount() - 1);
     }
 
+    /**
+     * 加载更多完成（没有更多数据）
+     */
     public void loadMoreEnd() {
-        if (mLoadMoreViewHolder.isLoadEndGone()) {
+        if (mLoadMoreView.isLoadEndGone()) {
             mEnableLoadMore = false;
             notifyItemRemoved(getItemCount() - 1);
         } else {
-            mLoadMoreViewHolder.setLoadMoreStatus(LoadMoreViewHolder.STATUS_LOAD_END);
+            mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_LOAD_END);
             notifyItemChanged(getItemCount() - 1);
         }
     }
@@ -293,28 +327,29 @@ abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
         BaseViewHolder baseViewHolder;
         switch (viewType) {
             case VIEW_TYPE_HEADER_VIEW:
-                baseViewHolder = new BaseViewHolder(mHeaderLayout);
+                baseViewHolder = new BaseViewHolder(mHeaderLayout, mViewHolderListener);
                 break;
             case VIEW_TYPE_FOOTER_VIEW:
-                baseViewHolder = new BaseViewHolder(mFooterLayout);
+                baseViewHolder = new BaseViewHolder(mFooterLayout, mViewHolderListener);
                 break;
             case VIEW_TYPE_LOADING_VIEW:
-                baseViewHolder = createBaseViewHolder(parent, mLoadMoreViewHolder.getLoadMoreViewLayoutId());
+                baseViewHolder = createBaseViewHolder(parent, mLoadMoreView.getLoadMoreViewLayoutId());
                 baseViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View v) {
-                        Log.e("TAG", "onclick---------->" + v);
-                        if (mLoadMoreViewHolder.getLoadMoreStatus() == LoadMoreViewHolder.STATUS_LOAD_ERROR) {
-                            mLoadMoreViewHolder.setLoadMoreStatus(LoadMoreViewHolder.STATUS_LOAD_DEFAULT);
+                        if (mLoadMoreView.getLoadMoreStatus() == LoadMoreView.STATUS_LOAD_ERROR) {
+                            mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_LOAD_DEFAULT);
                             notifyItemChanged(getItemCount() - 1);
                         }
                     }
                 });
                 break;
             case VIEW_TYPE_EMPTY_VIEW:
-                baseViewHolder = new BaseViewHolder(mEmptyView);
+                baseViewHolder = new BaseViewHolder(mEmptyView, mViewHolderListener);
                 break;
             default:
                 baseViewHolder = onCreateDefViewHolder(parent, viewType);
+                onCreateListener(baseViewHolder);
+                break;
         }
         return baseViewHolder;
     }
@@ -337,32 +372,25 @@ abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
             case VIEW_TYPE_EMPTY_VIEW:
                 break;
             case VIEW_TYPE_LOADING_VIEW:
-                boolean loadMore = false;
-                if (mLoadMoreViewHolder.getLoadMoreStatus() == LoadMoreViewHolder.STATUS_LOAD_DEFAULT) {
-                    mLoadMoreViewHolder.setLoadMoreStatus(LoadMoreViewHolder.STATUS_LOADING);
-                    loadMore = true;
-                }
-                mLoadMoreViewHolder.onStatusChanged(holder);
-                if (loadMore) {
+                if (mLoadMoreView.getLoadMoreStatus() == LoadMoreView.STATUS_LOAD_DEFAULT) {
+                    mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_LOADING);
                     if (mRequestLoadMoreListener != null) {
                         mRequestLoadMoreListener.onLoadMoreRequested();
                     }
                 }
+                mLoadMoreView.onStatusChanged(holder);
                 break;
             default:
-                convert(holder, getItem(positions - getHeaderViewCount()));
+                onBindViewHolder(holder, getItem(positions - getHeaderViewCount()));
                 break;
         }
-
     }
-
 
     protected BaseViewHolder createBaseViewHolder(ViewGroup parent, int layoutResId) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(layoutResId, parent, false);
-        return new BaseViewHolder(view);
+        return new BaseViewHolder(view, mViewHolderListener);
     }
-
 
     /**
      * When set to true, the item will layout using all span area. That means, if orientation
@@ -578,10 +606,6 @@ abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
         }
     }
 
-    public interface RequestLoadMoreListener {
-        void onLoadMoreRequested();
-    }
-
     public void openLoadAnimation() {
         openLoadAnimation(new AlphaInAnimation());
     }
@@ -608,12 +632,17 @@ abstract class XQuickAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
 
     protected abstract BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType);
 
+    protected abstract void onCreateListener(BaseViewHolder holder);
+
     /**
      * Implement this method and use the helper to adapt the view to the given item.
      *
-     * @param helper A fully initialized helper.
+     * @param holder A fully initialized helper.
      * @param item   The item that needs to be displayed.
      */
-    protected abstract void convert(BaseViewHolder helper, T item);
+    protected abstract void onBindViewHolder(BaseViewHolder holder, T item);
 
+    public interface RequestLoadMoreListener {
+        void onLoadMoreRequested();
+    }
 }

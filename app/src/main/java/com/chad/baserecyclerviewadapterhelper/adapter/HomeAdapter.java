@@ -23,11 +23,13 @@ public class HomeAdapter extends BaseQuickAdapter<HomeItem> {
         return R.layout.home_item_view;
     }
 
-    @Override
-    protected void convert(BaseViewHolder helper, HomeItem item) {
-        helper.setText(R.id.info_text, item.getTitle());
-        CardView cardView = helper.getView(R.id.card_view);
-        cardView.setCardBackgroundColor(Color.parseColor(item.getColorStr()));
+    @Override protected void onCreateListener(BaseViewHolder holder) {
+        holder.listenerOnItemClick();
     }
 
+    @Override protected void onBindViewHolder(BaseViewHolder holder, HomeItem item) {
+        holder.setText(R.id.info_text, item.getTitle());
+        CardView cardView = holder.getView(R.id.card_view);
+        cardView.setCardBackgroundColor(Color.parseColor(item.getColorStr()));
+    }
 }

@@ -21,19 +21,23 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
         addItemType(MultipleItem.IMG, R.layout.item_image_view);
     }
 
-    @Override
-    protected void convert(BaseViewHolder helper, MultipleItem item) {
-        switch (helper.getItemViewType()) {
+
+    @Override protected int getGridLayoutManagerSpanSize(GridLayoutManager gridLayoutManager, int position) {
+        return getItem(position).getSpanSize();
+    }
+
+    @Override protected void onCreateListener(BaseViewHolder holder) {
+
+    }
+
+    @Override protected void onBindViewHolder(BaseViewHolder holder, MultipleItem item) {
+        switch (holder.getItemViewType()) {
             case MultipleItem.TEXT:
-                helper.setText(R.id.tv, item.getContent());
+                holder.setText(R.id.tv, item.getContent());
                 break;
             case MultipleItem.IMG:
                 // set img data
                 break;
         }
-    }
-
-    @Override protected int getGridLayoutManagerSpanSize(GridLayoutManager gridLayoutManager, int position) {
-        return getItem(position).getSpanSize();
     }
 }

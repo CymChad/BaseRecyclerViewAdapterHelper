@@ -20,8 +20,12 @@ public class ItemDragAdapter extends BaseItemDraggableAdapter<String> {
         return R.layout.item_draggable_view;
     }
 
-    @Override
-    protected void convert(BaseViewHolder helper, String item) {
-        helper.setText(R.id.tv, item);
+    @Override protected void onCreateListener(BaseViewHolder holder) {
+
+    }
+
+    @Override protected void onBindViewHolder(BaseViewHolder holder, String item) {
+        holder.setText(R.id.tv, item);
+
     }
 }

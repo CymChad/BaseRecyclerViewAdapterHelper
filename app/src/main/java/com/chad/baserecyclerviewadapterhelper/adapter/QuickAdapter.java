@@ -16,7 +16,7 @@ import com.chad.library.adapter.base.vh.BaseViewHolder;
  */
 public class QuickAdapter extends BaseQuickAdapter<Status> {
     public QuickAdapter(Context context) {
-        super(context, DataServer.getSampleData(1));
+        super(context, DataServer.getSampleData(10));
     }
 
     public QuickAdapter(Context context, int dataSize) {
@@ -27,18 +27,21 @@ public class QuickAdapter extends BaseQuickAdapter<Status> {
         return R.layout.tweet;
     }
 
-    @Override
-    protected void convert(BaseViewHolder helper, Status item) {
-        helper.setText(R.id.tweetName, item.getUserName())
+
+    @Override protected void onCreateListener(BaseViewHolder holder) {
+        holder.listenerOnItemClick()
+                .listenerOnItemChildClick(R.id.tweetAvatar)
+                .listenerOnItemChildClick(R.id.tweetName);
+    }
+
+    @Override protected void onBindViewHolder(BaseViewHolder holder, Status item) {
+        holder.setText(R.id.tweetName, item.getUserName())
                 .setText(R.id.tweetText, item.getText())
                 .setText(R.id.tweetDate, item.getCreatedAt())
                 .setVisible(R.id.tweetRT, item.isRetweet())
-                .addOnClickListener(R.id.tweetAvatar)
-                .addOnClickListener(R.id.tweetName)
                 .linkify(R.id.tweetText);
 
-        Glide.with(mContext).load(item.getUserAvatar()).crossFade().placeholder(R.mipmap.def_head).transform(new GlideCircleTransform(mContext)).into((ImageView) helper.getView(R.id.tweetAvatar));
+        Glide.with(mContext).load(item.getUserAvatar()).crossFade().placeholder(R.mipmap.def_head).transform(new GlideCircleTransform(mContext)).into((ImageView) holder.getView(R.id.tweetAvatar));
+
     }
-
-
 }

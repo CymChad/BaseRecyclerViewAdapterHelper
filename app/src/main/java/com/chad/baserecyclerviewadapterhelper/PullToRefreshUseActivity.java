@@ -14,8 +14,9 @@ import android.widget.Toast;
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickAdapter;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.XQuickAdapter;
 import com.chad.library.adapter.base.animation.AlphaInAnimation;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.chad.library.adapter.base.listener.SimpleOnItemClickListener;
 
 
 /**
@@ -55,7 +56,6 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
     private void addHeadView() {
         View headView = getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false);
         ((TextView) headView.findViewById(R.id.tv)).setText("click use custom loading view");
-        final View customLoading = getLayoutInflater().inflate(R.layout.custom_loading, (ViewGroup) mRecyclerView.getParent(), false);
         headView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,14 +111,14 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
 //                mQuickAdapter.removeAllFooterView();
                 mCurrentCounter = PAGE_SIZE;
                 mSwipeRefreshLayout.setRefreshing(false);
-                mQuickAdapter.enableLoadMore(true);
                 isErr = false;
             }
         }, delayMillis);
     }
 
     private void initAdapter() {
-        mQuickAdapter = new QuickAdapter(this,PAGE_SIZE);
+        mQuickAdapter = new QuickAdapter(this, PAGE_SIZE);
+        mQuickAdapter.enableLoadMore(true);
 
         addFooterView();
         mQuickAdapter.openLoadAnimation(new AlphaInAnimation());
@@ -130,16 +130,11 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
         mRecyclerView.setAdapter(mQuickAdapter);
         mCurrentCounter = mQuickAdapter.getData().size();
         mQuickAdapter.setOnLoadMoreListener(this);
-
-        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
-            @Override
-            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
+        mQuickAdapter.setOnItemClickListener(new SimpleOnItemClickListener() {
+            @Override public void onItemClick(XQuickAdapter adapter, View view, int position) {
                 Toast.makeText(PullToRefreshUseActivity.this, Integer.toString(position), Toast.LENGTH_LONG).show();
             }
 
-            @Override public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                super.onItemChildClick(adapter, view, position);
-            }
         });
     }
 

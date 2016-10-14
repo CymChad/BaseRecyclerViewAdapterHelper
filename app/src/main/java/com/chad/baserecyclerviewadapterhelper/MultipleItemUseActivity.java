@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import com.chad.baserecyclerviewadapterhelper.adapter.MultipleItemQuickAdapter;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.MultipleItem;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 import java.util.List;
 
@@ -33,11 +31,6 @@ public class MultipleItemUseActivity extends Activity {
         multipleItemAdapter.addHeaderView(getView());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(multipleItemAdapter);
-        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
-            @Override public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
-
-            }
-        });
     }
 
     private View getView() {

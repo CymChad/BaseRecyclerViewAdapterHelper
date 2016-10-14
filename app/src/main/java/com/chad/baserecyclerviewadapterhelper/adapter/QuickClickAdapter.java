@@ -11,6 +11,8 @@ import com.chad.baserecyclerviewadapterhelper.transform.GlideCircleTransform;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.vh.BaseViewHolder;
 
+import static com.chad.baserecyclerviewadapterhelper.R.layout.item;
+
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
@@ -24,22 +26,24 @@ public class QuickClickAdapter extends BaseQuickAdapter<Status> {
     }
 
     @Override protected int getLayoutResId() {
-        return R.layout.item;
+        return item;
     }
 
-    @Override
-    protected void convert(BaseViewHolder helper, Status item) {
-//        helper.getConvertView().setBackgroundResource(R.drawable.card_click);
-        helper.setText(R.id.tweetName, item.getUserName())
+
+    @Override protected void onCreateListener(BaseViewHolder holder) {
+        holder.listenerOnItemClick()
+                .listenerOnItemLongClick()
+                .listenerOnItemChildClick(R.id.tweetAvatar)
+                .listenerOnItemChildClick(R.id.tweetName)
+                .listenerOnItemChildLongClick(R.id.tweetText);
+    }
+
+    @Override protected void onBindViewHolder(BaseViewHolder holder, Status item) {
+        holder.itemView.setBackgroundResource(R.drawable.card_click);
+        holder.setText(R.id.tweetName, item.getUserName())
                 .setText(R.id.tweetText, item.getText())
                 .setText(R.id.tweetDate, item.getCreatedAt())
-                .setVisible(R.id.tweetRT, item.isRetweet())
-                .addOnClickListener(R.id.tweetAvatar)
-                .addOnClickListener(R.id.tweetName)
-                .addOnLongClickListener(R.id.tweetText)
-        ;
-        Glide.with(mContext).load(item.getUserAvatar()).crossFade().placeholder(R.mipmap.def_head).transform(new GlideCircleTransform(mContext)).into((ImageView) helper.getView(R.id.tweetAvatar));
+                .setVisible(R.id.tweetRT, item.isRetweet());
+        Glide.with(mContext).load(item.getUserAvatar()).crossFade().placeholder(R.mipmap.def_head).transform(new GlideCircleTransform(mContext)).into((ImageView) holder.getView(R.id.tweetAvatar));
     }
-
-
 }

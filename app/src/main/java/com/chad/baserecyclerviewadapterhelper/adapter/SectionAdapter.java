@@ -30,7 +30,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
     protected void convertHead(BaseViewHolder helper, final MySection item) {
         helper.setText(R.id.header, item.header);
         helper.setVisible(R.id.more, item.isMore());
-        helper.addOnClickListener(R.id.more);
+//        helper.setOnClickListener(R.id.more);
     }
 
 
@@ -39,5 +39,9 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
         Video video = (Video) item.t;
         //helper.setImageUrl(R.id.iv, video.getImg());
         helper.setText(R.id.tv, video.getName());
+    }
+
+    @Override protected void onCreateListener(BaseViewHolder holder) {
+
     }
 }

@@ -6,7 +6,7 @@ import com.chad.library.R;
  * Created by BlingBling on 2016/10/11.
  */
 
-public class SimpleLoadMoreViewHolder extends LoadMoreViewHolder {
+public class SimpleLoadMoreView extends LoadMoreView {
     @Override public int getLoadMoreViewLayoutId() {
         return R.layout.def_loading;
     }

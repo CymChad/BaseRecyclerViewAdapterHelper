@@ -34,12 +34,7 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends B
         }
     }
 
-    /**
-     * @param holder A fully initialized helper.
-     * @param item   The item that needs to be displayed.
-     */
-    @Override
-    protected void convert(BaseViewHolder holder, T item) {
+    @Override protected void onBindViewHolder(BaseViewHolder holder, T item) {
         switch (holder.getItemViewType()) {
             case SECTION_HEADER_VIEW:
                 setFullSpan(holder);
