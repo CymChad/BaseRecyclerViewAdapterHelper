@@ -1,19 +1,19 @@
 /**
  * Copyright 2013 Joan Zapata
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.chad.library.adapter.base;
+package com.chad.library.adapter.base.vh;
 
 import android.graphics.Bitmap;
 import android.graphics.Paint;
@@ -27,8 +27,6 @@ import android.text.util.Linkify;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
-import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.CheckedTextView;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -36,8 +34,7 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
+import com.chad.library.adapter.base.listener.ViewHolderListener;
 
 
 /**
@@ -50,38 +47,13 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      */
     private final SparseArray<View> views;
 
-    private final LinkedHashSet<Integer> childClickViewIds;
-    private final LinkedHashSet<Integer> itemChildLongClickViewIds;
+    private ViewHolderListener mViewHolderListener;
 
 
-    public View convertView;
-
-    /**
-     * Package private field to retain the associated user object and detect a change
-     */
-    Object associatedObject;
-
-
-    protected BaseViewHolder(View view) {
+    public BaseViewHolder(View view, ViewHolderListener listener) {
         super(view);
-        this.views = new SparseArray<View>();
-        this.childClickViewIds = new LinkedHashSet<>();
-        this.itemChildLongClickViewIds = new LinkedHashSet<>();
-        convertView = view;
-
-    }
-
-    public HashSet<Integer> getItemChildLongClickViewIds() {
-        return itemChildLongClickViewIds;
-    }
-
-    public HashSet<Integer> getChildClickViewIds() {
-        return  childClickViewIds;
-    }
-
-    public View getConvertView() {
-
-        return convertView;
+        mViewHolderListener = listener;
+        this.views = new SparseArray<>();
     }
 
     /**
@@ -110,7 +82,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @param imageResId The image resource id.
      * @return The BaseViewHolder for chaining.
      */
-    public BaseViewHolder setImageResource(int viewId,@DrawableRes int imageResId) {
+    public BaseViewHolder setImageResource(int viewId, @DrawableRes int imageResId) {
         ImageView view = getView(viewId);
         view.setImageResource(imageResId);
         return this;
@@ -312,118 +284,6 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     /**
-     * Sets the on click listener of the view.
-     * @param viewId   The view id.
-     * @param listener The on click listener;
-     * @return The BaseViewHolder for chaining.
-     */
-    @Deprecated
-    public BaseViewHolder setOnClickListener(int viewId, View.OnClickListener listener) {
-        View view = getView(viewId);
-        view.setOnClickListener(listener);
-        return this;
-    }
-
-    /**
-     * add childView id
-     * @param viewId add the child view id   can support childview click
-     * @return
-     */
-    public BaseViewHolder addOnClickListener(int viewId) {
-        childClickViewIds.add(viewId);
-        return this;
-    }
-
-    /**
-     * add long click view id
-     * @param viewId
-     * @return
-     */
-    public BaseViewHolder addOnLongClickListener(int viewId){
-        itemChildLongClickViewIds.add(viewId);
-        return this;
-    }
-
-
-    /**
-     * Sets the on touch listener of the view.
-     *
-     * @param viewId   The view id.
-     * @param listener The on touch listener;
-     * @return The BaseViewHolder for chaining.
-     */
-    public BaseViewHolder setOnTouchListener(int viewId, View.OnTouchListener listener) {
-        View view = getView(viewId);
-        view.setOnTouchListener(listener);
-        return this;
-    }
-
-    /**
-     * Sets the on long click listener of the view.
-     *
-     * @param viewId   The view id.
-     * @param listener The on long click listener;
-     * @return The BaseViewHolder for chaining.
-     */
-    public BaseViewHolder setOnLongClickListener(int viewId, View.OnLongClickListener listener) {
-        View view = getView(viewId);
-        view.setOnLongClickListener(listener);
-        return this;
-    }
-
-    /**
-     * Sets the listview or gridview's item click listener of the view
-     *
-     * @param viewId   The view id.
-     * @param listener The item on click listener;
-     * @return The BaseViewHolder for chaining.
-     */
-    public BaseViewHolder setOnItemClickListener(int viewId, AdapterView.OnItemClickListener listener) {
-        AdapterView view = getView(viewId);
-        view.setOnItemClickListener(listener);
-        return this;
-    }
-
-    /**
-     * Sets the listview or gridview's item long click listener of the view
-     *
-     * @param viewId   The view id.
-     * @param listener The item long click listener;
-     * @return The BaseViewHolder for chaining.
-     */
-    public BaseViewHolder setOnItemLongClickListener(int viewId, AdapterView.OnItemLongClickListener listener) {
-        AdapterView view = getView(viewId);
-        view.setOnItemLongClickListener(listener);
-        return this;
-    }
-
-    /**
-     * Sets the listview or gridview's item selected click listener of the view
-     *
-     * @param viewId   The view id.
-     * @param listener The item selected click listener;
-     * @return The BaseViewHolder for chaining.
-     */
-    public BaseViewHolder setOnItemSelectedClickListener(int viewId, AdapterView.OnItemSelectedListener listener) {
-        AdapterView view = getView(viewId);
-        view.setOnItemSelectedListener(listener);
-        return this;
-    }
-
-    /**
-     * Sets the on checked change listener of the view.
-     *
-     * @param viewId   The view id.
-     * @param listener The checked change listener of compound button.
-     * @return The BaseViewHolder for chaining.
-     */
-    public BaseViewHolder setOnCheckedChangeListener(int viewId, CompoundButton.OnCheckedChangeListener listener) {
-        CompoundButton view = getView(viewId);
-        view.setOnCheckedChangeListener(listener);
-        return this;
-    }
-
-    /**
      * Sets the tag of the view.
      *
      * @param viewId The view id.
@@ -468,41 +328,57 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    /**
-     * Sets the adapter of a adapter view.
-     *
-     * @param viewId  The view id.
-     * @param adapter The adapter;
-     * @return The BaseViewHolder for chaining.
-     */
-    public BaseViewHolder setAdapter(int viewId, Adapter adapter) {
-        AdapterView view = getView(viewId);
-        view.setAdapter(adapter);
-        return this;
-    }
-
     @SuppressWarnings("unchecked")
     public <T extends View> T getView(int viewId) {
         View view = views.get(viewId);
         if (view == null) {
-            view = convertView.findViewById(viewId);
+            view = itemView.findViewById(viewId);
             views.put(viewId, view);
         }
         return (T) view;
     }
 
+    //set listener callback in XQuickAdapter.listenerOnItemClick
 
-    /**
-     * Retrieves the last converted object on this view.
-     */
-    public Object getAssociatedObject() {
-        return associatedObject;
+    public BaseViewHolder listenerOnItemClick() {
+        mViewHolderListener.setOnClick(this, itemView, null);
+        return this;
     }
 
-    /**
-     * Should be called during convert
-     */
-    public void setAssociatedObject(Object associatedObject) {
-        this.associatedObject = associatedObject;
+    public BaseViewHolder listenerOnItemLongClick() {
+        mViewHolderListener.setOnLongClick(this, itemView, null);
+        return this;
+    }
+
+    public BaseViewHolder listenerOnItemChildClick(int viewId) {
+        mViewHolderListener.setOnClick(this, getView(viewId), null);
+        return this;
+    }
+
+    public BaseViewHolder listenerOnItemChildLongClick(int viewId) {
+        mViewHolderListener.setOnLongClick(this, getView(viewId), null);
+        return this;
+    }
+
+    //set listener callback in params listener
+
+    public BaseViewHolder listenerOnItemClick(ViewHolderListener.OnClickListener listener) {
+        mViewHolderListener.setOnClick(this, itemView, listener);
+        return this;
+    }
+
+    public BaseViewHolder listenerOnItemLongClick(ViewHolderListener.OnLongClickListener listener) {
+        mViewHolderListener.setOnLongClick(this, itemView, listener);
+        return this;
+    }
+
+    public BaseViewHolder listenerOnItemChildClick(int viewId, ViewHolderListener.OnClickListener listener) {
+        mViewHolderListener.setOnClick(this, getView(viewId), listener);
+        return this;
+    }
+
+    public BaseViewHolder listenerOnItemChildLongClick(int viewId, ViewHolderListener.OnLongClickListener listener) {
+        mViewHolderListener.setOnLongClick(this, getView(viewId), listener);
+        return this;
     }
 }

@@ -4,11 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -16,14 +13,15 @@ import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickAdapter;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.chad.library.adapter.base.XQuickAdapter;
+import com.chad.library.adapter.base.animation.AlphaInAnimation;
+import com.chad.library.adapter.base.listener.SimpleOnItemClickListener;
 
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
+public class PullToRefreshUseActivity extends Activity implements XQuickAdapter.OnLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
     private RecyclerView mRecyclerView;
     private QuickAdapter mQuickAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -34,7 +32,7 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
 
     private static final int PAGE_SIZE = 6;
 
-    private int delayMillis = 1000;
+    private int delayMillis = 2000;
 
     private int mCurrentCounter = 0;
 
@@ -50,84 +48,78 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         initAdapter();
         addHeadView();
+
         mRecyclerView.setAdapter(mQuickAdapter);
     }
 
     private void addHeadView() {
         View headView = getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false);
         ((TextView) headView.findViewById(R.id.tv)).setText("click use custom loading view");
-        final View customLoading = getLayoutInflater().inflate(R.layout.custom_loading, (ViewGroup) mRecyclerView.getParent(), false);
-        headView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mQuickAdapter.setLoadingView(customLoading);
-                mRecyclerView.setAdapter(mQuickAdapter);
-                Toast.makeText(PullToRefreshUseActivity.this, "use ok!", Toast.LENGTH_LONG).show();
-            }
-        });
         mQuickAdapter.addHeaderView(headView);
+    }
+
+    private void addFooterView() {
+        View footerView = getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false);
+        ((TextView) footerView.findViewById(R.id.tv)).setText("footer view");
+        mQuickAdapter.addFooterView(footerView);
     }
 
     @Override
     public void onLoadMoreRequested() {
-        mRecyclerView.post(new Runnable() {
+        mSwipeRefreshLayout.setEnabled(false);
+        mRecyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (mCurrentCounter >= TOTAL_COUNTER) {
-                    mQuickAdapter.loadComplete();
-                    if (notLoadingView == null) {
-                        notLoadingView = getLayoutInflater().inflate(R.layout.not_loading, (ViewGroup) mRecyclerView.getParent(), false);
-                    }
-                    mQuickAdapter.addFooterView(notLoadingView);
+                    mQuickAdapter.loadMoreEnd();
                 } else {
                     if (isErr) {
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                mQuickAdapter.addData(DataServer.getSampleData(PAGE_SIZE));
-                                mCurrentCounter = mQuickAdapter.getData().size();
-                            }
-                        }, delayMillis);
+                        mQuickAdapter.addData(DataServer.getSampleData(PAGE_SIZE));
+                        mCurrentCounter = mQuickAdapter.getData().size();
+                        mQuickAdapter.loadMoreComplete();
                     } else {
                         isErr = true;
                         Toast.makeText(PullToRefreshUseActivity.this, R.string.network_err, Toast.LENGTH_LONG).show();
-                        mQuickAdapter.showLoadMoreFailedView();
-
+                        mQuickAdapter.loadMoreError();
                     }
                 }
+                mSwipeRefreshLayout.setEnabled(true);
             }
 
-        });
+        }, delayMillis);
     }
 
     @Override
     public void onRefresh() {
+        mQuickAdapter.setEnableLoadMore(false);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mQuickAdapter.setNewData(DataServer.getSampleData(PAGE_SIZE));
-                mQuickAdapter.openLoadMore(PAGE_SIZE);
-                mQuickAdapter.removeAllFooterView();
                 mCurrentCounter = PAGE_SIZE;
+                mQuickAdapter.setNewData(DataServer.getSampleData(4));
+
                 mSwipeRefreshLayout.setRefreshing(false);
                 isErr = false;
+                mQuickAdapter.setEnableLoadMore(true);
             }
         }, delayMillis);
     }
 
     private void initAdapter() {
-        mQuickAdapter = new QuickAdapter(PAGE_SIZE);
-        mQuickAdapter.openLoadAnimation();
-        mQuickAdapter.openLoadMore(PAGE_SIZE);
-        mRecyclerView.setAdapter(mQuickAdapter);
-        mCurrentCounter = mQuickAdapter.getData().size();
+        mQuickAdapter = new QuickAdapter(this, PAGE_SIZE);
         mQuickAdapter.setOnLoadMoreListener(this);
 
-        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
-            @Override
-            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
+        addFooterView();
+        mQuickAdapter.openLoadAnimation(new AlphaInAnimation());
+
+
+        mRecyclerView.setAdapter(mQuickAdapter);
+        mCurrentCounter = mQuickAdapter.getData().size();
+        mQuickAdapter.setOnItemClickListener(new SimpleOnItemClickListener() {
+            @Override public void onItemClick(XQuickAdapter adapter, View view, int position) {
                 Toast.makeText(PullToRefreshUseActivity.this, Integer.toString(position), Toast.LENGTH_LONG).show();
             }
+
         });
     }
 

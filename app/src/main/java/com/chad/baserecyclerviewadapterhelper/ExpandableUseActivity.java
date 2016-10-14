@@ -33,7 +33,7 @@ public class ExpandableUseActivity extends Activity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         ArrayList<MultiItemEntity> list = generateData();
-        ExpandableItemAdapter adapter = new ExpandableItemAdapter(list);
+        ExpandableItemAdapter adapter = new ExpandableItemAdapter(this,list);
 
         View headerView = getView();
         adapter.addHeaderView(headerView);

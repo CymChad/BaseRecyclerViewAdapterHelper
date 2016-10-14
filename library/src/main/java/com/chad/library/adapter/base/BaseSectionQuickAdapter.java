@@ -1,66 +1,54 @@
 package com.chad.library.adapter.base;
 
+import android.content.Context;
 import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.entity.SectionEntity;
+import com.chad.library.adapter.base.vh.BaseViewHolder;
 
 import java.util.List;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends BaseQuickAdapter {
+public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends BaseQuickAdapter<T> {
 
 
-    protected int mSectionHeadResId;
-    protected static final int SECTION_HEADER_VIEW = 0x00000444;
+    protected static final int SECTION_HEADER_VIEW = 0x10000555;
 
-    /**
-     * Same as QuickAdapter#QuickAdapter(Context,int) but with
-     * some initialization data.
-     *
-     * @param sectionHeadResId The section head layout id for each item
-     * @param layoutResId      The layout resource id of each item.
-     * @param data             A new list is created out of this one to avoid mutable list
-     */
-    public BaseSectionQuickAdapter( int layoutResId, int sectionHeadResId, List<T> data) {
-        super(layoutResId, data);
-        this.mSectionHeadResId = sectionHeadResId;
+    public BaseSectionQuickAdapter(Context context, List<T> data) {
+        super(context, data);
     }
 
     @Override
     protected int getDefItemViewType(int position) {
-        return ((SectionEntity) mData.get(position)).isHeader ? SECTION_HEADER_VIEW : 0;
+        return getItem(position).isHeader ? SECTION_HEADER_VIEW : 0;
     }
 
     @Override
     protected BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == SECTION_HEADER_VIEW)
-            return new BaseViewHolder(getItemView(mSectionHeadResId, parent));
-
-        return super.onCreateDefViewHolder(parent, viewType);
+        if (viewType == SECTION_HEADER_VIEW) {
+            return createBaseViewHolder(parent, getSectionHeadResId());
+        } else {
+            return super.onCreateDefViewHolder(parent, viewType);
+        }
     }
 
-    /**
-     * @param holder A fully initialized helper.
-     * @param item   The item that needs to be displayed.
-     */
-    @Override
-    protected void convert(BaseViewHolder holder, Object item) {
+    @Override protected void onBindViewHolder(BaseViewHolder holder, T item) {
         switch (holder.getItemViewType()) {
             case SECTION_HEADER_VIEW:
                 setFullSpan(holder);
-                convertHead(holder, (T) item);
+                convertHead(holder, item);
                 break;
             default:
-                convert(holder, (T) item);
+                convertContent(holder, item);
                 break;
         }
     }
 
     protected abstract void convertHead(BaseViewHolder helper, T item);
 
-    protected abstract void convert(BaseViewHolder helper, T item);
+    protected abstract void convertContent(BaseViewHolder helper, T item);
 
-
+    protected abstract int getSectionHeadResId();
 }

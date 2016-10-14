@@ -11,8 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.chad.library.adapter.base.XQuickAdapter;
+import com.chad.library.adapter.base.listener.SimpleOnItemClickListener;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
@@ -90,12 +90,11 @@ public class HeaderAndFooterUseActivity extends Activity {
     }
 
     private void initAdapter() {
-        mQuickAdapter = new QuickAdapter(PAGE_SIZE);
+        mQuickAdapter = new QuickAdapter(this, PAGE_SIZE);
         mQuickAdapter.openLoadAnimation();
         mRecyclerView.setAdapter(mQuickAdapter);
-        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
-            @Override
-            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
+        mQuickAdapter.setOnItemClickListener(new SimpleOnItemClickListener() {
+            @Override public void onItemClick(XQuickAdapter adapter, View view, int position) {
                 Toast.makeText(HeaderAndFooterUseActivity.this, "" + Integer.toString(position), Toast.LENGTH_LONG).show();
             }
         });

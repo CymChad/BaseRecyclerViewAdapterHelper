@@ -1,5 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.View;
 
@@ -7,16 +8,16 @@ import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.Level0Item;
 import com.chad.baserecyclerviewadapterhelper.entity.Level1Item;
 import com.chad.baserecyclerviewadapterhelper.entity.Person;
-import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.BaseExpandableItemQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.chad.library.adapter.base.vh.BaseViewHolder;
 
 import java.util.List;
 
 /**
  * Created by luoxw on 2016/8/9.
  */
-public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity> {
+public class ExpandableItemAdapter extends BaseExpandableItemQuickAdapter<MultiItemEntity> {
     private static final String TAG = ExpandableItemAdapter.class.getSimpleName();
 
     public static final int TYPE_LEVEL_0 = 0;
@@ -29,18 +30,21 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
      *
      * @param data A new list is created out of this one to avoid mutable list
      */
-    public ExpandableItemAdapter(List<MultiItemEntity> data) {
-        super(data);
+    public ExpandableItemAdapter(Context context,List<MultiItemEntity> data) {
+        super(context,data);
         addItemType(TYPE_LEVEL_0, R.layout.item_expandable_lv0);
         addItemType(TYPE_LEVEL_1, R.layout.item_expandable_lv1);
         addItemType(TYPE_PERSON, R.layout.item_text_view);
     }
 
-    @Override
-    protected void convert(final BaseViewHolder holder, final MultiItemEntity item) {
+    @Override protected void onCreateListener(BaseViewHolder holder) {
+
+    }
+
+    @Override protected void onBindViewHolder(final BaseViewHolder holder, MultiItemEntity item) {
         switch (holder.getItemViewType()) {
             case TYPE_LEVEL_0:
-                final Level0Item lv0 = (Level0Item)item;
+                final Level0Item lv0 = (Level0Item) item;
                 holder.setText(R.id.title, lv0.title)
                         .setText(R.id.sub_title, lv0.subTitle)
                         .setText(R.id.expand_state, lv0.isExpanded() ? R.string.expanded : R.string.collapsed);
@@ -62,7 +66,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                 });
                 break;
             case TYPE_LEVEL_1:
-                final Level1Item lv1 = (Level1Item)item;
+                final Level1Item lv1 = (Level1Item) item;
                 holder.setText(R.id.title, lv1.title)
                         .setText(R.id.sub_title, lv1.subTitle)
                         .setText(R.id.expand_state, lv1.isExpanded() ? R.string.expanded : R.string.collapsed);
@@ -72,15 +76,15 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                         int pos = holder.getAdapterPosition();
                         Log.d(TAG, "Level 1 item pos: " + pos);
                         if (lv1.isExpanded()) {
-                            collapse(pos, false);
+                            collapse(pos, true);
                         } else {
-                            expand(pos, false);
+                            expand(pos, true);
                         }
                     }
                 });
                 break;
             case TYPE_PERSON:
-                final Person person = (Person)item;
+                final Person person = (Person) item;
                 holder.setText(R.id.tv, person.name + " parent pos: " + getParentPosition(person));
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

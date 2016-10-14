@@ -1,7 +1,7 @@
 package com.chad.library.adapter.base.animation;
 
-import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.view.View;
 
 
@@ -10,21 +10,20 @@ import android.view.View;
  */
 public class ScaleInAnimation implements BaseAnimation {
 
-  private static final float DEFAULT_SCALE_FROM = .5f;
-  private final float mFrom;
+    private static final float DEFAULT_SCALE_FROM = .5f;
+    private final float mFrom;
 
-  public ScaleInAnimation() {
-    this(DEFAULT_SCALE_FROM);
-  }
+    public ScaleInAnimation() {
+        this(DEFAULT_SCALE_FROM);
+    }
 
-  public ScaleInAnimation(float from) {
-    mFrom = from;
-  }
+    public ScaleInAnimation(float from) {
+        mFrom = from;
+    }
 
-  @Override
-  public Animator[] getAnimators(View view) {
-    ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", mFrom, 1f);
-    ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, "scaleY", mFrom, 1f);
-    return new ObjectAnimator[] { scaleX, scaleY };
-  }
+    @Override public void startAnimator(View view) {
+        PropertyValuesHolder scaleX = PropertyValuesHolder.ofFloat("scaleX", mFrom, 1f);
+        PropertyValuesHolder scaleY = PropertyValuesHolder.ofFloat("scaleY", mFrom, 1f);
+        ObjectAnimator.ofPropertyValuesHolder(view, scaleX, scaleY).setDuration(DEFAULT_DURATION).start();
+    }
 }

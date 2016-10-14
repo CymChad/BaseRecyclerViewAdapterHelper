@@ -1,5 +1,6 @@
 package com.chad.library.adapter.base;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.support.annotation.NonNull;
 import android.support.v4.view.MotionEventCompat;
@@ -12,6 +13,7 @@ import com.chad.library.R;
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.chad.library.adapter.base.listener.OnItemSwipeListener;
+import com.chad.library.adapter.base.vh.BaseViewHolder;
 
 import java.util.Collections;
 import java.util.List;
@@ -35,18 +37,8 @@ public abstract class BaseItemDraggableAdapter<T> extends BaseQuickAdapter<T> {
 
     private static final String ERROR_NOT_SAME_ITEMTOUCHHELPER = "Item drag and item swipe should pass the same ItemTouchHelper";
 
-
-
-    public BaseItemDraggableAdapter(View contentView, List<T> data) {
-        super(contentView, data);
-    }
-
-    public BaseItemDraggableAdapter(List<T> data) {
-        super(data);
-    }
-
-    public BaseItemDraggableAdapter(int layoutResId, List<T> data) {
-        super(layoutResId, data);
+    public BaseItemDraggableAdapter(Context context, List<T> data) {
+        super(context, data);
     }
 
 
@@ -58,14 +50,14 @@ public abstract class BaseItemDraggableAdapter<T> extends BaseQuickAdapter<T> {
      * @see #getDefItemViewType(int)
      */
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int positions) {
+    public void onBindViewHolder(final BaseViewHolder holder, int positions) {
         super.onBindViewHolder(holder, positions);
         int viewType = holder.getItemViewType();
 
-        if (mItemTouchHelper != null && itemDragEnabled && viewType != LOADING_VIEW && viewType != HEADER_VIEW
-                && viewType != EMPTY_VIEW && viewType != FOOTER_VIEW) {
+        if (mItemTouchHelper != null && itemDragEnabled && viewType != VIEW_TYPE_LOADING_VIEW && viewType != VIEW_TYPE_HEADER_VIEW
+                && viewType != VIEW_TYPE_FOOTER_VIEW) {
             if (mToggleViewId != NO_TOGGLE_VIEW) {
-                View toggleView = ((BaseViewHolder) holder).getView(mToggleViewId);
+                View toggleView = ( holder).getView(mToggleViewId);
                 if (toggleView != null) {
                     toggleView.setTag(R.id.BaseQuickAdapter_viewholder_support, holder);
                     if (mDragOnLongPress) {
@@ -190,7 +182,7 @@ public abstract class BaseItemDraggableAdapter<T> extends BaseQuickAdapter<T> {
     }
 
     public int getViewHolderPosition(RecyclerView.ViewHolder viewHolder) {
-        return viewHolder.getAdapterPosition() - getHeaderLayoutCount();
+        return viewHolder.getAdapterPosition() - getHeaderViewCount();
     }
 
     public void onItemDragStart(RecyclerView.ViewHolder viewHolder) {

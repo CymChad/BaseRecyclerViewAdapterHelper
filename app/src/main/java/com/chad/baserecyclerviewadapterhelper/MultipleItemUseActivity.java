@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import com.chad.baserecyclerviewadapterhelper.adapter.MultipleItemQuickAdapter;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.MultipleItem;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.List;
 
@@ -31,12 +30,6 @@ public class MultipleItemUseActivity extends Activity {
         final GridLayoutManager manager = new GridLayoutManager(this, 3);
         multipleItemAdapter.addHeaderView(getView());
         mRecyclerView.setLayoutManager(manager);
-        multipleItemAdapter.setSpanSizeLookup(new BaseQuickAdapter.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(GridLayoutManager gridLayoutManager, int position) {
-                return data.get(position).getSpanSize();
-            }
-        });
         mRecyclerView.setAdapter(multipleItemAdapter);
     }
 
