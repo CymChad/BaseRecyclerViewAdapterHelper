@@ -241,7 +241,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      */
     public void addData(T data) {
         mData.add(data);
-        notifyItemInserted(mData.size());
+        notifyItemInserted(mData.size() - 1);
     }
 
     /**
