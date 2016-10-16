@@ -289,6 +289,12 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         }
         notifyDataSetChanged();
     }
+    
+    public void nextData() {
+        if (mNextLoadEnable) {
+            mLoadingMoreEnable = false;
+        }
+    }
 
     /**
      * set a loadingView
