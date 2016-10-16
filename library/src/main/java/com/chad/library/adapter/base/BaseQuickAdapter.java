@@ -266,10 +266,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      */
     public void addData(List<T> newData) {
         this.mData.addAll(newData);
-        if (mNextLoadEnable) {
-            mLoadingMoreEnable = false;
-        }
-        notifyItemRangeChanged(mData.size() - newData.size() + getHeaderLayoutCount(), newData.size());
+        hiedLoadingMore();
+        notifyItemRangeInserted(mData.size() - newData.size() + getHeaderLayoutCount(),newData.size());
     }
 
     /**
@@ -284,13 +282,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * same as addData(List<T>) but for when data is manually added to the adapter
      */
     public void dataAdded() {
-        if (mNextLoadEnable) {
-            mLoadingMoreEnable = false;
-        }
+        hiedLoadingMore();
         notifyDataSetChanged();
     }
     
-    public void nextData() {
+    public void hiedLoadingMore() {
         if (mNextLoadEnable) {
             mLoadingMoreEnable = false;
         }
