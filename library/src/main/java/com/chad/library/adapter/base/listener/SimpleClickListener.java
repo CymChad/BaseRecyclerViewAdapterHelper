@@ -1,5 +1,6 @@
 package com.chad.library.adapter.base.listener;
 
+import android.os.Build;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -62,7 +63,6 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
 
     @Override
     public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-        Log.e(TAG, "onTouchEvent: ");
         mGestureDetector.onTouchEvent(e);
     }
 
@@ -78,6 +78,11 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
         public boolean onDown(MotionEvent e) {
             mIsPrepressed = true;
             mPressedView = recyclerView.findChildViewUnder(e.getX(), e.getY());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (mPressedView.getBackground() != null) {
+                    mPressedView.getBackground().setHotspot(e.getRawX(), e.getY()-mPressedView.getY());
+                }
+            }
             super.onDown(e);
             return false;
         }
