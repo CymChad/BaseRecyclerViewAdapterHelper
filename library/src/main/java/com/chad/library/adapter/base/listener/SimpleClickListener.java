@@ -81,7 +81,7 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
                 /**
                  * when   click   Outside the region  ,mPressedView is null
                  */
-                if (mPressedView!=null&&mPressedView.getBackground() != null) {
+                if (mPressedView !=null && mPressedView.getBackground() != null) {
                     mPressedView.getBackground().setHotspot(e.getRawX(), e.getY()-mPressedView.getY());
                 }
             }
