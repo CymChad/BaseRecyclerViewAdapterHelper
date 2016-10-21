@@ -15,7 +15,8 @@ Please feel free to use this.(Welcome to **Star** and **Fork**)
 - [中文](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki/%E9%A6%96%E9%A1%B5)
 
 #Extension library
-[PinnedSectionItemDecoration](https://github.com/oubowu/PinnedSectionItemDecoration)
+[PinnedSectionItemDecoration](https://github.com/oubowu/PinnedSectionItemDecoration)  
+[EasyRefreshLayout](https://github.com/anzaizai/EasyRefreshLayout)
 
 #Thanks
 [JoanZapata / base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper)

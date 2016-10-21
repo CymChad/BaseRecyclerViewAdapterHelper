@@ -81,7 +81,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                 break;
             case TYPE_PERSON:
                 final Person person = (Person)item;
-                holder.setText(R.id.tv, person.name);
+                holder.setText(R.id.tv, person.name + " parent pos: " + getParentPosition(person));
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
