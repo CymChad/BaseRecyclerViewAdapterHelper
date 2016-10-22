@@ -267,7 +267,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     public void addData(List<T> newData) {
         this.mData.addAll(newData);
         hiedLoadingMore();
-        notifyItemRangeInserted(mData.size() - newData.size() + getHeaderLayoutCount(),newData.size());
+        notifyItemRangeInserted(mData.size() - newData.size() + getHeaderLayoutCount(), newData.size());
     }
 
     /**
@@ -285,7 +285,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         hiedLoadingMore();
         notifyDataSetChanged();
     }
-    
+
     public void hiedLoadingMore() {
         if (mNextLoadEnable) {
             mLoadingMoreEnable = false;
@@ -658,11 +658,26 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      *               the effect of this method is the same as that of {@link #addHeaderView(View)}.
      */
     public void addHeaderView(View header, int index) {
+        addHeaderView(header, index, LinearLayout.VERTICAL);
+    }
+
+    /**
+     *
+     * @param header
+     * @param index
+     * @param orientation
+     */
+    public void addHeaderView(View header, int index, int orientation) {
         if (mHeaderLayout == null) {
             if (mCopyHeaderLayout == null) {
                 mHeaderLayout = new LinearLayout(header.getContext());
-                mHeaderLayout.setOrientation(LinearLayout.VERTICAL);
-                mHeaderLayout.setLayoutParams(new LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+                if (orientation == LinearLayout.VERTICAL) {
+                    mHeaderLayout.setOrientation(LinearLayout.VERTICAL);
+                    mHeaderLayout.setLayoutParams(new LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+                } else {
+                    mHeaderLayout.setOrientation(LinearLayout.HORIZONTAL);
+                    mHeaderLayout.setLayoutParams(new LayoutParams(WRAP_CONTENT, MATCH_PARENT));
+                }
                 mCopyHeaderLayout = mHeaderLayout;
             } else {
                 mHeaderLayout = mCopyHeaderLayout;
@@ -1223,10 +1238,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     /**
      * Get the parent item position of the IExpandable item
+     *
      * @return return the closest parent item position of the IExpandable.
-     *         if the IExpandable item's level is 0, return itself position.
-     *         if the item's level is negative which mean do not implement this, return a negative
-     *         if the item is not exist in the data list, return a negative.
+     * if the IExpandable item's level is 0, return itself position.
+     * if the item's level is negative which mean do not implement this, return a negative
+     * if the item is not exist in the data list, return a negative.
      */
     public int getParentPosition(@NonNull T item) {
         int position = getItemPosition(item);
@@ -1238,7 +1254,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         // if it is not, return the closest IExpandable item position whose level is not negative
         int level;
         if (item instanceof IExpandable) {
-            level = ((IExpandable)item).getLevel();
+            level = ((IExpandable) item).getLevel();
         } else {
             level = Integer.MAX_VALUE;
         }
@@ -1251,7 +1267,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         for (int i = position; i >= 0; i--) {
             T temp = mData.get(i);
             if (temp instanceof IExpandable) {
-                IExpandable expandable = (IExpandable)temp;
+                IExpandable expandable = (IExpandable) temp;
                 if (expandable.getLevel() >= 0 && expandable.getLevel() < level) {
                     return i;
                 }
