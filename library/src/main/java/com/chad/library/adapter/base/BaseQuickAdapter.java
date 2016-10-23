@@ -268,6 +268,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         this.mData.addAll(newData);
         hideLoadingMore();
         notifyItemRangeInserted(mData.size() - newData.size() + getHeaderLayoutCount(), newData.size());
+        notifyDataSetChanged();
     }
 
     /**
@@ -607,7 +608,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 break;
             default:
                 convert((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
-                onBindDefViewHolder((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
                 break;
         }
 
@@ -923,15 +923,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
         return mLayoutInflater.inflate(layoutResId, parent, false);
     }
 
-
-    /**
-     * @see #convert(BaseViewHolder, Object) ()
-     * @deprecated This method is deprecated
-     * {@link #convert(BaseViewHolder, Object)} depending on your use case.
-     */
-    @Deprecated
-    protected void onBindDefViewHolder(BaseViewHolder holder, T item) {
-    }
 
     public interface RequestLoadMoreListener {
 
