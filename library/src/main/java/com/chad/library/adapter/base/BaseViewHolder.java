@@ -24,6 +24,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -490,7 +491,6 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         }
         return (T) view;
     }
-
 
     /**
      * Retrieves the last converted object on this view.

@@ -15,7 +15,7 @@ import java.util.List;
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 @Deprecated
-public class MultipleItemAdapter extends BaseQuickAdapter<String> {
+public class MultipleItemAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
     private static final int TEXT_TYPE = 1;
     private int mTextLayoutResId;
 
@@ -37,12 +37,6 @@ public class MultipleItemAdapter extends BaseQuickAdapter<String> {
         if (viewType == TEXT_TYPE)
             return new TextViewHolder(getItemView(mTextLayoutResId, parent));
         return super.onCreateDefViewHolder(parent, viewType);
-    }
-
-    @Override
-    protected void onBindDefViewHolder(BaseViewHolder holder, String item) {
-        if (holder instanceof TextViewHolder)
-            holder.setText(R.id.tv, item);
     }
 
     @Override

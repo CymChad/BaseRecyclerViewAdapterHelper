@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem> {
+public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem, BaseViewHolder> {
 
     public MultipleItemQuickAdapter(Context context, List data) {
         super(data);

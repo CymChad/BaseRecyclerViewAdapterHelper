@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends BaseQuickAdapter {
+public abstract class BaseSectionQuickAdapter<T extends SectionEntity, K extends BaseViewHolder> extends BaseQuickAdapter<T, K> {
 
 
     protected int mSectionHeadResId;
@@ -34,9 +34,9 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends B
     }
 
     @Override
-    protected BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
+    protected K onCreateDefViewHolder(ViewGroup parent, int viewType) {
         if (viewType == SECTION_HEADER_VIEW)
-            return new BaseViewHolder(getItemView(mSectionHeadResId, parent));
+            return createBaseViewHolder(getItemView(mSectionHeadResId, parent), -1);
 
         return super.onCreateDefViewHolder(parent, viewType);
     }
@@ -46,7 +46,7 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends B
      * @param item   The item that needs to be displayed.
      */
     @Override
-    protected void convert(BaseViewHolder holder, Object item) {
+    protected void convert(K holder, T item) {
         switch (holder.getItemViewType()) {
             case SECTION_HEADER_VIEW:
                 setFullSpan(holder);
@@ -59,8 +59,5 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity> extends B
     }
 
     protected abstract void convertHead(BaseViewHolder helper, T item);
-
-    protected abstract void convert(BaseViewHolder helper, T item);
-
 
 }
