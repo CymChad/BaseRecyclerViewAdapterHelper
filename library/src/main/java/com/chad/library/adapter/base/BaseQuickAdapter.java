@@ -267,7 +267,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     public void addData(List<T> newData) {
         this.mData.addAll(newData);
         hideLoadingMore();
-        notifyItemRangeInserted(mData.size() - newData.size() + getHeaderLayoutCount(), newData.size());
+//        notifyItemRangeInserted(mData.size() - newData.size() + getHeaderLayoutCount(), newData.size());
         notifyDataSetChanged();
     }
 
@@ -865,12 +865,12 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
 
     /**
-     *
+     *  Finished pull to refresh on the load
      */
     public void loadComplete() {
         mNextLoadEnable = false;
         mLoadingMoreEnable = false;
-        this.notifyItemChanged(getItemCount());
+        notifyDataSetChanged();
     }
 
 
