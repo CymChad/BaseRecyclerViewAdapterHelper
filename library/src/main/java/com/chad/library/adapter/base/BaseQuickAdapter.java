@@ -53,7 +53,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends RecyclerView.Adapter<K> {
 
     private boolean mNextLoadEnable = false;
     private boolean mLoadingMoreEnable = false;
@@ -66,7 +66,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     private int mDuration = 300;
     private int mLastPosition = -1;
     private RequestLoadMoreListener mRequestLoadMoreListener;
-    @AnimationType
+    //@AnimationType
     private BaseAnimation mCustomAnimation;
     private BaseAnimation mSelectAnimation = new AlphaInAnimation();
     private LinearLayout mHeaderLayout;
@@ -472,8 +472,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
     @Override
-    public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        BaseViewHolder baseViewHolder = null;
+    public K onCreateViewHolder(ViewGroup parent, int viewType) {
+        K baseViewHolder = null;
         this.mContext = parent.getContext();
         this.mLayoutInflater = LayoutInflater.from(mContext);
         switch (viewType) {
@@ -481,13 +481,13 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
                 baseViewHolder = getLoadingView(parent);
                 break;
             case HEADER_VIEW:
-                baseViewHolder = new BaseViewHolder(mHeaderLayout);
+                baseViewHolder = createBaseViewHolder(mHeaderLayout);
                 break;
             case EMPTY_VIEW:
-                baseViewHolder = new BaseViewHolder(mEmptyView == mCopyEmptyLayout ? mCopyEmptyLayout : mEmptyView);
+                baseViewHolder = createBaseViewHolder(mEmptyView == mCopyEmptyLayout ? mCopyEmptyLayout : mEmptyView);
                 break;
             case FOOTER_VIEW:
-                baseViewHolder = new BaseViewHolder(mFooterLayout);
+                baseViewHolder = createBaseViewHolder(mFooterLayout);
                 break;
             default:
                 baseViewHolder = onCreateDefViewHolder(parent, viewType);
@@ -497,11 +497,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     }
 
 
-    private BaseViewHolder getLoadingView(ViewGroup parent) {
+    private K getLoadingView(ViewGroup parent) {
         if (mLoadingView == null) {
             return createBaseViewHolder(parent, R.layout.def_loading);
         }
-        return new BaseViewHolder(mLoadingView);
+        return createBaseViewHolder(mLoadingView);
     }
 
     /**
@@ -512,7 +512,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * @param holder
      */
     @Override
-    public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
+    public void onViewAttachedToWindow(K holder) {
         super.onViewAttachedToWindow(holder);
         int type = holder.getItemViewType();
         if (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW) {
@@ -590,12 +590,12 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * @see #getDefItemViewType(int)
      */
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int positions) {
+    public void onBindViewHolder(K holder, int positions) {
         int viewType = holder.getItemViewType();
 
         switch (viewType) {
             case 0:
-                convert((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
+                convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
                 break;
             case LOADING_VIEW:
                 addLoadMore(holder);
@@ -607,21 +607,30 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
             case FOOTER_VIEW:
                 break;
             default:
-                convert((BaseViewHolder) holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
+                convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
                 break;
         }
-
     }
 
-    protected BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int viewType) {
+    protected K onCreateDefViewHolder(ViewGroup parent, int viewType) {
         return createBaseViewHolder(parent, mLayoutResId);
     }
 
-    protected BaseViewHolder createBaseViewHolder(ViewGroup parent, int layoutResId) {
+    protected K createBaseViewHolder(ViewGroup parent, int layoutResId) {
         if (mContentView == null) {
-            return new BaseViewHolder(getItemView(layoutResId, parent));
+            return createBaseViewHolder(getItemView(layoutResId, parent));
         }
-        return new BaseViewHolder(mContentView);
+        return createBaseViewHolder(mContentView);
+    }
+
+    /**
+     * if you want to use subclass of BaseViewHolder in the adapter,
+     * you must override the method to create new ViewHolder.
+     * @param view view
+     * @return new ViewHolder
+     */
+    protected K createBaseViewHolder(View view) {
+        return (K) new BaseViewHolder(view);
     }
 
     /**
@@ -992,7 +1001,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * @param helper A fully initialized helper.
      * @param item   The item that needs to be displayed.
      */
-    protected abstract void convert(BaseViewHolder helper, T item);
+    protected abstract void convert(K helper, T item);
 
     /**
      * Get the row id associated with the specified position in the list.

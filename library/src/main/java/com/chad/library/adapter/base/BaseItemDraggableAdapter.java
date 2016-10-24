@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by luoxw on 2016/7/13.
  */
-public abstract class BaseItemDraggableAdapter<T> extends BaseQuickAdapter<T> {
+public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> extends BaseQuickAdapter<T, K> {
 
     private static final int NO_TOGGLE_VIEW = 0;
     protected int mToggleViewId = NO_TOGGLE_VIEW;
@@ -58,7 +58,7 @@ public abstract class BaseItemDraggableAdapter<T> extends BaseQuickAdapter<T> {
      * @see #getDefItemViewType(int)
      */
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int positions) {
+    public void onBindViewHolder(K holder, int positions) {
         super.onBindViewHolder(holder, positions);
         int viewType = holder.getItemViewType();
 

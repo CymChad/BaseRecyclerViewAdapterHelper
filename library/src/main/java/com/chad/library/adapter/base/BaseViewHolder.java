@@ -491,7 +491,6 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         return (T) view;
     }
 
-
     /**
      * Retrieves the last converted object on this view.
      */
