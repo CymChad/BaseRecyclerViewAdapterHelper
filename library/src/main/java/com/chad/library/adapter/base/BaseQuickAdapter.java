@@ -501,7 +501,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         if (mLoadingView == null) {
             return createBaseViewHolder(parent, R.layout.def_loading);
         }
-        return createBaseViewHolder(mLoadingView, -1);
+        return createBaseViewHolder(mLoadingView);
     }
 
     /**
@@ -610,18 +610,15 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
                 break;
         }
-
     }
 
     protected K onCreateDefViewHolder(ViewGroup parent, int viewType) {
         return createBaseViewHolder(parent, mLayoutResId);
     }
 
-    protected K createBaseViewHolder(View parent, int layoutResId) {
-        if (layoutResId <= 0) {
-            return createBaseViewHolder(parent);
-        } else if (mContentView == null) {
-            return createBaseViewHolder(getItemView(layoutResId, (ViewGroup)parent));
+    protected K createBaseViewHolder(ViewGroup parent, int layoutResId) {
+        if (mContentView == null) {
+            return createBaseViewHolder(getItemView(layoutResId, parent));
         }
         return createBaseViewHolder(mContentView);
     }

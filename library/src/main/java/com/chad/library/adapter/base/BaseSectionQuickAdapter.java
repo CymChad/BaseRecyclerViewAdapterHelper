@@ -30,7 +30,7 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity, K extends
 
     @Override
     protected int getDefItemViewType(int position) {
-        return ((SectionEntity) mData.get(position)).isHeader ? SECTION_HEADER_VIEW : 0;
+        return  mData.get(position).isHeader ? SECTION_HEADER_VIEW : 0;
     }
 
     @Override
@@ -41,19 +41,15 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity, K extends
         return super.onCreateDefViewHolder(parent, viewType);
     }
 
-    /**
-     * @param holder A fully initialized helper.
-     * @param item   The item that needs to be displayed.
-     */
     @Override
-    protected void convert(K holder, T item) {
+    public void onBindViewHolder(K holder, int positions) {
         switch (holder.getItemViewType()) {
             case SECTION_HEADER_VIEW:
                 setFullSpan(holder);
-                convertHead(holder, (T) item);
+                convertHead(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
                 break;
             default:
-                convert(holder, (T) item);
+                super.onBindViewHolder(holder, positions);
                 break;
         }
     }
