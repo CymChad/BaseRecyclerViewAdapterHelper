@@ -1,39 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.chad.baserecyclerviewadapterhelper"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.chad.baserecyclerviewadapterhelper">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:supportsRtl="true">
-        <activity android:name=".PullToRefreshUseActivity">
-        </activity>
+        <activity android:name=".PullToRefreshUseActivity"></activity>
         <activity android:name=".HomeActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AnimationUseActivity">
-        </activity>
-        <activity android:name=".HeaderAndFooterUseActivity">
-        </activity>
-        <activity android:name=".SectionUseActivity">
-        </activity>
-        <activity android:name=".MultipleItemUseActivity">
-        </activity>
-        <activity android:name=".EmptyViewUseActivity">
-        </activity>
-        <activity android:name=".ItemDragAndSwipeUseActivity">
-        </activity>
-        <activity android:name=".RecyclerClickItemActivity">
-        </activity>
-        <activity android:name=".ExpandableUseActivity">
-        </activity>
+        <activity android:name=".AnimationUseActivity"></activity>
+        <activity android:name=".HeaderAndFooterUseActivity"></activity>
+        <activity android:name=".SectionUseActivity"></activity>
+        <activity android:name=".MultipleItemUseActivity"></activity>
+        <activity android:name=".EmptyViewUseActivity"></activity>
+        <activity android:name=".ItemDragAndSwipeUseActivity"></activity>
+        <activity android:name=".RecyclerClickItemActivity"></activity>
+        <activity android:name=".ExpandableUseActivity"></activity>
+        <activity android:name=".DataBindingUseActivity"></activity>
     </application>
 
 </manifest>

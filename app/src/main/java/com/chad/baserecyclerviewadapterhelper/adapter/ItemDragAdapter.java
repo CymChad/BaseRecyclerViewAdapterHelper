@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by luoxw on 2016/6/20.
  */
-public class ItemDragAdapter extends BaseItemDraggableAdapter<String> {
+public class ItemDragAdapter extends BaseItemDraggableAdapter<String, BaseViewHolder> {
     public ItemDragAdapter(List data) {
         super(R.layout.item_draggable_view, data);
     }

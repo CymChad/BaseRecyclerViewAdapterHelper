@@ -2,6 +2,7 @@ package com.chad.baserecyclerviewadapterhelper.adapter;
 
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.Level0Item;
@@ -16,7 +17,7 @@ import java.util.List;
 /**
  * Created by luoxw on 2016/8/9.
  */
-public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity> {
+public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
     private static final String TAG = ExpandableItemAdapter.class.getSimpleName();
 
     public static final int TYPE_LEVEL_0 = 0;

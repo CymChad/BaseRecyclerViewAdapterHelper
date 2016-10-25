@@ -402,6 +402,16 @@ public class ExpandableUseActivity extends Activity {
 }
 ```
 
+Use Custom BaseViewHolder
+```Java
+
+// 当使用自定义的BaseViewHolder时，需要重写此函数以创建ViewHolder
+protected K createBaseViewHolder(View view) {
+    return (K) new BaseViewHolder(view);
+}
+
+```
+
 >**持续更新!，所以推荐Star项目**
 
 #感谢

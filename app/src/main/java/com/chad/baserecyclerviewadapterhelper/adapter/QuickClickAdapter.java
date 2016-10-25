@@ -13,7 +13,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class QuickClickAdapter extends BaseQuickAdapter<Status> {
+public class QuickClickAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
     public QuickClickAdapter() {
         super( R.layout.item, DataServer.getSampleData(100));
     }
