@@ -36,11 +36,6 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
     private static final String ERROR_NOT_SAME_ITEMTOUCHHELPER = "Item drag and item swipe should pass the same ItemTouchHelper";
 
 
-
-    public BaseItemDraggableAdapter(View contentView, List<T> data) {
-        super(contentView, data);
-    }
-
     public BaseItemDraggableAdapter(List<T> data) {
         super(data);
     }
