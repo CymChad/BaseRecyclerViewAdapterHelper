@@ -74,7 +74,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     private LinearLayout mCopyHeaderLayout = null;
     private LinearLayout mCopyFooterLayout = null;
     private int pageSize = -1;
-    private View mContentView;
     /**
      * View to show if there are no items to show.
      */
@@ -173,11 +172,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     public BaseQuickAdapter(List<T> data) {
         this(0, data);
-    }
-
-    public BaseQuickAdapter(View contentView, List<T> data) {
-        this(0, data);
-        mContentView = contentView;
     }
 
     /**
@@ -617,15 +611,13 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     protected K createBaseViewHolder(ViewGroup parent, int layoutResId) {
-        if (mContentView == null) {
-            return createBaseViewHolder(getItemView(layoutResId, parent));
-        }
-        return createBaseViewHolder(mContentView);
+        return createBaseViewHolder(getItemView(layoutResId, parent));
     }
 
     /**
      * if you want to use subclass of BaseViewHolder in the adapter,
      * you must override the method to create new ViewHolder.
+     *
      * @param view view
      * @return new ViewHolder
      */
@@ -671,7 +663,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     /**
-     *
      * @param header
      * @param index
      * @param orientation
@@ -862,7 +853,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
 
     /**
-     *  Finished pull to refresh on the load
+     * Finished pull to refresh on the load
      */
     public void loadComplete() {
         mNextLoadEnable = false;
