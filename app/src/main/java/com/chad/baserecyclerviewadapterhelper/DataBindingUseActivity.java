@@ -1,12 +1,11 @@
 package com.chad.baserecyclerviewadapterhelper;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.chad.baserecyclerviewadapterhelper.adapter.DataBindingAdapter;
+import com.chad.baserecyclerviewadapterhelper.adapter.DataBindingUseAdapter;
 import com.chad.baserecyclerviewadapterhelper.entity.Movie;
 
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import java.util.Random;
 public class DataBindingUseActivity extends Activity {
 
     RecyclerView mRecyclerView;
-    DataBindingAdapter mAdapter;
+    DataBindingUseAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +23,7 @@ public class DataBindingUseActivity extends Activity {
         setContentView(R.layout.activity_data_binding_use);
 
         mRecyclerView = (RecyclerView)findViewById(R.id.rv);
-        mAdapter = new DataBindingAdapter(R.layout.item_movie, genData());
+        mAdapter = new DataBindingUseAdapter(R.layout.item_movie, genData());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);
     }
