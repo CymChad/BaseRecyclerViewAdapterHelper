@@ -26,6 +26,7 @@
         <activity android:name=".RecyclerClickItemActivity"></activity>
         <activity android:name=".ExpandableUseActivity"></activity>
         <activity android:name=".DataBindingUseActivity"></activity>
+        <activity android:name=".PullToRefreshDataBindingActivity"></activity>
     </application>
 
 </manifest>
