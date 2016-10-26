@@ -26,7 +26,7 @@ import java.util.Random;
  */
 public class PullToRefreshDataBindingActivity extends Activity implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
     private RecyclerView mRecyclerView;
-    private DataBindingAdapter mQuickAdapter;
+    private DataBindingAdapter mBindingAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private View notLoadingView;
@@ -51,7 +51,7 @@ public class PullToRefreshDataBindingActivity extends Activity implements BaseQu
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         initAdapter();
         addHeadView();
-        mRecyclerView.setAdapter(mQuickAdapter);
+        mRecyclerView.setAdapter(mBindingAdapter);
     }
 
     private void addHeadView() {
@@ -61,12 +61,12 @@ public class PullToRefreshDataBindingActivity extends Activity implements BaseQu
         headView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mQuickAdapter.setLoadingView(customLoading);
-                mRecyclerView.setAdapter(mQuickAdapter);
+                mBindingAdapter.setLoadingView(customLoading);
+                mRecyclerView.setAdapter(mBindingAdapter);
                 Toast.makeText(PullToRefreshDataBindingActivity.this, "use ok!", Toast.LENGTH_LONG).show();
             }
         });
-        mQuickAdapter.addHeaderView(headView);
+        mBindingAdapter.addHeaderView(headView);
     }
 
     @Override
@@ -75,24 +75,24 @@ public class PullToRefreshDataBindingActivity extends Activity implements BaseQu
             @Override
             public void run() {
                 if (mCurrentCounter >= TOTAL_COUNTER) {
-                    mQuickAdapter.loadComplete();
+                    mBindingAdapter.loadComplete();
                     if (notLoadingView == null) {
                         notLoadingView = getLayoutInflater().inflate(R.layout.not_loading, (ViewGroup) mRecyclerView.getParent(), false);
                     }
-                    mQuickAdapter.addFooterView(notLoadingView);
+                    mBindingAdapter.addFooterView(notLoadingView);
                 } else {
                     if (isErr) {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                mQuickAdapter.addData(genData(mCurrentCounter));
-                                mCurrentCounter = mQuickAdapter.getData().size();
+                                mBindingAdapter.addData(genData(mCurrentCounter));
+                                mCurrentCounter = mBindingAdapter.getData().size();
                             }
                         }, delayMillis);
                     } else {
                         isErr = true;
                         Toast.makeText(PullToRefreshDataBindingActivity.this, R.string.network_err, Toast.LENGTH_LONG).show();
-                        mQuickAdapter.showLoadMoreFailedView();
+                        mBindingAdapter.showLoadMoreFailedView();
 
                     }
                 }
@@ -106,9 +106,9 @@ public class PullToRefreshDataBindingActivity extends Activity implements BaseQu
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mQuickAdapter.setNewData(genData(mCurrentCounter));
-                mQuickAdapter.openLoadMore(PAGE_SIZE);
-                mQuickAdapter.removeAllFooterView();
+                mBindingAdapter.setNewData(genData(mCurrentCounter));
+                mBindingAdapter.openLoadMore(PAGE_SIZE);
+                mBindingAdapter.removeAllFooterView();
                 mCurrentCounter = PAGE_SIZE;
                 mSwipeRefreshLayout.setRefreshing(false);
                 isErr = false;
@@ -117,13 +117,13 @@ public class PullToRefreshDataBindingActivity extends Activity implements BaseQu
     }
 
     private void initAdapter() {
-        mQuickAdapter = new DataBindingAdapter(R.layout.item_movie, genData(0));
-        mQuickAdapter.openLoadAnimation();
-        mQuickAdapter.openLoadMore(PAGE_SIZE);
-        mRecyclerView.setAdapter(mQuickAdapter);
-        mCurrentCounter = mQuickAdapter.getData().size();
-        mQuickAdapter.setOnLoadMoreListener(this);
-        mQuickAdapter.setLoadingView(getLayoutInflater().inflate(R.layout.databinding_loading, (ViewGroup) mRecyclerView.getParent(), false));
+        mBindingAdapter = new DataBindingAdapter(R.layout.item_movie, genData(0));
+        mBindingAdapter.openLoadAnimation();
+        mBindingAdapter.openLoadMore(PAGE_SIZE);
+        mRecyclerView.setAdapter(mBindingAdapter);
+        mCurrentCounter = mBindingAdapter.getData().size();
+        mBindingAdapter.setOnLoadMoreListener(this);
+        mBindingAdapter.setLoadingView(getLayoutInflater().inflate(R.layout.databinding_loading, (ViewGroup) mRecyclerView.getParent(), false));
 
         mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
