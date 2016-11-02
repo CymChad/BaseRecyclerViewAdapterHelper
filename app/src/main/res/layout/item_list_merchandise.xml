@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/layout_root"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/touch_bg"
+                android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/iv_photo"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="fitXY"
+        android:src="@mipmap/logo"/>
+
+
+    <LinearLayout
+        android:id="@+id/layout_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/iv_photo"
+        android:layout_alignParentRight="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+        <ImageView
+            android:id="@+id/iv_num_reduce"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/selector_btn_reduce"/>
+
+        <TextView
+            android:id="@+id/tv_num"
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="0"/>
+
+        <ImageView
+            android:id="@+id/iv_num_add"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/selector_btn_add"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
