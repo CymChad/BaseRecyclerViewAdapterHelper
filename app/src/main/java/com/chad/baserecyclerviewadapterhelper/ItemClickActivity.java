@@ -8,8 +8,12 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.ItemClickAdapter;
+import com.chad.baserecyclerviewadapterhelper.entity.ClickEntity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemClickActivity extends Activity {
 
@@ -33,7 +37,12 @@ public class ItemClickActivity extends Activity {
     }
 
     private void initAdapter() {
-        itemClickAdapter = new ItemClickAdapter(null);
+        List<ClickEntity> data = new ArrayList<>();
+        data.add(new ClickEntity(ClickEntity.CLICK_ITEM_VIEW));
+        data.add(new ClickEntity(ClickEntity.CLICK_ITEM_CHILD_VIEW));
+        data.add(new ClickEntity(ClickEntity.LONG_CLICK_ITEM_VIEW));
+        data.add(new ClickEntity(ClickEntity.LONG_CLICK_ITEM_CHILD_VIEW));
+        itemClickAdapter = new ItemClickAdapter(data);
         itemClickAdapter.openLoadAnimation();
         mRecyclerView.setAdapter(itemClickAdapter);
     }
