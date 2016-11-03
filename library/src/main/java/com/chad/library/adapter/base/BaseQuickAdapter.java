@@ -60,6 +60,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     private boolean mFirstOnlyEnable = true;
     private boolean mOpenAnimationEnable = false;
     private boolean mEmptyEnable;
+    private boolean mIsUseEmpty = true;
     private boolean mHeadAndEmptyEnable;
     private boolean mFootAndEmptyEnable;
     private Interpolator mInterpolator = new LinearInterpolator();
@@ -370,7 +371,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     public int getItemCount() {
         int i = isLoadMore() ? 1 : 0;
         int count = mData.size() + i + getHeaderLayoutCount() + getFooterLayoutCount();
-        if (mData.size() == 0 && mEmptyView != null) {
+        if (mData.size() == 0 && mEmptyView != null && mIsUseEmpty) {
             /**
              *  setEmptyView(false) and add emptyView
              */
@@ -838,6 +839,15 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             mCopyEmptyLayout = emptyView;
         }
         mEmptyEnable = true;
+    }
+
+    /**
+     * Set whether to use empty view
+     *
+     * @param isUseEmpty
+     */
+    public void isUseEmpty(boolean isUseEmpty) {
+        mIsUseEmpty = isUseEmpty;
     }
 
     /**
