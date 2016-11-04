@@ -4,12 +4,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/selector_item"
-                android:padding="10dp">
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp">
 
     <ImageView
         android:id="@+id/iv_photo"
         android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_height="90dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
@@ -24,6 +27,8 @@
         android:layout_alignBottom="@id/iv_photo"
         android:layout_alignParentRight="true"
         android:gravity="center_vertical"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="16dp"
         android:orientation="horizontal">
 
 

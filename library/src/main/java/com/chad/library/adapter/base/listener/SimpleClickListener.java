@@ -4,6 +4,7 @@ import android.os.Build;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
+import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -116,14 +117,24 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
                             onItemChildClick(baseQuickAdapter, childView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
                             resetPressedView(childView);
                             return true;
+                        }else {
+                            childView.setPressed(false);
                         }
                     }
                     setPressViewHotSpot(e,pressedView);
                     mPressedView.setPressed(true);
+                    for (Iterator it = childClickViewIds.iterator(); it.hasNext(); ) {
+                        View childView = pressedView.findViewById((Integer) it.next());
+                        childView.setPressed(false);
+                    }
                     onItemClick(baseQuickAdapter, pressedView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
                 } else {
                     setPressViewHotSpot(e,pressedView);
                     mPressedView.setPressed(true);
+                    for (Iterator it = childClickViewIds.iterator(); it.hasNext(); ) {
+                        View childView = pressedView.findViewById((Integer) it.next());
+                        childView.setPressed(false);
+                    }
                     onItemClick(baseQuickAdapter, pressedView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
                 }
                 resetPressedView(pressedView);
@@ -153,6 +164,7 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
         public void onLongPress(MotionEvent e) {
             boolean isChildLongClick =false;
             if (mIsPrepressed && mPressedView != null) {
+                mPressedView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 BaseViewHolder vh = (BaseViewHolder) recyclerView.getChildViewHolder(mPressedView);
                 if (!isHeaderOrFooterPosition(vh.getLayoutPosition())) {
                     longClickViewIds = vh.getItemChildLongClickViewIds();
@@ -170,9 +182,14 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
                         }
                     }
                     if (!isChildLongClick){
+
                         onItemLongClick(baseQuickAdapter, mPressedView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
                         setPressViewHotSpot(e,mPressedView);
                         mPressedView.setPressed(true);
+                        for (Iterator it = longClickViewIds.iterator(); it.hasNext(); ) {
+                            View childView = mPressedView.findViewById((Integer) it.next());
+                            childView.setPressed(false);
+                        }
                         mIsShowPress = true;
                     }
 

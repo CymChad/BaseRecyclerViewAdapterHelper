@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -31,9 +32,11 @@ public class ItemClickActivity extends Activity {
         mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(final BaseQuickAdapter adapter, final View view, final int position) {
-
+                Log.d(TAG, "SimpleOnItemClick: ");
             }
         });
+
+
     }
 
     private void initAdapter() {
