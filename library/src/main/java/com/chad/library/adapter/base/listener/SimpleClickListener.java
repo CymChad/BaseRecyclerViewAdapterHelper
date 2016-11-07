@@ -257,6 +257,13 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
         /**
          *  have a headview and EMPTY_VIEW FOOTER_VIEW LOADING_VIEW
          */
+        if (baseQuickAdapter==null){
+            if (recyclerView!=null){
+                baseQuickAdapter= (BaseQuickAdapter) recyclerView.getAdapter();
+            }else {
+                return false;
+            }
+        }
         int type = baseQuickAdapter.getItemViewType(position);
         return (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW);
     }
