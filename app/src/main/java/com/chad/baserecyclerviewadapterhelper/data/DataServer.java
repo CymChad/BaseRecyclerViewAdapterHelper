@@ -96,5 +96,18 @@ public class DataServer {
         return list;
     }
 
+//    public static List<MultipleItem> getMultipleChildView() {
+//        List<MultipleItem> list = new ArrayList<>();
+//        for (int i = 0; i <= 4; i++) {
+//            list.add(new ClickEntity(ClickEntity.CLICK_ITEM_VIEW, MultipleItem.TEXT_SPAN_SIZE, CYM_CHAD));
+//            list.add(new MultipleItem(MultipleItem.IMG, MultipleItem.BIG_IMG_SPAN_SIZE));
+//            list.add(new MultipleItem(MultipleItem.IMG, MultipleItem.IMG_SPAN_SIZE));
+//            list.add(new MultipleItem(MultipleItem.IMG, MultipleItem.IMG_SPAN_SIZE));
+//            list.add(new MultipleItem(MultipleItem.IMG, MultipleItem.IMG_SPAN_SIZE));
+//        }
+//
+//        return list;
+//    }
+
 
 }
