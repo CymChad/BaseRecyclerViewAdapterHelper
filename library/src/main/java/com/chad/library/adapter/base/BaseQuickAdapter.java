@@ -549,18 +549,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 }
             });
         }
-        recyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                if (mRequestLoadMoreListener != null && pageSize == -1) {
-                    RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-                    int visibleItemCount = layoutManager.getChildCount();
-                    Log.e("visibleItemCount", visibleItemCount + "");
-                    openLoadMore(visibleItemCount);
-                }
-            }
-        });
-
     }
 
     private boolean flag = true;
