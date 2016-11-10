@@ -404,6 +404,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     @Override
     public int getItemViewType(int position) {
+        autoLoadMore(position);
         /**
          * if set headView and positon =0
          */
@@ -581,7 +582,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
                 break;
             case LOADING_VIEW:
-                addLoadMore(holder);
                 break;
             case HEADER_VIEW:
                 break;
@@ -859,9 +859,21 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         notifyDataSetChanged();
     }
 
+    private int mAutoLoadMoreSize = 1;
+    public void setAutoLoadMoreSize(int autoLoadMoreSize) {
+        if (autoLoadMoreSize > 1) {
+            mAutoLoadMoreSize = autoLoadMoreSize;
+        }
+    }
 
-    private void addLoadMore(RecyclerView.ViewHolder holder) {
-        if (isLoadMore() && !mLoadingMoreEnable) {
+    private void autoLoadMore(int position) {
+        if (!isLoadMore()) {
+            return;
+        }
+        if (position < getItemCount() - mAutoLoadMoreSize) {
+            return;
+        }
+        if (!mLoadingMoreEnable) {
             mLoadingMoreEnable = true;
             mRequestLoadMoreListener.onLoadMoreRequested();
         }
