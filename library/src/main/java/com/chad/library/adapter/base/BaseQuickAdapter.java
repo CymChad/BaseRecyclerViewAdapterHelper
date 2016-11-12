@@ -24,7 +24,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutParams;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,6 @@ import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
 
-import com.chad.library.R;
 import com.chad.library.adapter.base.animation.AlphaInAnimation;
 import com.chad.library.adapter.base.animation.BaseAnimation;
 import com.chad.library.adapter.base.animation.ScaleInAnimation;
@@ -55,18 +53,21 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  */
 public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends RecyclerView.Adapter<K> {
 
+    //load more
     private boolean mNextLoadEnable = false;
-    private boolean mLoadingMoreEnable = false;
+    private boolean mLoadMoreEnable = false;
+    private RequestLoadMoreListener mRequestLoadMoreListener;
+    private boolean mLoading=false;
+    private LoadMoreView mLoadMoreView=new SimpleLoadMoreView();
+
     private boolean mFirstOnlyEnable = true;
     private boolean mOpenAnimationEnable = false;
-    private boolean mEmptyEnable;
     private boolean mIsUseEmpty = true;
     private boolean mHeadAndEmptyEnable;
     private boolean mFootAndEmptyEnable;
     private Interpolator mInterpolator = new LinearInterpolator();
     private int mDuration = 300;
     private int mLastPosition = -1;
-    private RequestLoadMoreListener mRequestLoadMoreListener;
     //@AnimationType
     private BaseAnimation mCustomAnimation;
     private BaseAnimation mSelectAnimation = new AlphaInAnimation();
@@ -74,17 +75,11 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     private LinearLayout mFooterLayout;
     private LinearLayout mCopyHeaderLayout = null;
     private LinearLayout mCopyFooterLayout = null;
-    private int pageSize = -1;
     /**
      * View to show if there are no items to show.
      */
     private View mEmptyView;
     private View mCopyEmptyLayout;
-
-    /**
-     * View to show if load more failed.
-     */
-    private View loadMoreFailedView;
 
     protected static final String TAG = BaseQuickAdapter.class.getSimpleName();
     protected Context mContext;
@@ -95,7 +90,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     public static final int LOADING_VIEW = 0x00000222;
     public static final int FOOTER_VIEW = 0x00000333;
     public static final int EMPTY_VIEW = 0x00000555;
-    private View mLoadingView;
 
     @IntDef({ALPHAIN, SCALEIN, SLIDEIN_BOTTOM, SLIDEIN_LEFT, SLIDEIN_RIGHT})
     @Retention(RetentionPolicy.SOURCE)
@@ -125,6 +119,96 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     public void setOnLoadMoreListener(RequestLoadMoreListener requestLoadMoreListener) {
         this.mRequestLoadMoreListener = requestLoadMoreListener;
+        mNextLoadEnable = true;
+        mLoadMoreEnable =true;
+        mLoading=false;
+    }
+    /**
+     * set a loadingView
+     *
+     * @param loadingView
+     */
+    public void setLoadingView(LoadMoreView loadingView) {
+        this.mLoadMoreView = loadingView;
+    }
+
+    /**
+     * Determine whether it is loaded more
+     *
+     * @return
+     */
+    private int getLoadMoreViewCount() {
+        if (mRequestLoadMoreListener == null || !mLoadMoreEnable) {
+            return 0;
+        }
+        if (!mNextLoadEnable && mLoadMoreView.isLoadEndGone()) {
+            return 0;
+        }
+        if (mData.size() == 0) {
+            return 0;
+        }
+        return 1;
+    }
+
+    /**
+     * @return Whether the Adapter is actively showing load
+     * progress.
+     */
+    public boolean isLoading() {
+        return mLoading;
+    }
+
+
+    public void loadMoreEnd(){
+        if(getLoadMoreViewCount()==0){
+            return;
+        }
+        mLoading = false;
+        mNextLoadEnable = false;
+        if (mLoadMoreView.isLoadEndGone()) {
+            notifyItemRemoved(getHeaderLayoutCount()+mData.size()+getFooterLayoutCount());
+        } else {
+            mLoadMoreView.setLoadMoreStatus(LoadMoreView.LoadMoreStatus.STATUS_LOAD_END);
+            notifyItemChanged(getHeaderLayoutCount()+mData.size()+getFooterLayoutCount());
+        }
+    }
+
+    /**
+     * Finished pull to refresh on the load
+     */
+    public void loadMoreComplete() {
+        if(getLoadMoreViewCount()==0){
+            return;
+        }
+        mLoading=false;
+        mLoadMoreView.setLoadMoreStatus(LoadMoreView.LoadMoreStatus.STATUS_DEFAULT);
+        notifyItemChanged(getHeaderLayoutCount()+mData.size()+getFooterLayoutCount());
+    }
+
+    public void loadMoreFail(){
+        if(getLoadMoreViewCount()==0){
+            return;
+        }
+        mLoading=false;
+        mLoadMoreView.setLoadMoreStatus(LoadMoreView.LoadMoreStatus.STATUS_LOAD_ERROR);
+        notifyItemChanged(getHeaderLayoutCount()+mData.size()+getFooterLayoutCount());
+    }
+
+    public void setEnableLoadMore(boolean enable){
+        int oldLoadMoreCount = getLoadMoreViewCount();
+        mLoadMoreEnable = enable;
+        int newLoadMoreCount = getLoadMoreViewCount();
+
+        if (oldLoadMoreCount == 1) {
+            if (newLoadMoreCount == 0) {
+                notifyItemRemoved(getHeaderLayoutCount() + mData.size() + getFooterLayoutCount());
+            }
+        } else {
+            if (newLoadMoreCount == 1) {
+                mLoadMoreView.setLoadMoreStatus(LoadMoreView.LoadMoreStatus.STATUS_DEFAULT);
+                notifyItemInserted(getHeaderLayoutCount() + mData.size() + getFooterLayoutCount());
+            }
+        }
     }
 
     /**
@@ -134,26 +218,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     public void setDuration(int duration) {
         mDuration = duration;
-    }
-
-    /**
-     * when adapter's data size than pageSize and enable is true,the loading more function is enable,or disable
-     *
-     * @param pageSize
-     */
-    public void openLoadMore(int pageSize) {
-        this.pageSize = pageSize;
-        mNextLoadEnable = true;
-
-    }
-
-    /**
-     * return the value of pageSize
-     *
-     * @return
-     */
-    public int getPageSize() {
-        return this.pageSize;
     }
 
 
@@ -194,7 +258,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     public void add(int position, T item) {
         mData.add(position, item);
-        notifyItemInserted(position);
+        notifyItemInserted(position + getHeaderLayoutCount());
     }
 
 
@@ -207,10 +271,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         this.mData = data == null ? new ArrayList<T>() : data;
         if (mRequestLoadMoreListener != null) {
             mNextLoadEnable = true;
-            // mFooterLayout = null;
-        }
-        if (loadMoreFailedView != null) {
-            removeFooterView(loadMoreFailedView);
+            mLoadMoreEnable =true;
+            mLoading=false;
+            mLoadMoreView.setLoadMoreStatus(LoadMoreView.LoadMoreStatus.STATUS_DEFAULT);
         }
         mLastPosition = -1;
         notifyDataSetChanged();
@@ -224,8 +287,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     public void addData(int position, T data) {
         if (0 <= position && position < mData.size()) {
             mData.add(position, data);
-            notifyItemInserted(position);
-            notifyItemRangeChanged(position, mData.size() - position);
+            notifyItemInserted(position + getHeaderLayoutCount());
         } else {
             throw new ArrayIndexOutOfBoundsException("inserted position most greater than 0 and less than data size");
         }
@@ -236,7 +298,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     public void addData(T data) {
         mData.add(data);
-        notifyItemInserted(mData.size() - 1);
+        notifyItemInserted(mData.size() + getHeaderLayoutCount());
     }
 
     /**
@@ -247,8 +309,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     public void addData(int position, List<T> data) {
         if (0 <= position && position < mData.size()) {
             mData.addAll(position, data);
-            notifyItemInserted(position);
-            notifyItemRangeChanged(position, mData.size() - position - data.size());
+            notifyItemRangeInserted(position + getHeaderLayoutCount(), data.size());
         } else {
             throw new ArrayIndexOutOfBoundsException("inserted position most greater than 0 and less than data size");
         }
@@ -261,40 +322,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     public void addData(List<T> newData) {
         this.mData.addAll(newData);
-        hideLoadingMore();
-//        notifyItemRangeInserted(mData.size() - newData.size() + getHeaderLayoutCount(), newData.size());
-        notifyDataSetChanged();
-    }
-
-    /**
-     * @return Whether the Adapter is actively showing load
-     * progress.
-     */
-    public boolean isLoading() {
-        return mLoadingMoreEnable;
-    }
-
-    /**
-     * same as addData(List<T>) but for when data is manually added to the adapter
-     */
-    public void dataAdded() {
-        hideLoadingMore();
-        notifyDataSetChanged();
-    }
-
-    public void hideLoadingMore() {
-        if (mNextLoadEnable) {
-            mLoadingMoreEnable = false;
-        }
-    }
-
-    /**
-     * set a loadingView
-     *
-     * @param loadingView
-     */
-    public void setLoadingView(View loadingView) {
-        this.mLoadingView = loadingView;
+        notifyItemRangeInserted(mData.size() - newData.size() + getHeaderLayoutCount(), newData.size());
     }
 
     /**
@@ -359,109 +387,177 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @return
      */
     public int getmEmptyViewCount() {
-        return mEmptyView == null ? 0 : 1;
+        if(mEmptyView==null){
+            return 0;
+        }
+        if(!mIsUseEmpty){
+            return 0;
+        }
+        if(mData.size()!=0){
+            return 0;
+        }
+        return 1;
     }
 
-    /**
-     * returns the number of item that will be created
-     *
-     * @return
-     */
-    @Override
-    public int getItemCount() {
-        int i = isLoadMore() ? 1 : 0;
-        int count = mData.size() + i + getHeaderLayoutCount() + getFooterLayoutCount();
-        if (mData.size() == 0 && mEmptyView != null && mIsUseEmpty) {
-            /**
-             *  setEmptyView(false) and add emptyView
-             */
-            if (count == 0 && (!mHeadAndEmptyEnable || !mFootAndEmptyEnable)) {
-                count += getmEmptyViewCount();
-                /**
-                 * {@link #setEmptyView(true, true, View)}
-                 */
-            } else if (mHeadAndEmptyEnable || mFootAndEmptyEnable) {
-                count += getmEmptyViewCount();
+    @Override public int getItemCount() {
+        int count;
+        if(getmEmptyViewCount()==1){
+            count=1;
+            if(mHeadAndEmptyEnable&&getHeaderLayoutCount()!=0){
+                count++;
             }
-
-            if ((mHeadAndEmptyEnable && getHeaderLayoutCount() == 1 && count == 1) || count == 0) {
-                mEmptyEnable = true;
-                count += getmEmptyViewCount();
+            if(mFootAndEmptyEnable&&getFooterLayoutCount()!=0){
+                count++;
             }
-
+        }else {
+            count=getHeaderLayoutCount()+mData.size()+getFooterLayoutCount()+getLoadMoreViewCount();
         }
         return count;
     }
 
-    /**
-     * Get the type of View that will be created by {@link #getItemView(int, ViewGroup)} for the specified item.
-     *
-     * @param position The position of the item within the adapter's data set whose view type we
-     *                 want.
-     * @return An integer representing the type of View. Two views should share the same type if one
-     * can be converted to the other in {@link #getItemView(int, ViewGroup)}. Note: Integers must be in the
-     * range 0 to {@link #getItemCount()} - 1.
-     */
-    @Override
-    public int getItemViewType(int position) {
-        autoLoadMore(position);
-        /**
-         * if set headView and positon =0
-         */
-        if (mHeaderLayout != null && position == 0) {
-            return HEADER_VIEW;
-        }
-        /**
-         * if user has no data and add emptyView and position <2{(headview +emptyView)}
-         */
-        if (mData.size() == 0 && mEmptyEnable && mEmptyView != null && position <= 2) {
-            /**
-             * if set {@link #setEmptyView(boolean, boolean, View)}  position = 1
-             */
-            if ((mHeadAndEmptyEnable || mFootAndEmptyEnable) && position == 1) {
-                /**
-                 * if user want to show headview and footview and emptyView but not add headview
-                 */
-                if (mHeaderLayout == null && mFooterLayout != null) {
+    @Override public int getItemViewType(int position) {
+        if(getmEmptyViewCount()==1){
+            boolean header=mHeadAndEmptyEnable&&getHeaderLayoutCount()!=0;
+            switch (position){
+                case 0:
+                    if(header){
+                        return HEADER_VIEW;
+                    }else {
+                        return EMPTY_VIEW;
+                    }
+                case 1:
+                    if(header){
+                        return EMPTY_VIEW;
+                    }else {
+                        return FOOTER_VIEW;
+                    }
+                case 2:
                     return FOOTER_VIEW;
-                    /**
-                     * add headview
-                     */
-                } else if (mHeaderLayout != null) {
+                default:
                     return EMPTY_VIEW;
-                }
-            } else if (position == 0) {
-                /**
-                 * has no emptyView just add emptyview
-                 */
-                if (mHeaderLayout == null) {
-                    return EMPTY_VIEW;
-                } else if (mFooterLayout != null)
-
-                    return EMPTY_VIEW;
-
-
-            } else if (position == 2 && (mFootAndEmptyEnable || mHeadAndEmptyEnable) && mHeaderLayout != null && mEmptyView != null) {
-                return FOOTER_VIEW;
-
-            } /**
-             * user forget to set {@link #setEmptyView(boolean, boolean, View)}  but add footview and headview and emptyview
-             */
-            else if ((!mFootAndEmptyEnable || !mHeadAndEmptyEnable) && position == 1 && mFooterLayout != null) {
-                return FOOTER_VIEW;
             }
-        } else if (mData.size() == 0 && mEmptyView != null && getItemCount() == (mHeadAndEmptyEnable ? 2 : 1) && mEmptyEnable) {
-            return EMPTY_VIEW;
-        } else if (position == mData.size() + getHeaderLayoutCount()) {
-            if (mNextLoadEnable)
-                return LOADING_VIEW;
-            else
-                return FOOTER_VIEW;
-        } else if (position > mData.size() + getHeaderLayoutCount()) {
-            return FOOTER_VIEW;
         }
-        return getDefItemViewType(position - getHeaderLayoutCount());
+        autoLoadMore(position);
+        int numHeaders = getHeaderLayoutCount();
+        if (position < numHeaders) {
+            return HEADER_VIEW;
+        } else {
+            int adjPosition = position - numHeaders;
+            int adapterCount = mData.size();
+            if (adjPosition < adapterCount) {
+                return getDefItemViewType(adjPosition);
+            } else {
+                adjPosition = adjPosition - adapterCount;
+                int numFooters = getFooterLayoutCount();
+                if (adjPosition < numFooters) {
+                    return FOOTER_VIEW;
+                } else {
+                    return LOADING_VIEW;
+                }
+            }
+        }
     }
+
+    //    /**
+//     * returns the number of item that will be created
+//     *
+//     * @return
+//     */
+//    @Override
+//    public int getItemCount() {
+//        int i = getLoadMoreViewCount() ? 1 : 0;
+//        int count = mData.size() + i + getHeaderLayoutCount() + getFooterLayoutCount();
+//        if (mData.size() == 0 && mEmptyView != null && mIsUseEmpty) {
+//            /**
+//             *  setEmptyView(false) and add emptyView
+//             */
+//            if (count == 0 && (!mHeadAndEmptyEnable || !mFootAndEmptyEnable)) {
+//                count += getmEmptyViewCount();
+//                /**
+//                 * {@link #setEmptyView(true, true, View)}
+//                 */
+//            } else if (mHeadAndEmptyEnable || mFootAndEmptyEnable) {
+//                count += getmEmptyViewCount();
+//            }
+//
+//            if ((mHeadAndEmptyEnable && getHeaderLayoutCount() == 1 && count == 1) || count == 0) {
+//                mEmptyEnable = true;
+//                count += getmEmptyViewCount();
+//            }
+//
+//        }
+//        return count;
+//    }
+//
+//    /**
+//     * Get the type of View that will be created by {@link #getItemView(int, ViewGroup)} for the specified item.
+//     *
+//     * @param position The position of the item within the adapter's data set whose view type we
+//     *                 want.
+//     * @return An integer representing the type of View. Two views should share the same type if one
+//     * can be converted to the other in {@link #getItemView(int, ViewGroup)}. Note: Integers must be in the
+//     * range 0 to {@link #getItemCount()} - 1.
+//     */
+//    @Override
+//    public int getItemViewType(int position) {
+//        autoLoadMore(position);
+//        /**
+//         * if set headView and positon =0
+//         */
+//        if (mHeaderLayout != null && position == 0) {
+//            return HEADER_VIEW;
+//        }
+//        /**
+//         * if user has no data and add emptyView and position <2{(headview +emptyView)}
+//         */
+//        if (mData.size() == 0 && mEmptyEnable && mEmptyView != null && position <= 2) {
+//            /**
+//             * if set {@link #setEmptyView(boolean, boolean, View)}  position = 1
+//             */
+//            if ((mHeadAndEmptyEnable || mFootAndEmptyEnable) && position == 1) {
+//                /**
+//                 * if user want to show headview and footview and emptyView but not add headview
+//                 */
+//                if (mHeaderLayout == null && mFooterLayout != null) {
+//                    return FOOTER_VIEW;
+//                    /**
+//                     * add headview
+//                     */
+//                } else if (mHeaderLayout != null) {
+//                    return EMPTY_VIEW;
+//                }
+//            } else if (position == 0) {
+//                /**
+//                 * has no emptyView just add emptyview
+//                 */
+//                if (mHeaderLayout == null) {
+//                    return EMPTY_VIEW;
+//                } else if (mFooterLayout != null)
+//
+//                    return EMPTY_VIEW;
+//
+//
+//            } else if (position == 2 && (mFootAndEmptyEnable || mHeadAndEmptyEnable) && mHeaderLayout != null && mEmptyView != null) {
+//                return FOOTER_VIEW;
+//
+//            } /**
+//             * user forget to set {@link #setEmptyView(boolean, boolean, View)}  but add footview and headview and emptyview
+//             */
+//            else if ((!mFootAndEmptyEnable || !mHeadAndEmptyEnable) && position == 1 && mFooterLayout != null) {
+//                return FOOTER_VIEW;
+//            }
+//        } else if (mData.size() == 0 && mEmptyView != null && getItemCount() == (mHeadAndEmptyEnable ? 2 : 1) && mEmptyEnable) {
+//            return EMPTY_VIEW;
+//        } else if (position == mData.size() + getHeaderLayoutCount()) {
+//            if (mNextLoadEnable)
+//                return LOADING_VIEW;
+//            else
+//                return FOOTER_VIEW;
+//        } else if (position > mData.size() + getHeaderLayoutCount()) {
+//            return FOOTER_VIEW;
+//        }
+//        return getDefItemViewType(position - getHeaderLayoutCount());
+//    }
 
     protected int getDefItemViewType(int position) {
         return super.getItemViewType(position);
@@ -494,10 +590,17 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
 
     private K getLoadingView(ViewGroup parent) {
-        if (mLoadingView == null) {
-            return createBaseViewHolder(parent, R.layout.def_loading);
-        }
-        return createBaseViewHolder(mLoadingView);
+        View view = getItemView(mLoadMoreView.getLayoutId(),parent);
+        K holder= createBaseViewHolder(view);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                if(mLoadMoreView.getLoadMoreStatus()== LoadMoreView.LoadMoreStatus.STATUS_LOAD_ERROR){
+                    mLoadMoreView.setLoadMoreStatus(LoadMoreView.LoadMoreStatus.STATUS_DEFAULT);
+                    notifyItemChanged(getHeaderLayoutCount()+mData.size()+getFooterLayoutCount());
+                }
+            }
+        });
+        return holder;
     }
 
     /**
@@ -582,6 +685,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
                 break;
             case LOADING_VIEW:
+                mLoadMoreView.convert(holder);
                 break;
             case HEADER_VIEW:
                 break;
@@ -697,7 +801,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *               the effect of this method is the same as that of {@link #addFooterView(View)}.
      */
     public void addFooterView(View footer, int index) {
-        mNextLoadEnable = false;
         if (mFooterLayout == null) {
             if (mCopyFooterLayout == null) {
                 mFooterLayout = new LinearLayout(footer.getContext());
@@ -766,38 +869,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     /**
-     * Set the view to show when load more failed.
-     */
-    public void setLoadMoreFailedView(View view) {
-        loadMoreFailedView = view;
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                removeFooterView(loadMoreFailedView);
-                openLoadMore(pageSize);
-            }
-        });
-    }
-
-    /**
-     * Call this method when load more failed.
-     */
-    public void showLoadMoreFailedView() {
-        loadComplete();
-        if (loadMoreFailedView == null) {
-            loadMoreFailedView = mLayoutInflater.inflate(R.layout.def_load_more_failed, null);
-            loadMoreFailedView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    removeFooterView(loadMoreFailedView);
-                    openLoadMore(pageSize);
-                }
-            });
-        }
-        addFooterView(loadMoreFailedView);
-    }
-
-    /**
      * Sets the view to show if the adapter is empty
      */
     public void setEmptyView(View emptyView) {
@@ -826,7 +897,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         if (mCopyEmptyLayout == null) {
             mCopyEmptyLayout = emptyView;
         }
-        mEmptyEnable = true;
+        mIsUseEmpty = true;
     }
 
     /**
@@ -849,16 +920,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         return mEmptyView;
     }
 
-
-    /**
-     * Finished pull to refresh on the load
-     */
-    public void loadComplete() {
-        mNextLoadEnable = false;
-        mLoadingMoreEnable = false;
-        notifyDataSetChanged();
-    }
-
     private int mAutoLoadMoreSize = 1;
     public void setAutoLoadMoreSize(int autoLoadMoreSize) {
         if (autoLoadMoreSize > 1) {
@@ -867,14 +928,18 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     private void autoLoadMore(int position) {
-        if (!isLoadMore()) {
+        if (getLoadMoreViewCount()==0) {
             return;
         }
         if (position < getItemCount() - mAutoLoadMoreSize) {
             return;
         }
-        if (!mLoadingMoreEnable) {
-            mLoadingMoreEnable = true;
+        if(mLoadMoreView.getLoadMoreStatus()!= LoadMoreView.LoadMoreStatus.STATUS_DEFAULT){
+            return;
+        }
+        mLoadMoreView.setLoadMoreStatus(LoadMoreView.LoadMoreStatus.STATUS_LOADING);
+        if (!mLoading) {
+            mLoading = true;
             mRequestLoadMoreListener.onLoadMoreRequested();
         }
     }
@@ -911,15 +976,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     protected void startAnim(Animator anim, int index) {
         anim.setDuration(mDuration).start();
         anim.setInterpolator(mInterpolator);
-    }
-
-    /**
-     * Determine whether it is loaded more
-     *
-     * @return
-     */
-    private boolean isLoadMore() {
-        return mNextLoadEnable && pageSize != -1 && mRequestLoadMoreListener != null && mData.size() >= pageSize;
     }
 
     /**

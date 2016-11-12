@@ -50,7 +50,10 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
         }
         if (!mGestureDetector.onTouchEvent(e) && e.getActionMasked() == MotionEvent.ACTION_UP && mIsShowPress) {
             if (mPressedView!=null){
-                mPressedView.setPressed(false);
+                BaseViewHolder vh = (BaseViewHolder) recyclerView.getChildViewHolder(mPressedView);
+                if (vh == null || vh.getItemViewType() != LOADING_VIEW) {
+                    mPressedView.setPressed(false);
+                }
                 mPressedView = null;
             }
             mIsShowPress = false;
