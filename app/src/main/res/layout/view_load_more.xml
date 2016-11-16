@@ -16,7 +16,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="?android:attr/progressBarStyleSmall"
-            android:layout_marginRight="@dimen/dp_4"/>
+            android:layout_marginRight="@dimen/dp_4"
+            android:indeterminateDrawable="@drawable/sample_footer_loading_progress"/>
 
         <TextView
             android:id="@+id/loading_text"
@@ -24,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_4"
             android:text="@string/loading"
-            android:textColor="@android:color/black"
+            android:textColor="#0dddb8"
             android:textSize="@dimen/sp_14"/>
     </LinearLayout>
 
@@ -40,21 +41,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:textColor="#0dddb8"
             android:text="@string/load_failed"/>
 
     </FrameLayout>
 
-    <FrameLayout
-        android:id="@+id/load_more_load_end_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/load_end"
-            android:textColor="@android:color/darker_gray"/>
-    </FrameLayout>
 </FrameLayout>

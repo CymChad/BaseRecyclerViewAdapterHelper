@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickAdapter;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
+import com.chad.baserecyclerviewadapterhelper.loadmore.CustomLoadMoreView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 
@@ -53,6 +54,7 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
         headView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mQuickAdapter.setLoadMoreView(new CustomLoadMoreView());
                 mRecyclerView.setAdapter(mQuickAdapter);
                 Toast.makeText(PullToRefreshUseActivity.this, "use ok!", Toast.LENGTH_LONG).show();
             }
