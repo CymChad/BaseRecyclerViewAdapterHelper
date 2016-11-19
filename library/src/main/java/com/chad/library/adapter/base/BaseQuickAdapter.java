@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.animation.AlphaInAnimation;
@@ -64,24 +65,20 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     private boolean mFirstOnlyEnable = true;
     private boolean mOpenAnimationEnable = false;
-    private boolean mIsUseEmpty = true;
-    private boolean mHeadAndEmptyEnable;
-    private boolean mFootAndEmptyEnable;
     private Interpolator mInterpolator = new LinearInterpolator();
     private int mDuration = 300;
     private int mLastPosition = -1;
     //@AnimationType
     private BaseAnimation mCustomAnimation;
     private BaseAnimation mSelectAnimation = new AlphaInAnimation();
+    //header footer
     private LinearLayout mHeaderLayout;
     private LinearLayout mFooterLayout;
-    private LinearLayout mCopyHeaderLayout = null;
-    private LinearLayout mCopyFooterLayout = null;
-    /**
-     * View to show if there are no items to show.
-     */
-    private View mEmptyView;
-    private View mCopyEmptyLayout;
+    //empty
+    private FrameLayout mEmptyView;
+    private boolean mIsUseEmpty = true;
+    private boolean mHeadAndEmptyEnable;
+    private boolean mFootAndEmptyEnable;
 
     protected static final String TAG = BaseQuickAdapter.class.getSimpleName();
     protected Context mContext;
@@ -373,7 +370,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     @Deprecated
     public int getHeaderViewsCount() {
-        return mHeaderLayout == null ? 0 : 1;
+        return getHeaderLayoutCount();
     }
 
     /**
@@ -384,21 +381,27 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     @Deprecated
     public int getFooterViewsCount() {
-        return mFooterLayout == null ? 0 : 1;
+        return getFooterLayoutCount();
     }
 
     /**
      * if addHeaderView will be return 1, if not will be return 0
      */
     public int getHeaderLayoutCount() {
-        return mHeaderLayout == null ? 0 : 1;
+        if (mHeaderLayout == null || mHeaderLayout.getChildCount() == 0) {
+            return 0;
+        }
+        return 1;
     }
 
     /**
      * if addFooterView will be return 1, if not will be return 0
      */
     public int getFooterLayoutCount() {
-        return mFooterLayout == null ? 0 : 1;
+        if (mFooterLayout == null || mFooterLayout.getChildCount() == 0) {
+            return 0;
+        }
+        return 1;
     }
 
     /**
@@ -407,7 +410,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @return
      */
     public int getEmptyViewCount() {
-        if(mEmptyView==null){
+        if (mEmptyView == null || mEmptyView.getChildCount() == 0) {
             return 0;
         }
         if(!mIsUseEmpty){
@@ -495,7 +498,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 baseViewHolder = createBaseViewHolder(mHeaderLayout);
                 break;
             case EMPTY_VIEW:
-                baseViewHolder = createBaseViewHolder(mEmptyView == mCopyEmptyLayout ? mCopyEmptyLayout : mEmptyView);
+                baseViewHolder = createBaseViewHolder(mEmptyView);
                 break;
             case FOOTER_VIEW:
                 baseViewHolder = createBaseViewHolder(mFooterLayout);
@@ -680,24 +683,26 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param orientation
      */
     public void addHeaderView(View header, int index, int orientation) {
+        boolean insert=false;
         if (mHeaderLayout == null) {
-            if (mCopyHeaderLayout == null) {
-                mHeaderLayout = new LinearLayout(header.getContext());
-                if (orientation == LinearLayout.VERTICAL) {
-                    mHeaderLayout.setOrientation(LinearLayout.VERTICAL);
-                    mHeaderLayout.setLayoutParams(new LayoutParams(MATCH_PARENT, WRAP_CONTENT));
-                } else {
-                    mHeaderLayout.setOrientation(LinearLayout.HORIZONTAL);
-                    mHeaderLayout.setLayoutParams(new LayoutParams(WRAP_CONTENT, MATCH_PARENT));
-                }
-                mCopyHeaderLayout = mHeaderLayout;
+            insert=true;
+            mHeaderLayout = new LinearLayout(header.getContext());
+            if (orientation == LinearLayout.VERTICAL) {
+                mHeaderLayout.setOrientation(LinearLayout.VERTICAL);
+                mHeaderLayout.setLayoutParams(new LayoutParams(MATCH_PARENT, WRAP_CONTENT));
             } else {
-                mHeaderLayout = mCopyHeaderLayout;
+                mHeaderLayout.setOrientation(LinearLayout.HORIZONTAL);
+                mHeaderLayout.setLayoutParams(new LayoutParams(WRAP_CONTENT, MATCH_PARENT));
             }
         }
         index = index >= mHeaderLayout.getChildCount() ? -1 : index;
         mHeaderLayout.addView(header, index);
-        this.notifyDataSetChanged();
+        if(insert){
+            int position = getHeaderViewPosition();
+            if (position != -1) {
+                notifyItemInserted(position);
+            }
+        }
     }
 
     /**
@@ -720,19 +725,22 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *               the effect of this method is the same as that of {@link #addFooterView(View)}.
      */
     public void addFooterView(View footer, int index) {
+        boolean insert=false;
         if (mFooterLayout == null) {
-            if (mCopyFooterLayout == null) {
-                mFooterLayout = new LinearLayout(footer.getContext());
-                mFooterLayout.setOrientation(LinearLayout.VERTICAL);
-                mFooterLayout.setLayoutParams(new LayoutParams(MATCH_PARENT, WRAP_CONTENT));
-                mCopyFooterLayout = mFooterLayout;
-            } else {
-                mFooterLayout = mCopyFooterLayout;
-            }
+            insert = true;
+            mFooterLayout = new LinearLayout(footer.getContext());
+            mFooterLayout.setOrientation(LinearLayout.VERTICAL);
+            mFooterLayout.setLayoutParams(new LayoutParams(MATCH_PARENT, WRAP_CONTENT));
         }
         index = index >= mFooterLayout.getChildCount() ? -1 : index;
         mFooterLayout.addView(footer, index);
         this.notifyItemChanged(getItemCount());
+        if (insert) {
+            int position = getFooterViewPosition();
+            if (position != -1) {
+                notifyItemInserted(position);
+            }
+        }
     }
 
     /**
@@ -742,13 +750,15 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param header
      */
     public void removeHeaderView(View header) {
-        if (mHeaderLayout == null) return;
+        if (getHeaderLayoutCount()==0) return;
 
         mHeaderLayout.removeView(header);
         if (mHeaderLayout.getChildCount() == 0) {
-            mHeaderLayout = null;
+            int position = getHeaderViewPosition();
+            if (position != -1) {
+                notifyItemRemoved(position);
+            }
         }
-        this.notifyDataSetChanged();
     }
 
     /**
@@ -758,65 +768,109 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param footer
      */
     public void removeFooterView(View footer) {
-        if (mFooterLayout == null) return;
+        if (getFooterLayoutCount()==0) return;
 
         mFooterLayout.removeView(footer);
-        if (mFooterLayout.getChildCount() == 0) {
-            mFooterLayout = null;
+        if (mFooterLayout.getChildCount()==0) {
+            int position = getFooterViewPosition();
+            if (position != -1) {
+                notifyItemRemoved(position);
+            }
         }
-        this.notifyDataSetChanged();
     }
 
     /**
      * remove all header view from mHeaderLayout and set null to mHeaderLayout
      */
     public void removeAllHeaderView() {
-        if (mHeaderLayout == null) return;
+        if (getHeaderLayoutCount()==0) return;
 
         mHeaderLayout.removeAllViews();
-        mHeaderLayout = null;
+        int position = getHeaderViewPosition();
+        if (position != -1) {
+            notifyItemRemoved(position);
+        }
     }
 
     /**
      * remove all footer view from mFooterLayout and set null to mFooterLayout
      */
     public void removeAllFooterView() {
-        if (mFooterLayout == null) return;
+        if (getFooterLayoutCount()==0) return;
 
         mFooterLayout.removeAllViews();
-        mFooterLayout = null;
+        int position = getFooterViewPosition();
+        if (position != -1) {
+            notifyItemRemoved(position);
+        }
     }
 
-    /**
-     * Sets the view to show if the adapter is empty
-     */
+    private int getHeaderViewPosition() {
+        //Return to header view notify position
+        if (getEmptyViewCount() == 1) {
+            if (mHeadAndEmptyEnable) {
+                return 0;
+            }
+        } else {
+            return 0;
+        }
+        return -1;
+    }
+
+    private int getFooterViewPosition() {
+        //Return to footer view notify position
+        if (getEmptyViewCount() == 1) {
+            int position = 1;
+            if (mHeadAndEmptyEnable && getHeaderLayoutCount() != 0) {
+                position++;
+            }
+            if (mFootAndEmptyEnable) {
+                return position;
+            }
+        } else {
+            return getHeaderLayoutCount() + mData.size();
+        }
+        return -1;
+    }
+
     public void setEmptyView(View emptyView) {
-        setEmptyView(false, false, emptyView);
+        boolean insert = false;
+        if (mEmptyView == null) {
+            mEmptyView = new FrameLayout(emptyView.getContext());
+            mEmptyView.setLayoutParams(new LayoutParams(MATCH_PARENT, MATCH_PARENT));
+            insert = true;
+        }
+        mEmptyView.removeAllViews();
+        mEmptyView.addView(emptyView);
+        mIsUseEmpty = true;
+        if (insert) {
+            if (getEmptyViewCount() == 1) {
+                int position = 0;
+                if (mHeadAndEmptyEnable && getHeaderLayoutCount() != 0) {
+                    position++;
+                }
+                notifyItemInserted(position);
+            }
+        }
     }
 
     /**
+     * Call before {@link RecyclerView#setAdapter(RecyclerView.Adapter)}
      * @param isHeadAndEmpty false will not show headView if the data is empty true will show emptyView and headView
-     * @param emptyView
      */
-    public void setEmptyView(boolean isHeadAndEmpty, View emptyView) {
-        setEmptyView(isHeadAndEmpty, false, emptyView);
+    public void setHeaderAndEmpty(boolean isHeadAndEmpty) {
+        setHeaderFooterEmpty(isHeadAndEmpty, false);
     }
 
     /**
      * set emptyView show if adapter is empty and want to show headview and footview
-     *
+     * Call before {@link RecyclerView#setAdapter(RecyclerView.Adapter)}
      * @param isHeadAndEmpty
      * @param isFootAndEmpty
-     * @param emptyView
      */
-    public void setEmptyView(boolean isHeadAndEmpty, boolean isFootAndEmpty, View emptyView) {
+    public void setHeaderFooterEmpty(boolean isHeadAndEmpty, boolean isFootAndEmpty) {
         mHeadAndEmptyEnable = isHeadAndEmpty;
         mFootAndEmptyEnable = isFootAndEmpty;
-        mEmptyView = emptyView;
-        if (mCopyEmptyLayout == null) {
-            mCopyEmptyLayout = emptyView;
-        }
-        mIsUseEmpty = true;
     }
 
     /**
