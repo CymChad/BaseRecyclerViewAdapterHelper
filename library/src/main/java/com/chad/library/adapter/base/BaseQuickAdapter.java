@@ -683,9 +683,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param orientation
      */
     public void addHeaderView(View header, int index, int orientation) {
-        boolean insert=false;
         if (mHeaderLayout == null) {
-            insert=true;
             mHeaderLayout = new LinearLayout(header.getContext());
             if (orientation == LinearLayout.VERTICAL) {
                 mHeaderLayout.setOrientation(LinearLayout.VERTICAL);
@@ -697,7 +695,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         }
         index = index >= mHeaderLayout.getChildCount() ? -1 : index;
         mHeaderLayout.addView(header, index);
-        if(insert){
+        if(mHeaderLayout.getChildCount() == 1){
             int position = getHeaderViewPosition();
             if (position != -1) {
                 notifyItemInserted(position);
@@ -725,17 +723,14 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *               the effect of this method is the same as that of {@link #addFooterView(View)}.
      */
     public void addFooterView(View footer, int index) {
-        boolean insert=false;
         if (mFooterLayout == null) {
-            insert = true;
             mFooterLayout = new LinearLayout(footer.getContext());
             mFooterLayout.setOrientation(LinearLayout.VERTICAL);
             mFooterLayout.setLayoutParams(new LayoutParams(MATCH_PARENT, WRAP_CONTENT));
         }
         index = index >= mFooterLayout.getChildCount() ? -1 : index;
         mFooterLayout.addView(footer, index);
-        this.notifyItemChanged(getItemCount());
-        if (insert) {
+        if (mFooterLayout.getChildCount() == 1) {
             int position = getFooterViewPosition();
             if (position != -1) {
                 notifyItemInserted(position);
