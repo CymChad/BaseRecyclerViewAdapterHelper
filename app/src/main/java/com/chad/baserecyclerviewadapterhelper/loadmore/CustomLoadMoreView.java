@@ -14,10 +14,6 @@ public final class CustomLoadMoreView extends LoadMoreView {
         return R.layout.view_load_more;
     }
 
-    @Override public boolean isLoadEndGone() {
-        return true;
-    }
-
     @Override protected int getLoadingViewId() {
         return R.id.load_more_loading_view;
     }
@@ -27,6 +23,6 @@ public final class CustomLoadMoreView extends LoadMoreView {
     }
 
     @Override protected int getLoadEndViewId() {
-        return 0;
+        return R.id.load_more_load_end_view;
     }
 }

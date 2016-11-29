@@ -3,6 +3,7 @@ package com.chad.library.adapter.base.loadmore;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
 /**
@@ -17,6 +18,7 @@ public abstract class LoadMoreView {
     public static final int STATUS_END = 4;
 
     private int mLoadMoreStatus = STATUS_DEFAULT;
+    private boolean mLoadMoreEndGone = false;
 
     public void setLoadMoreStatus(int loadMoreStatus) {
         this.mLoadMoreStatus = loadMoreStatus;
@@ -55,11 +57,29 @@ public abstract class LoadMoreView {
     }
 
     private void visibleLoadEnd(BaseViewHolder holder, boolean visible) {
-        if (isLoadEndGone()) {
-            return;
+        final int loadEndViewId=getLoadEndViewId();
+        if (loadEndViewId != 0) {
+            holder.setVisible(loadEndViewId, visible);
         }
-        holder.setVisible(getLoadEndViewId(), visible);
     }
+
+    public final void setLoadMoreEndGone(boolean loadMoreEndGone) {
+        this.mLoadMoreEndGone = loadMoreEndGone;
+    }
+
+    public final boolean isLoadEndMoreGone(){
+        if(getLoadEndViewId()==0){
+            return true;
+        }
+        return mLoadMoreEndGone;}
+
+    /**
+     * No more data is hidden
+     * @return true for no more data hidden load more
+     * @deprecated Use {@link BaseQuickAdapter#loadMoreEnd(boolean)} instead.
+     */
+    @Deprecated
+    public boolean isLoadEndGone(){return mLoadMoreEndGone;}
 
     /**
      * load more layout
@@ -67,13 +87,6 @@ public abstract class LoadMoreView {
      * @return
      */
     public abstract @LayoutRes int getLayoutId();
-
-    /**
-     * No more data is hidden
-     *
-     * @return true for no more data hidden load more
-     */
-    public abstract boolean isLoadEndGone();
 
     /**
      * loading view
@@ -90,7 +103,7 @@ public abstract class LoadMoreView {
     protected abstract @IdRes int getLoadFailViewId();
 
     /**
-     * load end view, If {@link LoadMoreView#isLoadEndGone()} is true, you can return 0
+     * load end view, you can return 0
      *
      * @return
      */
