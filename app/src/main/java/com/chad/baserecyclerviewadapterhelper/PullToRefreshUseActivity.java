@@ -35,6 +35,7 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
     private int mCurrentCounter = 0;
 
     private boolean isErr;
+    private boolean mLoadMoreEndGone = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +51,11 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
 
     private void addHeadView() {
         View headView = getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false);
-        ((TextView) headView.findViewById(R.id.tv)).setText("click use custom loading view");
+        ((TextView) headView.findViewById(R.id.tv)).setText("click use custom load view");
         headView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mLoadMoreEndGone = true;
                 mQuickAdapter.setLoadMoreView(new CustomLoadMoreView());
                 mRecyclerView.setAdapter(mQuickAdapter);
                 Toast.makeText(PullToRefreshUseActivity.this, "use ok!", Toast.LENGTH_LONG).show();
@@ -69,7 +71,8 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
             @Override
             public void run() {
                 if (mCurrentCounter >= TOTAL_COUNTER) {
-                    mQuickAdapter.loadMoreEnd();
+//                    mQuickAdapter.loadMoreEnd();//default visible
+                    mQuickAdapter.loadMoreEnd(mLoadMoreEndGone);//true is gone,false is visible
                 } else {
                     if (isErr) {
                         mQuickAdapter.addData(DataServer.getSampleData(PAGE_SIZE));
@@ -95,9 +98,9 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
             @Override
             public void run() {
                 mQuickAdapter.setNewData(DataServer.getSampleData(PAGE_SIZE));
+                isErr = false;
                 mCurrentCounter = PAGE_SIZE;
                 mSwipeRefreshLayout.setRefreshing(false);
-                isErr = false;
                 mQuickAdapter.setEnableLoadMore(true);
             }
         }, delayMillis);

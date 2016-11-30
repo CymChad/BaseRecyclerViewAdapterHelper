@@ -46,4 +46,17 @@
 
     </FrameLayout>
 
+    <FrameLayout
+        android:id="@+id/load_more_load_end_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/load_end"
+            android:textColor="@android:color/darker_gray"/>
+    </FrameLayout>
 </FrameLayout>

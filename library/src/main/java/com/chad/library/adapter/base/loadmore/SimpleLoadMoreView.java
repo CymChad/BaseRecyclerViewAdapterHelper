@@ -13,10 +13,6 @@ public final class SimpleLoadMoreView extends LoadMoreView {
         return R.layout.quick_view_load_more;
     }
 
-    @Override public boolean isLoadEndGone() {
-        return false;
-    }
-
     @Override protected int getLoadingViewId() {
         return R.id.load_more_loading_view;
     }

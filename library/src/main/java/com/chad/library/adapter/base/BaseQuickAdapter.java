@@ -140,7 +140,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         if (mRequestLoadMoreListener == null || !mLoadMoreEnable) {
             return 0;
         }
-        if (!mNextLoadEnable && mLoadMoreView.isLoadEndGone()) {
+        if (!mNextLoadEnable && mLoadMoreView.isLoadEndMoreGone()) {
             return 0;
         }
         if (mData.size() == 0) {
@@ -162,12 +162,21 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * Refresh end, no more data
      */
     public void loadMoreEnd(){
+        loadMoreEnd(false);
+    }
+
+    /**
+     * Refresh end, no more data
+     * @param gone if true gone the load more view
+     */
+    public void loadMoreEnd(boolean gone){
         if(getLoadMoreViewCount()==0){
             return;
         }
         mLoading = false;
         mNextLoadEnable = false;
-        if (mLoadMoreView.isLoadEndGone()) {
+        mLoadMoreView.setLoadMoreEndGone(gone);
+        if (gone) {
             notifyItemRemoved(getHeaderLayoutCount()+mData.size()+getFooterLayoutCount());
         } else {
             mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_END);
