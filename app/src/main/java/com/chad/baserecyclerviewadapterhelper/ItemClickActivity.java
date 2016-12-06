@@ -31,7 +31,7 @@ public class ItemClickActivity extends Activity {
         initAdapter();
         mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
-            public void SimpleOnItemClick(final BaseQuickAdapter adapter, final View view, final int position) {
+            public void onSimpleItemClick(final BaseQuickAdapter adapter, final View view, final int position) {
                 Log.d(TAG, "SimpleOnItemClick: ");
             }
         });

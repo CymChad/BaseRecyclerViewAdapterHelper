@@ -42,7 +42,6 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
 
     @Override
     public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-
         if (recyclerView == null) {
             this.recyclerView = rv;
             this.baseQuickAdapter = (BaseQuickAdapter) recyclerView.getAdapter();
@@ -51,15 +50,12 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
         if (!mGestureDetector.onTouchEvent(e) && e.getActionMasked() == MotionEvent.ACTION_UP && mIsShowPress) {
             if (mPressedView!=null){
                 BaseViewHolder vh = (BaseViewHolder) recyclerView.getChildViewHolder(mPressedView);
-                if (vh == null || vh.getItemViewType() != LOADING_VIEW) {
+                if (vh == null ||!isHeaderOrFooterView(vh.getItemViewType())) {
                     mPressedView.setPressed(false);
                 }
-                mPressedView = null;
             }
             mIsShowPress = false;
             mIsPrepressed = false;
-
-
         }
         return false;
     }
@@ -102,7 +98,9 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             if (mIsPrepressed && mPressedView != null) {
-
+                if (recyclerView.getScrollState()!=RecyclerView.SCROLL_STATE_IDLE){
+                    return false;
+                }
                 final View pressedView = mPressedView;
                 BaseViewHolder vh = (BaseViewHolder) recyclerView.getChildViewHolder(pressedView);
 
@@ -166,6 +164,9 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
         @Override
         public void onLongPress(MotionEvent e) {
             boolean isChildLongClick =false;
+            if (recyclerView.getScrollState()!=RecyclerView.SCROLL_STATE_IDLE){
+                return ;
+            }
             if (mIsPrepressed && mPressedView != null) {
                 mPressedView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 BaseViewHolder vh = (BaseViewHolder) recyclerView.getChildViewHolder(mPressedView);
@@ -270,7 +271,10 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
         int type = baseQuickAdapter.getItemViewType(position);
         return (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW);
     }
+    private boolean isHeaderOrFooterView(int type) {
 
+        return (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW);
+    }
 }
 
 

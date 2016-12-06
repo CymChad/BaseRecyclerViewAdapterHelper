@@ -37,7 +37,7 @@ public class AnimationUseActivity extends Activity {
         mQuickAdapter.openLoadAnimation();
         mRecyclerView.addOnItemTouchListener(new OnItemChildClickListener() {
             @Override
-            public void SimpleOnItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onSimpleItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 String content = null;
                 Status status = (Status) adapter.getItem(position);
                 switch (view.getId()) {

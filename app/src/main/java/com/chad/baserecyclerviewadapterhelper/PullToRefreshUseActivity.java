@@ -116,7 +116,7 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
 
         mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
-            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onSimpleItemClick(final BaseQuickAdapter adapter, final View view, final int position) {
                 Toast.makeText(PullToRefreshUseActivity.this, Integer.toString(position), Toast.LENGTH_LONG).show();
             }
         });

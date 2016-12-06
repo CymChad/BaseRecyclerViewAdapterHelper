@@ -20,7 +20,7 @@ public abstract class OnItemLongClickListener extends SimpleClickListener {
 
     @Override
     public void onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-        SimpleOnItemLongClick( adapter,  view,  position);
+        onSimpleItemLongClick( adapter,  view,  position);
     }
 
     @Override
@@ -31,5 +31,5 @@ public abstract class OnItemLongClickListener extends SimpleClickListener {
     @Override
     public void onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
     }
-    public abstract void SimpleOnItemLongClick(BaseQuickAdapter adapter, View view, int position);
+    public abstract void onSimpleItemLongClick(BaseQuickAdapter adapter, View view, int position);
 }

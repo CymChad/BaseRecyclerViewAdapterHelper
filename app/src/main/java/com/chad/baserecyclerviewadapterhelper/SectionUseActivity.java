@@ -33,7 +33,7 @@ public class SectionUseActivity extends Activity {
         mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
 
             @Override
-            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
                 MySection mySection = mData.get(position);
                 if (mySection.isHeader)
                     Toast.makeText(SectionUseActivity.this, mySection.header, Toast.LENGTH_LONG).show();
