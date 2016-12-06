@@ -92,6 +92,7 @@ public class RecyclerClickItemActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(RecyclerClickItemActivity.this, "click headView", Toast.LENGTH_LONG).show();
+                Log.e(TAG, "点击了顶部: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             }
         });
         return view;
@@ -104,17 +105,11 @@ public class RecyclerClickItemActivity extends Activity {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(RecyclerClickItemActivity.this, "click FootView", Toast.LENGTH_LONG).show();
+                Toast.makeText(RecyclerClickItemActivity.this, "click FootView", Toast.LENGTH_LONG).show();
                 Log.e(TAG, "点击了底部: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             }
         });
-        view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(final View v, final MotionEvent event) {
-                Log.e(TAG, "onTouch: "+TouchEventUtil.getTouchAction(event.getAction()) );
-                return false;
-            }
-        });
+
         return view;
     }
 
