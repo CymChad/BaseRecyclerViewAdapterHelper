@@ -35,7 +35,7 @@ public class HomeActivity extends Activity {
         homeAdapter.openLoadAnimation();
         mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
-            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(HomeActivity.this, ACTIVITY[position]);
                 startActivity(intent);
             }
