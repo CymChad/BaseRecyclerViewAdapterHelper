@@ -75,7 +75,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     private LinearLayout mHeaderLayout;
     private LinearLayout mFooterLayout;
     //empty
-    private FrameLayout mEmptyView;
+    private FrameLayout mEmptyLayout;
     private boolean mIsUseEmpty = true;
     private boolean mHeadAndEmptyEnable;
     private boolean mFootAndEmptyEnable;
@@ -414,12 +414,12 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     /**
-     * if mEmptyView will be return 1 or not will be return 0
+     * if show empty view will be return 1 or not will be return 0
      *
      * @return
      */
     public int getEmptyViewCount() {
-        if (mEmptyView == null || mEmptyView.getChildCount() == 0) {
+        if (mEmptyLayout == null || mEmptyLayout.getChildCount() == 0) {
             return 0;
         }
         if(!mIsUseEmpty){
@@ -507,7 +507,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 baseViewHolder = createBaseViewHolder(mHeaderLayout);
                 break;
             case EMPTY_VIEW:
-                baseViewHolder = createBaseViewHolder(mEmptyView);
+                baseViewHolder = createBaseViewHolder(mEmptyLayout);
                 break;
             case FOOTER_VIEW:
                 baseViewHolder = createBaseViewHolder(mFooterLayout);
@@ -839,13 +839,19 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     public void setEmptyView(View emptyView) {
         boolean insert = false;
-        if (mEmptyView == null) {
-            mEmptyView = new FrameLayout(emptyView.getContext());
-            mEmptyView.setLayoutParams(new LayoutParams(MATCH_PARENT, MATCH_PARENT));
+        if (mEmptyLayout == null) {
+            mEmptyLayout = new FrameLayout(emptyView.getContext());
+            final LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+            final ViewGroup.LayoutParams lp = emptyView.getLayoutParams();
+            if (lp != null) {
+                layoutParams.width = lp.width;
+                layoutParams.height = lp.height;
+            }
+            mEmptyLayout.setLayoutParams(layoutParams);
             insert = true;
         }
-        mEmptyView.removeAllViews();
-        mEmptyView.addView(emptyView);
+        mEmptyLayout.removeAllViews();
+        mEmptyLayout.addView(emptyView);
         mIsUseEmpty = true;
         if (insert) {
             if (getEmptyViewCount() == 1) {
@@ -894,7 +900,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @return The view to show if the adapter is empty.
      */
     public View getEmptyView() {
-        return mEmptyView;
+        return mEmptyLayout;
     }
 
     private int mAutoLoadMoreSize = 1;
