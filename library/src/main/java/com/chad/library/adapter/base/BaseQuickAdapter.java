@@ -311,12 +311,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param position
      */
     public void addData(int position, T data) {
-        if (0 <= position && position < mData.size()) {
-            mData.add(position, data);
-            notifyItemInserted(position + getHeaderLayoutCount());
-        } else {
-            throw new ArrayIndexOutOfBoundsException("inserted position most greater than 0 and less than data size");
-        }
+        mData.add(position, data);
+        notifyItemInserted(position + getHeaderLayoutCount());
     }
 
     /**
@@ -333,12 +329,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param position
      */
     public void addData(int position, List<T> data) {
-        if (0 <= position && position < mData.size()) {
-            mData.addAll(position, data);
-            notifyItemRangeInserted(position + getHeaderLayoutCount(), data.size());
-        } else {
-            throw new ArrayIndexOutOfBoundsException("inserted position most greater than 0 and less than data size");
-        }
+        mData.addAll(position, data);
+        notifyItemRangeInserted(position + getHeaderLayoutCount(), data.size());
     }
 
     /**
