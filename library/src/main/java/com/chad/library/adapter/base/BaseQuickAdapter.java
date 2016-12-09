@@ -47,6 +47,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.R.attr.orientation;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
@@ -60,8 +61,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     private boolean mNextLoadEnable = false;
     private boolean mLoadMoreEnable = false;
     private RequestLoadMoreListener mRequestLoadMoreListener;
-    private boolean mLoading=false;
-    private LoadMoreView mLoadMoreView=new SimpleLoadMoreView();
+    private boolean mLoading = false;
+    private LoadMoreView mLoadMoreView = new SimpleLoadMoreView();
 
     private boolean mFirstOnlyEnable = true;
     private boolean mOpenAnimationEnable = false;
@@ -119,9 +120,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     public void setOnLoadMoreListener(RequestLoadMoreListener requestLoadMoreListener) {
         this.mRequestLoadMoreListener = requestLoadMoreListener;
         mNextLoadEnable = true;
-        mLoadMoreEnable =true;
-        mLoading=false;
+        mLoadMoreEnable = true;
+        mLoading = false;
     }
+
     /**
      * Set custom load more
      *
@@ -161,26 +163,27 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * Refresh end, no more data
      */
-    public void loadMoreEnd(){
+    public void loadMoreEnd() {
         loadMoreEnd(false);
     }
 
     /**
      * Refresh end, no more data
+     *
      * @param gone if true gone the load more view
      */
-    public void loadMoreEnd(boolean gone){
-        if(getLoadMoreViewCount()==0){
+    public void loadMoreEnd(boolean gone) {
+        if (getLoadMoreViewCount() == 0) {
             return;
         }
         mLoading = false;
         mNextLoadEnable = false;
         mLoadMoreView.setLoadMoreEndGone(gone);
         if (gone) {
-            notifyItemRemoved(getHeaderLayoutCount()+mData.size()+getFooterLayoutCount());
+            notifyItemRemoved(getHeaderLayoutCount() + mData.size() + getFooterLayoutCount());
         } else {
             mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_END);
-            notifyItemChanged(getHeaderLayoutCount()+mData.size()+getFooterLayoutCount());
+            notifyItemChanged(getHeaderLayoutCount() + mData.size() + getFooterLayoutCount());
         }
     }
 
@@ -188,31 +191,32 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * Refresh complete
      */
     public void loadMoreComplete() {
-        if(getLoadMoreViewCount()==0){
+        if (getLoadMoreViewCount() == 0) {
             return;
         }
-        mLoading=false;
+        mLoading = false;
         mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_DEFAULT);
-        notifyItemChanged(getHeaderLayoutCount()+mData.size()+getFooterLayoutCount());
+        notifyItemChanged(getHeaderLayoutCount() + mData.size() + getFooterLayoutCount());
     }
 
     /**
      * Refresh failed
      */
-    public void loadMoreFail(){
-        if(getLoadMoreViewCount()==0){
+    public void loadMoreFail() {
+        if (getLoadMoreViewCount() == 0) {
             return;
         }
-        mLoading=false;
+        mLoading = false;
         mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_FAIL);
-        notifyItemChanged(getHeaderLayoutCount()+mData.size()+getFooterLayoutCount());
+        notifyItemChanged(getHeaderLayoutCount() + mData.size() + getFooterLayoutCount());
     }
 
     /**
      * Set the enabled state of load more.
+     *
      * @param enable True if load more is enabled, false otherwise.
      */
-    public void setEnableLoadMore(boolean enable){
+    public void setEnableLoadMore(boolean enable) {
         int oldLoadMoreCount = getLoadMoreViewCount();
         mLoadMoreEnable = enable;
         int newLoadMoreCount = getLoadMoreViewCount();
@@ -231,6 +235,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     /**
      * Returns the enabled status for load more.
+     *
      * @return True if load more is enabled, false otherwise.
      */
     public boolean isLoadMoreEnable() {
@@ -297,8 +302,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         this.mData = data == null ? new ArrayList<T>() : data;
         if (mRequestLoadMoreListener != null) {
             mNextLoadEnable = true;
-            mLoadMoreEnable =true;
-            mLoading=false;
+            mLoadMoreEnable = true;
+            mLoading = false;
             mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_DEFAULT);
         }
         mLastPosition = -1;
@@ -414,32 +419,34 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         if (mEmptyLayout == null || mEmptyLayout.getChildCount() == 0) {
             return 0;
         }
-        if(!mIsUseEmpty){
+        if (!mIsUseEmpty) {
             return 0;
         }
-        if(mData.size()!=0){
+        if (mData.size() != 0) {
             return 0;
         }
         return 1;
     }
 
-    @Override public int getItemCount() {
+    @Override
+    public int getItemCount() {
         int count;
-        if(getEmptyViewCount()==1){
-            count=1;
-            if(mHeadAndEmptyEnable&&getHeaderLayoutCount()!=0){
+        if (getEmptyViewCount() == 1) {
+            count = 1;
+            if (mHeadAndEmptyEnable && getHeaderLayoutCount() != 0) {
                 count++;
             }
-            if(mFootAndEmptyEnable&&getFooterLayoutCount()!=0){
+            if (mFootAndEmptyEnable && getFooterLayoutCount() != 0) {
                 count++;
             }
-        }else {
-            count=getHeaderLayoutCount()+mData.size()+getFooterLayoutCount()+getLoadMoreViewCount();
+        } else {
+            count = getHeaderLayoutCount() + mData.size() + getFooterLayoutCount() + getLoadMoreViewCount();
         }
         return count;
     }
 
-    @Override public int getItemViewType(int position) {
+    @Override
+    public int getItemViewType(int position) {
         if (getEmptyViewCount() == 1) {
             boolean header = mHeadAndEmptyEnable && getHeaderLayoutCount() != 0;
             switch (position) {
@@ -513,13 +520,14 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
 
     private K getLoadingView(ViewGroup parent) {
-        View view = getItemView(mLoadMoreView.getLayoutId(),parent);
-        K holder= createBaseViewHolder(view);
+        View view = getItemView(mLoadMoreView.getLayoutId(), parent);
+        K holder = createBaseViewHolder(view);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                if(mLoadMoreView.getLoadMoreStatus()== LoadMoreView.STATUS_FAIL){
+            @Override
+            public void onClick(View v) {
+                if (mLoadMoreView.getLoadMoreStatus() == LoadMoreView.STATUS_FAIL) {
                     mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_DEFAULT);
-                    notifyItemChanged(getHeaderLayoutCount()+mData.size()+getFooterLayoutCount());
+                    notifyItemChanged(getHeaderLayoutCount() + mData.size() + getFooterLayoutCount());
                 }
             }
         });
@@ -696,7 +704,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         }
         index = index >= mHeaderLayout.getChildCount() ? -1 : index;
         mHeaderLayout.addView(header, index);
-        if(mHeaderLayout.getChildCount() == 1){
+        if (mHeaderLayout.getChildCount() == 1) {
             int position = getHeaderViewPosition();
             if (position != -1) {
                 notifyItemInserted(position);
@@ -710,7 +718,11 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param footer
      */
     public void addFooterView(View footer) {
-        addFooterView(footer, -1);
+        addFooterView(footer, -1, LinearLayout.VERTICAL);
+    }
+
+    public void addFooterView(View footer, int index) {
+        addFooterView(footer, index, LinearLayout.VERTICAL);
     }
 
     /**
@@ -723,11 +735,16 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *               When index = -1 or index >= child count in mFooterLayout,
      *               the effect of this method is the same as that of {@link #addFooterView(View)}.
      */
-    public void addFooterView(View footer, int index) {
+    public void addFooterView(View footer, int index, int orientation) {
         if (mFooterLayout == null) {
             mFooterLayout = new LinearLayout(footer.getContext());
-            mFooterLayout.setOrientation(LinearLayout.VERTICAL);
-            mFooterLayout.setLayoutParams(new LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+            if (orientation == LinearLayout.VERTICAL) {
+                mFooterLayout.setOrientation(LinearLayout.VERTICAL);
+                mFooterLayout.setLayoutParams(new LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+            } else {
+                mFooterLayout.setOrientation(LinearLayout.HORIZONTAL);
+                mFooterLayout.setLayoutParams(new LayoutParams(WRAP_CONTENT, MATCH_PARENT));
+            }
         }
         index = index >= mFooterLayout.getChildCount() ? -1 : index;
         mFooterLayout.addView(footer, index);
@@ -746,7 +763,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param header
      */
     public void removeHeaderView(View header) {
-        if (getHeaderLayoutCount()==0) return;
+        if (getHeaderLayoutCount() == 0) return;
 
         mHeaderLayout.removeView(header);
         if (mHeaderLayout.getChildCount() == 0) {
@@ -764,10 +781,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param footer
      */
     public void removeFooterView(View footer) {
-        if (getFooterLayoutCount()==0) return;
+        if (getFooterLayoutCount() == 0) return;
 
         mFooterLayout.removeView(footer);
-        if (mFooterLayout.getChildCount()==0) {
+        if (mFooterLayout.getChildCount() == 0) {
             int position = getFooterViewPosition();
             if (position != -1) {
                 notifyItemRemoved(position);
@@ -779,7 +796,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * remove all header view from mHeaderLayout and set null to mHeaderLayout
      */
     public void removeAllHeaderView() {
-        if (getHeaderLayoutCount()==0) return;
+        if (getHeaderLayoutCount() == 0) return;
 
         mHeaderLayout.removeAllViews();
         int position = getHeaderViewPosition();
@@ -792,7 +809,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * remove all footer view from mFooterLayout and set null to mFooterLayout
      */
     public void removeAllFooterView() {
-        if (getFooterLayoutCount()==0) return;
+        if (getFooterLayoutCount() == 0) return;
 
         mFooterLayout.removeAllViews();
         int position = getFooterViewPosition();
@@ -858,6 +875,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     /**
      * Call before {@link RecyclerView#setAdapter(RecyclerView.Adapter)}
+     *
      * @param isHeadAndEmpty false will not show headView if the data is empty true will show emptyView and headView
      */
     public void setHeaderAndEmpty(boolean isHeadAndEmpty) {
@@ -867,6 +885,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * set emptyView show if adapter is empty and want to show headview and footview
      * Call before {@link RecyclerView#setAdapter(RecyclerView.Adapter)}
+     *
      * @param isHeadAndEmpty
      * @param isFootAndEmpty
      */
@@ -896,6 +915,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     private int mAutoLoadMoreSize = 1;
+
     public void setAutoLoadMoreSize(int autoLoadMoreSize) {
         if (autoLoadMoreSize > 1) {
             mAutoLoadMoreSize = autoLoadMoreSize;
@@ -903,13 +923,13 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     private void autoLoadMore(int position) {
-        if (getLoadMoreViewCount()==0) {
+        if (getLoadMoreViewCount() == 0) {
             return;
         }
         if (position < getItemCount() - mAutoLoadMoreSize) {
             return;
         }
-        if(mLoadMoreView.getLoadMoreStatus()!= LoadMoreView.STATUS_DEFAULT){
+        if (mLoadMoreView.getLoadMoreStatus() != LoadMoreView.STATUS_DEFAULT) {
             return;
         }
         mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_LOADING);
