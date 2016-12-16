@@ -54,7 +54,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends RecyclerView.Adapter<K> {
+public abstract class BaseQuickAdapter<T, BVH extends BaseViewHolder> extends RecyclerView.Adapter<BVH> {
 
     //load more
     private boolean mNextLoadEnable = false;
@@ -486,8 +486,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     @Override
-    public K onCreateViewHolder(ViewGroup parent, int viewType) {
-        K baseViewHolder = null;
+    public BVH onCreateViewHolder(ViewGroup parent, int viewType) {
+        BVH baseViewHolder = null;
         this.mContext = parent.getContext();
         this.mLayoutInflater = LayoutInflater.from(mContext);
         switch (viewType) {
@@ -511,9 +511,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
 
-    private K getLoadingView(ViewGroup parent) {
+    private BVH getLoadingView(ViewGroup parent) {
         View view = getItemView(mLoadMoreView.getLayoutId(),parent);
-        K holder= createBaseViewHolder(view);
+        BVH holder= createBaseViewHolder(view);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 if(mLoadMoreView.getLoadMoreStatus()== LoadMoreView.STATUS_FAIL){
@@ -533,7 +533,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param holder
      */
     @Override
-    public void onViewAttachedToWindow(K holder) {
+    public void onViewAttachedToWindow(BVH holder) {
         super.onViewAttachedToWindow(holder);
         int type = holder.getItemViewType();
         if (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW) {
@@ -599,7 +599,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @see #getDefItemViewType(int)
      */
     @Override
-    public void onBindViewHolder(K holder, int positions) {
+    public void onBindViewHolder(BVH holder, int positions) {
         int viewType = holder.getItemViewType();
 
         switch (viewType) {
@@ -621,12 +621,13 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         }
     }
 
-    protected K onCreateDefViewHolder(ViewGroup parent, int viewType) {
+    protected BVH onCreateDefViewHolder(ViewGroup parent, int viewType) {
         return createBaseViewHolder(parent, mLayoutResId);
     }
 
-    protected K createBaseViewHolder(ViewGroup parent, int layoutResId) {
-        return createBaseViewHolder(getItemView(layoutResId, parent));
+    protected BVH createBaseViewHolder(ViewGroup parent, int layoutResId) {
+        View itemView = getItemView(layoutResId, parent);
+        return createBaseViewHolder(itemView);
     }
 
     /**
@@ -636,8 +637,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param view view
      * @return new ViewHolder
      */
-    protected K createBaseViewHolder(View view) {
-        return (K) new BaseViewHolder(view);
+    protected BVH createBaseViewHolder(View view) {
+        return (BVH) new BaseViewHolder(view);
     }
 
     /**
@@ -1031,7 +1032,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param helper A fully initialized helper.
      * @param item   The item that needs to be displayed.
      */
-    protected abstract void convert(K helper, T item);
+    protected abstract void convert(BVH helper, T item);
 
     /**
      * Get the row id associated with the specified position in the list.
