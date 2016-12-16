@@ -8,6 +8,7 @@ import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -186,6 +187,9 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
                 for (Iterator it = childClickViewIds.iterator(); it.hasNext(); ) {
                     View childView = pressedView.findViewById((Integer) it.next());
                     if (inRangeOfView(childView, e) && childView.isEnabled()) {
+                        if (childView instanceof ViewGroup) {
+                            childView = getViewClicked((ViewGroup) childView, e);
+                        }
                         setPressViewHotSpot(e, childView);
                         childView.setPressed(true);
                         int position = vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount();
@@ -216,6 +220,28 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
             }
             resetPressedView(pressedView);
             return true;
+        }
+
+        private View getViewClicked(ViewGroup childViewGroup, MotionEvent e) {
+            View viewClicked = null;
+            for (int i = 0; i < childViewGroup.getChildCount(); i++) {
+                View child = childViewGroup.getChildAt(i);
+                if (inRangeOfView(child, e) && child.isEnabled()) {
+                    if (child instanceof ViewGroup) {
+                        if (((ViewGroup) child).getChildCount() == 0 && childClickViewIds.contains(child.getId())) {
+                            viewClicked = child;
+                        } else {
+                            viewClicked = getViewClicked((ViewGroup) child, e);
+                        }
+                    } else if (childClickViewIds.contains(child.getId())) {
+                        viewClicked = child;
+                    }
+                }
+            }
+            if (viewClicked == null && childClickViewIds.contains(childViewGroup.getId())) {
+                viewClicked = childViewGroup;
+            }
+            return viewClicked;
         }
 
         private void resetPressedView(final View pressedView) {
