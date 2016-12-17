@@ -85,21 +85,29 @@ public class DataServer {
 
     public static List<MultipleItem> getMultipleItemData() {
         List<MultipleItem> list = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            MultipleItem multipleItem = new MultipleItem();
-            String str = null;
-            multipleItem.setItemType(MultipleItem.IMG);
-            if (i % 2 == 0) {
-                str = CYM_CHAD;
-                multipleItem.setItemType(MultipleItem.TEXT);
-            } else if (i % 3 == 0) {
-                multipleItem.setItemType(MultipleItem.IMGS);
-            }
-            multipleItem.setContent(str);
-            list.add(multipleItem);
+        for (int i = 0; i <= 4; i++) {
+            list.add(new MultipleItem(MultipleItem.TEXT, MultipleItem.TEXT_SPAN_SIZE, CYM_CHAD));
+            list.add(new MultipleItem(MultipleItem.IMG, MultipleItem.BIG_IMG_SPAN_SIZE));
+            list.add(new MultipleItem(MultipleItem.IMG, MultipleItem.IMG_SPAN_SIZE));
+            list.add(new MultipleItem(MultipleItem.IMG, MultipleItem.IMG_SPAN_SIZE));
+            list.add(new MultipleItem(MultipleItem.IMG, MultipleItem.IMG_SPAN_SIZE));
         }
+
         return list;
     }
+
+//    public static List<MultipleItem> getMultipleChildView() {
+//        List<MultipleItem> list = new ArrayList<>();
+//        for (int i = 0; i <= 4; i++) {
+//            list.add(new ClickEntity(ClickEntity.CLICK_ITEM_VIEW, MultipleItem.TEXT_SPAN_SIZE, CYM_CHAD));
+//            list.add(new MultipleItem(MultipleItem.IMG, MultipleItem.BIG_IMG_SPAN_SIZE));
+//            list.add(new MultipleItem(MultipleItem.IMG, MultipleItem.IMG_SPAN_SIZE));
+//            list.add(new MultipleItem(MultipleItem.IMG, MultipleItem.IMG_SPAN_SIZE));
+//            list.add(new MultipleItem(MultipleItem.IMG, MultipleItem.IMG_SPAN_SIZE));
+//        }
+//
+//        return list;
+//    }
 
 
 }

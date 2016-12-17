@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              style="@style/bg"
+              android:gravity="center"
+              android:orientation="vertical"
+    >
+    <ImageView
+        android:layout_width="@dimen/def_height"
+        android:layout_height="@dimen/def_height"
+        android:src="@mipmap/smalllogo_gray"/>
+    <TextView
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/empty_network_error"
+        android:textColor="@color/txt_color"/>
+</LinearLayout>

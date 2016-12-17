@@ -2,4 +2,10 @@
     <string name="app_name">BaseRecyclerViewAdapterHelper</string>
     <string name="title_activity_header_and_footer_use">HeaderAndFooterUseActivity</string>
     <string name="no_data">There is no data</string>
+    <string name="error">Network error</string>
+    <string name="expanded">expanded</string>
+    <string name="collapsed">collapsed</string>
+    <string name="network_err">Simulation network error</string>
+    <string name="empty_network_error">Network error, Click Retry</string>
+    <string name="empty_no_data">There is no data, Click Retry</string>
 </resources>

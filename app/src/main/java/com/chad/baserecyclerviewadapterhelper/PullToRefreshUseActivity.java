@@ -13,7 +13,9 @@ import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickAdapter;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
+import com.chad.baserecyclerviewadapterhelper.loadmore.CustomLoadMoreView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 
 /**
@@ -24,8 +26,6 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
     private QuickAdapter mQuickAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private View notLoadingView;
-
     private static final int TOTAL_COUNTER = 18;
 
     private static final int PAGE_SIZE = 6;
@@ -33,6 +33,9 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
     private int delayMillis = 1000;
 
     private int mCurrentCounter = 0;
+
+    private boolean isErr;
+    private boolean mLoadMoreEndGone = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,19 +47,18 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         initAdapter();
         addHeadView();
-        mRecyclerView.setAdapter(mQuickAdapter);
     }
 
     private void addHeadView() {
         View headView = getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false);
-        ((TextView)headView.findViewById(R.id.tv)).setText("click use custom loading view");
-        final View customLoading = getLayoutInflater().inflate(R.layout.custom_loading, (ViewGroup) mRecyclerView.getParent(), false);
+        ((TextView) headView.findViewById(R.id.tv)).setText("click use custom load view");
         headView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mQuickAdapter.setLoadingView(customLoading);
+                mLoadMoreEndGone = true;
+                mQuickAdapter.setLoadMoreView(new CustomLoadMoreView());
                 mRecyclerView.setAdapter(mQuickAdapter);
-                Toast.makeText(PullToRefreshUseActivity.this,"use ok!",Toast.LENGTH_LONG).show();
+                Toast.makeText(PullToRefreshUseActivity.this, "use ok!", Toast.LENGTH_LONG).show();
             }
         });
         mQuickAdapter.addHeaderView(headView);
@@ -64,55 +66,61 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
 
     @Override
     public void onLoadMoreRequested() {
-        mRecyclerView.post(new Runnable() {
+        mSwipeRefreshLayout.setEnabled(false);
+        mRecyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (mCurrentCounter >= TOTAL_COUNTER) {
-                    mQuickAdapter.notifyDataChangedAfterLoadMore(false);
-                    if (notLoadingView == null) {
-                        notLoadingView = getLayoutInflater().inflate(R.layout.not_loading, (ViewGroup) mRecyclerView.getParent(), false);
-                    }
-                    mQuickAdapter.addFooterView(notLoadingView);
+//                    mQuickAdapter.loadMoreEnd();//default visible
+                    mQuickAdapter.loadMoreEnd(mLoadMoreEndGone);//true is gone,false is visible
                 } else {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mQuickAdapter.notifyDataChangedAfterLoadMore(DataServer.getSampleData(PAGE_SIZE), true);
-                            mCurrentCounter = mQuickAdapter.getData().size();
-                        }
-                    }, delayMillis);
+                    if (isErr) {
+                        mQuickAdapter.addData(DataServer.getSampleData(PAGE_SIZE));
+                        mCurrentCounter = mQuickAdapter.getData().size();
+                        mQuickAdapter.loadMoreComplete();
+                    } else {
+                        isErr = true;
+                        Toast.makeText(PullToRefreshUseActivity.this, R.string.network_err, Toast.LENGTH_LONG).show();
+                        mQuickAdapter.loadMoreFail();
+
+                    }
                 }
+                mSwipeRefreshLayout.setEnabled(true);
             }
 
-        });
+        },delayMillis);
     }
 
     @Override
     public void onRefresh() {
+        mQuickAdapter.setEnableLoadMore(false);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 mQuickAdapter.setNewData(DataServer.getSampleData(PAGE_SIZE));
-                mQuickAdapter.openLoadMore(PAGE_SIZE, true);
-                mQuickAdapter.removeAllFooterView();
+                isErr = false;
                 mCurrentCounter = PAGE_SIZE;
                 mSwipeRefreshLayout.setRefreshing(false);
+                mQuickAdapter.setEnableLoadMore(true);
             }
         }, delayMillis);
     }
 
     private void initAdapter() {
         mQuickAdapter = new QuickAdapter(PAGE_SIZE);
-        mQuickAdapter.openLoadAnimation();
+        mQuickAdapter.setOnLoadMoreListener(this);
+        mQuickAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
+//        mQuickAdapter.setAutoLoadMoreSize(3);
         mRecyclerView.setAdapter(mQuickAdapter);
         mCurrentCounter = mQuickAdapter.getData().size();
-        mQuickAdapter.setOnLoadMoreListener(this);
-        mQuickAdapter.openLoadMore(PAGE_SIZE, true);//or call mQuickAdapter.setPageSize(PAGE_SIZE);  mQuickAdapter.openLoadMore(true);
-        mQuickAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+
+        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onSimpleItemClick(final BaseQuickAdapter adapter, final View view, final int position) {
                 Toast.makeText(PullToRefreshUseActivity.this, Integer.toString(position), Toast.LENGTH_LONG).show();
             }
         });
     }
+
+
 }

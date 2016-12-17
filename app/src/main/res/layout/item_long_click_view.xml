@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="80dip"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:background="@drawable/touch_bg"
+>
+
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="160dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:textColor="@color/txt_color"
+        android:background="@drawable/touch_bg"
+        android:text="长按我"/>
+
+</LinearLayout>
