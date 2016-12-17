@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
+    android:id="@+id/activity_item_click"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".EmptyViewUseActivity">
-    <Button
-        android:id="@+id/btn_reset"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Reset"/>
+    tools:context="com.chad.baserecyclerviewadapterhelper.ItemClickActivity">
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fadingEdge="none"/>
-
-</LinearLayout>
+        android:id="@+id/list"/>
+</RelativeLayout>

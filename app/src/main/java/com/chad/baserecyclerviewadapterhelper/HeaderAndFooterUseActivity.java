@@ -95,7 +95,7 @@ public class HeaderAndFooterUseActivity extends Activity {
         mRecyclerView.setAdapter(mQuickAdapter);
         mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
-            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Toast.makeText(HeaderAndFooterUseActivity.this, "" + Integer.toString(position), Toast.LENGTH_LONG).show();
             }
         });
