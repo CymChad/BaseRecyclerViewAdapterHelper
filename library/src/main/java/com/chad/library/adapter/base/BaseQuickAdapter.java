@@ -47,7 +47,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.attr.orientation;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
@@ -58,44 +57,14 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends RecyclerView.Adapter<K> {
 
     //load more
+    private boolean mOpenLoadMore = false;
     private boolean mNextLoadEnable = false;
     private boolean mLoadMoreEnable = false;
-    private RequestLoadMoreListener mRequestLoadMoreListener;
     private boolean mLoading = false;
     private LoadMoreView mLoadMoreView = new SimpleLoadMoreView();
+    private RequestLoadMoreListener mRequestLoadMoreListener;
 
-    private boolean mFirstOnlyEnable = true;
-    private boolean mOpenAnimationEnable = false;
-    private Interpolator mInterpolator = new LinearInterpolator();
-    private int mDuration = 300;
-    private int mLastPosition = -1;
-    //@AnimationType
-    private BaseAnimation mCustomAnimation;
-    private BaseAnimation mSelectAnimation = new AlphaInAnimation();
-    //header footer
-    private LinearLayout mHeaderLayout;
-    private LinearLayout mFooterLayout;
-    //empty
-    private FrameLayout mEmptyLayout;
-    private boolean mIsUseEmpty = true;
-    private boolean mHeadAndEmptyEnable;
-    private boolean mFootAndEmptyEnable;
-
-    protected static final String TAG = BaseQuickAdapter.class.getSimpleName();
-    protected Context mContext;
-    protected int mLayoutResId;
-    protected LayoutInflater mLayoutInflater;
-    protected List<T> mData;
-    public static final int HEADER_VIEW = 0x00000111;
-    public static final int LOADING_VIEW = 0x00000222;
-    public static final int FOOTER_VIEW = 0x00000333;
-    public static final int EMPTY_VIEW = 0x00000555;
-
-    @IntDef({ALPHAIN, SCALEIN, SLIDEIN_BOTTOM, SLIDEIN_LEFT, SLIDEIN_RIGHT})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface AnimationType {
-    }
-
+    //Animation
     /**
      * Use with {@link #openLoadAnimation}
      */
@@ -116,6 +85,39 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * Use with {@link #openLoadAnimation}
      */
     public static final int SLIDEIN_RIGHT = 0x00000005;
+
+    @IntDef({ALPHAIN, SCALEIN, SLIDEIN_BOTTOM, SLIDEIN_LEFT, SLIDEIN_RIGHT})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface AnimationType {
+    }
+
+    private boolean mFirstOnlyEnable = true;
+    private boolean mOpenAnimationEnable = false;
+    private Interpolator mInterpolator = new LinearInterpolator();
+    private int mDuration = 300;
+    private int mLastPosition = -1;
+
+    private BaseAnimation mCustomAnimation;
+    private BaseAnimation mSelectAnimation = new AlphaInAnimation();
+    //header footer
+    private LinearLayout mHeaderLayout;
+    private LinearLayout mFooterLayout;
+    //empty
+    private boolean mOpenEmpty = false;
+    private FrameLayout mEmptyLayout;
+    private boolean mIsUseEmpty = true;
+    private boolean mHeadAndEmptyEnable;
+    private boolean mFootAndEmptyEnable;
+
+    protected static final String TAG = BaseQuickAdapter.class.getSimpleName();
+    protected Context mContext;
+    protected int mLayoutResId;
+    protected LayoutInflater mLayoutInflater;
+    protected List<T> mData;
+    public static final int HEADER_VIEW = 0x00000111;
+    public static final int LOADING_VIEW = 0x00000222;
+    public static final int FOOTER_VIEW = 0x00000333;
+    public static final int EMPTY_VIEW = 0x00000555;
 
     public void setOnLoadMoreListener(RequestLoadMoreListener requestLoadMoreListener) {
         this.mRequestLoadMoreListener = requestLoadMoreListener;
@@ -145,7 +147,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         if (!mNextLoadEnable && mLoadMoreView.isLoadEndMoreGone()) {
             return 0;
         }
-        if (mData.size() == 0) {
+        if (!mOpenLoadMore) {
             return 0;
         }
         return 1;
@@ -264,10 +266,21 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         if (layoutResId != 0) {
             this.mLayoutResId = layoutResId;
         }
+        openEmptyAndLoadMore();
     }
 
     public BaseQuickAdapter(List<T> data) {
         this(0, data);
+    }
+
+    private void openEmptyAndLoadMore() {
+        if (mData == null || mData.size() == 0) {
+            mOpenEmpty = true;
+            mOpenLoadMore = false;
+        } else {
+            mOpenEmpty = false;
+            mOpenLoadMore = true;
+        }
     }
 
     /**
@@ -300,6 +313,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     public void setNewData(List<T> data) {
         this.mData = data == null ? new ArrayList<T>() : data;
+        openEmptyAndLoadMore();
         if (mRequestLoadMoreListener != null) {
             mNextLoadEnable = true;
             mLoadMoreEnable = true;
@@ -422,7 +436,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         if (!mIsUseEmpty) {
             return 0;
         }
-        if (mData.size() != 0) {
+        if (!mOpenEmpty) {
             return 0;
         }
         return 1;
