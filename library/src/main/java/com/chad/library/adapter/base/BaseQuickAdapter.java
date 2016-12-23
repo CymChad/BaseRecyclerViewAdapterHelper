@@ -331,6 +331,14 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     /**
+     * change data
+     */
+    public void setData(int index, T data) {
+        mData.set(index, data);
+        notifyItemChanged(index + getHeaderLayoutCount());
+    }
+
+    /**
      * add new data in to certain location
      *
      * @param position
