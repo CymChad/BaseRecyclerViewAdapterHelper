@@ -57,7 +57,6 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends RecyclerView.Adapter<K> {
 
     //load more
-    private boolean mOpenLoadMore = false;
     private boolean mNextLoadEnable = false;
     private boolean mLoadMoreEnable = false;
     private boolean mLoading = false;
@@ -103,7 +102,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     private LinearLayout mHeaderLayout;
     private LinearLayout mFooterLayout;
     //empty
-    private boolean mOpenEmpty = false;
     private FrameLayout mEmptyLayout;
     private boolean mIsUseEmpty = true;
     private boolean mHeadAndEmptyEnable;
@@ -147,7 +145,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         if (!mNextLoadEnable && mLoadMoreView.isLoadEndMoreGone()) {
             return 0;
         }
-        if (!mOpenLoadMore) {
+        if (mData.size() == 0) {
             return 0;
         }
         return 1;
@@ -266,45 +264,11 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         if (layoutResId != 0) {
             this.mLayoutResId = layoutResId;
         }
-        openEmptyAndLoadMore();
     }
 
     public BaseQuickAdapter(List<T> data) {
         this(0, data);
     }
-
-    private void openEmptyAndLoadMore() {
-        if (mData == null || mData.size() == 0) {
-            mOpenEmpty = true;
-            mOpenLoadMore = false;
-        } else {
-            mOpenEmpty = false;
-            mOpenLoadMore = true;
-        }
-    }
-
-    /**
-     * remove the item associated with the specified position of adapter
-     *
-     * @param position
-     */
-    public void remove(int position) {
-        mData.remove(position);
-        notifyItemRemoved(position + getHeaderLayoutCount());
-
-    }
-
-    /**
-     * insert  a item associated with the specified position of adapter
-     *
-     * @param position
-     * @param item
-     */
-    public void add(int position, T item) {
-        mData.add(position, item);
-        notifyItemInserted(position + getHeaderLayoutCount());
-    }
-
 
     /**
      * setting up a new instance to data;
@@ -313,7 +277,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     public void setNewData(List<T> data) {
         this.mData = data == null ? new ArrayList<T>() : data;
-        openEmptyAndLoadMore();
         if (mRequestLoadMoreListener != null) {
             mNextLoadEnable = true;
             mLoadMoreEnable = true;
@@ -324,6 +287,18 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         notifyDataSetChanged();
     }
 
+
+    /**
+     * insert  a item associated with the specified position of adapter
+     * @deprecated use {@link #addData(int, Object)} instead
+     * @param position
+     * @param item
+     */
+    @Deprecated
+    public void add(int position, T item) {
+        addData(position,item);
+    }
+
     /**
      * add one new data in to certain location
      *
@@ -332,6 +307,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     public void addData(int position, T data) {
         mData.add(position, data);
         notifyItemInserted(position + getHeaderLayoutCount());
+        compatibilityDataSizeChanged(1);
     }
 
     /**
@@ -340,6 +316,18 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     public void addData(T data) {
         mData.add(data);
         notifyItemInserted(mData.size() + getHeaderLayoutCount());
+        compatibilityDataSizeChanged(1);
+    }
+
+    /**
+     * remove the item associated with the specified position of adapter
+     *
+     * @param position
+     */
+    public void remove(int position) {
+        mData.remove(position);
+        notifyItemRemoved(position + getHeaderLayoutCount());
+        compatibilityDataSizeChanged(0);
     }
 
     /**
@@ -350,6 +338,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     public void addData(int position, List<T> data) {
         mData.addAll(position, data);
         notifyItemRangeInserted(position + getHeaderLayoutCount(), data.size());
+        compatibilityDataSizeChanged(data.size());
     }
 
     /**
@@ -360,6 +349,19 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     public void addData(List<T> newData) {
         this.mData.addAll(newData);
         notifyItemRangeInserted(mData.size() - newData.size() + getHeaderLayoutCount(), newData.size());
+        compatibilityDataSizeChanged(newData.size());
+    }
+
+    /**
+     * compatible getLoadMoreViewCount and getEmptyViewCount may change
+     *
+     * @param size Need compatible data size
+     */
+    private void compatibilityDataSizeChanged(int size) {
+        final int dataSize = mData == null ? 0 : mData.size();
+        if (dataSize == size) {
+            notifyDataSetChanged();
+        }
     }
 
     /**
@@ -436,7 +438,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         if (!mIsUseEmpty) {
             return 0;
         }
-        if (!mOpenEmpty) {
+        if (mData.size() != 0) {
             return 0;
         }
         return 1;
