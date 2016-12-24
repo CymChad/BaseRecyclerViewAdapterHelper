@@ -16,6 +16,8 @@ import com.jaredrummler.materialspinner.MaterialSpinner;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+ *
+ * modify by AllenCoder
  */
 public class AnimationUseActivity extends Activity {
     private RecyclerView mRecyclerView;
