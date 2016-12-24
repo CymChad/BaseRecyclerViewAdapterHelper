@@ -3,8 +3,8 @@
 
     <!-- 红色背景 -->
     <item>
-        <color android:color="@color/navbar_color" />
+        <color android:color="@color/spinner_bg" />
     </item>
     <!-- 白色背景 -->
-    <item android:bottom="1px" android:drawable="@color/navbar_color" />
+    <item android:bottom="1px" android:drawable="@color/spinner_bg" />
 </layer-list >

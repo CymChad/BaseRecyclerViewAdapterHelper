@@ -28,7 +28,7 @@ public class MultipleItemUseActivity extends Activity {
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         final List<MultipleItem> data = DataServer.getMultipleItemData();
         final MultipleItemQuickAdapter multipleItemAdapter = new MultipleItemQuickAdapter(this, data);
-        final GridLayoutManager manager = new GridLayoutManager(this, 3);
+        final GridLayoutManager manager = new GridLayoutManager(this, 2);
         multipleItemAdapter.addHeaderView(getView());
         mRecyclerView.setLayoutManager(manager);
         multipleItemAdapter.setSpanSizeLookup(new BaseQuickAdapter.SpanSizeLookup() {

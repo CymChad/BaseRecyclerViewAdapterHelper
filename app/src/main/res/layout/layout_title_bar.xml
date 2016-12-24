@@ -4,93 +4,26 @@
     android:layout_width="match_parent"
     android:layout_height="48dp"
 
-    android:background="@drawable/actionbar_bottom_bg"
+    android:background="@color/spinner_bg"
     >
-    <!--修改 actionbar 的沉浸式状态栏-->
-    <!--android:background="@drawable/action_bar_bg"-->
+   <ImageView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_centerVertical="true"
+       android:paddingLeft="@dimen/dp_10"
+       android:id="@+id/img_back"
+       android:src="@mipmap/arrow_l"/>
 
     <TextView
-        android:id="@+id/btn_back"
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:drawableLeft="@mipmap/nav_back"
-        android:drawablePadding="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/img_back"
         android:gravity="center_vertical"
-        android:paddingLeft="@dimen/paddingScreenValue"
-        android:text="返回"
-        android:textColor="@color/blue_bg"
+        android:text="title"
+        android:textColor="@color/white_text_color"
         android:textSize="16sp"
-        android:visibility="invisible" />
-
-    <TextView
-        android:id="@+id/action_bar_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:singleLine="true"
-        android:textColor="@color/white"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/tv_set"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/action_bar_title"
-        android:paddingLeft="@dimen/paddingScreenValue"
-        android:text="账户设置"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-
-        android:textStyle="normal"
-        android:visibility="invisible" />
-
-    <TextView
-        android:id="@+id/list_reacord"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/action_bar_title"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:gravity="center_vertical"
-        android:paddingRight="@dimen/paddingScreenValue"
-        android:text="交易记录"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        android:textStyle="normal"
-        android:visibility="invisible" />
-    <TextView
-        android:id="@+id/tv_edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/action_bar_title"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:gravity="center_vertical"
-        android:paddingRight="@dimen/paddingScreenValue"
-        android:text="交易记录"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        android:textStyle="normal"
-        android:visibility="invisible" />
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:layout_toLeftOf="@+id/email"
-        android:layout_centerInParent="true"
-        android:id="@+id/img_set"
-        android:visibility="invisible"
-        android:src="@mipmap/me_set"/>
-    <ImageView
-        android:id="@+id/email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/action_bar_title"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/dimen_16_dip"
-        android:src="@mipmap/me_news"
-        android:gravity="center_vertical"
-        android:visibility="invisible"
         />
 
 </RelativeLayout>

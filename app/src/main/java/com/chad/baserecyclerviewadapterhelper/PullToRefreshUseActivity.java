@@ -1,6 +1,5 @@
 package com.chad.baserecyclerviewadapterhelper;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickAdapter;
+import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.loadmore.CustomLoadMoreView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -21,7 +21,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
+public class PullToRefreshUseActivity extends BaseActivity implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
     private RecyclerView mRecyclerView;
     private QuickAdapter mQuickAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -40,11 +40,14 @@ public class PullToRefreshUseActivity extends Activity implements BaseQuickAdapt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        setTitle("Pull TO Refresh Use");
+        setBackBtn();
         initAdapter();
         addHeadView();
     }
