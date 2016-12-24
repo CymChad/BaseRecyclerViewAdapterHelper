@@ -6,14 +6,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.chad.baserecyclerviewadapterhelper.adapter.QuickAdapter;
+import com.chad.baserecyclerviewadapterhelper.adapter.PullToRefreshAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
-import com.chad.baserecyclerviewadapterhelper.loadmore.CustomLoadMoreView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 
@@ -23,7 +20,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
  */
 public class PullToRefreshUseActivity extends BaseActivity implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
     private RecyclerView mRecyclerView;
-    private QuickAdapter mQuickAdapter;
+    private PullToRefreshAdapter pullToRefreshAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private static final int TOTAL_COUNTER = 18;
@@ -49,23 +46,23 @@ public class PullToRefreshUseActivity extends BaseActivity implements BaseQuickA
         setTitle("Pull TO Refresh Use");
         setBackBtn();
         initAdapter();
-        addHeadView();
+//        addHeadView();
     }
 
-    private void addHeadView() {
-        View headView = getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false);
-        ((TextView) headView.findViewById(R.id.tv)).setText("click use custom load view");
-        headView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mLoadMoreEndGone = true;
-                mQuickAdapter.setLoadMoreView(new CustomLoadMoreView());
-                mRecyclerView.setAdapter(mQuickAdapter);
-                Toast.makeText(PullToRefreshUseActivity.this, "use ok!", Toast.LENGTH_LONG).show();
-            }
-        });
-        mQuickAdapter.addHeaderView(headView);
-    }
+//    private void addHeadView() {
+//        View headView = getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false);
+//        ((TextView) headView.findViewById(R.id.tv)).setText("click use custom load view");
+//        headView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mLoadMoreEndGone = true;
+//                pullToRefreshAdapter.setLoadMoreView(new CustomLoadMoreView());
+//                mRecyclerView.setAdapter(pullToRefreshAdapter);
+//                Toast.makeText(PullToRefreshUseActivity.this, "use ok!", Toast.LENGTH_LONG).show();
+//            }
+//        });
+//        pullToRefreshAdapter.addHeaderView(headView);
+//    }
 
     @Override
     public void onLoadMoreRequested() {
@@ -74,17 +71,17 @@ public class PullToRefreshUseActivity extends BaseActivity implements BaseQuickA
             @Override
             public void run() {
                 if (mCurrentCounter >= TOTAL_COUNTER) {
-//                    mQuickAdapter.loadMoreEnd();//default visible
-                    mQuickAdapter.loadMoreEnd(mLoadMoreEndGone);//true is gone,false is visible
+//                    pullToRefreshAdapter.loadMoreEnd();//default visible
+                    pullToRefreshAdapter.loadMoreEnd(mLoadMoreEndGone);//true is gone,false is visible
                 } else {
                     if (isErr) {
-                        mQuickAdapter.addData(DataServer.getSampleData(PAGE_SIZE));
-                        mCurrentCounter = mQuickAdapter.getData().size();
-                        mQuickAdapter.loadMoreComplete();
+                        pullToRefreshAdapter.addData(DataServer.getSampleData(PAGE_SIZE));
+                        mCurrentCounter = pullToRefreshAdapter.getData().size();
+                        pullToRefreshAdapter.loadMoreComplete();
                     } else {
                         isErr = true;
                         Toast.makeText(PullToRefreshUseActivity.this, R.string.network_err, Toast.LENGTH_LONG).show();
-                        mQuickAdapter.loadMoreFail();
+                        pullToRefreshAdapter.loadMoreFail();
 
                     }
                 }
@@ -96,26 +93,26 @@ public class PullToRefreshUseActivity extends BaseActivity implements BaseQuickA
 
     @Override
     public void onRefresh() {
-        mQuickAdapter.setEnableLoadMore(false);
+        pullToRefreshAdapter.setEnableLoadMore(false);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mQuickAdapter.setNewData(DataServer.getSampleData(PAGE_SIZE));
+                pullToRefreshAdapter.setNewData(DataServer.getSampleData(PAGE_SIZE));
                 isErr = false;
                 mCurrentCounter = PAGE_SIZE;
                 mSwipeRefreshLayout.setRefreshing(false);
-                mQuickAdapter.setEnableLoadMore(true);
+                pullToRefreshAdapter.setEnableLoadMore(true);
             }
         }, delayMillis);
     }
 
     private void initAdapter() {
-        mQuickAdapter = new QuickAdapter(PAGE_SIZE);
-        mQuickAdapter.setOnLoadMoreListener(this);
-        mQuickAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
-//        mQuickAdapter.setAutoLoadMoreSize(3);
-        mRecyclerView.setAdapter(mQuickAdapter);
-        mCurrentCounter = mQuickAdapter.getData().size();
+        pullToRefreshAdapter = new PullToRefreshAdapter();
+        pullToRefreshAdapter.setOnLoadMoreListener(this);
+        pullToRefreshAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
+//        pullToRefreshAdapter.setAutoLoadMoreSize(3);
+        mRecyclerView.setAdapter(pullToRefreshAdapter);
+        mCurrentCounter = pullToRefreshAdapter.getData().size();
 
         mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override

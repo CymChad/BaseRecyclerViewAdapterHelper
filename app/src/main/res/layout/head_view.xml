@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:gravity="center"
-              android:background="@drawable/touch_bg"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
-<ImageView
-    android:id="@+id/iv"
-    android:layout_marginTop="5dp"
-    android:layout_width="@dimen/avatarSize"
-    android:layout_height="@dimen/avatarSize"
-    android:src="@mipmap/smalllogo_gray"/>
-    <TextView
-        android:id="@+id/tv"
-        android:textColor="@color/txt_color"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/header_bg"/>
+
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"/>
-</LinearLayout>
+        android:layout_gravity="right|bottom"
+        android:src="@mipmap/arrow_l"/>
+</RelativeLayout>

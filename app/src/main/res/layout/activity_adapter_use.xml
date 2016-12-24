@@ -16,7 +16,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
+            android:id="@+id/img_back"
             android:src="@mipmap/arrow_l"/>
 
         <com.jaredrummler.materialspinner.MaterialSpinner
@@ -42,27 +42,20 @@
                 android:layout_height="wrap_content"
                 android:text="IsFirstOnly"
                 android:textColor="@color/new_text_color"
-                android:textSize="20sp"/>
+                android:textSize="16sp"/>
 
             <com.kyleduo.switchbutton.SwitchButton
-                android:id="@+id/sb_use_delay"
+                android:id="@+id/switch_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 app:kswTextOff="false"
                 app:kswTextOn="true"
-                app:kswTintColor="#00dd66"/>
+                android:textColor="@drawable/custom_text_state_color"
+                app:kswThumbDrawable="@drawable/thumb_drawable"
+                app:kswThumbColor="#555771"
+                app:kswTintColor="#00ddB6"/>
 
-            <com.jaredrummler.materialspinner.MaterialSpinner
-                android:id="@+id/spinner_first_only"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:visibility="gone"
-                app:ms_background_color="@color/txt_color"
-                app:ms_hide_arrow="true"
-                app:ms_text_color="#00ddb6"
-                />
 
 
         </LinearLayout>

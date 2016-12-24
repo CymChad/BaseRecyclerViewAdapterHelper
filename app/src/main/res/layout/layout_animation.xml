@@ -11,22 +11,14 @@
     android:foreground="?android:attr/selectableItemBackground"
     card_view:cardBackgroundColor="@color/item_bg"
     card_view:cardCornerRadius="4dp"
-    card_view:cardElevation="2dp"
     card_view:cardUseCompatPadding="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:padding="10dp">
+        >
 
-        <ImageView
-            android:id="@+id/tweetRT"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tweetDate"
-            android:layout_toLeftOf="@+id/tweetDate"
-            android:src="@drawable/retweet"/>
 
         <ImageView
             android:id="@+id/img"
@@ -39,16 +31,19 @@
 
         <TextView
             android:id="@+id/tweetName"
+            android:paddingLeft="@dimen/dp_10"
             style="@style/tweetName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Chad"
+            android:layout_marginTop="@dimen/dp_10"
             android:layout_below="@+id/img"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"/>
 
         <TextView
             android:id="@+id/tweetText"
+            android:paddingLeft="@dimen/dp_10"
             style="@style/tweetText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -57,6 +52,8 @@
             android:layout_below="@+id/tweetName"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:paddingRight="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"/>
 
@@ -66,6 +63,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="04/06/13"
+            android:paddingRight="@dimen/dp_10"
+            android:layout_alignBaseline="@+id/tweetName"
             android:layout_alignBottom="@+id/tweetName"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"/>

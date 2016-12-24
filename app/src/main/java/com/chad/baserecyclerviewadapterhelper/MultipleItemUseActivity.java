@@ -17,6 +17,7 @@ import java.util.List;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+ * modify by AllenCoder
  */
 public class MultipleItemUseActivity extends BaseActivity {
     private RecyclerView mRecyclerView;
