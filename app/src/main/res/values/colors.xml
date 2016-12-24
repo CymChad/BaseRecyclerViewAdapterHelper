@@ -5,9 +5,11 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="translate">#00000000</color>
-    <color name="color_light_blue">#14acae</color>
+    <color name="color_light_blue">#00DDB6</color>
     <color name="txt_color">#1d1e1e</color>
     <color name="mian_bg">#c3c9ce</color>
+    <color name="item_bg">#FFFFFF</color>
+    <color name="bg">#F0F0F0</color>
     <color name="item_bg">#e0e4e7</color>
     <color name="spinner_bg">#333244</color>
     <color name="new_text_color">#555771</color>

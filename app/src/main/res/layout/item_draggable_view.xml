@@ -1,43 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+
+
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:layout_gravity="center"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
+    android:layout_height="100dp"
+    android:orientation="horizontal"
     android:background="@android:color/white"
-    android:foreground="?android:attr/selectableItemBackground"
-    card_view:cardBackgroundColor="@color/item_bg"
-    card_view:cardCornerRadius="4dp"
-    card_view:cardElevation="2dp"
-    card_view:cardUseCompatPadding="true">
+    android:layout_marginBottom="2dp"
+    >
 
-    <RelativeLayout
+    <ImageView
+        android:id="@+id/iv_head"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="3"
+        android:paddingLeft="10dp"
+        android:src="@mipmap/head_img"
+        />
 
-        <TextView
-            android:id="@+id/tv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_toLeftOf="@id/iv"
-            android:gravity="center_vertical"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="20dp"
-            android:text="item 1"
-            android:textColor="@android:color/black"
-            />
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_toLeftOf="@id/iv"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:text="item 1"
+        android:textColor="@android:color/black"
+        />
 
-        <ImageView
-            android:id="@+id/iv"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:scaleType="center"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/ic_drag_handle"/>
-    </RelativeLayout>
+    <ImageView
+        android:id="@+id/iv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_weight="3"
+        android:scaleType="center"
+        android:src="@mipmap/drag_icon"/>
 
-</android.support.v7.widget.CardView>
+
+</LinearLayout>

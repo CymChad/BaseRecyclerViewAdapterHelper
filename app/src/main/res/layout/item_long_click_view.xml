@@ -3,19 +3,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="80dip"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
+    android:layout_height="120dip"
+    android:layout_margin="5dp"
     android:layout_gravity="center"
-    android:gravity="center"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
     android:background="@drawable/touch_bg"
->
-
+    >
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/click_head_img_2"
+        android:scaleType="center"
+        />
     <Button
         android:id="@+id/btn"
         android:layout_width="160dp"
         android:layout_height="50dp"
         android:gravity="center"
+        android:layout_marginLeft="50dp"
         android:textColor="@color/txt_color"
         android:background="@drawable/touch_bg"
         android:text="长按我"/>
