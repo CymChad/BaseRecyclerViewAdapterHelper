@@ -1,6 +1,5 @@
 package com.chad.baserecyclerviewadapterhelper;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.ItemClickAdapter;
+import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.entity.ClickEntity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
@@ -16,7 +16,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemClickActivity extends Activity {
+public class ItemClickActivity extends BaseActivity {
 
     private RecyclerView mRecyclerView;
     private ItemClickAdapter itemClickAdapter;
@@ -25,6 +25,8 @@ public class ItemClickActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setBackBtn();
+        setTitle("ItemClickActivity Activity");
         setContentView(R.layout.activity_item_click);
         mRecyclerView = (RecyclerView) findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));

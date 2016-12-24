@@ -1,6 +1,5 @@
 package com.chad.baserecyclerviewadapterhelper;
 
-import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -12,6 +11,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.ItemDragAdapter;
+import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class ItemDragAndSwipeUseActivity extends Activity {
+public class ItemDragAndSwipeUseActivity extends BaseActivity {
     private static final String TAG = ItemDragAndSwipeUseActivity.class.getSimpleName();
     private RecyclerView mRecyclerView;
     private List<String> mData;
@@ -35,7 +35,8 @@ public class ItemDragAndSwipeUseActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_touch_use);
-
+        setBackBtn();
+        setTitle("ItemDrag  And Swipe");
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mData = generateData(50);

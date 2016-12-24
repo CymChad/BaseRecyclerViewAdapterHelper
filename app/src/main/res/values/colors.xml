@@ -12,4 +12,6 @@
     <color name="bg">#F0F0F0</color>
     <color name="spinner_bg">#333244</color>
     <color name="new_text_color">#555771</color>
+    <color name="white_text_color">#F0F0F0</color>
+    <color name="gray_color">#4b4b58</color>
 </resources>

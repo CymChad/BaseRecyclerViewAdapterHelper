@@ -1,6 +1,5 @@
 package com.chad.baserecyclerviewadapterhelper;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,9 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.QuickAdapter;
+import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 
-public class EmptyViewUseActivity extends Activity implements View.OnClickListener {
+public class EmptyViewUseActivity extends BaseActivity implements View.OnClickListener {
     private RecyclerView mRecyclerView;
     private QuickAdapter mQuickAdapter;
     private View loadingView;
@@ -21,6 +21,8 @@ public class EmptyViewUseActivity extends Activity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setBackBtn();
+        setTitle("EmptyView Use");
         setContentView(R.layout.activity_empty_view_use);
         findViewById(R.id.btn_reset).setOnClickListener(this);
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);

@@ -1,6 +1,5 @@
 package com.chad.baserecyclerviewadapterhelper;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -8,6 +7,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.SectionAdapter;
+import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.MySection;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class SectionUseActivity extends Activity {
+public class SectionUseActivity extends BaseActivity {
     private RecyclerView mRecyclerView;
     private List<MySection> mData;
 
@@ -26,6 +26,8 @@ public class SectionUseActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_section_uer);
+        setBackBtn();
+        setTitle("Section Use");
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mData = DataServer.getSampleData();

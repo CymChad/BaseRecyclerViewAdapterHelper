@@ -25,5 +25,15 @@
         android:textColor="@color/white_text_color"
         android:textSize="16sp"
         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/title"
+        android:gravity="center_vertical"
+        android:text="Demo"
+        android:textColor="@color/gray_color"
+        android:textSize="12sp"
+        />
 
 </RelativeLayout>
