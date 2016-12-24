@@ -6,14 +6,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.ItemDragAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -25,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by luoxw on 2016/6/20.
+ * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 public class ItemDragAndSwipeUseActivity extends Activity {
     private static final String TAG = ItemDragAndSwipeUseActivity.class.getSimpleName();
@@ -40,16 +36,15 @@ public class ItemDragAndSwipeUseActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_touch_use);
 
-        mRecyclerView = (RecyclerView)findViewById(R.id.rv_list);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mData = generateData(50);
         OnItemDragListener listener = new OnItemDragListener() {
             @Override
             public void onItemDragStart(RecyclerView.ViewHolder viewHolder, int pos) {
                 Log.d(TAG, "drag start");
-                BaseViewHolder holder = ((BaseViewHolder)viewHolder);
-                holder.setTextColor(R.id.tv, Color.WHITE);
-                ((CardView)viewHolder.itemView).setCardBackgroundColor(ContextCompat.getColor(ItemDragAndSwipeUseActivity.this, R.color.color_light_blue));
+                BaseViewHolder holder = ((BaseViewHolder) viewHolder);
+//                holder.setTextColor(R.id.tv, Color.WHITE);
             }
 
             @Override
@@ -60,9 +55,8 @@ public class ItemDragAndSwipeUseActivity extends Activity {
             @Override
             public void onItemDragEnd(RecyclerView.ViewHolder viewHolder, int pos) {
                 Log.d(TAG, "drag end");
-                BaseViewHolder holder = ((BaseViewHolder)viewHolder);
-                holder.setTextColor(R.id.tv, Color.BLACK);
-                ((CardView)viewHolder.itemView).setCardBackgroundColor(Color.WHITE);
+                BaseViewHolder holder = ((BaseViewHolder) viewHolder);
+//                holder.setTextColor(R.id.tv, Color.BLACK);
             }
         };
         final Paint paint = new Paint();
@@ -73,17 +67,15 @@ public class ItemDragAndSwipeUseActivity extends Activity {
             @Override
             public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int pos) {
                 Log.d(TAG, "view swiped start: " + pos);
-                BaseViewHolder holder = ((BaseViewHolder)viewHolder);
-                holder.setTextColor(R.id.tv, Color.WHITE);
-                ((CardView)viewHolder.itemView).setCardBackgroundColor(Color.YELLOW);
+                BaseViewHolder holder = ((BaseViewHolder) viewHolder);
+//                holder.setTextColor(R.id.tv, Color.WHITE);
             }
 
             @Override
             public void clearView(RecyclerView.ViewHolder viewHolder, int pos) {
                 Log.d(TAG, "View reset: " + pos);
-                BaseViewHolder holder = ((BaseViewHolder)viewHolder);
-                holder.setTextColor(R.id.tv, Color.BLACK);
-                ((CardView)viewHolder.itemView).setCardBackgroundColor(Color.WHITE);
+                BaseViewHolder holder = ((BaseViewHolder) viewHolder);
+//                holder.setTextColor(R.id.tv, Color.BLACK);
             }
 
             @Override
@@ -94,7 +86,7 @@ public class ItemDragAndSwipeUseActivity extends Activity {
             @Override
             public void onItemSwipeMoving(Canvas canvas, RecyclerView.ViewHolder viewHolder, float dX, float dY, boolean isCurrentlyActive) {
                 canvas.drawColor(ContextCompat.getColor(ItemDragAndSwipeUseActivity.this, R.color.color_light_blue));
-                canvas.drawText("Just some text", 0, 40, paint);
+//                canvas.drawText("Just some text", 0, 40, paint);
             }
         };
 
@@ -110,8 +102,7 @@ public class ItemDragAndSwipeUseActivity extends Activity {
         mAdapter.enableDragItem(mItemTouchHelper);
         mAdapter.setOnItemDragListener(listener);
 
-        mAdapter.addHeaderView(getView());
-        mAdapter.addFooterView(getView());
+
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -123,11 +114,5 @@ public class ItemDragAndSwipeUseActivity extends Activity {
         return data;
     }
 
-    private View getView() {
-        View view = getLayoutInflater().inflate(R.layout.head_view, null);
-        view.findViewById(R.id.tv).setVisibility(View.GONE);
-        view.setLayoutParams(new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        return view;
-    }
 
 }
