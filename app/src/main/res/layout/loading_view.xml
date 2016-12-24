@@ -7,7 +7,7 @@
     <ImageView
         android:layout_width="@dimen/def_height"
         android:layout_height="@dimen/def_height"
-        android:src="@mipmap/smalllogo_gray"/>
+        android:src="@mipmap/empty_icon"/>
 
     <LinearLayout
         android:orientation="horizontal"
