@@ -9,17 +9,21 @@
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
     android:foreground="?android:attr/selectableItemBackground"
-    card_view:cardBackgroundColor="@color/item_bg"
+    card_view:cardBackgroundColor="@android:color/white"
     card_view:cardCornerRadius="4dp"
     card_view:cardElevation="2dp"
     card_view:cardUseCompatPadding="true">
-
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <ImageView
         android:id="@+id/iv"
-        android:layout_width="@dimen/def_height"
-        android:layout_height="@dimen/def_height"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:layout_gravity="center"
-        android:src="@mipmap/biglogo_gray"
+        android:src="@mipmap/section_img"
+        android:scaleType="fitXY"
         android:layout_marginBottom="10dp"/>
 
     <TextView
@@ -28,6 +32,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
         android:textColor="@color/txt_color"
-        android:layout_marginBottom="10dp"
         android:text="C"/>
+</LinearLayout>
 </android.support.v7.widget.CardView>

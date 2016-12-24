@@ -6,7 +6,7 @@
 
     <color name="translate">#00000000</color>
     <color name="color_light_blue">#00DDB6</color>
-    <color name="txt_color">#1d1e1e</color>
+    <color name="txt_color">#888888</color>
     <color name="mian_bg">#c3c9ce</color>
     <color name="item_bg">#FFFFFF</color>
     <color name="bg">#F0F0F0</color>
