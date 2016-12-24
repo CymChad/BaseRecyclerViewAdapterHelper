@@ -7,25 +7,28 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.R;
+import com.chad.baserecyclerviewadapterhelper.util.ToastUtils;
 
 /**
- * Created by AllenCoder on 2016/12/24.
+ * 文 件 名: MyApplication
+ * 创 建 人: Allen
+ * 创建日期: 16/12/24 15:33
+ * 邮   箱: AllenCoder@126.com
+ * 修改时间：
+ * 修改备注：
  */
 public class BaseActivity extends AppCompatActivity {
     protected View customView;
     private ImageView mBack;
     private TextView mActionBarTitle;
-    private Toast mToast;
     /**
      * 日志输出标志
      **/
@@ -103,15 +106,6 @@ public class BaseActivity extends AppCompatActivity {
 
 
     protected void showToast(CharSequence message) {
-        if (!this.isFinishing()) {
-            if (!TextUtils.isEmpty(message)) {
-                if (mToast == null) {
-                    mToast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
-                } else {
-                    mToast.setText(message);
-                }
-                mToast.show();
-            }
-        }
+        ToastUtils.showShortToast(message);
     }
 }

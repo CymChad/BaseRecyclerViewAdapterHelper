@@ -18,8 +18,9 @@
     </style>
 
     <style name="tweetName">
-        <item name="android:textColor">@color/txt_color</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/hard_color</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
         <!--<item name="android:textStyle">bold</item>-->
         <item name="android:shadowColor">#44000000</item>
         <item name="android:shadowDx">1</item>
@@ -28,13 +29,14 @@
     </style>
 
     <style name="tweetText">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColorLink">#778085</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColorLink">#888888</item>
+        <item name="android:lineSpacingExtra">4dp</item>
     </style>
 
     <style name="tweetDate">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">#FFAAAAAA</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">#FFCCCCCC</item>
     </style>
 
     <style name="About">
