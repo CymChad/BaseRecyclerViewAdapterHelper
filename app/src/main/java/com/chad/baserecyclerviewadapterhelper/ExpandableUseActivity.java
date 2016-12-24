@@ -1,11 +1,11 @@
 package com.chad.baserecyclerviewadapterhelper;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.ExpandableItemAdapter;
+import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.entity.Level0Item;
 import com.chad.baserecyclerviewadapterhelper.entity.Level1Item;
 import com.chad.baserecyclerviewadapterhelper.entity.Person;
@@ -17,12 +17,14 @@ import java.util.Random;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class ExpandableUseActivity extends Activity {
+public class ExpandableUseActivity extends BaseActivity {
     RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setBackBtn();
+        setTitle("ExpandableItem Activity");
         setContentView(R.layout.activity_expandable_item_use);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv);

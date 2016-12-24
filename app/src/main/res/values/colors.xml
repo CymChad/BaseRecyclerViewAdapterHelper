@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#292836</color>
+    <color name="colorPrimaryDark">#292836</color>
     <color name="colorAccent">#FF4081</color>
 
     <color name="translate">#00000000</color>
@@ -10,4 +10,8 @@
     <color name="mian_bg">#c3c9ce</color>
     <color name="item_bg">#FFFFFF</color>
     <color name="bg">#F0F0F0</color>
+    <color name="spinner_bg">#333244</color>
+    <color name="new_text_color">#555771</color>
+    <color name="white_text_color">#F0F0F0</color>
+    <color name="gray_color">#4b4b58</color>
 </resources>

@@ -1,6 +1,5 @@
 package com.chad.baserecyclerviewadapterhelper;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -9,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.MultipleItemQuickAdapter;
+import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.MultipleItem;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -18,12 +18,14 @@ import java.util.List;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class MultipleItemUseActivity extends Activity {
+public class MultipleItemUseActivity extends BaseActivity {
     private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setBackBtn();
+        setTitle("MultipleItem Use");
         setContentView(R.layout.activity_multiple_item_use);
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         final List<MultipleItem> data = DataServer.getMultipleItemData();
