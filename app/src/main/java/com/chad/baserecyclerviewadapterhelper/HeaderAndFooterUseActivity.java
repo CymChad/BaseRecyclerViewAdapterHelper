@@ -18,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.chad.baserecyclerviewadapterhelper.adapter.QuickAdapter;
+import com.chad.baserecyclerviewadapterhelper.adapter.HeaderAndFooterAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 
@@ -28,7 +28,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 public class HeaderAndFooterUseActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
-    private QuickAdapter mQuickAdapter;
+    private HeaderAndFooterAdapter headerAndFooterAdapter;
     private static final int PAGE_SIZE = 3;
 
     @Override
@@ -51,20 +51,20 @@ public class HeaderAndFooterUseActivity extends AppCompatActivity {
         View headerView = getView(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mQuickAdapter.addHeaderView(getView(getRemoveHeaderListener(), "click me to remove me"), 0);
+                headerAndFooterAdapter.addHeaderView(getView(getRemoveHeaderListener(), "click me to remove me"), 0);
             }
         }, "click me to add new header");
-        mQuickAdapter.addHeaderView(headerView);
+        headerAndFooterAdapter.addHeaderView(headerView);
 
         View footerView = getView(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mQuickAdapter.addFooterView(getView(getRemoveFooterListener(), "click me to remove me"));
+                headerAndFooterAdapter.addFooterView(getView(getRemoveFooterListener(), "click me to remove me"));
             }
         }, "click me to add new footer");
-        mQuickAdapter.addFooterView(footerView, 0);
+        headerAndFooterAdapter.addFooterView(footerView, 0);
 
-        mRecyclerView.setAdapter(mQuickAdapter);
+        mRecyclerView.setAdapter(headerAndFooterAdapter);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -105,7 +105,7 @@ public class HeaderAndFooterUseActivity extends AppCompatActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mQuickAdapter.removeHeaderView(v);
+                headerAndFooterAdapter.removeHeaderView(v);
             }
         };
     }
@@ -114,15 +114,15 @@ public class HeaderAndFooterUseActivity extends AppCompatActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mQuickAdapter.removeFooterView(v);
+                headerAndFooterAdapter.removeFooterView(v);
             }
         };
     }
 
     private void initAdapter() {
-        mQuickAdapter = new QuickAdapter(PAGE_SIZE);
-        mQuickAdapter.openLoadAnimation();
-        mRecyclerView.setAdapter(mQuickAdapter);
+        headerAndFooterAdapter = new HeaderAndFooterAdapter(PAGE_SIZE);
+        headerAndFooterAdapter.openLoadAnimation();
+        mRecyclerView.setAdapter(headerAndFooterAdapter);
         mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {

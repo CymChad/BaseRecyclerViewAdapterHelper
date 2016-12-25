@@ -12,9 +12,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.baserecyclerviewadapterhelper.R;
+import com.orhanobut.logger.Logger;
 
 /**
- * 文 件 名: MyApplication
+ * 文 件 名: BaseActivity
  * 创 建 人: Allen
  * 创建日期: 16/12/24 15:33
  * 邮   箱: AllenCoder@126.com
@@ -35,6 +36,9 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * sometime you want to define back event
+     */
     protected void setBackBtn() {
         if (back != null) {
             back.setVisibility(View.VISIBLE);
@@ -44,6 +48,18 @@ public class BaseActivity extends AppCompatActivity {
                     finish();
                 }
             });
+        }else {
+            Logger.t(TAG).e("back is null ,please check out");
+        }
+
+    }
+
+    protected void setBackClickListener(View.OnClickListener l) {
+        if (back != null) {
+            back.setVisibility(View.VISIBLE);
+            back.setOnClickListener(l);
+        }else {
+            Logger.t(TAG).e("back is null ,please check out");
         }
 
     }
