@@ -1,24 +1,21 @@
 package com.chad.baserecyclerviewadapterhelper.base;
 
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.baserecyclerviewadapterhelper.R;
-import com.chad.baserecyclerviewadapterhelper.util.ToastUtils;
+import com.orhanobut.logger.Logger;
 
 /**
- * 文 件 名: MyApplication
+ * 文 件 名: BaseActivity
  * 创 建 人: Allen
  * 创建日期: 16/12/24 15:33
  * 邮   箱: AllenCoder@126.com
@@ -26,86 +23,88 @@ import com.chad.baserecyclerviewadapterhelper.util.ToastUtils;
  * 修改备注：
  */
 public class BaseActivity extends AppCompatActivity {
-    protected View customView;
-    private ImageView mBack;
-    private TextView mActionBarTitle;
     /**
-     * 日志输出标志
+     * 日志输出标志getSupportActionBar().
      **/
+    private TextView title;
+    private ImageView back;
     protected final String TAG = this.getClass().getSimpleName();
+
+    protected void setTitle(String msg) {
+        if (title != null) {
+            title.setText(msg);
+        }
+    }
+
+    /**
+     * sometime you want to define back event
+     */
+    protected void setBackBtn() {
+        if (back != null) {
+            back.setVisibility(View.VISIBLE);
+            back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }else {
+            Logger.t(TAG).e("back is null ,please check out");
+        }
+
+    }
+
+    protected void setBackClickListener(View.OnClickListener l) {
+        if (back != null) {
+            back.setVisibility(View.VISIBLE);
+            back.setOnClickListener(l);
+        }else {
+            Logger.t(TAG).e("back is null ,please check out");
+        }
+
+    }
+
+    private LinearLayout rootLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initActionBar();
-        // 设置android:fitsSystemWindows="true"属性
-        ViewGroup contentFrameLayout = (ViewGroup) findViewById(Window.ID_ANDROID_CONTENT);
-        View parentView = contentFrameLayout.getChildAt(0);
-        if (parentView != null && Build.VERSION.SDK_INT >= 19) {
-            parentView.setFitsSystemWindows(true);
+        // 这句很关键，注意是调用父类的方法
+        super.setContentView(R.layout.activity_base);
+        // 经测试在代码里直接声明透明状态栏更有效
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
+            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
         }
+        initToolbar();
     }
 
-    protected void initActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        if (null != actionBar) {
-            actionBar.setDisplayShowHomeEnabled(false);
-            actionBar.setDisplayShowCustomEnabled(true);
-
-            ActionBar.LayoutParams layout = new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View v = inflator.inflate(R.layout.layout_title_bar, null);
-            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-
-            actionBar.setCustomView(v, layout);
-            /**
-             * 解决 actionbar 两端空白问题
-             */
-            Toolbar parent = (Toolbar) v.getParent();
-            parent.setContentInsetsAbsolute(0, 0);
-            customView = actionBar.getCustomView();
-            mActionBarTitle = (TextView) customView.findViewById(R.id.title);
-            mBack = (ImageView) customView.findViewById(R.id.img_back);
-            /**
-             * 解决 actionBar 阴影问题
-             */
-            getSupportActionBar().setElevation(0);
-            customView = getSupportActionBar().getCustomView();
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
+        if (getSupportActionBar() != null) {
+            // Enable the Up button
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         }
-    }
-
-    /**
-     * actionbar回退键
-     */
-    protected void setBackBtn() {
-        mBack.setVisibility(View.VISIBLE);
-        mBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-    }
-
-    protected void setBackBtn(View.OnClickListener listener) {
-        mBack.setVisibility(View.VISIBLE);
-        mBack.setOnClickListener(listener);
-    }
-
-    /**
-     * actionbar标题
-     *
-     * @param title
-     */
-    protected void setTitle(@NonNull String title) {
-        if (null != mActionBarTitle) {
-            mActionBarTitle.setText(title);
-        }
+        back = (ImageView) findViewById(R.id.img_back);
+        title = (TextView) findViewById(R.id.title);
     }
 
 
-    protected void showToast(CharSequence message) {
-        ToastUtils.showShortToast(message);
+    @Override
+    public void setContentView(int layoutId) {
+        setContentView(View.inflate(this, layoutId, null));
+    }
+
+    @Override
+    public void setContentView(View view) {
+        rootLayout = (LinearLayout) findViewById(R.id.root_layout);
+        if (rootLayout == null) return;
+        rootLayout.addView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        initToolbar();
     }
 }

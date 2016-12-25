@@ -1,8 +1,8 @@
 package com.chad.baserecyclerviewadapterhelper;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class HomeActivity extends Activity {
+public class HomeActivity extends AppCompatActivity {
     private static final Class<?>[] ACTIVITY = {AnimationUseActivity.class, MultipleItemUseActivity.class, HeaderAndFooterUseActivity.class, PullToRefreshUseActivity.class, SectionUseActivity.class, EmptyViewUseActivity.class, ItemDragAndSwipeUseActivity.class,ItemClickActivity.class,ExpandableUseActivity.class, DataBindingUseActivity.class};
     private static final String[] TITLE = {"Animation", "MultipleItem", "HeaderAndFooter", "PullToRefresh", "Section", "EmptyView", "DragAndSwipe", "ItemClick","ExpandableItem", "DataBinding"};
     private static final int[] IMG = {R.mipmap.gv_animation,R.mipmap.gv_multipleltem,R.mipmap.gv_header_and_footer,R.mipmap.gv_pulltorefresh,R.mipmap.gv_section,R.mipmap.gv_empty,R.mipmap.gv_drag_and_swipe,R.mipmap.gv_item_click,R.mipmap.gv_expandable,R.mipmap.gv_databinding,};

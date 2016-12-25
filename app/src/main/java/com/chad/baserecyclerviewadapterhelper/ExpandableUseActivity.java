@@ -40,6 +40,7 @@ public class ExpandableUseActivity extends BaseActivity {
     }
 
 
+
     private ArrayList<MultiItemEntity> generateData() {
         int lv0Count = 9;
         int lv1Count = 3;

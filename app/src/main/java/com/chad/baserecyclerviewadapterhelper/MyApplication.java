@@ -39,7 +39,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         appContext =this;
-        Utils.init(appContext);
+        Utils.init(this);
         if (BuildConfig.DEBUG) {
             Logger
                     .init("BaseRecyclerViewAdapter")                 // default PRETTYLOGGER or use just init()
