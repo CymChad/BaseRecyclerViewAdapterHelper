@@ -65,7 +65,8 @@
                     android:text='@{movie.length+ " minute"}'/>
             </RelativeLayout>
 
-            <Button
+
+            <android.support.design.widget.FloatingActionButton
                 android:id="@+id/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -75,7 +76,8 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 android:onClick="@{(view) -> presenter.buyTicket(view, movie)}"
-                android:text="Buy"
+                app:backgroundTint="@color/color_light_blue"
+                android:src="@android:drawable/button_onoff_indicator_off"
                 />
 
         </RelativeLayout>
