@@ -21,7 +21,6 @@ public class EmptyViewUseActivity extends BaseActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setBackBtn();
         setTitle("EmptyView Use");
         setContentView(R.layout.activity_empty_view_use);
         findViewById(R.id.btn_reset).setOnClickListener(this);

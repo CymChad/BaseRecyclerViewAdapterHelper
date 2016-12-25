@@ -30,6 +30,8 @@ public class DataBindingUseActivity extends BaseActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
+   
+
     private List<Movie> genData() {
         ArrayList<Movie> list = new ArrayList<>();
         Random random = new Random();
