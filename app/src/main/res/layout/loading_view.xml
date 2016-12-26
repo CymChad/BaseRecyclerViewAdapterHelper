@@ -5,8 +5,7 @@
               android:orientation="vertical"
     >
     <ImageView
-        android:layout_width="@dimen/def_height"
-        android:layout_height="@dimen/def_height"
+        style="@style/empty_img"
         android:src="@mipmap/empty_icon"/>
 
     <LinearLayout

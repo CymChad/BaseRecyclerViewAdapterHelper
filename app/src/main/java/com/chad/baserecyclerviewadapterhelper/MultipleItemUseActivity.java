@@ -31,8 +31,7 @@ public class MultipleItemUseActivity extends BaseActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         final List<MultipleItem> data = DataServer.getMultipleItemData();
         final MultipleItemQuickAdapter multipleItemAdapter = new MultipleItemQuickAdapter(this, data);
-        final GridLayoutManager manager = new GridLayoutManager(this, 3);
-        multipleItemAdapter.addHeaderView(getView());
+        final GridLayoutManager manager = new GridLayoutManager(this, 4);
         mRecyclerView.setLayoutManager(manager);
         multipleItemAdapter.setSpanSizeLookup(new BaseQuickAdapter.SpanSizeLookup() {
             @Override
@@ -43,10 +42,5 @@ public class MultipleItemUseActivity extends BaseActivity {
         mRecyclerView.setAdapter(multipleItemAdapter);
     }
 
-    private View getView() {
-        View view = getLayoutInflater().inflate(R.layout.head_view, null);
-        view.findViewById(R.id.tv).setVisibility(View.GONE);
-        view.setLayoutParams(new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        return view;
-    }
+
 }

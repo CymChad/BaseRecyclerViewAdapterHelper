@@ -5,9 +5,8 @@
               android:orientation="vertical"
     >
     <ImageView
-        android:layout_width="@dimen/def_height"
-        android:layout_height="@dimen/def_height"
-        android:src="@mipmap/empty_icon"/>
+        android:src="@mipmap/empty_icon"
+        style="@style/empty_img"/>
     <TextView
         android:layout_marginTop="5dp"
         android:layout_width="wrap_content"

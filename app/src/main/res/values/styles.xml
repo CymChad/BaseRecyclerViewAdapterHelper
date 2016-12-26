@@ -61,4 +61,10 @@
         <item name="android:background">@color/bg</item>
         <item name="android:orientation">vertical</item>
     </style>
+
+    <style name="empty_img">
+        <item name="android:layout_width">@dimen/def_height</item>
+        <item name="android:layout_height">@dimen/def_height</item>
+        <item name="android:layout_marginBottom">10dp</item>
+    </style>
 </resources>

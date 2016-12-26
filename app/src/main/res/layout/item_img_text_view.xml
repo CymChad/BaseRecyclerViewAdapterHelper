@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="90dp"
+    android:layout_height="150dp"
     android:layout_gravity="center"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
@@ -17,25 +17,24 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="5dp"
+
         android:orientation="vertical">
 
-        <TextView
+        <ImageView
             android:id="@+id/tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/animation_img1"
             />
 
         <TextView
             android:id="@+id/tv1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
             android:textColor="@android:color/black"
             android:textSize="14sp"
+            android:gravity="center"
             android:text="O ever youthful,O ever weeping."
             />
     </LinearLayout>
