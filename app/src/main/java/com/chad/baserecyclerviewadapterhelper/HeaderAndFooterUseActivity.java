@@ -19,13 +19,14 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.chad.baserecyclerviewadapterhelper.adapter.HeaderAndFooterAdapter;
+import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class HeaderAndFooterUseActivity extends AppCompatActivity {
+public class HeaderAndFooterUseActivity extends BaseActivity {
 
     private RecyclerView mRecyclerView;
     private HeaderAndFooterAdapter headerAndFooterAdapter;
@@ -34,6 +35,8 @@ public class HeaderAndFooterUseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setBackBtn();
+        setTitle("HeaderAndFooter Use");
 //        Window window = this.getWindow();
         //取消设置透明状态栏,使 ContentView 内容不再覆盖状态栏
 //        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
