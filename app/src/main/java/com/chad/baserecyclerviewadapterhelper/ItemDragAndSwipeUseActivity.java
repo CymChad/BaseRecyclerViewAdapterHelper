@@ -9,11 +9,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.View;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.ItemDragAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
+import com.chad.baserecyclerviewadapterhelper.util.ToastUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 
@@ -105,6 +109,12 @@ public class ItemDragAndSwipeUseActivity extends BaseActivity {
 
 
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
+            @Override
+            public void onSimpleItemClick(final BaseQuickAdapter adapter, final View view, final int position) {
+                ToastUtils.showShortToast("点击了" + position);
+            }
+        });
     }
 
     private List<String> generateData(int size) {
