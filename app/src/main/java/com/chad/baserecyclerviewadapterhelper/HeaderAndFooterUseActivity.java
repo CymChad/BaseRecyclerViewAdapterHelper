@@ -34,15 +34,15 @@ public class HeaderAndFooterUseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Window window = this.getWindow();
+//        Window window = this.getWindow();
         //取消设置透明状态栏,使 ContentView 内容不再覆盖状态栏
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         //需要设置这个 flag 才能调用 setStatusBarColor 来设置状态栏颜色
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        //设置状态栏颜色
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.setStatusBarColor(Color.TRANSPARENT);
-        }
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//        //设置状态栏颜色
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            window.setStatusBarColor(Color.TRANSPARENT);
+//        }
         setContentView(R.layout.activity_header_and_footer_use);
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -62,41 +62,28 @@ public class HeaderAndFooterUseActivity extends AppCompatActivity {
                 headerAndFooterAdapter.addFooterView(getView(getRemoveFooterListener(), "click me to remove me"));
             }
         }, "click me to add new footer");
+        footerView = getLayoutInflater().inflate(R.layout.footer_view, (ViewGroup) mRecyclerView.getParent(), false);
         headerAndFooterAdapter.addFooterView(footerView, 0);
 
         mRecyclerView.setAdapter(headerAndFooterAdapter);
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
 
-        CollapsingToolbarLayout collapsingToolbar =
-                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle("HeaderAndFooterUseActivity");
+//        CollapsingToolbarLayout collapsingToolbar =
+//                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+//        collapsingToolbar.setTitle("HeaderAndFooterUseActivity");
 
-        loadBackdrop();
+//        loadBackdrop();
     }
 
-    private void loadBackdrop() {
-        final ImageView imageView = (ImageView) findViewById(R.id.backdrop);
-        Glide.with(this).load(R.mipmap.header_bg).centerCrop().into(imageView);
-    }
+//    private void loadBackdrop() {
+//        final ImageView imageView = (ImageView) findViewById(R.id.backdrop);
+//        Glide.with(this).load(R.mipmap.header_bg).centerCrop().into(imageView);
+//    }
 
-    private View getView() {
-        View view = getLayoutInflater().inflate(R.layout.head_view, null);
-        view.findViewById(R.id.tv).setVisibility(View.GONE);
-        view.setLayoutParams(new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(HeaderAndFooterUseActivity.this, "click View", Toast.LENGTH_LONG).show();
-            }
-        });
-        return view;
-    }
 
     private View getView(View.OnClickListener listener, String text) {
-        View view = getLayoutInflater().inflate(R.layout.head_view, null);
-        view.setLayoutParams(new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        ((TextView) view.findViewById(R.id.tv)).setText(text);
+        View view = getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false);
         view.setOnClickListener(listener);
         return view;
     }

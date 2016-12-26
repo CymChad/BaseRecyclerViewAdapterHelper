@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:gravity="center"
-              android:background="@drawable/touch_bg"
+              android:background="@color/dull_blue"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
 <ImageView
     android:id="@+id/iv"
     android:layout_marginTop="5dp"
-    android:layout_width="@dimen/avatarSize"
-    android:layout_height="@dimen/avatarSize"
-    android:src="@mipmap/smalllogo_gray"/>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:src="@mipmap/header_bg"/>
     <TextView
         android:id="@+id/tv"
-        android:textColor="@color/txt_color"
+        android:textColor="@android:color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"/>
-</LinearLayout>
+        android:layout_gravity="center"
+        android:textSize="25sp"
+        android:text="Header"/>
+</FrameLayout>

@@ -1,5 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -42,6 +43,7 @@ public class PullToRefreshUseActivity extends BaseActivity implements BaseQuickA
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeColors(Color.rgb(47, 223, 189));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         setTitle("Pull TO Refresh Use");
         setBackBtn();
