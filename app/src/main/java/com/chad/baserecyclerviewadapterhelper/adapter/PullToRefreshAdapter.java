@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
+import com.chad.baserecyclerviewadapterhelper.entity.Movie;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.baserecyclerviewadapterhelper.util.SpannableStringUtils;
 import com.chad.baserecyclerviewadapterhelper.util.ToastUtils;
@@ -23,13 +24,13 @@ import com.chad.library.adapter.base.BaseViewHolder;
  * 修改时间：
  * 修改备注：
  */
-public class PullToRefreshAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
+public class PullToRefreshAdapter extends BaseQuickAdapter<Movie, BaseViewHolder> {
     public PullToRefreshAdapter() {
-        super( R.layout.layout_animation, DataServer.getSampleData(100));
+        super( R.layout.layout_animation, DataServer.getInstance().getMovieData());
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, Status item) {
+    protected void convert(BaseViewHolder helper, Movie item) {
         helper.addOnClickListener(R.id.img).addOnClickListener(R.id.tweetText).addOnClickListener(R.id.tweetName);
         switch (helper.getLayoutPosition()%
                 3){
@@ -43,24 +44,27 @@ public class PullToRefreshAdapter extends BaseQuickAdapter<Status, BaseViewHolde
                 helper.setImageResource(R.id.img,R.mipmap.animation_img3);
                 break;
         }
-        helper.setText(R.id.tweetName,"Hoteis in Rio de Janeiro");
-        String msg="\"He was one of Australia's most of distinguished artistes, renowned for his portraits\"";
-        ( (TextView)helper.getView(R.id.tweetText)).setText(SpannableStringUtils.getBuilder(msg).append("landscapes and nedes").setClickSpan(clickableSpan).create());
-        ( (TextView)helper.getView(R.id.tweetText)).setMovementMethod(LinkMovementMethod.getInstance());
+        helper.setText(R.id.tweetName, item.name);
+        helper.setText(R.id.tweetText,item.name+item.length+":  $"+item.price);
+        helper.setText(R.id.tweetDate, item.price+"");
+//        helper.setText(R.id.tweetName,"Hoteis in Rio de Janeiro");
+//        String msg="\"He was one of Australia's most of distinguished artistes, renowned for his portraits\"";
+//        ( (TextView)helper.getView(R.id.tweetText)).setText(SpannableStringUtils.getBuilder(msg).append("landscapes and nedes").setClickSpan(clickableSpan).create());
+//        ( (TextView)helper.getView(R.id.tweetText)).setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-    ClickableSpan clickableSpan = new ClickableSpan() {
-        @Override
-        public void onClick(View widget) {
-            ToastUtils.showShortToast("事件触发了 landscapes and nedes");
-        }
-
-        @Override
-        public void updateDrawState(TextPaint ds) {
-            ds.setColor(Utils.getContext().getResources().getColor(R.color.clickspan_color));
-            ds.setUnderlineText(true);
-        }
-    };
+//    ClickableSpan clickableSpan = new ClickableSpan() {
+//        @Override
+//        public void onClick(View widget) {
+//            ToastUtils.showShortToast("事件触发了 landscapes and nedes");
+//        }
+//
+//        @Override
+//        public void updateDrawState(TextPaint ds) {
+//            ds.setColor(Utils.getContext().getResources().getColor(R.color.clickspan_color));
+//            ds.setUnderlineText(true);
+//        }
+//    };
 
 
 }

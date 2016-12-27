@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,8 +13,13 @@ import android.widget.Toast;
 import com.chad.baserecyclerviewadapterhelper.adapter.PullToRefreshAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
+import com.chad.baserecyclerviewadapterhelper.entity.Movie;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 
 /**
@@ -77,7 +83,7 @@ public class PullToRefreshUseActivity extends BaseActivity implements BaseQuickA
                     pullToRefreshAdapter.loadMoreEnd(mLoadMoreEndGone);//true is gone,false is visible
                 } else {
                     if (isErr) {
-                        pullToRefreshAdapter.addData(DataServer.getSampleData(PAGE_SIZE));
+                        pullToRefreshAdapter.addData(DataServer.getInstance().getMovieData());
                         mCurrentCounter = pullToRefreshAdapter.getData().size();
                         pullToRefreshAdapter.loadMoreComplete();
                     } else {
@@ -99,7 +105,9 @@ public class PullToRefreshUseActivity extends BaseActivity implements BaseQuickA
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                pullToRefreshAdapter.setNewData(DataServer.getSampleData(PAGE_SIZE));
+                List<Movie> movies = new ArrayList<Movie>(pullToRefreshAdapter.getData());
+              //  movies.add(1, new Movie("绿巨人", 1, 200));
+                pullToRefreshAdapter.updateDataSet(movies);
                 isErr = false;
                 mCurrentCounter = PAGE_SIZE;
                 mSwipeRefreshLayout.setRefreshing(false);
@@ -110,8 +118,10 @@ public class PullToRefreshUseActivity extends BaseActivity implements BaseQuickA
 
     private void initAdapter() {
         pullToRefreshAdapter = new PullToRefreshAdapter();
-        pullToRefreshAdapter.setOnLoadMoreListener(this);
-        pullToRefreshAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
+        pullToRefreshAdapter
+                .openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT)
+                .isFirstOnly(true)
+                .setDiffUtilDetectMove(false);
 //        pullToRefreshAdapter.setAutoLoadMoreSize(3);
         mRecyclerView.setAdapter(pullToRefreshAdapter);
         mCurrentCounter = pullToRefreshAdapter.getData().size();

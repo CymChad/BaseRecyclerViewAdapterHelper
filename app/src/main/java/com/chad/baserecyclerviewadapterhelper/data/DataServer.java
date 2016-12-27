@@ -1,6 +1,7 @@
 package com.chad.baserecyclerviewadapterhelper.data;
 
 
+import com.chad.baserecyclerviewadapterhelper.entity.Movie;
 import com.chad.baserecyclerviewadapterhelper.entity.MultipleItem;
 import com.chad.baserecyclerviewadapterhelper.entity.MySection;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
@@ -17,8 +18,15 @@ public class DataServer {
     private static final String HTTPS_AVATARS1_GITHUBUSERCONTENT_COM_LINK = "https://avatars1.githubusercontent.com/u/7698209?v=3&s=460";
     private static final String CYM_CHAD = "CymChad";
 
+    private static final DataServer INSTANCE = new DataServer();
+
     private DataServer() {
     }
+
+    public static DataServer getInstance() {
+        return INSTANCE;
+    }
+
 
     public static List<Status> getSampleData(int lenth) {
         List<Status> list = new ArrayList<>();
@@ -47,6 +55,32 @@ public class DataServer {
 
         return list;
     }
+
+    public List<Movie> getMovieData() {
+        List<Movie> movies = new ArrayList<>();
+        movies = new ArrayList<>();
+        movies.add(new Movie("钢铁侠", 1, 100));
+        movies.add(new Movie("雷神", 1, 200));
+        movies.add(new Movie("美国队长", 1, 220));
+        movies.add(new Movie("复仇者联盟", 1, 400));
+        return movies;
+    }
+
+    public static List<Movie> updateMovies(List<Movie> movies) {
+        List<Movie> result = new ArrayList<>(movies.size());
+        for (Movie movie : movies) {
+            if (movie.price > 410) continue; //模拟删除
+
+            movie.length += 1;  //模拟修改
+            movie.price += 30;
+            result.add(movie);
+        }
+        if (result.size() < 5) { //模拟添加
+            result.add(0, new Movie("绿巨人", 1, 200));
+        }
+        return result;
+    }
+
 
     public static List<MySection> getSampleData() {
         List<MySection> list = new ArrayList<>();
