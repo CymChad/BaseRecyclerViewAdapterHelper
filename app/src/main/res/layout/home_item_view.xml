@@ -31,13 +31,15 @@
 
             <TextView
                 android:id="@+id/text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="Animation"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textColor="#48495F"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-condensed"
                 />
         </LinearLayout>
     </android.support.v7.widget.CardView>
