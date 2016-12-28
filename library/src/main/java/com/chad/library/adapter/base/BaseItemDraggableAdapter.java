@@ -49,7 +49,7 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
      * To bind different types of holder and solve different the bind events
      *
      * @param holder
-     * @param positions
+     * @param position
      * @see #getDefItemViewType(int)
      */
     @Override

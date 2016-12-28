@@ -71,7 +71,6 @@ implements  SwipeRefreshLayout.OnRefreshListener {
         });
     }
 
-
     static class CustomDiffCallback extends BaseQuickAdapter.DiffUtilCallback<Movie>{
 
         @Override
@@ -91,7 +90,7 @@ implements  SwipeRefreshLayout.OnRefreshListener {
         @Nullable
         @Override
         public Object getChangePayload(int oldItemPosition, int newItemPosition) {
-            //实现这个回调,可以解决局部刷新Item时,item闪烁问题,但相对来说,实现复杂度大大提高.
+            //实现这个回调,更加精确的进行局部更新,可以用来解决局部刷新Item时,item闪烁问题,但相对来说,实现复杂度增加.
             Movie oldItem = getOldItem(oldItemPosition);
             Movie newItem = getNewItem(newItemPosition);
             Bundle payload = new Bundle();
