@@ -49,14 +49,13 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
      * To bind different types of holder and solve different the bind events
      *
      * @param holder
-     * @param positions
+     * @param position
      * @see #getDefItemViewType(int)
      */
     @Override
-    public void onBindViewHolder(K holder, int positions) {
-        super.onBindViewHolder(holder, positions);
+    public void onBindViewHolder(K holder, int position, List<Object> payloads){
+        super.onBindViewHolder(holder, position,payloads);
         int viewType = holder.getItemViewType();
-
         if (mItemTouchHelper != null && itemDragEnabled && viewType != LOADING_VIEW && viewType != HEADER_VIEW
                 && viewType != EMPTY_VIEW && viewType != FOOTER_VIEW) {
             if (mToggleViewId != NO_TOGGLE_VIEW) {
@@ -131,8 +130,9 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
      *
      * @param itemTouchHelper {@link ItemTouchHelper}
      */
-    public void enableDragItem(@NonNull ItemTouchHelper itemTouchHelper) {
+    public BaseQuickAdapter enableDragItem(@NonNull ItemTouchHelper itemTouchHelper) {
         enableDragItem(itemTouchHelper, NO_TOGGLE_VIEW, true);
+        return this;
     }
 
     /**
@@ -142,11 +142,12 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
      * @param toggleViewId    The toggle view's id.
      * @param dragOnLongPress If true the drag event will be trigger on long press, otherwise on touch down.
      */
-    public void enableDragItem(@NonNull ItemTouchHelper itemTouchHelper, int toggleViewId, boolean dragOnLongPress) {
+    public BaseQuickAdapter enableDragItem(@NonNull ItemTouchHelper itemTouchHelper, int toggleViewId, boolean dragOnLongPress) {
         itemDragEnabled = true;
         mItemTouchHelper = itemTouchHelper;
         setToggleViewId(toggleViewId);
         setToggleDragOnLongPress(dragOnLongPress);
+        return this;
     }
 
     /**
@@ -165,8 +166,9 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
      * <p>Enable swipe items.</p>
      * You should attach {@link ItemTouchHelper} which construct with {@link ItemDragAndSwipeCallback} to the Recycler when you enable this.
      */
-    public void enableSwipeItem() {
+    public BaseQuickAdapter enableSwipeItem() {
         itemSwipeEnabled = true;
+        return this;
     }
 
     public void disableSwipeItem() {
@@ -180,8 +182,9 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
     /**
      * @param onItemDragListener Register a callback to be invoked when drag event happen.
      */
-    public void setOnItemDragListener(OnItemDragListener onItemDragListener) {
+    public BaseQuickAdapter setOnItemDragListener(OnItemDragListener onItemDragListener) {
         mOnItemDragListener = onItemDragListener;
+        return this;
     }
 
     public int getViewHolderPosition(RecyclerView.ViewHolder viewHolder) {

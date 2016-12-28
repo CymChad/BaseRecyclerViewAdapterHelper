@@ -42,14 +42,14 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity, K extends
     }
 
     @Override
-    public void onBindViewHolder(K holder, int positions) {
+    public void onBindViewHolder(K holder, int position, List<Object> payloads) {
         switch (holder.getItemViewType()) {
             case SECTION_HEADER_VIEW:
                 setFullSpan(holder);
                 convertHead(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
                 break;
             default:
-                super.onBindViewHolder(holder, positions);
+                super.onBindViewHolder(holder, position,payloads);
                 break;
         }
     }
