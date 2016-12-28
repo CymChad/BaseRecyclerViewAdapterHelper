@@ -53,10 +53,9 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
      * @see #getDefItemViewType(int)
      */
     @Override
-    public void onBindViewHolder(K holder, int positions) {
-        super.onBindViewHolder(holder, positions);
+    public void onBindViewHolder(K holder, int position, List<Object> payloads){
+        super.onBindViewHolder(holder, position,payloads);
         int viewType = holder.getItemViewType();
-
         if (mItemTouchHelper != null && itemDragEnabled && viewType != LOADING_VIEW && viewType != HEADER_VIEW
                 && viewType != EMPTY_VIEW && viewType != FOOTER_VIEW) {
             if (mToggleViewId != NO_TOGGLE_VIEW) {
