@@ -65,10 +65,10 @@ public class DataServer {
 
     public List<Movie> getMovieData() {
         List<Movie> movies = new ArrayList<>();
-        movies.add(new Movie("钢铁侠", 1, 100));
-        movies.add(new Movie("雷神", 1, 200));
-        movies.add(new Movie("美国队长", 1, 220));
-        movies.add(new Movie("复仇者联盟", 1, 400));
+        movies.add(new Movie("钢铁侠", 1, 100,"钢铁侠1"));
+        movies.add(new Movie("雷神", 1, 200,"雷神1"));
+        movies.add(new Movie("美国队长", 1, 220,"美国队长1"));
+        movies.add(new Movie("复仇者联盟", 1, 400,"复仇者联盟1"));
         return movies;
     }
 
@@ -87,7 +87,7 @@ public class DataServer {
             result.remove(result.size() - 1);
         }
         if (result.size() < 5) { //模拟添加 ,simulate addition
-            result.add(0, new Movie("绿巨人", 1, 200));
+            result.add(0, new Movie("绿巨人", 1, 200,"绿巨人1"));
         }
         return result;
     }
