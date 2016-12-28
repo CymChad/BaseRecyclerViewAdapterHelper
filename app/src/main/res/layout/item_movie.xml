@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -14,7 +15,7 @@
 
     <android.support.v7.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
                                         android:layout_width="match_parent"
-                                        android:layout_height="200dp"
+                                        android:layout_height="175dp"
                                         android:layout_margin="2dp"
                                         app:cardBackgroundColor="@android:color/white"
                                         app:cardCornerRadius="2dp"
@@ -25,11 +26,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:onClick="@{(view) -> presenter.buyTicket(view, movie)}"
+                app:backgroundTint="@color/color_light_blue"
+                android:src="@android:drawable/button_onoff_indicator_off"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="16dp"/>
+
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                >
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
 
                 <ImageView
                     android:id="@+id/iv"
@@ -44,41 +62,49 @@
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/iv"
                     android:text="@{movie.name}"
-                    android:textSize="19sp"/>
+                    android:layout_marginLeft="10dp"
+                    tools:text="Hoteis in RIo de Janeiro"
+                    android:textStyle="bold"
+                    android:layout_marginTop="20dp"
+                    android:textSize="13sp"/>
 
                 <TextView
-                    android:id="@+id/movie_price"
+                    android:id="@+id/movie_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/movie_name"
-                    android:layout_below="@id/movie_name"
-                    android:text='@{"$ " + movie.price}'
-                    android:textSize="15sp"/>
+                    android:text='@{movie.content}'
+                    tools:text="He was one of Australia's most distinguished artistes"
+                    android:textSize="10sp"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/movie_name"
+                    android:layout_alignLeft="@+id/movie_name"
+                    android:layout_alignStart="@+id/movie_name"/>
 
                 <TextView
                     android:id="@+id/movie_length"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/movie_price"
-                    android:layout_marginLeft="9dp"
-                    android:layout_toRightOf="@id/movie_price"
-                    android:text='@{movie.length+ " minute"}'/>
+                    tools:text="$ 12"
+                    android:textColor="@color/gray_color"
+                    android:layout_marginTop="15dp"
+                    android:text='@{movie.length+ " minute"}'
+                    android:layout_below="@+id/movie_content"
+                    android:layout_alignLeft="@+id/movie_content"
+                    android:layout_alignStart="@+id/movie_content"/>
+
+                <TextView
+                    android:id="@+id/movie_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text='@{"$ " + movie.price}'
+                    tools:text="$ 12"
+                    android:textSize="29sp"
+                    android:textColor="@color/hard_color"
+                    android:layout_marginBottom="17dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignLeft="@+id/movie_length"
+                    android:layout_alignStart="@+id/movie_length"/>
             </RelativeLayout>
-
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:onClick="@{(view) -> presenter.buyTicket(view, movie)}"
-                app:backgroundTint="@color/color_light_blue"
-                android:src="@android:drawable/button_onoff_indicator_off"
-                />
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>

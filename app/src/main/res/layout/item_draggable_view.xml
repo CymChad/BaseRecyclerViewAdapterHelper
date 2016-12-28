@@ -4,40 +4,55 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:orientation="horizontal"
+    android:layout_height="80dp"
     android:background="@android:color/white"
-    android:layout_marginBottom="2dp"
+    android:orientation="horizontal"
     >
 
     <ImageView
         android:id="@+id/iv_head"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
-        android:layout_weight="3"
-        android:paddingLeft="10dp"
+        android:layout_marginLeft="16dp"
         android:src="@mipmap/head_img"
         />
 
-    <TextView
-        android:id="@+id/tv"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="20dp"
         android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:text="item 1"
-        android:textColor="@android:color/black"
-        />
+        android:layout_marginLeft="13dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="item 1"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            />
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginTop="10dp"
+            android:text="allencoder2013@gmail.com"
+            android:textColor="@color/txt_color"
+            />
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/iv"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:layout_weight="3"
         android:scaleType="center"
+        android:layout_marginRight="27dp"
         android:src="@mipmap/drag_icon"/>
 
 
