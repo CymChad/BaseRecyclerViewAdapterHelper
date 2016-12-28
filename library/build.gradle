@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 24
+    compileSdkVersion 25
     buildToolsVersion "24.0.3"
 
     defaultConfig {
@@ -21,5 +21,5 @@ android {
 dependencies {
 
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    provided 'com.android.support:recyclerview-v7:24.2.1'
+    provided 'com.android.support:recyclerview-v7:25.1.0'
 }
