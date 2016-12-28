@@ -1,6 +1,9 @@
 package com.chad.baserecyclerviewadapterhelper.data;
 
 
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
+
 import com.chad.baserecyclerviewadapterhelper.entity.Movie;
 import com.chad.baserecyclerviewadapterhelper.entity.MultipleItem;
 import com.chad.baserecyclerviewadapterhelper.entity.MySection;
@@ -8,7 +11,11 @@ import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.baserecyclerviewadapterhelper.entity.Video;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+
+import kotlin.collections.ArraysKt;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
@@ -58,7 +65,6 @@ public class DataServer {
 
     public List<Movie> getMovieData() {
         List<Movie> movies = new ArrayList<>();
-        movies = new ArrayList<>();
         movies.add(new Movie("钢铁侠", 1, 100));
         movies.add(new Movie("雷神", 1, 200));
         movies.add(new Movie("美国队长", 1, 220));
@@ -66,16 +72,21 @@ public class DataServer {
         return movies;
     }
 
-    public static List<Movie> updateMovies(List<Movie> movies) {
-        List<Movie> result = new ArrayList<>(movies.size());
-        for (Movie movie : movies) {
-            if (movie.price > 410) continue; //模拟删除
-
-            movie.length += 1;  //模拟修改
-            movie.price += 30;
-            result.add(movie);
+    public  List<Movie> updateMovies(List<Movie> movies) {
+        List<Movie> result = new ArrayList<>();
+        for (Movie movie : movies) {    //deep copy
+            result.add(movie.clone());
         }
-        if (result.size() < 5) { //模拟添加
+        for (Movie movie : result) {
+            if (movie.price < 200) continue;
+            movie.length += 1;  //模拟修改 ,simulate update
+            movie.price += 30;
+        }
+
+        if (result.get(result.size() - 1).price > 410) {
+            result.remove(result.size() - 1);
+        }
+        if (result.size() < 5) { //模拟添加 ,simulate addition
             result.add(0, new Movie("绿巨人", 1, 200));
         }
         return result;

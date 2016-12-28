@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.HomeAdapter;
+import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.entity.HomeItem;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
@@ -17,10 +18,18 @@ import java.util.ArrayList;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class HomeActivity extends AppCompatActivity {
-    private static final Class<?>[] ACTIVITY = {AnimationUseActivity.class, MultipleItemUseActivity.class, HeaderAndFooterUseActivity.class, PullToRefreshUseActivity.class, SectionUseActivity.class, EmptyViewUseActivity.class, ItemDragAndSwipeUseActivity.class,ItemClickActivity.class,ExpandableUseActivity.class, DataBindingUseActivity.class};
-    private static final String[] TITLE = {"Animation", "MultipleItem", "HeaderAndFooter", "PullToRefresh", "Section", "EmptyView", "DragAndSwipe", "ItemClick","ExpandableItem", "DataBinding"};
-    private static final int[] IMG = {R.mipmap.gv_animation,R.mipmap.gv_multipleltem,R.mipmap.gv_header_and_footer,R.mipmap.gv_pulltorefresh,R.mipmap.gv_section,R.mipmap.gv_empty,R.mipmap.gv_drag_and_swipe,R.mipmap.gv_item_click,R.mipmap.gv_expandable,R.mipmap.gv_databinding,};
+public class HomeActivity extends BaseActivity {
+    private static final Class<?>[] ACTIVITY = {
+            AnimationUseActivity.class, MultipleItemUseActivity.class,
+            HeaderAndFooterUseActivity.class, PullToRefreshUseActivity.class,
+            SectionUseActivity.class, EmptyViewUseActivity.class,
+            ItemDragAndSwipeUseActivity.class,ItemClickActivity.class,
+            ExpandableUseActivity.class, DataBindingUseActivity.class,DiffUtilActivity.class};
+    private static final String[] TITLE = {
+            "Animation", "MultipleItem", "HeaderAndFooter", "PullToRefresh", "Section",
+            "EmptyView", "DragAndSwipe", "ItemClick","ExpandableItem", "DataBinding","DiffUtil"};
+
+    private static final int[] IMG = {R.mipmap.gv_animation,R.mipmap.gv_multipleltem,R.mipmap.gv_header_and_footer,R.mipmap.gv_pulltorefresh,R.mipmap.gv_section,R.mipmap.gv_empty,R.mipmap.gv_drag_and_swipe,R.mipmap.gv_item_click,R.mipmap.gv_expandable,R.mipmap.gv_databinding,R.drawable.diff};
     private ArrayList<HomeItem> mDataList;
     private RecyclerView mRecyclerView;
 

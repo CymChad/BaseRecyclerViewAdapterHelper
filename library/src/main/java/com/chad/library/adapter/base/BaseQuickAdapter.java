@@ -1,17 +1,15 @@
 /**
  * Copyright 2013 Joan Zapata
  * <p/>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
  * <p/>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 package com.chad.library.adapter.base;
 
@@ -49,6 +47,7 @@ import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
@@ -143,7 +142,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @return this Adapter, so the call can be chained
      */
 
-    public BaseQuickAdapter<T, K> setDiffUtilCallback(DiffUtilCallback<T> diffUtilCallback) {
+    public BaseQuickAdapter setDiffUtilCallback(DiffUtilCallback<T> diffUtilCallback) {
         this.diffUtilCallback = diffUtilCallback;
         return this;
     }
@@ -156,7 +155,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param detectMove true to detect move change after update data set ,false otherwise
      * @return this Adapter, so the call can be chained
      */
-    public BaseQuickAdapter  setDiffUtilDetectMove(boolean detectMove) {
+    public BaseQuickAdapter setDiffUtilDetectMove(boolean detectMove) {
         mDetectMoves = detectMove;
         return this;
     }
@@ -353,7 +352,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     @Deprecated
     public void add(int position, T item) {
-        addData(position,item);
+        addData(position, item);
     }
 
     /**
@@ -685,16 +684,26 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * To bind different types of holder and solve different the bind events
      *
      * @param holder
-     * @param positions
+     * @param position
      * @see #getDefItemViewType(int)
      */
     @Override
-    public void onBindViewHolder(K holder, int positions) {
-        int viewType = holder.getItemViewType();
+    public void onBindViewHolder(K holder, int position) {
+        this.onBindViewHolder(holder, position, Collections.unmodifiableList(new ArrayList<>()));
+    }
 
+    /**
+     *  Same concept of {@code #onBindViewHolder()} but with Payload.
+     * @param holder
+     * @param position
+     * @param payloads payloads A non-null list of merged payloads. Can be empty list if requires full update.
+     */
+    @Override
+    public void onBindViewHolder(K holder, int position, List<Object> payloads) {
+        int viewType = holder.getItemViewType();
         switch (viewType) {
             case 0:
-                convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
+                convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()),payloads);
                 break;
             case LOADING_VIEW:
                 mLoadMoreView.convert(holder);
@@ -706,9 +715,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             case FOOTER_VIEW:
                 break;
             default:
-                convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
+                convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()),payloads);
                 break;
         }
+
     }
 
     protected K onCreateDefViewHolder(ViewGroup parent, int viewType) {
@@ -1159,7 +1169,17 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param helper A fully initialized helper.
      * @param item   The item that needs to be displayed.
      */
+    @Deprecated
     protected abstract void convert(K helper, T item);
+
+    /**
+     * compatibility for old version,if you want better to use DiffUtil function,
+     * You can override this method to update the contents. may use this method
+     * instead of {@code convert(K helper, T item)} in next version.
+     */
+    protected void convert(K helper, T item ,List payloads){
+        convert(helper,item);
+    }
 
     /**
      * Get the row id associated with the specified position in the list.
@@ -1477,28 +1497,28 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * Default implementation DiffUtil.Callback ,your model need override equals() method correctly.
      */
-    private static class DiffUtilCallback<T> extends DiffUtil.Callback {
+    public static class DiffUtilCallback<T> extends DiffUtil.Callback {
 
-        List<T> oldItems;
-        List<T> newItems;
+        List<T> mOldItems;
+        List<T> mNewItems;
 
         final void setItems(List<T> oldItems, List<T> newItems) {
-            this.oldItems = oldItems;
-            this.newItems = newItems;
+            this.mOldItems = oldItems;
+            this.mNewItems = newItems;
         }
 
         final List<T> getNewItems() {
-            return newItems;
+            return mNewItems;
         }
 
         @Override
         public final int getOldListSize() {
-            return oldItems.size();
+            return mOldItems.size();
         }
 
         @Override
         public final int getNewListSize() {
-            return newItems.size();
+            return mNewItems.size();
         }
 
         /**
@@ -1512,8 +1532,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
          */
         @Override
         public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-            T oldItem = oldItems.get(oldItemPosition);
-            T newItem = newItems.get(newItemPosition);
+            T oldItem = getOldItem(oldItemPosition);
+            T newItem = getNewItem(newItemPosition);
             return oldItem.equals(newItem);
         }
 
@@ -1530,7 +1550,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
          */
         @Override
         public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-            return false;
+            return true;
         }
 
         /**
@@ -1548,5 +1568,15 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         public Object getChangePayload(int oldItemPosition, int newItemPosition) {
             return null;
         }
+
+        public T getOldItem(int position) {
+            return mOldItems.get(position);
+        }
+
+        public T getNewItem(int position) {
+            return mNewItems.get(position);
+        }
     }
+
+
 }
