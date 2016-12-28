@@ -334,6 +334,11 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         notifyDataSetChanged();
     }
 
+    /**
+     * This method will refresh the entire data by diffUtil, all changed can be animated. if new
+     * data is very big list. Should directly invoke   {@link #setNewData(List)} without any
+     * animations,
+     */
     public void updateDataSet(@NonNull List<T> data) {
         if (data == null) data = new ArrayList<>();
         if (mDiffAsyncTask != null) {
