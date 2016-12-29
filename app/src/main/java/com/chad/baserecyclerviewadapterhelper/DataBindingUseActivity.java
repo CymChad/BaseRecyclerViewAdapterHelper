@@ -36,7 +36,7 @@ public class DataBindingUseActivity extends BaseActivity {
         ArrayList<Movie> list = new ArrayList<>();
         Random random = new Random();
         for (int i = 0; i < 10; i++) {
-            String name = "Hoteis in Rio de Janeiro";
+            String name = "Chad";
             int price = random.nextInt(10) + 10;
             int len = random.nextInt(80) + 60;
             Movie movie = new Movie(name, len, price,"He was one of Australia's most distinguished artistes");

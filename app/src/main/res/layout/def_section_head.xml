@@ -27,6 +27,7 @@
             android:paddingLeft="10dp"
             android:gravity="left|center"
             android:textColor="@color/txt_color"
+            android:textStyle="bold"
             android:textSize="20sp"
             />
 
@@ -37,8 +38,8 @@
             android:layout_weight="1"
             android:paddingRight="10dp"
             android:gravity="right|center"
-            android:textColor="@color/txt_color"
-            android:text="more"
+            android:textColor="@color/color_light_blue"
+            android:text="more >"
             android:textSize="18sp"/>
     </LinearLayout>
 

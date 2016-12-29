@@ -29,7 +29,7 @@ public class DefAdpater extends RecyclerView.Adapter<DefAdpater.ViewHolder> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View item = mLayoutInflater.inflate(R.layout.tweet, parent, false);
+        View item = mLayoutInflater.inflate(R.layout.layout_animation, parent, false);
         return new ViewHolder(item);
     }
 
@@ -39,8 +39,6 @@ public class DefAdpater extends RecyclerView.Adapter<DefAdpater.ViewHolder> {
         holder.name.setText(status.getUserName());
         holder.text.setText(status.getText());
         holder.date.setText(status.getCreatedAt());
-        Glide.with(mContext).load(status.getUserAvatar()).into(holder.avatar);
-        holder.rt.setVisibility(status.isRetweet() ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -49,8 +47,7 @@ public class DefAdpater extends RecyclerView.Adapter<DefAdpater.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView avatar;
-        private ImageView rt;
+
         private TextView name;
         private TextView date;
         private TextView text;
@@ -60,8 +57,7 @@ public class DefAdpater extends RecyclerView.Adapter<DefAdpater.ViewHolder> {
             text = (TextView) itemView.findViewById(R.id.tweetText);
             name = (TextView) itemView.findViewById(R.id.tweetName);
             date = (TextView) itemView.findViewById(R.id.tweetDate);
-            avatar = (ImageView) itemView.findViewById(R.id.tweetAvatar);
-            rt = (ImageView) itemView.findViewById(R.id.tweetRT);
+
         }
     }
 }

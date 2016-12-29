@@ -13,7 +13,6 @@ import android.view.View;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.ItemDragAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
-import com.chad.baserecyclerviewadapterhelper.decoration.GridItemDecoration;
 import com.chad.baserecyclerviewadapterhelper.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -107,7 +106,7 @@ public class ItemDragAndSwipeUseActivity extends BaseActivity {
         mAdapter.setOnItemSwipeListener(onItemSwipeListener);
         mAdapter.enableDragItem(mItemTouchHelper);
         mAdapter.setOnItemDragListener(listener);
-        mRecyclerView.addItemDecoration(new GridItemDecoration(this ,R.drawable.list_divider));
+//        mRecyclerView.addItemDecoration(new GridItemDecoration(this ,R.drawable.list_divider));
 
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {

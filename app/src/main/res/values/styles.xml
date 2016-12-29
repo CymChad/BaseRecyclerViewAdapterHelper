@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:actionBarStyle">@style/actionbar_def_style</item>
         <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
     <style name="actionbar_def_style" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- 在样式里面直接替换掉actionbar的背景，避免在有的窗口进入慢时导致进入时显示系统默认的actionbar -->

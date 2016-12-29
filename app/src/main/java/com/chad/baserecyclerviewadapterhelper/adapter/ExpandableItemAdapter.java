@@ -41,6 +41,18 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
     protected void convert(final BaseViewHolder holder, final MultiItemEntity item) {
         switch (holder.getItemViewType()) {
             case TYPE_LEVEL_0:
+                switch (holder.getLayoutPosition() %
+                        3) {
+                    case 0:
+                        holder.setImageResource(R.id.iv_head, R.mipmap.head_img0);
+                        break;
+                    case 1:
+                        holder.setImageResource(R.id.iv_head, R.mipmap.head_img1);
+                        break;
+                    case 2:
+                        holder.setImageResource(R.id.iv_head, R.mipmap.head_img2);
+                        break;
+                }
                 final Level0Item lv0 = (Level0Item)item;
                 holder.setText(R.id.title, lv0.title)
                         .setText(R.id.sub_title, lv0.subTitle)

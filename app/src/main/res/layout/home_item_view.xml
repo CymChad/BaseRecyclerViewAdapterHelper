@@ -12,7 +12,7 @@
         android:layout_gravity="center"
         card_view:cardBackgroundColor="@android:color/white"
         card_view:cardCornerRadius="8dp"
-        card_view:cardElevation="4dp"
+        card_view:cardElevation="3dp"
         card_view:cardUseCompatPadding="true"
 
         >
