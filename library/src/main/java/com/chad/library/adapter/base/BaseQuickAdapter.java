@@ -138,7 +138,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *
      * @return 0 or 1
      */
-    private int getLoadMoreViewCount() {
+    public int getLoadMoreViewCount() {
         if (mRequestLoadMoreListener == null || !mLoadMoreEnable) {
             return 0;
         }
