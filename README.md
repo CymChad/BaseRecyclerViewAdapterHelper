@@ -2,9 +2,13 @@
 [![](https://jitpack.io/v/CymChad/BaseRecyclerViewAdapterHelper.svg)](https://jitpack.io/#CymChad/BaseRecyclerViewAdapterHelper)  
 Powerful and flexible RecyclerAdapter,
 Please feel free to use this.(Welcome to **Star** and **Fork**)
+## UI
+
 ## Google Play Demo
 
 [![Get it on Google Play](https://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=com.chad.baserecyclerviewadapterhelper)
+
+[国内下载地址](https://fir.im/s91g)
 #Document
 ##v1.9.8
 - [English](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki/old_doc)
