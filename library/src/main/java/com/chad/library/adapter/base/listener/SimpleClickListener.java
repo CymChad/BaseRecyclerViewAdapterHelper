@@ -46,6 +46,10 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
             this.recyclerView = rv;
             this.baseQuickAdapter = (BaseQuickAdapter) recyclerView.getAdapter();
             mGestureDetector = new GestureDetectorCompat(recyclerView.getContext(), new ItemTouchHelperGestureListener(recyclerView));
+        }else if (recyclerView!=rv){
+            this.recyclerView = rv;
+            this.baseQuickAdapter = (BaseQuickAdapter) recyclerView.getAdapter();
+            mGestureDetector = new GestureDetectorCompat(recyclerView.getContext(), new ItemTouchHelperGestureListener(recyclerView));
         }
         if (!mGestureDetector.onTouchEvent(e) && e.getActionMasked() == MotionEvent.ACTION_UP && mIsShowPress) {
             if (mPressedView!=null){
