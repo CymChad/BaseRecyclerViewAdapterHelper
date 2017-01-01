@@ -290,13 +290,14 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     /**
      * insert  a item associated with the specified position of adapter
-     * @deprecated use {@link #addData(int, Object)} instead
+     *
      * @param position
      * @param item
+     * @deprecated use {@link #addData(int, Object)} instead
      */
     @Deprecated
     public void add(int position, T item) {
-        addData(position,item);
+        addData(position, item);
     }
 
     /**
@@ -389,7 +390,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @return The data at the specified position.
      */
     public T getItem(int position) {
-        return mData.get(position);
+        if (position != -1)
+            return mData.get(position);
+        else
+            return null;
     }
 
     /**
@@ -1316,7 +1320,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         return list != null && list.size() > 0;
     }
 
-    private boolean isExpandable(T item) {
+    public boolean isExpandable(T item) {
         return item != null && item instanceof IExpandable;
     }
 
