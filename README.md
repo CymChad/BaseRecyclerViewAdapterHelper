@@ -2,6 +2,7 @@
 [![](https://jitpack.io/v/CymChad/BaseRecyclerViewAdapterHelper.svg)](https://jitpack.io/#CymChad/BaseRecyclerViewAdapterHelper)  
 Powerful and flexible RecyclerAdapter,
 Please feel free to use this.(Welcome to **Star** and **Fork**)
+![](https://cloud.githubusercontent.com/assets/7698209/21709381/923fdd64-d41b-11e6-8298-9bd1e427d636.png)
 ## [UI](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/issues/694)
 ## Google Play Demo
 

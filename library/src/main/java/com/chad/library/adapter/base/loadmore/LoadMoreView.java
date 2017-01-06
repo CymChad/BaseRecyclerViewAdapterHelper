@@ -45,6 +45,11 @@ public abstract class LoadMoreView {
                 visibleLoadFail(holder, false);
                 visibleLoadEnd(holder, true);
                 break;
+            case STATUS_DEFAULT:
+                visibleLoading(holder, false);
+                visibleLoadFail(holder, false);
+                visibleLoadEnd(holder, false);
+                break;
         }
     }
 
