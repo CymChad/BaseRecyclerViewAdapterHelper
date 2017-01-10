@@ -255,7 +255,7 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
 
     public boolean inRangeOfView(View view, MotionEvent ev) {
         int[] location = new int[2];
-        if (view==null||view.getVisibility()!=View.VISIBLE){
+        if (view==null||!view.isShown()){
             return false;
         }
         view.getLocationOnScreen(location);
