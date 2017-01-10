@@ -32,7 +32,6 @@ import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.chad.library.R;
 import com.chad.library.adapter.base.animation.AlphaInAnimation;
 import com.chad.library.adapter.base.animation.BaseAnimation;
 import com.chad.library.adapter.base.animation.ScaleInAnimation;
@@ -123,6 +122,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         mNextLoadEnable = true;
         mLoadMoreEnable = true;
         mLoading = false;
+    }
+
+    public void setNotDoAnimationCount(int count) {
+        mLastPosition = count;
     }
 
     /**
