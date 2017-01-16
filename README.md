@@ -18,6 +18,13 @@ Please feel free to use this.(Welcome to **Star** and **Fork**)
 - [English](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki)
 - [中文](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki/%E9%A6%96%E9%A1%B5)
 
+#proguard-rules.pro
+```
+-keep class com.chad.library.adapter.** {
+   *;
+}
+```
+
 #Extension library
 [PinnedSectionItemDecoration](https://github.com/oubowu/PinnedSectionItemDecoration)  
 [EasyRefreshLayout](https://github.com/anzaizai/EasyRefreshLayout)
