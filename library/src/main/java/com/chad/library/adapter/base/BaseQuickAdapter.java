@@ -274,6 +274,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         this(0, data);
     }
 
+    public BaseQuickAdapter(int layoutResId) {
+        this(layoutResId, null);
+    }
+
     /**
      * setting up a new instance to data;
      *
