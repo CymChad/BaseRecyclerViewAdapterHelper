@@ -3,7 +3,6 @@ package com.chad.library.adapter.base.listener;
 import android.os.Build;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
@@ -116,7 +115,6 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
                         View childView = pressedView.findViewById(childClickViewId);
                         if (childView != null) {
                             if (inRangeOfView(childView, e) && childView.isEnabled()) {
-                                Log.d(TAG, "onSingleTapUp: "+childClickViewIds.size());
                                 if (nestViewIds!=null&&nestViewIds.contains(childClickViewId)){
                                     return false;
                                 }
