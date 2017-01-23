@@ -3,6 +3,7 @@ package com.chad.library.adapter.base.listener;
 import android.os.Build;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
@@ -109,12 +110,16 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
                     return false;
                 }
                 Set<Integer> childClickViewIds = vh.getChildClickViewIds();
-
+                Set<Integer> nestViewIds = vh.getNestViews();
                 if (childClickViewIds != null && childClickViewIds.size() > 0) {
                     for (Integer childClickViewId : childClickViewIds) {
                         View childView = pressedView.findViewById(childClickViewId);
                         if (childView != null) {
                             if (inRangeOfView(childView, e) && childView.isEnabled()) {
+                                Log.d(TAG, "onSingleTapUp: "+childClickViewIds.size());
+                                if (nestViewIds!=null&&nestViewIds.contains(childClickViewId)){
+                                    return false;
+                                }
                                 setPressViewHotSpot(e, childView);
                                 childView.setPressed(true);
                                 onItemChildClick(baseQuickAdapter, childView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
@@ -183,10 +188,14 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
                 BaseViewHolder vh = (BaseViewHolder) recyclerView.getChildViewHolder(mPressedView);
                 if (!isHeaderOrFooterPosition(vh.getLayoutPosition())) {
                     Set<Integer> longClickViewIds = vh.getItemChildLongClickViewIds();
+                    Set<Integer> nestViewIds = vh.getNestViews();
                     if (longClickViewIds != null && longClickViewIds.size() > 0) {
                         for (Integer longClickViewId : longClickViewIds) {
                             View childView = mPressedView.findViewById(longClickViewId);
                             if (inRangeOfView(childView, e) && childView.isEnabled()) {
+                                if (nestViewIds!=null&&nestViewIds.contains(longClickViewIds)){
+                                    break;
+                                }
                                 setPressViewHotSpot(e, childView);
                                 onItemChildLongClick(baseQuickAdapter, childView, vh.getLayoutPosition() - baseQuickAdapter.getHeaderLayoutCount());
                                 childView.setPressed(true);
