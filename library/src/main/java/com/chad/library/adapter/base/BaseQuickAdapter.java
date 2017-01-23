@@ -124,6 +124,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         mLoading = false;
     }
 
+    public void setNotDoAnimationCount(int count) {
+        mLastPosition = count;
+    }
+
     /**
      * Set custom load more
      *
@@ -268,6 +272,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     public BaseQuickAdapter(List<T> data) {
         this(0, data);
+    }
+
+    public BaseQuickAdapter(int layoutResId) {
+        this(layoutResId, null);
     }
 
     /**
@@ -889,6 +897,11 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             return getHeaderLayoutCount() + mData.size();
         }
         return -1;
+    }
+
+    public void setEmptyView(int layoutResId, ViewGroup viewGroup) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(layoutResId, viewGroup, false);
+        setEmptyView(view);
     }
 
     public void setEmptyView(View emptyView) {

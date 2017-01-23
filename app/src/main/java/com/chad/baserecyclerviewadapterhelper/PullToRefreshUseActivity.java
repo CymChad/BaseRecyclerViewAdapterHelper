@@ -72,25 +72,29 @@ public class PullToRefreshUseActivity extends BaseActivity implements BaseQuickA
         mRecyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (mCurrentCounter >= TOTAL_COUNTER) {
-//                    pullToRefreshAdapter.loadMoreEnd();//default visible
-                    pullToRefreshAdapter.loadMoreEnd(mLoadMoreEndGone);//true is gone,false is visible
+                if (pullToRefreshAdapter.getData().size() < PAGE_SIZE) {
+                    pullToRefreshAdapter.loadMoreEnd(true);
                 } else {
-                    if (isErr) {
-                        pullToRefreshAdapter.addData(DataServer.getSampleData(PAGE_SIZE));
-                        mCurrentCounter = pullToRefreshAdapter.getData().size();
-                        pullToRefreshAdapter.loadMoreComplete();
+                    if (mCurrentCounter >= TOTAL_COUNTER) {
+//                    pullToRefreshAdapter.loadMoreEnd();//default visible
+                        pullToRefreshAdapter.loadMoreEnd(mLoadMoreEndGone);//true is gone,false is visible
                     } else {
-                        isErr = true;
-                        Toast.makeText(PullToRefreshUseActivity.this, R.string.network_err, Toast.LENGTH_LONG).show();
-                        pullToRefreshAdapter.loadMoreFail();
+                        if (isErr) {
+                            pullToRefreshAdapter.addData(DataServer.getSampleData(PAGE_SIZE));
+                            mCurrentCounter = pullToRefreshAdapter.getData().size();
+                            pullToRefreshAdapter.loadMoreComplete();
+                        } else {
+                            isErr = true;
+                            Toast.makeText(PullToRefreshUseActivity.this, R.string.network_err, Toast.LENGTH_LONG).show();
+                            pullToRefreshAdapter.loadMoreFail();
 
+                        }
                     }
+                    mSwipeRefreshLayout.setEnabled(true);
                 }
-                mSwipeRefreshLayout.setEnabled(true);
             }
 
-        },delayMillis);
+        }, delayMillis);
     }
 
     @Override

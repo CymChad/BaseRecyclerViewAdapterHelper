@@ -2,19 +2,8 @@
 [![](https://jitpack.io/v/CymChad/BaseRecyclerViewAdapterHelper.svg)](https://jitpack.io/#CymChad/BaseRecyclerViewAdapterHelper)  
 Powerful and flexible RecyclerAdapter,
 Please feel free to use this.(Welcome to **Star** and **Fork**)
-## UI
-![](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/1.png)
-![](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/2.png)
-![](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/3.png)
-![](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/4.png)
-![](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/5.png)
-![](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/6.png)
-![](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/7.png)
-![](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/8.png)
-![](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/9.png)
-![](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/10.png)
-![](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/11.png)
-![](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/12.png)
+![](https://cloud.githubusercontent.com/assets/7698209/21709381/923fdd64-d41b-11e6-8298-9bd1e427d636.png)
+## [UI](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/issues/694)
 ## Google Play Demo
 
 [![Get it on Google Play](https://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=com.chad.baserecyclerviewadapterhelper)
@@ -28,6 +17,13 @@ Please feel free to use this.(Welcome to **Star** and **Fork**)
 ##v2.0.0
 - [English](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki)
 - [中文](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki/%E9%A6%96%E9%A1%B5)
+
+#proguard-rules.pro
+```
+-keep class com.chad.library.adapter.** {
+   *;
+}
+```
 
 #Extension library
 [PinnedSectionItemDecoration](https://github.com/oubowu/PinnedSectionItemDecoration)  
