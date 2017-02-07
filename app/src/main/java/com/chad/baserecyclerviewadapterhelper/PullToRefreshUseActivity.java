@@ -7,11 +7,14 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.PullToRefreshAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
+import com.chad.baserecyclerviewadapterhelper.loadmore.CustomLoadMoreView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 
@@ -48,23 +51,24 @@ public class PullToRefreshUseActivity extends BaseActivity implements BaseQuickA
         setTitle("Pull TO Refresh Use");
         setBackBtn();
         initAdapter();
-//        addHeadView();
+        addHeadView();
     }
 
-//    private void addHeadView() {
-//        View headView = getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false);
-//        ((TextView) headView.findViewById(R.id.tv)).setText("click use custom load view");
-//        headView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mLoadMoreEndGone = true;
-//                pullToRefreshAdapter.setLoadMoreView(new CustomLoadMoreView());
-//                mRecyclerView.setAdapter(pullToRefreshAdapter);
-//                Toast.makeText(PullToRefreshUseActivity.this, "use ok!", Toast.LENGTH_LONG).show();
-//            }
-//        });
-//        pullToRefreshAdapter.addHeaderView(headView);
-//    }
+    private void addHeadView() {
+        View headView = getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false);
+        headView.findViewById(R.id.iv).setVisibility(View.GONE);
+        ((TextView) headView.findViewById(R.id.tv)).setText("setLoadMoreView");
+        headView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLoadMoreEndGone = true;
+                pullToRefreshAdapter.setLoadMoreView(new CustomLoadMoreView());
+                mRecyclerView.setAdapter(pullToRefreshAdapter);
+                Toast.makeText(PullToRefreshUseActivity.this, "change complete", Toast.LENGTH_LONG).show();
+            }
+        });
+        pullToRefreshAdapter.addHeaderView(headView);
+    }
 
     @Override
     public void onLoadMoreRequested() {
