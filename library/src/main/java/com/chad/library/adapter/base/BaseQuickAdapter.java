@@ -46,6 +46,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
@@ -654,9 +655,17 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     protected K createBaseViewHolder(View view) {
         Class<K> z = (Class<K>) ((ParameterizedType) (getClass()
                 .getGenericSuperclass())).getActualTypeArguments()[1];
+        Constructor constructor;
         try {
-            Constructor constructor = z.getConstructor(View.class);
-            return (K) constructor.newInstance(view);
+            String buffer = Modifier.toString(z.getModifiers());
+            String className = z.getName();
+            if (className.contains("$") && !buffer.contains("static")) {
+                constructor = z.getDeclaredConstructor(getClass(), View.class);
+                return (K) constructor.newInstance(this, view);
+            } else {
+                constructor = z.getDeclaredConstructor(View.class);
+                return (K) constructor.newInstance(view);
+            }
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -1016,7 +1025,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * Set the view animation type.
      *
      * @param animationType One of {@link #ALPHAIN}, {@link #SCALEIN}, {@link #SLIDEIN_BOTTOM},
-     * {@link #SLIDEIN_LEFT}, {@link #SLIDEIN_RIGHT}.
+     *                      {@link #SLIDEIN_LEFT}, {@link #SLIDEIN_RIGHT}.
      */
     public void openLoadAnimation(@AnimationType int animationType) {
         this.mOpenAnimationEnable = true;

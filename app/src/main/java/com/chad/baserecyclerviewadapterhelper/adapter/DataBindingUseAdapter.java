@@ -36,11 +36,11 @@ public class DataBindingUseAdapter extends BaseQuickAdapter<Movie, DataBindingUs
         binding.executePendingBindings();
     }
 
-    @Override
+  /*  @Override
     protected MovieViewHolder createBaseViewHolder(View view) {
         return new MovieViewHolder(view);
     }
-
+*/
     @Override
     protected View getItemView(int layoutResId, ViewGroup parent) {
         ViewDataBinding binding = DataBindingUtil.inflate(mLayoutInflater, layoutResId, parent, false);
