@@ -44,6 +44,10 @@ import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -598,7 +602,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     protected void setFullSpan(RecyclerView.ViewHolder holder) {
         if (holder.itemView.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams) {
-            StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
+            StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) holder
+                    .itemView.getLayoutParams();
             params.setFullSpan(true);
         }
     }
@@ -614,9 +619,12 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 public int getSpanSize(int position) {
                     int type = getItemViewType(position);
                     if (mSpanSizeLookup == null)
-                        return (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW) ? gridManager.getSpanCount() : 1;
+                        return (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type ==
+                                LOADING_VIEW) ? gridManager.getSpanCount() : 1;
                     else
-                        return (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW) ? gridManager.getSpanCount() : mSpanSizeLookup.getSpanSize(gridManager, position - getHeaderLayoutCount());
+                        return (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type ==
+                                LOADING_VIEW) ? gridManager.getSpanCount() : mSpanSizeLookup.getSpanSize(gridManager,
+                                position - getHeaderLayoutCount());
                 }
             });
         }
@@ -682,6 +690,28 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @return new ViewHolder
      */
     protected K createBaseViewHolder(View view) {
+        Class<K> z = (Class<K>) ((ParameterizedType) (getClass()
+                .getGenericSuperclass())).getActualTypeArguments()[1];
+        Constructor constructor;
+        try {
+            String buffer = Modifier.toString(z.getModifiers());
+            String className = z.getName();
+            if (className.contains("$") && !buffer.contains("static")) {
+                constructor = z.getDeclaredConstructor(getClass(), View.class);
+                return (K) constructor.newInstance(this, view);
+            } else {
+                constructor = z.getDeclaredConstructor(View.class);
+                return (K) constructor.newInstance(view);
+            }
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
         return (K) new BaseViewHolder(view);
     }
 
@@ -1053,7 +1083,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * Set the view animation type.
      *
-     * @param animationType One of {@link #ALPHAIN}, {@link #SCALEIN}, {@link #SLIDEIN_BOTTOM}, {@link #SLIDEIN_LEFT}, {@link #SLIDEIN_RIGHT}.
+     * @param animationType One of {@link #ALPHAIN}, {@link #SCALEIN}, {@link #SLIDEIN_BOTTOM},
+     *                      {@link #SLIDEIN_LEFT}, {@link #SLIDEIN_RIGHT}.
      */
     public void openLoadAnimation(@AnimationType int animationType) {
         this.mOpenAnimationEnable = true;
@@ -1147,7 +1178,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *
      * @param position     position of the item
      * @param animate      expand items with animation
-     * @param shouldNotify notify the RecyclerView to rebind items, <strong>false</strong> if you want to do it yourself.
+     * @param shouldNotify notify the RecyclerView to rebind items, <strong>false</strong> if you want to do it
+     *                     yourself.
      * @return the number of items that have been added.
      */
     public int expand(@IntRange(from = 0) int position, boolean animate, boolean shouldNotify) {
