@@ -10,13 +10,9 @@ Please feel free to use this. (Welcome to **Star** and **Fork**)
 
 [国内下载地址](https://fir.im/s91g)
 #Document
-##v1.9.8
-- [English](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki/old_doc)
-- [中文](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki/old_doc-cn)
-
-##v2.8.0
 - [English](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki)
 - [中文](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki/%E9%A6%96%E9%A1%B5)
+
 
 #proguard-rules.pro
 ```
