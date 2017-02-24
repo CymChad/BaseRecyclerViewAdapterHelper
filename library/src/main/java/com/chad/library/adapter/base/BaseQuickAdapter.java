@@ -839,6 +839,23 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         }
     }
 
+    public void setFooterView(View header) {
+        setFooterView(header, 0, LinearLayout.VERTICAL);
+    }
+
+    public void setFooterView(View header, int index) {
+        setFooterView(header, index, LinearLayout.VERTICAL);
+    }
+
+    public void setFooterView(View header, int index, int orientation) {
+        if (mFooterLayout == null || mFooterLayout.getChildCount() <= index) {
+            addFooterView(header, index, orientation);
+        } else {
+            mFooterLayout.removeViewAt(index);
+            mFooterLayout.addView(header, index);
+        }
+    }
+
     /**
      * remove header view from mHeaderLayout.
      * When the child count of mHeaderLayout is 0, mHeaderLayout will be set to null.
