@@ -676,7 +676,15 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     protected K onCreateDefViewHolder(ViewGroup parent, int viewType) {
-        return createBaseViewHolder(parent, mLayoutResId);
+        View view = getItemView(mLayoutResId, parent);
+        Class temp = getClass();
+        Class z = null;
+        while (z == null && null != temp) {
+            z = getInstancedGenericKClass(temp);
+            temp = temp.getSuperclass();
+        }
+        K k = createGenericKInstance(z, view);
+        return null != k ? k : (K) new BaseViewHolder(view);
     }
 
     protected K createBaseViewHolder(ViewGroup parent, int layoutResId) {
@@ -691,14 +699,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @return new ViewHolder
      */
     protected K createBaseViewHolder(View view) {
-        Class temp = getClass();
-        Class z = null;
-        while (z == null && null != temp) {
-            z = getInstancedGenericKClass(temp);
-            temp = temp.getSuperclass();
-        }
-        K k = createGenericKInstance(z, view);
-        return null != k ? k : (K) new BaseViewHolder(view);
+        return (K) new BaseViewHolder(view);
     }
 
     /**
