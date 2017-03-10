@@ -793,8 +793,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *
      * @param header
      */
-    public void addHeaderView(View header) {
-        addHeaderView(header, -1);
+    public int addHeaderView(View header) {
+        return addHeaderView(header, -1);
     }
 
     /**
@@ -807,8 +807,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *               When index = -1 or index >= child count in mHeaderLayout,
      *               the effect of this method is the same as that of {@link #addHeaderView(View)}.
      */
-    public void addHeaderView(View header, int index) {
-        addHeaderView(header, index, LinearLayout.VERTICAL);
+    public int addHeaderView(View header, int index) {
+        return addHeaderView(header, index, LinearLayout.VERTICAL);
     }
 
     /**
@@ -816,7 +816,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param index
      * @param orientation
      */
-    public void addHeaderView(View header, int index, int orientation) {
+    public int addHeaderView(View header, int index, int orientation) {
         if (mHeaderLayout == null) {
             mHeaderLayout = new LinearLayout(header.getContext());
             if (orientation == LinearLayout.VERTICAL) {
@@ -827,7 +827,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 mHeaderLayout.setLayoutParams(new LayoutParams(WRAP_CONTENT, MATCH_PARENT));
             }
         }
-        index = index >= mHeaderLayout.getChildCount() ? -1 : index;
+        final int childCount = mHeaderLayout.getChildCount();
+        if(index < 0 || index > childCount){
+            index = childCount;
+        }
         mHeaderLayout.addView(header, index);
         if (mHeaderLayout.getChildCount() == 1) {
             int position = getHeaderViewPosition();
@@ -835,22 +838,24 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 notifyItemInserted(position);
             }
         }
+        return index;
     }
 
-    public void setHeaderView(View header) {
-        setHeaderView(header, 0, LinearLayout.VERTICAL);
+    public int setHeaderView(View header) {
+        return setHeaderView(header, 0, LinearLayout.VERTICAL);
     }
 
-    public void setHeaderView(View header, int index) {
-        setHeaderView(header, index, LinearLayout.VERTICAL);
+    public int setHeaderView(View header, int index) {
+        return setHeaderView(header, index, LinearLayout.VERTICAL);
     }
 
-    public void setHeaderView(View header, int index, int orientation) {
+    public int setHeaderView(View header, int index, int orientation) {
         if (mHeaderLayout == null || mHeaderLayout.getChildCount() <= index) {
-            addHeaderView(header, index, orientation);
+            return addHeaderView(header, index, orientation);
         } else {
             mHeaderLayout.removeViewAt(index);
             mHeaderLayout.addView(header, index);
+            return index;
         }
     }
 
@@ -859,12 +864,12 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *
      * @param footer
      */
-    public void addFooterView(View footer) {
-        addFooterView(footer, -1, LinearLayout.VERTICAL);
+    public int addFooterView(View footer) {
+        return addFooterView(footer, -1, LinearLayout.VERTICAL);
     }
 
-    public void addFooterView(View footer, int index) {
-        addFooterView(footer, index, LinearLayout.VERTICAL);
+    public int addFooterView(View footer, int index) {
+        return addFooterView(footer, index, LinearLayout.VERTICAL);
     }
 
     /**
@@ -877,7 +882,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *               When index = -1 or index >= child count in mFooterLayout,
      *               the effect of this method is the same as that of {@link #addFooterView(View)}.
      */
-    public void addFooterView(View footer, int index, int orientation) {
+    public int addFooterView(View footer, int index, int orientation) {
         if (mFooterLayout == null) {
             mFooterLayout = new LinearLayout(footer.getContext());
             if (orientation == LinearLayout.VERTICAL) {
@@ -888,7 +893,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 mFooterLayout.setLayoutParams(new LayoutParams(WRAP_CONTENT, MATCH_PARENT));
             }
         }
-        index = index >= mFooterLayout.getChildCount() ? -1 : index;
+        final int childCount = mFooterLayout.getChildCount();
+        if(index < 0 || index > childCount){
+            index = childCount;
+        }
         mFooterLayout.addView(footer, index);
         if (mFooterLayout.getChildCount() == 1) {
             int position = getFooterViewPosition();
@@ -896,22 +904,24 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 notifyItemInserted(position);
             }
         }
+        return index;
     }
 
-    public void setFooterView(View header) {
-        setFooterView(header, 0, LinearLayout.VERTICAL);
+    public int setFooterView(View header) {
+        return setFooterView(header, 0, LinearLayout.VERTICAL);
     }
 
-    public void setFooterView(View header, int index) {
-        setFooterView(header, index, LinearLayout.VERTICAL);
+    public int setFooterView(View header, int index) {
+        return setFooterView(header, index, LinearLayout.VERTICAL);
     }
 
-    public void setFooterView(View header, int index, int orientation) {
+    public int setFooterView(View header, int index, int orientation) {
         if (mFooterLayout == null || mFooterLayout.getChildCount() <= index) {
-            addFooterView(header, index, orientation);
+            return addFooterView(header, index, orientation);
         } else {
             mFooterLayout.removeViewAt(index);
             mFooterLayout.addView(header, index);
+            return index;
         }
     }
 
