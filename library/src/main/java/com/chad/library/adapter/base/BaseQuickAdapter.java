@@ -122,11 +122,29 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     public static final int FOOTER_VIEW = 0x00000333;
     public static final int EMPTY_VIEW = 0x00000555;
 
+    private RecyclerView mRecyclerView;
+
+    /**
+     * @deprecated This method is because it can lead to crash: always call this method while RecyclerView is computing a layout or scrolling.
+     * Please use {@link #setOnLoadMoreListener(RequestLoadMoreListener, RecyclerView)}
+     *
+     * @see #setOnLoadMoreListener(RequestLoadMoreListener, RecyclerView)
+     */
+    @Deprecated
     public void setOnLoadMoreListener(RequestLoadMoreListener requestLoadMoreListener) {
+        openLoadMore(requestLoadMoreListener);
+    }
+
+    private void openLoadMore(RequestLoadMoreListener requestLoadMoreListener) {
         this.mRequestLoadMoreListener = requestLoadMoreListener;
         mNextLoadEnable = true;
         mLoadMoreEnable = true;
         mLoading = false;
+    }
+
+    public void setOnLoadMoreListener(RequestLoadMoreListener requestLoadMoreListener, RecyclerView recyclerView) {
+        openLoadMore(requestLoadMoreListener);
+        mRecyclerView = recyclerView;
     }
 
     public void setNotDoAnimationCount(int count) {
@@ -1081,7 +1099,16 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_LOADING);
         if (!mLoading) {
             mLoading = true;
-            mRequestLoadMoreListener.onLoadMoreRequested();
+            if (mRecyclerView != null) {
+                mRecyclerView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRequestLoadMoreListener.onLoadMoreRequested();
+                    }
+                });
+            } else {
+                mRequestLoadMoreListener.onLoadMoreRequested();
+            }
         }
     }
 
