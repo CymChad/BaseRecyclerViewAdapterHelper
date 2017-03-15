@@ -29,10 +29,8 @@ proguard/
 .idea
 build
 <<<<<<< HEAD
-/build.gradle
 /.idea/
 
-build.gradle
 
 .idea/misc.xml
 =======

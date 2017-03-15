@@ -50,7 +50,14 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      */
     private final SparseArray<View> views;
 
+    public HashSet<Integer> getNestViews() {
+        return nestViews;
+    }
+
+    private final HashSet<Integer> nestViews;
+
     private final LinkedHashSet<Integer> childClickViewIds;
+
     private final LinkedHashSet<Integer> itemChildLongClickViewIds;
 
 
@@ -67,6 +74,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         this.views = new SparseArray<View>();
         this.childClickViewIds = new LinkedHashSet<>();
         this.itemChildLongClickViewIds = new LinkedHashSet<>();
+        this.nestViews = new HashSet<>();
         convertView = view;
 
     }
@@ -331,6 +339,17 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      */
     public BaseViewHolder addOnClickListener(int viewId) {
         childClickViewIds.add(viewId);
+        return this;
+    }
+    /**
+     * set nestview id
+     * @param viewId add the child view id   can support childview click
+     * @return
+     */
+    public BaseViewHolder setNestView(int viewId) {
+        addOnClickListener(viewId);
+        addOnLongClickListener(viewId);
+        nestViews.add(viewId);
         return this;
     }
 

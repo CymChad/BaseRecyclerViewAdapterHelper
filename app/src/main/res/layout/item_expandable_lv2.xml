@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:background="@android:color/white"
+              android:layout_width="match_parent"
+              android:layout_height="80dp"
+              android:orientation="horizontal"
+              android:gravity="center_vertical"
+              android:layout_marginBottom="1dp"
+              android:paddingLeft="50dp"
+    >
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/dress_icon"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"/>
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_weight="1"
+        />
+
+</LinearLayout>

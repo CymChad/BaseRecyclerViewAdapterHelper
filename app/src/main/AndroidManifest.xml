@@ -5,12 +5,15 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
-        android:supportsRtl="true">
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
         <activity android:name=".PullToRefreshUseActivity"/>
-        <activity android:name=".HomeActivity">
+        <activity android:name=".WelcomeActivity"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -23,10 +26,13 @@
         <activity android:name=".MultipleItemUseActivity"/>
         <activity android:name=".EmptyViewUseActivity"/>
         <activity android:name=".ItemDragAndSwipeUseActivity"/>
-        <activity android:name=".RecyclerClickItemActivity"/>
         <activity android:name=".ExpandableUseActivity"/>
         <activity android:name=".DataBindingUseActivity"/>
         <activity android:name=".ItemClickActivity">
+        </activity>
+        <activity android:name=".base.BaseActivity">
+        </activity>
+        <activity android:name=".HomeActivity" android:launchMode="singleTask">
         </activity>
     </application>
 

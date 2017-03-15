@@ -2,7 +2,6 @@ package com.chad.baserecyclerviewadapterhelper.adapter;
 
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.Level0Item;
@@ -34,17 +33,31 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
         super(data);
         addItemType(TYPE_LEVEL_0, R.layout.item_expandable_lv0);
         addItemType(TYPE_LEVEL_1, R.layout.item_expandable_lv1);
-        addItemType(TYPE_PERSON, R.layout.item_text_view);
+        addItemType(TYPE_PERSON, R.layout.item_expandable_lv2);
     }
+
+
 
     @Override
     protected void convert(final BaseViewHolder holder, final MultiItemEntity item) {
         switch (holder.getItemViewType()) {
             case TYPE_LEVEL_0:
+                switch (holder.getLayoutPosition() %
+                        3) {
+                    case 0:
+                        holder.setImageResource(R.id.iv_head, R.mipmap.head_img0);
+                        break;
+                    case 1:
+                        holder.setImageResource(R.id.iv_head, R.mipmap.head_img1);
+                        break;
+                    case 2:
+                        holder.setImageResource(R.id.iv_head, R.mipmap.head_img2);
+                        break;
+                }
                 final Level0Item lv0 = (Level0Item)item;
                 holder.setText(R.id.title, lv0.title)
                         .setText(R.id.sub_title, lv0.subTitle)
-                        .setText(R.id.expand_state, lv0.isExpanded() ? R.string.expanded : R.string.collapsed);
+                        .setImageResource(R.id.iv, lv0.isExpanded() ? R.mipmap.arrow_b : R.mipmap.arrow_r);
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -53,11 +66,11 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                         if (lv0.isExpanded()) {
                             collapse(pos);
                         } else {
-                            if (pos % 3 == 0) {
-                                expandAll(pos, false);
-                            } else {
+//                            if (pos % 3 == 0) {
+//                                expandAll(pos, false);
+//                            } else {
                                 expand(pos);
-                            }
+//                            }
                         }
                     }
                 });
@@ -66,7 +79,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                 final Level1Item lv1 = (Level1Item)item;
                 holder.setText(R.id.title, lv1.title)
                         .setText(R.id.sub_title, lv1.subTitle)
-                        .setText(R.id.expand_state, lv1.isExpanded() ? R.string.expanded : R.string.collapsed);
+                        .setImageResource(R.id.iv, lv1.isExpanded() ? R.mipmap.arrow_b : R.mipmap.arrow_r);
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -83,12 +96,6 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
             case TYPE_PERSON:
                 final Person person = (Person)item;
                 holder.setText(R.id.tv, person.name + " parent pos: " + getParentPosition(person));
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d(TAG, "person: " + person.name + " age: " + person.age);
-                    }
-                });
                 break;
         }
     }

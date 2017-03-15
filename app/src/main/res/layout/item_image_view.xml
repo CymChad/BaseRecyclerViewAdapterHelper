@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
-    android:layout_width="match_parent"
-    android:layout_height="120dip"
+    android:layout_width="90dp"
+    android:layout_height="90dp"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
     android:layout_gravity="center"
@@ -17,7 +17,7 @@
     <ImageView
         android:id="@+id/iv"
         android:layout_gravity="center"
-        android:layout_width="@dimen/def_height"
-        android:layout_height="@dimen/def_height"
-        android:src="@mipmap/biglogo_gray"/>
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:src="@mipmap/click_head_img_0"/>
 </android.support.v7.widget.CardView>

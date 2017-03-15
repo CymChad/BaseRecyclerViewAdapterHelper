@@ -1,12 +1,15 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
+import android.text.method.LinkMovementMethod;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.baserecyclerviewadapterhelper.transform.GlideCircleTransform;
+import com.chad.baserecyclerviewadapterhelper.util.SpannableStringUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -14,25 +17,28 @@ import com.chad.library.adapter.base.BaseViewHolder;
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 public class QuickAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
-    public QuickAdapter() {
-        super( R.layout.tweet, DataServer.getSampleData(100));
-    }
 
     public QuickAdapter(int dataSize) {
-        super( R.layout.tweet, DataServer.getSampleData(dataSize));
+        super(R.layout.layout_animation, DataServer.getSampleData(dataSize));
     }
 
     @Override
     protected void convert(BaseViewHolder helper, Status item) {
-        helper.setText(R.id.tweetName, item.getUserName())
-                .setText(R.id.tweetText, item.getText())
-                .setText(R.id.tweetDate, item.getCreatedAt())
-                .setVisible(R.id.tweetRT, item.isRetweet())
-                .addOnClickListener(R.id.tweetAvatar)
-                .addOnClickListener(R.id.tweetName)
-                .linkify(R.id.tweetText);
+        switch (helper.getLayoutPosition() %
+                3) {
+            case 0:
+                helper.setImageResource(R.id.img, R.mipmap.animation_img1);
+                break;
+            case 1:
+                helper.setImageResource(R.id.img, R.mipmap.animation_img2);
+                break;
+            case 2:
+                helper.setImageResource(R.id.img, R.mipmap.animation_img3);
+                break;
+        }
+        helper.setText(R.id.tweetName, "Hoteis in Rio de Janeiro");
+        helper.setText(R.id.tweetText, "O ever youthful,O ever weeping");
 
-        Glide.with(mContext).load(item.getUserAvatar()).crossFade().placeholder(R.mipmap.def_head).transform(new GlideCircleTransform(mContext)).into((ImageView) helper.getView(R.id.tweetAvatar));
     }
 
 
