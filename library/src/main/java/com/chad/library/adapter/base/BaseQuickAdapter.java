@@ -21,6 +21,7 @@ import android.support.annotation.IntDef;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutParams;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -124,11 +125,35 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     private RecyclerView mRecyclerView;
 
+    protected RecyclerView getRecyclerView() {
+        return mRecyclerView;
+    }
+
+    private void setRecyclerView(RecyclerView recyclerView) {
+        mRecyclerView = recyclerView;
+    }
+
+    private void checkNotNull() {
+        if (getRecyclerView() == null) {
+            throw new RuntimeException("please bind recyclerView first!");
+        }
+    }
+
     /**
+     * same as recyclerView.setAdapter(), and save the instance of recyclerView
+     */
+    public void bindToRecyclerView(RecyclerView recyclerView) {
+        if (getRecyclerView() != null) {
+            throw new RuntimeException("Don't bind twice");
+        }
+        setRecyclerView(recyclerView);
+        getRecyclerView().setAdapter(this);
+    }
+
+    /**
+     * @see #setOnLoadMoreListener(RequestLoadMoreListener, RecyclerView)
      * @deprecated This method is because it can lead to crash: always call this method while RecyclerView is computing a layout or scrolling.
      * Please use {@link #setOnLoadMoreListener(RequestLoadMoreListener, RecyclerView)}
-     *
-     * @see #setOnLoadMoreListener(RequestLoadMoreListener, RecyclerView)
      */
     @Deprecated
     public void setOnLoadMoreListener(RequestLoadMoreListener requestLoadMoreListener) {
@@ -144,7 +169,68 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     public void setOnLoadMoreListener(RequestLoadMoreListener requestLoadMoreListener, RecyclerView recyclerView) {
         openLoadMore(requestLoadMoreListener);
-        mRecyclerView = recyclerView;
+        if (getRecyclerView() == null) {
+            setRecyclerView(recyclerView);
+        }
+    }
+
+    /**
+     * bind recyclerView {@link #bindToRecyclerView(RecyclerView)} before use!
+     *
+     * @see #disableLoadMoreIfNotFullPage(RecyclerView)
+     */
+    public void disableLoadMoreIfNotFullPage() {
+        checkNotNull();
+        disableLoadMoreIfNotFullPage(getRecyclerView());
+    }
+
+    /**
+     * check if full page after {@link #setNewData(List)}, if full, it will enable load more again.
+     *
+     * @param recyclerView your recyclerView
+     * @see #setNewData(List)
+     */
+    public void disableLoadMoreIfNotFullPage(RecyclerView recyclerView) {
+        if (recyclerView == null) return;
+        RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+        if (manager == null) return;
+        if (manager instanceof LinearLayoutManager) {
+            final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) manager;
+            recyclerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if ((linearLayoutManager.findLastCompletelyVisibleItemPosition() + 1) != getItemCount()) {
+                        setEnableLoadMore(true);
+                    }
+                }
+            }, 50);
+        } else if (manager instanceof StaggeredGridLayoutManager) {
+            final StaggeredGridLayoutManager staggeredGridLayoutManager = (StaggeredGridLayoutManager) manager;
+            recyclerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    final int[] positions = new int[staggeredGridLayoutManager.getSpanCount()];
+                    staggeredGridLayoutManager.findLastCompletelyVisibleItemPositions(positions);
+                    int pos = getTheBiggestNumber(positions) + 1;
+                    if (pos != getItemCount()) {
+                        setEnableLoadMore(true);
+                    }
+                }
+            }, 50);
+        }
+    }
+
+    private int getTheBiggestNumber(int[] numbers) {
+        int tmp = -1;
+        if (numbers == null || numbers.length == 0) {
+            return tmp;
+        }
+        for (int num : numbers) {
+            if (num > tmp) {
+                tmp = num;
+            }
+        }
+        return tmp;
     }
 
     public void setNotDoAnimationCount(int count) {
@@ -828,7 +914,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             }
         }
         final int childCount = mHeaderLayout.getChildCount();
-        if(index < 0 || index > childCount){
+        if (index < 0 || index > childCount) {
             index = childCount;
         }
         mHeaderLayout.addView(header, index);
@@ -894,7 +980,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             }
         }
         final int childCount = mFooterLayout.getChildCount();
-        if(index < 0 || index > childCount){
+        if (index < 0 || index > childCount) {
             index = childCount;
         }
         mFooterLayout.addView(footer, index);
@@ -1020,6 +1106,16 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         setEmptyView(view);
     }
 
+    /**
+     * bind recyclerView {@link #bindToRecyclerView(RecyclerView)} before use!
+     *
+     * @see #bindToRecyclerView(RecyclerView)
+     */
+    public void setEmptyView(int layoutResId) {
+        checkNotNull();
+        setEmptyView(layoutResId, getRecyclerView());
+    }
+
     public void setEmptyView(View emptyView) {
         boolean insert = false;
         if (mEmptyLayout == null) {
@@ -1109,8 +1205,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_LOADING);
         if (!mLoading) {
             mLoading = true;
-            if (mRecyclerView != null) {
-                mRecyclerView.post(new Runnable() {
+            if (getRecyclerView() != null) {
+                getRecyclerView().post(new Runnable() {
                     @Override
                     public void run() {
                         mRequestLoadMoreListener.onLoadMoreRequested();
@@ -1238,6 +1334,26 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param item   The item that needs to be displayed.
      */
     protected abstract void convert(K helper, T item);
+
+    /**
+     * get the specific view by position,e.g. getViewByPosition(2, R.id.textView)
+     * <p>
+     * bind recyclerView {@link #bindToRecyclerView(RecyclerView)} before use!
+     *
+     * @see #bindToRecyclerView(RecyclerView)
+     */
+    public View getViewByPosition(int position, int viewId) {
+        checkNotNull();
+        return getViewByPosition(getRecyclerView(), position, viewId);
+    }
+
+    public View getViewByPosition(RecyclerView recyclerView, int position, int viewId) {
+        if (recyclerView == null) {
+            return null;
+        }
+        BaseViewHolder viewHolder = (BaseViewHolder) recyclerView.findViewHolderForLayoutPosition(position);
+        return viewHolder.getView(viewId);
+    }
 
     /**
      * Get the row id associated with the specified position in the list.
