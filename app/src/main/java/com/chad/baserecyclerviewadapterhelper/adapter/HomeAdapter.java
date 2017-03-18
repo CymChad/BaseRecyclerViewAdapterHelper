@@ -1,7 +1,5 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
-import android.animation.Animator;
-
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.HomeItem;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -21,6 +19,5 @@ public class HomeAdapter extends BaseQuickAdapter<HomeItem, BaseViewHolder> {
     protected void convert(BaseViewHolder helper, HomeItem item) {
         helper.setText(R.id.text, item.getTitle());
         helper.setImageResource(R.id.icon, item.getImageResource());
-
     }
 }
