@@ -11,9 +11,6 @@ import android.widget.Toast;
 import com.chad.baserecyclerviewadapterhelper.adapter.HeaderAndFooterAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
-
-import static android.R.attr.type;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
@@ -99,9 +96,15 @@ public class HeaderAndFooterUseActivity extends BaseActivity {
         headerAndFooterAdapter = new HeaderAndFooterAdapter(PAGE_SIZE);
         headerAndFooterAdapter.openLoadAnimation();
         mRecyclerView.setAdapter(headerAndFooterAdapter);
-        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
+//        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
+//            @Override
+//            public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+//                Toast.makeText(HeaderAndFooterUseActivity.this, "" + Integer.toString(position), Toast.LENGTH_LONG).show();
+//            }
+//        });
+        headerAndFooterAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Toast.makeText(HeaderAndFooterUseActivity.this, "" + Integer.toString(position), Toast.LENGTH_LONG).show();
             }
         });
