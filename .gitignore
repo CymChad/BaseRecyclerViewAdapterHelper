@@ -37,3 +37,5 @@ build
 .DS_Store
 
 /app/.gitignore
+!/.idea/
+!/.idea/gradle.xml
