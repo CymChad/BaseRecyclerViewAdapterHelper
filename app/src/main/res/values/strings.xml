@@ -1,4 +1,4 @@
-<resources>
+<resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">BRVAH</string>
     <string name="title_activity_header_and_footer_use">HeaderAndFooterUseActivity</string>
     <string name="error">Network error</string>
