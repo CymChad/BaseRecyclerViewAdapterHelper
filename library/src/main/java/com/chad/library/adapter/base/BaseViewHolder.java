@@ -339,6 +339,10 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      */
     public BaseViewHolder addOnClickListener(int viewId) {
         childClickViewIds.add(viewId);
+        View view = getView(viewId);
+        if (!view.isClickable()) {
+            view.setClickable(true);
+        }
         return this;
     }
     /**
@@ -360,6 +364,10 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      */
     public BaseViewHolder addOnLongClickListener(int viewId){
         itemChildLongClickViewIds.add(viewId);
+        View view = getView(viewId);
+        if (!view.isLongClickable()) {
+            view.setLongClickable(true);
+        }
         return this;
     }
 
