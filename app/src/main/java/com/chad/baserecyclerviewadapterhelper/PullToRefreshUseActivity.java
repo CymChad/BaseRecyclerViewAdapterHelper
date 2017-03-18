@@ -57,7 +57,7 @@ public class PullToRefreshUseActivity extends BaseActivity implements BaseQuickA
     private void addHeadView() {
         View headView = getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false);
         headView.findViewById(R.id.iv).setVisibility(View.GONE);
-        ((TextView) headView.findViewById(R.id.tv)).setText("setLoadMoreView");
+        ((TextView) headView.findViewById(R.id.tv)).setText("change load view");
         headView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,32 +73,26 @@ public class PullToRefreshUseActivity extends BaseActivity implements BaseQuickA
     @Override
     public void onLoadMoreRequested() {
         mSwipeRefreshLayout.setEnabled(false);
-        mRecyclerView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (pullToRefreshAdapter.getData().size() < PAGE_SIZE) {
-                    pullToRefreshAdapter.loadMoreEnd(true);
-                } else {
-                    if (mCurrentCounter >= TOTAL_COUNTER) {
+        if (pullToRefreshAdapter.getData().size() < PAGE_SIZE) {
+            pullToRefreshAdapter.loadMoreEnd(true);
+        } else {
+            if (mCurrentCounter >= TOTAL_COUNTER) {
 //                    pullToRefreshAdapter.loadMoreEnd();//default visible
-                        pullToRefreshAdapter.loadMoreEnd(mLoadMoreEndGone);//true is gone,false is visible
-                    } else {
-                        if (isErr) {
-                            pullToRefreshAdapter.addData(DataServer.getSampleData(PAGE_SIZE));
-                            mCurrentCounter = pullToRefreshAdapter.getData().size();
-                            pullToRefreshAdapter.loadMoreComplete();
-                        } else {
-                            isErr = true;
-                            Toast.makeText(PullToRefreshUseActivity.this, R.string.network_err, Toast.LENGTH_LONG).show();
-                            pullToRefreshAdapter.loadMoreFail();
+                pullToRefreshAdapter.loadMoreEnd(mLoadMoreEndGone);//true is gone,false is visible
+            } else {
+                if (isErr) {
+                    pullToRefreshAdapter.addData(DataServer.getSampleData(PAGE_SIZE));
+                    mCurrentCounter = pullToRefreshAdapter.getData().size();
+                    pullToRefreshAdapter.loadMoreComplete();
+                } else {
+                    isErr = true;
+                    Toast.makeText(PullToRefreshUseActivity.this, R.string.network_err, Toast.LENGTH_LONG).show();
+                    pullToRefreshAdapter.loadMoreFail();
 
-                        }
-                    }
-                    mSwipeRefreshLayout.setEnabled(true);
                 }
             }
-
-        }, delayMillis);
+            mSwipeRefreshLayout.setEnabled(true);
+        }
     }
 
     @Override
@@ -118,7 +112,7 @@ public class PullToRefreshUseActivity extends BaseActivity implements BaseQuickA
 
     private void initAdapter() {
         pullToRefreshAdapter = new PullToRefreshAdapter();
-        pullToRefreshAdapter.setOnLoadMoreListener(this);
+        pullToRefreshAdapter.setOnLoadMoreListener(this, mRecyclerView);
         pullToRefreshAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
 //        pullToRefreshAdapter.setAutoLoadMoreSize(3);
         mRecyclerView.setAdapter(pullToRefreshAdapter);
