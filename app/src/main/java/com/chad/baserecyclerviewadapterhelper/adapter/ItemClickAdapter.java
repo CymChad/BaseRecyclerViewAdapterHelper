@@ -60,8 +60,6 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity, Bas
                 nestAdapter.setOnItemClickListener(this);
                 nestAdapter.setOnItemChildClickListener(this);
                 recyclerView.setAdapter(nestAdapter);
-
-//                recyclerView.addOnItemTouchListener(listener);
                 break;
         }
     }
@@ -77,15 +75,4 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity, Bas
         Logger.d("嵌套RecycleView item 收到: " + "点击了第 " + position + " 一次");
         Toast.makeText(Utils.getContext(), "嵌套RecycleView item 收到: " + "点击了第 " + position + " 一次", Toast.LENGTH_SHORT).show();
     }
-//    final com.chad.library.adapter.base.listener.OnItemClickListener  listener = new com.chad.library.adapter.base.listener.OnItemClickListener () {
-//        @Override
-//        public void onSimpleItemClick(final BaseQuickAdapter baseQuickAdapter, final View view, final int i) {
-//
-//        }
-//        @Override
-//        public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-//
-//
-//        }
-//    };
 }

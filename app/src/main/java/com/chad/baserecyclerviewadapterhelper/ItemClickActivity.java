@@ -62,19 +62,9 @@ public class ItemClickActivity extends BaseActivity {
                 Toast.makeText(ItemClickActivity.this, "onItemChildLongClick" + position, Toast.LENGTH_SHORT).show();
             }
         });
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//            }
-//        });
-//        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//                return false;
-//            }
-//        });
-
+/**
+ * you can also use this way to solve your click Event
+ */
 //        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
 //            /**
 //             * Callback method to be invoked when an item in this AdapterView has

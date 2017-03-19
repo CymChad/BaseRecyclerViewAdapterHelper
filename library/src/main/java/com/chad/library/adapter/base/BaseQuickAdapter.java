@@ -663,6 +663,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 break;
             default:
                 baseViewHolder = onCreateDefViewHolder(parent, viewType);
+                bindViewClickListener(baseViewHolder);
         }
         baseViewHolder.setAdapter(this);
         return baseViewHolder;
@@ -741,7 +742,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         }
     }
 
-    private boolean flag = true;
     private SpanSizeLookup mSpanSizeLookup;
 
     public interface SpanSizeLookup {
@@ -768,7 +768,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
         switch (viewType) {
             case 0:
-                bindViewClickListener(holder.getConvertView(),positions);
+
                 convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
                 break;
             case LOADING_VIEW:
@@ -781,25 +781,25 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             case FOOTER_VIEW:
                 break;
             default:
-                bindViewClickListener(holder.getConvertView(),positions);
                 convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
                 break;
         }
     }
-    private int getClickPosition(int position) {
-        return position-getHeaderLayoutCount();
-    }
-    private void bindViewClickListener(final View view, final int positions){
-        final int clickPosition = getClickPosition(positions);
-        if (view==null|| clickPosition<0 ){
+
+    private void bindViewClickListener(final BaseViewHolder baseViewHolder) {
+        if (baseViewHolder == null) {
+            return;
+        }
+        final View view = baseViewHolder.getConvertView();
+        if (view == null) {
             return;
         }
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getOnItemClickListener() != null) {
+                if (getOnItemClickListener() != null&&baseViewHolder!=null) {
 
-                    getOnItemClickListener().onItemClick(BaseQuickAdapter.this, view, clickPosition);
+                    getOnItemClickListener().onItemClick(BaseQuickAdapter.this, view, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
                 }
 
             }
@@ -807,8 +807,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if (getOnItemChildClickListener() != null) {
-                    return getOnItemLongClickListener().onItemLongClick(BaseQuickAdapter.this, view, clickPosition);
+                if (getOnItemChildClickListener() != null&&baseViewHolder!=null) {
+                    return getOnItemLongClickListener().onItemLongClick(BaseQuickAdapter.this, view, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
                 }
                 return false;
 
@@ -1707,6 +1707,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         /**
          * callback method to be invoked when an item in this view has been
          * click and held
+         *
          * @param adapter  the adpater
          * @param view     The view whihin the RecyclerView that was clicked and held.
          * @param position The position of the view int the adapter
@@ -1743,6 +1744,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     public void setOnItemClickListener(@Nullable OnItemClickListener listener) {
         mOnItemClickListener = listener;
     }
+
     /**
      * Register a callback to be invoked when an itemchild in View has
      * been  clicked
@@ -1762,6 +1764,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     public void setOnItemLongClickListener(OnItemLongClickListener listener) {
         mOnItemLongClickListener = listener;
     }
+
     /**
      * Register a callback to be invoked when an itemchild  in this View has
      * been long clicked and held
