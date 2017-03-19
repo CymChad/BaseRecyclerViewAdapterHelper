@@ -11,7 +11,6 @@ import com.chad.baserecyclerviewadapterhelper.util.Utils;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
@@ -19,8 +18,9 @@ import java.util.List;
 /**
  *
  */
-public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity, BaseViewHolder> {
+public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity, BaseViewHolder> implements BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemChildClickListener {
     NestAdapter nestAdapter;
+
     public ItemClickAdapter(List<ClickEntity> data) {
         super(data);
         addItemType(ClickEntity.CLICK_ITEM_VIEW, R.layout.item_click_view);
@@ -40,7 +40,7 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity, Bas
                 break;
             case ClickEntity.CLICK_ITEM_CHILD_VIEW:
                 helper.addOnClickListener(R.id.iv_num_reduce).addOnClickListener(R.id.iv_num_add)
-                .addOnLongClickListener(R.id.iv_num_reduce).addOnLongClickListener(R.id.iv_num_add);
+                        .addOnLongClickListener(R.id.iv_num_reduce).addOnLongClickListener(R.id.iv_num_add);
                 // set img data
                 break;
             case ClickEntity.LONG_CLICK_ITEM_VIEW:
@@ -48,31 +48,31 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity, Bas
                 break;
             case ClickEntity.LONG_CLICK_ITEM_CHILD_VIEW:
                 helper.addOnLongClickListener(R.id.iv_num_reduce).addOnLongClickListener(R.id.iv_num_add)
-                .addOnClickListener(R.id.iv_num_reduce).addOnClickListener(R.id.iv_num_add);
+                        .addOnClickListener(R.id.iv_num_reduce).addOnClickListener(R.id.iv_num_add);
                 break;
             case ClickEntity.NEST_CLICK_ITEM_CHILD_VIEW:
                 helper.setNestView(R.id.item_click); // u can set nestview id
                 final RecyclerView recyclerView = (RecyclerView) helper.getView(R.id.nest_list);
-                recyclerView.setLayoutManager(new LinearLayoutManager(helper.getConvertView().getContext(),LinearLayoutManager.VERTICAL,false));
+                recyclerView.setLayoutManager(new LinearLayoutManager(helper.getConvertView().getContext(), LinearLayoutManager.VERTICAL, false));
                 recyclerView.setHasFixedSize(true);
 
                 nestAdapter = new NestAdapter();
+                nestAdapter.setOnItemClickListener(this);
+                nestAdapter.setOnItemChildClickListener(this);
                 recyclerView.setAdapter(nestAdapter);
-
-                recyclerView.addOnItemTouchListener(listener);
                 break;
         }
     }
-    final OnItemClickListener listener = new OnItemClickListener() {
-        @Override
-        public void onSimpleItemClick(final BaseQuickAdapter baseQuickAdapter, final View view, final int i) {
-            Logger.d( "嵌套RecycleView item 收到: "+"点击了第 "+i+" 一次");
-            Toast.makeText(Utils.getContext(), "嵌套RecycleView item 收到: "+"点击了第 "+i+" 一次", Toast.LENGTH_SHORT).show();
-        }
-        @Override
-        public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-            Toast.makeText(Utils.getContext(), "childView click", Toast.LENGTH_SHORT).show();
 
-        }
-    };
+    @Override
+    public boolean onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+        Toast.makeText(Utils.getContext(), "childView click", Toast.LENGTH_SHORT).show();
+        return false;
+    }
+
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        Logger.d("嵌套RecycleView item 收到: " + "点击了第 " + position + " 一次");
+        Toast.makeText(Utils.getContext(), "嵌套RecycleView item 收到: " + "点击了第 " + position + " 一次", Toast.LENGTH_SHORT).show();
+    }
 }
