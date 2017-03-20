@@ -160,7 +160,7 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
 
         private void resetPressedView(final View pressedView) {
             if (pressedView!=null){
-                pressedView.post(new Runnable() {
+                pressedView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         if (pressedView!=null){
@@ -168,7 +168,7 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
                         }
 
                     }
-                });
+                },50);
             }
 
             mIsPrepressed = false;
