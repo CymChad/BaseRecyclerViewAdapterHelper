@@ -54,6 +54,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.R.attr.data;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
@@ -451,6 +452,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         mData.remove(position);
         notifyItemRemoved(position + getHeaderLayoutCount());
         compatibilityDataSizeChanged(0);
+        notifyItemRangeChanged(position, mData.size() - position);
     }
 
     /**
