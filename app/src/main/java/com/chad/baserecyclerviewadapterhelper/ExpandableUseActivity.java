@@ -19,7 +19,8 @@ import java.util.Random;
  */
 public class ExpandableUseActivity extends BaseActivity {
     RecyclerView mRecyclerView;
-
+    ExpandableItemAdapter adapter;
+    ArrayList<MultiItemEntity> list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,16 +31,20 @@ public class ExpandableUseActivity extends BaseActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.rv);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        ArrayList<MultiItemEntity> list = generateData();
-        ExpandableItemAdapter adapter = new ExpandableItemAdapter(list);
+        list = generateData();
+        adapter = new ExpandableItemAdapter(list);
 
 
         mRecyclerView.setAdapter(adapter);
-
+        expandAll();
 //        adapter.expandAll(3, true);
     }
 
-
+    private void expandAll() {
+        for (int i = 0; i <list.size() ; i++) {
+            adapter.expand(i + adapter.getHeaderLayoutCount(), false, false);
+        }
+    }
 
     private ArrayList<MultiItemEntity> generateData() {
         int lv0Count = 9;
