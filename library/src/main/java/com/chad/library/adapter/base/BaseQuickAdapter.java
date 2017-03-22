@@ -54,7 +54,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.attr.data;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
@@ -801,7 +800,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             public void onClick(View v) {
                 if (getOnItemClickListener() != null&&baseViewHolder!=null) {
 
-                    getOnItemClickListener().onItemClick(BaseQuickAdapter.this, view, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
+                    getOnItemClickListener().onItemClick(BaseQuickAdapter.this, v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
                 }
 
             }
@@ -809,8 +808,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if (getOnItemChildClickListener() != null&&baseViewHolder!=null) {
-                    return getOnItemLongClickListener().onItemLongClick(BaseQuickAdapter.this, view, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
+                if (getOnItemLongClickListener() != null&&baseViewHolder!=null) {
+                    return getOnItemLongClickListener().onItemLongClick(BaseQuickAdapter.this, v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
                 }
                 return false;
 

@@ -82,7 +82,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     private int getClickPosition() {
-        return getLayoutPosition()-adapter.getHeaderLayoutCount();
+        return getLayoutPosition() - adapter.getHeaderLayoutCount();
     }
 
     public HashSet<Integer> getItemChildLongClickViewIds() {
@@ -327,6 +327,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     /**
      * Sets the on click listener of the view.
+     *
      * @param viewId   The view id.
      * @param listener The on click listener;
      * @return The BaseViewHolder for chaining.
@@ -340,36 +341,38 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     /**
      * add childView id
-     * @param viewId add the child view id   can support childview click
-     * @return
-     * if you use adapter bind listener
-     * @link {(adapter.setOnItemChildClickListener(listener))}
      *
+     * @param viewId add the child view id   can support childview click
+     * @return if you use adapter bind listener
+     * @link {(adapter.setOnItemChildClickListener(listener))}
+     * <p>
      * or if you can use  recyclerView.addOnItemTouch(listerer)  wo also support this menthod
      */
 
     public BaseViewHolder addOnClickListener(final int viewId) {
         childClickViewIds.add(viewId);
         final View view = getView(viewId);
-        if (view!=null){
+        if (!view.isClickable()) {
+            view.setClickable(true);
+        }
+        if (view != null) {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (adapter.getOnItemChildClickListener() != null) {
-                        adapter.getOnItemChildClickListener().onItemChildClick(adapter, view, getClickPosition());
+                        adapter.getOnItemChildClickListener().onItemChildClick(adapter, v, getClickPosition());
                     }
                 }
             });
         }
-        if (!view.isClickable()) {
-            view.setClickable(true);
-        }
+
         return this;
     }
 
 
     /**
      * set nestview id
+     *
      * @param viewId add the child view id   can support childview click
      * @return
      */
@@ -382,30 +385,31 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     /**
      * add long click view id
-     * @param viewId
-     * @return
-     * if you use adapter bind listener
-     * @link {(adapter.setOnItemChildLongClickListener(listener))}
      *
+     * @param viewId
+     * @return if you use adapter bind listener
+     * @link {(adapter.setOnItemChildLongClickListener(listener))}
+     * <p>
      * or if you can use  recyclerView.addOnItemTouch(listerer)  wo also support this menthod
      */
     public BaseViewHolder addOnLongClickListener(final int viewId) {
         itemChildLongClickViewIds.add(viewId);
         final View view = getView(viewId);
-        if (view!=null){
+        if (!view.isLongClickable()) {
+            view.setLongClickable(true);
+        }
+        if (view != null) {
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     if (adapter.getmOnItemChildLongClickListener() != null) {
-                        adapter.getmOnItemChildLongClickListener().onItemChildLongClick(adapter, view, getClickPosition());
+                        adapter.getmOnItemChildLongClickListener().onItemChildLongClick(adapter, v, getClickPosition());
                     }
                     return false;
                 }
             });
         }
-        if (!view.isLongClickable()) {
-            view.setLongClickable(true);
-        }
+
         return this;
     }
 
