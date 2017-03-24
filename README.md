@@ -13,7 +13,7 @@ Please feel free to use this. (Welcome to **Star** and **Fork**)
 - [English](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki)
 - [中文](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki/%E9%A6%96%E9%A1%B5)  
     [BRVAH源码分析：BaseViewHolder、BaseQuickAdapter之生命周期、预加载实现、上拉加载实现](http://url.cn/45xnhTW)
-
+    [BRVAH源码分析：分组、多布局、折叠](http://url.cn/46Va4jy)
 #proguard-rules.pro
 ```
 -keep class com.chad.library.adapter.** {
