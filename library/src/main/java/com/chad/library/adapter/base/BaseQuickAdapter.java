@@ -448,10 +448,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param position
      */
     public void remove(int position) {
-        mData.remove(position);
-        notifyItemRemoved(position + getHeaderLayoutCount());
+        int internalPosition = position + getHeaderLayoutCount();
+        notifyItemRemoved(internalPosition);
         compatibilityDataSizeChanged(0);
-        notifyItemRangeChanged(position, mData.size() - position);
+        notifyItemRangeChanged(internalPosition, mData.size() - internalPosition);
     }
 
     /**
