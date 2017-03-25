@@ -449,9 +449,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     public void remove(int position) {
         mData.remove(position);
-        notifyItemRemoved(position + getHeaderLayoutCount());
+        int internalPosition = position + getHeaderLayoutCount();
+        notifyItemRemoved(internalPosition);
         compatibilityDataSizeChanged(0);
-        notifyItemRangeChanged(position, mData.size() - position);
+        notifyItemRangeChanged(internalPosition, mData.size() - internalPosition);
     }
 
     /**
@@ -798,7 +799,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getOnItemClickListener() != null&&baseViewHolder!=null) {
+                if (getOnItemClickListener() != null && baseViewHolder != null) {
 
                     getOnItemClickListener().onItemClick(BaseQuickAdapter.this, v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
                 }
@@ -808,7 +809,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if (getOnItemLongClickListener() != null&&baseViewHolder!=null) {
+                if (getOnItemLongClickListener() != null && baseViewHolder != null) {
                     return getOnItemLongClickListener().onItemLongClick(BaseQuickAdapter.this, v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
                 }
                 return false;
