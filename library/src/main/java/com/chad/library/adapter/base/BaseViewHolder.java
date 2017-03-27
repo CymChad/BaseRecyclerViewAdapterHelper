@@ -352,10 +352,10 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     public BaseViewHolder addOnClickListener(final int viewId) {
         childClickViewIds.add(viewId);
         final View view = getView(viewId);
-        if (!view.isClickable()) {
-            view.setClickable(true);
-        }
         if (view != null) {
+            if (!view.isClickable()) {
+                view.setClickable(true);
+            }
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -395,10 +395,10 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     public BaseViewHolder addOnLongClickListener(final int viewId) {
         itemChildLongClickViewIds.add(viewId);
         final View view = getView(viewId);
-        if (!view.isLongClickable()) {
-            view.setLongClickable(true);
-        }
         if (view != null) {
+            if (!view.isLongClickable()) {
+                view.setLongClickable(true);
+            }
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -409,7 +409,6 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
                 }
             });
         }
-
         return this;
     }
 
