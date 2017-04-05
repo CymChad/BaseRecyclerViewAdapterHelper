@@ -185,7 +185,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @see #disableLoadMoreIfNotFullPage(RecyclerView)
      */
     public void disableLoadMoreIfNotFullPage() {
-        setEnableLoadMore(false);
         checkNotNull();
         disableLoadMoreIfNotFullPage(getRecyclerView());
     }
@@ -197,6 +196,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @see #setNewData(List)
      */
     public void disableLoadMoreIfNotFullPage(RecyclerView recyclerView) {
+        setEnableLoadMore(false);
         if (recyclerView == null) return;
         RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
         if (manager == null) return;
