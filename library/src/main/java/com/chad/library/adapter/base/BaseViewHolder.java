@@ -327,7 +327,6 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     /**
      * Sets the on click listener of the view.
-     *
      * @param viewId   The view id.
      * @param listener The on click listener;
      * @return The BaseViewHolder for chaining.
@@ -341,11 +340,11 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     /**
      * add childView id
-     *
      * @param viewId add the child view id   can support childview click
-     * @return if you use adapter bind listener
+     * @return
+     * if you use adapter bind listener
      * @link {(adapter.setOnItemChildClickListener(listener))}
-     * <p>
+     *
      * or if you can use  recyclerView.addOnItemTouch(listerer)  wo also support this menthod
      */
 
@@ -403,7 +402,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
                 @Override
                 public boolean onLongClick(View v) {
                     if (adapter.getmOnItemChildLongClickListener() != null) {
-                        adapter.getmOnItemChildLongClickListener().onItemChildLongClick(adapter, v, getClickPosition());
+                        return adapter.getmOnItemChildLongClickListener().onItemChildLongClick(adapter, v, getClickPosition());
                     }
                     return false;
                 }
