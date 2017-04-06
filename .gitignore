@@ -39,4 +39,5 @@ build
 /app/.gitignore
 !/.idea/
 !/.idea/gradle.xml
+.idea/libraries
 
