@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.HeaderAndFooterAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
+import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 /**
@@ -105,6 +106,7 @@ public class HeaderAndFooterUseActivity extends BaseActivity {
         headerAndFooterAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                adapter.setNewData(DataServer.getSampleData(PAGE_SIZE));
                 Toast.makeText(HeaderAndFooterUseActivity.this, "" + Integer.toString(position), Toast.LENGTH_LONG).show();
             }
         });
