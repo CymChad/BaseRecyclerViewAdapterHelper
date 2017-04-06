@@ -40,4 +40,5 @@ build
 !/.idea/
 !/.idea/gradle.xml
 .idea/libraries
+.idea/vcs.xml
 
