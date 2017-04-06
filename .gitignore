@@ -29,13 +29,9 @@ proguard/
 .idea
 build
 <<<<<<< HEAD
-/.idea/
 
-
-.idea/misc.xml
 =======
 .DS_Store
 
 /app/.gitignore
-!/.idea/
-!/.idea/gradle.xml
+
