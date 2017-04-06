@@ -44,22 +44,22 @@ public class ItemClickActivity extends BaseActivity {
             public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
                 Log.d(TAG, "onItemLongClick: ");
                 Toast.makeText(ItemClickActivity.this, "onItemLongClick" + position, Toast.LENGTH_SHORT).show();
-                return false;
+                return true;
             }
         });
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
-            public boolean onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 Log.d(TAG, "onItemChildClick: ");
                 Toast.makeText(ItemClickActivity.this, "onItemChildClick" + position, Toast.LENGTH_SHORT).show();
-                return false;
             }
         });
         adapter.setOnItemChildLongClickListener(new BaseQuickAdapter.OnItemChildLongClickListener() {
             @Override
-            public void onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
+            public boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
                 Log.d(TAG, "onItemChildLongClick: ");
                 Toast.makeText(ItemClickActivity.this, "onItemChildLongClick" + position, Toast.LENGTH_SHORT).show();
+                return true;
             }
         });
 /**

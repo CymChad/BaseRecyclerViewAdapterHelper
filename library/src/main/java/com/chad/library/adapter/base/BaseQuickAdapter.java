@@ -1678,9 +1678,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
          *
          * @param view     The view whihin the ItemView that was clicked
          * @param position The position of the view int the adapter
-         * @return true if the callback consumed the long click ,false otherwise
          */
-        boolean onItemChildClick(BaseQuickAdapter adapter, View view, int position);
+        void onItemChildClick(BaseQuickAdapter adapter, View view, int position);
     }
 
 
@@ -1697,7 +1696,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
          * @param position The position of the view int the adapter
          * @return true if the callback consumed the long click ,false otherwise
          */
-        void onItemChildLongClick(BaseQuickAdapter adapter, View view, int position);
+        boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position);
     }
 
     /**
