@@ -57,9 +57,8 @@ public class SectionUseActivity extends BaseActivity {
         });
         sectionAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
-            public boolean onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 Toast.makeText(SectionUseActivity.this, "onItemChildClick" + position, Toast.LENGTH_LONG).show();
-                return false;
             }
         });
         mRecyclerView.setAdapter(sectionAdapter);

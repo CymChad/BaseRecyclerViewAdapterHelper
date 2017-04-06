@@ -56,7 +56,7 @@ public class AnimationUseActivity extends Activity {
         mAnimationAdapter.setNotDoAnimationCount(mFirstPageItemCount);
         mAnimationAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
-            public boolean onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 String content = null;
                 Status status = (Status) adapter.getItem(position);
                 switch (view.getId()) {
@@ -69,11 +69,12 @@ public class AnimationUseActivity extends Activity {
                         Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
                         break;
                     case R.id.tweetText:
+                        content = "tweetText:" + status.getUserName();
+                        Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
                         // you have set clickspan .so there should not solve any click event ,just empty
                         break;
 
                 }
-                return false;
             }
         });
         mRecyclerView.setAdapter(mAnimationAdapter);

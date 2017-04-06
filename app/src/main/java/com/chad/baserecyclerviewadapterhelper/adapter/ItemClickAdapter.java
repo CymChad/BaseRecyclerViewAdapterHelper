@@ -65,9 +65,8 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity, Bas
     }
 
     @Override
-    public boolean onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
         Toast.makeText(Utils.getContext(), "childView click", Toast.LENGTH_SHORT).show();
-        return false;
     }
 
     @Override

@@ -8,6 +8,8 @@ import android.view.View;
 import com.chad.baserecyclerviewadapterhelper.adapter.DataBindingUseAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.entity.Movie;
+import com.chad.baserecyclerviewadapterhelper.util.ToastUtils;
+import com.chad.baserecyclerviewadapterhelper.util.Utils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.ArrayList;
@@ -33,19 +35,21 @@ public class DataBindingUseActivity extends BaseActivity {
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-
+                ToastUtils.showShortToast("onItemClick");
             }
         });
         mAdapter.setOnItemChildLongClickListener(new BaseQuickAdapter.OnItemChildLongClickListener() {
             @Override
-            public void onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
-
+            public boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
+                ToastUtils.showShortToast("onItemChildLongClick");
+                return true;
             }
         });
         mAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-                return false;
+                ToastUtils.showShortToast("onItemLongClick");
+                return true;
             }
         });
     }
