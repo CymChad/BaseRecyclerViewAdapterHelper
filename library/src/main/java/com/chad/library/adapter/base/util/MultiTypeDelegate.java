@@ -53,7 +53,6 @@ public abstract class MultiTypeDelegate<T> {
         this.layouts.put(type, layoutResId);
     }
 
-
     /**
      * auto increase type vale, start from 0.
      *
