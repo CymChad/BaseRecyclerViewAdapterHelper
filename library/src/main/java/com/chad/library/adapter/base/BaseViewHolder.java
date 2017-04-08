@@ -72,7 +72,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     public BaseViewHolder(final View view) {
         super(view);
-        this.views = new SparseArray<View>();
+        this.views = new SparseArray<>();
         this.childClickViewIds = new LinkedHashSet<>();
         this.itemChildLongClickViewIds = new LinkedHashSet<>();
         this.nestViews = new HashSet<>();
@@ -327,6 +327,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     /**
      * Sets the on click listener of the view.
+     *
      * @param viewId   The view id.
      * @param listener The on click listener;
      * @return The BaseViewHolder for chaining.
@@ -340,14 +341,14 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     /**
      * add childView id
-     * @param viewId add the child view id   can support childview click
-     * @return
-     * if you use adapter bind listener
-     * @link {(adapter.setOnItemChildClickListener(listener))}
      *
+     * @param viewId add the child view id   can support childview click
+     * @return if you use adapter bind listener
+     * @link {(adapter.setOnItemChildClickListener(listener))}
+     * <p>
      * or if you can use  recyclerView.addOnItemTouch(listerer)  wo also support this menthod
      */
-
+    @SuppressWarnings("unchecked")
     public BaseViewHolder addOnClickListener(final int viewId) {
         childClickViewIds.add(viewId);
         final View view = getView(viewId);
@@ -391,6 +392,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * <p>
      * or if you can use  recyclerView.addOnItemTouch(listerer)  wo also support this menthod
      */
+    @SuppressWarnings("unchecked")
     public BaseViewHolder addOnLongClickListener(final int viewId) {
         itemChildLongClickViewIds.add(viewId);
         final View view = getView(viewId);
@@ -401,8 +403,8 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    if (adapter.getmOnItemChildLongClickListener() != null) {
-                        return adapter.getmOnItemChildLongClickListener().onItemChildLongClick(adapter, v, getClickPosition());
+                    if (adapter.getOnItemChildLongClickListener() != null) {
+                        return adapter.getOnItemChildLongClickListener().onItemChildLongClick(adapter, v, getClickPosition());
                     }
                     return false;
                 }

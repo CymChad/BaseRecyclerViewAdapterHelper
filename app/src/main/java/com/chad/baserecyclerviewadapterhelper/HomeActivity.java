@@ -18,9 +18,9 @@ import java.util.ArrayList;
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 public class HomeActivity extends AppCompatActivity {
-    private static final Class<?>[] ACTIVITY = {AnimationUseActivity.class, MultipleItemUseActivity.class, HeaderAndFooterUseActivity.class, PullToRefreshUseActivity.class, SectionUseActivity.class, EmptyViewUseActivity.class, ItemDragAndSwipeUseActivity.class,ItemClickActivity.class,ExpandableUseActivity.class, DataBindingUseActivity.class};
-    private static final String[] TITLE = {"Animation", "MultipleItem", "Header/Footer", "PullToRefresh", "Section", "EmptyView", "DragAndSwipe", "ItemClick","ExpandableItem", "DataBinding"};
-    private static final int[] IMG = {R.mipmap.gv_animation,R.mipmap.gv_multipleltem,R.mipmap.gv_header_and_footer,R.mipmap.gv_pulltorefresh,R.mipmap.gv_section,R.mipmap.gv_empty,R.mipmap.gv_drag_and_swipe,R.mipmap.gv_item_click,R.mipmap.gv_expandable,R.mipmap.gv_databinding,};
+    private static final Class<?>[] ACTIVITY = {AnimationUseActivity.class, MultipleItemUseActivity.class, HeaderAndFooterUseActivity.class, PullToRefreshUseActivity.class, SectionUseActivity.class, EmptyViewUseActivity.class, ItemDragAndSwipeUseActivity.class, ItemClickActivity.class, ExpandableUseActivity.class, DataBindingUseActivity.class};
+    private static final String[] TITLE = {"Animation", "MultipleItem", "Header/Footer", "PullToRefresh", "Section", "EmptyView", "DragAndSwipe", "ItemClick", "ExpandableItem", "DataBinding"};
+    private static final int[] IMG = {R.mipmap.gv_animation, R.mipmap.gv_multipleltem, R.mipmap.gv_header_and_footer, R.mipmap.gv_pulltorefresh, R.mipmap.gv_section, R.mipmap.gv_empty, R.mipmap.gv_drag_and_swipe, R.mipmap.gv_item_click, R.mipmap.gv_expandable, R.mipmap.gv_databinding,};
     private ArrayList<HomeItem> mDataList;
     private RecyclerView mRecyclerView;
 
@@ -35,9 +35,10 @@ public class HomeActivity extends AppCompatActivity {
 
     private void initView() {
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
     }
 
+    @SuppressWarnings("unchecked")
     private void initAdapter() {
         BaseQuickAdapter homeAdapter = new HomeAdapter(R.layout.home_item_view, mDataList);
         homeAdapter.openLoadAnimation();

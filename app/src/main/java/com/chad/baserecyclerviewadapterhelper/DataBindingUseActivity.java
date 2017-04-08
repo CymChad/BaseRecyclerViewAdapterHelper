@@ -11,6 +11,7 @@ import com.chad.baserecyclerviewadapterhelper.entity.Movie;
 import com.chad.baserecyclerviewadapterhelper.util.ToastUtils;
 import com.chad.baserecyclerviewadapterhelper.util.Utils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,33 +29,32 @@ public class DataBindingUseActivity extends BaseActivity {
         setTitle("DataBinding Use");
         setContentView(R.layout.activity_data_binding_use);
 
-        mRecyclerView = (RecyclerView)findViewById(R.id.rv);
+        mRecyclerView = (RecyclerView) findViewById(R.id.rv);
         mAdapter = new DataBindingUseAdapter(R.layout.item_movie, genData());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener<Movie>() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemClick(BaseQuickAdapter<Movie, ? extends BaseViewHolder> adapter, View view, int position) {
                 ToastUtils.showShortToast("onItemClick");
             }
         });
-        mAdapter.setOnItemChildLongClickListener(new BaseQuickAdapter.OnItemChildLongClickListener() {
+        mAdapter.setOnItemChildLongClickListener(new BaseQuickAdapter.OnItemChildLongClickListener<Movie>() {
             @Override
-            public boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
+            public boolean onItemChildLongClick(BaseQuickAdapter<Movie, ? extends BaseViewHolder> adapter, View view, int position) {
                 ToastUtils.showShortToast("onItemChildLongClick");
                 return true;
             }
         });
-        mAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+        mAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener<Movie>() {
             @Override
-            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+            public boolean onItemLongClick(BaseQuickAdapter<Movie, ? extends BaseViewHolder> adapter, View view, int position) {
                 ToastUtils.showShortToast("onItemLongClick");
                 return true;
             }
         });
     }
 
-   
 
     private List<Movie> genData() {
         ArrayList<Movie> list = new ArrayList<>();
@@ -63,7 +63,7 @@ public class DataBindingUseActivity extends BaseActivity {
             String name = "Chad";
             int price = random.nextInt(10) + 10;
             int len = random.nextInt(80) + 60;
-            Movie movie = new Movie(name, len, price,"He was one of Australia's most distinguished artistes");
+            Movie movie = new Movie(name, len, price, "He was one of Australia's most distinguished artistes");
             list.add(movie);
         }
         return list;
