@@ -626,7 +626,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                     return EMPTY_VIEW;
             }
         }
-        autoLoadMore(position);
         int numHeaders = getHeaderLayoutCount();
         if (position < numHeaders) {
             return HEADER_VIEW;
@@ -795,6 +794,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
                 break;
         }
+        autoLoadMore(positions);
     }
 
     private void bindViewClickListener(final BaseViewHolder baseViewHolder) {
