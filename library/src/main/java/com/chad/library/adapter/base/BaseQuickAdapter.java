@@ -770,6 +770,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     @Override
     public void onBindViewHolder(K holder, int positions) {
+        //Do not move position, need to change before LoadMoreView binding
+        autoLoadMore(positions);
         int viewType = holder.getItemViewType();
 
         switch (viewType) {
@@ -790,7 +792,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
                 break;
         }
-        autoLoadMore(positions);
     }
 
     private void bindViewClickListener(final BaseViewHolder baseViewHolder) {
