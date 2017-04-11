@@ -408,11 +408,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_DEFAULT);
         }
         mLastPosition = -1;
-        if (getHeaderLayoutCount() == 1 && data != null) {
-            notifyItemRangeChanged(getHeaderLayoutCount(), data.size());
-        } else {
-            notifyDataSetChanged();
-        }
+        notifyDataSetChanged();
     }
 
 
