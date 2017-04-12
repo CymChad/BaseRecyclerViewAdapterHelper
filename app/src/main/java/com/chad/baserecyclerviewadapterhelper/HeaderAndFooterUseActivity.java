@@ -11,7 +11,9 @@ import android.widget.Toast;
 import com.chad.baserecyclerviewadapterhelper.adapter.HeaderAndFooterAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
+import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
@@ -64,6 +66,7 @@ public class HeaderAndFooterUseActivity extends BaseActivity {
         view.setOnClickListener(listener);
         return view;
     }
+
     private View getFooterView(int type, View.OnClickListener listener) {
         View view = getLayoutInflater().inflate(R.layout.footer_view, (ViewGroup) mRecyclerView.getParent(), false);
         if (type == 1) {
@@ -103,9 +106,9 @@ public class HeaderAndFooterUseActivity extends BaseActivity {
 //                Toast.makeText(HeaderAndFooterUseActivity.this, "" + Integer.toString(position), Toast.LENGTH_LONG).show();
 //            }
 //        });
-        headerAndFooterAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        headerAndFooterAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener<Status>() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemClick(BaseQuickAdapter<Status, ? extends BaseViewHolder> adapter, View view, int position) {
                 adapter.setNewData(DataServer.getSampleData(PAGE_SIZE));
                 Toast.makeText(HeaderAndFooterUseActivity.this, "" + Integer.toString(position), Toast.LENGTH_LONG).show();
             }

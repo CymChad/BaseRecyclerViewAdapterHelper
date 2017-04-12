@@ -114,16 +114,16 @@ public class ItemDragAndSwipeUseActivity extends BaseActivity {
 //                ToastUtils.showShortToast("点击了" + position);
 //            }
 //        });
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener<String>() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemClick(BaseQuickAdapter<String, ? extends BaseViewHolder> adapter, View view, int position) {
                 ToastUtils.showShortToast("点击了" + position);
             }
         });
     }
 
     private List<String> generateData(int size) {
-        ArrayList<String> data = new ArrayList(size);
+        ArrayList<String> data = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             data.add("item " + i);
         }
