@@ -113,6 +113,7 @@ public class AnimationUseActivity extends Activity {
                 mRecyclerView.setAdapter(mAnimationAdapter);
             }
         });
+        mAnimationAdapter.isFirstOnly(false);//init firstOnly state
         SwitchButton switchButton = (SwitchButton) findViewById(R.id.switch_button);
         switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
