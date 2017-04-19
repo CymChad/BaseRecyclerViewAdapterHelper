@@ -13,7 +13,6 @@ import com.chad.baserecyclerviewadapterhelper.adapter.AnimationAdapter;
 import com.chad.baserecyclerviewadapterhelper.animation.CustomAnimation;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.kyleduo.switchbutton.SwitchButton;
 
@@ -55,11 +54,11 @@ public class AnimationUseActivity extends Activity {
         mAnimationAdapter = new AnimationAdapter();
         mAnimationAdapter.openLoadAnimation();
         mAnimationAdapter.setNotDoAnimationCount(mFirstPageItemCount);
-        mAnimationAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener<Status>() {
+        mAnimationAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
-            public void onItemChildClick(BaseQuickAdapter<Status, ? extends BaseViewHolder> adapter, View view, int position) {
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 String content = null;
-                Status status = adapter.getItem(position);
+                Status status = (Status) adapter.getItem(position);
                 switch (view.getId()) {
                     case R.id.img:
                         content = "img:" + status.getUserAvatar();
