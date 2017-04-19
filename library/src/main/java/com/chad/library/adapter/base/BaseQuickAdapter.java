@@ -1514,7 +1514,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         }
 
         IExpandable expandable = getExpandableItem(position);
-        if (!hasSubItems(expandable)) {
+        if (expandable == null || !hasSubItems(expandable)) {
             return 0;
         }
 
@@ -1637,6 +1637,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     private boolean hasSubItems(IExpandable item) {
+        if (item == null) { return false; }
         List list = item.getSubItems();
         return list != null && list.size() > 0;
     }
