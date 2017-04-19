@@ -1411,6 +1411,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             return null;
         }
         BaseViewHolder viewHolder = (BaseViewHolder) recyclerView.findViewHolderForLayoutPosition(position);
+        if (viewHolder == null) {
+            return null;
+        }
         return viewHolder.getView(viewId);
     }
 
