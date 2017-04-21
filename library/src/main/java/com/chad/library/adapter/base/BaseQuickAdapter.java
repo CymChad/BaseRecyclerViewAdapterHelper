@@ -379,18 +379,18 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param layoutResId The layout resource id of each item.
      * @param data        A new list is created out of this one to avoid mutable list
      */
-    public BaseQuickAdapter(int layoutResId, List<T> data) {
+    public BaseQuickAdapter(@LayoutRes int layoutResId, @Nullable List<T> data) {
         this.mData = data == null ? new ArrayList<T>() : data;
         if (layoutResId != 0) {
             this.mLayoutResId = layoutResId;
         }
     }
 
-    public BaseQuickAdapter(List<T> data) {
+    public BaseQuickAdapter(@Nullable List<T> data) {
         this(0, data);
     }
 
-    public BaseQuickAdapter(int layoutResId) {
+    public BaseQuickAdapter(@LayoutRes int layoutResId) {
         this(layoutResId, null);
     }
 
@@ -399,7 +399,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *
      * @param data
      */
-    public void setNewData(List<T> data) {
+    public void setNewData(@Nullable List<T> data) {
         this.mData = data == null ? new ArrayList<T>() : data;
         if (mRequestLoadMoreListener != null) {
             mNextLoadEnable = true;
@@ -420,7 +420,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @deprecated use {@link #addData(int, Object)} instead
      */
     @Deprecated
-    public void add(int position, T item) {
+    public void add(@IntRange(from = 0) int position, @NonNull T item) {
         addData(position, item);
     }
 
@@ -429,7 +429,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *
      * @param position
      */
-    public void addData(int position, T data) {
+    public void addData(@IntRange(from = 0) int position, @NonNull T data) {
         mData.add(position, data);
         notifyItemInserted(position + getHeaderLayoutCount());
         compatibilityDataSizeChanged(1);
@@ -438,7 +438,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * add one new data
      */
-    public void addData(T data) {
+    public void addData(@NonNull T data) {
         mData.add(data);
         notifyItemInserted(mData.size() + getHeaderLayoutCount());
         compatibilityDataSizeChanged(1);
@@ -449,7 +449,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *
      * @param position
      */
-    public void remove(int position) {
+    public void remove(@IntRange(from = 0) int position) {
         mData.remove(position);
         int internalPosition = position + getHeaderLayoutCount();
         notifyItemRemoved(internalPosition);
@@ -460,7 +460,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * change data
      */
-    public void setData(int index, T data) {
+    public void setData(@IntRange(from = 0) int index, @NonNull T data) {
         mData.set(index, data);
         notifyItemChanged(index + getHeaderLayoutCount());
     }
@@ -470,7 +470,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *
      * @param position
      */
-    public void addData(int position, List<T> data) {
+    public void addData(@IntRange(from = 0) int position, @Nullable List<T> data) {
         mData.addAll(position, data);
         notifyItemRangeInserted(position + getHeaderLayoutCount(), data.size());
         compatibilityDataSizeChanged(data.size());
@@ -481,7 +481,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *
      * @param newData
      */
-    public void addData(List<T> newData) {
+    public void addData(@Nullable List<T> newData) {
         this.mData.addAll(newData);
         notifyItemRangeInserted(mData.size() - newData.size() + getHeaderLayoutCount(), newData.size());
         compatibilityDataSizeChanged(newData.size());
@@ -504,6 +504,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *
      * @return
      */
+    @NonNull
     public List<T> getData() {
         return mData;
     }
@@ -515,7 +516,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *                 data set.
      * @return The data at the specified position.
      */
-    public T getItem(int position) {
+    public T getItem(@IntRange(from = 0) int position) {
         if (position != -1)
             return mData.get(position);
         else
