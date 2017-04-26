@@ -738,16 +738,45 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 @Override
                 public int getSpanSize(int position) {
                     int type = getItemViewType(position);
-                    if (mSpanSizeLookup == null)
+                    if (type == HEADER_VIEW && isHeaderViewAsFlow()) {
+                        return 1;
+                    }
+                    if (type == FOOTER_VIEW && isFooterViewAsFlow()) {
+                        return 1;
+                    }
+                    if (mSpanSizeLookup == null) {
                         return (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type ==
                                 LOADING_VIEW) ? gridManager.getSpanCount() : 1;
-                    else
+                    } else {
                         return (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type ==
                                 LOADING_VIEW) ? gridManager.getSpanCount() : mSpanSizeLookup.getSpanSize(gridManager,
                                 position - getHeaderLayoutCount());
+                    }
                 }
             });
         }
+    }
+
+    /**
+     * if asFlow is true, footer/header will arrange like normal item view.
+     * only works when use {@link GridLayoutManager},and it will ignore span size.
+     */
+    private boolean headerViewAsFlow, footerViewAsFlow;
+
+    public void setHeaderViewAsFlow(boolean headerViewAsFlow) {
+        this.headerViewAsFlow = headerViewAsFlow;
+    }
+
+    public boolean isHeaderViewAsFlow() {
+        return headerViewAsFlow;
+    }
+
+    public void setFooterViewAsFlow(boolean footerViewAsFlow) {
+        this.footerViewAsFlow = footerViewAsFlow;
+    }
+
+    public boolean isFooterViewAsFlow() {
+        return footerViewAsFlow;
     }
 
     private SpanSizeLookup mSpanSizeLookup;
@@ -1558,7 +1587,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     public void expandAll() {
-        for (int i = mData.size() - 1; i >=0; i--) {
+        for (int i = mData.size() - 1; i >= 0; i--) {
             expandAll(i, false, false);
         }
     }
@@ -1642,7 +1671,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     private boolean hasSubItems(IExpandable item) {
-        if (item == null) { return false; }
+        if (item == null) {
+            return false;
+        }
         List list = item.getSubItems();
         return list != null && list.size() > 0;
     }
