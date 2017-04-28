@@ -17,6 +17,7 @@ package com.chad.library.adapter.base;
 
 import android.animation.Animator;
 import android.content.Context;
+import android.support.annotation.IdRes;
 import android.support.annotation.IntDef;
 import android.support.annotation.IntRange;
 import android.support.annotation.LayoutRes;
@@ -471,7 +472,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *
      * @param position
      */
-    public void addData(@IntRange(from = 0) int position, @Nullable List<T> data) {
+    public void addData(@IntRange(from = 0) int position, @NonNull List<T> data) {
         mData.addAll(position, data);
         notifyItemRangeInserted(position + getHeaderLayoutCount(), data.size());
         compatibilityDataSizeChanged(data.size());
@@ -482,7 +483,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *
      * @param newData
      */
-    public void addData(@Nullable List<T> newData) {
+    public void addData(@NonNull List<T> newData) {
         this.mData.addAll(newData);
         notifyItemRangeInserted(mData.size() - newData.size() + getHeaderLayoutCount(), newData.size());
         compatibilityDataSizeChanged(newData.size());
@@ -517,8 +518,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *                 data set.
      * @return The data at the specified position.
      */
+    @Nullable
     public T getItem(@IntRange(from = 0) int position) {
-        if (position != -1)
+        if (position < mData.size())
             return mData.get(position);
         else
             return null;
@@ -829,14 +831,14 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         if (baseViewHolder == null) {
             return;
         }
-        final View view = baseViewHolder.getConvertView();
+        final View view = baseViewHolder.itemView;
         if (view == null) {
             return;
         }
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getOnItemClickListener() != null && baseViewHolder != null) {
+                if (getOnItemClickListener() != null) {
 
                     getOnItemClickListener().onItemClick(BaseQuickAdapter.this, v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
                 }
@@ -846,11 +848,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if (getOnItemLongClickListener() != null && baseViewHolder != null) {
-                    return getOnItemLongClickListener().onItemLongClick(BaseQuickAdapter.this, v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
-                }
-                return false;
-
+                return getOnItemLongClickListener() != null &&
+                        getOnItemLongClickListener().onItemLongClick(BaseQuickAdapter.this, v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
             }
         });
     }
@@ -884,6 +883,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param view view
      * @return new ViewHolder
      */
+    @SuppressWarnings("unchecked")
     protected K createBaseViewHolder(View view) {
         Class temp = getClass();
         Class z = null;
@@ -902,6 +902,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param view
      * @return
      */
+    @SuppressWarnings("unchecked")
     private K createGenericKInstance(Class z, View view) {
         try {
             Constructor constructor;
@@ -1349,7 +1350,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *                    hierarchy
      * @return view will be return
      */
-    protected View getItemView(int layoutResId, ViewGroup parent) {
+    protected View getItemView(@LayoutRes int layoutResId, ViewGroup parent) {
         return mLayoutInflater.inflate(layoutResId, parent, false);
     }
 
@@ -1432,12 +1433,12 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *
      * @see #bindToRecyclerView(RecyclerView)
      */
-    public View getViewByPosition(int position, int viewId) {
+    public View getViewByPosition(int position, @IdRes int viewId) {
         checkNotNull();
         return getViewByPosition(getRecyclerView(), position, viewId);
     }
 
-    public View getViewByPosition(RecyclerView recyclerView, int position, int viewId) {
+    public View getViewByPosition(RecyclerView recyclerView, int position, @IdRes int viewId) {
         if (recyclerView == null) {
             return null;
         }
@@ -1459,6 +1460,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         return position;
     }
 
+    @SuppressWarnings("unchecked")
     private int recursiveExpand(int position, @NonNull List list) {
         int count = 0;
         int pos = position + list.size() - 1;
@@ -1486,6 +1488,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *                     yourself.
      * @return the number of items that have been added.
      */
+    @SuppressWarnings("unchecked")
     public int expand(@IntRange(from = 0) int position, boolean animate, boolean shouldNotify) {
         position -= getHeaderLayoutCount();
 
@@ -1592,6 +1595,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         }
     }
 
+    @SuppressWarnings("unchecked")
     private int recursiveCollapse(@IntRange(from = 0) int position) {
         T item = getItem(position);
         if (!isExpandable(item)) {
