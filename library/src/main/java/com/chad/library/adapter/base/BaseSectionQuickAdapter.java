@@ -23,14 +23,14 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity, K extends
      * @param layoutResId      The layout resource id of each item.
      * @param data             A new list is created out of this one to avoid mutable list
      */
-    public BaseSectionQuickAdapter( int layoutResId, int sectionHeadResId, List<T> data) {
+    public BaseSectionQuickAdapter(int layoutResId, int sectionHeadResId, List<T> data) {
         super(layoutResId, data);
         this.mSectionHeadResId = sectionHeadResId;
     }
 
     @Override
     protected int getDefItemViewType(int position) {
-        return  mData.get(position).isHeader ? SECTION_HEADER_VIEW : 0;
+        return mData.get(position).isHeader ? SECTION_HEADER_VIEW : 0;
     }
 
     @Override
@@ -39,6 +39,11 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity, K extends
             return createBaseViewHolder(getItemView(mSectionHeadResId, parent));
 
         return super.onCreateDefViewHolder(parent, viewType);
+    }
+
+    @Override
+    protected boolean isFixedViewType(int type) {
+        return super.isFixedViewType(type)|| type == SECTION_HEADER_VIEW;
     }
 
     @Override

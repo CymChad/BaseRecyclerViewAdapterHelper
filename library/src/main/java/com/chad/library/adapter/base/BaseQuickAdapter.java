@@ -747,16 +747,21 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                         return 1;
                     }
                     if (mSpanSizeLookup == null) {
-                        return (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type ==
-                                LOADING_VIEW) ? gridManager.getSpanCount() : 1;
+                        return isFixedViewType(type) ? gridManager.getSpanCount() : 1;
                     } else {
-                        return (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type ==
-                                LOADING_VIEW) ? gridManager.getSpanCount() : mSpanSizeLookup.getSpanSize(gridManager,
+                        return (isFixedViewType(type)) ? gridManager.getSpanCount() : mSpanSizeLookup.getSpanSize(gridManager,
                                 position - getHeaderLayoutCount());
                     }
                 }
+
+
             });
         }
+    }
+
+    protected boolean isFixedViewType(int type) {
+        return type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type ==
+                LOADING_VIEW;
     }
 
     /**

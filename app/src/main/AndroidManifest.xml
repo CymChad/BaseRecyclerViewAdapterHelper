@@ -12,8 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".PullToRefreshUseActivity"/>
-        <activity android:name=".WelcomeActivity"
-            >
+        <activity android:name=".WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -32,7 +31,9 @@
         </activity>
         <activity android:name=".base.BaseActivity">
         </activity>
-        <activity android:name=".HomeActivity" android:launchMode="singleTask">
+        <activity
+            android:name=".HomeActivity"
+            android:launchMode="singleTask">
         </activity>
     </application>
 
