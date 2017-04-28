@@ -69,7 +69,7 @@ public class DataBindingUseAdapter extends BaseQuickAdapter<Movie, DataBindingUs
         }
 
         public ViewDataBinding getBinding() {
-            return (ViewDataBinding) getConvertView().getTag(R.id.BaseQuickAdapter_databinding_support);
+            return (ViewDataBinding) itemView.getTag(R.id.BaseQuickAdapter_databinding_support);
         }
     }
 }

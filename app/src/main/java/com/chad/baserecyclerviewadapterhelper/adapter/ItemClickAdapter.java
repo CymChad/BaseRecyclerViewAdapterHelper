@@ -53,7 +53,7 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity, Bas
             case ClickEntity.NEST_CLICK_ITEM_CHILD_VIEW:
                 helper.setNestView(R.id.item_click); // u can set nestview id
                 final RecyclerView recyclerView = helper.getView(R.id.nest_list);
-                recyclerView.setLayoutManager(new LinearLayoutManager(helper.getConvertView().getContext(), LinearLayoutManager.VERTICAL, false));
+                recyclerView.setLayoutManager(new LinearLayoutManager(helper.itemView.getContext(), LinearLayoutManager.VERTICAL, false));
                 recyclerView.setHasFixedSize(true);
 
                 nestAdapter = new NestAdapter();
