@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".EmptyViewUseActivity">
+    tools:context=".activity.EmptyViewUseActivity">
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btn_reset"
         android:layout_width="wrap_content"

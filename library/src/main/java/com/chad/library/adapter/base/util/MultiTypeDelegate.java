@@ -12,7 +12,7 @@ import java.util.List;
  * Date: 2017/4/6 08:41.
  * Email: tyshengsx@gmail.com
  * <p>
- *
+ * <p>
  * more information: https://github.com/CymChad/BaseRecyclerViewAdapterHelper/issues/968
  */
 
