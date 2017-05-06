@@ -17,7 +17,7 @@ public class ScaleInAnimation implements BaseAnimation {
     this(DEFAULT_SCALE_FROM);
   }
 
-  public ScaleInAnimation(float from) {
+  private ScaleInAnimation(float from) {
     mFrom = from;
   }
 

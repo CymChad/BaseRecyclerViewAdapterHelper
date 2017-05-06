@@ -11,28 +11,28 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PullToRefreshUseActivity"/>
-        <activity android:name=".WelcomeActivity">
+        <activity android:name=".activity.PullToRefreshUseActivity"/>
+        <activity android:name=".activity.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".AnimationUseActivity"/>
-        <activity android:name=".HeaderAndFooterUseActivity"/>
-        <activity android:name=".SectionUseActivity"/>
-        <activity android:name=".MultipleItemUseActivity"/>
-        <activity android:name=".EmptyViewUseActivity"/>
-        <activity android:name=".ItemDragAndSwipeUseActivity"/>
-        <activity android:name=".ExpandableUseActivity"/>
-        <activity android:name=".DataBindingUseActivity"/>
-        <activity android:name=".ItemClickActivity">
+        <activity android:name=".activity.AnimationUseActivity"/>
+        <activity android:name=".activity.HeaderAndFooterUseActivity"/>
+        <activity android:name=".activity.SectionUseActivity"/>
+        <activity android:name=".activity.MultipleItemUseActivity"/>
+        <activity android:name=".activity.EmptyViewUseActivity"/>
+        <activity android:name=".activity.ItemDragAndSwipeUseActivity"/>
+        <activity android:name=".activity.ExpandableUseActivity"/>
+        <activity android:name=".activity.DataBindingUseActivity"/>
+        <activity android:name=".activity.ItemClickActivity">
         </activity>
         <activity android:name=".base.BaseActivity">
         </activity>
         <activity
-            android:name=".HomeActivity"
+            android:name=".activity.HomeActivity"
             android:launchMode="singleTask">
         </activity>
     </application>

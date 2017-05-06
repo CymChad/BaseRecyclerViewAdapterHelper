@@ -9,8 +9,8 @@ import java.util.List;
  * Created by luoxw on 2016/8/9.
  */
 public abstract class AbstractExpandableItem<T> implements IExpandable<T> {
-    protected boolean mExpandable = false;
-    protected List<T> mSubItems;
+    private boolean mExpandable = false;
+    private List<T> mSubItems;
 
     @Override
     public boolean isExpanded() {
@@ -27,7 +27,7 @@ public abstract class AbstractExpandableItem<T> implements IExpandable<T> {
         return mSubItems;
     }
 
-    public boolean hasSubItem() {
+    private boolean hasSubItem() {
         return mSubItems != null && mSubItems.size() > 0;
     }
 

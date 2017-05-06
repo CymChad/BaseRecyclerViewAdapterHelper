@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg"
-    tools:context="com.chad.baserecyclerviewadapterhelper.DataBindingUseActivity">
+    tools:context="com.chad.baserecyclerviewadapterhelper.activity.DataBindingUseActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv"
