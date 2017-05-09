@@ -1280,11 +1280,16 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         return mEmptyLayout;
     }
 
-    private int mAutoLoadMoreSize = 1;
+    private int mPreLoadNumber = 1;
 
-    public void setAutoLoadMoreSize(int autoLoadMoreSize) {
-        if (autoLoadMoreSize > 1) {
-            mAutoLoadMoreSize = autoLoadMoreSize;
+    @Deprecated
+    public void setAutoLoadMoreSize(int preLoadNumber) {
+        setPreLoadNumber(preLoadNumber);
+    }
+
+    public void setPreLoadNumber(int preLoadNumber) {
+        if (preLoadNumber > 1) {
+            mPreLoadNumber = preLoadNumber;
         }
     }
 
@@ -1292,7 +1297,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         if (getLoadMoreViewCount() == 0) {
             return;
         }
-        if (position < getItemCount() - mAutoLoadMoreSize) {
+        if (position < getItemCount() - mPreLoadNumber) {
             return;
         }
         if (mLoadMoreView.getLoadMoreStatus() != LoadMoreView.STATUS_DEFAULT) {

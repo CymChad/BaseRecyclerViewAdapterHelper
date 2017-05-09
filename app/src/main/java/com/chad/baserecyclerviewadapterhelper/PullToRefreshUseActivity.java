@@ -114,7 +114,7 @@ public class PullToRefreshUseActivity extends BaseActivity implements BaseQuickA
         pullToRefreshAdapter = new PullToRefreshAdapter();
         pullToRefreshAdapter.setOnLoadMoreListener(this, mRecyclerView);
         pullToRefreshAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
-//        pullToRefreshAdapter.setAutoLoadMoreSize(3);
+//        pullToRefreshAdapter.setPreLoadNumber(3);
         mRecyclerView.setAdapter(pullToRefreshAdapter);
         mCurrentCounter = pullToRefreshAdapter.getData().size();
 
