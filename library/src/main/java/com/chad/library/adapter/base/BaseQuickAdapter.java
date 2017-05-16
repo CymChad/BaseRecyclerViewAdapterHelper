@@ -472,7 +472,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * add new data in to certain location
      *
      * @param position the insert position
-     * @param newData     the new data collection
+     * @param newData  the new data collection
      */
     public void addData(@IntRange(from = 0) int position, @NonNull Collection<? extends T> newData) {
         mData.addAll(position, newData);
@@ -842,23 +842,22 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         if (view == null) {
             return;
         }
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getOnItemClickListener() != null) {
-
+        if (getOnItemClickListener() != null) {
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     getOnItemClickListener().onItemClick(BaseQuickAdapter.this, v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
                 }
-
-            }
-        });
-        view.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                return getOnItemLongClickListener() != null &&
-                        getOnItemLongClickListener().onItemLongClick(BaseQuickAdapter.this, v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
-            }
-        });
+            });
+        }
+        if (getOnItemLongClickListener() != null) {
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    return getOnItemLongClickListener().onItemLongClick(BaseQuickAdapter.this, v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
+                }
+            });
+        }
     }
 
     private MultiTypeDelegate<T> mMultiTypeDelegate;
