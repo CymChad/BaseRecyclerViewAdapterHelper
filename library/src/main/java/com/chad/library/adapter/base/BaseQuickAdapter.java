@@ -55,6 +55,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
@@ -470,21 +471,22 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * add new data in to certain location
      *
-     * @param position
+     * @param position the insert position
+     * @param newData     the new data collection
      */
-    public void addData(@IntRange(from = 0) int position, @NonNull List<T> data) {
-        mData.addAll(position, data);
-        notifyItemRangeInserted(position + getHeaderLayoutCount(), data.size());
-        compatibilityDataSizeChanged(data.size());
+    public void addData(@IntRange(from = 0) int position, @NonNull Collection<? extends T> newData) {
+        mData.addAll(position, newData);
+        notifyItemRangeInserted(position + getHeaderLayoutCount(), newData.size());
+        compatibilityDataSizeChanged(newData.size());
     }
 
     /**
-     * additional data;
+     * add new data to the end of mData
      *
-     * @param newData
+     * @param newData the new data collection
      */
-    public void addData(@NonNull List<T> newData) {
-        this.mData.addAll(newData);
+    public void addData(@NonNull Collection<? extends T> newData) {
+        mData.addAll(newData);
         notifyItemRangeInserted(mData.size() - newData.size() + getHeaderLayoutCount(), newData.size());
         compatibilityDataSizeChanged(newData.size());
     }
