@@ -389,6 +389,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         }
     }
 
+    public BaseQuickAdapter() {
+        this(0, null);
+    }
+
     public BaseQuickAdapter(@Nullable List<T> data) {
         this(0, data);
     }
@@ -1601,7 +1605,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     public void expandAll() {
-        for (int i = mData.size() - 1; i >= 0; i--) {
+        for (int i = mData.size() - 1; i >= 0 + getHeaderLayoutCount(); i--) {
             expandAll(i, false, false);
         }
     }
