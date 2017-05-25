@@ -389,10 +389,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         }
     }
 
-    public BaseQuickAdapter() {
-        this(0, null);
-    }
-
     public BaseQuickAdapter(@Nullable List<T> data) {
         this(0, data);
     }
