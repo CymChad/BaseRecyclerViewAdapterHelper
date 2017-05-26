@@ -242,7 +242,55 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         }
         return tmp;
     }
+    /**
+     * up fetch start
+     */
+    private boolean mUpFetchEnable;
+    private boolean mUpFetching;
+    private UpFetchListener mUpFetchListener;
+    public void setUpFetchEnable(boolean upFetch) {
+        this.mUpFetchEnable = upFetch;
+    }
 
+    public boolean isUpFetchEnable() {
+        return mUpFetchEnable;
+    }
+
+    /**
+     * start up fetch position, default is 1.
+     */
+    private int mStartUpFetchPosition = 1;
+
+    public void setStartUpFetchPosition(int startUpFetchPosition) {
+        mStartUpFetchPosition = startUpFetchPosition;
+    }
+
+    private void autoUpFetch(int positions) {
+        if (!isUpFetchEnable() || isUpFetching()) {
+            return;
+        }
+        if (positions <= mStartUpFetchPosition && mUpFetchListener != null) {
+            mUpFetchListener.onUpFetch();
+        }
+    }
+
+    public boolean isUpFetching() {
+        return mUpFetching;
+    }
+
+    public void setUpFetching(boolean upFetching) {
+        this.mUpFetching = upFetching;
+    }
+
+    public void setUpFetchListener(UpFetchListener upFetchListener) {
+        mUpFetchListener = upFetchListener;
+    }
+    public interface UpFetchListener {
+        void onUpFetch();
+    }
+    /**
+     * up fetch end
+     */
     public void setNotDoAnimationCount(int count) {
         mLastPosition = count;
     }
@@ -810,6 +858,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     @Override
     public void onBindViewHolder(K holder, int positions) {
+        //Add up fetch logic, almost like load more, but simpler.
+        autoUpFetch(positions);
         //Do not move position, need to change before LoadMoreView binding
         autoLoadMore(positions);
         int viewType = holder.getItemViewType();
