@@ -5,6 +5,8 @@ import android.util.SparseIntArray;
 
 import java.util.List;
 
+import static com.chad.library.adapter.base.BaseMultiItemQuickAdapter.TYPE_NOT_FOUND;
+
 /**
  * help you to achieve multi type easily
  * <p>
@@ -43,7 +45,7 @@ public abstract class MultiTypeDelegate<T> {
     protected abstract int getItemType(T t);
 
     public final int getLayoutId(int viewType) {
-        return this.layouts.get(viewType);
+        return this.layouts.get(viewType,TYPE_NOT_FOUND);
     }
 
     private void addItemType(int type, @LayoutRes int layoutResId) {

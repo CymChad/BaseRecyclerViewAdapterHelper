@@ -19,22 +19,23 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity, K ext
     private SparseArray<Integer> layouts;
 
     private static final int DEFAULT_VIEW_TYPE = -0xff;
+    public static final int TYPE_NOT_FOUND = -404;
 
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.
      *
-     * @param data    A new list is created out of this one to avoid mutable list
+     * @param data A new list is created out of this one to avoid mutable list
      */
-    public BaseMultiItemQuickAdapter( List<T> data) {
-        super( data);
+    public BaseMultiItemQuickAdapter(List<T> data) {
+        super(data);
     }
 
     @Override
     protected int getDefItemViewType(int position) {
         Object item = mData.get(position);
         if (item instanceof MultiItemEntity) {
-            return ((MultiItemEntity)item).getItemType();
+            return ((MultiItemEntity) item).getItemType();
         }
         return DEFAULT_VIEW_TYPE;
     }
@@ -49,7 +50,7 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity, K ext
     }
 
     private int getLayoutId(int viewType) {
-        return layouts.get(viewType);
+        return layouts.get(viewType,TYPE_NOT_FOUND);
     }
 
     protected void addItemType(int type, @LayoutRes int layoutResId) {
