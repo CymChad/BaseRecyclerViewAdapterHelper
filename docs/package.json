@@ -1,0 +1,39 @@
+{
+  "name": "BRAVH",
+  "version": "1.0.0",
+  "description": "page for bravh",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server . -p 7070",
+    "dev": "gulp && gulp watch"
+  },
+  "keywords": [
+    "bravh",
+    "Android",
+    "RecycleView",
+    "Angularjs",
+    "Bootstrap"
+  ],
+  "author": "Harlan",
+  "license": "ISC",
+  "dependencies": {
+    "angular": "^1.6.4",
+    "angular-translate": "^2.15.1",
+    "angular-translate-storage-cookie": "^2.15.1",
+    "angular-ui-bootstrap": "^2.5.0",
+    "bootstrap": "^3.3.7"
+  },
+  "devDependencies": {
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^4.0.0",
+    "gulp-cache": "^0.4.6",
+    "gulp-connect": "^5.0.0",
+    "gulp-imagemin": "^3.3.0",
+    "gulp-livereload": "^3.8.1",
+    "gulp-notify": "^3.0.0",
+    "gulp-sass": "^3.1.0",
+    "imagemin-pngquant": "^5.0.1",
+    "gulp-uglify": "^3.0.0"
+  }
+}
