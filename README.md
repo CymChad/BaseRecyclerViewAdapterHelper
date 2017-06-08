@@ -25,7 +25,7 @@ Please feel free to use this. (Welcome to **Star** and **Fork**)
 # Extension library
 [PinnedSectionItemDecoration](https://github.com/oubowu/PinnedSectionItemDecoration)  
 [EasyRefreshLayout](https://github.com/anzaizai/EasyRefreshLayout)  
-[EasySwipeMenuLayout](https：//github.com/anzaizai/EasySwipeMenuLayout)
+[EasySwipeMenuLayout](https://github.com/anzaizai/EasySwipeMenuLayout)
 
 # Thanks
 [JoanZapata / base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper)
