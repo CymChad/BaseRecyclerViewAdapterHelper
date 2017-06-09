@@ -28,6 +28,17 @@ Please feel free to use this. (Welcome to **Star** and **Fork**)
 [EasySwipeMenuLayout](https://github.com/anzaizai/EasySwipeMenuLayout)
 
 # Thanks
+contributors:  
+[Allen](https://github.com/AllenCoder)
+[Harlan](https://github.com/elfman)
+[Tianyang Sheng](https://github.com/tysheng)
+[BlingBling](https://github.com/1109993488)
+[GajAngels](https://github.com/githubzaibao)
+[Frank Kwok](https://github.com/FrankKwok)
+[QtyearLin](https://github.com/QtyearLin)
+[Santiago Castro](https://github.com/bryant1410)
+
+project:  
 [JoanZapata / base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper)
 
 # License
