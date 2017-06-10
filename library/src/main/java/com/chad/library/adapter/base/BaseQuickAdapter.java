@@ -470,6 +470,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Drag
         notifyDataSetChanged();
     }
 
+    public void setData(List<T> data){
+        this.mData = data == null ? new ArrayList<T>() : data;
+    }
+
 
     /**
      * insert  a item associated with the specified position of adapter
@@ -866,6 +870,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Drag
      */
     @Override
     public void onBindViewHolder(K holder, int positions) {
+        super.onBindViewHolder(holder, positions);
         //Add up fetch logic, almost like load more, but simpler.
         autoUpFetch(positions);
         //Do not move position, need to change before LoadMoreView binding
