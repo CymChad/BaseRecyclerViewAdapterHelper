@@ -30,7 +30,6 @@ public class PullToRefreshAdapter extends BaseQuickAdapter<Status, BaseViewHolde
 
     @Override
     protected void convert(BaseViewHolder helper, Status item) {
-        helper.addOnClickListener(R.id.img).addOnClickListener(R.id.tweetText).addOnClickListener(R.id.tweetName);
         switch (helper.getLayoutPosition()%
                 3){
             case 0:
