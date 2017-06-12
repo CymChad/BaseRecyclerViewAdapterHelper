@@ -85,7 +85,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    private int getClickPosition() {
+    protected int getClickPosition() {
         return getLayoutPosition() - adapter.getHeaderLayoutCount();
     }
 

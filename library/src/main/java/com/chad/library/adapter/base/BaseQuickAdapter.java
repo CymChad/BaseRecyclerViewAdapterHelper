@@ -56,6 +56,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
@@ -242,12 +243,14 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         }
         return tmp;
     }
+
     /**
      * up fetch start
      */
     private boolean mUpFetchEnable;
     private boolean mUpFetching;
     private UpFetchListener mUpFetchListener;
+
     public void setUpFetchEnable(boolean upFetch) {
         this.mUpFetchEnable = upFetch;
     }
@@ -435,6 +438,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         if (layoutResId != 0) {
             this.mLayoutResId = layoutResId;
         }
+        this.childClickViewIds = new LinkedHashSet<>();
+        this.itemChildLongClickViewIds = new LinkedHashSet<>();
     }
 
     public BaseQuickAdapter(@Nullable List<T> data) {
@@ -724,9 +729,66 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             default:
                 baseViewHolder = onCreateDefViewHolder(parent, viewType);
                 bindViewClickListener(baseViewHolder);
+                bindChildViewClickListener(baseViewHolder);
         }
         baseViewHolder.setAdapter(this);
         return baseViewHolder;
+
+    }
+
+    private final LinkedHashSet<Integer> childClickViewIds;
+
+    private final LinkedHashSet<Integer> itemChildLongClickViewIds;
+
+    private void bindChildViewClickListener(final K baseViewHolder) {
+        if (baseViewHolder == null) {
+            return;
+        }
+        final View itemView = baseViewHolder.itemView;
+        if (itemView == null) {
+            return;
+        }
+        if (getOnItemChildClickListener() != null) {
+
+            for (int id : childClickViewIds
+                    ) {
+                View view = itemView.findViewById(id);
+                if (view != null) {
+                    if (!view.isClickable()) {
+                        view.setClickable(true);
+                    }
+                    view.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (getOnItemChildClickListener() != null) {
+                                getOnItemChildClickListener().onItemChildClick(BaseQuickAdapter.this, v, baseViewHolder.getClickPosition());
+                            }
+                        }
+                    });
+                }
+
+            }
+
+        }
+        if (getOnItemLongClickListener() != null) {
+            for (int id : itemChildLongClickViewIds
+                    ) {
+                View childView = itemView.findViewById(id);
+                if (childView != null) {
+                    if (!childView.isLongClickable()) {
+                        childView.setLongClickable(true);
+                    }
+                    itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            return getOnItemLongClickListener().onItemLongClick(BaseQuickAdapter.this, v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
+                        }
+                    });
+                }
+
+            }
+
+        }
 
     }
 
@@ -1882,6 +1944,42 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     public void setOnItemChildClickListener(OnItemChildClickListener listener) {
         mOnItemChildClickListener = listener;
+    }
+
+
+    /**
+     * Register a callback to be invoked when an itemchild in View has
+     * been  clicked
+     *
+     * @param listener The callback that will run
+     * @param id  the childView id
+     */
+    public void setOnItemChildClickListener(OnItemChildClickListener listener, @IdRes int... id) {
+
+        if (id != null && id.length > 0) {
+            for (int i : id
+                    ) {
+                childClickViewIds.add(i);
+            }
+        }
+        mOnItemChildClickListener = listener;
+    }
+
+    /**
+     * Register a callback to be invoked when an itemchild  in this View has
+     * been long clicked and held
+     *
+     * @param listener The callback that will run
+     *  @param id  the childView id
+     */
+    public void setOnItemChildLongClickListener(OnItemChildLongClickListener listener, @IdRes int... id) {
+        if (id != null && id.length > 0) {
+            for (int i : id
+                    ) {
+                itemChildLongClickViewIds.add(i);
+            }
+        }
+        mOnItemChildLongClickListener = listener;
     }
 
     /**
