@@ -197,6 +197,13 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * check if full page after {@link #setNewData(List)}, if full, it will enable load more again.
      *
+     * 不是配置项！！
+     *
+     * 这个方法是用来检查是否满一屏的，所以只推荐在 {@link #setNewData(List)} 之后使用
+     * 原理很简单，先关闭 load more，检查完了再决定是否开启
+     *
+     * 不是配置项！！
+     *
      * @param recyclerView your recyclerView
      * @see #setNewData(List)
      */
@@ -1556,11 +1563,13 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *
      * @see #bindToRecyclerView(RecyclerView)
      */
+    @Nullable
     public View getViewByPosition(int position, @IdRes int viewId) {
         checkNotNull();
         return getViewByPosition(getRecyclerView(), position, viewId);
     }
 
+    @Nullable
     public View getViewByPosition(RecyclerView recyclerView, int position, @IdRes int viewId) {
         if (recyclerView == null) {
             return null;

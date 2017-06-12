@@ -4,9 +4,7 @@ Powerful and flexible RecyclerAdapter,
 Please feel free to use this. (Welcome to **Star** and **Fork**)  
 # Document
 - [English](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki)
-- [中文](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki/%E9%A6%96%E9%A1%B5)  
-   - [BRVAH源码分析：BaseViewHolder、BaseQuickAdapter之生命周期、预加载实现、上拉加载实现](http://url.cn/45xnhTW)    
-    - [BRVAH源码分析：分组、多布局、折叠](http://url.cn/46Va4jy)  
+- [中文](http://www.jianshu.com/p/b343fcff51b0)  
 
 ## [UI](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/issues/694)
 ## Demo
@@ -24,9 +22,21 @@ Please feel free to use this. (Welcome to **Star** and **Fork**)
 
 # Extension library
 [PinnedSectionItemDecoration](https://github.com/oubowu/PinnedSectionItemDecoration)  
-[EasyRefreshLayout](https://github.com/anzaizai/EasyRefreshLayout)
+[EasyRefreshLayout](https://github.com/anzaizai/EasyRefreshLayout)  
+[EasySwipeMenuLayout](https://github.com/anzaizai/EasySwipeMenuLayout)
 
 # Thanks
+contributors:  
+[Allen](https://github.com/AllenCoder)
+[Harlan](https://github.com/elfman)
+[Tianyang Sheng](https://github.com/tysheng)
+[BlingBling](https://github.com/1109993488)
+[GajAngels](https://github.com/githubzaibao)
+[Frank Kwok](https://github.com/FrankKwok)
+[QtyearLin](https://github.com/QtyearLin)
+[Santiago Castro](https://github.com/bryant1410)
+
+project:  
 [JoanZapata / base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper)
 
 # License
