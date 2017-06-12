@@ -196,12 +196,12 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     /**
      * check if full page after {@link #setNewData(List)}, if full, it will enable load more again.
-     *
+     * <p>
      * 不是配置项！！
-     *
+     * <p>
      * 这个方法是用来检查是否满一屏的，所以只推荐在 {@link #setNewData(List)} 之后使用
      * 原理很简单，先关闭 load more，检查完了再决定是否开启
-     *
+     * <p>
      * 不是配置项！！
      *
      * @param recyclerView your recyclerView
@@ -295,9 +295,11 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     public void setUpFetchListener(UpFetchListener upFetchListener) {
         mUpFetchListener = upFetchListener;
     }
+
     public interface UpFetchListener {
         void onUpFetch();
     }
+
     /**
      * up fetch end
      */
@@ -780,15 +782,16 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         if (getOnItemLongClickListener() != null) {
             for (int id : itemChildLongClickViewIds
                     ) {
-                View childView = itemView.findViewById(id);
-                if (childView != null) {
-                    if (!childView.isLongClickable()) {
-                        childView.setLongClickable(true);
+                View view = itemView.findViewById(id);
+                if (view != null) {
+                    if (!view.isLongClickable()) {
+                        view.setLongClickable(true);
                     }
-                    itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    view.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View v) {
-                            return getOnItemLongClickListener().onItemLongClick(BaseQuickAdapter.this, v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
+                            return getOnItemChildLongClickListener() != null &&
+                                    getOnItemChildLongClickListener().onItemChildLongClick(BaseQuickAdapter.this, v, baseViewHolder.getClickPosition());
                         }
                     });
                 }
@@ -1961,7 +1964,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * been  clicked
      *
      * @param listener The callback that will run
-     * @param id  the childView id
+     * @param id       the childView id
      */
     public void setOnItemChildClickListener(OnItemChildClickListener listener, @IdRes int... id) {
 
@@ -1979,7 +1982,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * been long clicked and held
      *
      * @param listener The callback that will run
-     *  @param id  the childView id
+     * @param id       the childView id
      */
     public void setOnItemChildLongClickListener(OnItemChildLongClickListener listener, @IdRes int... id) {
         if (id != null && id.length > 0) {

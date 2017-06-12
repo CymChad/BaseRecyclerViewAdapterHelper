@@ -36,19 +36,12 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity, Bas
     protected void convert(final BaseViewHolder helper, final ClickEntity item) {
         switch (helper.getItemViewType()) {
             case ClickEntity.CLICK_ITEM_VIEW:
-                helper.addOnClickListener(R.id.btn);
                 break;
             case ClickEntity.CLICK_ITEM_CHILD_VIEW:
-                helper.addOnClickListener(R.id.iv_num_reduce).addOnClickListener(R.id.iv_num_add)
-                        .addOnLongClickListener(R.id.iv_num_reduce).addOnLongClickListener(R.id.iv_num_add);
-                // set img data
                 break;
             case ClickEntity.LONG_CLICK_ITEM_VIEW:
-                helper.addOnLongClickListener(R.id.btn);
                 break;
             case ClickEntity.LONG_CLICK_ITEM_CHILD_VIEW:
-                helper.addOnLongClickListener(R.id.iv_num_reduce).addOnLongClickListener(R.id.iv_num_add)
-                        .addOnClickListener(R.id.iv_num_reduce).addOnClickListener(R.id.iv_num_add);
                 break;
             case ClickEntity.NEST_CLICK_ITEM_CHILD_VIEW:
                 helper.setNestView(R.id.item_click); // u can set nestview id
