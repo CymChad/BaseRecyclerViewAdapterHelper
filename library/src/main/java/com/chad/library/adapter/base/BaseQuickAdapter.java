@@ -195,12 +195,12 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     /**
      * check if full page after {@link #setNewData(List)}, if full, it will enable load more again.
-     *
+     * <p>
      * 不是配置项！！
-     *
+     * <p>
      * 这个方法是用来检查是否满一屏的，所以只推荐在 {@link #setNewData(List)} 之后使用
      * 原理很简单，先关闭 load more，检查完了再决定是否开启
-     *
+     * <p>
      * 不是配置项！！
      *
      * @param recyclerView your recyclerView
@@ -249,12 +249,14 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         }
         return tmp;
     }
+
     /**
      * up fetch start
      */
     private boolean mUpFetchEnable;
     private boolean mUpFetching;
     private UpFetchListener mUpFetchListener;
+
     public void setUpFetchEnable(boolean upFetch) {
         this.mUpFetchEnable = upFetch;
     }
@@ -292,9 +294,11 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     public void setUpFetchListener(UpFetchListener upFetchListener) {
         mUpFetchListener = upFetchListener;
     }
+
     public interface UpFetchListener {
         void onUpFetch();
     }
+
     /**
      * up fetch end
      */
@@ -969,14 +973,14 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     private K createGenericKInstance(Class z, View view) {
         try {
             Constructor constructor;
-            String buffer = Modifier.toString(z.getModifiers());
-            String className = z.getName();
             // inner and unstatic class
-            if (className.contains("$") && !buffer.contains("static")) {
+            if (z.isMemberClass() && !Modifier.isStatic(z.getModifiers())) {
                 constructor = z.getDeclaredConstructor(getClass(), View.class);
+                constructor.setAccessible(true);
                 return (K) constructor.newInstance(this, view);
             } else {
                 constructor = z.getDeclaredConstructor(View.class);
+                constructor.setAccessible(true);
                 return (K) constructor.newInstance(view);
             }
         } catch (NoSuchMethodException e) {
