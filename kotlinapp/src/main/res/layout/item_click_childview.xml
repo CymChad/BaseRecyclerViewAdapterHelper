@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="120dip"
+    android:layout_margin="5dp"
+    android:layout_gravity="center"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:background="@drawable/touch_bg"
+    >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_height="match_parent"
+        android:src="@mipmap/click_head_img_1"
+        android:scaleType="centerCrop"
+        />
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:text="Shooting Stars"
+        android:layout_marginTop="16dp"
+        android:textStyle="bold"
+        android:layout_marginLeft="13dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/imageView"
+        android:layout_toEndOf="@+id/imageView"/>
+
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/txt_color"
+        android:textSize="13sp"
+        android:text="O ever youthful,O ever weeping."
+        android:layout_below="@+id/tv"
+
+        android:layout_alignLeft="@+id/tv"
+        android:layout_alignStart="@+id/tv"/>
+
+
+    <LinearLayout
+        android:id="@+id/layout_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="12dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginEnd="12dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="8dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+
+
+        <ImageView
+            android:id="@+id/iv_num_reduce"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:background="@drawable/selector_item_child"/>
+
+        <TextView
+            android:id="@+id/tv_num"
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="0"/>
+
+        <ImageView
+            android:id="@+id/iv_num_add"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:background="@drawable/selector_item_child"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

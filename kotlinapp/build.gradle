@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+//apply plugin: 'com.android.databinding'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
@@ -40,5 +41,7 @@ dependencies {
     compile 'com.kyleduo.switchbutton:library:1.4.4'
     compile 'com.orhanobut:logger:1.15'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    // Data Binding
+    kapt 'com.android.databinding:compiler:2.3.1'
 
 }
