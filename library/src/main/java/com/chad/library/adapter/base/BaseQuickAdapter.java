@@ -73,6 +73,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     private boolean mLoading = false;
     private LoadMoreView mLoadMoreView = new SimpleLoadMoreView();
     private RequestLoadMoreListener mRequestLoadMoreListener;
+    private boolean mEnableLoadMoreEndClick = false;
 
     //Animation
     /**
@@ -334,6 +335,15 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     /**
+     * Gets to load more locations
+     *
+     * @return
+     */
+    public int getLoadMoreViewPosition() {
+        return getHeaderLayoutCount() + mData.size() + getFooterLayoutCount();
+    }
+
+    /**
      * @return Whether the Adapter is actively showing load
      * progress.
      */
@@ -362,10 +372,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         mNextLoadEnable = false;
         mLoadMoreView.setLoadMoreEndGone(gone);
         if (gone) {
-            notifyItemRemoved(getHeaderLayoutCount() + mData.size() + getFooterLayoutCount());
+            notifyItemRemoved(getLoadMoreViewPosition());
         } else {
             mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_END);
-            notifyItemChanged(getHeaderLayoutCount() + mData.size() + getFooterLayoutCount());
+            notifyItemChanged(getLoadMoreViewPosition());
         }
     }
 
@@ -377,8 +387,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             return;
         }
         mLoading = false;
+        mNextLoadEnable = true;
         mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_DEFAULT);
-        notifyItemChanged(getHeaderLayoutCount() + mData.size() + getFooterLayoutCount());
+        notifyItemChanged(getLoadMoreViewPosition());
     }
 
     /**
@@ -390,7 +401,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         }
         mLoading = false;
         mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_FAIL);
-        notifyItemChanged(getHeaderLayoutCount() + mData.size() + getFooterLayoutCount());
+        notifyItemChanged(getLoadMoreViewPosition());
     }
 
     /**
@@ -405,12 +416,12 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
         if (oldLoadMoreCount == 1) {
             if (newLoadMoreCount == 0) {
-                notifyItemRemoved(getHeaderLayoutCount() + mData.size() + getFooterLayoutCount());
+                notifyItemRemoved(getLoadMoreViewPosition());
             }
         } else {
             if (newLoadMoreCount == 1) {
                 mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_DEFAULT);
-                notifyItemInserted(getHeaderLayoutCount() + mData.size() + getFooterLayoutCount());
+                notifyItemInserted(getLoadMoreViewPosition());
             }
         }
     }
@@ -741,7 +752,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     }
 
-
     private K getLoadingView(ViewGroup parent) {
         View view = getItemView(mLoadMoreView.getLayoutId(), parent);
         K holder = createBaseViewHolder(view);
@@ -749,12 +759,34 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             @Override
             public void onClick(View v) {
                 if (mLoadMoreView.getLoadMoreStatus() == LoadMoreView.STATUS_FAIL) {
-                    mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_DEFAULT);
-                    notifyItemChanged(getHeaderLayoutCount() + mData.size() + getFooterLayoutCount());
+                    notifyLoadMoreToLoading();
+                }
+                if (mEnableLoadMoreEndClick && mLoadMoreView.getLoadMoreStatus() == LoadMoreView.STATUS_END) {
+                    notifyLoadMoreToLoading();
                 }
             }
         });
         return holder;
+    }
+
+    /**
+     * The notification starts the callback and loads more
+     */
+    public void notifyLoadMoreToLoading() {
+        if (mLoadMoreView.getLoadMoreStatus() == LoadMoreView.STATUS_LOADING) {
+            return;
+        }
+        mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_DEFAULT);
+        notifyItemChanged(getLoadMoreViewPosition());
+    }
+
+    /**
+     * Load more without data when settings are clicked loaded
+     *
+     * @param enable
+     */
+    public void enableLoadMoreEndClick(boolean enable) {
+        mEnableLoadMoreEndClick = enable;
     }
 
     /**
