@@ -45,7 +45,7 @@ class ToastUtils private constructor() {
          * @param text 文本
          */
         fun showShortToastSafe(text: CharSequence) {
-            sHandler.post { showToast(text, Toast.LENGTH_SHORT) }
+            sHandler.post { toast(text, Toast.LENGTH_SHORT) }
         }
 
         /**
@@ -85,7 +85,7 @@ class ToastUtils private constructor() {
          * @param text 文本
          */
         fun showLongToastSafe(text: CharSequence) {
-            sHandler.post { showToast(text, Toast.LENGTH_LONG) }
+            sHandler.post { toast(text, Toast.LENGTH_LONG) }
         }
 
         /**
@@ -125,7 +125,7 @@ class ToastUtils private constructor() {
          * @param text 文本
          */
         fun showShortToast(text: CharSequence) {
-            showToast(text, Toast.LENGTH_SHORT)
+            toast(text, Toast.LENGTH_SHORT)
         }
 
         /**
@@ -165,7 +165,7 @@ class ToastUtils private constructor() {
          * @param text 文本
          */
         fun showLongToast(text: CharSequence) {
-            showToast(text, Toast.LENGTH_LONG)
+            toast(text, Toast.LENGTH_LONG)
         }
 
         /**
@@ -233,7 +233,7 @@ class ToastUtils private constructor() {
          * @param args     参数
          */
         private fun showToast(format: String, duration: Int, vararg args: Any) {
-            showToast(String.format(format, *args), duration)
+            toast(String.format(format, *args), duration)
         }
 
         /**
@@ -243,7 +243,7 @@ class ToastUtils private constructor() {
          * *
          * @param duration 显示时长
          */
-        private fun showToast(text: CharSequence, duration: Int) {
+        private fun toast(text: CharSequence, duration: Int) {
             if (isJumpWhenMore) cancelToast()
             if (sToast == null) {
                 sToast = Toast.makeText(Utils.getContext(), text, duration)

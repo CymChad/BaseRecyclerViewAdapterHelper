@@ -10,8 +10,7 @@ import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.chad.library.R
-import com.orhanobut.logger.Logger
+import com.allen.kotlinapp.R
 
 /**
  * 文 件 名: DataBindingUseActivity
@@ -20,50 +19,40 @@ import com.orhanobut.logger.Logger
  * 修改时间：
  * 修改备注：
  */
-class BaseActivity : AppCompatActivity() {
+open class BaseActivity : AppCompatActivity() {
     /**
      * 日志输出标志getSupportActionBar().
      */
     private var title: TextView? = null
     private var back: ImageView? = null
-    protected val TAG = this.javaClass.getSimpleName()
+    protected val TAG = this.javaClass.simpleName
 
     protected fun setTitle(msg: String) {
-        if (title != null) {
-            title!!.text = msg
-        }
+        title?.text = msg
     }
 
     /**
      * sometime you want to define back event
      */
     protected fun setBackBtn() {
-        if (back != null) {
-            back!!.visibility = View.VISIBLE
-            back!!.setOnClickListener { finish() }
-        } else {
-            Logger.t(TAG).e("back is null ,please check out")
-        }
+        back?.visibility = View.VISIBLE
+        back?.setOnClickListener { finish() }
 
     }
 
     protected fun setBackClickListener(l: View.OnClickListener) {
-        if (back != null) {
-            back!!.visibility = View.VISIBLE
-            back!!.setOnClickListener(l)
-        } else {
-            Logger.t(TAG).e("back is null ,please check out")
-        }
+        back?.visibility = View.VISIBLE
+        back?.setOnClickListener { finish() }
 
     }
 
     private var rootLayout: LinearLayout? = null
 
-    protected override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // 经测试在代码里直接声明透明状态栏更有效
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         }
         // 这句很关键，注意是调用父类的方法
@@ -73,15 +62,10 @@ class BaseActivity : AppCompatActivity() {
 
     private fun initToolbar() {
         val toolbar = findViewById(R.id.toolbar) as Toolbar
-        if (toolbar != null) {
-            setSupportActionBar(toolbar)
-        }
-        if (getSupportActionBar() != null) {
-            // Enable the Up button
-            getSupportActionBar()!!.setDisplayHomeAsUpEnabled(false)
-            getSupportActionBar()!!.setDisplayShowTitleEnabled(false)
-
-        }
+        setSupportActionBar(toolbar)
+        // Enable the Up button
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         back = findViewById(R.id.img_back) as ImageView
         title = findViewById(R.id.title) as TextView
     }
@@ -94,7 +78,7 @@ class BaseActivity : AppCompatActivity() {
     override fun setContentView(view: View) {
         rootLayout = findViewById(R.id.root_layout) as LinearLayout
         if (rootLayout == null) return
-        rootLayout!!.addView(view, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        rootLayout?.addView(view, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
         initToolbar()
     }
 }

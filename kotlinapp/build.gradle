@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'com.android.databinding'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
@@ -45,3 +45,17 @@ dependencies {
     kapt 'com.android.databinding:compiler:2.3.1'
 
 }
+kapt {
+    generateStubs = true
+}
+//buildscript {
+//    ext.kotlin_version = '1.1.2-5'
+//    repositories {
+//        jcenter()
+//    }
+//    dependencies {
+//        classpath 'com.android.tools.build:gradle:2.3.1'
+//        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+//        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
+//    }
+//}

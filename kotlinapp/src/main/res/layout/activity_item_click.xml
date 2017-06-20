@@ -7,7 +7,7 @@
     android:background="@color/bg"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context="com.chad.baserecyclerviewadapterhelper.ItemClickActivity">
+    tools:context=".ItemClickActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"

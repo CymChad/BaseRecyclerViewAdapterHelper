@@ -24,7 +24,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 class AnimationAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.layout_animation, DataServer.getSampleData(100)) {
 
     override fun convert(helper: BaseViewHolder, item: Status) {
-        helper.addOnClickListener(R.id.img).addOnClickListener(R.id.tweetText).addOnClickListener(R.id.tweetName)
+        helper.addOnClickListener(R.id.img).addOnClickListener(R.id.tweetName)
         when (helper.layoutPosition % 3) {
             0 -> helper.setImageResource(R.id.img, R.mipmap.animation_img1)
             1 -> helper.setImageResource(R.id.img, R.mipmap.animation_img2)
@@ -33,6 +33,10 @@ class AnimationAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.layou
         helper.setText(R.id.tweetName, "Hoteis in Rio de Janeiro")
         val msg = "\"He was one of Australia's most of distinguished artistes, renowned for his portraits\""
         (helper.getView<View>(R.id.tweetText) as TextView).setText(SpannableStringUtils.getBuilder(msg).append("landscapes and nedes").setClickSpan(clickableSpan).create())
+        (helper.getView<View>(R.id.tweetText) as TextView).setMovementMethod(com.allen.kotlinapp.util.ClickableMovementMethod.getInstance());
+        (helper.getView<View>(R.id.tweetText) as TextView).setFocusable(false);
+        (helper.getView<View>(R.id.tweetText) as TextView).setClickable(false);
+        (helper.getView<View>(R.id.tweetText) as TextView).setLongClickable(false);
         (helper.getView<View>(R.id.tweetText) as TextView).movementMethod = LinkMovementMethod.getInstance()
     }
 

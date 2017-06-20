@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@android:color/holo_orange_light" android:state_pressed="true" />
+    <item android:drawable="@android:color/holo_red_light" android:state_pressed="true"/>
+    <item android:state_active="false">
+        <shape android:shape="rectangle">
+            <corners android:radius="4dp"/>
+            <solid android:color="@color/item_bg"/>
+            <stroke android:color="@color/color_light_blue" android:width="1dp"/>
+        </shape>
+    </item>
+</selector>
