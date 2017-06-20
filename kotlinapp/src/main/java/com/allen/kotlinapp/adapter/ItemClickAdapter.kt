@@ -33,14 +33,21 @@ class ItemClickAdapter(data: List<ClickEntity>) : BaseMultiItemQuickAdapter<Clic
 
 
     override fun convert(helper: BaseViewHolder, item: ClickEntity) {
+
         when (helper.itemViewType) {
             ClickEntity.CLICK_ITEM_VIEW -> {
+                helper.addOnClickListener(R.id.btn)
             }
             ClickEntity.CLICK_ITEM_CHILD_VIEW -> {
+                helper.addOnClickListener(R.id.iv_num_reduce).addOnClickListener(R.id.iv_num_add)
+                        .addOnLongClickListener(R.id.iv_num_reduce).addOnLongClickListener(R.id.iv_num_add)
             }
             ClickEntity.LONG_CLICK_ITEM_VIEW -> {
+                helper.addOnLongClickListener(R.id.btn)
             }
             ClickEntity.LONG_CLICK_ITEM_CHILD_VIEW -> {
+                helper.addOnLongClickListener(R.id.iv_num_reduce).addOnLongClickListener(R.id.iv_num_add)
+                        .addOnClickListener(R.id.iv_num_reduce).addOnClickListener(R.id.iv_num_add)
             }
             ClickEntity.NEST_CLICK_ITEM_CHILD_VIEW -> {
                 helper.setNestView(R.id.item_click) // u can set nestview id

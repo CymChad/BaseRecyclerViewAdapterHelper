@@ -41,15 +41,15 @@ class ItemClickActivity : BaseActivity() {
             Toast.makeText(this@ItemClickActivity, "onItemLongClick" + position, Toast.LENGTH_SHORT).show()
             true
         }
-        adapter?.setOnItemChildClickListener(BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
+        adapter?.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
             Log.d(TAG, "onItemChildClick: ")
             Toast.makeText(this@ItemClickActivity, "onItemChildClick" + position, Toast.LENGTH_SHORT).show()
-        }, R.id.btn, R.id.iv_num_reduce, R.id.iv_num_add)
-        adapter?.setOnItemChildLongClickListener(BaseQuickAdapter.OnItemChildLongClickListener { adapter, view, position ->
+        }
+        adapter?.onItemChildLongClickListener = BaseQuickAdapter.OnItemChildLongClickListener { adapter, view, position ->
             Log.d(TAG, "onItemChildLongClick: ")
             Toast.makeText(this@ItemClickActivity, "onItemChildLongClick" + position, Toast.LENGTH_SHORT).show()
             true
-        }, R.id.btn, R.id.iv_num_reduce, R.id.iv_num_add)
+        }
         /**
          * you can also use this way to solve your click Event
          */

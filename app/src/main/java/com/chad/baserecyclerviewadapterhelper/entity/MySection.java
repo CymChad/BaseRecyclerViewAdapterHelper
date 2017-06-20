@@ -7,7 +7,6 @@ import com.chad.library.adapter.base.entity.SectionEntity;
  */
 public class MySection extends SectionEntity<Video> {
     private boolean isMore;
-
     public MySection(boolean isHeader, String header, boolean isMroe) {
         super(isHeader, header);
         this.isMore = isMroe;

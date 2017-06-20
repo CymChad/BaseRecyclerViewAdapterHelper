@@ -53,7 +53,7 @@ public class ItemClickActivity extends BaseActivity {
                 Log.d(TAG, "onItemChildClick: ");
                 Toast.makeText(ItemClickActivity.this, "onItemChildClick" + position, Toast.LENGTH_SHORT).show();
             }
-        },R.id.btn,R.id.iv_num_reduce,R.id.iv_num_add);
+        });
         adapter.setOnItemChildLongClickListener(new BaseQuickAdapter.OnItemChildLongClickListener() {
             @Override
             public boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
@@ -61,7 +61,7 @@ public class ItemClickActivity extends BaseActivity {
                 Toast.makeText(ItemClickActivity.this, "onItemChildLongClick" + position, Toast.LENGTH_SHORT).show();
                 return true;
             }
-        },R.id.btn,R.id.iv_num_reduce,R.id.iv_num_add);
+        });
 /**
  * you can also use this way to solve your click Event
  */
