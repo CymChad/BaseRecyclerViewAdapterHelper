@@ -1,5 +1,4 @@
 buildscript {
-    ext.kotlin_version = '1.1.2-5'
     repositories {
         jcenter()
         mavenLocal()
@@ -8,8 +7,6 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
     }
 }
 
