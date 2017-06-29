@@ -3,7 +3,7 @@ jdk:
     - oraclejdk8
 env:
   matrix:
-    - ANDROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-25 ANDROID_ABI=armeabi-v7a
   global:
     - ADB_INSTALL_TIMEOUT=8
 android:
