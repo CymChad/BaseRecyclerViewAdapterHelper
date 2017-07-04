@@ -17,6 +17,7 @@ android {
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        
     }
     dataBinding {
         enabled = true
@@ -33,5 +34,4 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.kyleduo.switchbutton:library:1.4.4'
     compile 'com.orhanobut:logger:1.15'
-
 }
