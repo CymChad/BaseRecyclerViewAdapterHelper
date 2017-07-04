@@ -46,11 +46,11 @@ public class DataBindingUseAdapter extends BaseQuickAdapter<Movie, DataBindingUs
         }
     }
 
-  /*  @Override
-    protected MovieViewHolder createBaseViewHolder(View view) {
-        return new MovieViewHolder(view);
-    }
-*/
+    /*  @Override
+      protected MovieViewHolder createBaseViewHolder(View view) {
+          return new MovieViewHolder(view);
+      }
+  */
     @Override
     protected View getItemView(int layoutResId, ViewGroup parent) {
         ViewDataBinding binding = DataBindingUtil.inflate(mLayoutInflater, layoutResId, parent, false);
@@ -62,7 +62,7 @@ public class DataBindingUseAdapter extends BaseQuickAdapter<Movie, DataBindingUs
         return view;
     }
 
-    public class MovieViewHolder extends BaseViewHolder {
+    public static class MovieViewHolder extends BaseViewHolder {
 
         public MovieViewHolder(View view) {
             super(view);
