@@ -77,12 +77,12 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
     }
 
 
-        /**
-         * Set the toggle view's id which will trigger drag event.
-         * If the toggle view id is not set, drag event will be triggered when the item is long pressed.
-         *
-         * @param toggleViewId the toggle view's id
-         */
+    /**
+     * Set the toggle view's id which will trigger drag event.
+     * If the toggle view id is not set, drag event will be triggered when the item is long pressed.
+     *
+     * @param toggleViewId the toggle view's id
+     */
     public void setToggleViewId(int toggleViewId) {
         mToggleViewId = toggleViewId;
     }
@@ -198,16 +198,18 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
         int from = getViewHolderPosition(source);
         int to = getViewHolderPosition(target);
 
-        if (from < to) {
-            for (int i = from; i < to; i++) {
-                Collections.swap(mData, i, i + 1);
+        if (inRange(from) && inRange(to)) {
+            if (from < to) {
+                for (int i = from; i < to; i++) {
+                    Collections.swap(mData, i, i + 1);
+                }
+            } else {
+                for (int i = from; i > to; i--) {
+                    Collections.swap(mData, i, i - 1);
+                }
             }
-        } else {
-            for (int i = from; i > to; i--) {
-                Collections.swap(mData, i, i - 1);
-            }
+            notifyItemMoved(source.getAdapterPosition(), target.getAdapterPosition());
         }
-        notifyItemMoved(source.getAdapterPosition(), target.getAdapterPosition());
 
         if (mOnItemDragListener != null && itemDragEnabled) {
             mOnItemDragListener.onItemDragMoving(source, from, target, to);
@@ -243,8 +245,10 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
 
         int pos = getViewHolderPosition(viewHolder);
 
-        mData.remove(pos);
-        notifyItemRemoved(viewHolder.getAdapterPosition());
+        if (inRange(pos)) {
+            mData.remove(pos);
+            notifyItemRemoved(viewHolder.getAdapterPosition());
+        }
     }
 
     public void onItemSwiping(Canvas canvas, RecyclerView.ViewHolder viewHolder, float dX, float dY, boolean isCurrentlyActive) {
@@ -253,4 +257,7 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
         }
     }
 
+    private boolean inRange(int position) {
+        return position >= 0 && position < mData.size();
+    }
 }
