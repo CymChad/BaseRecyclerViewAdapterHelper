@@ -40,6 +40,7 @@ import android.widget.TextView;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 
 /**
@@ -52,7 +53,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      */
     private final SparseArray<View> views;
 
-    public HashSet<Integer> getNestViews() {
+    public Set<Integer> getNestViews() {
         return nestViews;
     }
 
