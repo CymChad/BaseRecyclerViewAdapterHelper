@@ -2,6 +2,7 @@ package com.chad.library.adapter.base;
 
 import android.support.annotation.LayoutRes;
 import android.util.SparseArray;
+import android.util.SparseIntArray;
 import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
@@ -16,7 +17,7 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity, K ext
     /**
      * layouts indexed with their types
      */
-    private SparseArray<Integer> layouts;
+    private SparseIntArray layouts;
 
     private static final int DEFAULT_VIEW_TYPE = -0xff;
     public static final int TYPE_NOT_FOUND = -404;
@@ -50,12 +51,12 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity, K ext
     }
 
     private int getLayoutId(int viewType) {
-        return layouts.get(viewType,TYPE_NOT_FOUND);
+        return layouts.get(viewType, TYPE_NOT_FOUND);
     }
 
     protected void addItemType(int type, @LayoutRes int layoutResId) {
         if (layouts == null) {
-            layouts = new SparseArray<>();
+            layouts = new SparseIntArray();
         }
         layouts.put(type, layoutResId);
     }

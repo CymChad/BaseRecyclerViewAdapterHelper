@@ -49,18 +49,18 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
      * To bind different types of holder and solve different the bind events
      *
      * @param holder
-     * @param positions
+     * @param position
      * @see #getDefItemViewType(int)
      */
     @Override
-    public void onBindViewHolder(K holder, int positions) {
-        super.onBindViewHolder(holder, positions);
+    public void onBindViewHolder(K holder, int position) {
+        super.onBindViewHolder(holder, position);
         int viewType = holder.getItemViewType();
 
         if (mItemTouchHelper != null && itemDragEnabled && viewType != LOADING_VIEW && viewType != HEADER_VIEW
                 && viewType != EMPTY_VIEW && viewType != FOOTER_VIEW) {
             if (mToggleViewId != NO_TOGGLE_VIEW) {
-                View toggleView = ((BaseViewHolder) holder).getView(mToggleViewId);
+                View toggleView = holder.getView(mToggleViewId);
                 if (toggleView != null) {
                     toggleView.setTag(R.id.BaseQuickAdapter_viewholder_support, holder);
                     if (mDragOnLongPress) {

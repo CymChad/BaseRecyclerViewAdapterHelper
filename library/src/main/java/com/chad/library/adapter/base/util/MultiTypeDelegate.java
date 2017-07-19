@@ -14,7 +14,7 @@ import static com.chad.library.adapter.base.BaseMultiItemQuickAdapter.TYPE_NOT_F
  * Date: 2017/4/6 08:41.
  * Email: tyshengsx@gmail.com
  * <p>
- *
+ * <p>
  * more information: https://github.com/CymChad/BaseRecyclerViewAdapterHelper/issues/968
  */
 
@@ -45,7 +45,7 @@ public abstract class MultiTypeDelegate<T> {
     protected abstract int getItemType(T t);
 
     public final int getLayoutId(int viewType) {
-        return this.layouts.get(viewType,TYPE_NOT_FOUND);
+        return this.layouts.get(viewType, TYPE_NOT_FOUND);
     }
 
     private void addItemType(int type, @LayoutRes int layoutResId) {
