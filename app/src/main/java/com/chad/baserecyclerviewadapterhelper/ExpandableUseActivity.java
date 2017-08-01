@@ -1,15 +1,12 @@
 package com.chad.baserecyclerviewadapterhelper;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.ExpandableItemAdapter;
+import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.entity.Level0Item;
 import com.chad.baserecyclerviewadapterhelper.entity.Level1Item;
 import com.chad.baserecyclerviewadapterhelper.entity.Person;
@@ -19,47 +16,37 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Created by luoxw on 2016/8/9.
+ * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class ExpandableUseActivity extends Activity {
+public class ExpandableUseActivity extends BaseActivity {
     RecyclerView mRecyclerView;
-
+    ExpandableItemAdapter adapter;
+    ArrayList<MultiItemEntity> list;
     @Override
-    protected  void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setBackBtn();
+        setTitle("ExpandableItem Activity");
         setContentView(R.layout.activity_expandable_item_use);
 
-        mRecyclerView = (RecyclerView)findViewById(R.id.rv);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView = (RecyclerView) findViewById(R.id.rv);
 
-        ArrayList<MultiItemEntity> list = generateData();
-        ExpandableItemAdapter adapter = new ExpandableItemAdapter(list);
+        list = generateData();
+        adapter = new ExpandableItemAdapter(list);
 
-        View headerView = getView();
-        adapter.addHeaderView(headerView);
-
-        View footerView = getView();
-        adapter.addFooterView(footerView);
-
-        mRecyclerView.setAdapter(adapter);
-
-        adapter.expandAll(3, true);
-    }
-
-
-    private View getView() {
-        View view = getLayoutInflater().inflate(R.layout.head_view, null);
-        view.findViewById(R.id.tv).setVisibility(View.GONE);
-        view.setLayoutParams(new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        view.setOnClickListener(new View.OnClickListener() {
+        final GridLayoutManager manager = new GridLayoutManager(this, 3);
+        manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
-            public void onClick(View v) {
-                Toast.makeText(ExpandableUseActivity.this, "click View", Toast.LENGTH_LONG).show();
+            public int getSpanSize(int position) {
+                return adapter.getItemViewType(position) == ExpandableItemAdapter.TYPE_PERSON ? 1 : manager.getSpanCount();
             }
         });
-        return view;
-    }
 
+        mRecyclerView.setAdapter(adapter);
+        // important! setLayoutManager should be called after setAdapter
+        mRecyclerView.setLayoutManager(manager);
+        adapter.expandAll();
+    }
 
     private ArrayList<MultiItemEntity> generateData() {
         int lv0Count = 9;

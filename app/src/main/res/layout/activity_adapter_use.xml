@@ -1,41 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              style="@style/bg">
+<LinearLayout style="@style/bg"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_10"
+        android:background="@color/spinner_bg"
+        android:gravity="center"
+        android:paddingRight="@dimen/dp_10"
         >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:id="@+id/img_back"
+            android:src="@mipmap/back"/>
 
         <com.jaredrummler.materialspinner.MaterialSpinner
             android:id="@+id/spinner"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/txt_color"
-            app:ms_background_color="@color/txt_color"
-            app:ms_hide_arrow="true"
-            app:ms_text_color="#00ddb6"
+            android:background="@null"
+            app:ms_background_color="@color/spinner_bg"
+            app:ms_hide_arrow="false"
+            app:ms_text_color="#ffffff"
             />
 
-        <TextView
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#000000"/>
-
-        <com.jaredrummler.materialspinner.MaterialSpinner
-            android:id="@+id/spinner_first_only"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:ms_background_color="@color/txt_color"
-            app:ms_hide_arrow="true"
-            app:ms_text_color="#00ddb6"
-            />
-    </LinearLayout>
+            android:background="@color/spinner_bg"
+            android:gravity="center|right">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="IsFirstOnly"
+                android:textColor="@color/new_text_color"
+                android:textSize="16sp"/>
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/switch_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                app:kswTextOff="false"
+                app:kswTextOn="true"
+                android:textColor="@drawable/custom_text_state_color"
+                app:kswThumbDrawable="@drawable/thumb_drawable"
+                app:kswThumbColor="#555771"
+                app:kswTintColor="#00ddB6"/>
+
+
+
+        </LinearLayout>
+    </LinearLayout>
 
 
     <android.support.v7.widget.RecyclerView

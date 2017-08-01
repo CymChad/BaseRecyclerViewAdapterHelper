@@ -16,6 +16,18 @@ public class ItemDragAdapter extends BaseItemDraggableAdapter<String, BaseViewHo
 
     @Override
     protected void convert(BaseViewHolder helper, String item) {
+        switch (helper.getLayoutPosition() %
+                3) {
+            case 0:
+                helper.setImageResource(R.id.iv_head, R.mipmap.head_img0);
+                break;
+            case 1:
+                helper.setImageResource(R.id.iv_head, R.mipmap.head_img1);
+                break;
+            case 2:
+                helper.setImageResource(R.id.iv_head, R.mipmap.head_img2);
+                break;
+        }
         helper.setText(R.id.tv, item);
     }
 }
