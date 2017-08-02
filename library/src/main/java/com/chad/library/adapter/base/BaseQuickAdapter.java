@@ -1001,8 +1001,14 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             z = getInstancedGenericKClass(temp);
             temp = temp.getSuperclass();
         }
-        K k = createGenericKInstance(z, view);
-        return null != k ? k : (K) new BaseViewHolder(view);
+        K k;
+        // 泛型擦除会导致z为null
+        if (z == null) {
+            k = (K) new BaseViewHolder(view);
+        } else {
+            k = createGenericKInstance(z, view);
+        }
+        return k != null ? k : (K) new BaseViewHolder(view);
     }
 
     /**

@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.chad.library.R;
 import com.chad.library.adapter.base.BaseItemDraggableAdapter;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 
 /**
  * Created by luoxw on 2016/6/20.
@@ -15,13 +16,13 @@ public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
 
 //    private static final String TAG = ItemDragAndSwipeCallback.class.getSimpleName();
 
-    BaseItemDraggableAdapter mAdapter;
+    private BaseItemDraggableAdapter mAdapter;
 
-    float mMoveThreshold = 0.1f;
-    float mSwipeThreshold = 0.7f;
+    private float mMoveThreshold = 0.1f;
+    private float mSwipeThreshold = 0.7f;
 
-    int mDragMoveFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
-    int mSwipeMoveFlags = ItemTouchHelper.END;
+    private int mDragMoveFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+    private int mSwipeMoveFlags = ItemTouchHelper.END;
 
     public ItemDragAndSwipeCallback(BaseItemDraggableAdapter adapter) {
         mAdapter = adapter;
@@ -81,11 +82,7 @@ public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
 
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {
-        if (source.getItemViewType() != target.getItemViewType()) {
-            return false;
-        } else {
-            return true;
-        }
+        return source.getItemViewType() == target.getItemViewType();
     }
 
     @Override
@@ -188,11 +185,7 @@ public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
 
     private boolean isViewCreateByAdapter(RecyclerView.ViewHolder viewHolder) {
         int type = viewHolder.getItemViewType();
-        if (type == mAdapter.HEADER_VIEW || type == mAdapter.LOADING_VIEW
-                || type == mAdapter.FOOTER_VIEW || type == mAdapter.EMPTY_VIEW) {
-            return true;
-        }
-        return false;
-
+        return type == BaseQuickAdapter.HEADER_VIEW || type == BaseQuickAdapter.LOADING_VIEW
+                || type == BaseQuickAdapter.FOOTER_VIEW || type == BaseQuickAdapter.EMPTY_VIEW;
     }
 }
