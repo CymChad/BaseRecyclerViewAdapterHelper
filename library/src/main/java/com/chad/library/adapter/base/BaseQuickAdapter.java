@@ -908,21 +908,20 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * To bind different types of holder and solve different the bind events
      *
      * @param holder
-     * @param positions
+     * @param position
      * @see #getDefItemViewType(int)
      */
     @Override
-    public void onBindViewHolder(K holder, int positions) {
+    public void onBindViewHolder(K holder, int position) {
         //Add up fetch logic, almost like load more, but simpler.
-        autoUpFetch(positions);
+        autoUpFetch(position);
         //Do not move position, need to change before LoadMoreView binding
-        autoLoadMore(positions);
+        autoLoadMore(position);
         int viewType = holder.getItemViewType();
 
         switch (viewType) {
             case 0:
-
-                convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
+                convert(holder, getItem(position - getHeaderLayoutCount()));
                 break;
             case LOADING_VIEW:
                 mLoadMoreView.convert(holder);
@@ -934,7 +933,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             case FOOTER_VIEW:
                 break;
             default:
-                convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
+                convert(holder, getItem(position - getHeaderLayoutCount()));
                 break;
         }
     }
@@ -1002,8 +1001,14 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             z = getInstancedGenericKClass(temp);
             temp = temp.getSuperclass();
         }
-        K k = createGenericKInstance(z, view);
-        return null != k ? k : (K) new BaseViewHolder(view);
+        K k;
+        // 泛型擦除会导致z为null
+        if (z == null) {
+            k = (K) new BaseViewHolder(view);
+        } else {
+            k = createGenericKInstance(z, view);
+        }
+        return k != null ? k : (K) new BaseViewHolder(view);
     }
 
     /**

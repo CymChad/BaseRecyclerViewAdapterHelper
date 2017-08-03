@@ -43,18 +43,18 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity, K extends
 
     @Override
     protected boolean isFixedViewType(int type) {
-        return super.isFixedViewType(type)|| type == SECTION_HEADER_VIEW;
+        return super.isFixedViewType(type) || type == SECTION_HEADER_VIEW;
     }
 
     @Override
-    public void onBindViewHolder(K holder, int positions) {
+    public void onBindViewHolder(K holder, int position) {
         switch (holder.getItemViewType()) {
             case SECTION_HEADER_VIEW:
                 setFullSpan(holder);
-                convertHead(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
+                convertHead(holder, getItem(position - getHeaderLayoutCount()));
                 break;
             default:
-                super.onBindViewHolder(holder, positions);
+                super.onBindViewHolder(holder, position);
                 break;
         }
     }
