@@ -227,9 +227,22 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @param visible True for VISIBLE, false for GONE.
      * @return The BaseViewHolder for chaining.
      */
-    public BaseViewHolder setVisible(@IdRes int viewId, boolean visible) {
+    public BaseViewHolder setGone(@IdRes int viewId, boolean visible) {
         View view = getView(viewId);
         view.setVisibility(visible ? View.VISIBLE : View.GONE);
+        return this;
+    }
+
+    /**
+     * Set a view visibility to VISIBLE (true) or INVISIBLE (false).
+     *
+     * @param viewId  The view id.
+     * @param visible True for VISIBLE, false for INVISIBLE.
+     * @return The BaseViewHolder for chaining.
+     */
+    public BaseViewHolder setVisible(@IdRes int viewId, boolean visible) {
+        View view = getView(viewId);
+        view.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
         return this;
     }
 
