@@ -37,7 +37,6 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
     }
 
 
-
     @Override
     protected void convert(final BaseViewHolder holder, final MultiItemEntity item) {
         switch (holder.getItemViewType()) {
@@ -54,7 +53,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                         holder.setImageResource(R.id.iv_head, R.mipmap.head_img2);
                         break;
                 }
-                final Level0Item lv0 = (Level0Item)item;
+                final Level0Item lv0 = (Level0Item) item;
                 holder.setText(R.id.title, lv0.title)
                         .setText(R.id.sub_title, lv0.subTitle)
                         .setImageResource(R.id.iv, lv0.isExpanded() ? R.mipmap.arrow_b : R.mipmap.arrow_r);
@@ -69,14 +68,14 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
 //                            if (pos % 3 == 0) {
 //                                expandAll(pos, false);
 //                            } else {
-                                expand(pos);
+                            expand(pos);
 //                            }
                         }
                     }
                 });
                 break;
             case TYPE_LEVEL_1:
-                final Level1Item lv1 = (Level1Item)item;
+                final Level1Item lv1 = (Level1Item) item;
                 holder.setText(R.id.title, lv1.title)
                         .setText(R.id.sub_title, lv1.subTitle)
                         .setImageResource(R.id.iv, lv1.isExpanded() ? R.mipmap.arrow_b : R.mipmap.arrow_r);
@@ -94,15 +93,17 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                 });
                 break;
             case TYPE_PERSON:
-                final Person person = (Person)item;
+                final Person person = (Person) item;
                 holder.setText(R.id.tv, person.name + " parent pos: " + getParentPosition(person));
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         int cp = getParentPosition(person);
-                        ((Level1Item)getData().get(cp)).removeSubItem(person);
-                        getData().remove(holder.getLayoutPosition());
-                        notifyItemRemoved(holder.getLayoutPosition());
+                        if (cp != -1) {
+                            ((Level1Item) getData().get(cp)).removeSubItem(person);
+                            getData().remove(holder.getLayoutPosition());
+                            notifyItemRemoved(holder.getLayoutPosition());
+                        }
                     }
                 });
                 break;
