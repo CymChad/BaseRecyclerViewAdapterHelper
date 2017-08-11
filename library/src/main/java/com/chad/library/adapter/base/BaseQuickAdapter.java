@@ -559,6 +559,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         mData.addAll(newData);
         notifyItemRangeInserted(mData.size() - newData.size() + getHeaderLayoutCount(), newData.size());
         compatibilityDataSizeChanged(newData.size());
+        loadMoreComplete();
     }
 
     /**
