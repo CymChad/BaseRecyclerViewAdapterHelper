@@ -71,7 +71,7 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
     public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
     }
 
-    private class ItemTouchHelperGestureListener extends GestureDetector.SimpleOnGestureListener {
+    private class ItemTouchHelperGestureListener implements GestureDetector.OnGestureListener {
 
         private RecyclerView recyclerView;
 
@@ -79,8 +79,6 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
         public boolean onDown(MotionEvent e) {
             mIsPrepressed = true;
             mPressedView = recyclerView.findChildViewUnder(e.getX(), e.getY());
-
-            super.onDown(e);
             return false;
         }
 
@@ -90,7 +88,6 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
 //                mPressedView.setPressed(true);
                 mIsShowPress = true;
             }
-            super.onShowPress(e);
         }
 
         ItemTouchHelperGestureListener(RecyclerView recyclerView) {
@@ -219,6 +216,16 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
                     }
                 }
             }
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            return false;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            return false;
         }
     }
 
