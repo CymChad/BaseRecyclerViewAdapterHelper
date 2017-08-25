@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '26.0.1'
 
     defaultConfig {
         applicationId "com.chad.baserecyclerviewadapterhelper"
@@ -29,9 +29,9 @@ dependencies {
     compile project(path: ':library')
     compile project(':material-spinner-1.0.5')
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.android.support:design:25.2.0'
-    compile 'com.android.support:cardview-v7:25.2.0'
-    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:cardview-v7:25.3.1'
+    compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.kyleduo.switchbutton:library:1.4.4'
     compile 'com.orhanobut:logger:1.15'
 }
