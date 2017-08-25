@@ -33,26 +33,12 @@ import android.text.style.UnderlineSpan;
 
 import static android.graphics.BlurMaskFilter.Blur;
 
-/**
- * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 16/12/13
- *     desc  : SpannableString相关工具类
- * </pre>
- */
 public class SpannableStringUtils {
 
     private SpannableStringUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
+        throw new UnsupportedOperationException("You can't instantiate me...");
     }
 
-    /**
-     * 获取建造者
-     *
-     * @param text 样式字符串文本
-     * @return {@link Builder}
-     */
     public static Builder getBuilder(@NonNull CharSequence text) {
         return new Builder(text);
     }

@@ -1,8 +1,5 @@
 package com.chad.baserecyclerviewadapterhelper.entity;
 
-/**
- * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
- */
 public class Video {
     private String img;
     private String name;

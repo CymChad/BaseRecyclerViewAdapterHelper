@@ -13,9 +13,6 @@ import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
-/**
- * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
- */
 public class HeaderAndFooterUseActivity extends BaseActivity {
 
     private RecyclerView mRecyclerView;

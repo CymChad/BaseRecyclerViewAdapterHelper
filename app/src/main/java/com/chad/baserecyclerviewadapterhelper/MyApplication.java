@@ -20,14 +20,6 @@ import com.chad.baserecyclerviewadapterhelper.util.Utils;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
-/**
- * 文 件 名: MyApplication
- * 创 建 人: Allen
- * 创建日期: 16/12/24 15:33
- * 邮   箱: AllenCoder@126.com
- * 修改时间：
- * 修改备注：
- */
 public class MyApplication extends Application {
     private static MyApplication appContext;
 

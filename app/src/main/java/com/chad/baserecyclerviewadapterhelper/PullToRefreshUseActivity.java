@@ -18,10 +18,6 @@ import com.chad.baserecyclerviewadapterhelper.loadmore.CustomLoadMoreView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 
-
-/**
- * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
- */
 public class PullToRefreshUseActivity extends BaseActivity implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
     private RecyclerView mRecyclerView;
     private PullToRefreshAdapter pullToRefreshAdapter;
@@ -57,14 +53,14 @@ public class PullToRefreshUseActivity extends BaseActivity implements BaseQuickA
     private void addHeadView() {
         View headView = getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false);
         headView.findViewById(R.id.iv).setVisibility(View.GONE);
-        ((TextView) headView.findViewById(R.id.tv)).setText("change load view");
+        ((TextView) headView.findViewById(R.id.tv)).setText(R.string.change_load_view);
         headView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mLoadMoreEndGone = true;
                 pullToRefreshAdapter.setLoadMoreView(new CustomLoadMoreView());
                 mRecyclerView.setAdapter(pullToRefreshAdapter);
-                Toast.makeText(PullToRefreshUseActivity.this, "change complete", Toast.LENGTH_LONG).show();
+                Toast.makeText(PullToRefreshUseActivity.this, getString(R.string.change_completed), Toast.LENGTH_LONG).show();
             }
         });
         pullToRefreshAdapter.addHeaderView(headView);

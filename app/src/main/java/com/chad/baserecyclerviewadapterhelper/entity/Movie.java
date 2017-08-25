@@ -1,9 +1,5 @@
 package com.chad.baserecyclerviewadapterhelper.entity;
 
-/**
- * Created by luoxiongwen on 16/10/24.
- */
-
 public class Movie {
 
     public String name;

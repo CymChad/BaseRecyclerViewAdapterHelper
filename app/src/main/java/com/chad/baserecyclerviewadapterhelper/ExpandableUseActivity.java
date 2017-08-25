@@ -2,7 +2,6 @@ package com.chad.baserecyclerviewadapterhelper;
 
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.ExpandableItemAdapter;
@@ -15,9 +14,6 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
- * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
- */
 public class ExpandableUseActivity extends BaseActivity {
     RecyclerView mRecyclerView;
     ExpandableItemAdapter adapter;

@@ -14,10 +14,6 @@ import com.chad.library.adapter.base.BaseViewHolder;
 
 import java.util.List;
 
-/**
- * Created by luoxiongwen on 16/10/24.
- */
-
 public class DataBindingUseAdapter extends BaseQuickAdapter<Movie, DataBindingUseAdapter.MovieViewHolder> {
 
     private MoviePresenter mPresenter;
@@ -46,11 +42,6 @@ public class DataBindingUseAdapter extends BaseQuickAdapter<Movie, DataBindingUs
         }
     }
 
-    /*  @Override
-      protected MovieViewHolder createBaseViewHolder(View view) {
-          return new MovieViewHolder(view);
-      }
-  */
     @Override
     protected View getItemView(int layoutResId, ViewGroup parent) {
         ViewDataBinding binding = DataBindingUtil.inflate(mLayoutInflater, layoutResId, parent, false);

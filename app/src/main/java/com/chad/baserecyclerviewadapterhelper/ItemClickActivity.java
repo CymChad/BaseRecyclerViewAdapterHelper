@@ -115,8 +115,6 @@ public class ItemClickActivity extends BaseActivity {
 //                Toast.makeText(ItemClickActivity.this, "onItemChildLongClick" + position, Toast.LENGTH_SHORT).show();
 //            }
 //        });
-
-
     }
 
     private void initAdapter() {
@@ -130,7 +128,6 @@ public class ItemClickActivity extends BaseActivity {
         adapter.openLoadAnimation();
         mRecyclerView.setAdapter(adapter);
     }
-
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {

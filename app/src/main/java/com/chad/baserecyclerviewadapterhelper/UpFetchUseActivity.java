@@ -13,12 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Created by tysheng
- * Date: 2017/5/25 10:41.
- * Email: tyshengsx@gmail.com
- */
-
 public class UpFetchUseActivity extends BaseActivity {
     RecyclerView mRecyclerView;
     UpFetchAdapter mAdapter;

@@ -6,9 +6,6 @@ import android.view.View;
 
 import com.chad.library.adapter.base.animation.BaseAnimation;
 
-/**
- * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
- */
 public class CustomAnimation implements BaseAnimation {
 
     @Override

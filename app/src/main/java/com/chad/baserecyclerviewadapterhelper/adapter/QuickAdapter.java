@@ -1,21 +1,11 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
-import android.text.method.LinkMovementMethod;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
-import com.chad.baserecyclerviewadapterhelper.transform.GlideCircleTransform;
-import com.chad.baserecyclerviewadapterhelper.util.SpannableStringUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
-/**
- * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
- */
 public class QuickAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
 
     public QuickAdapter(int dataSize) {
@@ -24,8 +14,7 @@ public class QuickAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
 
     @Override
     protected void convert(BaseViewHolder helper, Status item) {
-        switch (helper.getLayoutPosition() %
-                3) {
+        switch (helper.getLayoutPosition() % 3) {
             case 0:
                 helper.setImageResource(R.id.img, R.mipmap.animation_img1);
                 break;

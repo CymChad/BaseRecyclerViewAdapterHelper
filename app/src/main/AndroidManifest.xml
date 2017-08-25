@@ -27,11 +27,11 @@
         <activity android:name=".ItemDragAndSwipeUseActivity" />
         <activity android:name=".ExpandableUseActivity" />
         <activity android:name=".DataBindingUseActivity" />
-        <activity android:name=".ItemClickActivity"></activity>
-        <activity android:name=".base.BaseActivity"></activity>
+        <activity android:name=".ItemClickActivity"/>
+        <activity android:name=".base.BaseActivity"/>
         <activity
             android:name=".HomeActivity"
-            android:launchMode="singleTask"></activity>
+            android:launchMode="singleTask" />
         <activity android:name=".UpFetchUseActivity" />
     </application>
 

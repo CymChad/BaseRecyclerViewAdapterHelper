@@ -53,7 +53,6 @@ public class DataBindingUseActivity extends BaseActivity {
         });
     }
 
-
     private List<Movie> genData() {
         ArrayList<Movie> list = new ArrayList<>();
         Random random = new Random();

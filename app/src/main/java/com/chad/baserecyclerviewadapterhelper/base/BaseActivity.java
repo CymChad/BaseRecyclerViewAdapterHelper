@@ -14,18 +14,8 @@ import android.widget.TextView;
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.orhanobut.logger.Logger;
 
-/**
- * 文 件 名: BaseActivity
- * 创 建 人: Allen
- * 创建日期: 16/12/24 15:33
- * 邮   箱: AllenCoder@126.com
- * 修改时间：
- * 修改备注：
- */
 public class BaseActivity extends AppCompatActivity {
-    /**
-     * 日志输出标志getSupportActionBar().
-     **/
+
     private TextView title;
     private ImageView back;
     protected final String TAG = this.getClass().getSimpleName();
@@ -69,12 +59,10 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // 经测试在代码里直接声明透明状态栏更有效
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-        // 这句很关键，注意是调用父类的方法
         super.setContentView(R.layout.activity_base);
         initToolbar();
     }

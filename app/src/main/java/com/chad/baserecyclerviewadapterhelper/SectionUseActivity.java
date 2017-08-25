@@ -14,9 +14,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.List;
 
-/**
- * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
- */
 public class SectionUseActivity extends BaseActivity {
     private RecyclerView mRecyclerView;
     private List<MySection> mData;

@@ -15,9 +15,6 @@ import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
-/**
- *
- */
 public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity, BaseViewHolder> implements BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemChildClickListener {
     NestAdapter nestAdapter;
 
@@ -28,9 +25,7 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity, Bas
         addItemType(ClickEntity.LONG_CLICK_ITEM_VIEW, R.layout.item_long_click_view);
         addItemType(ClickEntity.LONG_CLICK_ITEM_CHILD_VIEW, R.layout.item_long_click_childview);
         addItemType(ClickEntity.NEST_CLICK_ITEM_CHILD_VIEW, R.layout.item_nest_click);
-
     }
-
 
     @Override
     protected void convert(final BaseViewHolder helper, final ClickEntity item) {
@@ -51,7 +46,7 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity, Bas
                         .addOnClickListener(R.id.iv_num_reduce).addOnClickListener(R.id.iv_num_add);
                 break;
             case ClickEntity.NEST_CLICK_ITEM_CHILD_VIEW:
-                helper.setNestView(R.id.item_click); // u can set nestview id
+                helper.setNestView(R.id.item_click); // you can set nestview id
                 final RecyclerView recyclerView = helper.getView(R.id.nest_list);
                 recyclerView.setLayoutManager(new LinearLayoutManager(helper.itemView.getContext(), LinearLayoutManager.VERTICAL, false));
                 recyclerView.setHasFixedSize(true);

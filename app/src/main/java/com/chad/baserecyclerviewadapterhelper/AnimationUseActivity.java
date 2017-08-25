@@ -16,11 +16,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.kyleduo.switchbutton.SwitchButton;
 
-/**
- * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
- * <p>
- * modify by AllenCoder
- */
 public class AnimationUseActivity extends Activity {
     private RecyclerView mRecyclerView;
     private AnimationAdapter mAnimationAdapter;

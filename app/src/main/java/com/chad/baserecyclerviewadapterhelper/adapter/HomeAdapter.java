@@ -7,9 +7,6 @@ import com.chad.library.adapter.base.BaseViewHolder;
 
 import java.util.List;
 
-/**
- * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
- */
 public class HomeAdapter extends BaseQuickAdapter<HomeItem, BaseViewHolder> {
     public HomeAdapter(int layoutResId, List data) {
         super(layoutResId, data);

@@ -15,3 +15,8 @@ allprojects {
             mavenCentral()
         }
 }
+
+task wrapper(type: Wrapper) {
+    description 'Creates gradle wrapper.'
+    gradleVersion '4.1'
+}

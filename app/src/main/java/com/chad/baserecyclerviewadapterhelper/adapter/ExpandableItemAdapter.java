@@ -13,9 +13,6 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 
 import java.util.List;
 
-/**
- * Created by luoxw on 2016/8/9.
- */
 public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
     private static final String TAG = ExpandableItemAdapter.class.getSimpleName();
 

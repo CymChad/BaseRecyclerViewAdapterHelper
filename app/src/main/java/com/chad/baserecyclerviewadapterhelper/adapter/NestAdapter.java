@@ -15,14 +15,6 @@ import com.chad.baserecyclerviewadapterhelper.util.Utils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
-/**
- * 文 件 名: AnimationAdapter
- * 创 建 人: Allen
- * 创建日期: 16/12/24 15:33
- * 邮   箱: AllenCoder@126.com
- * 修改时间：
- * 修改备注：
- */
 public class NestAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
     public NestAdapter() {
         super( R.layout.layout_nest_item, DataServer.getSampleData(20));

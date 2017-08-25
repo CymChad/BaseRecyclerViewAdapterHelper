@@ -1,11 +1,8 @@
 package com.chad.baserecyclerviewadapterhelper;
 
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.MultipleItemQuickAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
@@ -15,10 +12,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.List;
 
-/**
- * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
- * modify by AllenCoder
- */
 public class MultipleItemUseActivity extends BaseActivity {
     private RecyclerView mRecyclerView;
 
@@ -41,6 +34,4 @@ public class MultipleItemUseActivity extends BaseActivity {
         });
         mRecyclerView.setAdapter(multipleItemAdapter);
     }
-
-
 }

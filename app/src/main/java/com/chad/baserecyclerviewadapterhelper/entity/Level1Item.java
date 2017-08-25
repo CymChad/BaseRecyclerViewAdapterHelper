@@ -4,10 +4,6 @@ import com.chad.library.adapter.base.entity.AbstractExpandableItem;
 import com.chad.baserecyclerviewadapterhelper.adapter.ExpandableItemAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
-/**
- * Created by luoxw on 2016/8/10.
- */
-
 public class Level1Item extends AbstractExpandableItem<Person> implements MultiItemEntity{
     public String title;
     public String subTitle;

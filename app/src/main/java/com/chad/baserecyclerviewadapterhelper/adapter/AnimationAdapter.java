@@ -15,14 +15,6 @@ import com.chad.baserecyclerviewadapterhelper.util.Utils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
-/**
- * 文 件 名: AnimationAdapter
- * 创 建 人: Allen
- * 创建日期: 16/12/24 15:33
- * 邮   箱: AllenCoder@126.com
- * 修改时间：
- * 修改备注：
- */
 public class AnimationAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
     public AnimationAdapter() {
         super(R.layout.layout_animation, DataServer.getSampleData(100));
@@ -31,8 +23,7 @@ public class AnimationAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder helper, Status item) {
         helper.addOnClickListener(R.id.img).addOnClickListener(R.id.tweetName);
-        switch (helper.getLayoutPosition() %
-                3) {
+        switch (helper.getLayoutPosition() % 3) {
             case 0:
                 helper.setImageResource(R.id.img, R.mipmap.animation_img1);
                 break;
@@ -47,9 +38,9 @@ public class AnimationAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
         String msg = "\"He was one of Australia's most of distinguished artistes, renowned for his portraits\"";
         ((TextView) helper.getView(R.id.tweetText)).setText(SpannableStringUtils.getBuilder(msg).append("landscapes and nedes").setClickSpan(clickableSpan).create());
         ((TextView) helper.getView(R.id.tweetText)).setMovementMethod(ClickableMovementMethod.getInstance());
-        ((TextView) helper.getView(R.id.tweetText)).setFocusable(false);
-        ((TextView) helper.getView(R.id.tweetText)).setClickable(false);
-        ((TextView) helper.getView(R.id.tweetText)).setLongClickable(false);
+        helper.getView(R.id.tweetText).setFocusable(false);
+        helper.getView(R.id.tweetText).setClickable(false);
+        helper.getView(R.id.tweetText).setLongClickable(false);
     }
 
     ClickableSpan clickableSpan = new ClickableSpan() {

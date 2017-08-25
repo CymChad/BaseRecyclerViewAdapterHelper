@@ -23,9 +23,6 @@ import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
- */
 public class ItemDragAndSwipeUseActivity extends BaseActivity {
     private static final String TAG = ItemDragAndSwipeUseActivity.class.getSimpleName();
     private RecyclerView mRecyclerView;
