@@ -3,18 +3,20 @@ buildscript {
         jcenter()
         mavenLocal()
         mavenCentral()
-
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.1'
+        classpath 'com.android.tools.build:gradle:2.3.3'
     }
 }
 
 allprojects {
-        repositories {
-                jcenter()
-                mavenCentral()
-            }
-    }
+    repositories {
+            jcenter()
+            mavenCentral()
+        }
+}
 
-
+task wrapper(type: Wrapper) {
+    description 'Creates gradle wrapper.'
+    gradleVersion '4.1'
+}

@@ -1,66 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<RelativeLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:minHeight="70dp"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:padding="4dp"
+                android:background="@drawable/touch_bg">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:minHeight="70dp"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:padding="4dp"
-        android:background="@drawable/touch_bg"
-        >
+  <ImageView
+      android:id="@+id/img"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
+      android:layout_alignParentTop="true"
+      android:scaleType="centerCrop"
+      android:src="@mipmap/animation_img1"/>
 
+  <TextView
+      android:id="@+id/tweetName"
+      android:paddingLeft="@dimen/dp_10"
+      style="@style/tweetName"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Chad"
+      android:layout_marginTop="@dimen/dp_10"
+      android:layout_below="@+id/img"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"/>
 
-        <ImageView
-            android:id="@+id/img"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/animation_img1"/>
+  <TextView
+      android:id="@+id/tweetText"
+      android:paddingLeft="@dimen/dp_10"
+      style="@style/tweetText"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Hello world!"
+      android:textColor="@android:color/darker_gray"
+      android:layout_below="@+id/tweetName"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
+      android:paddingRight="@dimen/dp_10"
+      android:paddingBottom="@dimen/dp_10"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="true"/>
 
-        <TextView
-            android:id="@+id/tweetName"
-            android:paddingLeft="@dimen/dp_10"
-            style="@style/tweetName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Chad"
-            android:layout_marginTop="@dimen/dp_10"
-            android:layout_below="@+id/img"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
+  <TextView
+      android:id="@+id/tweetDate"
+      style="@style/tweetDate"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="04/06/13"
+      android:paddingRight="@dimen/dp_10"
+      android:layout_alignBaseline="@+id/tweetName"
+      android:layout_alignBottom="@+id/tweetName"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="true"/>
 
-        <TextView
-            android:id="@+id/tweetText"
-            android:paddingLeft="@dimen/dp_10"
-            style="@style/tweetText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hello world!"
-            android:textColor="@android:color/darker_gray"
-            android:layout_below="@+id/tweetName"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:paddingRight="@dimen/dp_10"
-            android:paddingBottom="@dimen/dp_10"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
-
-        <TextView
-            android:id="@+id/tweetDate"
-            style="@style/tweetDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="04/06/13"
-            android:paddingRight="@dimen/dp_10"
-            android:layout_alignBaseline="@+id/tweetName"
-            android:layout_alignBottom="@+id/tweetName"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
-
-    </RelativeLayout>
+</RelativeLayout>

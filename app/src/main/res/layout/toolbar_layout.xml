@@ -9,5 +9,5 @@
                                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                                    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-    <include layout="@layout/layout_title_bar"/>
+  <include layout="@layout/layout_title_bar"/>
 </android.support.v7.widget.Toolbar>
