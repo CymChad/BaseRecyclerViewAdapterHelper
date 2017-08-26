@@ -1,60 +1,70 @@
 package com.chad.baserecyclerviewadapterhelper.entity;
 
 public class Status {
-    private boolean isRetweet;
-    private String text;
-    private String userName;
-    private String userAvatar;
-    private String createdAt;
 
-    public boolean isRetweet() {
-        return isRetweet;
-    }
+  private boolean isRetweet;
+  private String text;
+  private String userName;
+  private String userAvatar;
+  private String createdAt;
 
-    public void setRetweet(boolean retweet) {
-        isRetweet = retweet;
-    }
+  public boolean isRetweet() {
+    return isRetweet;
+  }
 
-    public String getText() {
-        return text;
-    }
+  public void setRetweet(boolean retweet) {
+    isRetweet = retweet;
+  }
 
-    public void setText(String text) {
-        this.text = text;
-    }
+  public String getText() {
+    return text;
+  }
 
-    public String getUserName() {
-        return userName;
-    }
+  public void setText(String text) {
+    this.text = text;
+  }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+  public String getUserName() {
+    return userName;
+  }
 
-    public String getUserAvatar() {
-        return userAvatar;
-    }
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
 
-    public void setUserAvatar(String userAvatar) {
-        this.userAvatar = userAvatar;
-    }
+  public String getUserAvatar() {
+    return userAvatar;
+  }
 
-    public String getCreatedAt() {
-        return createdAt;
-    }
+  public void setUserAvatar(String userAvatar) {
+    this.userAvatar = userAvatar;
+  }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
+  public String getCreatedAt() {
+    return createdAt;
+  }
 
-    @Override
-    public String toString() {
-        return "Status{" +
-                "isRetweet=" + isRetweet +
-                ", text='" + text + '\'' +
-                ", userName='" + userName + '\'' +
-                ", userAvatar='" + userAvatar + '\'' +
-                ", createdAt='" + createdAt + '\'' +
-                '}';
-    }
+  public void setCreatedAt(String createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  @Override
+  public String toString() {
+    return "Status{" +
+           "isRetweet=" +
+           isRetweet +
+           ", text='" +
+           text +
+           '\'' +
+           ", userName='" +
+           userName +
+           '\'' +
+           ", userAvatar='" +
+           userAvatar +
+           '\'' +
+           ", createdAt='" +
+           createdAt +
+           '\'' +
+           '}';
+  }
 }

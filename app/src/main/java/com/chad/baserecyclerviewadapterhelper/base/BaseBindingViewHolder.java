@@ -6,17 +6,18 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseViewHolder;
 
 public class BaseBindingViewHolder<Binding extends ViewDataBinding> extends BaseViewHolder {
-    private Binding mBinding;
 
-    public BaseBindingViewHolder(View view) {
-        super(view);
-    }
+  private Binding mBinding;
 
-    public Binding getBinding() {
-        return mBinding;
-    }
+  public BaseBindingViewHolder(View view) {
+    super(view);
+  }
 
-    public void setBinding(Binding binding) {
-        mBinding = binding;
-    }
+  public Binding getBinding() {
+    return mBinding;
+  }
+
+  public void setBinding(Binding binding) {
+    mBinding = binding;
+  }
 }

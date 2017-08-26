@@ -14,74 +14,74 @@ import java.util.List;
 import java.util.Random;
 
 public class UpFetchUseActivity extends BaseActivity {
-    RecyclerView mRecyclerView;
-    UpFetchAdapter mAdapter;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setBackBtn();
-        setTitle("UpFetch Use");
-        setContentView(R.layout.activity_data_binding_use);
+  RecyclerView mRecyclerView;
+  UpFetchAdapter mAdapter;
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.rv);
-        mAdapter = new UpFetchAdapter();
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setAdapter(mAdapter);
-        mAdapter.setNewData(genData());
-        mAdapter.setUpFetchEnable(true);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setBackBtn();
+    setTitle("UpFetch Use");
+    setContentView(R.layout.activity_data_binding_use);
+
+    mRecyclerView = (RecyclerView) findViewById(R.id.rv);
+    mAdapter = new UpFetchAdapter();
+    mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    mRecyclerView.setAdapter(mAdapter);
+    mAdapter.setNewData(genData());
+    mAdapter.setUpFetchEnable(true);
+    /**
+     * start fetch when scroll to position 2, default is 1.
+     */
+    mAdapter.setStartUpFetchPosition(2);
+    mAdapter.setUpFetchListener(new BaseQuickAdapter.UpFetchListener() {
+      @Override
+      public void onUpFetch() {
+        startUpFetch();
+      }
+    });
+  }
+
+  private int count;
+
+  private void startUpFetch() {
+    count++;
+    /**
+     * set fetching on when start network request.
+     */
+    mAdapter.setUpFetching(true);
+    /**
+     * get data from internet.
+     */
+    mRecyclerView.postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        mAdapter.addData(0, genData());
         /**
-         * start fetch when scroll to position 2, default is 1.
+         * set fetching off when network request ends.
          */
-        mAdapter.setStartUpFetchPosition(2);
-        mAdapter.setUpFetchListener(new BaseQuickAdapter.UpFetchListener() {
-            @Override
-            public void onUpFetch() {
-                startUpFetch();
-            }
-        });
-    }
-
-    private int count;
-
-    private void startUpFetch() {
-        count++;
+        mAdapter.setUpFetching(false);
         /**
-         * set fetching on when start network request.
+         * set fetch enable false when you don't need anymore.
          */
-        mAdapter.setUpFetching(true);
-        /**
-         * get data from internet.
-         */
-        mRecyclerView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.addData(0, genData());
-                /**
-                 * set fetching off when network request ends.
-                 */
-                mAdapter.setUpFetching(false);
-                /**
-                 * set fetch enable false when you don't need anymore.
-                 */
-                if (count > 5) {
-                    mAdapter.setUpFetchEnable(false);
-                }
-            }
-        }, 300);
-    }
-
-
-    private List<Movie> genData() {
-        ArrayList<Movie> list = new ArrayList<>();
-        Random random = new Random();
-        for (int i = 0; i < 10; i++) {
-            String name = "Chad";
-            int price = random.nextInt(10) + 10;
-            int len = random.nextInt(80) + 60;
-            Movie movie = new Movie(name, len, price, "He was one of Australia's most distinguished artistes");
-            list.add(movie);
+        if (count > 5) {
+          mAdapter.setUpFetchEnable(false);
         }
-        return list;
+      }
+    }, 300);
+  }
+
+  private List<Movie> genData() {
+    ArrayList<Movie> list = new ArrayList<>();
+    Random random = new Random();
+    for (int i = 0; i < 10; i++) {
+      String name = "Chad";
+      int price = random.nextInt(10) + 10;
+      int len = random.nextInt(80) + 60;
+      Movie movie = new Movie(name, len, price, "He was one of Australia's most distinguished artistes");
+      list.add(movie);
     }
+    return list;
+  }
 }

@@ -6,12 +6,13 @@ import com.chad.baserecyclerviewadapterhelper.databinding.ItemMovieBinding;
 import com.chad.baserecyclerviewadapterhelper.entity.Movie;
 
 public class UpFetchAdapter extends BaseDataBindingAdapter<Movie, ItemMovieBinding> {
-    public UpFetchAdapter() {
-        super(R.layout.item_movie, null);
-    }
 
-    @Override
-    protected void convert(ItemMovieBinding binding, Movie item) {
-        binding.setMovie(item);
-    }
+  public UpFetchAdapter() {
+    super(R.layout.item_movie, null);
+  }
+
+  @Override
+  protected void convert(ItemMovieBinding binding, Movie item) {
+    binding.setMovie(item);
+  }
 }

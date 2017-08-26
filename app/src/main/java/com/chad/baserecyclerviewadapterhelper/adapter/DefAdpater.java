@@ -14,45 +14,47 @@ import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import java.util.List;
 
 public class DefAdpater extends RecyclerView.Adapter<DefAdpater.ViewHolder> {
-    private final List<Status> sampleData = DataServer.getSampleData(100);
-    private Context mContext;
-    private LayoutInflater mLayoutInflater;
-    public DefAdpater(Context context) {
-        mContext = context;
-        mLayoutInflater = LayoutInflater.from(context);
+
+  private final List<Status> sampleData = DataServer.getSampleData(100);
+  private Context mContext;
+  private LayoutInflater mLayoutInflater;
+
+  public DefAdpater(Context context) {
+    mContext = context;
+    mLayoutInflater = LayoutInflater.from(context);
+  }
+
+  @Override
+  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    View item = mLayoutInflater.inflate(R.layout.layout_animation, parent, false);
+    return new ViewHolder(item);
+  }
+
+  @Override
+  public void onBindViewHolder(ViewHolder holder, int position) {
+    Status status = sampleData.get(position);
+    holder.name.setText(status.getUserName());
+    holder.text.setText(status.getText());
+    holder.date.setText(status.getCreatedAt());
+  }
+
+  @Override
+  public int getItemCount() {
+    return sampleData.size();
+  }
+
+  public static class ViewHolder extends RecyclerView.ViewHolder {
+
+    private TextView name;
+    private TextView date;
+    private TextView text;
+
+    public ViewHolder(View itemView) {
+      super(itemView);
+      text = (TextView) itemView.findViewById(R.id.tweetText);
+      name = (TextView) itemView.findViewById(R.id.tweetName);
+      date = (TextView) itemView.findViewById(R.id.tweetDate);
+
     }
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View item = mLayoutInflater.inflate(R.layout.layout_animation, parent, false);
-        return new ViewHolder(item);
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Status status = sampleData.get(position);
-        holder.name.setText(status.getUserName());
-        holder.text.setText(status.getText());
-        holder.date.setText(status.getCreatedAt());
-    }
-
-    @Override
-    public int getItemCount() {
-        return sampleData.size();
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-
-        private TextView name;
-        private TextView date;
-        private TextView text;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            text = (TextView) itemView.findViewById(R.id.tweetText);
-            name = (TextView) itemView.findViewById(R.id.tweetName);
-            date = (TextView) itemView.findViewById(R.id.tweetDate);
-
-        }
-    }
+  }
 }

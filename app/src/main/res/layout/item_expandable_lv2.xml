@@ -8,16 +8,15 @@
               android:layout_marginBottom="1dp"
               android:layout_marginRight="1dp"
               android:layout_marginLeft="1dp"
-              android:paddingLeft="10dp"
-    >
-    <TextView
-        android:id="@+id/tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_weight="1"
-        />
+              android:paddingLeft="10dp">
+
+  <TextView
+      android:id="@+id/tv"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textSize="18sp"
+      android:textStyle="bold"
+      android:textColor="@android:color/black"
+      android:layout_weight="1"/>
 
 </LinearLayout>

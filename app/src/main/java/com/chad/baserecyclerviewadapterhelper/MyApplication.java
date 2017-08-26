@@ -21,26 +21,25 @@ import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
 public class MyApplication extends Application {
-    private static MyApplication appContext;
 
-    public static MyApplication getInstance() {
-        return appContext;
+  private static MyApplication appContext;
+
+  public static MyApplication getInstance() {
+    return appContext;
+  }
+
+  @Override
+  public void onCreate() {
+    super.onCreate();
+    appContext = this;
+    Utils.init(this);
+    if (BuildConfig.DEBUG) {
+      Logger.init("BaseRecyclerViewAdapter")                 // default PRETTYLOGGER or use just init()
+            .methodCount(3)                 // default 2
+            .logLevel(LogLevel.FULL)        // default LogLevel.FULL
+            .methodOffset(2)                // default 0
+      ; //default AndroidLogAdapter
+
     }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        appContext =this;
-        Utils.init(this);
-        if (BuildConfig.DEBUG) {
-            Logger
-                    .init("BaseRecyclerViewAdapter")                 // default PRETTYLOGGER or use just init()
-                    .methodCount(3)                 // default 2
-                    .logLevel(LogLevel.FULL)        // default LogLevel.FULL
-                    .methodOffset(2)                // default 0
-            ; //default AndroidLogAdapter
-
-
-        }
-    }
+  }
 }

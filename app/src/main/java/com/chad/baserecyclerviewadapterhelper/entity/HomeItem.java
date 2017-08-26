@@ -1,31 +1,32 @@
 package com.chad.baserecyclerviewadapterhelper.entity;
 
 public class HomeItem {
-    private String title;
-    private Class<?> activity;
-    private int imageResource;
 
-    public int getImageResource() {
-        return imageResource;
-    }
+  private String title;
+  private Class<?> activity;
+  private int imageResource;
 
-    public void setImageResource(int imageResource) {
-        this.imageResource = imageResource;
-    }
+  public int getImageResource() {
+    return imageResource;
+  }
 
-    public String getTitle() {
-        return title;
-    }
+  public void setImageResource(int imageResource) {
+    this.imageResource = imageResource;
+  }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  public String getTitle() {
+    return title;
+  }
 
-    public Class<?> getActivity() {
-        return activity;
-    }
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-    public void setActivity(Class<?> activity) {
-        this.activity = activity;
-    }
+  public Class<?> getActivity() {
+    return activity;
+  }
+
+  public void setActivity(Class<?> activity) {
+    this.activity = activity;
+  }
 }

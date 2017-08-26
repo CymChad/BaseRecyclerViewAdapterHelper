@@ -1,35 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:state_enabled="false" android:state_checked="true">
-		<shape android:shape="oval">
-			<solid android:color="#E1E1E1"/>
-			<stroke
-				android:width="1px"
-				android:color="#ECECEC"/>
-		</shape>
-	</item>
-	<item android:state_enabled="false">
-		<shape android:shape="oval">
-			<solid android:color="#555771"/>
-			<stroke
-				android:width="1px"
-				android:color="#55577E"/>
-		</shape>
-	</item>
-	<item android:state_checked="true">
-		<shape android:shape="oval">
-			<solid android:color="#E1E1E1"/>
-			<stroke
-				android:width="1px"
-				android:color="#D0D0D0"/>
-		</shape>
-	</item>
-	<item>
-		<shape android:shape="oval">
-			<solid android:color="#555771"/>
-			<stroke
-				android:width="1px"
-				android:color="#55577E"/>
-		</shape>
-	</item>
+  <item android:state_enabled="false"
+        android:state_checked="true">
+    <shape android:shape="oval">
+      <solid android:color="#E1E1E1"/>
+      <stroke android:width="1px"
+              android:color="#ECECEC"/>
+    </shape>
+  </item>
+  <item android:state_enabled="false">
+    <shape android:shape="oval">
+      <solid android:color="#555771"/>
+      <stroke android:width="1px"
+              android:color="#55577E"/>
+    </shape>
+  </item>
+  <item android:state_checked="true">
+    <shape android:shape="oval">
+      <solid android:color="#E1E1E1"/>
+      <stroke android:width="1px"
+              android:color="#D0D0D0"/>
+    </shape>
+  </item>
+  <item>
+    <shape android:shape="oval">
+      <solid android:color="#555771"/>
+      <stroke android:width="1px"
+              android:color="#55577E"/>
+    </shape>
+  </item>
 </selector>
