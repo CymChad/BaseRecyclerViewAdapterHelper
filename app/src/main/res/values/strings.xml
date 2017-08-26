@@ -1,8 +1,11 @@
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <string name="app_name">BRVAH</string>
-    <string name="title_activity_header_and_footer_use">HeaderAndFooterUseActivity</string>
-    <string name="error">Network error</string>
-    <string name="network_err">Simulation network error</string>
-    <string name="empty_network_error">Network error, Click Retry</string>
-    <string name="empty_no_data">There is no data, Click Retry</string>
+<resources xmlns:tools="http://schemas.android.com/tools"
+           tools:ignore="MissingTranslation">
+  <string name="app_name">BRVAH</string>
+  <string name="title_activity_header_and_footer_use">HeaderAndFooterUseActivity</string>
+  <string name="error">Network error</string>
+  <string name="network_err">Simulation network error</string>
+  <string name="empty_network_error">Network error, Click Retry</string>
+  <string name="empty_no_data">There is no data, Click Retry</string>
+  <string name="change_load_view">change load view</string>
+  <string name="change_completed">change complete</string>
 </resources>

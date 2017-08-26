@@ -2,27 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               style="@style/bg"
               android:gravity="center"
-              android:orientation="vertical"
-    >
-    <ImageView
-        style="@style/empty_img"
-        android:src="@mipmap/empty_icon"/>
+              android:orientation="vertical">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_marginTop="5dp"
+  <ImageView
+      style="@style/empty_img"
+      android:src="@mipmap/empty_icon"/>
+
+  <LinearLayout
+      android:orientation="horizontal"
+      android:layout_marginTop="5dp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content">
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"/>
+
+    <TextView
+        android:layout_marginLeft="8dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <ProgressBar
-            style="?android:attr/progressBarStyleSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/progressBar"/>
-        <TextView
-            android:layout_marginLeft="8dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/loading"
-            android:textColor="@color/txt_color"/>
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:text="@string/loading"
+        android:textColor="@color/txt_color"/>
+  </LinearLayout>
 </LinearLayout>

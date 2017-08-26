@@ -9,58 +9,56 @@
     android:layout_margin="5dp"
     android:background="@drawable/touch_bg"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
-    >
+    android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/click_head_img_0"/>
+  <ImageView
+      android:id="@+id/imageView"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:scaleType="centerCrop"
+      android:src="@mipmap/click_head_img_0"/>
 
-    <Button
-        android:id="@+id/btn"
-        android:layout_width="85dp"
-        android:layout_height="33dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="15dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@drawable/touch_bg"
-        android:gravity="center"
-        android:text="长按我"
+  <Button
+      android:id="@+id/btn"
+      android:layout_width="85dp"
+      android:layout_height="33dp"
+      android:layout_alignParentBottom="true"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:layout_marginBottom="15dp"
+      android:layout_marginEnd="20dp"
+      android:layout_marginRight="20dp"
+      android:background="@drawable/touch_bg"
+      android:gravity="center"
+      android:text="长按我"
 
-        android:textColor="@color/txt_color"/>
+      android:textColor="@color/txt_color"/>
 
-    <TextView
-        android:id="@+id/tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="13dp"
-        android:layout_marginTop="16dp"
-        android:layout_toEndOf="@+id/imageView"
-        android:layout_toRightOf="@+id/imageView"
-        android:text="Shooting Stars"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
+  <TextView
+      android:id="@+id/tv"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentTop="true"
+      android:layout_marginLeft="13dp"
+      android:layout_marginTop="16dp"
+      android:layout_toEndOf="@+id/imageView"
+      android:layout_toRightOf="@+id/imageView"
+      android:text="Shooting Stars"
+      android:textColor="@android:color/black"
+      android:textSize="18sp"
+      android:textStyle="bold"/>
 
-    <TextView
-        android:id="@+id/tv1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tv"
-        android:layout_alignStart="@+id/tv"
-        android:layout_below="@+id/tv"
-        android:layout_weight="1"
-        android:text="O ever youthful,O ever weeping."
+  <TextView
+      android:id="@+id/tv1"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignLeft="@+id/tv"
+      android:layout_alignStart="@+id/tv"
+      android:layout_below="@+id/tv"
+      android:layout_weight="1"
+      android:text="O ever youthful,O ever weeping."
 
-        android:textColor="@color/txt_color"
-        android:textSize="13sp"/>
-
+      android:textColor="@color/txt_color"
+      android:textSize="13sp"/>
 
 </RelativeLayout>

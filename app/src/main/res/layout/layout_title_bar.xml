@@ -4,40 +4,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
 
-                android:background="@color/spinner_bg"
-    >
+                android:background="@color/spinner_bg">
 
-    <ImageView
-        android:id="@+id/img_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingRight="10dp"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
-        android:layout_centerVertical="true"
-        android:src="@mipmap/back"/>
+  <ImageView
+      android:id="@+id/img_back"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingRight="10dp"
+      android:paddingBottom="10dp"
+      android:paddingTop="10dp"
+      android:layout_centerVertical="true"
+      android:src="@mipmap/back"/>
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/img_back"
-        android:gravity="center_vertical"
-        android:text="title"
-        android:textColor="@color/white_text_color"
-        android:textSize="16sp"
-        />
+  <TextView
+      android:id="@+id/title"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_marginLeft="10dp"
+      android:layout_toRightOf="@+id/img_back"
+      android:gravity="center_vertical"
+      android:text="title"
+      android:textColor="@color/white_text_color"
+      android:textSize="16sp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/title"
-        android:gravity="center_vertical"
-        android:text="Demo"
-        android:textColor="@color/gray_color"
-        android:textSize="12sp"
-        />
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_marginLeft="10dp"
+      android:layout_toRightOf="@+id/title"
+      android:gravity="center_vertical"
+      android:text="Demo"
+      android:textColor="@color/gray_color"
+      android:textSize="12sp"/>
 
 </RelativeLayout>
