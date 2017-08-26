@@ -6,9 +6,6 @@ import com.chad.library.adapter.base.entity.SectionEntity;
 
 import java.util.List;
 
-/**
- * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
- */
 public abstract class BaseSectionQuickAdapter<T extends SectionEntity, K extends BaseViewHolder> extends BaseQuickAdapter<T, K> {
 
   protected int mSectionHeadResId;

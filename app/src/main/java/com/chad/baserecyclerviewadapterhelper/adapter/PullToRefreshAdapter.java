@@ -43,7 +43,7 @@ public class PullToRefreshAdapter extends BaseQuickAdapter<Status, BaseViewHolde
     ((TextView) helper.getView(R.id.tweetText)).setMovementMethod(LinkMovementMethod.getInstance());
   }
 
-  ClickableSpan clickableSpan = new ClickableSpan() {
+  private ClickableSpan clickableSpan = new ClickableSpan() {
     @Override
     public void onClick(View widget) {
       ToastUtils.showShortToast("事件触发了 landscapes and nedes");

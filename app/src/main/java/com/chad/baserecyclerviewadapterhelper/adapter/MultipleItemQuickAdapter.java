@@ -1,7 +1,5 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
-import android.content.Context;
-
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.MultipleItem;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
@@ -11,7 +9,7 @@ import java.util.List;
 
 public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem, BaseViewHolder> {
 
-  public MultipleItemQuickAdapter(Context context, List data) {
+  public MultipleItemQuickAdapter(List data) {
     super(data);
     addItemType(MultipleItem.TEXT, R.layout.item_text_view);
     addItemType(MultipleItem.IMG, R.layout.item_image_view);

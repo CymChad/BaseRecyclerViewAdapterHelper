@@ -19,8 +19,6 @@ import static com.chad.library.adapter.base.BaseQuickAdapter.HEADER_VIEW;
 import static com.chad.library.adapter.base.BaseQuickAdapter.LOADING_VIEW;
 
 /**
- * Created by AllenCoder on 2016/8/03.
- * <p>
  * This can be useful for applications that wish to implement various forms of click and longclick and childView click
  * manipulation of item views within the RecyclerView. SimpleClickListener may intercept
  * a touch interaction already in progress even if the SimpleClickListener is already handling that

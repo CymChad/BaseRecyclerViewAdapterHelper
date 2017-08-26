@@ -5,7 +5,6 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 /**
- * Created by AllenCoder on 2016/8/03.
  * A convenience class to extend when you only want to OnItemChildClickListener for a subset
  * of all the SimpleClickListener. This implements all methods in the
  * {@link SimpleClickListener}

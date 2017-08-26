@@ -15,9 +15,9 @@ import com.chad.baserecyclerviewadapterhelper.util.Utils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
-public class NestAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
+class NestAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
 
-  public NestAdapter() {
+  NestAdapter() {
     super(R.layout.layout_nest_item, DataServer.getSampleData(20));
   }
 
@@ -44,7 +44,7 @@ public class NestAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
     ((TextView) helper.getView(R.id.tweetText)).setMovementMethod(LinkMovementMethod.getInstance());
   }
 
-  ClickableSpan clickableSpan = new ClickableSpan() {
+  private ClickableSpan clickableSpan = new ClickableSpan() {
     @Override
     public void onClick(View widget) {
       ToastUtils.showShortToast("事件触发了 landscapes and nedes");

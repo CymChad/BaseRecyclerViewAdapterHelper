@@ -6,7 +6,7 @@
 
   <application
       android:name=".MyApplication"
-      android:allowBackup="true"
+      android:allowBackup="false"
       android:icon="@mipmap/logo"
       android:label="@string/app_name"
       android:supportsRtl="true"

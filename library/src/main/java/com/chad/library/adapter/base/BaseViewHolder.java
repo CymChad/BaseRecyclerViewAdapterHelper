@@ -42,9 +42,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
- */
 public class BaseViewHolder extends RecyclerView.ViewHolder {
 
   /**
