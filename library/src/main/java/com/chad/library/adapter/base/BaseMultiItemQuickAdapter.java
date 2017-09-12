@@ -64,7 +64,9 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity, K ext
 
     @Override
     public void remove(@IntRange(from = 0L) int position) {
-        MultiItemEntity entity = mData.get(position);
+        if (mData == null || position >= mData.size()) return;
+
+        T entity = mData.get(position);
         if (entity instanceof IExpandable) {
             removeAllChild((IExpandable) entity, position);
         }
@@ -72,28 +74,30 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity, K ext
         super.remove(position);
     }
 
-   /**
-    * 移除父控件时，若父控件处于展开状态，则先移除其所有的子控件
-    * @param parent 父控件实体
-    * @param parentPosition  父控件位置
-    */
+    /**
+     * 移除父控件时，若父控件处于展开状态，则先移除其所有的子控件
+     *
+     * @param parent         父控件实体
+     * @param parentPosition 父控件位置
+     */
     protected void removeAllChild(IExpandable parent, int parentPosition) {
         if (parent.isExpanded()) {
             List<MultiItemEntity> chidChilds = parent.getSubItems();
             int childSize = chidChilds.size();
             if (null != chidChilds && childSize > 0) {
-            for (int i = 0; i < childSize; i++) {
+                for (int i = 0; i < childSize; i++) {
                     remove(parentPosition + 1);
                 }
             }
         }
     }
 
-   /**
-    * 移除子控件时，移除父控件实体类中相关子控件数据，避免关闭后再次展开数据重现
-    * @param child 子控件实体
-    */
-    protected void removeDataFromParent(MultiItemEntity child){
+    /**
+     * 移除子控件时，移除父控件实体类中相关子控件数据，避免关闭后再次展开数据重现
+     *
+     * @param child 子控件实体
+     */
+    protected void removeDataFromParent(T child) {
         IExpandable parent = (IExpandable) mData.get(getParentPosition(child));
         parent.getSubItems().remove(child);
     }
