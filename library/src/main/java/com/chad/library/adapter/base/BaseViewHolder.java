@@ -87,7 +87,10 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     private int getClickPosition() {
-        return getLayoutPosition() - adapter.getHeaderLayoutCount();
+        if (getLayoutPosition()>=adapter.getHeaderLayoutCount()){
+            return getLayoutPosition() - adapter.getHeaderLayoutCount();
+        }
+        return 0;
     }
 
     public HashSet<Integer> getItemChildLongClickViewIds() {
