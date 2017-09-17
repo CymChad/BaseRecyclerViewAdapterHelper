@@ -98,8 +98,11 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity, K ext
      * @param child 子控件实体
      */
     protected void removeDataFromParent(T child) {
-        IExpandable parent = (IExpandable) mData.get(getParentPosition(child));
-        parent.getSubItems().remove(child);
+        int position = getParentPosition(child);
+        if(position > 0){
+            IExpandable parent = (IExpandable) mData.get(position);
+            parent.getSubItems().remove(child);
+        }
     }
 }
 
