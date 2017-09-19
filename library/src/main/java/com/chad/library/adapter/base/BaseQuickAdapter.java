@@ -1716,7 +1716,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     public void expandAll() {
-        for (int i = mData.size() - 1; i >= getHeaderLayoutCount(); i--) {
+
+        for (int i = mData.size() - 1 + getHeaderLayoutCount(); i >= getHeaderLayoutCount(); i--) {
             expandAll(i, false, false);
         }
     }
