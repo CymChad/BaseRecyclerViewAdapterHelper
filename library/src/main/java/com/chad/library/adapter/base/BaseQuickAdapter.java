@@ -1623,7 +1623,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             return 0;
         }
         if (!hasSubItems(expandable)) {
-            expandable.setExpanded(false);
+            expandable.setExpanded(true);
+            notifyItemChanged(position);
             return 0;
         }
         int subItemCount = 0;
@@ -1677,7 +1678,13 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         }
 
         IExpandable expandable = getExpandableItem(position);
-        if (expandable == null || !hasSubItems(expandable)) {
+        if (expandable == null) {
+            return 0;
+        }
+
+        if(!hasSubItems(expandable)){
+            expandable.setExpanded(true);
+            notifyItemChanged(position);
             return 0;
         }
 
@@ -1731,6 +1738,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         int subItemCount = 0;
         if (expandable.isExpanded()) {
             List<T> subItems = expandable.getSubItems();
+            if(null == subItems) return 0;
+
             for (int i = subItems.size() - 1; i >= 0; i--) {
                 T subItem = subItems.get(i);
                 int pos = getItemPosition(subItem);

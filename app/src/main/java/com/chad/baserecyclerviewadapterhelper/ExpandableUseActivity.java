@@ -2,7 +2,6 @@ package com.chad.baserecyclerviewadapterhelper;
 
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.ExpandableItemAdapter;
@@ -68,6 +67,7 @@ public class ExpandableUseActivity extends BaseActivity {
             }
             res.add(lv0);
         }
+        res.add(new  Level0Item("This is " + lv0Count + "th item in Level 0", "subtitle of " + lv0Count));
         return res;
     }
 }
