@@ -22,10 +22,9 @@ kotlin demo :[BRVAH_kotlin](https://github.com/AllenCoder/BRVAH_kotlin)
 }
 -keep public class * extends com.chad.library.adapter.base.BaseQuickAdapter
 -keep public class * extends com.chad.library.adapter.base.BaseViewHolder
--keepclassmembers public class * extends com.chad.library.adapter.base.BaseViewHolder {
-     <init>(android.view.View);
+-keepclassmembers  class **$** extends com.chad.library.adapter.base.BaseViewHolder {
+     <init>(...);
 }
-
 ```
 
 # Extension library
