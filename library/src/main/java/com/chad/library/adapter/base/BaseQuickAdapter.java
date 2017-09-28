@@ -1063,6 +1063,11 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                     if (BaseViewHolder.class.isAssignableFrom(tempClass)) {
                         return tempClass;
                     }
+                } else if (temp instanceof ParameterizedType) {
+                    Type rawType = ((ParameterizedType) temp).getRawType();
+                    if (rawType instanceof Class && BaseViewHolder.class.isAssignableFrom((Class<?>) rawType)) {
+                        return (Class<?>) rawType;
+                    }
                 }
             }
         }
