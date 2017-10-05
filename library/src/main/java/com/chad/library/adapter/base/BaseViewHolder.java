@@ -250,6 +250,19 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     /**
+     * Set a view visibility to VISIBLE, INVISIBLE or GONE.
+     *
+     * @param viewId     The view id.
+     * @param visibility View visibility (VISIBLE, INVISIBLE or GONE).
+     * @return The BaseViewHolder for chaining.
+     */
+    public BaseViewHolder setVisibility(@IdRes int viewId, int visibility) {
+        View view = getView(viewId);
+        view.setVisibility(visibility);
+        return this;
+    }
+    
+    /**
      * Add links into a TextView.
      *
      * @param viewId The id of the TextView to linkify.
