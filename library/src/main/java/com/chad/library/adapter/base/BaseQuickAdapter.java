@@ -1593,7 +1593,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     @SuppressWarnings("unchecked")
     private int recursiveExpand(int position, @NonNull List list) {
-        int count = 0;
+        int count = list.size();
         int pos = position + list.size() - 1;
         for (int i = list.size() - 1; i >= 0; i--, pos--) {
             if (list.get(i) instanceof IExpandable) {
@@ -1638,7 +1638,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             subItemCount += recursiveExpand(position + 1, list);
 
             expandable.setExpanded(true);
-            subItemCount += list.size();
+//            subItemCount += list.size();
         }
         int parentPos = position + getHeaderLayoutCount();
         if (shouldNotify) {
