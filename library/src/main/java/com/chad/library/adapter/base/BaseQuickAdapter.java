@@ -58,9 +58,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
@@ -122,6 +119,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     private boolean mIsUseEmpty = true;
     private boolean mHeadAndEmptyEnable;
     private boolean mFootAndEmptyEnable;
+    //setEmptyView
+    private static final int MATCH_PARENT = 0x00000010;
+    private static final int WRAP_CONTENT = 0x00000010;
 
     protected static final String TAG = BaseQuickAdapter.class.getSimpleName();
     protected Context mContext;
@@ -1318,7 +1318,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     public void setEmptyView(int layoutResId, ViewGroup viewGroup) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(layoutResId, viewGroup, false);
-        setEmptyView(view);
+        setEmptyView(view,MATCH_PARENT);
     }
 
     /**
@@ -1331,11 +1331,16 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         setEmptyView(layoutResId, getRecyclerView());
     }
 
-    public void setEmptyView(View emptyView) {
+    public void setEmptyView(View emptyView,int params) {
         boolean insert = false;
         if (mEmptyLayout == null) {
             mEmptyLayout = new FrameLayout(emptyView.getContext());
-            final LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+            final LayoutParams layoutParams;
+            if (params == MATCH_PARENT) {
+                layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+            }else{
+                layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            }
             final ViewGroup.LayoutParams lp = emptyView.getLayoutParams();
             if (lp != null) {
                 layoutParams.width = lp.width;
