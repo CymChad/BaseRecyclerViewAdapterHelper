@@ -91,6 +91,15 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                         }
                     }
                 });
+
+                holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        int pos = holder.getAdapterPosition();
+                        remove(pos);
+                        return true;
+                    }
+                });
                 break;
             case TYPE_PERSON:
                 final Person person = (Person) item;
@@ -98,12 +107,8 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        int cp = getParentPosition(person);
-                        if (cp != -1) {
-                            ((Level1Item) getData().get(cp)).removeSubItem(person);
-                            getData().remove(holder.getLayoutPosition());
-                            notifyItemRemoved(holder.getLayoutPosition());
-                        }
+                        int pos = holder.getAdapterPosition();
+                        remove(pos);
                     }
                 });
                 break;
