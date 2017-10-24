@@ -84,11 +84,11 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity, K ext
     protected void removeAllChild(IExpandable parent, int parentPosition) {
         if (parent.isExpanded()) {
             List<MultiItemEntity> chidChilds = parent.getSubItems();
+            if (chidChilds == null || chidChilds.size() == 0) return;
+
             int childSize = chidChilds.size();
-            if (null != chidChilds && childSize > 0) {
-                for (int i = 0; i < childSize; i++) {
-                    remove(parentPosition + 1);
-                }
+            for (int i = 0; i < childSize; i++) {
+                remove(parentPosition + 1);
             }
         }
     }
@@ -100,7 +100,7 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity, K ext
      */
     protected void removeDataFromParent(T child) {
         int position = getParentPosition(child);
-        if(position > 0){
+        if (position >= 0) {
             IExpandable parent = (IExpandable) mData.get(position);
             parent.getSubItems().remove(child);
         }
