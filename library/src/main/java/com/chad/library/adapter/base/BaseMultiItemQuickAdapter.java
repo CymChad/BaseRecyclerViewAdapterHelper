@@ -2,6 +2,7 @@ package com.chad.library.adapter.base;
 
 import android.support.annotation.IntRange;
 import android.support.annotation.LayoutRes;
+import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.ViewGroup;
 
@@ -65,7 +66,9 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity, K ext
 
     @Override
     public void remove(@IntRange(from = 0L) int position) {
-        if (mData == null || position >= mData.size()) return;
+        if (mData == null
+                || position < 0
+                || position >= mData.size()) return;
 
         T entity = mData.get(position);
         if (entity instanceof IExpandable) {
