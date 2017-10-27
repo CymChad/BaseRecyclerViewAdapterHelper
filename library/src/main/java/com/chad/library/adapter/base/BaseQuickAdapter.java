@@ -1402,16 +1402,24 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     private int mPreLoadNumber = 1;
 
     @Deprecated
-    public void setAutoLoadMoreSize(int preLoadNumber) {
+    public void setAutoLoadMoreSize(@IntRange(from = 2) int preLoadNumber) {
         setPreLoadNumber(preLoadNumber);
     }
 
-    public void setPreLoadNumber(int preLoadNumber) {
-        if (preLoadNumber > 1) {
-            mPreLoadNumber = preLoadNumber;
-        }
+    /**
+     * Set when the list is swiped to the penultimate item (default is 1) callback
+     * onLoadMoreRequested() method
+     *
+     * @param preLoadNumber
+     */
+    public void setPreLoadNumber(@IntRange(from = 2) int preLoadNumber) {
+        mPreLoadNumber = preLoadNumber;
     }
 
+    /**
+     * According to position position to determine whether the current need to load more
+     * @param position  The current position of onBindViewHolder()
+     */
     private void autoLoadMore(int position) {
         if (getLoadMoreViewCount() == 0) {
             return;
@@ -1526,7 +1534,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *
      * @param animation ObjectAnimator
      */
-    public void openLoadAnimation(BaseAnimation animation) {
+    public void openLoadAnimation(@NonNull BaseAnimation animation) {
         this.mOpenAnimationEnable = true;
         this.mCustomAnimation = animation;
     }
