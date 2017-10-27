@@ -1,8 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    implementationSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 26
 
     defaultConfig {
         applicationId "com.chad.baserecyclerviewadapterhelper"
