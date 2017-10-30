@@ -31,6 +31,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
@@ -57,9 +58,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 
 /**
@@ -114,6 +112,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     private BaseAnimation mCustomAnimation;
     private BaseAnimation mSelectAnimation = new AlphaInAnimation();
+    //setEmptyView
+    private static final int MATCH_PARENT = WindowManager.LayoutParams.MATCH_PARENT;
+    private static final int WRAP_CONTENT = WindowManager.LayoutParams.WRAP_CONTENT;
+    private int emptyViewParams = WindowManager.LayoutParams.MATCH_PARENT;
     //header footer
     private LinearLayout mHeaderLayout;
     private LinearLayout mFooterLayout;
@@ -1318,7 +1320,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     public void setEmptyView(int layoutResId, ViewGroup viewGroup) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(layoutResId, viewGroup, false);
-        setEmptyView(view);
+        setEmptyView(view,MATCH_PARENT);
     }
 
     /**
@@ -1331,11 +1333,15 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         setEmptyView(layoutResId, getRecyclerView());
     }
 
+    public void setEmptyView(View emptyView,int params){
+        emptyViewParams = (emptyViewParams == MATCH_PARENT? MATCH_PARENT : WRAP_CONTENT);
+        setEmptyView(emptyView);
+    }
     public void setEmptyView(View emptyView) {
         boolean insert = false;
         if (mEmptyLayout == null) {
             mEmptyLayout = new FrameLayout(emptyView.getContext());
-            final LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+            final LayoutParams layoutParams = new LayoutParams(emptyViewParams, emptyViewParams);
             final ViewGroup.LayoutParams lp = emptyView.getLayoutParams();
             if (lp != null) {
                 layoutParams.width = lp.width;
