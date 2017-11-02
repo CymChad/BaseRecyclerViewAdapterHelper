@@ -5,8 +5,8 @@ sudo: false
 android:
   components:
     - tools
-    - build-tools-25.0.2
-    - android-25
+    - build-tools-26.0.2
+    - android-26
     - extra-android-m2repository
     - extra-android-support
   licenses:
