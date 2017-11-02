@@ -12,8 +12,9 @@ dependencies:
 
 
   override:
-    - echo y | android update sdk --no-ui --filter "android-25"
-    - echo y | android update sdk --no-ui --filter "build-tools-25.0.2"
+    - echo y | android update sdk --no-ui --all --filter build-tools-26.0.2
+    - echo y | android update sdk --no-ui --filter "android-26"
+    - echo y | android update sdk --no-ui --filter "build-tools-26.0.2"
     - echo y | android update sdk --no-ui --filter "extra-android-m2repository"
     - echo y | android update sdk --no-ui --filter "extra-android-support"
     - echo y | android update sdk --no-ui --filter "extra-google-m2repositor"
