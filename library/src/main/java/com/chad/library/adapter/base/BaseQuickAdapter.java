@@ -953,7 +953,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getOnItemClickListener().onItemClick(BaseQuickAdapter.this, v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
+                    setOnItemClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
                 }
             });
         }
@@ -961,10 +961,29 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    return getOnItemLongClickListener().onItemLongClick(BaseQuickAdapter.this, v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
+                    return setOnItemLongClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
                 }
             });
         }
+    }
+
+    /**
+     * override this method if you want to override click event logic
+     * @param v
+     * @param position
+     */
+    public void setOnItemClick(View v, int position) {
+        getOnItemClickListener().onItemClick(BaseQuickAdapter.this, v, position);
+    }
+
+    /**
+     * override this method if you want to override longClick event logic
+     * @param v
+     * @param position
+     * @return
+     */
+    public boolean setOnItemLongClick(View v, int position) {
+        return getOnItemLongClickListener().onItemLongClick(BaseQuickAdapter.this, v, position);
     }
 
     private MultiTypeDelegate<T> mMultiTypeDelegate;
@@ -1687,7 +1706,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             return 0;
         }
 
-        if(!hasSubItems(expandable)){
+        if (!hasSubItems(expandable)) {
             expandable.setExpanded(true);
             notifyItemChanged(position);
             return 0;
@@ -1744,7 +1763,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         int subItemCount = 0;
         if (expandable.isExpanded()) {
             List<T> subItems = expandable.getSubItems();
-            if(null == subItems) return 0;
+            if (null == subItems) return 0;
 
             for (int i = subItems.size() - 1; i >= 0; i--) {
                 T subItem = subItems.get(i);
