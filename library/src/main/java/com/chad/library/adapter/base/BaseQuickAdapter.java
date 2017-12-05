@@ -217,7 +217,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             recyclerView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if ((linearLayoutManager.findLastCompletelyVisibleItemPosition() + 1) != getItemCount()) {
+                    if (isFullScreen(linearLayoutManager)) {
                         setEnableLoadMore(true);
                     }
                 }
@@ -236,6 +236,11 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 }
             }, 50);
         }
+    }
+
+    private boolean isFullScreen(LinearLayoutManager llm) {
+        return (llm.findLastCompletelyVisibleItemPosition() + 1) != getItemCount() ||
+                llm.findFirstCompletelyVisibleItemPosition() != 0;
     }
 
     private int getTheBiggestNumber(int[] numbers) {
@@ -969,6 +974,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     /**
      * override this method if you want to override click event logic
+     *
      * @param v
      * @param position
      */
@@ -978,6 +984,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     /**
      * override this method if you want to override longClick event logic
+     *
      * @param v
      * @param position
      * @return
