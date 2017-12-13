@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class HomeAdapter extends BaseQuickAdapter<HomeItem, BaseViewHolder> {
+public class HomeAdapter extends BaseQuickAdapter<HomeItem, BaseViewHolder<HomeItem>> {
     public HomeAdapter(int layoutResId, List data) {
         super(layoutResId, data);
     }

@@ -16,7 +16,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class QuickAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
+public class QuickAdapter extends BaseQuickAdapter<Status, BaseViewHolder<Status>> {
 
     public QuickAdapter(int dataSize) {
         super(R.layout.layout_animation, DataServer.getSampleData(dataSize));

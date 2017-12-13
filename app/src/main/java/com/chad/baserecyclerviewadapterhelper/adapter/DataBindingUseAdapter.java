@@ -62,7 +62,7 @@ public class DataBindingUseAdapter extends BaseQuickAdapter<Movie, DataBindingUs
         return view;
     }
 
-    public static class MovieViewHolder extends BaseViewHolder {
+    public static class MovieViewHolder extends BaseViewHolder<Movie> {
 
         public MovieViewHolder(View view) {
             super(view);

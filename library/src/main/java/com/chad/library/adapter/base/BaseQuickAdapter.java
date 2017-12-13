@@ -65,7 +65,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends RecyclerView.Adapter<K> {
+public abstract class BaseQuickAdapter<T, K extends BaseViewHolder<T>> extends RecyclerView.Adapter<K> {
 
     //load more
     private boolean mNextLoadEnable = false;
@@ -969,6 +969,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     /**
      * override this method if you want to override click event logic
+     *
      * @param v
      * @param position
      */
@@ -978,6 +979,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     /**
      * override this method if you want to override longClick event logic
+     *
      * @param v
      * @param position
      * @return
@@ -1567,12 +1569,14 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     /**
-     * Implement this method and use the helper to adapt the view to the given item.
+     * Override this method and use the helper to adapt the view to the given item.
      *
      * @param helper A fully initialized helper.
      * @param item   The item that needs to be displayed.
      */
-    protected abstract void convert(K helper, T item);
+    protected void convert(K helper, T item) {
+        helper.onBind(item);
+    }
 
     /**
      * get the specific view by position,e.g. getViewByPosition(2, R.id.textView)
