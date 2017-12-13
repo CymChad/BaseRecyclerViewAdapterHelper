@@ -38,9 +38,4 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
                 return super.onCreateDefViewHolder(parent, viewType);
         }
     }
-
-    @Override
-    protected void convert(BaseViewHolder<MultipleItem> helper, MultipleItem item) {
-        super.convert(helper, item);
-    }
 }
