@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
-import com.chad.baserecyclerviewadapterhelper.entity.ClickEntity;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.baserecyclerviewadapterhelper.util.SpannableStringUtils;
 import com.chad.baserecyclerviewadapterhelper.util.ToastUtils;
