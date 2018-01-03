@@ -53,7 +53,7 @@ public abstract class BaseDataBindingAdapter<T, Binding extends ViewDataBinding>
     }
 
     @Override
-    protected void convert(BaseBindingViewHolder<Binding> helper, T item) {
+    protected void convert(BaseBindingViewHolder<Binding> helper, T item, int position) {
         convert(helper.getBinding(), item);
         helper.getBinding().executePendingBindings();
     }

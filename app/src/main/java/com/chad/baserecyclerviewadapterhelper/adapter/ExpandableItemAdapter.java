@@ -38,7 +38,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
 
 
     @Override
-    protected void convert(final BaseViewHolder holder, final MultiItemEntity item) {
+    protected void convert(final BaseViewHolder holder, final MultiItemEntity item, int position) {
         switch (holder.getItemViewType()) {
             case TYPE_LEVEL_0:
                 switch (holder.getLayoutPosition() %

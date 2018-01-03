@@ -16,7 +16,7 @@ public class HomeAdapter extends BaseQuickAdapter<HomeItem, BaseViewHolder> {
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, HomeItem item) {
+    protected void convert(BaseViewHolder helper, HomeItem item, int position) {
         helper.setText(R.id.text, item.getTitle());
         helper.setImageResource(R.id.icon, item.getImageResource());
     }

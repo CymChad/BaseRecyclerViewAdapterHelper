@@ -29,7 +29,7 @@ public class NestAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, Status item) {
+    protected void convert(BaseViewHolder helper, Status item, int position) {
         helper.addOnClickListener(R.id.tweetText);
         switch (helper.getLayoutPosition()%
                 3){

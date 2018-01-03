@@ -33,7 +33,7 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity, Bas
 
 
     @Override
-    protected void convert(final BaseViewHolder helper, final ClickEntity item) {
+    protected void convert(final BaseViewHolder helper, final ClickEntity item, int position) {
         switch (helper.getItemViewType()) {
             case ClickEntity.CLICK_ITEM_VIEW:
                 helper.addOnClickListener(R.id.btn);
