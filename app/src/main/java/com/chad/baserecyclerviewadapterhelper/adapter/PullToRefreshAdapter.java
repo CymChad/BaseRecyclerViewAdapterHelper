@@ -28,7 +28,7 @@ public class PullToRefreshAdapter extends BaseQuickAdapter<Status, BaseViewHolde
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, Status item) {
+    protected void convert(BaseViewHolder helper, Status item, int position) {
         switch (helper.getLayoutPosition()%
                 3){
             case 0:

@@ -15,7 +15,7 @@ public class ItemDragAdapter extends BaseItemDraggableAdapter<String, BaseViewHo
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, String item) {
+    protected void convert(BaseViewHolder helper, String item, int position) {
         switch (helper.getLayoutPosition() %
                 3) {
             case 0:

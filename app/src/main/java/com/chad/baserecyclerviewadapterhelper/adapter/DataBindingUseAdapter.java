@@ -29,7 +29,7 @@ public class DataBindingUseAdapter extends BaseQuickAdapter<Movie, DataBindingUs
     }
 
     @Override
-    protected void convert(MovieViewHolder helper, Movie item) {
+    protected void convert(MovieViewHolder helper, Movie item, int position) {
         ViewDataBinding binding = helper.getBinding();
         binding.setVariable(BR.movie, item);
         binding.setVariable(BR.presenter, mPresenter);

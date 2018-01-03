@@ -23,7 +23,7 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, MultipleItem item) {
+    protected void convert(BaseViewHolder helper, MultipleItem item, int position) {
         switch (helper.getItemViewType()) {
             case MultipleItem.TEXT:
                 helper.setText(R.id.tv, item.getContent());
