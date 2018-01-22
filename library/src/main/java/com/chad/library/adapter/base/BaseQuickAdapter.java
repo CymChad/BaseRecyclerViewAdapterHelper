@@ -204,7 +204,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * <p>
      * 不是配置项！！
      *
-     * @param recyclerView your recyclerView
+     * @param recyclerView
+     *         your recyclerView
      * @see #setNewData(List)
      */
     public void disableLoadMoreIfNotFullPage(RecyclerView recyclerView) {
@@ -310,7 +311,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * Set custom load more
      *
-     * @param loadingView 加载视图
+     * @param loadingView
+     *         加载视图
      */
     public void setLoadMoreView(LoadMoreView loadingView) {
         this.mLoadMoreView = loadingView;
@@ -362,7 +364,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * Refresh end, no more data
      *
-     * @param gone if true gone the load more view
+     * @param gone
+     *         if true gone the load more view
      */
     public void loadMoreEnd(boolean gone) {
         if (getLoadMoreViewCount() == 0) {
@@ -407,7 +410,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * Set the enabled state of load more.
      *
-     * @param enable True if load more is enabled, false otherwise.
+     * @param enable
+     *         True if load more is enabled, false otherwise.
      */
     public void setEnableLoadMore(boolean enable) {
         int oldLoadMoreCount = getLoadMoreViewCount();
@@ -438,7 +442,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * Sets the duration of the animation.
      *
-     * @param duration The length of the animation, in milliseconds.
+     * @param duration
+     *         The length of the animation, in milliseconds.
      */
     public void setDuration(int duration) {
         mDuration = duration;
@@ -449,8 +454,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.
      *
-     * @param layoutResId The layout resource id of each item.
-     * @param data        A new list is created out of this one to avoid mutable list
+     * @param layoutResId
+     *         The layout resource id of each item.
+     * @param data
+     *         A new list is created out of this one to avoid mutable list
      */
     public BaseQuickAdapter(@LayoutRes int layoutResId, @Nullable List<T> data) {
         this.mData = data == null ? new ArrayList<T>() : data;
@@ -541,8 +548,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * add new data in to certain location
      *
-     * @param position the insert position
-     * @param newData  the new data collection
+     * @param position
+     *         the insert position
+     * @param newData
+     *         the new data collection
      */
     public void addData(@IntRange(from = 0) int position, @NonNull Collection<? extends T> newData) {
         mData.addAll(position, newData);
@@ -553,7 +562,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * add new data to the end of mData
      *
-     * @param newData the new data collection
+     * @param newData
+     *         the new data collection
      */
     public void addData(@NonNull Collection<? extends T> newData) {
         mData.addAll(newData);
@@ -565,7 +575,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * use data to replace all item in mData. this method is different {@link #setNewData(List)},
      * it doesn't change the mData reference
      *
-     * @param data data collection
+     * @param data
+     *         data collection
      */
     public void replaceData(@NonNull Collection<? extends T> data) {
         // 不是同一个引用才清空列表
@@ -579,7 +590,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * compatible getLoadMoreViewCount and getEmptyViewCount may change
      *
-     * @param size Need compatible data size
+     * @param size
+     *         Need compatible data size
      */
     private void compatibilityDataSizeChanged(int size) {
         final int dataSize = mData == null ? 0 : mData.size();
@@ -601,8 +613,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * Get the data item associated with the specified position in the data set.
      *
-     * @param position Position of the item whose data we want within the adapter's
-     *                 data set.
+     * @param position
+     *         Position of the item whose data we want within the adapter's
+     *         data set.
      * @return The data at the specified position.
      */
     @Nullable
@@ -828,7 +841,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * have full height.
      * if the hold view use StaggeredGridLayoutManager they should using all span area
      *
-     * @param holder True if this item should traverse all spans.
+     * @param holder
+     *         True if this item should traverse all spans.
      */
     protected void setFullSpan(RecyclerView.ViewHolder holder) {
         if (holder.itemView.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams) {
@@ -901,7 +915,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     /**
-     * @param spanSizeLookup instance to be used to query number of spans occupied by each item
+     * @param spanSizeLookup
+     *         instance to be used to query number of spans occupied by each item
      */
     public void setSpanSizeLookup(SpanSizeLookup spanSizeLookup) {
         this.mSpanSizeLookup = spanSizeLookup;
@@ -941,6 +956,51 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         }
     }
 
+    /**
+     * @param holder
+     * @param position
+     * @param payloads
+     */
+    @Override
+    public void onBindViewHolder(K holder, int position, List<Object> payloads) {
+        //Add up fetch logic, almost like load more, but simpler.
+        autoUpFetch(position);
+        //Do not move position, need to change before LoadMoreView binding
+        autoLoadMore(position);
+        int viewType = holder.getItemViewType();
+
+        switch (viewType) {
+            case 0:
+                convert(holder, getItem(position - getHeaderLayoutCount()), payloads);
+                break;
+            case LOADING_VIEW:
+                mLoadMoreView.convert(holder);
+                break;
+            case HEADER_VIEW:
+                break;
+            case EMPTY_VIEW:
+                break;
+            case FOOTER_VIEW:
+                break;
+            default:
+                convert(holder, getItem(position - getHeaderLayoutCount()), payloads);
+                break;
+        }
+    }
+
+    /**
+     * @param helper
+     * @param item
+     * @param payloads
+     */
+    protected void convert(K helper, T item, List<Object> payloads) {
+        if (payloads == null || payloads.isEmpty()) {
+            convert(helper, item);
+        } else {
+            //do nothing
+        }
+    }
+
     private void bindViewClickListener(final BaseViewHolder baseViewHolder) {
         if (baseViewHolder == null) {
             return;
@@ -969,6 +1029,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     /**
      * override this method if you want to override click event logic
+     *
      * @param v
      * @param position
      */
@@ -978,6 +1039,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     /**
      * override this method if you want to override longClick event logic
+     *
      * @param v
      * @param position
      * @return
@@ -1012,7 +1074,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * if you want to use subclass of BaseViewHolder in the adapter,
      * you must override the method to create new ViewHolder.
      *
-     * @param view view
+     * @param view
+     *         view
      * @return new ViewHolder
      */
     @SuppressWarnings("unchecked")
@@ -1123,9 +1186,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * the effect of this method is the same as that of {@link #addHeaderView(View)}.
      *
      * @param header
-     * @param index  the position in mHeaderLayout of this header.
-     *               When index = -1 or index >= child count in mHeaderLayout,
-     *               the effect of this method is the same as that of {@link #addHeaderView(View)}.
+     * @param index
+     *         the position in mHeaderLayout of this header.
+     *         When index = -1 or index >= child count in mHeaderLayout,
+     *         the effect of this method is the same as that of {@link #addHeaderView(View)}.
      */
     public int addHeaderView(View header, int index) {
         return addHeaderView(header, index, LinearLayout.VERTICAL);
@@ -1198,9 +1262,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * the effect of this method is the same as that of {@link #addFooterView(View)}.
      *
      * @param footer
-     * @param index  the position in mFooterLayout of this footer.
-     *               When index = -1 or index >= child count in mFooterLayout,
-     *               the effect of this method is the same as that of {@link #addFooterView(View)}.
+     * @param index
+     *         the position in mFooterLayout of this footer.
+     *         When index = -1 or index >= child count in mFooterLayout,
+     *         the effect of this method is the same as that of {@link #addFooterView(View)}.
      */
     public int addFooterView(View footer, int index, int orientation) {
         if (mFooterLayout == null) {
@@ -1380,7 +1445,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * Call before {@link RecyclerView#setAdapter(RecyclerView.Adapter)}
      *
-     * @param isHeadAndEmpty false will not show headView if the data is empty true will show emptyView and headView
+     * @param isHeadAndEmpty
+     *         false will not show headView if the data is empty true will show emptyView and headView
      */
     public void setHeaderAndEmpty(boolean isHeadAndEmpty) {
         setHeaderFooterEmpty(isHeadAndEmpty, false);
@@ -1492,10 +1558,12 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     /**
-     * @param layoutResId ID for an XML layout resource to load
-     * @param parent      Optional view to be the parent of the generated hierarchy or else simply an object that
-     *                    provides a set of LayoutParams values for root of the returned
-     *                    hierarchy
+     * @param layoutResId
+     *         ID for an XML layout resource to load
+     * @param parent
+     *         Optional view to be the parent of the generated hierarchy or else simply an object that
+     *         provides a set of LayoutParams values for root of the returned
+     *         hierarchy
      * @return view will be return
      */
     protected View getItemView(@LayoutRes int layoutResId, ViewGroup parent) {
@@ -1513,8 +1581,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * Set the view animation type.
      *
-     * @param animationType One of {@link #ALPHAIN}, {@link #SCALEIN}, {@link #SLIDEIN_BOTTOM},
-     *                      {@link #SLIDEIN_LEFT}, {@link #SLIDEIN_RIGHT}.
+     * @param animationType
+     *         One of {@link #ALPHAIN}, {@link #SCALEIN}, {@link #SLIDEIN_BOTTOM},
+     *         {@link #SLIDEIN_LEFT}, {@link #SLIDEIN_RIGHT}.
      */
     public void openLoadAnimation(@AnimationType int animationType) {
         this.mOpenAnimationEnable = true;
@@ -1543,7 +1612,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * Set Custom ObjectAnimator
      *
-     * @param animation ObjectAnimator
+     * @param animation
+     *         ObjectAnimator
      */
     public void openLoadAnimation(BaseAnimation animation) {
         this.mOpenAnimationEnable = true;
@@ -1560,7 +1630,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * {@link #addAnimation(RecyclerView.ViewHolder)}
      *
-     * @param firstOnly true just show anim when first loading false show anim when load the data every time
+     * @param firstOnly
+     *         true just show anim when first loading false show anim when load the data every time
      */
     public void isFirstOnly(boolean firstOnly) {
         this.mFirstOnlyEnable = firstOnly;
@@ -1569,8 +1640,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * Implement this method and use the helper to adapt the view to the given item.
      *
-     * @param helper A fully initialized helper.
-     * @param item   The item that needs to be displayed.
+     * @param helper
+     *         A fully initialized helper.
+     * @param item
+     *         The item that needs to be displayed.
      */
     protected abstract void convert(K helper, T item);
 
@@ -1602,7 +1675,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * Get the row id associated with the specified position in the list.
      *
-     * @param position The position of the item within the adapter's data set whose row id we want.
+     * @param position
+     *         The position of the item within the adapter's data set whose row id we want.
      * @return The id of the item at the specified position.
      */
     @Override
@@ -1632,10 +1706,13 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * Expand an expandable item
      *
-     * @param position     position of the item
-     * @param animate      expand items with animation
-     * @param shouldNotify notify the RecyclerView to rebind items, <strong>false</strong> if you want to do it
-     *                     yourself.
+     * @param position
+     *         position of the item
+     * @param animate
+     *         expand items with animation
+     * @param shouldNotify
+     *         notify the RecyclerView to rebind items, <strong>false</strong> if you want to do it
+     *         yourself.
      * @return the number of items that have been added.
      */
     @SuppressWarnings("unchecked")
@@ -1675,8 +1752,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * Expand an expandable item
      *
-     * @param position position of the item, which includes the header layout count.
-     * @param animate  expand items with animation
+     * @param position
+     *         position of the item, which includes the header layout count.
+     * @param animate
+     *         expand items with animation
      * @return the number of items that have been added.
      */
     public int expand(@IntRange(from = 0) int position, boolean animate) {
@@ -1686,7 +1765,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * Expand an expandable item with animation.
      *
-     * @param position position of the item, which includes the header layout count.
+     * @param position
+     *         position of the item, which includes the header layout count.
      * @return the number of items that have been added.
      */
     public int expand(@IntRange(from = 0) int position) {
@@ -1737,9 +1817,11 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * expand the item and all its subItems
      *
-     * @param position position of the item, which includes the header layout count.
-     * @param init     whether you are initializing the recyclerView or not.
-     *                 if <strong>true</strong>, it won't notify recyclerView to redraw UI.
+     * @param position
+     *         position of the item, which includes the header layout count.
+     * @param init
+     *         whether you are initializing the recyclerView or not.
+     *         if <strong>true</strong>, it won't notify recyclerView to redraw UI.
      * @return the number of items that have been added to the adapter.
      */
     public int expandAll(int position, boolean init) {
@@ -1784,9 +1866,12 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * Collapse an expandable item that has been expanded..
      *
-     * @param position the position of the item, which includes the header layout count.
-     * @param animate  collapse with animation or not.
-     * @param notify   notify the recyclerView refresh UI or not.
+     * @param position
+     *         the position of the item, which includes the header layout count.
+     * @param animate
+     *         collapse with animation or not.
+     * @param notify
+     *         notify the recyclerView refresh UI or not.
      * @return the number of subItems collapsed.
      */
     public int collapse(@IntRange(from = 0) int position, boolean animate, boolean notify) {
@@ -1813,7 +1898,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * Collapse an expandable item that has been expanded..
      *
-     * @param position the position of the item, which includes the header layout count.
+     * @param position
+     *         the position of the item, which includes the header layout count.
      * @return the number of subItems collapsed.
      */
     public int collapse(@IntRange(from = 0) int position) {
@@ -1823,7 +1909,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * Collapse an expandable item that has been expanded..
      *
-     * @param position the position of the item, which includes the header layout count.
+     * @param position
+     *         the position of the item, which includes the header layout count.
      * @return the number of subItems collapsed.
      */
     public int collapse(@IntRange(from = 0) int position, boolean animate) {
@@ -1904,8 +1991,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
          * callback method to be invoked when an item in this view has been
          * click and held
          *
-         * @param view     The view whihin the ItemView that was clicked
-         * @param position The position of the view int the adapter
+         * @param view
+         *         The view whihin the ItemView that was clicked
+         * @param position
+         *         The position of the view int the adapter
          */
         void onItemChildClick(BaseQuickAdapter adapter, View view, int position);
     }
@@ -1920,8 +2009,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
          * callback method to be invoked when an item in this view has been
          * click and held
          *
-         * @param view     The childView whihin the itemView that was clicked and held.
-         * @param position The position of the view int the adapter
+         * @param view
+         *         The childView whihin the itemView that was clicked and held.
+         * @param position
+         *         The position of the view int the adapter
          * @return true if the callback consumed the long click ,false otherwise
          */
         boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position);
@@ -1936,9 +2027,12 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
          * callback method to be invoked when an item in this view has been
          * click and held
          *
-         * @param adapter  the adpater
-         * @param view     The view whihin the RecyclerView that was clicked and held.
-         * @param position The position of the view int the adapter
+         * @param adapter
+         *         the adpater
+         * @param view
+         *         The view whihin the RecyclerView that was clicked and held.
+         * @param position
+         *         The position of the view int the adapter
          * @return true if the callback consumed the long click ,false otherwise
          */
         boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position);
@@ -1955,10 +2049,13 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
          * Callback method to be invoked when an item in this RecyclerView has
          * been clicked.
          *
-         * @param adapter  the adpater
-         * @param view     The itemView within the RecyclerView that was clicked (this
-         *                 will be a view provided by the adapter)
-         * @param position The position of the view in the adapter.
+         * @param adapter
+         *         the adpater
+         * @param view
+         *         The itemView within the RecyclerView that was clicked (this
+         *         will be a view provided by the adapter)
+         * @param position
+         *         The position of the view in the adapter.
          */
         void onItemClick(BaseQuickAdapter adapter, View view, int position);
     }
@@ -1967,7 +2064,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * Register a callback to be invoked when an item in this RecyclerView has
      * been clicked.
      *
-     * @param listener The callback that will be invoked.
+     * @param listener
+     *         The callback that will be invoked.
      */
     public void setOnItemClickListener(@Nullable OnItemClickListener listener) {
         mOnItemClickListener = listener;
@@ -1977,7 +2075,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * Register a callback to be invoked when an itemchild in View has
      * been  clicked
      *
-     * @param listener The callback that will run
+     * @param listener
+     *         The callback that will run
      */
     public void setOnItemChildClickListener(OnItemChildClickListener listener) {
         mOnItemChildClickListener = listener;
@@ -1987,7 +2086,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * Register a callback to be invoked when an item in this RecyclerView has
      * been long clicked and held
      *
-     * @param listener The callback that will run
+     * @param listener
+     *         The callback that will run
      */
     public void setOnItemLongClickListener(OnItemLongClickListener listener) {
         mOnItemLongClickListener = listener;
@@ -1997,7 +2097,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * Register a callback to be invoked when an itemchild  in this View has
      * been long clicked and held
      *
-     * @param listener The callback that will run
+     * @param listener
+     *         The callback that will run
      */
     public void setOnItemChildLongClickListener(OnItemChildLongClickListener listener) {
         mOnItemChildLongClickListener = listener;
