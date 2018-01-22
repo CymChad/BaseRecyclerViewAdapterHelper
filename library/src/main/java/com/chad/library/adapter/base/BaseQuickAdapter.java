@@ -965,6 +965,11 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     @Override
     public void onBindViewHolder(K holder, int position, List<Object> payloads) {
+
+        if (payloads == null || payloads.isEmpty()) {
+            onBindViewHolder(holder, position);
+            return;
+        }
         //Add up fetch logic, almost like load more, but simpler.
         autoUpFetch(position);
         //Do not move position, need to change before LoadMoreView binding
@@ -1001,11 +1006,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *         The list of view that needs refresh.
      */
     protected void convert(K helper, T item, List<Object> payloads) {
-        if (payloads == null || payloads.isEmpty()) {
-            convert(helper, item);
-        } else {
-            //do nothing
-        }
+        //do nothing
     }
 
     private void bindViewClickListener(final BaseViewHolder baseViewHolder) {
