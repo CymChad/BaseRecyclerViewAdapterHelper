@@ -957,6 +957,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     /**
+     * To bind different types of holder and solve different the bind events
+     *
      * @param holder
      * @param position
      * @param payloads
@@ -989,9 +991,14 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     /**
+     * Implement this method and use the helper to adapt the view to the given item.
+     *
      * @param helper
+     *         A fully initialized helper.
      * @param item
+     *         The item that needs to be displayed.
      * @param payloads
+     *         The list of view that needs refresh.
      */
     protected void convert(K helper, T item, List<Object> payloads) {
         if (payloads == null || payloads.isEmpty()) {
