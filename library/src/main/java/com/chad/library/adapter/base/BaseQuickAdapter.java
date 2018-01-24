@@ -957,11 +957,12 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     /**
-     * To bind different types of holder and solve different the bind events
+     * Partial refresh  by overloading the method.
      *
-     * @param holder
-     * @param position
-     * @param payloads
+     * @param holder The ViewHolder which should be updated to represent the contents of the
+     *               item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     * @param payloads The list of view that needs refresh.
      */
     @Override
     public void onBindViewHolder(K holder, int position, List<Object> payloads) {
@@ -998,12 +999,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * Implement this method and use the helper to adapt the view to the given item.
      *
-     * @param helper
-     *         A fully initialized helper.
-     * @param item
-     *         The item that needs to be displayed.
-     * @param payloads
-     *         The list of view that needs refresh.
+     * @param helper A fully initialized helper.
+     * @param item The item that needs to be displayed.
+     * @param payloads The list of view that needs refresh.
      */
     protected void convert(K helper, T item, List<Object> payloads) {
         //do nothing
