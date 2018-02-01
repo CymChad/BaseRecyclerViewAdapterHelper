@@ -54,17 +54,17 @@ public abstract class LoadMoreView {
     }
 
     private void visibleLoading(BaseViewHolder holder, boolean visible) {
-        holder.setVisible(getLoadingViewId(), visible);
+        holder.setGone(getLoadingViewId(), visible);
     }
 
     private void visibleLoadFail(BaseViewHolder holder, boolean visible) {
-        holder.setVisible(getLoadFailViewId(), visible);
+        holder.setGone(getLoadFailViewId(), visible);
     }
 
     private void visibleLoadEnd(BaseViewHolder holder, boolean visible) {
         final int loadEndViewId = getLoadEndViewId();
         if (loadEndViewId != 0) {
-            holder.setVisible(loadEndViewId, visible);
+            holder.setGone(loadEndViewId, visible);
         }
     }
 
