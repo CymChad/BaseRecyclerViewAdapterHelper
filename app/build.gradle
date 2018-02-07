@@ -31,6 +31,6 @@ dependencies {
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.android.support:cardview-v7:26.1.0'
     implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.kyleduo.switchbutton:library:1.4.4'
+    implementation 'com.kyleduo.switchbutton:library:2.0.0'
     implementation 'com.orhanobut:logger:2.1.1'
 }
