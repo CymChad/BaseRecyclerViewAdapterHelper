@@ -11,7 +11,7 @@ public final class SimpleLoadMoreView extends LoadMoreView {
 
     @Override
     public int getLayoutId() {
-        return R.layout.quick_view_load_more;
+        return R.layout.brvah_quick_view_load_more;
     }
 
     @Override

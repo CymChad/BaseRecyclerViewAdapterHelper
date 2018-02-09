@@ -3,7 +3,7 @@
 
     <item>
         <rotate
-            android:drawable="@drawable/sample_footer_loading"
+            android:drawable="@drawable/brvah_sample_footer_loading"
             android:duration="500"
             android:fromDegrees="0.0"
             android:pivotX="50.0%"
