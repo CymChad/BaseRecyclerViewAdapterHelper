@@ -22,7 +22,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
  * 修改时间：
  * 修改备注：
  */
-public class PullToRefreshAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
+public class PullToRefreshAdapter extends BaseQuickAdapter<Status, BaseViewHolder<Status>> {
     public PullToRefreshAdapter() {
         super( R.layout.layout_animation, null);
     }

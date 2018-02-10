@@ -46,7 +46,7 @@ import java.util.Set;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class BaseViewHolder extends RecyclerView.ViewHolder {
+public class BaseViewHolder<T> extends RecyclerView.ViewHolder {
 
     /**
      * Views indexed with their IDs
@@ -74,6 +74,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      */
     Object associatedObject;
 
+    public T data;
 
     public BaseViewHolder(final View view) {
         super(view);
@@ -83,11 +84,14 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         this.nestViews = new HashSet<>();
         convertView = view;
 
+    }
 
+    public void onBind(T data) {
+        this.data = data;
     }
 
     private int getClickPosition() {
-        if (getLayoutPosition()>=adapter.getHeaderLayoutCount()){
+        if (getLayoutPosition() >= adapter.getHeaderLayoutCount()) {
             return getLayoutPosition() - adapter.getHeaderLayoutCount();
         }
         return 0;

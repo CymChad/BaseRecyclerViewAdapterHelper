@@ -23,7 +23,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
  * 修改时间：
  * 修改备注：
  */
-public class NestAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
+public class NestAdapter extends BaseQuickAdapter<Status, BaseViewHolder<Status>> {
     public NestAdapter() {
         super( R.layout.layout_nest_item, DataServer.getSampleData(20));
     }

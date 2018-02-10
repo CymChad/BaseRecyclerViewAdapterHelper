@@ -1,8 +1,13 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
 import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.chad.baserecyclerviewadapterhelper.R;
+import com.chad.baserecyclerviewadapterhelper.adapter.viewholder.ImageTextHolder;
+import com.chad.baserecyclerviewadapterhelper.adapter.viewholder.TextHolder;
 import com.chad.baserecyclerviewadapterhelper.entity.MultipleItem;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -13,7 +18,7 @@ import java.util.List;
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  * modify by AllenCoder
  */
-public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem, BaseViewHolder> {
+public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem, BaseViewHolder<MultipleItem>> {
 
     public MultipleItemQuickAdapter(Context context, List data) {
         super(data);
@@ -23,24 +28,14 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, MultipleItem item) {
-        switch (helper.getItemViewType()) {
+    protected BaseViewHolder<MultipleItem> onCreateDefViewHolder(ViewGroup parent, int viewType) {
+        switch (viewType) {
             case MultipleItem.TEXT:
-                helper.setText(R.id.tv, item.getContent());
-                break;
+                return new TextHolder(getItemView(R.layout.item_text_view, parent));
             case MultipleItem.IMG_TEXT:
-                switch (helper.getLayoutPosition() %
-                        2) {
-                    case 0:
-                        helper.setImageResource(R.id.iv, R.mipmap.animation_img1);
-                        break;
-                    case 1:
-                        helper.setImageResource(R.id.iv, R.mipmap.animation_img2);
-                        break;
-
-                }
-                break;
+                return new ImageTextHolder(getItemView(R.layout.item_img_text_view, parent));
+            default:
+                return super.onCreateDefViewHolder(parent, viewType);
         }
     }
-
 }

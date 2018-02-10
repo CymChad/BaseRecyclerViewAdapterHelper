@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity, K extends BaseViewHolder> extends BaseQuickAdapter<T, K> {
+public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity, K extends BaseViewHolder<T>> extends BaseQuickAdapter<T, K> {
 
     /**
      * layouts indexed with their types

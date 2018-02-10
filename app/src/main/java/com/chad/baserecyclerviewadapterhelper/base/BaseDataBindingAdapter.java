@@ -18,7 +18,7 @@ import java.util.List;
  * Email: tyshengsx@gmail.com
  */
 
-public abstract class BaseDataBindingAdapter<T, Binding extends ViewDataBinding> extends BaseQuickAdapter<T, BaseBindingViewHolder<Binding>> {
+public abstract class BaseDataBindingAdapter<T, Binding extends ViewDataBinding> extends BaseQuickAdapter<T,BaseBindingViewHolder<Binding,T>> {
 
 
     public BaseDataBindingAdapter(@LayoutRes int layoutResId, @Nullable List<T> data) {
@@ -34,12 +34,12 @@ public abstract class BaseDataBindingAdapter<T, Binding extends ViewDataBinding>
     }
 
     @Override
-    protected BaseBindingViewHolder<Binding> createBaseViewHolder(View view) {
+    protected BaseBindingViewHolder<Binding,T> createBaseViewHolder(View view) {
         return new BaseBindingViewHolder<>(view);
     }
 
     @Override
-    protected BaseBindingViewHolder<Binding> createBaseViewHolder(ViewGroup parent, int layoutResId) {
+    protected BaseBindingViewHolder<Binding,T> createBaseViewHolder(ViewGroup parent, int layoutResId) {
         Binding binding = DataBindingUtil.inflate(mLayoutInflater, layoutResId, parent, false);
         View view;
         if (binding == null) {
@@ -47,13 +47,13 @@ public abstract class BaseDataBindingAdapter<T, Binding extends ViewDataBinding>
         } else {
             view = binding.getRoot();
         }
-        BaseBindingViewHolder<Binding> holder = new BaseBindingViewHolder<>(view);
+        BaseBindingViewHolder<Binding,T> holder = new BaseBindingViewHolder<>(view);
         holder.setBinding(binding);
         return holder;
     }
 
     @Override
-    protected void convert(BaseBindingViewHolder<Binding> helper, T item) {
+    protected void convert(BaseBindingViewHolder<Binding,T> helper, T item) {
         convert(helper.getBinding(), item);
         helper.getBinding().executePendingBindings();
     }

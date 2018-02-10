@@ -9,7 +9,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class HeaderAndFooterAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
+public class HeaderAndFooterAdapter extends BaseQuickAdapter<Status, BaseViewHolder<Status>> {
 
     public HeaderAndFooterAdapter(int dataSize) {
         super(R.layout.item_header_and_footer, DataServer.getSampleData(dataSize));

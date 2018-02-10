@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class SectionAdapter extends BaseSectionQuickAdapter<MySection, BaseViewHolder> {
+public class SectionAdapter extends BaseSectionQuickAdapter<MySection, BaseViewHolder<MySection>> {
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.

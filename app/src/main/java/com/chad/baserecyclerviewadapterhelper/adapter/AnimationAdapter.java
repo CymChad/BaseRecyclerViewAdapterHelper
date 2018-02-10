@@ -23,7 +23,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
  * 修改时间：
  * 修改备注：
  */
-public class AnimationAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
+public class AnimationAdapter extends BaseQuickAdapter<Status, BaseViewHolder<Status>> {
     public AnimationAdapter() {
         super(R.layout.layout_animation, DataServer.getSampleData(100));
     }
