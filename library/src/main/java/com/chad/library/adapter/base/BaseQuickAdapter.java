@@ -1342,9 +1342,11 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     /**
      * bind recyclerView {@link #bindToRecyclerView(RecyclerView)} before use!
-     *
+     * Recommend you to use {@link #setEmptyView(layoutResId,viewGroup)}
      * @see #bindToRecyclerView(RecyclerView)
+     *
      */
+    @Deprecated
     public void setEmptyView(int layoutResId) {
         checkNotNull();
         setEmptyView(layoutResId, getRecyclerView());
