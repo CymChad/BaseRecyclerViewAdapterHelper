@@ -14,7 +14,6 @@ import com.chad.library.adapter.base.provider.BaseItemProvider;
 public class ProviderDelegate {
 
     private SparseArray<BaseItemProvider> mItemProviders = new SparseArray<>();
-    private static ProviderDelegate mInstance;
 
     public void registerProvider(BaseItemProvider provider){
         ItemProviderTag tag = provider.getClass().getAnnotation(ItemProviderTag.class);

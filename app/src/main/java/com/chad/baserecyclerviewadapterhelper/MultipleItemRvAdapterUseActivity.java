@@ -23,7 +23,6 @@ import java.util.List;
 
 public class MultipleItemRvAdapterUseActivity extends BaseActivity {
 
-    private RecyclerView mRecyclerView;
     private List<NormalMultipleEntity> mData;
 
     @Override
@@ -34,7 +33,7 @@ public class MultipleItemRvAdapterUseActivity extends BaseActivity {
         setTitle("MultipleItemRvAdapter");
         setBackBtn();
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         GridLayoutManager manager = new GridLayoutManager(this, 4);
         mRecyclerView.setLayoutManager(manager);
 
