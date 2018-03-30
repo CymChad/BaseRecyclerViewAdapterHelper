@@ -22,7 +22,9 @@
         <activity android:name=".AnimationUseActivity" />
         <activity android:name=".HeaderAndFooterUseActivity" />
         <activity android:name=".SectionUseActivity" />
+        <activity android:name=".ChooseMultipleItemUseTypeActivity" />
         <activity android:name=".MultipleItemUseActivity" />
+        <activity android:name=".MultipleItemRvAdapterUseActivity" />
         <activity android:name=".EmptyViewUseActivity" />
         <activity android:name=".ItemDragAndSwipeUseActivity" />
         <activity android:name=".ExpandableUseActivity" />
