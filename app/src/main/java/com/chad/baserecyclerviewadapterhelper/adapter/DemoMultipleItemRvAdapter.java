@@ -6,6 +6,7 @@ import com.chad.baserecyclerviewadapterhelper.adapter.provider.ImgItemProvider;
 import com.chad.baserecyclerviewadapterhelper.adapter.provider.TextImgItemProvider;
 import com.chad.baserecyclerviewadapterhelper.adapter.provider.TextItemProvider;
 import com.chad.baserecyclerviewadapterhelper.entity.NormalMultipleEntity;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.MultipleItemRvAdapter;
 
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
  * @date 2018/3/30  11:28
  */
 
-public class DemoMultipleItemRvAdapter extends MultipleItemRvAdapter<NormalMultipleEntity> {
+public class DemoMultipleItemRvAdapter extends MultipleItemRvAdapter<NormalMultipleEntity,BaseViewHolder> {
 
     public static final int TYPE_TEXT = 100;
     public static final int TYPE_IMG = 200;

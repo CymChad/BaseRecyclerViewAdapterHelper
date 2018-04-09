@@ -20,7 +20,7 @@ import java.util.List;
  * @date 2018/3/21  9:55
  */
 
-public abstract class MultipleItemRvAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
+public abstract class MultipleItemRvAdapter<T,V extends BaseViewHolder> extends BaseQuickAdapter<T, V> {
 
     private SparseArray<BaseItemProvider> mItemProviders;
     protected ProviderDelegate mProviderDelegate;
@@ -63,7 +63,7 @@ public abstract class MultipleItemRvAdapter<T> extends BaseQuickAdapter<T, BaseV
     public abstract void registerItemProvider();
 
     @Override
-    protected void convert(BaseViewHolder helper, T item) {
+    protected void convert(V helper, T item) {
         int itemViewType = helper.getItemViewType();
         BaseItemProvider provider = mItemProviders.get(itemViewType);
 
@@ -75,7 +75,7 @@ public abstract class MultipleItemRvAdapter<T> extends BaseQuickAdapter<T, BaseV
         bindClick(helper, item, position, provider);
     }
 
-    private void bindClick(final BaseViewHolder helper, final T item, final int position, final BaseItemProvider provider) {
+    private void bindClick(final V helper, final T item, final int position, final BaseItemProvider provider) {
         View itemView = helper.itemView;
 
         itemView.setOnClickListener(new View.OnClickListener() {
