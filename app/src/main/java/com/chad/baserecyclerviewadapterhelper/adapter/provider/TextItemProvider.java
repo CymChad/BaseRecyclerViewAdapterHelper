@@ -20,7 +20,7 @@ import com.chad.library.adapter.base.provider.BaseItemProvider;
         viewType = DemoMultipleItemRvAdapter.TYPE_TEXT,
         layout = R.layout.item_text_view
 )
-public class TextItemProvider extends BaseItemProvider<NormalMultipleEntity> {
+public class TextItemProvider extends BaseItemProvider<NormalMultipleEntity,BaseViewHolder> {
 
     @Override
     public void convert(BaseViewHolder helper, NormalMultipleEntity data, int position) {

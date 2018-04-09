@@ -21,7 +21,7 @@ import com.chad.library.adapter.base.provider.BaseItemProvider;
         viewType = DemoMultipleItemRvAdapter.TYPE_IMG,
         layout = R.layout.item_image_view
 )
-public class ImgItemProvider extends BaseItemProvider<NormalMultipleEntity> {
+public class ImgItemProvider extends BaseItemProvider<NormalMultipleEntity,BaseViewHolder> {
 
     @Override
     public void convert(BaseViewHolder helper, NormalMultipleEntity data, int position) {
