@@ -22,6 +22,23 @@ import com.chad.library.adapter.base.provider.BaseItemProvider;
 )
 public class TextItemProvider extends BaseItemProvider<NormalMultipleEntity,BaseViewHolder> {
 
+   /*
+        使用注解返回对应的viewType和layout，或者重写getViewType()和getLayout()
+        Use annotations to return the corresponding viewType and layout, or override getViewType() and getLayout()
+
+        @Override
+        public int getViewType() {
+            return DemoMultipleItemRvAdapter.TYPE_TEXT;
+        }
+    */
+
+    /*
+        @Override
+        public int getLayout() {
+            return R.layout.item_text_view;
+        }
+    */
+
     @Override
     public void convert(BaseViewHolder helper, NormalMultipleEntity data, int position) {
         helper.setText(R.id.tv, data.content);

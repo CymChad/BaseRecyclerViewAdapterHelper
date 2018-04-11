@@ -54,7 +54,12 @@ public abstract class MultipleItemRvAdapter<T,V extends BaseViewHolder> extends 
             provider.mData = mData;
 
             ItemProviderTag tag = provider.getClass().getAnnotation(ItemProviderTag.class);
-            getMultiTypeDelegate().registerItemType(key, tag.layout());
+            if (tag == null){
+                getMultiTypeDelegate().registerItemType(key, provider.getLayout());
+            }else{
+                getMultiTypeDelegate().registerItemType(key, tag.layout());
+            }
+
         }
     }
 
@@ -76,20 +81,37 @@ public abstract class MultipleItemRvAdapter<T,V extends BaseViewHolder> extends 
     }
 
     private void bindClick(final V helper, final T item, final int position, final BaseItemProvider provider) {
+        OnItemClickListener clickListener = getOnItemClickListener();
+        OnItemLongClickListener longClickListener = getOnItemLongClickListener();
+
+        if (clickListener != null && longClickListener != null){
+            //如果已经设置了子条目点击监听和子条目长按监听
+            // If you have set up a sub-entry click monitor and sub-entries long press listen
+            return;
+        }
+
         View itemView = helper.itemView;
 
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                provider.onClick(helper, item, position);
-            }
-        });
+        if (clickListener == null){
+            //如果没有设置点击监听，则回调给itemProvider
+            //Callback to itemProvider if no click listener is set
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    provider.onClick(helper, item, position);
+                }
+            });
+        }
 
-        itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                return provider.onLongClick(helper, item, position);
-            }
-        });
+        if (longClickListener == null){
+            //如果没有设置长按监听，则回调给itemProvider
+            // If you do not set a long press listener, callback to the itemProvider
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    return provider.onLongClick(helper, item, position);
+                }
+            });
+        }
     }
 }

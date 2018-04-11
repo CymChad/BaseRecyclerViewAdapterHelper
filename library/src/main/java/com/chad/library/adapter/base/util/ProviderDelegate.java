@@ -17,11 +17,13 @@ public class ProviderDelegate {
 
     public void registerProvider(BaseItemProvider provider){
         ItemProviderTag tag = provider.getClass().getAnnotation(ItemProviderTag.class);
+        int viewType;
         if (tag == null){
-            throw new ItemProviderAnnotationException("ItemProviderTag not def layout");
+            viewType = provider.getViewType();
+        }else{
+            viewType = tag.viewType();
         }
 
-        int viewType = tag.viewType();
         if (mItemProviders.get(viewType) == null){
             mItemProviders.put(viewType,provider);
         }
