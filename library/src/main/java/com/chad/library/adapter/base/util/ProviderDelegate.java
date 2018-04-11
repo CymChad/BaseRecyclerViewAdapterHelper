@@ -16,12 +16,11 @@ public class ProviderDelegate {
     private SparseArray<BaseItemProvider> mItemProviders = new SparseArray<>();
 
     public void registerProvider(BaseItemProvider provider){
-        ItemProviderTag tag = provider.getClass().getAnnotation(ItemProviderTag.class);
-        if (tag == null){
+        if (provider == null){
             throw new ItemProviderAnnotationException("ItemProviderTag not def layout");
         }
 
-        int viewType = tag.viewType();
+        int viewType = provider.viewType();
         if (mItemProviders.get(viewType) == null){
             mItemProviders.put(viewType,provider);
         }

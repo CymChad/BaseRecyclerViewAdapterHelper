@@ -13,14 +13,14 @@ import java.util.List;
 
 /**
  * https://github.com/chaychan
+ *
  * @author ChayChan
- * @description:
- * When there are multiple entries, avoid too much business logic in convert(),Put the logic of each item in the corresponding ItemProvider
+ * @description: When there are multiple entries, avoid too much business logic in convert(),Put the logic of each item in the corresponding ItemProvider
  * 当有多种条目的时候，避免在convert()中做太多的业务逻辑，把逻辑放在对应的ItemProvider中
  * @date 2018/3/21  9:55
  */
 
-public abstract class MultipleItemRvAdapter<T,V extends BaseViewHolder> extends BaseQuickAdapter<T, V> {
+public abstract class MultipleItemRvAdapter<T, V extends BaseViewHolder> extends BaseQuickAdapter<T, V> {
 
     private SparseArray<BaseItemProvider> mItemProviders;
     protected ProviderDelegate mProviderDelegate;
@@ -49,12 +49,9 @@ public abstract class MultipleItemRvAdapter<T,V extends BaseViewHolder> extends 
         mItemProviders = mProviderDelegate.getItemProviders();
         for (int i = 0; i < mItemProviders.size(); i++) {
             int key = mItemProviders.keyAt(i);
-
             BaseItemProvider provider = mItemProviders.get(key);
             provider.mData = mData;
-
-            ItemProviderTag tag = provider.getClass().getAnnotation(ItemProviderTag.class);
-            getMultiTypeDelegate().registerItemType(key, tag.layout());
+            getMultiTypeDelegate().registerItemType(key, provider.layout());
         }
     }
 
@@ -66,30 +63,8 @@ public abstract class MultipleItemRvAdapter<T,V extends BaseViewHolder> extends 
     protected void convert(V helper, T item) {
         int itemViewType = helper.getItemViewType();
         BaseItemProvider provider = mItemProviders.get(itemViewType);
-
         provider.mContext = helper.itemView.getContext();
-
         int position = helper.getLayoutPosition() - getHeaderLayoutCount();
         provider.convert(helper, item, position);
-
-        bindClick(helper, item, position, provider);
-    }
-
-    private void bindClick(final V helper, final T item, final int position, final BaseItemProvider provider) {
-        View itemView = helper.itemView;
-
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                provider.onClick(helper, item, position);
-            }
-        });
-
-        itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                return provider.onLongClick(helper, item, position);
-            }
-        });
     }
 }

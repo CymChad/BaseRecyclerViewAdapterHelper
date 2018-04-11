@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * https://github.com/chaychan
+ *
  * @author ChayChan
  * @description: ItemProvider's annotation
  * @date 2018/3/21  10:48
@@ -14,7 +15,9 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
+@Deprecated
 public @interface ItemProviderTag {
     int viewType();
+
     int layout();
 }
