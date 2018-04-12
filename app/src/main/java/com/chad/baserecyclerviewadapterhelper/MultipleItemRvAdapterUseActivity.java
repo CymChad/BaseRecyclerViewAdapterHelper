@@ -17,7 +17,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import java.util.List;
 
 /**
- * https://github.com/chaychan
  *
  * @author ChayChan
  * @description: MultipleItemRvAdapter's usage
@@ -56,20 +55,43 @@ public class MultipleItemRvAdapterUseActivity extends BaseActivity {
                 }
             }
         });
-        multipleItemAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+
+/**
+ *      The click event is distributed to the BaseItemProvider and can be overridden.
+ *      if you need register itemchild click longClick
+ *      you need to use https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki/Add-OnItemClickLister#use-it-item-child-long-click
+ */
+  /*      @Override
+        protected void convert(BaseViewHolder helper, Status item) {
+            helper.setText(R.id.tweetName, item.getUserName())
+                    .setText(R.id.tweetText, item.getText())
+                    .setText(R.id.tweetDate, item.getCreatedAt())
+                    .setVisible(R.id.tweetRT, item.isRetweet())
+                    .addOnLongClickListener(R.id.tweetText)
+                    .linkify(R.id.tweetText);
+
+        }
+        adapter.setOnItemChildLongClickListener(new BaseQuickAdapter.OnItemChildLongClickListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Log.d(TAG, "onItemClick: ");
-                Toast.makeText(MultipleItemRvAdapterUseActivity.this, "onItemClick" + position, Toast.LENGTH_SHORT).show();
+            public void onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
+                Log.d(TAG, "onItemChildLongClick: ");
+                Toast.makeText(ItemClickActivity.this, "onItemChildLongClick" + position, Toast.LENGTH_SHORT).show();
             }
-        });
-        multipleItemAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                Log.d(TAG, "onItemClick: ");
-                Toast.makeText(MultipleItemRvAdapterUseActivity.this, "onItemChildClick" + view.getId(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        });*/
+//        multipleItemAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+//                Log.d(TAG, "onItemClick: ");
+//                Toast.makeText(MultipleItemRvAdapterUseActivity.this, "onItemClick" + position, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        multipleItemAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+//            @Override
+//            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+//                Log.d(TAG, "onItemClick: ");
+//                Toast.makeText(MultipleItemRvAdapterUseActivity.this, "onItemChildClick" + view.getId(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
         mRecyclerView.setAdapter(multipleItemAdapter);
     }
 }
