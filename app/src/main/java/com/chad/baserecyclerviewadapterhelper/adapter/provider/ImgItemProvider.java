@@ -6,7 +6,6 @@ import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.adapter.DemoMultipleItemRvAdapter;
 import com.chad.baserecyclerviewadapterhelper.entity.NormalMultipleEntity;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.chad.library.adapter.base.annotation.ItemProviderTag;
 import com.chad.library.adapter.base.provider.BaseItemProvider;
 
 /**
@@ -17,11 +16,17 @@ import com.chad.library.adapter.base.provider.BaseItemProvider;
  * @date 2018/3/30  11:39
  */
 
-@ItemProviderTag(
-        viewType = DemoMultipleItemRvAdapter.TYPE_IMG,
-        layout = R.layout.item_image_view
-)
 public class ImgItemProvider extends BaseItemProvider<NormalMultipleEntity,BaseViewHolder> {
+
+    @Override
+    public int viewType() {
+        return DemoMultipleItemRvAdapter.TYPE_IMG;
+    }
+
+    @Override
+    public int layout() {
+        return R.layout.item_image_view;
+    }
 
     @Override
     public void convert(BaseViewHolder helper, NormalMultipleEntity data, int position) {
