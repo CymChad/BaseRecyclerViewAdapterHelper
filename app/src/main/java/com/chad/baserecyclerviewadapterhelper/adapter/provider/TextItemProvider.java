@@ -6,7 +6,6 @@ import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.adapter.DemoMultipleItemRvAdapter;
 import com.chad.baserecyclerviewadapterhelper.entity.NormalMultipleEntity;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.chad.library.adapter.base.annotation.ItemProviderTag;
 import com.chad.library.adapter.base.provider.BaseItemProvider;
 
 /**
@@ -32,7 +31,16 @@ public class TextItemProvider extends BaseItemProvider<NormalMultipleEntity, Bas
     @Override
     public void convert(BaseViewHolder helper, NormalMultipleEntity data, int position) {
         helper.setText(R.id.tv, data.content);
-        helper.addOnClickListener(R.id.tv);
     }
 
+    @Override
+    public void onClick(BaseViewHolder helper, NormalMultipleEntity data, int position) {
+        Toast.makeText(mContext, "click", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onLongClick(BaseViewHolder helper, NormalMultipleEntity data, int position) {
+        Toast.makeText(mContext, "longClick", Toast.LENGTH_SHORT).show();
+        return true;
+    }
 }

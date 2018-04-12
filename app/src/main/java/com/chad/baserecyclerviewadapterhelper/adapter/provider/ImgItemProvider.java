@@ -6,7 +6,6 @@ import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.adapter.DemoMultipleItemRvAdapter;
 import com.chad.baserecyclerviewadapterhelper.entity.NormalMultipleEntity;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.chad.library.adapter.base.annotation.ItemProviderTag;
 import com.chad.library.adapter.base.provider.BaseItemProvider;
 
 /**
@@ -17,7 +16,7 @@ import com.chad.library.adapter.base.provider.BaseItemProvider;
  * @date 2018/3/30  11:39
  */
 
-public class ImgItemProvider extends BaseItemProvider<NormalMultipleEntity, BaseViewHolder> {
+public class ImgItemProvider extends BaseItemProvider<NormalMultipleEntity,BaseViewHolder> {
 
     @Override
     public int viewType() {
@@ -33,9 +32,19 @@ public class ImgItemProvider extends BaseItemProvider<NormalMultipleEntity, Base
     public void convert(BaseViewHolder helper, NormalMultipleEntity data, int position) {
         if (position % 2 == 0) {
             helper.setImageResource(R.id.iv, R.mipmap.animation_img1);
-        } else {
+        }else{
             helper.setImageResource(R.id.iv, R.mipmap.animation_img2);
         }
-        helper.addOnClickListener(R.id.iv);
+    }
+
+    @Override
+    public void onClick(BaseViewHolder helper, NormalMultipleEntity data, int position) {
+        Toast.makeText(mContext, "click", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onLongClick(BaseViewHolder helper, NormalMultipleEntity data, int position) {
+        Toast.makeText(mContext, "longClick", Toast.LENGTH_SHORT).show();
+        return true;
     }
 }
