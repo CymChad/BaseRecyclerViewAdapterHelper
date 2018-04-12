@@ -18,6 +18,14 @@ public abstract class BaseItemProvider<T,V extends BaseViewHolder> {
     public Context mContext;
     public List<T> mData;
 
+    //子类须重写该方法返回viewType
+    //Rewrite this method to return viewType
+    public abstract int viewType();
+
+    //子类须重写该方法返回layout
+    //Rewrite this method to return layout
+    public abstract int layout();
+
     public abstract void convert(V helper, T data, int position);
 
     //子类若想实现条目点击事件则重写该方法
@@ -27,16 +35,4 @@ public abstract class BaseItemProvider<T,V extends BaseViewHolder> {
     //子类若想实现条目长按事件则重写该方法
     //Subclasses override this method if you want to implement an item long press event
     public boolean onLongClick(V helper, T data, int position){return false;};
-
-    //如果没有使用注解返回layout则重写该方法
-    //Rewrite this method if you did not use annotations to return layout
-    public int getLayout(){
-        return 0;
-    }
-
-    //如果没有使用注解返回viewType则重写该方法
-    //Rewrite this method if you did not use annotations to return viewType
-    public int getViewType(){
-        return 0;
-    }
 }

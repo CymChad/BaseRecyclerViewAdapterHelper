@@ -6,38 +6,27 @@ import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.adapter.DemoMultipleItemRvAdapter;
 import com.chad.baserecyclerviewadapterhelper.entity.NormalMultipleEntity;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.chad.library.adapter.base.annotation.ItemProviderTag;
 import com.chad.library.adapter.base.provider.BaseItemProvider;
 
 /**
  * https://github.com/chaychan
+ *
  * @author ChayChan
  * @description: Text ItemProvider
  * @date 2018/3/30  11:39
  */
 
-@ItemProviderTag(
-        viewType = DemoMultipleItemRvAdapter.TYPE_TEXT,
-        layout = R.layout.item_text_view
-)
-public class TextItemProvider extends BaseItemProvider<NormalMultipleEntity,BaseViewHolder> {
+public class TextItemProvider extends BaseItemProvider<NormalMultipleEntity, BaseViewHolder> {
 
-   /*
-        使用注解返回对应的viewType和layout，或者重写getViewType()和getLayout()
-        Use annotations to return the corresponding viewType and layout, or override getViewType() and getLayout()
+    @Override
+    public int viewType() {
+        return DemoMultipleItemRvAdapter.TYPE_TEXT;
+    }
 
-        @Override
-        public int getViewType() {
-            return DemoMultipleItemRvAdapter.TYPE_TEXT;
-        }
-    */
-
-    /*
-        @Override
-        public int getLayout() {
-            return R.layout.item_text_view;
-        }
-    */
+    @Override
+    public int layout() {
+        return R.layout.item_text_view;
+    }
 
     @Override
     public void convert(BaseViewHolder helper, NormalMultipleEntity data, int position) {

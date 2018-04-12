@@ -4,7 +4,6 @@ import android.support.annotation.Nullable;
 import android.util.SparseArray;
 import android.view.View;
 
-import com.chad.library.adapter.base.annotation.ItemProviderTag;
 import com.chad.library.adapter.base.provider.BaseItemProvider;
 import com.chad.library.adapter.base.util.MultiTypeDelegate;
 import com.chad.library.adapter.base.util.ProviderDelegate;
@@ -47,19 +46,12 @@ public abstract class MultipleItemRvAdapter<T,V extends BaseViewHolder> extends 
         registerItemProvider();
 
         mItemProviders = mProviderDelegate.getItemProviders();
+
         for (int i = 0; i < mItemProviders.size(); i++) {
             int key = mItemProviders.keyAt(i);
-
             BaseItemProvider provider = mItemProviders.get(key);
             provider.mData = mData;
-
-            ItemProviderTag tag = provider.getClass().getAnnotation(ItemProviderTag.class);
-            if (tag == null){
-                getMultiTypeDelegate().registerItemType(key, provider.getLayout());
-            }else{
-                getMultiTypeDelegate().registerItemType(key, tag.layout());
-            }
-
+            getMultiTypeDelegate().registerItemType(key, provider.layout());
         }
     }
 

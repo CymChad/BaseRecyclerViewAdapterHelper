@@ -2,7 +2,6 @@ package com.chad.library.adapter.base.util;
 
 import android.util.SparseArray;
 
-import com.chad.library.adapter.base.annotation.ItemProviderTag;
 import com.chad.library.adapter.base.provider.BaseItemProvider;
 
 /**
@@ -16,13 +15,11 @@ public class ProviderDelegate {
     private SparseArray<BaseItemProvider> mItemProviders = new SparseArray<>();
 
     public void registerProvider(BaseItemProvider provider){
-        ItemProviderTag tag = provider.getClass().getAnnotation(ItemProviderTag.class);
-        int viewType;
-        if (tag == null){
-            viewType = provider.getViewType();
-        }else{
-            viewType = tag.viewType();
+        if (provider == null){
+            throw new ItemProviderException("ItemProvider can not be null");
         }
+
+        int viewType = provider.viewType();
 
         if (mItemProviders.get(viewType) == null){
             mItemProviders.put(viewType,provider);
