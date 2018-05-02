@@ -1348,6 +1348,23 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         return -1;
     }
 
+    public void setEmptyView(int layoutResId, ViewGroup viewGroup) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(layoutResId, viewGroup, false);
+        setEmptyView(view);
+    }
+
+    /**
+     * bind recyclerView {@link #bindToRecyclerView(RecyclerView)} before use!
+     * Recommend you to use {@link #setEmptyView(layoutResId, viewGroup)}
+     *
+     * @see #bindToRecyclerView(RecyclerView)
+     */
+    @Deprecated
+    public void setEmptyView(int layoutResId) {
+        checkNotNull();
+        setEmptyView(layoutResId, getRecyclerView());
+    }
+
     public void setEmptyView(final View emptyView) {
         boolean insert = false;
         if (mEmptyLayout == null) {
@@ -1389,8 +1406,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             }
             mEmptyLayout.setLayoutParams(layoutParams);
             insert = true;
-
         }
+
         mEmptyLayout.removeAllViews();
         mEmptyLayout.addView(emptyView);
         mIsUseEmpty = true;
@@ -1403,23 +1420,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 notifyItemInserted(position);
             }
         }
-    }
-
-    public void setEmptyView(int layoutResId, ViewGroup viewGroup) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(layoutResId, viewGroup, false);
-        setEmptyView(view);
-    }
-
-    /**
-     * bind recyclerView {@link #bindToRecyclerView(RecyclerView)} before use!
-     * Recommend you to use {@link #setEmptyView(layoutResId, viewGroup)}
-     *
-     * @see #bindToRecyclerView(RecyclerView)
-     */
-    @Deprecated
-    public void setEmptyView(int layoutResId) {
-        checkNotNull();
-        setEmptyView(layoutResId, getRecyclerView());
     }
 
     /**
