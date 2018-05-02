@@ -48,7 +48,14 @@ public class EmptyViewUseActivity extends BaseActivity implements View.OnClickLi
 
     private void initAdapter() {
         mQuickAdapter = new QuickAdapter(0);
+        mQuickAdapter.bindToRecyclerView(mRecyclerView);
+        mQuickAdapter.setHeaderFooterEmpty(true, true);
+        mQuickAdapter.setCompatEmptyHeight(true);
         mRecyclerView.setAdapter(mQuickAdapter);
+
+        mQuickAdapter.addHeaderView(getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false));
+        mQuickAdapter.addFooterView(getLayoutInflater().inflate(R.layout.footer_view, (ViewGroup) mRecyclerView.getParent(), false), 0);
+
     }
 
     @Override

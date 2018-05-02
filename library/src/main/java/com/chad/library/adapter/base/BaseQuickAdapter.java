@@ -135,6 +135,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     private RecyclerView mRecyclerView;
 
+    private Boolean mCompatEmptyHeight = false;
+
     protected RecyclerView getRecyclerView() {
         return mRecyclerView;
     }
@@ -447,11 +449,13 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     /**
      * If you have added headeview, the notification view refreshes.
      * Do not need to care about the number of headview, only need to pass in the position of the final view
+     *
      * @param position
      */
     public final void refreshNotifyItemChanged(int position) {
         notifyItemChanged(position + getHeaderLayoutCount());
     }
+
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.
@@ -976,6 +980,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     /**
      * override this method if you want to override click event logic
+     *
      * @param v
      * @param position
      */
@@ -985,6 +990,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     /**
      * override this method if you want to override longClick event logic
+     *
      * @param v
      * @param position
      * @return
@@ -1342,24 +1348,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         return -1;
     }
 
-    public void setEmptyView(int layoutResId, ViewGroup viewGroup) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(layoutResId, viewGroup, false);
-        setEmptyView(view);
-    }
-
-    /**
-     * bind recyclerView {@link #bindToRecyclerView(RecyclerView)} before use!
-     * Recommend you to use {@link #setEmptyView(layoutResId,viewGroup)}
-     * @see #bindToRecyclerView(RecyclerView)
-     *
-     */
-    @Deprecated
-    public void setEmptyView(int layoutResId) {
-        checkNotNull();
-        setEmptyView(layoutResId, getRecyclerView());
-    }
-
-    public void setEmptyView(View emptyView) {
+    public void setEmptyView(final View emptyView) {
         boolean insert = false;
         if (mEmptyLayout == null) {
             mEmptyLayout = new FrameLayout(emptyView.getContext());
@@ -1369,8 +1358,38 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 layoutParams.width = lp.width;
                 layoutParams.height = lp.height;
             }
+
+            if (mCompatEmptyHeight && (getHeaderLayoutCount() > 0 || getFooterLayoutCount() > 0)) {
+                getRecyclerView().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        layoutParams.height = getRecyclerView().getMeasuredHeight();
+                        if (getHeaderLayoutCount() > 0)
+                            layoutParams.height -= getHeaderLayout().getMeasuredHeight();
+
+                        if (getFooterLayoutCount() > 0)
+                            layoutParams.height -= getFooterLayout().getHeight();
+
+                        mEmptyLayout.setLayoutParams(layoutParams);
+
+                        mEmptyLayout.removeAllViews();
+                        mEmptyLayout.addView(emptyView);
+                        mIsUseEmpty = true;
+
+                        if (getEmptyViewCount() == 1) {
+                            int position = 0;
+                            if (mHeadAndEmptyEnable && getHeaderLayoutCount() != 0) {
+                                position++;
+                            }
+                            notifyItemInserted(position);
+                        }
+                    }
+                });
+                return;
+            }
             mEmptyLayout.setLayoutParams(layoutParams);
             insert = true;
+
         }
         mEmptyLayout.removeAllViews();
         mEmptyLayout.addView(emptyView);
@@ -1384,6 +1403,23 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 notifyItemInserted(position);
             }
         }
+    }
+
+    public void setEmptyView(int layoutResId, ViewGroup viewGroup) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(layoutResId, viewGroup, false);
+        setEmptyView(view);
+    }
+
+    /**
+     * bind recyclerView {@link #bindToRecyclerView(RecyclerView)} before use!
+     * Recommend you to use {@link #setEmptyView(layoutResId, viewGroup)}
+     *
+     * @see #bindToRecyclerView(RecyclerView)
+     */
+    @Deprecated
+    public void setEmptyView(int layoutResId) {
+        checkNotNull();
+        setEmptyView(layoutResId, getRecyclerView());
     }
 
     /**
@@ -1565,6 +1601,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     public void openLoadAnimation() {
         this.mOpenAnimationEnable = true;
     }
+
     /**
      * To close the animation when loading
      */
@@ -1976,6 +2013,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
          * @param position The position of the view in the adapter.
          */
         void onItemClick(BaseQuickAdapter adapter, View view, int position);
+
     }
 
     /**
@@ -2051,5 +2089,12 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     @Nullable
     public final OnItemChildLongClickListener getOnItemChildLongClickListener() {
         return mOnItemChildLongClickListener;
+    }
+
+    public void setCompatEmptyHeight(Boolean mCompatEmptyHeight) {
+        if (getRecyclerView() == null) {
+            throw new RuntimeException("please bind recyclerView first!");
+        }
+        this.mCompatEmptyHeight = mCompatEmptyHeight;
     }
 }
