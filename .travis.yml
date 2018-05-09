@@ -3,16 +3,13 @@ jdk: oraclejdk8
 sudo: false
 
 android:
-  components:
+components:
     - tools
+    - platform-tools
     - build-tools-27.0.2
     - android-27
     - extra-android-m2repository
     - extra-android-support
-  licenses:
-      - android-sdk-license-.+
-      - '.+'
-
 before_install:
   - chmod +x gradlew
   - mkdir "$ANDROID_HOME/licenses" || true
