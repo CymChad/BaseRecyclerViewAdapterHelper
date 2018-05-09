@@ -28,7 +28,7 @@ public class MultipleItemUseActivity extends BaseActivity {
         setContentView(R.layout.activity_multiple_item_use);
         setTitle("MultipleItem Use");
         setBackBtn();
-        mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
+        mRecyclerView = findViewById(R.id.rv_list);
         final List<MultipleItem> data = DataServer.getMultipleItemData();
         final MultipleItemQuickAdapter multipleItemAdapter = new MultipleItemQuickAdapter(this, data);
         final GridLayoutManager manager = new GridLayoutManager(this, 4);
