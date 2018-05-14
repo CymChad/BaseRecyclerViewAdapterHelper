@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.chad.baserecyclerviewadapterhelper.R;
-import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.baserecyclerviewadapterhelper.util.SpannableStringUtils;
 import com.chad.baserecyclerviewadapterhelper.util.ToastUtils;
@@ -25,12 +24,11 @@ import com.chad.library.adapter.base.BaseViewHolder;
  */
 public class PullToRefreshAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
     public PullToRefreshAdapter() {
-        super( R.layout.layout_animation, DataServer.getSampleData(100));
+        super( R.layout.layout_animation, null);
     }
 
     @Override
     protected void convert(BaseViewHolder helper, Status item) {
-        helper.addOnClickListener(R.id.img).addOnClickListener(R.id.tweetText).addOnClickListener(R.id.tweetName);
         switch (helper.getLayoutPosition()%
                 3){
             case 0:

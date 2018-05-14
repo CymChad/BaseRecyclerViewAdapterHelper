@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:gravity="center"
-              android:background="@color/dull_blue"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
-<ImageView
-    android:id="@+id/iv"
-    android:layout_marginTop="5dp"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:src="@mipmap/header_bg"/>
+              android:layout_height="wrap_content"
+              android:background="@mipmap/header_background"
+              android:gravity="center"
+              android:layout_marginBottom="1dp"
+              android:orientation="vertical"
+    >
+
+    <ImageView
+        android:id="@+id/iv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:src="@mipmap/add_icon"/>
+
     <TextView
         android:id="@+id/tv"
-        android:textColor="@android:color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textSize="25sp"
-        android:text="Header"/>
-</FrameLayout>
+        android:text="Header"
+        android:layout_marginTop="10dp"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"/>
+</LinearLayout>

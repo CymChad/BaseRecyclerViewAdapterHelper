@@ -12,7 +12,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
  **/
 
 public abstract class OnItemChildClickListener extends SimpleClickListener {
-
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
 
@@ -33,6 +32,5 @@ public abstract class OnItemChildClickListener extends SimpleClickListener {
 
     }
 
-    public  abstract void onSimpleItemChildClick(BaseQuickAdapter adapter, View view, int position);
-
+    public abstract void onSimpleItemChildClick(BaseQuickAdapter adapter, View view, int position);
 }

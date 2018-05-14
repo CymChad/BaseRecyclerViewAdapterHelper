@@ -21,7 +21,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/tv"
+            android:id="@+id/iv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
@@ -29,13 +29,15 @@
             />
 
         <TextView
-            android:id="@+id/tv1"
+            android:id="@+id/tv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textColor="@android:color/black"
-            android:textSize="14sp"
+            android:textSize="18sp"
+            android:textStyle="bold"
             android:gravity="center"
-            android:text="O ever youthful,O ever weeping."
+            android:text="CymChad"
             />
+
     </LinearLayout>
 </android.support.v7.widget.CardView>

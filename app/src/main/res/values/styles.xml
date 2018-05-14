@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:actionBarStyle">@style/actionbar_def_style</item>
         <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
     <style name="actionbar_def_style" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- 在样式里面直接替换掉actionbar的背景，避免在有的窗口进入慢时导致进入时显示系统默认的actionbar -->
@@ -40,16 +41,9 @@
         <item name="android:textColor">#FFCCCCCC</item>
     </style>
 
-    <style name="About">
-        <item name="android:textSize">16sp</item>
-    </style>
 
-    <style name="line_style">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1dp</item>
-        <item name="android:background">#eff0f1</item>
-        <item name="android:layout_alignParentBottom">true</item>
-    </style>
+
+
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 

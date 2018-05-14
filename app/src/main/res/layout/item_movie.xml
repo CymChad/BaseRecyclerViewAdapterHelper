@@ -16,9 +16,8 @@
     <android.support.v7.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
                                         android:layout_width="match_parent"
                                         android:layout_height="175dp"
-                                        android:layout_margin="2dp"
                                         app:cardBackgroundColor="@android:color/white"
-                                        app:cardCornerRadius="2dp"
+                                        app:cardCornerRadius="8dp"
                                         app:cardElevation="4dp"
                                         app:cardUseCompatPadding="true">
 
@@ -35,7 +34,7 @@
                 android:layout_marginRight="16dp"
                 android:onClick="@{(view) -> presenter.buyTicket(view, movie)}"
                 app:backgroundTint="@color/color_light_blue"
-                android:src="@android:drawable/button_onoff_indicator_off"
+                android:src="@mipmap/buy_icon"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
 
@@ -63,10 +62,11 @@
                     android:layout_toRightOf="@id/iv"
                     android:text="@{movie.name}"
                     android:layout_marginLeft="10dp"
-                    tools:text="Hoteis in RIo de Janeiro"
+                    tools:text="Chad"
                     android:textStyle="bold"
-                    android:layout_marginTop="20dp"
-                    android:textSize="13sp"/>
+                    android:textColor="@color/txt_color"
+                    android:layout_marginTop="10dp"
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/movie_content"
@@ -74,8 +74,8 @@
                     android:layout_height="wrap_content"
                     android:text='@{movie.content}'
                     tools:text="He was one of Australia's most distinguished artistes"
-                    android:textSize="10sp"
-                    android:layout_marginTop="10dp"
+                    android:textSize="12sp"
+                    android:textColor="#888888"
                     android:layout_below="@+id/movie_name"
                     android:layout_alignLeft="@+id/movie_name"
                     android:layout_alignStart="@+id/movie_name"/>
@@ -84,9 +84,9 @@
                     android:id="@+id/movie_length"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="$ 12"
-                    android:textColor="@color/gray_color"
-                    android:layout_marginTop="15dp"
+                    tools:text="PM 11:28"
+                    android:textColor="#CCCCCC"
+                    android:textSize="12sp"
                     android:text='@{movie.length+ " minute"}'
                     android:layout_below="@+id/movie_content"
                     android:layout_alignLeft="@+id/movie_content"
@@ -98,8 +98,9 @@
                     android:layout_height="wrap_content"
                     android:text='@{"$ " + movie.price}'
                     tools:text="$ 12"
-                    android:textSize="29sp"
-                    android:textColor="@color/hard_color"
+                    android:textStyle="bold"
+                    android:textSize="28sp"
+                    android:textColor="@color/txt_color"
                     android:layout_marginBottom="17dp"
                     android:layout_alignParentBottom="true"
                     android:layout_alignLeft="@+id/movie_length"

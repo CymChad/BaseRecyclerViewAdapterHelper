@@ -28,8 +28,17 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
             case MultipleItem.TEXT:
                 helper.setText(R.id.tv, item.getContent());
                 break;
-            case MultipleItem.IMG:
-                // set img data
+            case MultipleItem.IMG_TEXT:
+                switch (helper.getLayoutPosition() %
+                        2) {
+                    case 0:
+                        helper.setImageResource(R.id.iv, R.mipmap.animation_img1);
+                        break;
+                    case 1:
+                        helper.setImageResource(R.id.iv, R.mipmap.animation_img2);
+                        break;
+
+                }
                 break;
         }
     }

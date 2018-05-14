@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:backgroundTint="@color/color_light_blue"
-        android:src="@android:drawable/ic_menu_revert"
+        android:src="@mipmap/reset_icon"
         android:layout_margin="20dp"
         android:layout_gravity="end|bottom"
         />

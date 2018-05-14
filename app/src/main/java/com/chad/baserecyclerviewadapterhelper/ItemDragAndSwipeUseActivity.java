@@ -13,12 +13,10 @@ import android.view.View;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.ItemDragAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
-import com.chad.baserecyclerviewadapterhelper.decoration.GridItemDecoration;
 import com.chad.baserecyclerviewadapterhelper.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 
@@ -107,19 +105,25 @@ public class ItemDragAndSwipeUseActivity extends BaseActivity {
         mAdapter.setOnItemSwipeListener(onItemSwipeListener);
         mAdapter.enableDragItem(mItemTouchHelper);
         mAdapter.setOnItemDragListener(listener);
-        mRecyclerView.addItemDecoration(new GridItemDecoration(this ,R.drawable.list_divider));
+//        mRecyclerView.addItemDecoration(new GridItemDecoration(this ,R.drawable.list_divider));
 
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
+//        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
+//            @Override
+//            public void onSimpleItemClick(final BaseQuickAdapter adapter, final View view, final int position) {
+//                ToastUtils.showShortToast("点击了" + position);
+//            }
+//        });
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onSimpleItemClick(final BaseQuickAdapter adapter, final View view, final int position) {
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 ToastUtils.showShortToast("点击了" + position);
             }
         });
     }
 
     private List<String> generateData(int size) {
-        ArrayList<String> data = new ArrayList(size);
+        ArrayList<String> data = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             data.add("item " + i);
         }

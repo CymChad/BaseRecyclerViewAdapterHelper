@@ -2,11 +2,9 @@
 <resources>
     <color name="colorPrimary">#292836</color>
     <color name="colorPrimaryDark">#292836</color>
-    <color name="colorAccent">#FF4081</color>
 
-    <color name="translate">#00000000</color>
     <color name="color_light_blue">#00DDB6</color>
-    <color name="txt_color">#888888</color>
+    <color name="txt_color">#48495F</color>
     <color name="item_bg">#FFFFFF</color>
     <color name="bg">#F0F0F0</color>
     <color name="spinner_bg">#333244</color>
@@ -15,6 +13,5 @@
     <color name="gray_color">#4b4b58</color>
     <color name="hard_color">#48495f</color>
     <color name="clickspan_color">#00ddb6</color>
-    <color name="gray_text">#CCCCCC</color>
     <color name="dull_blue">#3B4BBF</color>
 </resources>

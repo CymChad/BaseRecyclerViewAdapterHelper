@@ -5,13 +5,15 @@
               android:layout_height="80dp"
               android:orientation="horizontal"
               android:gravity="center_vertical"
-              android:layout_marginBottom="2dp"
+              android:layout_marginBottom="1dp"
+              android:paddingLeft="10dp"
     >
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/head_img_1"
-        android:layout_weight="3"/>
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"/>
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"

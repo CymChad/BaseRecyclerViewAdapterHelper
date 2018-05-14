@@ -13,19 +13,19 @@ import com.chad.baserecyclerviewadapterhelper.adapter.AnimationAdapter;
 import com.chad.baserecyclerviewadapterhelper.animation.CustomAnimation;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.kyleduo.switchbutton.SwitchButton;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
- *
+ * <p>
  * modify by AllenCoder
  */
 public class AnimationUseActivity extends Activity {
     private RecyclerView mRecyclerView;
-    private AnimationAdapter animationAdapter;
-    private ImageView imgBtn;
+    private AnimationAdapter mAnimationAdapter;
+    private ImageView mImgBtn;
+    private int mFirstPageItemCount = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +41,8 @@ public class AnimationUseActivity extends Activity {
 
     private void initView() {
 
-        imgBtn = (ImageView) findViewById(R.id.img_back);
-        imgBtn.setOnClickListener(new View.OnClickListener() {
+        mImgBtn = (ImageView) findViewById(R.id.img_back);
+        mImgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 finish();
@@ -51,11 +51,12 @@ public class AnimationUseActivity extends Activity {
     }
 
     private void initAdapter() {
-        animationAdapter = new AnimationAdapter();
-        animationAdapter.openLoadAnimation();
-        mRecyclerView.addOnItemTouchListener(new OnItemChildClickListener() {
+        mAnimationAdapter = new AnimationAdapter();
+        mAnimationAdapter.openLoadAnimation();
+        mAnimationAdapter.setNotDoAnimationCount(mFirstPageItemCount);
+        mAnimationAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
-            public void onSimpleItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 String content = null;
                 Status status = (Status) adapter.getItem(position);
                 switch (view.getId()) {
@@ -68,13 +69,15 @@ public class AnimationUseActivity extends Activity {
                         Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
                         break;
                     case R.id.tweetText:
+                        content = "tweetText:" + status.getUserName();
+                        Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
                         // you have set clickspan .so there should not solve any click event ,just empty
                         break;
-                }
 
+                }
             }
         });
-        mRecyclerView.setAdapter(animationAdapter);
+        mRecyclerView.setAdapter(mAnimationAdapter);
     }
 
     private void initMenu() {
@@ -86,39 +89,40 @@ public class AnimationUseActivity extends Activity {
             public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                 switch (position) {
                     case 0:
-                        animationAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
+                        mAnimationAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
                         break;
                     case 1:
-                        animationAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
+                        mAnimationAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
                         break;
                     case 2:
-                        animationAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_BOTTOM);
+                        mAnimationAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_BOTTOM);
                         break;
                     case 3:
-                        animationAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
+                        mAnimationAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
                         break;
                     case 4:
-                        animationAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_RIGHT);
+                        mAnimationAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_RIGHT);
                         break;
                     case 5:
-                        animationAdapter.openLoadAnimation(new CustomAnimation());
+                        mAnimationAdapter.openLoadAnimation(new CustomAnimation());
                         break;
                     default:
                         break;
                 }
-                mRecyclerView.setAdapter(animationAdapter);
+                mRecyclerView.setAdapter(mAnimationAdapter);
             }
         });
+        mAnimationAdapter.isFirstOnly(false);//init firstOnly state
         SwitchButton switchButton = (SwitchButton) findViewById(R.id.switch_button);
         switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
-                if (isChecked){
-                    animationAdapter.isFirstOnly(true);
-                }else {
-                    animationAdapter.isFirstOnly(false);
+                if (isChecked) {
+                    mAnimationAdapter.isFirstOnly(true);
+                } else {
+                    mAnimationAdapter.isFirstOnly(false);
                 }
-                animationAdapter.notifyDataSetChanged();
+                mAnimationAdapter.notifyDataSetChanged();
             }
         });
 
