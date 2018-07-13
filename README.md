@@ -8,7 +8,7 @@ Please feel free to use this. (Welcome to **Star** and **Fork**)
 kotlin demo :[BRVAH_kotlin](https://github.com/AllenCoder/BRVAH_kotlin)
 # Document
 - [English](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki)
-- [中文](http://www.jianshu.com/p/b343fcff51b0)  
+- [中文](http://www.jianshu.com/p/b343fcff51b0)
 
 ## [UI](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/issues/694)
 ## Demo
