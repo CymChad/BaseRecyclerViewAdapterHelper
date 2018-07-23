@@ -54,7 +54,30 @@ public class AnimationUseActivity extends Activity {
         mAnimationAdapter = new AnimationAdapter();
         mAnimationAdapter.openLoadAnimation();
         mAnimationAdapter.setNotDoAnimationCount(mFirstPageItemCount);
-        mAnimationAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        mAnimationAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener<Status>() {
+            @Override
+            public void onItemChildClick(Status status, View view, int position) {
+                String content = null;
+                switch (view.getId()) {
+                    case R.id.img:
+                        content = "img:" + status.getUserAvatar();
+                        Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
+                        break;
+                    case R.id.tweetName:
+                        content = "name:" + status.getUserName();
+                        Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
+                        break;
+                    case R.id.tweetText:
+                        content = "tweetText:" + status.getUserName();
+                        Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
+                        // you have set clickspan .so there should not solve any click event ,just empty
+                        break;
+
+                }
+            }
+        });
+        //不在使用强转
+    /*    mAnimationAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 String content = null;
@@ -76,7 +99,7 @@ public class AnimationUseActivity extends Activity {
 
                 }
             }
-        });
+        });*/
         mRecyclerView.setAdapter(mAnimationAdapter);
     }
 

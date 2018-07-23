@@ -32,31 +32,31 @@ public class ItemClickActivity extends BaseActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         initAdapter();
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener<ClickEntity>() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemClick(ClickEntity adapter, View view, int position) {
                 Log.d(TAG, "onItemClick: ");
                 Toast.makeText(ItemClickActivity.this, "onItemClick" + position, Toast.LENGTH_SHORT).show();
             }
         });
-        adapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+        adapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener<ClickEntity>() {
             @Override
-            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+            public boolean onItemLongClick(ClickEntity adapter, View view, int position) {
                 Log.d(TAG, "onItemLongClick: ");
                 Toast.makeText(ItemClickActivity.this, "onItemLongClick" + position, Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
-        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener<ClickEntity>() {
             @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemChildClick(ClickEntity adapter, View view, int position) {
                 Log.d(TAG, "onItemChildClick: ");
                 Toast.makeText(ItemClickActivity.this, "onItemChildClick" + position, Toast.LENGTH_SHORT).show();
             }
         });
-        adapter.setOnItemChildLongClickListener(new BaseQuickAdapter.OnItemChildLongClickListener() {
+        adapter.setOnItemChildLongClickListener(new BaseQuickAdapter.OnItemChildLongClickListener<ClickEntity>() {
             @Override
-            public boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
+            public boolean onItemChildLongClick(ClickEntity adapter, View view, int position) {
                 Log.d(TAG, "onItemChildLongClick: ");
                 Toast.makeText(ItemClickActivity.this, "onItemChildLongClick" + position, Toast.LENGTH_SHORT).show();
                 return true;

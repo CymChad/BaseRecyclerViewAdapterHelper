@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.ClickEntity;
+import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.baserecyclerviewadapterhelper.util.Utils;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -18,7 +19,7 @@ import java.util.List;
 /**
  *
  */
-public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity, BaseViewHolder> implements BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemChildClickListener {
+public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity, BaseViewHolder> implements BaseQuickAdapter.OnItemClickListener<Status>, BaseQuickAdapter.OnItemChildClickListener<Status> {
     NestAdapter nestAdapter;
 
     public ItemClickAdapter(List<ClickEntity> data) {
@@ -30,6 +31,7 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity, Bas
         addItemType(ClickEntity.NEST_CLICK_ITEM_CHILD_VIEW, R.layout.item_nest_click);
 
     }
+
 
 
     @Override
@@ -64,13 +66,15 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity, Bas
         }
     }
 
+
+
     @Override
-    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+    public void onItemChildClick(Status status, View view, int position) {
         Toast.makeText(Utils.getContext(), "childView click", Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+    public void onItemClick(Status status, View view, int position) {
         Logger.d("嵌套RecycleView item 收到: " + "点击了第 " + position + " 一次");
         Toast.makeText(Utils.getContext(), "嵌套RecycleView item 收到: " + "点击了第 " + position + " 一次", Toast.LENGTH_SHORT).show();
     }

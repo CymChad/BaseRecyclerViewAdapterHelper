@@ -31,26 +31,32 @@ public class DataBindingUseActivity extends BaseActivity {
         mAdapter = new DataBindingUseAdapter(R.layout.item_movie, genData());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+
+
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener<Movie>() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemClick(Movie item, View view, int position) {
                 ToastUtils.showShortToast("onItemClick");
             }
         });
-        mAdapter.setOnItemChildLongClickListener(new BaseQuickAdapter.OnItemChildLongClickListener() {
+
+
+
+        mAdapter.setOnItemChildLongClickListener(new BaseQuickAdapter.OnItemChildLongClickListener<Movie>() {
             @Override
-            public boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
+            public boolean onItemChildLongClick(Movie adapter, View view, int position) {
                 ToastUtils.showShortToast("onItemChildLongClick");
                 return true;
             }
         });
-        mAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+        mAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener<Movie>() {
             @Override
-            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+            public boolean onItemLongClick(Movie adapter, View view, int position) {
                 ToastUtils.showShortToast("onItemLongClick");
                 return true;
             }
         });
+
     }
 
 

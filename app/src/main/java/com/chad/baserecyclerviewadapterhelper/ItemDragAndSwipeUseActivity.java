@@ -114,9 +114,9 @@ public class ItemDragAndSwipeUseActivity extends BaseActivity {
 //                ToastUtils.showShortToast("点击了" + position);
 //            }
 //        });
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener<String>() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemClick(String item, View view, int position) {
                 ToastUtils.showShortToast("点击了" + position);
             }
         });
