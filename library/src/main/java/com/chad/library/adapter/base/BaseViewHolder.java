@@ -387,7 +387,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
                 @Override
                 public void onClick(View v) {
                     if (adapter.getOnItemChildClickListener() != null) {
-                        adapter.getOnItemChildClickListener().onItemChildClick(adapter, v, getClickPosition());
+                        adapter.getOnItemChildClickListener().onItemChildClick(adapter.getItem(getClickPosition()), v, getClickPosition());
                     }
                 }
             });
@@ -431,7 +431,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
                 @Override
                 public boolean onLongClick(View v) {
                     return adapter.getOnItemChildLongClickListener() != null &&
-                            adapter.getOnItemChildLongClickListener().onItemChildLongClick(adapter, v, getClickPosition());
+                            adapter.getOnItemChildLongClickListener().onItemChildLongClick(adapter.getItem(getClickPosition()), v, getClickPosition());
                 }
             });
         }

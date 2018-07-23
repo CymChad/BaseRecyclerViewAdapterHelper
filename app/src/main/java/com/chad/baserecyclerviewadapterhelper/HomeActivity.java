@@ -44,9 +44,9 @@ public class HomeActivity extends AppCompatActivity {
         homeAdapter.openLoadAnimation();
         View top = getLayoutInflater().inflate(R.layout.top_view, (ViewGroup) mRecyclerView.getParent(), false);
         homeAdapter.addHeaderView(top);
-        homeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        homeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener<HomeItem>() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemClick(HomeItem adapter, View view, int position) {
                 Intent intent = new Intent(HomeActivity.this, ACTIVITY[position]);
                 startActivity(intent);
             }

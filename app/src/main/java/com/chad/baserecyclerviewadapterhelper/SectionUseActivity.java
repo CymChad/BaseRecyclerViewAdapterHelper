@@ -32,9 +32,9 @@ public class SectionUseActivity extends BaseActivity {
         mData = DataServer.getSampleData();
         SectionAdapter sectionAdapter = new SectionAdapter(R.layout.item_section_content, R.layout.def_section_head, mData);
 
-        sectionAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        sectionAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener<MySection>() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemClick(MySection item, View view, int position) {
                 MySection mySection = mData.get(position);
                 if (mySection.isHeader)
                     Toast.makeText(SectionUseActivity.this, mySection.header, Toast.LENGTH_LONG).show();
@@ -42,9 +42,9 @@ public class SectionUseActivity extends BaseActivity {
                     Toast.makeText(SectionUseActivity.this, mySection.t.getName(), Toast.LENGTH_LONG).show();
             }
         });
-        sectionAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        sectionAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener<MySection>() {
             @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemChildClick(MySection item, View view, int position) {
                 Toast.makeText(SectionUseActivity.this, "onItemChildClick" + position, Toast.LENGTH_LONG).show();
             }
         });
