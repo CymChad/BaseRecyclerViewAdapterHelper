@@ -244,7 +244,9 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
             mData.remove(pos);
             notifyItemRemoved(viewHolder.getAdapterPosition());
         }
-         if (mOnItemSwipeListener != null && itemSwipeEnabled) {
+
+
+        if (mOnItemSwipeListener != null && itemSwipeEnabled) {
             mOnItemSwipeListener.onItemSwiped(viewHolder, getViewHolderPosition(viewHolder));
         }
     }
