@@ -15,7 +15,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import java.util.List;
 
 /**
- * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+ * to get SectionMultipleItem you need follow two things
+ * 1.create entity which extend SectionMultiEntity
+ * 2.create adapter which extend BaseSectionMultiItemQuickAdapter
  */
 public class SectionMultipleItemUseActivity extends BaseActivity {
     private RecyclerView mRecyclerView;
@@ -29,7 +31,11 @@ public class SectionMultipleItemUseActivity extends BaseActivity {
         setTitle("SectionMultiple Use");
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // 1. create entityList which item data extend SectionMultiEntity
         mData = DataServer.getSectionMultiData();
+
+        // create adapter which extend BaseSectionMultiItemQuickAdapter provide your headerResId
         SectionMultipleItemAdapter sectionAdapter = new SectionMultipleItemAdapter(R.layout.def_section_head, mData);
         sectionAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override

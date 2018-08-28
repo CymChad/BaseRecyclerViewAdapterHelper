@@ -13,8 +13,9 @@ import java.util.List;
  */
 public class SectionMultipleItemAdapter extends BaseSectionMultiItemQuickAdapter<SectionMultipleItem, BaseViewHolder> {
     /**
-     * Same as QuickAdapter#QuickAdapter(Context,int) but with
-     * some initialization data.
+     * init SectionMultipleItemAdapter
+     * 1. add your header resource layout
+     * 2. add some kind of items
      *
      * @param sectionHeadResId The section head layout id for each item
      * @param data             A new list is created out of this one to avoid mutable list
@@ -22,12 +23,12 @@ public class SectionMultipleItemAdapter extends BaseSectionMultiItemQuickAdapter
     public SectionMultipleItemAdapter(int sectionHeadResId, List data) {
         super(sectionHeadResId, data);
         addItemType(SectionMultipleItem.TEXT, R.layout.item_text_view);
-        addItemType(SectionMultipleItem.IMG, R.layout.item_image_view);
         addItemType(SectionMultipleItem.IMG_TEXT, R.layout.item_img_text_view);
     }
 
     @Override
     protected void convertHead(BaseViewHolder helper, final SectionMultipleItem item) {
+        // deal with header viewHolder
         helper.setText(R.id.header, item.header);
         helper.setVisible(R.id.more, item.isMore());
         helper.addOnClickListener(R.id.more);
@@ -35,6 +36,7 @@ public class SectionMultipleItemAdapter extends BaseSectionMultiItemQuickAdapter
 
     @Override
     protected void convert(BaseViewHolder helper, SectionMultipleItem item) {
+        // deal with multiple type items viewHolder
         switch (helper.getItemViewType()) {
             case MultipleItem.TEXT:
                 helper.setText(R.id.tv, item.getVideo().getName());

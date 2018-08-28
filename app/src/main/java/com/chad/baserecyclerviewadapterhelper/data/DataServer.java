@@ -77,21 +77,23 @@ public class DataServer {
     public static List<SectionMultipleItem> getSectionMultiData() {
         List<SectionMultipleItem> list = new ArrayList<>();
         Video video = new Video(HTTPS_AVATARS1_GITHUBUSERCONTENT_COM_LINK, CYM_CHAD);
+
+        // add section data
         list.add(new SectionMultipleItem(true, "Section 1", true));
-        list.add(new SectionMultipleItem(SectionMultipleItem.IMG, video));
+        // add multiple type item data ---start---
+        list.add(new SectionMultipleItem(SectionMultipleItem.TEXT, video));
         list.add(new SectionMultipleItem(SectionMultipleItem.TEXT, video));
         list.add(new SectionMultipleItem(SectionMultipleItem.IMG_TEXT, video));
+        // ---end---
+
         list.add(new SectionMultipleItem(true, "Section 2", false));
         list.add(new SectionMultipleItem(SectionMultipleItem.IMG_TEXT, video));
-        list.add(new SectionMultipleItem(SectionMultipleItem.IMG, video));
         list.add(new SectionMultipleItem(SectionMultipleItem.IMG_TEXT, video));
+        list.add(new SectionMultipleItem(SectionMultipleItem.TEXT, video));
         list.add(new SectionMultipleItem(SectionMultipleItem.TEXT, video));
         list.add(new SectionMultipleItem(true, "Section 3", false));
-        list.add(new SectionMultipleItem(SectionMultipleItem.TEXT, video));
         list.add(new SectionMultipleItem(SectionMultipleItem.IMG_TEXT, video));
-        list.add(new SectionMultipleItem(SectionMultipleItem.IMG, video));
         list.add(new SectionMultipleItem(true, "Section 4", false));
-        list.add(new SectionMultipleItem(SectionMultipleItem.IMG, video));
         list.add(new SectionMultipleItem(SectionMultipleItem.TEXT, video));
         list.add(new SectionMultipleItem(true, "Section 5", false));
         list.add(new SectionMultipleItem(SectionMultipleItem.IMG_TEXT, video));

@@ -31,7 +31,8 @@ public abstract class BaseSectionMultiItemQuickAdapter<T extends SectionMultiEnt
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.
      *
-     * @param data A new list is created out of this one to avoid mutable list
+     * @param sectionHeadResId The section head layout id for each item
+     * @param data             A new list is created out of this one to avoid mutable list
      */
     public BaseSectionMultiItemQuickAdapter(int sectionHeadResId, List<T> data) {
         super(data);
@@ -43,6 +44,7 @@ public abstract class BaseSectionMultiItemQuickAdapter<T extends SectionMultiEnt
         T item = mData.get(position);
 
         if (item != null) {
+            // check the item type include header or not
             return item.isHeader ? SECTION_HEADER_VIEW : item.getItemType();
         }
         return DEFAULT_VIEW_TYPE;
@@ -54,6 +56,7 @@ public abstract class BaseSectionMultiItemQuickAdapter<T extends SectionMultiEnt
 
     @Override
     protected K onCreateDefViewHolder(ViewGroup parent, int viewType) {
+        // add this to check viewType of section
         if (viewType == SECTION_HEADER_VIEW)
             return createBaseViewHolder(getItemView(mSectionHeadResId, parent));
 
@@ -64,6 +67,12 @@ public abstract class BaseSectionMultiItemQuickAdapter<T extends SectionMultiEnt
         return layouts.get(viewType, TYPE_NOT_FOUND);
     }
 
+    /**
+     * collect layout types you need
+     *
+     * @param type             The key of layout type
+     * @param layoutResId      The layoutResId of layout type
+     */
     protected void addItemType(int type, @LayoutRes int layoutResId) {
         if (layouts == null) {
             layouts = new SparseIntArray();
@@ -93,8 +102,7 @@ public abstract class BaseSectionMultiItemQuickAdapter<T extends SectionMultiEnt
 
     @Override
     public void remove(@IntRange(from = 0L) int position) {
-        if (mData == null
-                || position < 0
+        if (mData == null || position < 0
                 || position >= mData.size()) return;
 
         T entity = mData.get(position);
