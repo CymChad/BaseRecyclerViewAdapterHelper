@@ -81,9 +81,9 @@ public class DataServer {
         // add section data
         list.add(new SectionMultipleItem(true, "Section 1", true));
         // add multiple type item data ---start---
-        list.add(new SectionMultipleItem(SectionMultipleItem.TEXT, video));
-        list.add(new SectionMultipleItem(SectionMultipleItem.TEXT, video));
-        list.add(new SectionMultipleItem(SectionMultipleItem.IMG_TEXT, video));
+        list.add(new SectionMultipleItem(SectionMultipleItem.TEXT, new Video(HTTPS_AVATARS1_GITHUBUSERCONTENT_COM_LINK, "video_id_0")));
+        list.add(new SectionMultipleItem(SectionMultipleItem.TEXT, new Video(HTTPS_AVATARS1_GITHUBUSERCONTENT_COM_LINK, "video_id_1")));
+        list.add(new SectionMultipleItem(SectionMultipleItem.IMG_TEXT, new Video(HTTPS_AVATARS1_GITHUBUSERCONTENT_COM_LINK, "video_id_2")));
         // ---end---
 
         list.add(new SectionMultipleItem(true, "Section 2", false));

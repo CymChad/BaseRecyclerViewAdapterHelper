@@ -40,7 +40,19 @@ public class SectionMultipleItemUseActivity extends BaseActivity {
         sectionAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                Toast.makeText(SectionMultipleItemUseActivity.this, "onItemChildClick" + position, Toast.LENGTH_LONG).show();
+                SectionMultipleItem item = (SectionMultipleItem) adapter.getData().get(position);
+                switch (view.getId()) {
+                    case R.id.card_view:
+                        // 获取主体item相应数据给后期使用
+                        if (item.getVideo() != null) {
+                            Toast.makeText(SectionMultipleItemUseActivity.this, item.getVideo().getName(), Toast.LENGTH_LONG).show();
+                        }
+                        break;
+                    default:
+                        Toast.makeText(SectionMultipleItemUseActivity.this, "OnItemChildClickListener " + position, Toast.LENGTH_LONG).show();
+                        break;
+
+                }
             }
         });
         mRecyclerView.setAdapter(sectionAdapter);

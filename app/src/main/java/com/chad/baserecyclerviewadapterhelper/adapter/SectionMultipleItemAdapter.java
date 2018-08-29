@@ -37,6 +37,7 @@ public class SectionMultipleItemAdapter extends BaseSectionMultiItemQuickAdapter
     @Override
     protected void convert(BaseViewHolder helper, SectionMultipleItem item) {
         // deal with multiple type items viewHolder
+        helper.addOnClickListener(R.id.card_view);
         switch (helper.getItemViewType()) {
             case MultipleItem.TEXT:
                 helper.setText(R.id.tv, item.getVideo().getName());
