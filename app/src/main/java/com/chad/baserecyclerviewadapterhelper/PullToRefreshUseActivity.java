@@ -183,7 +183,11 @@ public class PullToRefreshUseActivity extends BaseActivity {
         new Request(mNextRequestPage, new RequestCallBack() {
             @Override
             public void success(List<Status> data) {
-                setData(false, data);
+                /**
+                 * fix https://github.com/CymChad/BaseRecyclerViewAdapterHelper/issues/2400
+                 */
+                boolean isRefresh =mNextRequestPage ==1;
+                setData(isRefresh, data);
             }
 
             @Override

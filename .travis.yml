@@ -3,21 +3,18 @@ jdk: oraclejdk8
 sudo: false
 
 android:
-  components:
+components:
     - tools
-    - build-tools-26.0.2
-    - android-26
+    - platform-tools
+    - build-tools-27.0.2
+    - android-27
     - extra-android-m2repository
     - extra-android-support
-  licenses:
-      - android-sdk-license-.+
-      - '.+'
-
 before_install:
   - chmod +x gradlew
   - mkdir "$ANDROID_HOME/licenses" || true
-  - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
-  - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+  # Hack to accept Android licenses
+  - yes | sdkmanager "platforms;android-27"
 
 script:
   - ./gradlew assembleRelease

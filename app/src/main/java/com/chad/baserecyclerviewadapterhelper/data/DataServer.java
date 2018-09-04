@@ -3,6 +3,8 @@ package com.chad.baserecyclerviewadapterhelper.data;
 
 import com.chad.baserecyclerviewadapterhelper.entity.MultipleItem;
 import com.chad.baserecyclerviewadapterhelper.entity.MySection;
+import com.chad.baserecyclerviewadapterhelper.entity.NormalMultipleEntity;
+import com.chad.baserecyclerviewadapterhelper.entity.SectionMultipleItem;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.baserecyclerviewadapterhelper.entity.Video;
 
@@ -16,6 +18,7 @@ public class DataServer {
 
     private static final String HTTPS_AVATARS1_GITHUBUSERCONTENT_COM_LINK = "https://avatars1.githubusercontent.com/u/7698209?v=3&s=460";
     private static final String CYM_CHAD = "CymChad";
+    private static final String CHAY_CHAN = "ChayChan";
 
     private DataServer() {
     }
@@ -71,6 +74,34 @@ public class DataServer {
         return list;
     }
 
+    public static List<SectionMultipleItem> getSectionMultiData() {
+        List<SectionMultipleItem> list = new ArrayList<>();
+        Video video = new Video(HTTPS_AVATARS1_GITHUBUSERCONTENT_COM_LINK, CYM_CHAD);
+
+        // add section data
+        list.add(new SectionMultipleItem(true, "Section 1", true));
+        // add multiple type item data ---start---
+        list.add(new SectionMultipleItem(SectionMultipleItem.TEXT, new Video(HTTPS_AVATARS1_GITHUBUSERCONTENT_COM_LINK, "video_id_0")));
+        list.add(new SectionMultipleItem(SectionMultipleItem.TEXT, new Video(HTTPS_AVATARS1_GITHUBUSERCONTENT_COM_LINK, "video_id_1")));
+        list.add(new SectionMultipleItem(SectionMultipleItem.IMG_TEXT, new Video(HTTPS_AVATARS1_GITHUBUSERCONTENT_COM_LINK, "video_id_2")));
+        // ---end---
+
+        list.add(new SectionMultipleItem(true, "Section 2", false));
+        list.add(new SectionMultipleItem(SectionMultipleItem.IMG_TEXT, video));
+        list.add(new SectionMultipleItem(SectionMultipleItem.IMG_TEXT, video));
+        list.add(new SectionMultipleItem(SectionMultipleItem.TEXT, video));
+        list.add(new SectionMultipleItem(SectionMultipleItem.TEXT, video));
+        list.add(new SectionMultipleItem(true, "Section 3", false));
+        list.add(new SectionMultipleItem(SectionMultipleItem.IMG_TEXT, video));
+        list.add(new SectionMultipleItem(true, "Section 4", false));
+        list.add(new SectionMultipleItem(SectionMultipleItem.TEXT, video));
+        list.add(new SectionMultipleItem(true, "Section 5", false));
+        list.add(new SectionMultipleItem(SectionMultipleItem.IMG_TEXT, video));
+        list.add(new SectionMultipleItem(SectionMultipleItem.IMG_TEXT, video));
+        list.add(new SectionMultipleItem(SectionMultipleItem.IMG_TEXT, video));
+        return list;
+    }
+
     public static List<String> getStrData() {
         List<String> list = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
@@ -93,6 +124,18 @@ public class DataServer {
             list.add(new MultipleItem(MultipleItem.IMG_TEXT, MultipleItem.IMG_TEXT_SPAN_SIZE_MIN));
         }
 
+        return list;
+    }
+
+    public static List<NormalMultipleEntity> getNormalMultipleEntities() {
+        List<NormalMultipleEntity> list = new ArrayList<>();
+        for (int i = 0; i <= 4; i++) {
+            list.add(new NormalMultipleEntity(NormalMultipleEntity.SINGLE_IMG));
+            list.add(new NormalMultipleEntity(NormalMultipleEntity.SINGLE_TEXT,CHAY_CHAN));
+            list.add(new NormalMultipleEntity(NormalMultipleEntity.TEXT_IMG,CHAY_CHAN));
+            list.add(new NormalMultipleEntity(NormalMultipleEntity.TEXT_IMG,CYM_CHAD));
+            list.add(new NormalMultipleEntity(NormalMultipleEntity.TEXT_IMG,CHAY_CHAN));
+        }
         return list;
     }
 
