@@ -1,6 +1,6 @@
 package com.chad.library.adapter.base;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.SparseArray;
 import android.view.View;
 
