@@ -20,12 +20,6 @@ A clear and concise description of what you expected to happen.
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
-
 **Additional context**
 Add any other context about the problem here.
 
@@ -34,6 +28,7 @@ Add any other context about the problem here.
 3. 尝试阅读[Demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper)找到答案。
 4. 尝试自己检查或试验以找到答案。
 5. 尝试阅读源代码以找到答案。
+6. 请勿将产品的一些特殊交互需求 和 该库暂不支持作为bug混为一谈，请您仔细甄别
 
 如果以上都尝试过了请提一个新的[issues](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/issues/new)   
 参考[提問的智慧](https://github.com/FredWe/How-To-Ask-Questions-The-Smart-Way)
