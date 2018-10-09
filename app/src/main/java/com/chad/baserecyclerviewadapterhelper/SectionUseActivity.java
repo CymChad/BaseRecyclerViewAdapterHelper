@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.chad.baserecyclerviewadapterhelper.adapter.SectionAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
+import com.chad.baserecyclerviewadapterhelper.decoration.GridAverageGapSectionItemDecoration;
 import com.chad.baserecyclerviewadapterhelper.entity.MySection;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
@@ -29,6 +30,7 @@ public class SectionUseActivity extends BaseActivity {
         setTitle("Section Use");
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
+        mRecyclerView.addItemDecoration(new GridAverageGapSectionItemDecoration(50,20,20,20));
         mData = DataServer.getSampleData();
         SectionAdapter sectionAdapter = new SectionAdapter(R.layout.item_section_content, R.layout.def_section_head, mData);
 
