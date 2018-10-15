@@ -4,7 +4,6 @@ import android.graphics.Rect;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -22,7 +21,7 @@ import com.chad.library.adapter.base.entity.SectionEntity;
  * @org :Aurora Team
  * @since : 2018/9/29
  */
-public class GridAverageGapSectionItemDecoration extends RecyclerView.ItemDecoration {
+public class GridSectionAverageGapItemDecoration extends RecyclerView.ItemDecoration {
 
     private float gapHorizontalDp;
     private float gapVerticalDp;
@@ -45,7 +44,7 @@ public class GridAverageGapSectionItemDecoration extends RecyclerView.ItemDecora
      * @param sectionEdgeHPaddingDp 左右两端的padding大小
      * @param sectionEdgeVPaddingDp 上下两端的padding大小
      */
-    public GridAverageGapSectionItemDecoration(float gapHorizontalDp, float gapVerticalDp, float sectionEdgeHPaddingDp, float sectionEdgeVPaddingDp) {
+    public GridSectionAverageGapItemDecoration(float gapHorizontalDp, float gapVerticalDp, float sectionEdgeHPaddingDp, float sectionEdgeVPaddingDp) {
         this.gapHorizontalDp = gapHorizontalDp;
         this.gapVerticalDp = gapVerticalDp;
         this.sectionEdgeHPaddingDp = sectionEdgeHPaddingDp;
@@ -77,13 +76,7 @@ public class GridAverageGapSectionItemDecoration extends RecyclerView.ItemDecora
             }
 
             if (gapHSizePx < 0 || gapVSizePx < 0) {
-                DisplayMetrics displayMetrics = new DisplayMetrics();
-                parent.getDisplay().getMetrics(displayMetrics);
-                gapHSizePx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, gapHorizontalDp, displayMetrics);
-                gapVSizePx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, gapVerticalDp, displayMetrics);
-                sectionEdgeHPaddingPx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, sectionEdgeHPaddingDp, displayMetrics);
-                sectionEdgeVPaddingPx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, sectionEdgeVPaddingDp, displayMetrics);
-                eachItemHPaddingPx = (sectionEdgeHPaddingPx * 2 + gapHSizePx * (spanCount - 1)) / spanCount;
+                transformGapDefinition(parent, spanCount);
             }
             outRect.top = gapVSizePx;
             outRect.bottom = 0;
@@ -118,6 +111,16 @@ public class GridAverageGapSectionItemDecoration extends RecyclerView.ItemDecora
         } else {
             super.getItemOffsets(outRect, view, parent, state);
         }
+    }
+
+    private void transformGapDefinition(RecyclerView parent, int spanCount) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        parent.getDisplay().getMetrics(displayMetrics);
+        gapHSizePx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, gapHorizontalDp, displayMetrics);
+        gapVSizePx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, gapVerticalDp, displayMetrics);
+        sectionEdgeHPaddingPx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, sectionEdgeHPaddingDp, displayMetrics);
+        sectionEdgeVPaddingPx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, sectionEdgeVPaddingDp, displayMetrics);
+        eachItemHPaddingPx = (sectionEdgeHPaddingPx * 2 + gapHSizePx * (spanCount - 1)) / spanCount;
     }
 
     private int findSectionLastItemPos(int curPos, BaseQuickAdapter<SectionEntity, BaseViewHolder> adapter) {
