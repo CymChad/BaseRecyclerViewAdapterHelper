@@ -1,10 +1,10 @@
 apply plugin: 'com.android.library'
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
 
     defaultConfig {
-        minSdkVersion 11
-        targetSdkVersion 27
+        minSdkVersion 16
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
     }
@@ -48,5 +48,34 @@ artifacts {
 dependencies {
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    compileOnly 'com.android.support:recyclerview-v7:27.1.1'
+    compileOnly 'com.android.support:recyclerview-v7:28.0.0'
+}
+
+
+apply plugin: 'maven'
+def GROUP = "com.github.CymChad"
+def POM_ARTIFACT_ID = 'BaseRecyclerViewAdapterHelper'
+def VERSION_CODE = "2.9.40-fec"
+def UPLOAD_DESC = "自己的版本,优化了onItemClick"
+uploadArchives {
+    doFirst {
+        logger.quiet("---------------------------start upload--------------------------------\t\n")
+        logger.quiet(String.format("groupId = %s\t\nartifactId = %s\t\nversion = %s\t\nuploadDesc = %s\t\n", GROUP, POM_ARTIFACT_ID, VERSION_CODE, UPLOAD_DESC))
+    }
+    doLast {
+        logger.quiet("---------------------------upload finish--------------------------------")
+    }
+    repositories {
+        mavenDeployer {
+            repository(url: 'http://192.168.2.39:8908/repository/yunmall/') {
+                authentication(userName: "void", password: "void")
+            }
+            pom.project {
+                version VERSION_CODE
+                artifactId POM_ARTIFACT_ID
+                groupId GROUP
+                description UPLOAD_DESC
+            }
+        }
+    }
 }

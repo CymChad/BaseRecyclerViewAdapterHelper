@@ -77,29 +77,29 @@ public class AnimationUseActivity extends Activity {
             }
         });
         //不在使用强转
-    /*    mAnimationAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                String content = null;
-                Status status = (Status) adapter.getItem(position);
-                switch (view.getId()) {
-                    case R.id.img:
-                        content = "img:" + status.getUserAvatar();
-                        Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
-                        break;
-                    case R.id.tweetName:
-                        content = "name:" + status.getUserName();
-                        Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
-                        break;
-                    case R.id.tweetText:
-                        content = "tweetText:" + status.getUserName();
-                        Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
-                        // you have set clickspan .so there should not solve any click event ,just empty
-                        break;
-
-                }
-            }
-        });*/
+        //mAnimationAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        //    @Override
+        //    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+        //        String content = null;
+        //        Status status = (Status) adapter.getItem(position);
+        //        switch (view.getId()) {
+        //            case R.id.img:
+        //                content = "img:" + status.getUserAvatar();
+        //                Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
+        //                break;
+        //            case R.id.tweetName:
+        //                content = "name:" + status.getUserName();
+        //                Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
+        //                break;
+        //            case R.id.tweetText:
+        //                content = "tweetText:" + status.getUserName();
+        //                Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
+        //                // you have set clickspan .so there should not solve any click event ,just empty
+        //                break;
+        //
+        //        }
+        //    }
+        //});
         mRecyclerView.setAdapter(mAnimationAdapter);
     }
 

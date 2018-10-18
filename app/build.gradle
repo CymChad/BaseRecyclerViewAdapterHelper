@@ -5,7 +5,7 @@ android {
 
     defaultConfig {
         applicationId "com.chad.baserecyclerviewadapterhelper"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 27
         versionCode 5
         versionName "2.1"
