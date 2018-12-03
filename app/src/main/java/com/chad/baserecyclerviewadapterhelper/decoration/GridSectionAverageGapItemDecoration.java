@@ -1,6 +1,7 @@
 package com.chad.baserecyclerviewadapterhelper.decoration;
 
 import android.graphics.Rect;
+import android.os.Build;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -115,7 +116,9 @@ public class GridSectionAverageGapItemDecoration extends RecyclerView.ItemDecora
 
     private void transformGapDefinition(RecyclerView parent, int spanCount) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        parent.getDisplay().getMetrics(displayMetrics);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            parent.getDisplay().getMetrics(displayMetrics);
+        }
         gapHSizePx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, gapHorizontalDp, displayMetrics);
         gapVSizePx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, gapVerticalDp, displayMetrics);
         sectionEdgeHPaddingPx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, sectionEdgeHPaddingDp, displayMetrics);
