@@ -564,6 +564,18 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         }
         return this;
     }
+    /**
+     * Set the enabled state of this view.
+     *
+     * @param viewId  The view id.
+     * @param enable The checked status;
+     * @return The BaseViewHolder for chaining.
+     */
+    public BaseViewHolder setEnabled(@IdRes int viewId,boolean enable) {
+        View view = getView(viewId);
+        view.setEnabled(enable);
+        return this;
+    }
 
     /**
      * Sets the adapter of a adapter view.
