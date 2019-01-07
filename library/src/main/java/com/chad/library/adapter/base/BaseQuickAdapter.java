@@ -1792,6 +1792,11 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 int pos = getItemPosition(subItem);
                 if (pos < 0) {
                     continue;
+                } else if (pos < position) {
+                    pos = position + i + 1;
+                    if (pos >= mData.size()) {
+                        continue;
+                    }
                 }
                 if (subItem instanceof IExpandable) {
                     subItemCount += recursiveCollapse(pos);
