@@ -15,6 +15,9 @@
  */
 package com.chad.library.adapter.base;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 import android.animation.Animator;
 import android.content.Context;
 import android.support.annotation.IdRes;
@@ -35,7 +38,6 @@ import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-
 import com.chad.library.adapter.base.animation.AlphaInAnimation;
 import com.chad.library.adapter.base.animation.BaseAnimation;
 import com.chad.library.adapter.base.animation.ScaleInAnimation;
@@ -46,7 +48,6 @@ import com.chad.library.adapter.base.entity.IExpandable;
 import com.chad.library.adapter.base.loadmore.LoadMoreView;
 import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView;
 import com.chad.library.adapter.base.util.MultiTypeDelegate;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Constructor;
@@ -57,9 +58,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 
 /**
@@ -1856,7 +1854,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         return item != null && mData != null && !mData.isEmpty() ? mData.indexOf(item) : -1;
     }
 
-    private boolean hasSubItems(IExpandable item) {
+    public boolean hasSubItems(IExpandable item) {
         if (item == null) {
             return false;
         }
