@@ -48,5 +48,5 @@ artifacts {
 dependencies {
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    compileOnly 'androidx.recyclerview:recyclerview:1.0.0-rc02'
+    compileOnly 'androidx.recyclerview:recyclerview:1.0.0'
 }

@@ -27,10 +27,9 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(path: ':library')
     implementation project(':material-spinner-1.0.5')
-    implementation 'com.github.bumptech.glide:glide:3.7.0'
-    implementation 'com.google.android.material:material:1.0.0-rc02'
-    implementation 'androidx.cardview:cardview:1.0.0-rc02'
-    implementation 'androidx.appcompat:appcompat:1.0.0-rc02'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.kyleduo.switchbutton:library:2.0.0'
-    implementation 'com.orhanobut:logger:2.1.1'
+    implementation 'com.orhanobut:logger:2.2.0'
 }
