@@ -1,7 +1,7 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
-import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.view.View;
 import android.view.ViewGroup;
 

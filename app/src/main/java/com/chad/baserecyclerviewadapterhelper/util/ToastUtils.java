@@ -2,7 +2,7 @@ package com.chad.baserecyclerviewadapterhelper.util;
 
 import android.os.Handler;
 import android.os.Looper;
-import androidx.annotation.StringRes;
+import android.support.annotation.StringRes;
 import android.widget.Toast;
 
 public class ToastUtils {
