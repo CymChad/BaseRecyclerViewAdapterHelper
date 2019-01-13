@@ -7,7 +7,7 @@
     android:gravity="center_vertical"
     android:orientation="vertical">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/card_view1"
         android:layout_width="match_parent"
         android:layout_height="150dp"
@@ -45,9 +45,9 @@
 
         </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/card_view2"
         android:layout_width="match_parent"
         android:layout_height="150dp"
@@ -85,6 +85,6 @@
                 />
 
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>
