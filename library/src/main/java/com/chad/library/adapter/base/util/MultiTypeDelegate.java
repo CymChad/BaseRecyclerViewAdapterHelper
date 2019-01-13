@@ -1,6 +1,6 @@
 package com.chad.library.adapter.base.util;
 
-import androidx.annotation.LayoutRes;
+import android.support.annotation.LayoutRes;
 import android.util.SparseIntArray;
 
 import java.util.List;

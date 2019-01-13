@@ -1,6 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
-import androidx.annotation.Nullable;
+import android.support.annotation.Nullable;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.provider.ImgItemProvider;
 import com.chad.baserecyclerviewadapterhelper.adapter.provider.TextImgItemProvider;

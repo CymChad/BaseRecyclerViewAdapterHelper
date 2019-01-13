@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
@@ -20,4 +20,4 @@
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:src="@mipmap/click_head_img_0"/>
-</androidx.cardview.widget.CardView>
+</android.support.v7.widget.CardView>
