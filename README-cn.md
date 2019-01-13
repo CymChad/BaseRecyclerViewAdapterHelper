@@ -45,7 +45,7 @@
 	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.46'
 	}
 ```
-## [androidX 迁移库版本](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/releases/tag/2.9.45-androidx))
+## [androidX 迁移库版本](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/releases/tag/2.9.45-androidx)
 
 # 如何使用它来创建Adapter？
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/item_view.png)
