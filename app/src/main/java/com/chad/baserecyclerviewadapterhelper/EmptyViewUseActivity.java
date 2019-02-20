@@ -16,7 +16,8 @@ public class EmptyViewUseActivity extends BaseActivity implements View.OnClickLi
     private QuickAdapter mQuickAdapter;
     private View notDataView;
     private View errorView;
-
+    private boolean mError = true;
+    private boolean mNoData = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,8 +60,7 @@ public class EmptyViewUseActivity extends BaseActivity implements View.OnClickLi
         onRefresh();
     }
 
-    private boolean mError = true;
-    private boolean mNoData = true;
+
 
     private void onRefresh() {
         mQuickAdapter.setEmptyView(R.layout.loading_view, (ViewGroup) mRecyclerView.getParent());

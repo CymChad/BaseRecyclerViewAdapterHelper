@@ -1152,7 +1152,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param index
      * @param orientation
      */
-    public int addHeaderView(View header, int index, int orientation) {
+    public int addHeaderView(View header,final int index, int orientation) {
         if (mHeaderLayout == null) {
             mHeaderLayout = new LinearLayout(header.getContext());
             if (orientation == LinearLayout.VERTICAL) {
@@ -1164,17 +1164,18 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             }
         }
         final int childCount = mHeaderLayout.getChildCount();
+        int mIndex =index;
         if (index < 0 || index > childCount) {
-            index = childCount;
+            mIndex = childCount;
         }
-        mHeaderLayout.addView(header, index);
+        mHeaderLayout.addView(header, mIndex);
         if (mHeaderLayout.getChildCount() == 1) {
             int position = getHeaderViewPosition();
             if (position != -1) {
                 notifyItemInserted(position);
             }
         }
-        return index;
+        return mIndex;
     }
 
     public int setHeaderView(View header) {

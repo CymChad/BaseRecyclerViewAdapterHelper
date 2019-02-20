@@ -19,7 +19,7 @@ import java.util.List;
  *
  */
 public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity, BaseViewHolder> implements BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemChildClickListener {
-    NestAdapter nestAdapter;
+    private NestAdapter nestAdapter;
 
     public ItemClickAdapter(List<ClickEntity> data) {
         super(data);
@@ -51,7 +51,8 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity, Bas
                         .addOnClickListener(R.id.iv_num_reduce).addOnClickListener(R.id.iv_num_add);
                 break;
             case ClickEntity.NEST_CLICK_ITEM_CHILD_VIEW:
-                helper.setNestView(R.id.item_click); // u can set nestview id
+                // u can set nestview id
+                helper.setNestView(R.id.item_click);
                 final RecyclerView recyclerView = helper.getView(R.id.nest_list);
                 recyclerView.setLayoutManager(new LinearLayoutManager(helper.itemView.getContext(), LinearLayoutManager.VERTICAL, false));
                 recyclerView.setHasFixedSize(true);
