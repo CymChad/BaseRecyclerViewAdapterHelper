@@ -18,9 +18,9 @@ import java.util.Random;
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 public class ExpandableUseActivity extends BaseActivity {
-    RecyclerView mRecyclerView;
-    ExpandableItemAdapter adapter;
-    ArrayList<MultiItemEntity> list;
+    private RecyclerView mRecyclerView;
+    private ExpandableItemAdapter adapter;
+    private ArrayList<MultiItemEntity> list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
