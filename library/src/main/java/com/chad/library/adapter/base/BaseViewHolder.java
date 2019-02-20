@@ -72,7 +72,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     /**
      * Package private field to retain the associated user object and detect a change
      */
-    Object associatedObject;
+    private Object associatedObject;
 
 
     public BaseViewHolder(final View view) {

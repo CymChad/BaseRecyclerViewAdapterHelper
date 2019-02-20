@@ -272,6 +272,8 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
             case MultipleItem.IMG:
                 helper.setImageUrl(R.id.iv, item.getContent());
                 break;
+            default:
+                    break;
         }
     }
 
@@ -352,7 +354,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
     protected void convert(final BaseViewHolder holder, final MultiItemEntity item) {
         switch (holder.getItemViewType()) {
         case TYPE_LEVEL_0:
-            ....
+            
             //set view content
            holder.itemView.setOnClickListener(new View.OnClickListener() {
                @Override
@@ -371,6 +373,8 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
         case TYPE_PERSON:
            //just set the content
            break;
+       default:
+               break;
     }
 }
 ```

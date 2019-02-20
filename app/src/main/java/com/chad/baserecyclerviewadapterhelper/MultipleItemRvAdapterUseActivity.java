@@ -3,9 +3,6 @@ package com.chad.baserecyclerviewadapterhelper;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.DemoMultipleItemRvAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
