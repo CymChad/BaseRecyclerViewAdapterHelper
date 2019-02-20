@@ -135,6 +135,16 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     private RecyclerView mRecyclerView;
     private int mPreLoadNumber = 1;
 
+    /**
+     * start up fetch position, default is 1.
+     */
+    private int mStartUpFetchPosition = 1;
+    /**
+     * if asFlow is true, footer/header will arrange like normal item view.
+     * only works when use {@link GridLayoutManager},and it will ignore span size.
+     */
+    private boolean headerViewAsFlow, footerViewAsFlow;
+
     @IntDef({ALPHAIN, SCALEIN, SLIDEIN_BOTTOM, SLIDEIN_LEFT, SLIDEIN_RIGHT})
     @Retention(RetentionPolicy.SOURCE)
     public @interface AnimationType {
@@ -270,10 +280,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         return mUpFetchEnable;
     }
 
-    /**
-     * start up fetch position, default is 1.
-     */
-    private int mStartUpFetchPosition = 1;
 
     public void setStartUpFetchPosition(int startUpFetchPosition) {
         mStartUpFetchPosition = startUpFetchPosition;
@@ -689,7 +695,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     @Override
     public int getItemCount() {
         int count;
-        if (getEmptyViewCount() == 1) {
+        if (1 == getEmptyViewCount()) {
             count = 1;
             if (mHeadAndEmptyEnable && getHeaderLayoutCount() != 0) {
                 count++;
@@ -885,11 +891,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 LOADING_VIEW;
     }
 
-    /**
-     * if asFlow is true, footer/header will arrange like normal item view.
-     * only works when use {@link GridLayoutManager},and it will ignore span size.
-     */
-    private boolean headerViewAsFlow, footerViewAsFlow;
 
     public void setHeaderViewAsFlow(boolean headerViewAsFlow) {
         this.headerViewAsFlow = headerViewAsFlow;
@@ -1383,14 +1384,12 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         mEmptyLayout.removeAllViews();
         mEmptyLayout.addView(emptyView);
         mIsUseEmpty = true;
-        if (insert) {
-            if (getEmptyViewCount() == 1) {
-                int position = 0;
-                if (mHeadAndEmptyEnable && getHeaderLayoutCount() != 0) {
-                    position++;
-                }
-                notifyItemInserted(position);
+        if (insert && getEmptyViewCount() == 1) {
+            int position = 0;
+            if (mHeadAndEmptyEnable && getHeaderLayoutCount() != 0) {
+                position++;
             }
+            notifyItemInserted(position);
         }
     }
 
