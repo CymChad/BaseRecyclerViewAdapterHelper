@@ -2,6 +2,7 @@ package com.chad.baserecyclerviewadapterhelper.adapter;
 
 import android.util.Log;
 import android.view.View;
+
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.Level0Item;
 import com.chad.baserecyclerviewadapterhelper.entity.Level1Item;
@@ -10,6 +11,7 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.IExpandable;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+
 import java.util.List;
 
 /**
@@ -40,8 +42,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
     protected void convert(final BaseViewHolder holder, final MultiItemEntity item) {
         switch (holder.getItemViewType()) {
             case TYPE_LEVEL_0:
-                switch (holder.getLayoutPosition() %
-                        3) {
+                switch (holder.getLayoutPosition() % 3) {
                     case 0:
                         holder.setImageResource(R.id.iv_head, R.mipmap.head_img0);
                         break;
@@ -50,6 +51,8 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                         break;
                     case 2:
                         holder.setImageResource(R.id.iv_head, R.mipmap.head_img2);
+                        break;
+                    default:
                         break;
                 }
                 final Level0Item lv0 = (Level0Item) item;
@@ -126,6 +129,8 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                         }
                     }
                 });
+                break;
+            default:
                 break;
         }
     }

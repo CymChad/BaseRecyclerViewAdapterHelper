@@ -61,6 +61,8 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity, Bas
                 nestAdapter.setOnItemChildClickListener(this);
                 recyclerView.setAdapter(nestAdapter);
                 break;
+            default:
+                break;
         }
     }
 

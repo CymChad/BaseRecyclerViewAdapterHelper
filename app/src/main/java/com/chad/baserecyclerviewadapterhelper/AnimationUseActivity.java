@@ -73,6 +73,8 @@ public class AnimationUseActivity extends Activity {
                         Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
                         // you have set clickspan .so there should not solve any click event ,just empty
                         break;
+                    default:
+                        break;
 
                 }
             }
