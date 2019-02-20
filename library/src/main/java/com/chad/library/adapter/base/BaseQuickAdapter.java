@@ -1928,9 +1928,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     public interface OnItemChildClickListener {
         /**
-         * callback method to be invoked when an item in this view has been
-         * click and held
-         *
+         * callback method to be invoked when an itemchild in this view has been click
+         * @param adapter
          * @param view     The view whihin the ItemView that was clicked
          * @param position The position of the view int the adapter
          */
