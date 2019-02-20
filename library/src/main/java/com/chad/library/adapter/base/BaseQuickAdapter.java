@@ -150,7 +150,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     private void checkNotNull() {
         if (getRecyclerView() == null) {
-            throw new RuntimeException("please bind recyclerView first!");
+            throw new IllegalStateException("please bind recyclerView first!");
         }
     }
 
@@ -159,7 +159,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     public void bindToRecyclerView(RecyclerView recyclerView) {
         if (getRecyclerView() != null) {
-            throw new RuntimeException("Don't bind twice");
+            throw new IllegalStateException("Don't bind twice");
         }
         setRecyclerView(recyclerView);
         getRecyclerView().setAdapter(this);
