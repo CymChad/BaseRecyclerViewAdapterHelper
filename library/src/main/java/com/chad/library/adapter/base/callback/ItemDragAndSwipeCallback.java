@@ -11,7 +11,9 @@ import com.chad.library.adapter.base.BaseItemDraggableAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 /**
- * Created by luoxw on 2016/6/20.
+ *
+ * @author luoxw
+ * @date 2016/6/20
  */
 public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
 
