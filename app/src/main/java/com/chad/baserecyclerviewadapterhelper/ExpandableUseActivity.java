@@ -67,7 +67,7 @@ public class ExpandableUseActivity extends BaseActivity {
             }
             res.add(lv0);
         }
-        res.add(new  Level0Item("This is " + lv0Count + "th item in Level 0", "subtitle of " + lv0Count));
+
         return res;
     }
 }
