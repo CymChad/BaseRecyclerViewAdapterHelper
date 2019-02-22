@@ -35,6 +35,7 @@
             android:name=".HomeActivity"
             android:launchMode="singleTask"></activity>
         <activity android:name=".UpFetchUseActivity" />
+        <activity android:name=".SectionMultipleItemUseActivity" />
     </application>
 
 </manifest>

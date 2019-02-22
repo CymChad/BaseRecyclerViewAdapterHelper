@@ -42,13 +42,6 @@
     </style>
 
 
-
-
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
-
     <style name="bg">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
