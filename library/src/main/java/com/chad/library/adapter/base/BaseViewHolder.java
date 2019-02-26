@@ -28,6 +28,8 @@ import android.support.v7.widget.RecyclerView;
 import android.text.util.Linkify;
 import android.util.SparseArray;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.animation.AlphaAnimation;
 import android.widget.Adapter;
 import android.widget.AdapterView;
@@ -74,6 +76,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      */
     private Object associatedObject;
 
+    private OnClickListener internalClickListener;
+
+    private OnLongClickListener internalLongClickListener;
 
     public BaseViewHolder(final View view) {
         super(view);
@@ -384,14 +389,17 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
                 if (!view.isClickable()) {
                     view.setClickable(true);
                 }
-                view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (adapter.getOnItemChildClickListener() != null) {
-                            adapter.getOnItemChildClickListener().onItemChildClick(adapter, v, getClickPosition());
+                if (internalClickListener == null) {
+                    internalClickListener = new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (adapter.getOnItemChildClickListener() != null) {
+                                adapter.getOnItemChildClickListener().onItemChildClick(adapter, v, getClickPosition());
+                            }
                         }
-                    }
-                });
+                    };
+                }
+                view.setOnClickListener(internalClickListener);
             }
         }
         return this;
@@ -431,13 +439,16 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
                 if (!view.isLongClickable()) {
                     view.setLongClickable(true);
                 }
-                view.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        return adapter.getOnItemChildLongClickListener() != null &&
-                                adapter.getOnItemChildLongClickListener().onItemChildLongClick(adapter, v, getClickPosition());
-                    }
-                });
+                if (internalLongClickListener == null) {
+                    internalLongClickListener = new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            return adapter.getOnItemChildLongClickListener() != null &&
+                                    adapter.getOnItemChildLongClickListener().onItemChildLongClick(adapter, v, getClickPosition());
+                        }
+                    };
+                }
+                view.setOnLongClickListener(internalLongClickListener);
             }
         }
         return this;
