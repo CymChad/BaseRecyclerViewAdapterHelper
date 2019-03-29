@@ -2,13 +2,10 @@ package com.chad.library.adapter.base;
 
 import android.support.annotation.IntRange;
 import android.support.annotation.LayoutRes;
-import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.ViewGroup;
-
 import com.chad.library.adapter.base.entity.IExpandable;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
-
 import java.util.List;
 
 /**
@@ -107,6 +104,40 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity, K ext
             IExpandable parent = (IExpandable) mData.get(position);
             parent.getSubItems().remove(child);
         }
+    }
+
+    /**
+     * 该方法用于 IExpandable 树形列表。
+     * 如果不存在 Parent，则 return -1。
+     *
+     * @param position 所处列表的位置
+     * @return 父 position 在数据列表中的位置
+     */
+    public int getParentPositionInAll(int position) {
+        List<T> data = getData();
+        MultiItemEntity multiItemEntity = getItem(position);
+
+        if (isExpandable(multiItemEntity)) {
+            IExpandable IExpandable = (IExpandable) multiItemEntity;
+            for (int i = position - 1; i >= 0; i--) {
+                MultiItemEntity entity = data.get(i);
+                if (isExpandable(entity) && IExpandable.getLevel() > ((IExpandable) entity).getLevel()) {
+                    return i;
+                }
+            }
+        } else {
+            for (int i = position - 1; i >= 0; i--) {
+                MultiItemEntity entity = data.get(i);
+                if (isExpandable(entity)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    public boolean isExpandable(MultiItemEntity item) {
+        return item != null && item instanceof IExpandable;
     }
 }
 

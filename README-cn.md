@@ -42,9 +42,10 @@
 然后在dependencies添加:
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.9.7'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.46'
 	}
 ```
+## [androidX 迁移库版本](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/releases/tag/2.9.45-androidx)
 
 # 如何使用它来创建Adapter？
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/item_view.png)
@@ -271,6 +272,8 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
             case MultipleItem.IMG:
                 helper.setImageUrl(R.id.iv, item.getContent());
                 break;
+            default:
+                    break;
         }
     }
 
@@ -351,7 +354,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
     protected void convert(final BaseViewHolder holder, final MultiItemEntity item) {
         switch (holder.getItemViewType()) {
         case TYPE_LEVEL_0:
-            ....
+            
             //set view content
            holder.itemView.setOnClickListener(new View.OnClickListener() {
                @Override
@@ -370,6 +373,8 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
         case TYPE_PERSON:
            //just set the content
            break;
+       default:
+               break;
     }
 }
 ```
