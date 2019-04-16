@@ -523,7 +523,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     public void addData(@NonNull T data) {
         mData.add(data);
-        notifyItemInserted(mData.size() + getHeaderLayoutCount());
+        notifyItemInserted(mData.size() - 1 + getHeaderLayoutCount());
         compatibilityDataSizeChanged(1);
     }
 
