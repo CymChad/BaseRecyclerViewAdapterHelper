@@ -963,22 +963,23 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         if (view == null) {
             return;
         }
-        if (getOnItemClickListener() != null) {
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getOnItemClickListener() != null) {
                     setOnItemClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
                 }
-            });
-        }
-        if (getOnItemLongClickListener() != null) {
-            view.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
+            }
+        });
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (getOnItemLongClickListener() != null) {
                     return setOnItemLongClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
                 }
-            });
-        }
+                return false;
+            }
+        });
     }
 
     /**
@@ -1152,7 +1153,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param index
      * @param orientation
      */
-    public int addHeaderView(View header,final int index, int orientation) {
+    public int addHeaderView(View header, final int index, int orientation) {
         if (mHeaderLayout == null) {
             mHeaderLayout = new LinearLayout(header.getContext());
             if (orientation == LinearLayout.VERTICAL) {
@@ -1164,7 +1165,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             }
         }
         final int childCount = mHeaderLayout.getChildCount();
-        int mIndex =index;
+        int mIndex = index;
         if (index < 0 || index > childCount) {
             mIndex = childCount;
         }
@@ -1930,6 +1931,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     public interface OnItemChildClickListener {
         /**
          * callback method to be invoked when an itemchild in this view has been click
+         *
          * @param adapter
          * @param view     The view whihin the ItemView that was clicked
          * @param position The position of the view int the adapter
@@ -1946,6 +1948,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         /**
          * callback method to be invoked when an item in this view has been
          * click and held
+         *
          * @param adapter  this BaseQuickAdapter adapter
          * @param view     The childView whihin the itemView that was clicked and held.
          * @param position The position of the view int the adapter
