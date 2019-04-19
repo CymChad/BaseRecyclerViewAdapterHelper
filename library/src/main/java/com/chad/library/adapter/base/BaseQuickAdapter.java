@@ -74,6 +74,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     private LoadMoreView mLoadMoreView = new SimpleLoadMoreView();
     private RequestLoadMoreListener mRequestLoadMoreListener;
     private boolean mEnableLoadMoreEndClick = false;
+    private List<K> mViewHolders;
 
     //Animation
     /**
@@ -476,6 +477,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         if (layoutResId != 0) {
             this.mLayoutResId = layoutResId;
         }
+        mViewHolders = new ArrayList<>();
     }
 
     public BaseQuickAdapter(@Nullable List<T> data) {
@@ -780,6 +782,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             default:
                 baseViewHolder = onCreateDefViewHolder(parent, viewType);
                 bindViewClickListener(baseViewHolder);
+                mViewHolders.add(baseViewHolder);
         }
         baseViewHolder.setAdapter(this);
         return baseViewHolder;
@@ -963,23 +966,22 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         if (view == null) {
             return;
         }
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getOnItemClickListener() != null) {
+        if (getOnItemClickListener() != null) {
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     setOnItemClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
                 }
-            }
-        });
-        view.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (getOnItemLongClickListener() != null) {
+            });
+        }
+        if (getOnItemLongClickListener() != null) {
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
                     return setOnItemLongClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
                 }
-                return false;
-            }
-        });
+            });
+        }
     }
 
     /**
@@ -2001,6 +2003,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     public void setOnItemClickListener(@Nullable OnItemClickListener listener) {
         mOnItemClickListener = listener;
+        for (BaseViewHolder b : mViewHolders) {
+            bindViewClickListener(b);
+        }
     }
 
     /**
