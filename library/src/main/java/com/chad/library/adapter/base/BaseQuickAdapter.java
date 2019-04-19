@@ -2003,8 +2003,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     public void setOnItemClickListener(@Nullable OnItemClickListener listener) {
         mOnItemClickListener = listener;
-        for (BaseViewHolder b : mViewHolders) {
-            bindViewClickListener(b);
+        for (BaseViewHolder viewHolder : mViewHolders) {
+            bindViewClickListener(viewHolder);
         }
     }
 
@@ -2026,6 +2026,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     public void setOnItemLongClickListener(OnItemLongClickListener listener) {
         mOnItemLongClickListener = listener;
+        for (BaseViewHolder viewHolder : mViewHolders) {
+            bindViewClickListener(viewHolder);
+        }
     }
 
     /**
