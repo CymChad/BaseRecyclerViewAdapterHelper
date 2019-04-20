@@ -970,7 +970,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setOnItemClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
+                    if (getOnItemClickListener() != null) {
+                        setOnItemClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
+                    }
                 }
             });
         }
@@ -978,7 +980,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    return setOnItemLongClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
+                    if (getOnItemLongClickListener() != null)
+                        return setOnItemLongClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
+                    return false;
                 }
             });
         }
