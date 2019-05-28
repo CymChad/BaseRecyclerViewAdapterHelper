@@ -30,7 +30,7 @@ public class SectionUseActivity extends BaseActivity {
         setTitle("Section Use");
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
-        mRecyclerView.addItemDecoration(new GridSectionAverageGapItemDecoration(50,20,20,20));
+        mRecyclerView.addItemDecoration(new GridSectionAverageGapItemDecoration(10,10,20,15));
         mData = DataServer.getSampleData();
         SectionAdapter sectionAdapter = new SectionAdapter(R.layout.item_section_content, R.layout.def_section_head, mData);
 

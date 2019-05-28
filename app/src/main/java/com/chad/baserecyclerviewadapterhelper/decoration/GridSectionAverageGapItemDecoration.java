@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -23,7 +22,6 @@ import java.util.List;
  * Section Grid中Item的宽度应设为MATCH_PARAENT
  *
  * @author : renpeng
- * @org :Aurora Team
  * @since : 2018/9/29
  */
 public class GridSectionAverageGapItemDecoration extends RecyclerView.ItemDecoration {
@@ -95,10 +93,10 @@ public class GridSectionAverageGapItemDecoration extends RecyclerView.ItemDecora
 
 
     /**
-     * @param gapHorizontalDp       水平间距
-     * @param gapVerticalDp         垂直间距
-     * @param sectionEdgeHPaddingDp 左右两端的padding大小
-     * @param sectionEdgeVPaddingDp 上下两端的padding大小
+     * @param gapHorizontalDp       item之间的水平间距
+     * @param gapVerticalDp         item之间的垂直间距
+     * @param sectionEdgeHPaddingDp section左右两端的padding大小
+     * @param sectionEdgeVPaddingDp section上下两端的padding大小
      */
     public GridSectionAverageGapItemDecoration(float gapHorizontalDp, float gapVerticalDp, float sectionEdgeHPaddingDp, float sectionEdgeVPaddingDp) {
         this.gapHorizontalDp = gapHorizontalDp;
@@ -128,7 +126,6 @@ public class GridSectionAverageGapItemDecoration extends RecyclerView.ItemDecora
             }
 
             Section section = findSectionLastItemPos(position);
-//            Log.w("GridAverageGapItem", "section=" + section.startPos + "-" + section.endPos);
 
             if (gapHSizePx < 0 || gapVSizePx < 0) {
                 transformGapDefinition(parent, spanCount);
@@ -202,7 +199,7 @@ public class GridSectionAverageGapItemDecoration extends RecyclerView.ItemDecora
                 mSectionList.add(section);
             }
 
-            Log.w("GridAverageGapItem", "section list=" + mSectionList);
+//            Log.w("GridAverageGapItem", "section list=" + mSectionList);
         }
     }
 
