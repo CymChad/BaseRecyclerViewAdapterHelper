@@ -10,7 +10,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseSectionQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.SectionEntity;
@@ -124,12 +123,12 @@ public class GridSectionAverageGapItemDecoration extends RecyclerView.ItemDecora
                 //不处理header
                 outRect.set(0, 0, 0, 0);
                 preRect = new Rect(outRect);
-                Log.w("GridAverageGapItem", "pos=" + position + "," + outRect.toShortString());
+//                Log.w("GridAverageGapItem", "pos=" + position + "," + outRect.toShortString());
                 return;
             }
 
             Section section = findSectionLastItemPos(position);
-            Log.w("GridAverageGapItem", "section=" + section.startPos + "-" + section.endPos);
+//            Log.w("GridAverageGapItem", "section=" + section.startPos + "-" + section.endPos);
 
             if (gapHSizePx < 0 || gapVSizePx < 0) {
                 transformGapDefinition(parent, spanCount);
@@ -162,7 +161,7 @@ public class GridSectionAverageGapItemDecoration extends RecyclerView.ItemDecora
                 //最后一行
                 outRect.bottom = sectionEdgeVPaddingPx;
             }
-            Log.w("GridAverageGapItem", "pos=" + position + ",vPos=" + visualPos + "," + outRect.toShortString());
+//            Log.w("GridAverageGapItem", "pos=" + position + ",vPos=" + visualPos + "," + outRect.toShortString());
         } else {
             super.getItemOffsets(outRect, view, parent, state);
         }
