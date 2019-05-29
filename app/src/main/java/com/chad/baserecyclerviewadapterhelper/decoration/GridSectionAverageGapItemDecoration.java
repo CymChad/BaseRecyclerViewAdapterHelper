@@ -56,7 +56,6 @@ public class GridSectionAverageGapItemDecoration extends RecyclerView.ItemDecora
     private int sectionEdgeHPaddingPx;
     private int eachItemHPaddingPx; //每个条目应该在水平方向上加的padding 总大小，即=paddingLeft+paddingRight
     private int sectionEdgeVPaddingPx;
-    private Rect preRect = new Rect();
     private List<Section> mSectionList = new ArrayList<>();
     private BaseSectionQuickAdapter mAdapter;
     private RecyclerView.AdapterDataObserver mDataObserver = new RecyclerView.AdapterDataObserver() {
@@ -120,7 +119,6 @@ public class GridSectionAverageGapItemDecoration extends RecyclerView.ItemDecora
             if (entity != null && entity.isHeader) {
                 //不处理header
                 outRect.set(0, 0, 0, 0);
-                preRect = new Rect(outRect);
 //                Log.w("GridAverageGapItem", "pos=" + position + "," + outRect.toShortString());
                 return;
             }
@@ -139,13 +137,12 @@ public class GridSectionAverageGapItemDecoration extends RecyclerView.ItemDecora
                 //第一列
                 outRect.left = sectionEdgeHPaddingPx;
                 outRect.right = eachItemHPaddingPx - sectionEdgeHPaddingPx;
-                preRect.setEmpty();
             } else if (visualPos % spanCount == 0) {
                 //最后一列
                 outRect.left = eachItemHPaddingPx - sectionEdgeHPaddingPx;
                 outRect.right = sectionEdgeHPaddingPx;
             } else {
-                outRect.left = gapHSizePx - preRect.right;
+                outRect.left = gapHSizePx - (eachItemHPaddingPx - sectionEdgeHPaddingPx);
                 outRect.right = eachItemHPaddingPx - outRect.left;
             }
 
