@@ -7,5 +7,4 @@
     <dimen name="dp_40">40dp</dimen>
 
     <dimen name="sp_14">14sp</dimen>
-    <dimen name="toolbar_padding_top">0dp</dimen>
 </resources>

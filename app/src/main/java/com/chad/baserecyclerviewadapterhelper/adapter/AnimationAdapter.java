@@ -31,8 +31,7 @@ public class AnimationAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder helper, Status item) {
         helper.addOnClickListener(R.id.img).addOnClickListener(R.id.tweetName);
-        switch (helper.getLayoutPosition() %
-                3) {
+        switch (helper.getLayoutPosition() % 3) {
             case 0:
                 helper.setImageResource(R.id.img, R.mipmap.animation_img1);
                 break;
@@ -41,6 +40,8 @@ public class AnimationAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
                 break;
             case 2:
                 helper.setImageResource(R.id.img, R.mipmap.animation_img3);
+                break;
+            default:
                 break;
         }
         helper.setText(R.id.tweetName, "Hoteis in Rio de Janeiro");
@@ -52,7 +53,7 @@ public class AnimationAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
         ((TextView) helper.getView(R.id.tweetText)).setLongClickable(false);
     }
 
-    ClickableSpan clickableSpan = new ClickableSpan() {
+    private ClickableSpan clickableSpan = new ClickableSpan() {
         @Override
         public void onClick(View widget) {
             ToastUtils.showShortToast("事件触发了 landscapes and nedes");
