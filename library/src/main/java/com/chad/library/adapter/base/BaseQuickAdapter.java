@@ -75,6 +75,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     private LoadMoreView mLoadMoreView = new SimpleLoadMoreView();
     private RequestLoadMoreListener mRequestLoadMoreListener;
     private boolean mEnableLoadMoreEndClick = false;
+    private List<K> mViewHolders;
 
     //Animation
     /**
@@ -477,6 +478,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         if (layoutResId != 0) {
             this.mLayoutResId = layoutResId;
         }
+        mViewHolders = new ArrayList<>();
     }
 
     public BaseQuickAdapter(@Nullable List<T> data) {
@@ -797,6 +799,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             default:
                 baseViewHolder = onCreateDefViewHolder(parent, viewType);
                 bindViewClickListener(baseViewHolder);
+                mViewHolders.add(baseViewHolder);
         }
         baseViewHolder.setAdapter(this);
         return baseViewHolder;
@@ -1029,7 +1032,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setOnItemClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
+                    if (getOnItemClickListener() != null) {
+                        setOnItemClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
+                    }
                 }
             });
         }
@@ -1037,7 +1042,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    return setOnItemLongClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
+                    if (getOnItemLongClickListener() != null)
+                        return setOnItemLongClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
+                    return false;
                 }
             });
         }
@@ -1214,7 +1221,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param index
      * @param orientation
      */
-    public int addHeaderView(View header,final int index, int orientation) {
+    public int addHeaderView(View header, final int index, int orientation) {
         if (mHeaderLayout == null) {
             mHeaderLayout = new LinearLayout(header.getContext());
             if (orientation == LinearLayout.VERTICAL) {
@@ -1226,7 +1233,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             }
         }
         final int childCount = mHeaderLayout.getChildCount();
-        int mIndex =index;
+        int mIndex = index;
         if (index < 0 || index > childCount) {
             mIndex = childCount;
         }
@@ -2014,6 +2021,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     public interface OnItemChildClickListener {
         /**
          * callback method to be invoked when an itemchild in this view has been click
+         *
          * @param adapter
          * @param view     The view whihin the ItemView that was clicked
          * @param position The position of the view int the adapter
@@ -2030,6 +2038,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         /**
          * callback method to be invoked when an item in this view has been
          * click and held
+         *
          * @param adapter  this BaseQuickAdapter adapter
          * @param view     The childView whihin the itemView that was clicked and held.
          * @param position The position of the view int the adapter
@@ -2082,6 +2091,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     public void setOnItemClickListener(@Nullable OnItemClickListener listener) {
         mOnItemClickListener = listener;
+        for (BaseViewHolder viewHolder : mViewHolders) {
+            bindViewClickListener(viewHolder);
+        }
     }
 
     /**
@@ -2102,6 +2114,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     public void setOnItemLongClickListener(OnItemLongClickListener listener) {
         mOnItemLongClickListener = listener;
+        for (BaseViewHolder viewHolder : mViewHolders) {
+            bindViewClickListener(viewHolder);
+        }
     }
 
     /**
