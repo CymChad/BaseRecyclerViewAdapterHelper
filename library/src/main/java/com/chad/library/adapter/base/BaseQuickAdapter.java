@@ -23,6 +23,7 @@ import android.support.annotation.IntRange;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -503,6 +504,22 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         notifyDataSetChanged();
     }
 
+    /**
+     * use Diff setting up a new instance to data
+     *
+     * @param baseQuickDiffCallback implementation {@link BaseQuickDiffCallback}
+     */
+    public void setNewDiffData(@NonNull BaseQuickDiffCallback<T> baseQuickDiffCallback) {
+        if (getEmptyViewCount() == 1) {
+            // If the current view is an empty view, set the new data directly without diff
+            setNewData(baseQuickDiffCallback.getNewList());
+            return;
+        }
+        baseQuickDiffCallback.setOldList(this.getData());
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(baseQuickDiffCallback);
+        diffResult.dispatchUpdatesTo(this);
+        mData = baseQuickDiffCallback.getNewList();
+    }
 
     /**
      * insert  a item associated with the specified position of adapter
@@ -954,6 +971,51 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 break;
         }
     }
+
+    /**
+     * To bind different types of holder and solve different the bind events
+     *
+     * the ViewHolder is currently bound to old data and Adapter may run an efficient partial
+     * update using the payload info.  If the payload is empty,  Adapter run a full bind.
+     *
+     * @param holder The ViewHolder which should be updated to represent the contents of the
+     *               item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     * @param payloads A non-null list of merged payloads. Can be empty list if requires full
+     *                 update.
+     * @see #getDefItemViewType(int)
+     */
+    @Override
+    public void onBindViewHolder(@NonNull K holder, int position, @NonNull List<Object> payloads) {
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position);
+            return;
+        }
+        //Add up fetch logic, almost like load more, but simpler.
+        autoUpFetch(position);
+        //Do not move position, need to change before LoadMoreView binding
+        autoLoadMore(position);
+        int viewType = holder.getItemViewType();
+
+        switch (viewType) {
+            case 0:
+                convertPayloads(holder, getItem(position - getHeaderLayoutCount()), payloads);
+                break;
+            case LOADING_VIEW:
+                mLoadMoreView.convert(holder);
+                break;
+            case HEADER_VIEW:
+                break;
+            case EMPTY_VIEW:
+                break;
+            case FOOTER_VIEW:
+                break;
+            default:
+                convertPayloads(holder, getItem(position - getHeaderLayoutCount()), payloads);
+                break;
+        }
+    }
+
 
     private void bindViewClickListener(final BaseViewHolder baseViewHolder) {
         if (baseViewHolder == null) {
@@ -1601,6 +1663,23 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param item   The item that needs to be displayed.
      */
     protected abstract void convert(K helper, T item);
+
+    /**
+     * Optional implementation this method and use the helper to adapt the view to the given item.
+     *
+     * If {@link DiffUtil.Callback#getChangePayload(int, int)} is implemented,
+     * then {@link BaseQuickAdapter#convert(BaseViewHolder, Object)} will not execute, and will
+     * perform this method, Please implement this method for partial refresh.
+     *
+     * If use {@link RecyclerView.Adapter#notifyItemChanged(int, Object)} with payload,
+     * Will execute this method.
+     *
+     *
+     * @param helper   A fully initialized helper.
+     * @param item     The item that needs to be displayed.
+     * @param payloads payload info.
+     */
+    protected void convertPayloads(K helper, T item, @NonNull List<Object> payloads) {}
 
     /**
      * get the specific view by position,e.g. getViewByPosition(2, R.id.textView)
