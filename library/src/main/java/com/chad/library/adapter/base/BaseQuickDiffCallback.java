@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * Extend this method to quickly implement DiffUtil
+ *
  * @param <T> Data type
  */
 public abstract class BaseQuickDiffCallback<T> extends DiffUtil.Callback {
@@ -63,14 +64,14 @@ public abstract class BaseQuickDiffCallback<T> extends DiffUtil.Callback {
      * @param newItem old Data
      * @return Return false if items are no same
      */
-    protected abstract boolean areItemsTheSame(T oldItem, T newItem);
+    protected abstract boolean areItemsTheSame(@NonNull T oldItem, @NonNull T newItem);
 
     /**
      * @param oldItem New data
      * @param newItem old Data
      * @return Return false if item content are no same
      */
-    protected abstract boolean areContentsTheSame(T oldItem, T newItem);
+    protected abstract boolean areContentsTheSame(@NonNull T oldItem, @NonNull T newItem);
 
     /**
      * Optional implementation
@@ -79,7 +80,8 @@ public abstract class BaseQuickDiffCallback<T> extends DiffUtil.Callback {
      * @param newItem old Data
      * @return Payload info
      */
-    protected Object getChangePayload(T oldItem, T newItem) {
+    @Nullable
+    protected Object getChangePayload(@NonNull T oldItem, @NonNull T newItem) {
         return null;
     }
 }

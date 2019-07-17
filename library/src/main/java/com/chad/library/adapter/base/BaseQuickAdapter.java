@@ -1672,7 +1672,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param helper A fully initialized helper.
      * @param item   The item that needs to be displayed.
      */
-    protected abstract void convert(K helper, T item);
+    protected abstract void convert(@NonNull K helper, T item);
 
     /**
      * Optional implementation this method and use the helper to adapt the view to the given item.
@@ -1689,7 +1689,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param item     The item that needs to be displayed.
      * @param payloads payload info.
      */
-    protected void convertPayloads(K helper, T item, @NonNull List<Object> payloads) {}
+    protected void convertPayloads(@NonNull K helper, T item, @NonNull List<Object> payloads) {}
 
     /**
      * get the specific view by position,e.g. getViewByPosition(2, R.id.textView)

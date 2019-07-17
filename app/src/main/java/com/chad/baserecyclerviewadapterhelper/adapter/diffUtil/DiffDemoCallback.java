@@ -1,5 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.adapter.diffUtil;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.chad.baserecyclerviewadapterhelper.entity.DiffUtilDemoEntity;
@@ -26,7 +27,7 @@ public class DiffDemoCallback extends BaseQuickDiffCallback<DiffUtilDemoEntity> 
      * @return
      */
     @Override
-    protected boolean areItemsTheSame(DiffUtilDemoEntity oldItem, DiffUtilDemoEntity newItem) {
+    protected boolean areItemsTheSame(@NonNull DiffUtilDemoEntity oldItem, @NonNull DiffUtilDemoEntity newItem) {
         return oldItem.getId() == newItem.getId();
     }
 
@@ -40,7 +41,7 @@ public class DiffDemoCallback extends BaseQuickDiffCallback<DiffUtilDemoEntity> 
      * @return
      */
     @Override
-    protected boolean areContentsTheSame(DiffUtilDemoEntity oldItem, DiffUtilDemoEntity newItem) {
+    protected boolean areContentsTheSame(@NonNull DiffUtilDemoEntity oldItem, @NonNull DiffUtilDemoEntity newItem) {
         return oldItem.getTitle().equals(newItem.getTitle())
                 && oldItem.getContent().equals(newItem.getContent())
                 && oldItem.getDate().equals(newItem.getDate());
@@ -60,7 +61,7 @@ public class DiffDemoCallback extends BaseQuickDiffCallback<DiffUtilDemoEntity> 
      * @return Payload info. if return null, the entire item will be refreshed.
      */
     @Override
-    protected Object getChangePayload(DiffUtilDemoEntity oldItem, DiffUtilDemoEntity newItem) {
+    protected Object getChangePayload(@NonNull DiffUtilDemoEntity oldItem, @NonNull DiffUtilDemoEntity newItem) {
         if (!oldItem.getTitle().equals(newItem.getTitle())) {
             // if only title change（如果标题变化了）
             return DiffUtilAdapter.TITLE_PAYLOAD;
