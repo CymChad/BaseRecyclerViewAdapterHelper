@@ -1,4 +1,4 @@
-package com.chad.library.adapter.base;
+package com.chad.library.adapter.base.diff;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -29,7 +29,7 @@ public abstract class BaseQuickDiffCallback<T> extends DiffUtil.Callback {
         return oldList;
     }
 
-    void setOldList(@Nullable List<T> oldList) {
+    public void setOldList(@Nullable List<T> oldList) {
         this.oldList = oldList == null ? new ArrayList<T>() : oldList;
     }
 

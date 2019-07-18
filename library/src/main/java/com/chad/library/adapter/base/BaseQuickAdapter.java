@@ -43,6 +43,8 @@ import com.chad.library.adapter.base.animation.ScaleInAnimation;
 import com.chad.library.adapter.base.animation.SlideInBottomAnimation;
 import com.chad.library.adapter.base.animation.SlideInLeftAnimation;
 import com.chad.library.adapter.base.animation.SlideInRightAnimation;
+import com.chad.library.adapter.base.diff.BaseQuickAdapterListUpdateCallback;
+import com.chad.library.adapter.base.diff.BaseQuickDiffCallback;
 import com.chad.library.adapter.base.entity.IExpandable;
 import com.chad.library.adapter.base.loadmore.LoadMoreView;
 import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView;
@@ -517,7 +519,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         }
         baseQuickDiffCallback.setOldList(this.getData());
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(baseQuickDiffCallback);
-        diffResult.dispatchUpdatesTo(this);
+        diffResult.dispatchUpdatesTo(new BaseQuickAdapterListUpdateCallback(this));
         mData = baseQuickDiffCallback.getNewList();
     }
 
@@ -996,7 +998,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         //Do not move position, need to change before LoadMoreView binding
         autoLoadMore(position);
         int viewType = holder.getItemViewType();
-
+        System.out.println("---------->>> viewType " + viewType);
+        System.out.println("---------->>> position " + position);
+        System.out.println("---------->>> getHeaderLayoutCount()  " + getHeaderLayoutCount());
         switch (viewType) {
             case 0:
                 convertPayloads(holder, getItem(position - getHeaderLayoutCount()), payloads);
