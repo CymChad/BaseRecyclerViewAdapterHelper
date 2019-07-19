@@ -512,13 +512,23 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param baseQuickDiffCallback implementation {@link BaseQuickDiffCallback}
      */
     public void setNewDiffData(@NonNull BaseQuickDiffCallback<T> baseQuickDiffCallback) {
+        setNewDiffData(baseQuickDiffCallback, false);
+    }
+
+    /**
+     * use Diff setting up a new instance to data
+     *
+     * @param baseQuickDiffCallback implementation {@link BaseQuickDiffCallback}.
+     * @param detectMoves Whether to detect the movement of the Item
+     */
+    public void setNewDiffData(@NonNull BaseQuickDiffCallback<T> baseQuickDiffCallback, boolean detectMoves) {
         if (getEmptyViewCount() == 1) {
             // If the current view is an empty view, set the new data directly without diff
             setNewData(baseQuickDiffCallback.getNewList());
             return;
         }
         baseQuickDiffCallback.setOldList(this.getData());
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(baseQuickDiffCallback);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(baseQuickDiffCallback, detectMoves);
         diffResult.dispatchUpdatesTo(new BaseQuickAdapterListUpdateCallback(this));
         mData = baseQuickDiffCallback.getNewList();
     }
