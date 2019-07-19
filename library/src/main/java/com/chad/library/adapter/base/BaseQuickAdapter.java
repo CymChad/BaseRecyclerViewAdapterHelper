@@ -788,8 +788,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         return super.getItemViewType(position);
     }
 
+    @NonNull
     @Override
-    public K onCreateViewHolder(ViewGroup parent, int viewType) {
+    public K onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         K baseViewHolder = null;
         this.mContext = parent.getContext();
         this.mLayoutInflater = LayoutInflater.from(mContext);
@@ -1008,9 +1009,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         //Do not move position, need to change before LoadMoreView binding
         autoLoadMore(position);
         int viewType = holder.getItemViewType();
-        System.out.println("---------->>> viewType " + viewType);
-        System.out.println("---------->>> position " + position);
-        System.out.println("---------->>> getHeaderLayoutCount()  " + getHeaderLayoutCount());
+
         switch (viewType) {
             case 0:
                 convertPayloads(holder, getItem(position - getHeaderLayoutCount()), payloads);
@@ -1036,9 +1035,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             return;
         }
         final View view = baseViewHolder.itemView;
-        if (view == null) {
-            return;
-        }
         if (getOnItemClickListener() != null) {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
