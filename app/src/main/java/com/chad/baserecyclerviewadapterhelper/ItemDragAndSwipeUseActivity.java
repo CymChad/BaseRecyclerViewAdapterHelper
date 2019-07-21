@@ -4,10 +4,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.ItemTouchHelper;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 
@@ -28,11 +28,6 @@ import java.util.List;
  */
 public class ItemDragAndSwipeUseActivity extends BaseActivity {
     private static final String TAG = ItemDragAndSwipeUseActivity.class.getSimpleName();
-    private RecyclerView mRecyclerView;
-    private List<String> mData;
-    private ItemDragAdapter mAdapter;
-    private ItemTouchHelper mItemTouchHelper;
-    private ItemDragAndSwipeCallback mItemDragAndSwipeCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +35,9 @@ public class ItemDragAndSwipeUseActivity extends BaseActivity {
         setContentView(R.layout.activity_item_touch_use);
         setBackBtn();
         setTitle("ItemDrag  And Swipe");
-        mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mData = generateData(50);
+        List<String> mData = generateData(50);
         OnItemDragListener listener = new OnItemDragListener() {
             @Override
             public void onItemDragStart(RecyclerView.ViewHolder viewHolder, int pos) {
@@ -94,9 +89,9 @@ public class ItemDragAndSwipeUseActivity extends BaseActivity {
             }
         };
 
-        mAdapter = new ItemDragAdapter(mData);
-        mItemDragAndSwipeCallback = new ItemDragAndSwipeCallback(mAdapter);
-        mItemTouchHelper = new ItemTouchHelper(mItemDragAndSwipeCallback);
+        ItemDragAdapter mAdapter = new ItemDragAdapter(mData);
+        ItemDragAndSwipeCallback mItemDragAndSwipeCallback = new ItemDragAndSwipeCallback(mAdapter);
+        ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(mItemDragAndSwipeCallback);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
 
         //mItemDragAndSwipeCallback.setDragMoveFlags(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.UP | ItemTouchHelper.DOWN);

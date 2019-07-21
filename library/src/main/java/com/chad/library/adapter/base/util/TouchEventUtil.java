@@ -22,6 +22,8 @@ public class TouchEventUtil {
             case MotionEvent.ACTION_OUTSIDE:
                 actionName = "ACTION_OUTSIDE";
                 break;
+            default:
+                break;
         }
         return actionName;
     }

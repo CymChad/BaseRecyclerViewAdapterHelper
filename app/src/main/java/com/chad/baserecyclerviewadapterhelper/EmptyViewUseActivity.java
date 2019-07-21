@@ -2,8 +2,8 @@ package com.chad.baserecyclerviewadapterhelper;
 
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,7 +16,8 @@ public class EmptyViewUseActivity extends BaseActivity implements View.OnClickLi
     private QuickAdapter mQuickAdapter;
     private View notDataView;
     private View errorView;
-
+    private boolean mError = true;
+    private boolean mNoData = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,8 +60,7 @@ public class EmptyViewUseActivity extends BaseActivity implements View.OnClickLi
         onRefresh();
     }
 
-    private boolean mError = true;
-    private boolean mNoData = true;
+
 
     private void onRefresh() {
         mQuickAdapter.setEmptyView(R.layout.loading_view, (ViewGroup) mRecyclerView.getParent());

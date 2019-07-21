@@ -1,7 +1,7 @@
 package com.chad.library.adapter.base.loadmore;
 
-import androidx.annotation.IdRes;
-import androidx.annotation.LayoutRes;
+import android.support.annotation.IdRes;
+import android.support.annotation.LayoutRes;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -49,6 +49,8 @@ public abstract class LoadMoreView {
                 visibleLoading(holder, false);
                 visibleLoadFail(holder, false);
                 visibleLoadEnd(holder, false);
+                break;
+            default:
                 break;
         }
     }

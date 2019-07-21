@@ -1,7 +1,7 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
-import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -34,13 +34,14 @@ public class DataBindingUseAdapter extends BaseQuickAdapter<Movie, DataBindingUs
         binding.setVariable(BR.movie, item);
         binding.setVariable(BR.presenter, mPresenter);
         binding.executePendingBindings();
-        switch (helper.getLayoutPosition() %
-                2) {
+        switch (helper.getLayoutPosition() % 2) {
             case 0:
                 helper.setImageResource(R.id.iv, R.mipmap.m_img1);
                 break;
             case 1:
                 helper.setImageResource(R.id.iv, R.mipmap.m_img2);
+                break;
+            default:
                 break;
 
         }

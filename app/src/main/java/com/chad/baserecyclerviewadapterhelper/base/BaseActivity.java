@@ -2,8 +2,8 @@ package com.chad.baserecyclerviewadapterhelper.base;
 
 import android.os.Build;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -29,6 +29,7 @@ public class BaseActivity extends AppCompatActivity {
     private TextView title;
     private ImageView back;
     protected final String TAG = this.getClass().getSimpleName();
+    private LinearLayout rootLayout;
 
     protected void setTitle(String msg) {
         if (title != null) {
@@ -48,7 +49,7 @@ public class BaseActivity extends AppCompatActivity {
                     finish();
                 }
             });
-        }else {
+        } else {
             Logger.t(TAG).e("back is null ,please check out");
         }
 
@@ -58,13 +59,12 @@ public class BaseActivity extends AppCompatActivity {
         if (back != null) {
             back.setVisibility(View.VISIBLE);
             back.setOnClickListener(l);
-        }else {
+        } else {
             Logger.t(TAG).e("back is null ,please check out");
         }
 
     }
 
-    private LinearLayout rootLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +103,9 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void setContentView(View view) {
         rootLayout = (LinearLayout) findViewById(R.id.root_layout);
-        if (rootLayout == null) return;
+        if (rootLayout == null) {
+            return;
+        }
         rootLayout.addView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         initToolbar();
     }

@@ -1,8 +1,8 @@
 package com.chad.baserecyclerviewadapterhelper;
 
 import android.os.Bundle;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.UpFetchAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
@@ -20,8 +20,8 @@ import java.util.Random;
  */
 
 public class UpFetchUseActivity extends BaseActivity {
-    RecyclerView mRecyclerView;
-    UpFetchAdapter mAdapter;
+    private RecyclerView mRecyclerView;
+    private UpFetchAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

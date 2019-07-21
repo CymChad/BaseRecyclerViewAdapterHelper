@@ -1,6 +1,6 @@
 package com.chad.library.adapter.base.util;
 
-import androidx.annotation.LayoutRes;
+import android.support.annotation.LayoutRes;
 import android.util.SparseIntArray;
 
 import java.util.List;
@@ -86,7 +86,7 @@ public abstract class MultiTypeDelegate<T> {
 
     private void checkMode(boolean mode) {
         if (mode) {
-            throw new RuntimeException("Don't mess two register mode");
+            throw new IllegalArgumentException("Don't mess two register mode");
         }
     }
 }
