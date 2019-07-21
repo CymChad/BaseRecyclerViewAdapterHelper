@@ -1,6 +1,7 @@
 package com.chad.baserecyclerviewadapterhelper.adapter.diffUtil;
 
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.DiffUtilDemoEntity;
