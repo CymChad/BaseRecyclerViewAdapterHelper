@@ -1,6 +1,7 @@
 package com.chad.baserecyclerviewadapterhelper.data;
 
 
+import com.chad.baserecyclerviewadapterhelper.entity.DiffUtilDemoEntity;
 import com.chad.baserecyclerviewadapterhelper.entity.MultipleItem;
 import com.chad.baserecyclerviewadapterhelper.entity.MySection;
 import com.chad.baserecyclerviewadapterhelper.entity.NormalMultipleEntity;
@@ -152,5 +153,16 @@ public class DataServer {
 //        return list;
 //    }
 
-
+    public static List<DiffUtilDemoEntity> getDiffUtilDemoEntities() {
+        List<DiffUtilDemoEntity> list = new ArrayList<>();
+        for (int i = 0; i < 10; i++){
+            list.add(new DiffUtilDemoEntity(
+                    i,
+                    "Item " + i,
+                    "This item " + i + " content",
+                    "06-12")
+            );
+        }
+        return list;
+    }
 }

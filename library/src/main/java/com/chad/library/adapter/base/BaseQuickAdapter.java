@@ -23,6 +23,7 @@ import androidx.annotation.IntRange;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,6 +43,8 @@ import com.chad.library.adapter.base.animation.ScaleInAnimation;
 import com.chad.library.adapter.base.animation.SlideInBottomAnimation;
 import com.chad.library.adapter.base.animation.SlideInLeftAnimation;
 import com.chad.library.adapter.base.animation.SlideInRightAnimation;
+import com.chad.library.adapter.base.diff.BaseQuickAdapterListUpdateCallback;
+import com.chad.library.adapter.base.diff.BaseQuickDiffCallback;
 import com.chad.library.adapter.base.entity.IExpandable;
 import com.chad.library.adapter.base.loadmore.LoadMoreView;
 import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView;
@@ -503,6 +506,32 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         notifyDataSetChanged();
     }
 
+    /**
+     * use Diff setting up a new instance to data
+     *
+     * @param baseQuickDiffCallback implementation {@link BaseQuickDiffCallback}
+     */
+    public void setNewDiffData(@NonNull BaseQuickDiffCallback<T> baseQuickDiffCallback) {
+        setNewDiffData(baseQuickDiffCallback, false);
+    }
+
+    /**
+     * use Diff setting up a new instance to data
+     *
+     * @param baseQuickDiffCallback implementation {@link BaseQuickDiffCallback}.
+     * @param detectMoves Whether to detect the movement of the Item
+     */
+    public void setNewDiffData(@NonNull BaseQuickDiffCallback<T> baseQuickDiffCallback, boolean detectMoves) {
+        if (getEmptyViewCount() == 1) {
+            // If the current view is an empty view, set the new data directly without diff
+            setNewData(baseQuickDiffCallback.getNewList());
+            return;
+        }
+        baseQuickDiffCallback.setOldList(this.getData());
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(baseQuickDiffCallback, detectMoves);
+        diffResult.dispatchUpdatesTo(new BaseQuickAdapterListUpdateCallback(this));
+        mData = baseQuickDiffCallback.getNewList();
+    }
 
     /**
      * insert  a item associated with the specified position of adapter
@@ -759,8 +788,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         return super.getItemViewType(position);
     }
 
+    @NonNull
     @Override
-    public K onCreateViewHolder(ViewGroup parent, int viewType) {
+    public K onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         K baseViewHolder = null;
         this.mContext = parent.getContext();
         this.mLayoutInflater = LayoutInflater.from(mContext);
@@ -955,19 +985,66 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         }
     }
 
+    /**
+     * To bind different types of holder and solve different the bind events
+     *
+     * the ViewHolder is currently bound to old data and Adapter may run an efficient partial
+     * update using the payload info.  If the payload is empty,  Adapter run a full bind.
+     *
+     * @param holder The ViewHolder which should be updated to represent the contents of the
+     *               item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     * @param payloads A non-null list of merged payloads. Can be empty list if requires full
+     *                 update.
+     * @see #getDefItemViewType(int)
+     */
+    @Override
+    public void onBindViewHolder(@NonNull K holder, int position, @NonNull List<Object> payloads) {
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position);
+            return;
+        }
+        //Add up fetch logic, almost like load more, but simpler.
+        autoUpFetch(position);
+        //Do not move position, need to change before LoadMoreView binding
+        autoLoadMore(position);
+        int viewType = holder.getItemViewType();
+
+        switch (viewType) {
+            case 0:
+                convertPayloads(holder, getItem(position - getHeaderLayoutCount()), payloads);
+                break;
+            case LOADING_VIEW:
+                mLoadMoreView.convert(holder);
+                break;
+            case HEADER_VIEW:
+                break;
+            case EMPTY_VIEW:
+                break;
+            case FOOTER_VIEW:
+                break;
+            default:
+                convertPayloads(holder, getItem(position - getHeaderLayoutCount()), payloads);
+                break;
+        }
+    }
+
+
     private void bindViewClickListener(final BaseViewHolder baseViewHolder) {
         if (baseViewHolder == null) {
             return;
         }
         final View view = baseViewHolder.itemView;
-        if (view == null) {
-            return;
-        }
         if (getOnItemClickListener() != null) {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setOnItemClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
+                    int position = baseViewHolder.getAdapterPosition();
+                    if (position == RecyclerView.NO_POSITION) {
+                        return;
+                    }
+                    position -= getHeaderLayoutCount();
+                    setOnItemClick(v, position);
                 }
             });
         }
@@ -975,7 +1052,12 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    return setOnItemLongClick(v, baseViewHolder.getLayoutPosition() - getHeaderLayoutCount());
+                    int position = baseViewHolder.getAdapterPosition();
+                    if (position == RecyclerView.NO_POSITION) {
+                        return false;
+                    }
+                    position -= getHeaderLayoutCount();
+                    return setOnItemLongClick(v, position);
                 }
             });
         }
@@ -1359,7 +1441,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     /**
      * bind recyclerView {@link #bindToRecyclerView(RecyclerView)} before use!
-     * Recommend you to use {@link #setEmptyView(layoutResId, viewGroup)}
+     * Recommend you to use {@link #setEmptyView(int, ViewGroup)}
      *
      * @see #bindToRecyclerView(RecyclerView)
      */
@@ -1370,6 +1452,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     public void setEmptyView(View emptyView) {
+        int oldItemCount = getItemCount();
         boolean insert = false;
         if (mEmptyLayout == null) {
             mEmptyLayout = new FrameLayout(emptyView.getContext());
@@ -1390,7 +1473,11 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             if (mHeadAndEmptyEnable && getHeaderLayoutCount() != 0) {
                 position++;
             }
-            notifyItemInserted(position);
+            if (getItemCount() > oldItemCount) {
+                notifyItemInserted(position);
+            } else {
+                notifyDataSetChanged();
+            }
         }
     }
 
@@ -1595,7 +1682,24 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param helper A fully initialized helper.
      * @param item   The item that needs to be displayed.
      */
-    protected abstract void convert(K helper, T item);
+    protected abstract void convert(@NonNull K helper, T item);
+
+    /**
+     * Optional implementation this method and use the helper to adapt the view to the given item.
+     *
+     * If {@link DiffUtil.Callback#getChangePayload(int, int)} is implemented,
+     * then {@link BaseQuickAdapter#convert(BaseViewHolder, Object)} will not execute, and will
+     * perform this method, Please implement this method for partial refresh.
+     *
+     * If use {@link RecyclerView.Adapter#notifyItemChanged(int, Object)} with payload,
+     * Will execute this method.
+     *
+     *
+     * @param helper   A fully initialized helper.
+     * @param item     The item that needs to be displayed.
+     * @param payloads payload info.
+     */
+    protected void convertPayloads(@NonNull K helper, T item, @NonNull List<Object> payloads) {}
 
     /**
      * get the specific view by position,e.g. getViewByPosition(2, R.id.textView)
