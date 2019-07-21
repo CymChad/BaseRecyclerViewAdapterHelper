@@ -1,8 +1,8 @@
 package com.chad.baserecyclerviewadapterhelper;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.UpFetchAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
