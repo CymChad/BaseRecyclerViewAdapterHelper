@@ -50,7 +50,10 @@ public class SectionMultipleItemAdapter extends BaseSectionMultiItemQuickAdapter
                     case 1:
                         helper.setImageResource(R.id.iv, R.mipmap.animation_img2);
                         break;
+                    default:
+                        break;
                 }
+            default:
                 break;
         }
     }

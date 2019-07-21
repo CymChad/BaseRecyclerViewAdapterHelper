@@ -72,7 +72,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     /**
      * Package private field to retain the associated user object and detect a change
      */
-    Object associatedObject;
+    private Object associatedObject;
 
 
     public BaseViewHolder(final View view) {
@@ -84,13 +84,6 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         convertView = view;
 
 
-    }
-
-    private int getClickPosition() {
-        if (getLayoutPosition()>=adapter.getHeaderLayoutCount()){
-            return getLayoutPosition() - adapter.getHeaderLayoutCount();
-        }
-        return 0;
     }
 
     public HashSet<Integer> getItemChildLongClickViewIds() {
@@ -388,7 +381,12 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
                     @Override
                     public void onClick(View v) {
                         if (adapter.getOnItemChildClickListener() != null) {
-                            adapter.getOnItemChildClickListener().onItemChildClick(adapter, v, getClickPosition());
+                            int position = getAdapterPosition();
+                            if (position == RecyclerView.NO_POSITION) {
+                                return;
+                            }
+                            position -= adapter.getHeaderLayoutCount();
+                            adapter.getOnItemChildClickListener().onItemChildClick(adapter, v, position);
                         }
                     }
                 });
@@ -434,8 +432,15 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
                 view.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        return adapter.getOnItemChildLongClickListener() != null &&
-                                adapter.getOnItemChildLongClickListener().onItemChildLongClick(adapter, v, getClickPosition());
+                        if (adapter.getOnItemChildLongClickListener() == null) {
+                            return false;
+                        }
+                        int position = getAdapterPosition();
+                        if (position == RecyclerView.NO_POSITION) {
+                            return false;
+                        }
+                        position -= adapter.getHeaderLayoutCount();
+                        return adapter.getOnItemChildLongClickListener().onItemChildLongClick(adapter, v, position);
                     }
                 });
             }

@@ -16,11 +16,13 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Allen
+ */
 public class ItemClickActivity extends BaseActivity {
 
     private RecyclerView mRecyclerView;
     private ItemClickAdapter adapter;
-    private static final int PAGE_SIZE = 10;
     private static String TAG = "ItemClickActivity";
 
     @Override
@@ -29,7 +31,7 @@ public class ItemClickActivity extends BaseActivity {
         setBackBtn();
         setTitle("ItemClickActivity Activity");
         setContentView(R.layout.activity_item_click);
-        mRecyclerView = (RecyclerView) findViewById(R.id.list);
+        mRecyclerView = findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         initAdapter();
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {

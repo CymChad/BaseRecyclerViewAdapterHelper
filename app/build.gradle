@@ -5,7 +5,7 @@ android {
 
     defaultConfig {
         applicationId "com.chad.baserecyclerviewadapterhelper"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 5
         versionName "2.1"
@@ -24,9 +24,8 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     implementation project(path: ':library')
-    implementation project(':material-spinner-1.0.5')
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.0.2'

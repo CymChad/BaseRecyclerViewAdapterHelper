@@ -20,8 +20,6 @@ import java.util.List;
  * 2.create adapter which extend BaseSectionMultiItemQuickAdapter
  */
 public class SectionMultipleItemUseActivity extends BaseActivity {
-    private RecyclerView mRecyclerView;
-    private List<SectionMultipleItem> mData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +27,11 @@ public class SectionMultipleItemUseActivity extends BaseActivity {
         setContentView(R.layout.activity_section_uer);
         setBackBtn();
         setTitle("SectionMultiple Use");
-        mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // 1. create entityList which item data extend SectionMultiEntity
-        mData = DataServer.getSectionMultiData();
+        List<SectionMultipleItem> mData = DataServer.getSectionMultiData();
 
         // create adapter which extend BaseSectionMultiItemQuickAdapter provide your headerResId
         SectionMultipleItemAdapter sectionAdapter = new SectionMultipleItemAdapter(R.layout.def_section_head, mData);

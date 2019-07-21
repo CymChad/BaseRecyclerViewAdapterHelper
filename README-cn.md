@@ -163,7 +163,7 @@ Activity
                 Toast.makeText(RecyclerClickItemActivity.this, "" + Integer.toString(position), Toast.LENGTH_SHORT).show();
             }
         });
-``` 
+```
 
 
 # 如何使用它添加动画？
@@ -412,6 +412,85 @@ protected K createBaseViewHolder(View view) {
 }
 
 ```
+
+# DiffUtil
+先继承`BaseQuickDiffCallback<T>`并实现：
+```java
+public class DiffDemoCallback extends BaseQuickDiffCallback<DiffUtilDemoEntity> {
+
+    public DiffDemoCallback(@Nullable List<DiffUtilDemoEntity> newList) {
+        super(newList);
+    }
+
+    /**
+     * 判断是否是同一个item
+     *
+     * @param oldItem New data
+     * @param newItem old Data
+     * @return
+     */
+    @Override
+    protected boolean areItemsTheSame(DiffUtilDemoEntity oldItem, DiffUtilDemoEntity newItem) {
+……
+    }
+
+    /**
+     * 当是同一个item时，再判断内容是否发生改变
+     *
+     * @param oldItem New data
+     * @param newItem old Data
+     * @return
+     */
+    @Override
+    protected boolean areContentsTheSame(DiffUtilDemoEntity oldItem, DiffUtilDemoEntity newItem) {
+……
+    }
+
+    /**
+     * 可选实现
+     * 如果需要精确修改某一个view中的内容，请实现此方法。
+     * 如果不实现此方法，或者返回null，将会直接刷新整个item。
+     *
+     * @param oldItem Old data
+     * @param newItem New data
+     * @return Payload info. if return null, the entire item will be refreshed.
+     */
+    @Override
+    protected Object getChangePayload(DiffUtilDemoEntity oldItem, DiffUtilDemoEntity newItem) {
+……
+    }
+}
+```
+
+`BaseQuickAdapter`中实现`convertPayloads()`方法，用于局部更新：
+```java
+    /**
+     *
+     * 当有 payload info 时，只会执行此方法
+     *
+     * @param helper   A fully initialized helper.
+     * @param item     The item that needs to be displayed.
+     * @param payloads payload info.
+     */
+    @Override
+    protected void convertPayloads(BaseViewHolder helper, DiffUtilDemoEntity item, @NonNull List<Object> payloads) {
+        for (Object p : payloads) {
+……
+        }
+    }
+```
+
+更新整个数据集时，使用如下方法：
+```java
+DiffDemoCallback callback = new DiffDemoCallback(getNewList());
+mAdapter.setNewDiffData(callback);
+```
+
+更新单个item时，使用如下方法：
+```java
+mAdapter.notifyItemChanged(0, "payload info");
+```
+
 
 >**持续更新!，所以推荐Star项目**
 

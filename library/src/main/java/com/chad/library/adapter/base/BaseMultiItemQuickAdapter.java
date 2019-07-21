@@ -2,7 +2,6 @@ package com.chad.library.adapter.base;
 
 import androidx.annotation.IntRange;
 import androidx.annotation.LayoutRes;
-
 import android.util.SparseIntArray;
 import android.view.ViewGroup;
 import com.chad.library.adapter.base.entity.IExpandable;

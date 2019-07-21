@@ -18,7 +18,7 @@ import java.util.List;
  * Email: tyshengsx@gmail.com
  */
 
-public abstract class BaseDataBindingAdapter<T, Binding extends ViewDataBinding> extends BaseQuickAdapter<T, BaseBindingViewHolder<Binding>> {
+public abstract class BaseDataBindingAdapter<T, B extends ViewDataBinding> extends BaseQuickAdapter<T, BaseBindingViewHolder<B>> {
 
 
     public BaseDataBindingAdapter(@LayoutRes int layoutResId, @Nullable List<T> data) {
@@ -34,29 +34,29 @@ public abstract class BaseDataBindingAdapter<T, Binding extends ViewDataBinding>
     }
 
     @Override
-    protected BaseBindingViewHolder<Binding> createBaseViewHolder(View view) {
+    protected BaseBindingViewHolder<B> createBaseViewHolder(View view) {
         return new BaseBindingViewHolder<>(view);
     }
 
     @Override
-    protected BaseBindingViewHolder<Binding> createBaseViewHolder(ViewGroup parent, int layoutResId) {
-        Binding binding = DataBindingUtil.inflate(mLayoutInflater, layoutResId, parent, false);
+    protected BaseBindingViewHolder<B> createBaseViewHolder(ViewGroup parent, int layoutResId) {
+        B b = DataBindingUtil.inflate(mLayoutInflater, layoutResId, parent, false);
         View view;
-        if (binding == null) {
+        if (b == null) {
             view = getItemView(layoutResId, parent);
         } else {
-            view = binding.getRoot();
+            view = b.getRoot();
         }
-        BaseBindingViewHolder<Binding> holder = new BaseBindingViewHolder<>(view);
-        holder.setBinding(binding);
+        BaseBindingViewHolder<B> holder = new BaseBindingViewHolder<>(view);
+        holder.setBinding(b);
         return holder;
     }
 
     @Override
-    protected void convert(BaseBindingViewHolder<Binding> helper, T item) {
+    protected void convert(BaseBindingViewHolder<B> helper, T item) {
         convert(helper.getBinding(), item);
         helper.getBinding().executePendingBindings();
     }
 
-    protected abstract void convert(Binding binding, T item);
+    protected abstract void convert(B b, T item);
 }

@@ -36,6 +36,7 @@
             android:launchMode="singleTask"></activity>
         <activity android:name=".UpFetchUseActivity" />
         <activity android:name=".SectionMultipleItemUseActivity" />
+        <activity android:name=".DiffUtilActivity" />
     </application>
 
 </manifest>

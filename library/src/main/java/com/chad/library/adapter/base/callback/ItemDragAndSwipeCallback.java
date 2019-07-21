@@ -1,6 +1,7 @@
 package com.chad.library.adapter.base.callback;
 
 import android.graphics.Canvas;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import android.view.View;
@@ -10,7 +11,9 @@ import com.chad.library.adapter.base.BaseItemDraggableAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 /**
- * Created by luoxw on 2016/6/20.
+ *
+ * @author luoxw
+ * @date 2016/6/20
  */
 public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
 
@@ -53,7 +56,7 @@ public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
     }
 
     @Override
-    public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+    public void clearView(@NonNull RecyclerView recyclerView,@NonNull RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
         if (isViewCreateByAdapter(viewHolder)) {
             return;
@@ -72,7 +75,7 @@ public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
     }
 
     @Override
-    public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+    public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
         if (isViewCreateByAdapter(viewHolder)) {
             return makeMovementFlags(0, 0);
         }
@@ -81,30 +84,30 @@ public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
     }
 
     @Override
-    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {
+    public boolean onMove(@NonNull RecyclerView recyclerView,@NonNull RecyclerView.ViewHolder source,@NonNull RecyclerView.ViewHolder target) {
         return source.getItemViewType() == target.getItemViewType();
     }
 
     @Override
-    public void onMoved(RecyclerView recyclerView, RecyclerView.ViewHolder source, int fromPos, RecyclerView.ViewHolder target, int toPos, int x, int y) {
+    public void onMoved(@NonNull RecyclerView recyclerView,@NonNull RecyclerView.ViewHolder source, int fromPos,@NonNull RecyclerView.ViewHolder target, int toPos, int x, int y) {
         super.onMoved(recyclerView, source, fromPos, target, toPos, x, y);
         mAdapter.onItemDragMoving(source, target);
     }
 
     @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
         if (!isViewCreateByAdapter(viewHolder)) {
             mAdapter.onItemSwiped(viewHolder);
         }
     }
 
     @Override
-    public float getMoveThreshold(RecyclerView.ViewHolder viewHolder) {
+    public float getMoveThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
         return mMoveThreshold;
     }
 
     @Override
-    public float getSwipeThreshold(RecyclerView.ViewHolder viewHolder) {
+    public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
         return mSwipeThreshold;
     }
 
@@ -142,6 +145,7 @@ public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
      *
      * @param dragMoveFlags the drag movement direction. Default value is ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT.
      */
+
     public void setDragMoveFlags(int dragMoveFlags) {
         mDragMoveFlags = dragMoveFlags;
     }
@@ -158,7 +162,7 @@ public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
     }
 
     @Override
-    public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+    public void onChildDrawOver(@NonNull Canvas c, @NonNull RecyclerView recyclerView,@NonNull RecyclerView.ViewHolder viewHolder,
                                 float dX, float dY, int actionState, boolean isCurrentlyActive) {
         super.onChildDrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
 
@@ -183,7 +187,7 @@ public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
         }
     }
 
-    private boolean isViewCreateByAdapter(RecyclerView.ViewHolder viewHolder) {
+    private boolean isViewCreateByAdapter(@NonNull RecyclerView.ViewHolder viewHolder) {
         int type = viewHolder.getItemViewType();
         return type == BaseQuickAdapter.HEADER_VIEW || type == BaseQuickAdapter.LOADING_VIEW
                 || type == BaseQuickAdapter.FOOTER_VIEW || type == BaseQuickAdapter.EMPTY_VIEW;

@@ -5,16 +5,17 @@ import android.os.Looper;
 import androidx.annotation.StringRes;
 import android.widget.Toast;
 
+/**
+ * @author Allen
+ */
 public class ToastUtils {
-
-    private ToastUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
-    }
 
     private static Toast sToast;
     private static Handler sHandler = new Handler(Looper.getMainLooper());
     private static boolean isJumpWhenMore;
-
+    private ToastUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
+    }
     /**
      * 吐司初始化
      *

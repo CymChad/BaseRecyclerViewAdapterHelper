@@ -20,8 +20,8 @@ import java.util.Random;
  */
 
 public class UpFetchUseActivity extends BaseActivity {
-    RecyclerView mRecyclerView;
-    UpFetchAdapter mAdapter;
+    private RecyclerView mRecyclerView;
+    private UpFetchAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

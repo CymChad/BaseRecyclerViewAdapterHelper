@@ -50,6 +50,8 @@ public abstract class LoadMoreView {
                 visibleLoadFail(holder, false);
                 visibleLoadEnd(holder, false);
                 break;
+            default:
+                break;
         }
     }
 
