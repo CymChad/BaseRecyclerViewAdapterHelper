@@ -1,4 +1,4 @@
-package com.chad.library.adapter.base;
+package com.chad.library.adapter.base.diff;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * Extend this method to quickly implement DiffUtil
+ *
  * @param <T> Data type
  */
 public abstract class BaseQuickDiffCallback<T> extends DiffUtil.Callback {
@@ -28,7 +29,7 @@ public abstract class BaseQuickDiffCallback<T> extends DiffUtil.Callback {
         return oldList;
     }
 
-    void setOldList(@Nullable List<T> oldList) {
+    public void setOldList(@Nullable List<T> oldList) {
         this.oldList = oldList == null ? new ArrayList<T>() : oldList;
     }
 
@@ -63,14 +64,14 @@ public abstract class BaseQuickDiffCallback<T> extends DiffUtil.Callback {
      * @param newItem old Data
      * @return Return false if items are no same
      */
-    protected abstract boolean areItemsTheSame(T oldItem, T newItem);
+    protected abstract boolean areItemsTheSame(@NonNull T oldItem, @NonNull T newItem);
 
     /**
      * @param oldItem New data
      * @param newItem old Data
      * @return Return false if item content are no same
      */
-    protected abstract boolean areContentsTheSame(T oldItem, T newItem);
+    protected abstract boolean areContentsTheSame(@NonNull T oldItem, @NonNull T newItem);
 
     /**
      * Optional implementation
@@ -79,7 +80,8 @@ public abstract class BaseQuickDiffCallback<T> extends DiffUtil.Callback {
      * @param newItem old Data
      * @return Payload info
      */
-    protected Object getChangePayload(T oldItem, T newItem) {
+    @Nullable
+    protected Object getChangePayload(@NonNull T oldItem, @NonNull T newItem) {
         return null;
     }
 }

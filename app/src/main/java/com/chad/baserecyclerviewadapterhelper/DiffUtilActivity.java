@@ -3,7 +3,10 @@ package com.chad.baserecyclerviewadapterhelper;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+
 import com.chad.baserecyclerviewadapterhelper.adapter.diffUtil.DiffDemoCallback;
 import com.chad.baserecyclerviewadapterhelper.adapter.diffUtil.DiffUtilAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
@@ -46,6 +49,10 @@ public class DiffUtilActivity extends BaseActivity {
     private void initRv() {
         mAdapter = new DiffUtilAdapter(DataServer.getDiffUtilDemoEntities());
         mAdapter.bindToRecyclerView(mRecyclerView);
+
+        View view = getLayoutInflater().inflate(R.layout.head_view, mRecyclerView, false);
+        view.findViewById(R.id.iv).setVisibility(View.GONE);
+        mAdapter.addHeaderView(view);
     }
 
     private void initClick() {
@@ -66,7 +73,7 @@ public class DiffUtilActivity extends BaseActivity {
                         "😊😊Item " + 0,
                         "Item " + 0 + " content have change (notifyItemChanged)",
                         "06-12"));
-                mAdapter.notifyItemChanged(0, DiffUtilAdapter.ITEM_0_PAYLOAD);
+                mAdapter.notifyItemChanged(0 + mAdapter.getHeaderLayoutCount(), DiffUtilAdapter.ITEM_0_PAYLOAD);
             }
         });
     }
@@ -88,7 +95,7 @@ public class DiffUtilActivity extends BaseActivity {
 
             /*
             Simulate modification title of data No. 0
-            模拟修改0号数据的title发生变化
+            模拟修改0号数据的title
              */
             if (i == 0) {
                 list.add(new DiffUtilDemoEntity(

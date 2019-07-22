@@ -38,7 +38,7 @@ public class DiffUtilAdapter extends BaseQuickAdapter<DiffUtilDemoEntity, BaseVi
      * @param payloads payload info.
      */
     @Override
-    protected void convertPayloads(BaseViewHolder helper, DiffUtilDemoEntity item, @NonNull List<Object> payloads) {
+    protected void convertPayloads(@NonNull BaseViewHolder helper, DiffUtilDemoEntity item, @NonNull List<Object> payloads) {
         for (Object p : payloads) {
             int payload = (int) p;
             if (payload == TITLE_PAYLOAD) {
