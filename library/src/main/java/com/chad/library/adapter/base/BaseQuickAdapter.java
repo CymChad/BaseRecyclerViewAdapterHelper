@@ -1883,34 +1883,25 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     @SuppressWarnings("unchecked")
     private int recursiveCollapse(@IntRange(from = 0) int position) {
         T item = getItem(position);
-        if (!isExpandable(item)) {
+        if (item == null || !isExpandable(item)) {
             return 0;
         }
         IExpandable expandable = (IExpandable) item;
-        int subItemCount = 0;
-        if (expandable.isExpanded()) {
-            List<T> subItems = expandable.getSubItems();
-            if (null == subItems) return 0;
-
-            for (int i = subItems.size() - 1; i >= 0; i--) {
-                T subItem = subItems.get(i);
-                int pos = getItemPosition(subItem);
-                if (pos < 0) {
-                    continue;
-                } else if (pos < position) {
-                    pos = position + i + 1;
-                    if (pos >= mData.size()) {
-                        continue;
-                    }
-                }
-                if (subItem instanceof IExpandable) {
-                    subItemCount += recursiveCollapse(pos);
-                }
-                mData.remove(pos);
-                subItemCount++;
-            }
+        if (!expandable.isExpanded()) {
+            return 0;
         }
-        return subItemCount;
+        List<T> collapseList = new ArrayList<>();
+        int itemLevel = expandable.getLevel();
+        T itemTemp;
+        for (int i = position + 1, n = mData.size(); i < n; i++) {
+            itemTemp = mData.get(i);
+            if (itemTemp instanceof IExpandable && ((IExpandable) itemTemp).getLevel() == itemLevel) {
+                break;
+            }
+            collapseList.add(itemTemp);
+        }
+        mData.removeAll(collapseList);
+        return collapseList.size();
     }
 
     /**
