@@ -52,6 +52,7 @@ import com.chad.library.adapter.base.util.MultiTypeDelegate;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -531,6 +532,48 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(baseQuickDiffCallback, detectMoves);
         diffResult.dispatchUpdatesTo(new BaseQuickAdapterListUpdateCallback(this));
         mData = baseQuickDiffCallback.getNewList();
+    }
+
+    /**
+     * use Diff setting up a new instance to data (with async)
+     * @param baseQuickDiffCallback implementation {@link BaseQuickDiffCallback}.
+     * @param recyclerView RecyclerView
+     */
+    public void setNewDiffDataAsync(@NonNull BaseQuickDiffCallback<T> baseQuickDiffCallback, @NonNull RecyclerView recyclerView) {
+        setNewDiffDataAsync(baseQuickDiffCallback, false, recyclerView);
+    }
+
+    /**
+     * use Diff setting up a new instance to data (with async)
+     * @param baseQuickDiffCallback implementation {@link BaseQuickDiffCallback}.
+     * @param detectMoves Whether to detect the movement of the Item
+     * @param recyclerView RecyclerView
+     */
+    public void setNewDiffDataAsync(@NonNull BaseQuickDiffCallback<T> baseQuickDiffCallback, boolean detectMoves, @NonNull final RecyclerView recyclerView) {
+        if (getEmptyViewCount() == 1) {
+            // If the current view is an empty view, set the new data directly without diff
+            setNewData(baseQuickDiffCallback.getNewList());
+            return;
+        }
+        final BaseQuickDiffCallback<T> finalCallback = baseQuickDiffCallback;
+        final boolean finalDetectMoves = detectMoves;
+        finalCallback.setOldList(this.getData());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                WeakReference<RecyclerView> rfRecyclerView = new WeakReference<>(recyclerView);
+                final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(finalCallback, finalDetectMoves);
+                if (rfRecyclerView.get() != null) {
+                    rfRecyclerView.get().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            diffResult.dispatchUpdatesTo(new BaseQuickAdapterListUpdateCallback(BaseQuickAdapter.this));
+                            mData = finalCallback.getNewList();
+                        }
+                    });
+                }
+            }
+        }).start();
     }
 
     /**
