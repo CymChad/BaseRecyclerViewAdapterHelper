@@ -7,6 +7,8 @@ import android.view.View;
 
 import com.chad.library.R;
 import com.chad.library.adapter.base.BaseItemDraggableAdapter;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.DraggableController;
 
 /**
  * Created by luoxw on 2016/6/20.
@@ -15,8 +17,9 @@ public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
 
 //    private static final String TAG = ItemDragAndSwipeCallback.class.getSimpleName();
 
-    BaseItemDraggableAdapter mAdapter;
+    private BaseItemDraggableAdapter mAdapter;
 
+    private DraggableController mDraggableController;
     float mMoveThreshold = 0.1f;
     float mSwipeThreshold = 0.7f;
 
@@ -27,6 +30,10 @@ public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
         mAdapter = adapter;
     }
 
+    public ItemDragAndSwipeCallback(DraggableController draggableController) {
+        mDraggableController = draggableController;
+    }
+
     @Override
     public boolean isLongPressDragEnabled() {
         return false;
@@ -34,18 +41,18 @@ public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
 
     @Override
     public boolean isItemViewSwipeEnabled() {
-        return mAdapter.isItemSwipeEnable();
+        return mDraggableController.isItemSwipeEnable();
     }
 
     @Override
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         if (actionState == ItemTouchHelper.ACTION_STATE_DRAG
                 && !isViewCreateByAdapter(viewHolder)) {
-            mAdapter.onItemDragStart(viewHolder);
+            mDraggableController.onItemDragStart(viewHolder);
             viewHolder.itemView.setTag(R.id.BaseQuickAdapter_dragging_support, true);
         } else if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE
                 && !isViewCreateByAdapter(viewHolder)) {
-            mAdapter.onItemSwipeStart(viewHolder);
+            mDraggableController.onItemSwipeStart(viewHolder);
             viewHolder.itemView.setTag(R.id.BaseQuickAdapter_swiping_support, true);
         }
         super.onSelectedChanged(viewHolder, actionState);
@@ -60,12 +67,12 @@ public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
 
         if (viewHolder.itemView.getTag(R.id.BaseQuickAdapter_dragging_support) != null
                 && (Boolean) viewHolder.itemView.getTag(R.id.BaseQuickAdapter_dragging_support)) {
-            mAdapter.onItemDragEnd(viewHolder);
+            mDraggableController.onItemDragEnd(viewHolder);
             viewHolder.itemView.setTag(R.id.BaseQuickAdapter_dragging_support, false);
         }
         if (viewHolder.itemView.getTag(R.id.BaseQuickAdapter_swiping_support) != null
                 && (Boolean) viewHolder.itemView.getTag(R.id.BaseQuickAdapter_swiping_support)) {
-            mAdapter.onItemSwipeClear(viewHolder);
+            mDraggableController.onItemSwipeClear(viewHolder);
             viewHolder.itemView.setTag(R.id.BaseQuickAdapter_swiping_support, false);
         }
     }
@@ -91,13 +98,13 @@ public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
     @Override
     public void onMoved(RecyclerView recyclerView, RecyclerView.ViewHolder source, int fromPos, RecyclerView.ViewHolder target, int toPos, int x, int y) {
         super.onMoved(recyclerView, source, fromPos, target, toPos, x, y);
-        mAdapter.onItemDragMoving(source, target);
+        mDraggableController.onItemDragMoving(source, target);
     }
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         if (!isViewCreateByAdapter(viewHolder)) {
-            mAdapter.onItemSwiped(viewHolder);
+            mDraggableController.onItemSwiped(viewHolder);
         }
     }
 
@@ -180,7 +187,7 @@ public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
                 c.translate(itemView.getRight() + dX, itemView.getTop());
             }
 
-            mAdapter.onItemSwiping(c, viewHolder, dX, dY, isCurrentlyActive);
+            mDraggableController.onItemSwiping(c, viewHolder, dX, dY, isCurrentlyActive);
             c.restore();
 
         }
@@ -188,8 +195,8 @@ public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
 
     private boolean isViewCreateByAdapter(RecyclerView.ViewHolder viewHolder) {
         int type = viewHolder.getItemViewType();
-        if (type == mAdapter.HEADER_VIEW || type == mAdapter.LOADING_VIEW
-                || type == mAdapter.FOOTER_VIEW || type == mAdapter.EMPTY_VIEW) {
+        if (type == BaseQuickAdapter.HEADER_VIEW || type == BaseQuickAdapter.LOADING_VIEW
+                || type == BaseQuickAdapter.FOOTER_VIEW || type == BaseQuickAdapter.EMPTY_VIEW) {
             return true;
         }
         return false;
