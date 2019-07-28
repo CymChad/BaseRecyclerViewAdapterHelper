@@ -42,7 +42,7 @@
 然后在dependencies添加:
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.46'
+	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.47'
 	}
 ```
 ## [androidX 迁移库版本](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/releases/tag/2.9.45-androidx)
@@ -494,6 +494,32 @@ mAdapter.setNewDiffData(callback);
 ```java
 mAdapter.notifyItemChanged(0, "payload info");
 ```
+
+## 异步Diff & 原始DiffUtil.Callback
+用户可以直接使用`DiffUtil.Callback`，自己进行diff计算，将结果告知adapter即可。
+所以adapter并不关心diff计算过程，用户可以同步或是异步进行。
+使用如下方法：
+```java
+setNewDiffData(DiffUtil.DiffResult, List)}
+```
+例子：
+```java
+new Thread(new Runnable() {
+    @Override
+    public void run() {
+        final List<DiffUtilDemoEntity> newData = getNewList();
+        DiffDemoCallback callback = new DiffDemoCallback(newData);
+        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(callback, false);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.setNewDiffData(diffResult, newData);
+            }
+        });
+    }
+}).start();
+```
+>警告：你应该自己进行多线程管理，防止内存泄漏
 
 
 >**持续更新!，所以推荐Star项目**
