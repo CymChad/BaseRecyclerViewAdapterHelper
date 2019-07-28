@@ -1,5 +1,6 @@
 package com.chad.library.adapter.base;
 
+import android.support.annotation.NonNull;
 import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.entity.SectionEntity;
@@ -47,7 +48,7 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity, K extends
     }
 
     @Override
-    public void onBindViewHolder(K holder, int position) {
+    public void onBindViewHolder(@NonNull K holder, int position) {
         switch (holder.getItemViewType()) {
             case SECTION_HEADER_VIEW:
                 setFullSpan(holder);

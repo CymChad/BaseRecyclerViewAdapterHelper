@@ -3,6 +3,7 @@ package com.chad.baserecyclerviewadapterhelper.base;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +54,7 @@ public abstract class BaseDataBindingAdapter<T, B extends ViewDataBinding> exten
     }
 
     @Override
-    protected void convert(BaseBindingViewHolder<B> helper, T item) {
+    protected void convert(@NonNull BaseBindingViewHolder<B> helper, T item) {
         convert(helper.getBinding(), item);
         helper.getBinding().executePendingBindings();
     }

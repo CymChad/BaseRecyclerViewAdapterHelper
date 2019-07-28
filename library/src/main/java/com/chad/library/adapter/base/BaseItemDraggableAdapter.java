@@ -53,7 +53,7 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
      * @see #getDefItemViewType(int)
      */
     @Override
-    public void onBindViewHolder(K holder, int position) {
+    public void onBindViewHolder(@NonNull K holder, int position) {
         super.onBindViewHolder(holder, position);
         int viewType = holder.getItemViewType();
 
