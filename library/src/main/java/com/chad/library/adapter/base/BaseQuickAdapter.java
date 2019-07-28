@@ -52,7 +52,6 @@ import com.chad.library.adapter.base.util.MultiTypeDelegate;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -517,7 +516,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     /**
-     * use Diff setting up a new instance to data
+     * use Diff setting up a new instance to data.
+     * this is sync, if you need use async, see {@link #setNewDiffData(DiffUtil.DiffResult, List)}.
      *
      * @param baseQuickDiffCallback implementation {@link BaseQuickDiffCallback}.
      * @param detectMoves Whether to detect the movement of the Item
@@ -535,45 +535,23 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     /**
-     * use Diff setting up a new instance to data (with async)
-     * @param baseQuickDiffCallback implementation {@link BaseQuickDiffCallback}.
-     * @param recyclerView RecyclerView
+     * use DiffResult setting up a new instance to data
+     *
+     * If you need to use async computing Diff, please use this method.
+     * You only need to tell the calculation result,
+     * this adapter does not care about the calculation process.
+     *
+     * @param diffResult DiffResult
+     * @param newData New Data
      */
-    public void setNewDiffDataAsync(@NonNull BaseQuickDiffCallback<T> baseQuickDiffCallback, @NonNull RecyclerView recyclerView) {
-        setNewDiffDataAsync(baseQuickDiffCallback, false, recyclerView);
-    }
-
-    /**
-     * use Diff setting up a new instance to data (with async)
-     * @param baseQuickDiffCallback implementation {@link BaseQuickDiffCallback}.
-     * @param detectMoves Whether to detect the movement of the Item
-     * @param recyclerView RecyclerView
-     */
-    public void setNewDiffDataAsync(@NonNull BaseQuickDiffCallback<T> baseQuickDiffCallback, boolean detectMoves, @NonNull final RecyclerView recyclerView) {
+    public void setNewDiffData(@NonNull DiffUtil.DiffResult diffResult, @NonNull List<T> newData) {
         if (getEmptyViewCount() == 1) {
             // If the current view is an empty view, set the new data directly without diff
-            setNewData(baseQuickDiffCallback.getNewList());
+            setNewData(newData);
             return;
         }
-        final BaseQuickDiffCallback<T> finalCallback = baseQuickDiffCallback;
-        final boolean finalDetectMoves = detectMoves;
-        finalCallback.setOldList(this.getData());
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                WeakReference<RecyclerView> rfRecyclerView = new WeakReference<>(recyclerView);
-                final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(finalCallback, finalDetectMoves);
-                if (rfRecyclerView.get() != null) {
-                    rfRecyclerView.get().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            diffResult.dispatchUpdatesTo(new BaseQuickAdapterListUpdateCallback(BaseQuickAdapter.this));
-                            mData = finalCallback.getNewList();
-                        }
-                    });
-                }
-            }
-        }).start();
+        diffResult.dispatchUpdatesTo(new BaseQuickAdapterListUpdateCallback(BaseQuickAdapter.this));
+        mData = newData;
     }
 
     /**

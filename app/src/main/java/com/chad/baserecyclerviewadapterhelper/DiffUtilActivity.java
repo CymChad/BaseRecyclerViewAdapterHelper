@@ -57,10 +57,34 @@ public class DiffUtilActivity extends BaseActivity {
         itemChangeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DiffDemoCallback callback = new DiffDemoCallback(getNewList());
+                List<DiffUtilDemoEntity> newData = getNewList();
+                DiffDemoCallback callback = new DiffDemoCallback(newData);
                 mAdapter.setNewDiffData(callback);
-                // use async
-                // mAdapter.setNewDiffDataAsync(callback, mRecyclerView);
+
+                /*
+                Use async example.
+                The user performs the diff calculation in the child thread and informs the adapter of the result.
+                Warning: You should do multi-thread management yourself to prevent memory leaks.
+
+                异步使用diff刷新
+                用户自己在子线程中进行diff计算，将结果告知adapter即可
+                警告：你应该自己进行多线程管理，防止内存泄漏
+                 */
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        final List<DiffUtilDemoEntity> newData = getNewList();
+//                        DiffDemoCallback callback = new DiffDemoCallback(newData);
+//                        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(callback, false);
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                mAdapter.setNewDiffData(diffResult, newData);
+//                            }
+//                        });
+//                    }
+//                }).start();
+
             }
         });
 
