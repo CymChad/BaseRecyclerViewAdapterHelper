@@ -1,11 +1,12 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
-import android.support.annotation.NonNull;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;

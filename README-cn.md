@@ -354,7 +354,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
     protected void convert(final BaseViewHolder holder, final MultiItemEntity item) {
         switch (holder.getItemViewType()) {
         case TYPE_LEVEL_0:
-            
+
             //set view content
            holder.itemView.setOnClickListener(new View.OnClickListener() {
                @Override

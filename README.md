@@ -7,7 +7,7 @@ Please feel free to use this. (Welcome to **Star** and **Fork**)
 
 kotlin demo :[BRVAH_kotlin](https://github.com/AllenCoder/BRVAH_kotlin)
 
-## [androidX stable version ](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/releases/tag/2.9.46-androidx)
+## [androidX stable version ](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/releases/tag/2.9.45-androidx)
 # Document
 - [English](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki)
 - [中文1](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/README-cn.md)

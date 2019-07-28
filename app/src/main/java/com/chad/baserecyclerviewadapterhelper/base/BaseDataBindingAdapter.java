@@ -1,5 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.base;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.annotation.LayoutRes;

@@ -1,8 +1,9 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.Level0Item;

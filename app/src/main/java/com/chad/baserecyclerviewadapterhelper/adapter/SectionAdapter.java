@@ -1,6 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.MySection;
