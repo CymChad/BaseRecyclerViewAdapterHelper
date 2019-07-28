@@ -1,5 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
+import android.support.annotation.NonNull;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
@@ -29,7 +30,7 @@ public class NestAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, Status item) {
+    protected void convert(@NonNull BaseViewHolder helper, Status item) {
         helper.addOnClickListener(R.id.tweetText);
         switch (helper.getLayoutPosition() % 3) {
             case 0:

@@ -23,7 +23,7 @@ public class DiffUtilAdapter extends BaseQuickAdapter<DiffUtilDemoEntity, BaseVi
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, DiffUtilDemoEntity item) {
+    protected void convert(@NonNull BaseViewHolder helper, DiffUtilDemoEntity item) {
         helper.setText(R.id.tweetName, item.getTitle())
                 .setText(R.id.tweetText, item.getContent())
                 .setText(R.id.tweetDate, item.getDate());

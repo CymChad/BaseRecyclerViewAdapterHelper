@@ -86,7 +86,7 @@ public abstract class BaseSectionMultiItemQuickAdapter<T extends SectionMultiEnt
     }
 
     @Override
-    public void onBindViewHolder(K holder, int position) {
+    public void onBindViewHolder(@NonNull K holder, int position) {
         switch (holder.getItemViewType()) {
             case SECTION_HEADER_VIEW:
                 setFullSpan(holder);

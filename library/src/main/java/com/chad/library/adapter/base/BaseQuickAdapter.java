@@ -516,7 +516,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     /**
-     * use Diff setting up a new instance to data
+     * use Diff setting up a new instance to data.
+     * this is sync, if you need use async, see {@link #setNewDiffData(DiffUtil.DiffResult, List)}.
      *
      * @param baseQuickDiffCallback implementation {@link BaseQuickDiffCallback}.
      * @param detectMoves Whether to detect the movement of the Item
@@ -531,6 +532,26 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(baseQuickDiffCallback, detectMoves);
         diffResult.dispatchUpdatesTo(new BaseQuickAdapterListUpdateCallback(this));
         mData = baseQuickDiffCallback.getNewList();
+    }
+
+    /**
+     * use DiffResult setting up a new instance to data
+     *
+     * If you need to use async computing Diff, please use this method.
+     * You only need to tell the calculation result,
+     * this adapter does not care about the calculation process.
+     *
+     * @param diffResult DiffResult
+     * @param newData New Data
+     */
+    public void setNewDiffData(@NonNull DiffUtil.DiffResult diffResult, @NonNull List<T> newData) {
+        if (getEmptyViewCount() == 1) {
+            // If the current view is an empty view, set the new data directly without diff
+            setNewData(newData);
+            return;
+        }
+        diffResult.dispatchUpdatesTo(new BaseQuickAdapterListUpdateCallback(BaseQuickAdapter.this));
+        mData = newData;
     }
 
     /**
@@ -861,7 +882,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param holder
      */
     @Override
-    public void onViewAttachedToWindow(K holder) {
+    public void onViewAttachedToWindow(@NonNull K holder) {
         super.onViewAttachedToWindow(holder);
         int type = holder.getItemViewType();
         if (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW) {
@@ -888,7 +909,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     @Override
-    public void onAttachedToRecyclerView(final RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NonNull final RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
         if (manager instanceof GridLayoutManager) {
@@ -959,7 +980,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @see #getDefItemViewType(int)
      */
     @Override
-    public void onBindViewHolder(K holder, int position) {
+    public void onBindViewHolder(@NonNull K holder, int position) {
         //Add up fetch logic, almost like load more, but simpler.
         autoUpFetch(position);
         //Do not move position, need to change before LoadMoreView binding
@@ -1883,34 +1904,25 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     @SuppressWarnings("unchecked")
     private int recursiveCollapse(@IntRange(from = 0) int position) {
         T item = getItem(position);
-        if (!isExpandable(item)) {
+        if (item == null || !isExpandable(item)) {
             return 0;
         }
         IExpandable expandable = (IExpandable) item;
-        int subItemCount = 0;
-        if (expandable.isExpanded()) {
-            List<T> subItems = expandable.getSubItems();
-            if (null == subItems) return 0;
-
-            for (int i = subItems.size() - 1; i >= 0; i--) {
-                T subItem = subItems.get(i);
-                int pos = getItemPosition(subItem);
-                if (pos < 0) {
-                    continue;
-                } else if (pos < position) {
-                    pos = position + i + 1;
-                    if (pos >= mData.size()) {
-                        continue;
-                    }
-                }
-                if (subItem instanceof IExpandable) {
-                    subItemCount += recursiveCollapse(pos);
-                }
-                mData.remove(pos);
-                subItemCount++;
-            }
+        if (!expandable.isExpanded()) {
+            return 0;
         }
-        return subItemCount;
+        List<T> collapseList = new ArrayList<>();
+        int itemLevel = expandable.getLevel();
+        T itemTemp;
+        for (int i = position + 1, n = mData.size(); i < n; i++) {
+            itemTemp = mData.get(i);
+            if (itemTemp instanceof IExpandable && ((IExpandable) itemTemp).getLevel() == itemLevel) {
+                break;
+            }
+            collapseList.add(itemTemp);
+        }
+        mData.removeAll(collapseList);
+        return collapseList.size();
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.chad.library.adapter.base;
 
-import androidx.annotation.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.SparseArray;
 import android.view.View;
 
@@ -60,7 +61,7 @@ public abstract class MultipleItemRvAdapter<T,V extends BaseViewHolder> extends 
     public abstract void registerItemProvider();
 
     @Override
-    protected void convert(V helper, T item) {
+    protected void convert(@NonNull V helper, T item) {
         int itemViewType = helper.getItemViewType();
         BaseItemProvider provider = mItemProviders.get(itemViewType);
 
