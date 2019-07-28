@@ -508,7 +508,7 @@ new Thread(new Runnable() {
     @Override
     public void run() {
         final List<DiffUtilDemoEntity> newData = getNewList();
-        DiffDemoCallback callback = new DiffDemoCallback(newData);
+        MyDiffCallback callback = new MyDiffCallback(newData, mAdapter.getData());
         final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(callback, false);
         runOnUiThread(new Runnable() {
             @Override
