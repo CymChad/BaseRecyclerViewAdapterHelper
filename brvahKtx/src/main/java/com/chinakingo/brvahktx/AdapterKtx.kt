@@ -1,6 +1,6 @@
 package com.chinakingo.brvahktx
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.diff.BaseQuickDiffCallback
