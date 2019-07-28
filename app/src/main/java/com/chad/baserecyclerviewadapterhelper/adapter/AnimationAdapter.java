@@ -5,6 +5,8 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
@@ -29,7 +31,7 @@ public class AnimationAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, Status item) {
+    protected void convert(@NonNull BaseViewHolder helper, Status item) {
         helper.addOnClickListener(R.id.img).addOnClickListener(R.id.tweetName);
         switch (helper.getLayoutPosition() % 3) {
             case 0:

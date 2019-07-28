@@ -4,8 +4,10 @@ import androidx.annotation.IntRange;
 import androidx.annotation.LayoutRes;
 import android.util.SparseIntArray;
 import android.view.ViewGroup;
+
 import com.chad.library.adapter.base.entity.IExpandable;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+
 import java.util.List;
 
 /**
@@ -102,7 +104,9 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity, K ext
         int position = getParentPosition(child);
         if (position >= 0) {
             IExpandable parent = (IExpandable) mData.get(position);
-            parent.getSubItems().remove(child);
+            if (parent != child) {
+                parent.getSubItems().remove(child);
+            }
         }
     }
 

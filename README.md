@@ -10,7 +10,8 @@ kotlin demo :[BRVAH_kotlin](https://github.com/AllenCoder/BRVAH_kotlin)
 ## [androidX stable version ](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/releases/tag/2.9.45-androidx)
 # Document
 - [English](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki)
-- [中文](http://www.jianshu.com/p/b343fcff51b0)
+- [中文1](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/README-cn.md)
+- [中文2](http://www.jianshu.com/p/b343fcff51b0)
 
 ## [UI](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/issues/694)
 ## Demo
@@ -20,17 +21,10 @@ kotlin demo :[BRVAH_kotlin](https://github.com/AllenCoder/BRVAH_kotlin)
 [国内下载地址](https://fir.im/s91g)  
 
 # proguard-rules.pro
-```
--keep class com.chad.library.adapter.** {
-*;
-}
--keep public class * extends com.chad.library.adapter.base.BaseQuickAdapter
--keep public class * extends com.chad.library.adapter.base.BaseViewHolder
--keepclassmembers  class **$** extends com.chad.library.adapter.base.BaseViewHolder {
-     <init>(...);
-}
--keepattributes InnerClasses
-```
+> 此资源库自带混淆规则，并且会自动导入，正常情况下无需手动导入。
+> The library comes with `proguard-rules.pro` rules and is automatically imported. Normally no manual import is required.
+> You can also go here to view [proguard-rules](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/library/proguard-rules.pro)
+
 
 # Extension library
 [PinnedSectionItemDecoration](https://github.com/oubowu/PinnedSectionItemDecoration)  

@@ -1,5 +1,7 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
+import androidx.annotation.NonNull;
+
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.MultipleItem;
 import com.chad.baserecyclerviewadapterhelper.entity.SectionMultipleItem;
@@ -35,7 +37,7 @@ public class SectionMultipleItemAdapter extends BaseSectionMultiItemQuickAdapter
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, SectionMultipleItem item) {
+    protected void convert(@NonNull BaseViewHolder helper, SectionMultipleItem item) {
         // deal with multiple type items viewHolder
         helper.addOnClickListener(R.id.card_view);
         switch (helper.getItemViewType()) {

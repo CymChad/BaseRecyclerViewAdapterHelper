@@ -1,7 +1,7 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
 import android.content.Context;
-
+import androidx.annotation.NonNull;
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.MultipleItem;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
@@ -23,7 +23,7 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<Multiple
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, MultipleItem item) {
+    protected void convert(@NonNull BaseViewHolder helper, MultipleItem item) {
         switch (helper.getItemViewType()) {
             case MultipleItem.TEXT:
                 helper.setText(R.id.tv, item.getContent());

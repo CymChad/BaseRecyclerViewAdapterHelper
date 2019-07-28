@@ -1,5 +1,7 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
+import androidx.annotation.NonNull;
+
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.MySection;
 import com.chad.baserecyclerviewadapterhelper.entity.Video;
@@ -33,7 +35,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection, BaseViewH
 
 
     @Override
-    protected void convert(BaseViewHolder helper, MySection item) {
+    protected void convert(@NonNull BaseViewHolder helper, MySection item) {
         Video video = (Video) item.t;
         switch (helper.getLayoutPosition() % 2) {
             case 0:

@@ -6,6 +6,8 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.baserecyclerviewadapterhelper.util.SpannableStringUtils;
@@ -28,7 +30,7 @@ public class PullToRefreshAdapter extends BaseQuickAdapter<Status, BaseViewHolde
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, Status item) {
+    protected void convert(@NonNull BaseViewHolder helper, Status item) {
         switch (helper.getLayoutPosition() % 3) {
             case 0:
                 helper.setImageResource(R.id.img, R.mipmap.animation_img1);

@@ -3,6 +3,8 @@ package com.chad.baserecyclerviewadapterhelper.adapter;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.Level0Item;
 import com.chad.baserecyclerviewadapterhelper.entity.Level1Item;
@@ -39,7 +41,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
 
 
     @Override
-    protected void convert(final BaseViewHolder holder, final MultiItemEntity item) {
+    protected void convert(@NonNull final BaseViewHolder holder, final MultiItemEntity item) {
         switch (holder.getItemViewType()) {
             case TYPE_LEVEL_0:
                 switch (holder.getLayoutPosition() % 3) {

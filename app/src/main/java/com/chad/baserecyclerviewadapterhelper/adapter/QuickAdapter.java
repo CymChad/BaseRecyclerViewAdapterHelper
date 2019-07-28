@@ -1,5 +1,7 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
+
+import androidx.annotation.NonNull;
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
@@ -16,7 +18,7 @@ public class QuickAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, Status item) {
+    protected void convert(@NonNull BaseViewHolder helper, Status item) {
         switch (helper.getLayoutPosition() % 3) {
             case 0:
                 helper.setImageResource(R.id.img, R.mipmap.animation_img1);

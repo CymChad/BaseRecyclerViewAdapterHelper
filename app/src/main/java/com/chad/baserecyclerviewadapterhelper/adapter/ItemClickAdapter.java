@@ -1,5 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
@@ -33,7 +34,7 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity, Bas
 
 
     @Override
-    protected void convert(final BaseViewHolder helper, final ClickEntity item) {
+    protected void convert(@NonNull final BaseViewHolder helper, final ClickEntity item) {
         switch (helper.getItemViewType()) {
             case ClickEntity.CLICK_ITEM_VIEW:
                 helper.addOnClickListener(R.id.btn);

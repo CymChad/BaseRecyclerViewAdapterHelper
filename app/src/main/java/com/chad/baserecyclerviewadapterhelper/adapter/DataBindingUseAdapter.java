@@ -1,5 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import android.view.View;
@@ -29,7 +30,7 @@ public class DataBindingUseAdapter extends BaseQuickAdapter<Movie, DataBindingUs
     }
 
     @Override
-    protected void convert(MovieViewHolder helper, Movie item) {
+    protected void convert(@NonNull MovieViewHolder helper, Movie item) {
         ViewDataBinding binding = helper.getBinding();
         binding.setVariable(BR.movie, item);
         binding.setVariable(BR.presenter, mPresenter);
