@@ -72,7 +72,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     /**
      * Package private field to retain the associated user object and detect a change
      */
-    Object associatedObject;
+    private Object associatedObject;
 
 
     public BaseViewHolder(final View view) {
@@ -84,10 +84,6 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         convertView = view;
 
 
-    }
-
-    private int getClickPosition() {
-        return getLayoutPosition() - adapter.getHeaderLayoutCount();
     }
 
     public HashSet<Integer> getItemChildLongClickViewIds() {
@@ -227,9 +223,22 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @param visible True for VISIBLE, false for GONE.
      * @return The BaseViewHolder for chaining.
      */
-    public BaseViewHolder setVisible(@IdRes int viewId, boolean visible) {
+    public BaseViewHolder setGone(@IdRes int viewId, boolean visible) {
         View view = getView(viewId);
         view.setVisibility(visible ? View.VISIBLE : View.GONE);
+        return this;
+    }
+
+    /**
+     * Set a view visibility to VISIBLE (true) or INVISIBLE (false).
+     *
+     * @param viewId  The view id.
+     * @param visible True for VISIBLE, false for INVISIBLE.
+     * @return The BaseViewHolder for chaining.
+     */
+    public BaseViewHolder setVisible(@IdRes int viewId, boolean visible) {
+        View view = getView(viewId);
+        view.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
         return this;
     }
 
@@ -353,30 +362,36 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     /**
      * add childView id
      *
-     * @param viewId add the child view id   can support childview click
+     * @param viewIds add the child views id can support childview click
      * @return if you use adapter bind listener
      * @link {(adapter.setOnItemChildClickListener(listener))}
      * <p>
      * or if you can use  recyclerView.addOnItemTouch(listerer)  wo also support this menthod
      */
     @SuppressWarnings("unchecked")
-    public BaseViewHolder addOnClickListener(@IdRes final int viewId) {
-        childClickViewIds.add(viewId);
-        final View view = getView(viewId);
-        if (view != null) {
-            if (!view.isClickable()) {
-                view.setClickable(true);
-            }
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (adapter.getOnItemChildClickListener() != null) {
-                        adapter.getOnItemChildClickListener().onItemChildClick(adapter, v, getClickPosition());
-                    }
+    public BaseViewHolder addOnClickListener(@IdRes final int ...viewIds) {
+        for (int viewId : viewIds) {
+            childClickViewIds.add(viewId);
+            final View view = getView(viewId);
+            if (view != null) {
+                if (!view.isClickable()) {
+                    view.setClickable(true);
                 }
-            });
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (adapter.getOnItemChildClickListener() != null) {
+                            int position = getAdapterPosition();
+                            if (position == RecyclerView.NO_POSITION) {
+                                return;
+                            }
+                            position -= adapter.getHeaderLayoutCount();
+                            adapter.getOnItemChildClickListener().onItemChildClick(adapter, v, position);
+                        }
+                    }
+                });
+            }
         }
-
         return this;
     }
 
@@ -384,40 +399,51 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     /**
      * set nestview id
      *
-     * @param viewId add the child view id   can support childview click
+     * @param viewIds add the child views id   can support childview click
      * @return
      */
-    public BaseViewHolder setNestView(@IdRes int viewId) {
-        addOnClickListener(viewId);
-        addOnLongClickListener(viewId);
-        nestViews.add(viewId);
+    public BaseViewHolder setNestView(@IdRes int ... viewIds) {
+        for (int viewId : viewIds) {
+            nestViews.add(viewId);
+        }
+        addOnClickListener(viewIds);
+        addOnLongClickListener(viewIds);
         return this;
     }
 
     /**
      * add long click view id
      *
-     * @param viewId
+     * @param viewIds
      * @return if you use adapter bind listener
      * @link {(adapter.setOnItemChildLongClickListener(listener))}
      * <p>
      * or if you can use  recyclerView.addOnItemTouch(listerer)  wo also support this menthod
      */
     @SuppressWarnings("unchecked")
-    public BaseViewHolder addOnLongClickListener(@IdRes final int viewId) {
-        itemChildLongClickViewIds.add(viewId);
-        final View view = getView(viewId);
-        if (view != null) {
-            if (!view.isLongClickable()) {
-                view.setLongClickable(true);
-            }
-            view.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    return adapter.getOnItemChildLongClickListener() != null &&
-                            adapter.getOnItemChildLongClickListener().onItemChildLongClick(adapter, v, getClickPosition());
+    public BaseViewHolder addOnLongClickListener(@IdRes final int ... viewIds) {
+        for (int viewId : viewIds) {
+            itemChildLongClickViewIds.add(viewId);
+            final View view = getView(viewId);
+            if (view != null) {
+                if (!view.isLongClickable()) {
+                    view.setLongClickable(true);
                 }
-            });
+                view.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        if (adapter.getOnItemChildLongClickListener() == null) {
+                            return false;
+                        }
+                        int position = getAdapterPosition();
+                        if (position == RecyclerView.NO_POSITION) {
+                            return false;
+                        }
+                        position -= adapter.getHeaderLayoutCount();
+                        return adapter.getOnItemChildLongClickListener().onItemChildLongClick(adapter, v, position);
+                    }
+                });
+            }
         }
         return this;
     }
@@ -443,7 +469,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @param viewId   The view id.
      * @param listener The on long click listener;
      * @return The BaseViewHolder for chaining.
-     * Please use {@link #addOnLongClickListener(int)} (adapter.setOnItemChildLongClickListener(listener))}
+     * Please use {@link #addOnLongClickListener} (adapter.setOnItemChildLongClickListener(listener))}
      */
     @Deprecated
     public BaseViewHolder setOnLongClickListener(@IdRes int viewId, View.OnLongClickListener listener) {
@@ -458,7 +484,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @param viewId   The view id.
      * @param listener The item on click listener;
      * @return The BaseViewHolder for chaining.
-     * Please use {@link #addOnClickListener(int)} (int)} (adapter.setOnItemChildClickListener(listener))}
+     * Please use {@link #addOnClickListener} (int)} (adapter.setOnItemChildClickListener(listener))}
      */
     @Deprecated
     public BaseViewHolder setOnItemClickListener(@IdRes int viewId, AdapterView.OnItemClickListener listener) {
@@ -546,6 +572,18 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         if (view instanceof Checkable) {
             ((Checkable) view).setChecked(checked);
         }
+        return this;
+    }
+    /**
+     * Set the enabled state of this view.
+     *
+     * @param viewId  The view id.
+     * @param enable The checked status;
+     * @return The BaseViewHolder for chaining.
+     */
+    public BaseViewHolder setEnabled(@IdRes int viewId,boolean enable) {
+        View view = getView(viewId);
+        view.setEnabled(enable);
         return this;
     }
 

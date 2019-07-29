@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <rotate
+            android:drawable="@drawable/brvah_sample_footer_loading"
+            android:duration="500"
+            android:fromDegrees="0.0"
+            android:pivotX="50.0%"
+            android:pivotY="50.0%"
+            android:toDegrees="360.0" />
+    </item>
+
+</layer-list>

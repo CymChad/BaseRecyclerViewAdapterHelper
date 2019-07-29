@@ -9,6 +9,7 @@ import com.chad.baserecyclerviewadapterhelper.entity.Level1Item;
 import com.chad.baserecyclerviewadapterhelper.entity.Person;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.entity.IExpandable;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
 import java.util.List;
@@ -37,13 +38,11 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
     }
 
 
-
     @Override
     protected void convert(final BaseViewHolder holder, final MultiItemEntity item) {
         switch (holder.getItemViewType()) {
             case TYPE_LEVEL_0:
-                switch (holder.getLayoutPosition() %
-                        3) {
+                switch (holder.getLayoutPosition() % 3) {
                     case 0:
                         holder.setImageResource(R.id.iv_head, R.mipmap.head_img0);
                         break;
@@ -53,8 +52,10 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                     case 2:
                         holder.setImageResource(R.id.iv_head, R.mipmap.head_img2);
                         break;
+                    default:
+                        break;
                 }
-                final Level0Item lv0 = (Level0Item)item;
+                final Level0Item lv0 = (Level0Item) item;
                 holder.setText(R.id.title, lv0.title)
                         .setText(R.id.sub_title, lv0.subTitle)
                         .setImageResource(R.id.iv, lv0.isExpanded() ? R.mipmap.arrow_b : R.mipmap.arrow_r);
@@ -69,14 +70,14 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
 //                            if (pos % 3 == 0) {
 //                                expandAll(pos, false);
 //                            } else {
-                                expand(pos);
+                            expand(pos);
 //                            }
                         }
                     }
                 });
                 break;
             case TYPE_LEVEL_1:
-                final Level1Item lv1 = (Level1Item)item;
+                final Level1Item lv1 = (Level1Item) item;
                 holder.setText(R.id.title, lv1.title)
                         .setText(R.id.sub_title, lv1.subTitle)
                         .setImageResource(R.id.iv, lv1.isExpanded() ? R.mipmap.arrow_b : R.mipmap.arrow_r);
@@ -92,19 +93,44 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                         }
                     }
                 });
+
+                holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        int pos = holder.getAdapterPosition();
+                        // 先获取到当前 item 的父 positon，再移除自己
+                        int positionAtAll = getParentPositionInAll(pos);
+                        remove(pos);
+                        if (positionAtAll != -1) {
+                            IExpandable multiItemEntity = (IExpandable) getData().get(positionAtAll);
+                            if (!hasSubItems(multiItemEntity)) {
+                                remove(positionAtAll);
+                            }
+                        }
+                        return true;
+                    }
+                });
                 break;
             case TYPE_PERSON:
-                final Person person = (Person)item;
+                final Person person = (Person) item;
                 holder.setText(R.id.tv, person.name + " parent pos: " + getParentPosition(person));
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        int cp = getParentPosition(person);
-                        ((Level1Item)getData().get(cp)).removeSubItem(person);
-                        getData().remove(holder.getLayoutPosition());
-                        notifyItemRemoved(holder.getLayoutPosition());
+                        int pos = holder.getAdapterPosition();
+                        // 先获取到当前 item 的父 positon，再移除自己
+                        int positionAtAll = getParentPositionInAll(pos);
+                        remove(pos);
+                        if (positionAtAll != -1) {
+                            IExpandable multiItemEntity = (IExpandable) getData().get(positionAtAll);
+                            if (!hasSubItems(multiItemEntity)) {
+                                remove(positionAtAll);
+                            }
+                        }
                     }
                 });
+                break;
+            default:
                 break;
         }
     }

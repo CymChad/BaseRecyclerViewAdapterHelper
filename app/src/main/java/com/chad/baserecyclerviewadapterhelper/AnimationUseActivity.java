@@ -24,8 +24,6 @@ import com.kyleduo.switchbutton.SwitchButton;
 public class AnimationUseActivity extends Activity {
     private RecyclerView mRecyclerView;
     private AnimationAdapter mAnimationAdapter;
-    private ImageView mImgBtn;
-    private int mFirstPageItemCount = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +39,7 @@ public class AnimationUseActivity extends Activity {
 
     private void initView() {
 
-        mImgBtn = (ImageView) findViewById(R.id.img_back);
+        ImageView mImgBtn = (ImageView) findViewById(R.id.img_back);
         mImgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -53,6 +51,7 @@ public class AnimationUseActivity extends Activity {
     private void initAdapter() {
         mAnimationAdapter = new AnimationAdapter();
         mAnimationAdapter.openLoadAnimation();
+        int mFirstPageItemCount = 3;
         mAnimationAdapter.setNotDoAnimationCount(mFirstPageItemCount);
         mAnimationAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
@@ -72,6 +71,8 @@ public class AnimationUseActivity extends Activity {
                         content = "tweetText:" + status.getUserName();
                         Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
                         // you have set clickspan .so there should not solve any click event ,just empty
+                        break;
+                    default:
                         break;
 
                 }
@@ -112,7 +113,8 @@ public class AnimationUseActivity extends Activity {
                 mRecyclerView.setAdapter(mAnimationAdapter);
             }
         });
-        mAnimationAdapter.isFirstOnly(false);//init firstOnly state
+        //init firstOnly state
+        mAnimationAdapter.isFirstOnly(false);
         SwitchButton switchButton = (SwitchButton) findViewById(R.id.switch_button);
         switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

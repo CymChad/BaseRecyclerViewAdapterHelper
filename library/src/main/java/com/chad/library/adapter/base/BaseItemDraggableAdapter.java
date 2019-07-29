@@ -239,15 +239,14 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
     }
 
     public void onItemSwiped(RecyclerView.ViewHolder viewHolder) {
-        if (mOnItemSwipeListener != null && itemSwipeEnabled) {
-            mOnItemSwipeListener.onItemSwiped(viewHolder, getViewHolderPosition(viewHolder));
-        }
-
-        int pos = getViewHolderPosition(viewHolder);
-
+        final int pos = getViewHolderPosition(viewHolder);
         if (inRange(pos)) {
             mData.remove(pos);
             notifyItemRemoved(viewHolder.getAdapterPosition());
+
+            if (mOnItemSwipeListener != null && itemSwipeEnabled) {
+                mOnItemSwipeListener.onItemSwiped(viewHolder, pos);
+            }
         }
     }
 
