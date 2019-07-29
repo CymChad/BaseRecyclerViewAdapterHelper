@@ -32,6 +32,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
@@ -171,7 +172,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * same as recyclerView.setAdapter(), and save the instance of recyclerView
      */
     public void bindToRecyclerView(RecyclerView recyclerView) {
-        if (getRecyclerView() != null) {
+        if (getRecyclerView() == recyclerView) {
             throw new IllegalStateException("Don't bind twice");
         }
         setRecyclerView(recyclerView);
@@ -820,12 +821,27 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 baseViewHolder = getLoadingView(parent);
                 break;
             case HEADER_VIEW:
+                ViewParent headerLayoutVp = mHeaderLayout.getParent();
+                if (headerLayoutVp instanceof ViewGroup) {
+                    ((ViewGroup) headerLayoutVp).removeView(mHeaderLayout);
+                }
+
                 baseViewHolder = createBaseViewHolder(mHeaderLayout);
                 break;
             case EMPTY_VIEW:
+                ViewParent emptyLayoutVp = mEmptyLayout.getParent();
+                if (emptyLayoutVp instanceof ViewGroup) {
+                    ((ViewGroup) emptyLayoutVp).removeView(mEmptyLayout);
+                }
+
                 baseViewHolder = createBaseViewHolder(mEmptyLayout);
                 break;
             case FOOTER_VIEW:
+                ViewParent footerLayoutVp = mFooterLayout.getParent();
+                if (footerLayoutVp instanceof ViewGroup) {
+                    ((ViewGroup) footerLayoutVp).removeView(mFooterLayout);
+                }
+
                 baseViewHolder = createBaseViewHolder(mFooterLayout);
                 break;
             default:
