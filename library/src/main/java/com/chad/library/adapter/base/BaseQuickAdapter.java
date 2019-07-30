@@ -1932,7 +1932,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         T itemTemp;
         for (int i = position + 1, n = mData.size(); i < n; i++) {
             itemTemp = mData.get(i);
-            if (itemTemp instanceof IExpandable && ((IExpandable) itemTemp).getLevel() == itemLevel) {
+            if (itemTemp instanceof IExpandable && ((IExpandable) itemTemp).getLevel() <= itemLevel) {
                 break;
             }
             collapseList.add(itemTemp);
