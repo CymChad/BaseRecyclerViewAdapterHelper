@@ -3,7 +3,6 @@ package com.chad.baserecyclerviewadapterhelper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,13 +24,9 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        initView();
-        initAdapter();
-    }
 
-    private void initView() {
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        initAdapter();
     }
 
     @SuppressWarnings("unchecked")
@@ -43,8 +38,8 @@ public class HomeActivity extends AppCompatActivity {
         homeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Class cls = (Class) adapter.getItem(position);
-                Intent intent = new Intent(HomeActivity.this, cls);
+                HomeItem item = (HomeItem) adapter.getItem(position);
+                Intent intent = new Intent(HomeActivity.this, item.getActivity());
                 startActivity(intent);
             }
         });
