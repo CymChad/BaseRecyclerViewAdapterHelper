@@ -12,16 +12,13 @@ import com.chad.baserecyclerviewadapterhelper.adapter.HomeAdapter;
 import com.chad.baserecyclerviewadapterhelper.entity.HomeItem;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 public class HomeActivity extends AppCompatActivity {
-    private static final Class<?>[] ACTIVITY = {AnimationUseActivity.class, ChooseMultipleItemUseTypeActivity.class, HeaderAndFooterUseActivity.class, PullToRefreshUseActivity.class, SectionUseActivity.class, EmptyViewUseActivity.class, ItemDragAndSwipeUseActivity.class, ItemClickActivity.class, ExpandableUseActivity.class, DataBindingUseActivity.class,UpFetchUseActivity.class,SectionMultipleItemUseActivity.class, DiffUtilActivity.class};
-    private static final String[] TITLE = {"Animation", "MultipleItem", "Header/Footer", "PullToRefresh", "Section", "EmptyView", "DragAndSwipe", "ItemClick", "ExpandableItem", "DataBinding", "UpFetchData", "SectionMultipleItem", "DiffUtil"};
-    private static final int[] IMG = {R.mipmap.gv_animation, R.mipmap.gv_multipleltem, R.mipmap.gv_header_and_footer, R.mipmap.gv_pulltorefresh, R.mipmap.gv_section, R.mipmap.gv_empty, R.mipmap.gv_drag_and_swipe, R.mipmap.gv_item_click, R.mipmap.gv_expandable, R.mipmap.gv_databinding,R.drawable.gv_up_fetch, R.mipmap.gv_multipleltem, R.mipmap.gv_databinding};
-    private ArrayList<HomeItem> mDataList;
     private RecyclerView mRecyclerView;
 
     @Override
@@ -29,7 +26,6 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         initView();
-        initData();
         initAdapter();
     }
 
@@ -40,14 +36,15 @@ public class HomeActivity extends AppCompatActivity {
 
     @SuppressWarnings("unchecked")
     private void initAdapter() {
-        BaseQuickAdapter homeAdapter = new HomeAdapter(R.layout.home_item_view, mDataList);
+        BaseQuickAdapter homeAdapter = new HomeAdapter(R.layout.home_item_view, getHomeItemData());
         homeAdapter.openLoadAnimation();
         View top = getLayoutInflater().inflate(R.layout.top_view, (ViewGroup) mRecyclerView.getParent(), false);
         homeAdapter.addHeaderView(top);
         homeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(HomeActivity.this, ACTIVITY[position]);
+                Class cls = (Class) adapter.getItem(position);
+                Intent intent = new Intent(HomeActivity.this, cls);
                 startActivity(intent);
             }
         });
@@ -55,15 +52,22 @@ public class HomeActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(homeAdapter);
     }
 
-    private void initData() {
-        mDataList = new ArrayList<>();
-        for (int i = 0; i < TITLE.length; i++) {
-            HomeItem item = new HomeItem();
-            item.setTitle(TITLE[i]);
-            item.setActivity(ACTIVITY[i]);
-            item.setImageResource(IMG[i]);
-            mDataList.add(item);
-        }
+    private List<HomeItem> getHomeItemData() {
+        return Arrays.asList(
+                new HomeItem("Animation", AnimationUseActivity.class, R.mipmap.gv_animation),
+                new HomeItem("MultipleItem", ChooseMultipleItemUseTypeActivity.class, R.mipmap.gv_multipleltem),
+                new HomeItem("Header/Footer", HeaderAndFooterUseActivity.class, R.mipmap.gv_header_and_footer),
+                new HomeItem("PullToRefresh", PullToRefreshUseActivity.class, R.mipmap.gv_pulltorefresh),
+                new HomeItem("Section", SectionUseActivity.class, R.mipmap.gv_section),
+                new HomeItem("EmptyView", EmptyViewUseActivity.class, R.mipmap.gv_empty),
+                new HomeItem("DragAndSwipe", ItemDragAndSwipeUseActivity.class, R.mipmap.gv_drag_and_swipe),
+                new HomeItem("ItemClick", ItemClickActivity.class, R.mipmap.gv_item_click),
+                new HomeItem("ExpandableItem", ExpandableUseActivity.class, R.mipmap.gv_expandable),
+                new HomeItem("DataBinding", DataBindingUseActivity.class, R.mipmap.gv_databinding),
+                new HomeItem("UpFetchData", UpFetchUseActivity.class, R.drawable.gv_up_fetch),
+                new HomeItem("SectionMultipleItem", SectionMultipleItemUseActivity.class, R.mipmap.gv_multipleltem),
+                new HomeItem("DiffUtil", DiffUtilActivity.class, R.mipmap.gv_databinding)
+        );
     }
 
 }

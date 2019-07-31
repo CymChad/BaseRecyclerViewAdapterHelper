@@ -8,6 +8,15 @@ public class HomeItem {
     private Class<?> activity;
     private int imageResource;
 
+    public HomeItem() {
+    }
+
+    public HomeItem(String title, Class<?> activity, int imageResource) {
+        this.title = title;
+        this.activity = activity;
+        this.imageResource = imageResource;
+    }
+
     public int getImageResource() {
         return imageResource;
     }
