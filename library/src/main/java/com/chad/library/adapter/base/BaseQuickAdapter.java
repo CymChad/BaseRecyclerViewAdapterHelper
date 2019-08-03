@@ -1801,9 +1801,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     @SuppressWarnings("unchecked")
     public int expand(@IntRange(from = 0) int position, boolean animate, boolean shouldNotify) {
-        position -= getHeaderLayoutCount();
+        int adapterPos = position - getHeaderLayoutCount();
 
-        IExpandable expandable = getExpandableItem(position);
+        IExpandable expandable = getExpandableItem(adapterPos);
         if (expandable == null) {
             return 0;
         }
@@ -1815,17 +1815,16 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         int subItemCount = 0;
         if (!expandable.isExpanded()) {
             List list = expandable.getSubItems();
-            mData.addAll(position + 1, list);
-            subItemCount += recursiveExpand(position + 1, list);
+            mData.addAll(adapterPos + 1, list);
+            subItemCount += recursiveExpand(adapterPos + 1, list);
 
             expandable.setExpanded(true);
 //            subItemCount += list.size();
         }
-        int parentPos = position + getHeaderLayoutCount();
         if (shouldNotify) {
             if (animate) {
-                notifyItemChanged(parentPos);
-                notifyItemRangeInserted(parentPos + 1, subItemCount);
+                notifyItemChanged(position);
+                notifyItemRangeInserted(position + 1, subItemCount);
             } else {
                 notifyDataSetChanged();
             }
@@ -1855,14 +1854,9 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     public int expandAll(int position, boolean animate, boolean notify) {
-        position -= getHeaderLayoutCount();
+        int adapterPos = position - getHeaderLayoutCount();
 
-        T endItem = null;
-        if (position + 1 < this.mData.size()) {
-            endItem = getItem(position + 1);
-        }
-
-        IExpandable expandable = getExpandableItem(position);
+        IExpandable expandable = getExpandableItem(adapterPos);
         if (expandable == null) {
             return 0;
         }
@@ -1873,8 +1867,13 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             return 0;
         }
 
-        int count = expand(position + getHeaderLayoutCount(), false, false);
-        for (int i = position + 1; i < this.mData.size(); i++) {
+        T endItem = null;
+        if (adapterPos + 1 < this.mData.size()) {
+            endItem = getItem(adapterPos + 1);
+        }
+
+        int count = expand(position, false, false);
+        for (int i = adapterPos + 1; i < this.mData.size(); i++) {
             T item = getItem(i);
 
             if (item != null && item.equals(endItem)) {
@@ -1887,7 +1886,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
         if (notify) {
             if (animate) {
-                notifyItemRangeInserted(position + getHeaderLayoutCount() + 1, count);
+                notifyItemChanged(position);
+                notifyItemRangeInserted(position + 1, count);
             } else {
                 notifyDataSetChanged();
             }
@@ -1947,19 +1947,18 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @return the number of subItems collapsed.
      */
     public int collapse(@IntRange(from = 0) int position, boolean animate, boolean notify) {
-        position -= getHeaderLayoutCount();
+        int adapterPos = position - getHeaderLayoutCount();
 
-        IExpandable expandable = getExpandableItem(position);
+        IExpandable expandable = getExpandableItem(adapterPos);
         if (expandable == null) {
             return 0;
         }
-        int subItemCount = recursiveCollapse(position);
+        int subItemCount = recursiveCollapse(adapterPos);
         expandable.setExpanded(false);
-        int parentPos = position + getHeaderLayoutCount();
         if (notify) {
             if (animate) {
-                notifyItemChanged(parentPos);
-                notifyItemRangeRemoved(parentPos + 1, subItemCount);
+                notifyItemChanged(position);
+                notifyItemRangeRemoved(position + 1, subItemCount);
             } else {
                 notifyDataSetChanged();
             }
