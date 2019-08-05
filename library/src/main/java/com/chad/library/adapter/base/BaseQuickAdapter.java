@@ -49,7 +49,6 @@ import com.chad.library.adapter.base.diff.BaseQuickDiffCallback;
 import com.chad.library.adapter.base.entity.IExpandable;
 import com.chad.library.adapter.base.loadmore.LoadMoreView;
 import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView;
-import com.chad.library.adapter.base.util.MultiTypeDelegate;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -804,9 +803,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     protected int getDefItemViewType(int position) {
-        if (mMultiTypeDelegate != null) {
-            return mMultiTypeDelegate.getDefItemViewType(mData, position);
-        }
         return super.getItemViewType(position);
     }
 
@@ -1067,7 +1063,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
 
-    private void bindViewClickListener(final BaseViewHolder baseViewHolder) {
+    protected void bindViewClickListener(final K baseViewHolder) {
         if (baseViewHolder == null) {
             return;
         }
@@ -1121,22 +1117,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         return getOnItemLongClickListener().onItemLongClick(BaseQuickAdapter.this, v, position);
     }
 
-    private MultiTypeDelegate<T> mMultiTypeDelegate;
-
-    public void setMultiTypeDelegate(MultiTypeDelegate<T> multiTypeDelegate) {
-        mMultiTypeDelegate = multiTypeDelegate;
-    }
-
-    public MultiTypeDelegate<T> getMultiTypeDelegate() {
-        return mMultiTypeDelegate;
-    }
-
     protected K onCreateDefViewHolder(ViewGroup parent, int viewType) {
-        int layoutId = mLayoutResId;
-        if (mMultiTypeDelegate != null) {
-            layoutId = mMultiTypeDelegate.getLayoutId(viewType);
-        }
-        return createBaseViewHolder(parent, layoutId);
+        return createBaseViewHolder(parent, mLayoutResId);
     }
 
     protected K createBaseViewHolder(ViewGroup parent, int layoutResId) {

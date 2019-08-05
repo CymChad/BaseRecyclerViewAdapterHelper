@@ -33,9 +33,9 @@ public abstract class BaseItemProvider<T,V extends BaseViewHolder> {
 
     //子类若想实现条目点击事件则重写该方法
     //Subclasses override this method if you want to implement an item click event
-    public void onClick(V helper, T data, int position){};
+    public void onClick(V helper, T data, int position){}
 
     //子类若想实现条目长按事件则重写该方法
     //Subclasses override this method if you want to implement an item long press event
-    public boolean onLongClick(V helper, T data, int position){return false;};
+    public boolean onLongClick(V helper, T data, int position){return false;}
 }
