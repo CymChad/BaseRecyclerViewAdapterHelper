@@ -1,6 +1,7 @@
 package com.chad.library.adapter.base.provider;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -26,7 +27,9 @@ public abstract class BaseItemProvider<T,V extends BaseViewHolder> {
     //Rewrite this method to return layout
     public abstract int layout();
 
-    public abstract void convert(V helper, T data, int position);
+    public abstract void convert(@NonNull V helper, T data, int position);
+
+    public void convertPayloads(@NonNull V helper, T data, int position, @NonNull List<Object> payloads){}
 
     //子类若想实现条目点击事件则重写该方法
     //Subclasses override this method if you want to implement an item click event

@@ -73,6 +73,15 @@ public abstract class MultipleItemRvAdapter<T,V extends BaseViewHolder> extends 
         bindClick(helper, item, position, provider);
     }
 
+    @Override
+    protected void convertPayloads(@NonNull V helper, T item, @NonNull List<Object> payloads) {
+        int itemViewType = helper.getItemViewType();
+        BaseItemProvider provider = mItemProviders.get(itemViewType);
+
+        int position = helper.getLayoutPosition() - getHeaderLayoutCount();
+        provider.convertPayloads(helper, item, position, payloads);
+    }
+
     private void bindClick(final V helper, final T item, final int position, final BaseItemProvider provider) {
         OnItemClickListener clickListener = getOnItemClickListener();
         OnItemLongClickListener longClickListener = getOnItemLongClickListener();
