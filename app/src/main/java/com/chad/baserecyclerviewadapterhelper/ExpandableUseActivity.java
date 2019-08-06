@@ -41,9 +41,8 @@ public class ExpandableUseActivity extends BaseActivity {
             }
         });
 
-        mRecyclerView.setAdapter(adapter);
-        // important! setLayoutManager should be called after setAdapter
         mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.setAdapter(adapter);
         adapter.expandAll();
     }
 

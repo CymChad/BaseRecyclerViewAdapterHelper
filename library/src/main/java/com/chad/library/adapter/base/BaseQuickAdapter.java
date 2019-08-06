@@ -926,6 +926,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
         if (manager instanceof GridLayoutManager) {
             final GridLayoutManager gridManager = ((GridLayoutManager) manager);
+            final GridLayoutManager.SpanSizeLookup defSpanSizeLookup = gridManager.getSpanSizeLookup();
             gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
@@ -937,7 +938,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                         return 1;
                     }
                     if (mSpanSizeLookup == null) {
-                        return isFixedViewType(type) ? gridManager.getSpanCount() : 1;
+                        return isFixedViewType(type) ? gridManager.getSpanCount() : defSpanSizeLookup.getSpanSize(position);
                     } else {
                         return (isFixedViewType(type)) ? gridManager.getSpanCount() : mSpanSizeLookup.getSpanSize(gridManager,
                                 position - getHeaderLayoutCount());
