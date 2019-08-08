@@ -113,10 +113,10 @@ public class GridSectionAverageGapItemDecoration extends RecyclerView.ItemDecora
                 setUpWithAdapter(adapter);
             }
             int spanCount = layoutManager.getSpanCount();
-            int position = parent.getChildAdapterPosition(view);
+            int position = parent.getChildAdapterPosition(view) - mAdapter.getHeaderLayoutCount();
             SectionEntity entity = adapter.getItem(position);
 
-            if (entity != null && entity.isHeader) {
+            if (entity == null || entity.isHeader) {
                 //不处理header
                 outRect.set(0, 0, 0, 0);
 //                Log.w("GridAverageGapItem", "pos=" + position + "," + outRect.toShortString());
