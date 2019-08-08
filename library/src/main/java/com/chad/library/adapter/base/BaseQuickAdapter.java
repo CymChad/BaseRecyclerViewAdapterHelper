@@ -52,6 +52,7 @@ import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.Object;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -465,6 +466,19 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     public final void refreshNotifyItemChanged(int position) {
         notifyItemChanged(position + getHeaderLayoutCount());
+    }
+
+    /**
+     * If you have added headeview, the notification view refreshes.
+     * Do not need to care about the number of headview, only need to pass in the position of the final view
+     *
+     * @param position Position other than the number of head layouts. {@link #getHeaderLayoutCount()}
+     * @param payload Optional parameter, use null to identify a "full" update
+     *
+     * @see RecyclerView.Adapter#notifyItemChanged(int, Object)
+     */
+    public final void refreshNotifyItemChanged(int position, @Nullable Object payload) {
+        notifyItemChanged(position + getHeaderLayoutCount(), payload);
     }
 
     /**
