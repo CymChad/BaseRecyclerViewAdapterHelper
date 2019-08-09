@@ -3,12 +3,16 @@ package com.chad.baserecyclerviewadapterhelper;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.ExpandableItemAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.entity.Level0Item;
 import com.chad.baserecyclerviewadapterhelper.entity.Level1Item;
 import com.chad.baserecyclerviewadapterhelper.entity.Person;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
 import java.util.ArrayList;
@@ -27,6 +31,13 @@ public class ExpandableUseActivity extends BaseActivity {
         setBackBtn();
         setTitle("ExpandableItem Activity");
         setContentView(R.layout.activity_expandable_item_use);
+
+        ((CheckBox) findViewById(R.id.cbOnlyExpandOne)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                adapter.setOnlyExpandOne(isChecked);
+            }
+        });
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv);
 
