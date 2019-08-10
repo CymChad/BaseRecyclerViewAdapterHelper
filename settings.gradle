@@ -1,1 +1,1 @@
-include ':app', ':library', ':brvahKtx'
+include ':app', ':library'
