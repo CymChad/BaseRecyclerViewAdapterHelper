@@ -39,12 +39,12 @@ public class ImgItemProvider extends BaseItemProvider<NormalMultipleEntity,BaseV
 
     @Override
     public void onClick(BaseViewHolder helper, NormalMultipleEntity data, int position) {
-        Toast.makeText(mContext, "click", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, "click " + position, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public boolean onLongClick(BaseViewHolder helper, NormalMultipleEntity data, int position) {
-        Toast.makeText(mContext, "longClick", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, "longClick " + position, Toast.LENGTH_SHORT).show();
         return true;
     }
 }

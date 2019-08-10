@@ -57,7 +57,7 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
 
         if (mItemTouchHelper != null && itemDragEnabled && viewType != LOADING_VIEW && viewType != HEADER_VIEW
                 && viewType != EMPTY_VIEW && viewType != FOOTER_VIEW) {
-            if (mToggleViewId != NO_TOGGLE_VIEW) {
+            if (hasToggleView()) {
                 View toggleView = holder.getView(mToggleViewId);
                 if (toggleView != null) {
                     toggleView.setTag(R.id.BaseQuickAdapter_viewholder_support, holder);
@@ -67,9 +67,6 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
                         toggleView.setOnTouchListener(mOnToggleViewTouchListener);
                     }
                 }
-            } else {
-                holder.itemView.setTag(R.id.BaseQuickAdapter_viewholder_support, holder);
-                holder.itemView.setOnLongClickListener(mOnToggleViewLongClickListener);
             }
         }
     }
@@ -83,6 +80,13 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
      */
     public void setToggleViewId(int toggleViewId) {
         mToggleViewId = toggleViewId;
+    }
+
+    /**
+     * Is there a toggle view which will trigger drag event.
+     */
+    public boolean hasToggleView() {
+        return mToggleViewId != NO_TOGGLE_VIEW;
     }
 
     /**
@@ -131,6 +135,16 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
      */
     public void enableDragItem(@NonNull ItemTouchHelper itemTouchHelper) {
         enableDragItem(itemTouchHelper, NO_TOGGLE_VIEW, true);
+    }
+
+    /**
+     * Enable drag items. Use the specified view as toggle.
+     *
+     * @param itemTouchHelper {@link ItemTouchHelper}
+     * @param toggleViewId    The toggle view's id.
+     */
+    public void enableDragItem(@NonNull ItemTouchHelper itemTouchHelper, int toggleViewId) {
+        enableDragItem(itemTouchHelper, toggleViewId, true);
     }
 
     /**
