@@ -2,8 +2,10 @@ package com.chad.library.adapter.base;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.provider.BaseItemProvider;
 import com.chad.library.adapter.base.util.MultiTypeDelegate;
@@ -13,17 +15,18 @@ import java.util.List;
 
 /**
  * https://github.com/chaychan
+ *
  * @author ChayChan
- * @description:
- * When there are multiple entries, avoid too much business logic in convert(),Put the logic of each item in the corresponding ItemProvider
+ * @description: When there are multiple entries, avoid too much business logic in convert(),Put the logic of each item in the corresponding ItemProvider
  * 当有多种条目的时候，避免在convert()中做太多的业务逻辑，把逻辑放在对应的ItemProvider中
  * @date 2018/3/21  9:55
  */
 
-public abstract class MultipleItemRvAdapter<T,V extends BaseViewHolder> extends BaseQuickAdapter<T, V> {
+public abstract class MultipleItemRvAdapter<T, V extends BaseViewHolder> extends BaseQuickAdapter<T, V> {
 
     private SparseArray<BaseItemProvider> mItemProviders;
     protected ProviderDelegate mProviderDelegate;
+    private MultiTypeDelegate<T> mMultiTypeDelegate;
 
     public MultipleItemRvAdapter(@Nullable List<T> data) {
         super(data);
@@ -37,7 +40,6 @@ public abstract class MultipleItemRvAdapter<T,V extends BaseViewHolder> extends 
         mProviderDelegate = new ProviderDelegate();
 
         setMultiTypeDelegate(new MultiTypeDelegate<T>() {
-
             @Override
             protected int getItemType(T t) {
                 return getViewType(t);
@@ -61,6 +63,34 @@ public abstract class MultipleItemRvAdapter<T,V extends BaseViewHolder> extends 
     public abstract void registerItemProvider();
 
     @Override
+    protected void bindViewClickListener(V baseViewHolder) {
+        if (baseViewHolder == null) {
+            return;
+        }
+
+        bindClick(baseViewHolder);
+
+        super.bindViewClickListener(baseViewHolder);
+    }
+
+    @Override
+    protected V onCreateDefViewHolder(ViewGroup parent, int viewType) {
+        if (getMultiTypeDelegate() == null) {
+            throw new IllegalStateException("please use setMultiTypeDelegate first!");
+        }
+        int layoutId = getMultiTypeDelegate().getLayoutId(viewType);
+        return createBaseViewHolder(parent, layoutId);
+    }
+
+    @Override
+    protected int getDefItemViewType(int position) {
+        if (getMultiTypeDelegate() == null) {
+            throw new IllegalStateException("please use setMultiTypeDelegate first!");
+        }
+        return getMultiTypeDelegate().getDefItemViewType(mData, position);
+    }
+
+    @Override
     protected void convert(@NonNull V helper, T item) {
         int itemViewType = helper.getItemViewType();
         BaseItemProvider provider = mItemProviders.get(itemViewType);
@@ -69,42 +99,73 @@ public abstract class MultipleItemRvAdapter<T,V extends BaseViewHolder> extends 
 
         int position = helper.getLayoutPosition() - getHeaderLayoutCount();
         provider.convert(helper, item, position);
-
-        bindClick(helper, item, position, provider);
     }
 
-    private void bindClick(final V helper, final T item, final int position, final BaseItemProvider provider) {
+    @Override
+    protected void convertPayloads(@NonNull V helper, T item, @NonNull List<Object> payloads) {
+        int itemViewType = helper.getItemViewType();
+        BaseItemProvider provider = mItemProviders.get(itemViewType);
+
+        int position = helper.getLayoutPosition() - getHeaderLayoutCount();
+        provider.convertPayloads(helper, item, position, payloads);
+    }
+
+    private void bindClick(final V helper) {
         OnItemClickListener clickListener = getOnItemClickListener();
         OnItemLongClickListener longClickListener = getOnItemLongClickListener();
 
-        if (clickListener != null && longClickListener != null){
+        if (clickListener != null && longClickListener != null) {
             //如果已经设置了子条目点击监听和子条目长按监听
             // If you have set up a sub-entry click monitor and sub-entries long press listen
             return;
         }
 
-        View itemView = helper.itemView;
-
-        if (clickListener == null){
+        if (clickListener == null) {
             //如果没有设置点击监听，则回调给itemProvider
             //Callback to itemProvider if no click listener is set
-            itemView.setOnClickListener(new View.OnClickListener() {
+            helper.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    provider.onClick(helper, item, position);
+                    int position = helper.getAdapterPosition();
+                    if (position == RecyclerView.NO_POSITION) {
+                        return;
+                    }
+                    position -= getHeaderLayoutCount();
+
+                    int itemViewType = helper.getItemViewType();
+                    BaseItemProvider provider = mItemProviders.get(itemViewType);
+
+                    provider.onClick(helper, mData.get(position), position);
                 }
             });
         }
 
-        if (longClickListener == null){
+        if (longClickListener == null) {
             //如果没有设置长按监听，则回调给itemProvider
             // If you do not set a long press listener, callback to the itemProvider
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            helper.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    return provider.onLongClick(helper, item, position);
+                    int position = helper.getAdapterPosition();
+                    if (position == RecyclerView.NO_POSITION) {
+                        return false;
+                    }
+                    position -= getHeaderLayoutCount();
+
+                    int itemViewType = helper.getItemViewType();
+                    BaseItemProvider provider = mItemProviders.get(itemViewType);
+                    return provider.onLongClick(helper, mData.get(position), position);
                 }
             });
         }
     }
+
+    public void setMultiTypeDelegate(MultiTypeDelegate<T> multiTypeDelegate) {
+        mMultiTypeDelegate = multiTypeDelegate;
+    }
+
+    public MultiTypeDelegate<T> getMultiTypeDelegate() {
+        return mMultiTypeDelegate;
+    }
+
 }
