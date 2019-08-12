@@ -18,6 +18,7 @@ import java.util.List;
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 public class HomeActivity extends AppCompatActivity {
+
     private RecyclerView mRecyclerView;
 
     @Override

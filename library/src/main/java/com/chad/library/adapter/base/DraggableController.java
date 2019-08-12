@@ -1,5 +1,6 @@
 package com.chad.library.adapter.base;
 
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.support.annotation.NonNull;
 import android.support.v4.view.MotionEventCompat;
@@ -10,56 +11,53 @@ import android.view.View;
 
 import com.chad.library.R;
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
+import com.chad.library.adapter.base.listener.IDraggableListener;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 
 import java.util.Collections;
-import java.util.List;
+
+import static com.chad.library.adapter.base.BaseQuickAdapter.*;
 
 /**
- * Created by luoxw on 2016/7/13.
+ * <pre>
+ *     @author : xyk
+ *     e-mail : yaxiaoke@163.com
+ *     time   : 2019/07/25
+ *     desc   : 把拖拽、滑动删除的功能封装到一个类里，更加适合扩展
+ *     更新记录：
+ *          抽取接口，兼容新旧版本 2019.07.29 18：24
+ *
+ *
+ *     version: 1.1
+ * </pre>
  */
-public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> extends BaseQuickAdapter<T, K> {
+public class DraggableController implements IDraggableListener {
 
     private static final int NO_TOGGLE_VIEW = 0;
-    protected int mToggleViewId = NO_TOGGLE_VIEW;
-    protected ItemTouchHelper mItemTouchHelper;
-    protected boolean itemDragEnabled = false;
-    protected boolean itemSwipeEnabled = false;
-    protected OnItemDragListener mOnItemDragListener;
-    protected OnItemSwipeListener mOnItemSwipeListener;
-    protected boolean mDragOnLongPress = true;
+    private int mToggleViewId = NO_TOGGLE_VIEW;
+    private ItemTouchHelper mItemTouchHelper;
+    private boolean itemDragEnabled = false;
+    private boolean itemSwipeEnabled = false;
+    private OnItemDragListener mOnItemDragListener;
+    private OnItemSwipeListener mOnItemSwipeListener;
+    private boolean mDragOnLongPress = true;
 
-    protected View.OnTouchListener mOnToggleViewTouchListener;
-    protected View.OnLongClickListener mOnToggleViewLongClickListener;
+    private View.OnTouchListener mOnToggleViewTouchListener;
+    private View.OnLongClickListener mOnToggleViewLongClickListener;
 
-    private static final String ERROR_NOT_SAME_ITEMTOUCHHELPER = "Item drag and item swipe should pass the same ItemTouchHelper";
+    private BaseQuickAdapter mAdapter;
 
-
-    public BaseItemDraggableAdapter(List<T> data) {
-        super(data);
+    public DraggableController(BaseQuickAdapter adapter) {
+        mAdapter = adapter;
     }
 
-    public BaseItemDraggableAdapter(int layoutResId, List<T> data) {
-        super(layoutResId, data);
-    }
-
-
-    /**
-     * To bind different types of holder and solve different the bind events
-     *
-     * @param holder
-     * @param position
-     * @see #getDefItemViewType(int)
-     */
-    @Override
-    public void onBindViewHolder(@NonNull K holder, int position) {
-        super.onBindViewHolder(holder, position);
+    public void initView(BaseViewHolder holder) {
         int viewType = holder.getItemViewType();
 
         if (mItemTouchHelper != null && itemDragEnabled && viewType != LOADING_VIEW && viewType != HEADER_VIEW
                 && viewType != EMPTY_VIEW && viewType != FOOTER_VIEW) {
-            if (hasToggleView()) {
+            if (mToggleViewId != NO_TOGGLE_VIEW) {
                 View toggleView = holder.getView(mToggleViewId);
                 if (toggleView != null) {
                     toggleView.setTag(R.id.BaseQuickAdapter_viewholder_support, holder);
@@ -69,6 +67,9 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
                         toggleView.setOnTouchListener(mOnToggleViewTouchListener);
                     }
                 }
+            } else {
+                holder.itemView.setTag(R.id.BaseQuickAdapter_viewholder_support, holder);
+                holder.itemView.setOnLongClickListener(mOnToggleViewLongClickListener);
             }
         }
     }
@@ -82,13 +83,6 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
      */
     public void setToggleViewId(int toggleViewId) {
         mToggleViewId = toggleViewId;
-    }
-
-    /**
-     * Is there a toggle view which will trigger drag event.
-     */
-    public boolean hasToggleView() {
-        return mToggleViewId != NO_TOGGLE_VIEW;
     }
 
     /**
@@ -112,6 +106,7 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
             };
         } else {
             mOnToggleViewTouchListener = new View.OnTouchListener() {
+                @SuppressLint("ClickableViewAccessibility")
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN
@@ -137,16 +132,6 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
      */
     public void enableDragItem(@NonNull ItemTouchHelper itemTouchHelper) {
         enableDragItem(itemTouchHelper, NO_TOGGLE_VIEW, true);
-    }
-
-    /**
-     * Enable drag items. Use the specified view as toggle.
-     *
-     * @param itemTouchHelper {@link ItemTouchHelper}
-     * @param toggleViewId    The toggle view's id.
-     */
-    public void enableDragItem(@NonNull ItemTouchHelper itemTouchHelper, int toggleViewId) {
-        enableDragItem(itemTouchHelper, toggleViewId, true);
     }
 
     /**
@@ -187,6 +172,7 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
         itemSwipeEnabled = false;
     }
 
+    @Override
     public boolean isItemSwipeEnable() {
         return itemSwipeEnabled;
     }
@@ -199,15 +185,17 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
     }
 
     public int getViewHolderPosition(RecyclerView.ViewHolder viewHolder) {
-        return viewHolder.getAdapterPosition() - getHeaderLayoutCount();
+        return viewHolder.getAdapterPosition() - mAdapter.getHeaderLayoutCount();
     }
 
+    @Override
     public void onItemDragStart(RecyclerView.ViewHolder viewHolder) {
         if (mOnItemDragListener != null && itemDragEnabled) {
             mOnItemDragListener.onItemDragStart(viewHolder, getViewHolderPosition(viewHolder));
         }
     }
 
+    @Override
     public void onItemDragMoving(RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {
         int from = getViewHolderPosition(source);
         int to = getViewHolderPosition(target);
@@ -215,14 +203,14 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
         if (inRange(from) && inRange(to)) {
             if (from < to) {
                 for (int i = from; i < to; i++) {
-                    Collections.swap(mData, i, i + 1);
+                    Collections.swap(mAdapter.getData(), i, i + 1);
                 }
             } else {
                 for (int i = from; i > to; i--) {
-                    Collections.swap(mData, i, i - 1);
+                    Collections.swap(mAdapter.getData(), i, i - 1);
                 }
             }
-            notifyItemMoved(source.getAdapterPosition(), target.getAdapterPosition());
+            mAdapter.notifyItemMoved(source.getAdapterPosition(), target.getAdapterPosition());
         }
 
         if (mOnItemDragListener != null && itemDragEnabled) {
@@ -230,6 +218,7 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
         }
     }
 
+    @Override
     public void onItemDragEnd(RecyclerView.ViewHolder viewHolder) {
         if (mOnItemDragListener != null && itemDragEnabled) {
             mOnItemDragListener.onItemDragEnd(viewHolder, getViewHolderPosition(viewHolder));
@@ -240,37 +229,43 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
         mOnItemSwipeListener = listener;
     }
 
+    @Override
     public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder) {
         if (mOnItemSwipeListener != null && itemSwipeEnabled) {
             mOnItemSwipeListener.onItemSwipeStart(viewHolder, getViewHolderPosition(viewHolder));
         }
     }
 
+    @Override
     public void onItemSwipeClear(RecyclerView.ViewHolder viewHolder) {
         if (mOnItemSwipeListener != null && itemSwipeEnabled) {
             mOnItemSwipeListener.clearView(viewHolder, getViewHolderPosition(viewHolder));
         }
     }
 
+    @Override
     public void onItemSwiped(RecyclerView.ViewHolder viewHolder) {
-        final int pos = getViewHolderPosition(viewHolder);
-        if (inRange(pos)) {
-            mData.remove(pos);
-            notifyItemRemoved(viewHolder.getAdapterPosition());
+        if (mOnItemSwipeListener != null && itemSwipeEnabled) {
+            mOnItemSwipeListener.onItemSwiped(viewHolder, getViewHolderPosition(viewHolder));
+        }
 
-            if (mOnItemSwipeListener != null && itemSwipeEnabled) {
-                mOnItemSwipeListener.onItemSwiped(viewHolder, pos);
-            }
+        int pos = getViewHolderPosition(viewHolder);
+
+        if (inRange(pos)) {
+            mAdapter.getData().remove(pos);
+            mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
         }
     }
 
-    public void onItemSwiping(Canvas canvas, RecyclerView.ViewHolder viewHolder, float dX, float dY, boolean isCurrentlyActive) {
+    @Override
+    public void onItemSwiping(Canvas canvas, RecyclerView.ViewHolder viewHolder, float x, float y, boolean isCurrentlyActive) {
         if (mOnItemSwipeListener != null && itemSwipeEnabled) {
-            mOnItemSwipeListener.onItemSwipeMoving(canvas, viewHolder, dX, dY, isCurrentlyActive);
+            mOnItemSwipeListener.onItemSwipeMoving(canvas, viewHolder, x, y, isCurrentlyActive);
         }
     }
 
     private boolean inRange(int position) {
-        return position >= 0 && position < mData.size();
+        return position >= 0 && position < mAdapter.getData().size();
     }
+
 }

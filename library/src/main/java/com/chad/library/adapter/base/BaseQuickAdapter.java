@@ -32,6 +32,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
@@ -48,10 +49,10 @@ import com.chad.library.adapter.base.diff.BaseQuickDiffCallback;
 import com.chad.library.adapter.base.entity.IExpandable;
 import com.chad.library.adapter.base.loadmore.LoadMoreView;
 import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView;
-import com.chad.library.adapter.base.util.MultiTypeDelegate;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.Object;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -171,7 +172,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * same as recyclerView.setAdapter(), and save the instance of recyclerView
      */
     public void bindToRecyclerView(RecyclerView recyclerView) {
-        if (getRecyclerView() != null) {
+        if (getRecyclerView() == recyclerView) {
             throw new IllegalStateException("Don't bind twice");
         }
         setRecyclerView(recyclerView);
@@ -465,6 +466,19 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     public final void refreshNotifyItemChanged(int position) {
         notifyItemChanged(position + getHeaderLayoutCount());
+    }
+
+    /**
+     * If you have added headeview, the notification view refreshes.
+     * Do not need to care about the number of headview, only need to pass in the position of the final view
+     *
+     * @param position Position other than the number of head layouts. {@link #getHeaderLayoutCount()}
+     * @param payload Optional parameter, use null to identify a "full" update
+     *
+     * @see RecyclerView.Adapter#notifyItemChanged(int, Object)
+     */
+    public final void refreshNotifyItemChanged(int position, @Nullable Object payload) {
+        notifyItemChanged(position + getHeaderLayoutCount(), payload);
     }
 
     /**
@@ -803,9 +817,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     protected int getDefItemViewType(int position) {
-        if (mMultiTypeDelegate != null) {
-            return mMultiTypeDelegate.getDefItemViewType(mData, position);
-        }
         return super.getItemViewType(position);
     }
 
@@ -820,12 +831,27 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 baseViewHolder = getLoadingView(parent);
                 break;
             case HEADER_VIEW:
+                ViewParent headerLayoutVp = mHeaderLayout.getParent();
+                if (headerLayoutVp instanceof ViewGroup) {
+                    ((ViewGroup) headerLayoutVp).removeView(mHeaderLayout);
+                }
+
                 baseViewHolder = createBaseViewHolder(mHeaderLayout);
                 break;
             case EMPTY_VIEW:
+                ViewParent emptyLayoutVp = mEmptyLayout.getParent();
+                if (emptyLayoutVp instanceof ViewGroup) {
+                    ((ViewGroup) emptyLayoutVp).removeView(mEmptyLayout);
+                }
+
                 baseViewHolder = createBaseViewHolder(mEmptyLayout);
                 break;
             case FOOTER_VIEW:
+                ViewParent footerLayoutVp = mFooterLayout.getParent();
+                if (footerLayoutVp instanceof ViewGroup) {
+                    ((ViewGroup) footerLayoutVp).removeView(mFooterLayout);
+                }
+
                 baseViewHolder = createBaseViewHolder(mFooterLayout);
                 break;
             default:
@@ -914,6 +940,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
         if (manager instanceof GridLayoutManager) {
             final GridLayoutManager gridManager = ((GridLayoutManager) manager);
+            final GridLayoutManager.SpanSizeLookup defSpanSizeLookup = gridManager.getSpanSizeLookup();
             gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
@@ -925,7 +952,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                         return 1;
                     }
                     if (mSpanSizeLookup == null) {
-                        return isFixedViewType(type) ? gridManager.getSpanCount() : 1;
+                        return isFixedViewType(type) ? gridManager.getSpanCount() : defSpanSizeLookup.getSpanSize(position);
                     } else {
                         return (isFixedViewType(type)) ? gridManager.getSpanCount() : mSpanSizeLookup.getSpanSize(gridManager,
                                 position - getHeaderLayoutCount());
@@ -1051,7 +1078,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
 
-    private void bindViewClickListener(final BaseViewHolder baseViewHolder) {
+    protected void bindViewClickListener(final K baseViewHolder) {
         if (baseViewHolder == null) {
             return;
         }
@@ -1105,22 +1132,8 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         return getOnItemLongClickListener().onItemLongClick(BaseQuickAdapter.this, v, position);
     }
 
-    private MultiTypeDelegate<T> mMultiTypeDelegate;
-
-    public void setMultiTypeDelegate(MultiTypeDelegate<T> multiTypeDelegate) {
-        mMultiTypeDelegate = multiTypeDelegate;
-    }
-
-    public MultiTypeDelegate<T> getMultiTypeDelegate() {
-        return mMultiTypeDelegate;
-    }
-
     protected K onCreateDefViewHolder(ViewGroup parent, int viewType) {
-        int layoutId = mLayoutResId;
-        if (mMultiTypeDelegate != null) {
-            layoutId = mMultiTypeDelegate.getLayoutId(viewType);
-        }
-        return createBaseViewHolder(parent, layoutId);
+        return createBaseViewHolder(parent, mLayoutResId);
     }
 
     protected K createBaseViewHolder(ViewGroup parent, int layoutResId) {
@@ -1916,7 +1929,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         T itemTemp;
         for (int i = position + 1, n = mData.size(); i < n; i++) {
             itemTemp = mData.get(i);
-            if (itemTemp instanceof IExpandable && ((IExpandable) itemTemp).getLevel() == itemLevel) {
+            if (itemTemp instanceof IExpandable && ((IExpandable) itemTemp).getLevel() <= itemLevel) {
                 break;
             }
             collapseList.add(itemTemp);
