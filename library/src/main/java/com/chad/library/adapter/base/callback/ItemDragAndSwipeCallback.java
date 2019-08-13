@@ -39,7 +39,7 @@ public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
 
     @Override
     public boolean isLongPressDragEnabled() {
-        return mAdapter.isItemDraggable() && !mAdapter.hasToggleView();
+        return mBaseItemDraggableAdapter.isItemDraggable() && !mBaseItemDraggableAdapter.hasToggleView();
     }
 
     @Override
