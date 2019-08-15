@@ -57,6 +57,7 @@ public class HomeActivity extends AppCompatActivity {
                 new HomeItem("Section", SectionUseActivity.class, R.mipmap.gv_section),
                 new HomeItem("EmptyView", EmptyViewUseActivity.class, R.mipmap.gv_empty),
                 new HomeItem("DragAndSwipe", ItemDragAndSwipeUseActivity.class, R.mipmap.gv_drag_and_swipe),
+                new HomeItem("MultipleDragAndSwipe", MultipleItemAndDragUseActivity.class, R.mipmap.gv_drag_and_swipe),
                 new HomeItem("ItemClick", ItemClickActivity.class, R.mipmap.gv_item_click),
                 new HomeItem("ExpandableItem", ExpandableUseActivity.class, R.mipmap.gv_expandable),
                 new HomeItem("DataBinding", DataBindingUseActivity.class, R.mipmap.gv_databinding),

@@ -21,6 +21,18 @@ public interface IDraggableListener {
     boolean isItemSwipeEnable();
 
     /**
+     * @return boolean
+     */
+    boolean isItemDraggable();
+
+    /**
+     * Is there a toggle view which will trigger drag event.
+     *
+     * @return boolean
+     */
+    boolean hasToggleView();
+
+    /**
      * @param viewHolder viewHolder
      */
     void onItemDragStart(RecyclerView.ViewHolder viewHolder);

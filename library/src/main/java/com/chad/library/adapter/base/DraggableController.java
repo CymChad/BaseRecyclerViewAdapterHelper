@@ -57,7 +57,7 @@ public class DraggableController implements IDraggableListener {
 
         if (mItemTouchHelper != null && itemDragEnabled && viewType != LOADING_VIEW && viewType != HEADER_VIEW
                 && viewType != EMPTY_VIEW && viewType != FOOTER_VIEW) {
-            if (mToggleViewId != NO_TOGGLE_VIEW) {
+            if (hasToggleView()) {
                 View toggleView = holder.getView(mToggleViewId);
                 if (toggleView != null) {
                     toggleView.setTag(R.id.BaseQuickAdapter_viewholder_support, holder);
@@ -67,9 +67,6 @@ public class DraggableController implements IDraggableListener {
                         toggleView.setOnTouchListener(mOnToggleViewTouchListener);
                     }
                 }
-            } else {
-                holder.itemView.setTag(R.id.BaseQuickAdapter_viewholder_support, holder);
-                holder.itemView.setOnLongClickListener(mOnToggleViewLongClickListener);
             }
         }
     }
@@ -139,6 +136,16 @@ public class DraggableController implements IDraggableListener {
      *
      * @param itemTouchHelper {@link ItemTouchHelper}
      * @param toggleViewId    The toggle view's id.
+     */
+    public void enableDragItem(@NonNull ItemTouchHelper itemTouchHelper, int toggleViewId) {
+        enableDragItem(itemTouchHelper, toggleViewId, true);
+    }
+
+    /**
+     * Enable drag items. Use the specified view as toggle.
+     *
+     * @param itemTouchHelper {@link ItemTouchHelper}
+     * @param toggleViewId    The toggle view's id.
      * @param dragOnLongPress If true the drag event will be trigger on long press, otherwise on touch down.
      */
     public void enableDragItem(@NonNull ItemTouchHelper itemTouchHelper, int toggleViewId, boolean dragOnLongPress) {
@@ -156,8 +163,14 @@ public class DraggableController implements IDraggableListener {
         mItemTouchHelper = null;
     }
 
+    @Override
     public boolean isItemDraggable() {
         return itemDragEnabled;
+    }
+
+    @Override
+    public boolean hasToggleView() {
+        return mToggleViewId != NO_TOGGLE_VIEW;
     }
 
     /**
