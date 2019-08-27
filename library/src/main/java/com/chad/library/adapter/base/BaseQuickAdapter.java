@@ -17,6 +17,8 @@ package com.chad.library.adapter.base;
 
 import android.animation.Animator;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.IdRes;
 import android.support.annotation.IntDef;
 import android.support.annotation.IntRange;
@@ -52,7 +54,6 @@ import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.Object;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -61,6 +62,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -568,6 +570,43 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         }
         diffResult.dispatchUpdatesTo(new BaseQuickAdapterListUpdateCallback(BaseQuickAdapter.this));
         mData = newData == null ? new ArrayList<T>() : newData;
+    }
+
+    /**
+     * Simple async Diff refresh
+     * @param backgroundThreadExecutor Thread Pool
+     * @param baseQuickDiffCallback Implementation {@link BaseQuickDiffCallback}.
+     */
+    public void setNewAsyncDiffData(@NonNull Executor backgroundThreadExecutor, @NonNull final BaseQuickDiffCallback<T> baseQuickDiffCallback) {
+        setNewAsyncDiffData(backgroundThreadExecutor, baseQuickDiffCallback, true);
+    }
+
+    /**
+     * Simple async Diff refresh
+     * @param backgroundThreadExecutor Thread Pool
+     * @param baseQuickDiffCallback Implementation {@link BaseQuickDiffCallback}.
+     * @param detectMoves Whether to detect the movement of the Item
+     */
+    public void setNewAsyncDiffData(@NonNull Executor backgroundThreadExecutor, @NonNull final BaseQuickDiffCallback<T> baseQuickDiffCallback, final boolean detectMoves) {
+        if (getEmptyViewCount() == 1) {
+            // If the current view is an empty view, set the new data directly without diff
+            setNewData(baseQuickDiffCallback.getNewList());
+            return;
+        }
+        baseQuickDiffCallback.setOldList(this.getData());
+        backgroundThreadExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(baseQuickDiffCallback, detectMoves);
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        diffResult.dispatchUpdatesTo(new BaseQuickAdapterListUpdateCallback(BaseQuickAdapter.this));
+                        mData = baseQuickDiffCallback.getNewList();
+                    }
+                });
+            }
+        });
     }
 
     /**

@@ -13,6 +13,8 @@ import com.chad.baserecyclerviewadapterhelper.entity.DiffUtilDemoEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by limuyang
@@ -22,9 +24,11 @@ public class DiffUtilActivity extends BaseActivity {
     private RecyclerView mRecyclerView;
     private Button itemChangeBtn;
     private Button notifyChangeBtn;
+    private Button asyncChangeBtn;
 
     private DiffUtilAdapter mAdapter;
 
+    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(2);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,7 @@ public class DiffUtilActivity extends BaseActivity {
         mRecyclerView = findViewById(R.id.diff_rv);
         itemChangeBtn = findViewById(R.id.item_change_btn);
         notifyChangeBtn = findViewById(R.id.notify_change_btn);
+        asyncChangeBtn = findViewById(R.id.async_change_btn);
     }
 
     private void initRv() {
@@ -54,21 +59,42 @@ public class DiffUtilActivity extends BaseActivity {
     }
 
     private void initClick() {
+        // Use sync example. 同步使用示例
         itemChangeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 List<DiffUtilDemoEntity> newData = getNewList();
                 DiffDemoCallback callback = new DiffDemoCallback(newData);
                 mAdapter.setNewDiffData(callback);
+            }
+        });
 
-                /*
-                Use async example.
-                The user performs the diff calculation in the child thread and informs the adapter of the result.
+        // Use async example. 异步使用示例
+        asyncChangeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /* Method one: (Quick and easy)
+                If you only need to use asynchronous refresh quickly and easily, you can use this method directly, but there is a risk of memory leaks;
+                It is recommended to use the same global thread pool to pass it.
+
+                方法一：（快速使用）
+                如果只需要简单快速的使用异步刷新，可直接使用此方法，但有可能有内存泄漏的风险；
+                建议使用同一个全局的线程池，将其进行传递。
+                 */
+                List<DiffUtilDemoEntity> newData = getNewList();
+                DiffDemoCallback callback = new DiffDemoCallback(newData);
+                mAdapter.setNewAsyncDiffData(fixedThreadPool, callback);
+
+                /* Method Two: (recommend)
+                In this way, the user has the greatest degree of control;
+                The user performs the Diff calculation in the child thread and informs the adapter of the result.
                 Warning: You should do multi-thread management yourself to prevent memory leaks.
+                         This is just an example, so use new Thread() directly, don't use it in your project.
 
-                异步使用diff刷新
-                用户自己在子线程中进行diff计算，在主线程将结果告知adapter即可
-                警告：你应该自己进行多线程管理，防止内存泄漏，此处只是作为示例，所以直接使用了 new Thread()，请勿在你的项目这种使用。
+                方法二：（推荐）
+                此种方法，用户具有最大的可控程度；
+                用户自己在子线程中进行 Diff 计算，在主线程将结果告知 Adapter 即可。
+                警告：你应该自己进行多线程管理，防止内存泄漏；此处只是作为示例，所以直接使用了 new Thread()，请勿在你的项目这种使用。
                  */
 //                new Thread(new Runnable() {
 //                    @Override
@@ -84,10 +110,10 @@ public class DiffUtilActivity extends BaseActivity {
 //                        });
 //                    }
 //                }).start();
-
             }
         });
 
+        // Just modify a row of data. 仅仅修改某一行数据
         notifyChangeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +123,7 @@ public class DiffUtilActivity extends BaseActivity {
                         "😊😊Item " + 0,
                         "Item " + 0 + " content have change (notifyItemChanged)",
                         "06-12"));
-                mAdapter.notifyItemChanged(0 + mAdapter.getHeaderLayoutCount(), DiffUtilAdapter.ITEM_0_PAYLOAD);
+                mAdapter.refreshNotifyItemChanged(0, DiffUtilAdapter.ITEM_0_PAYLOAD);
             }
         });
     }
