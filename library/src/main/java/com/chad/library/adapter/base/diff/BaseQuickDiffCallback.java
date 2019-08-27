@@ -2,6 +2,7 @@ package com.chad.library.adapter.base.diff;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.recyclerview.extensions.AsyncListDiffer;
 import android.support.v7.util.DiffUtil;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.List;
 /**
  * Extend this method to quickly implement DiffUtil
  *
+ * @author limuyang
  * @param <T> Data type
  */
 public abstract class BaseQuickDiffCallback<T> extends DiffUtil.Callback {
@@ -45,18 +47,38 @@ public abstract class BaseQuickDiffCallback<T> extends DiffUtil.Callback {
 
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        return areItemsTheSame(oldList.get(oldItemPosition), newList.get(newItemPosition));
+        T oldItem = oldList.get(oldItemPosition);
+        T newItem = newList.get(newItemPosition);
+        if (oldItem != null && newItem != null) {
+            return areItemsTheSame(oldList.get(oldItemPosition), newList.get(newItemPosition));
+        } else {
+            return oldItem == null && newItem == null;
+        }
     }
 
     @Override
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-        return areContentsTheSame(oldList.get(oldItemPosition), newList.get(newItemPosition));
+        T oldItem = oldList.get(oldItemPosition);
+        T newItem = newList.get(newItemPosition);
+        if (oldItem != null && newItem != null) {
+            return areContentsTheSame(oldList.get(oldItemPosition), newList.get(newItemPosition));
+        } else if (oldItem == null && newItem == null) {
+            return true;
+        } else {
+            throw new AssertionError();
+        }
     }
 
     @Nullable
     @Override
     public Object getChangePayload(int oldItemPosition, int newItemPosition) {
-        return getChangePayload(oldList.get(oldItemPosition), newList.get(newItemPosition));
+        T oldItem = oldList.get(oldItemPosition);
+        T newItem = newList.get(newItemPosition);
+        if (oldItem != null && newItem != null) {
+            return getChangePayload(oldList.get(oldItemPosition), newList.get(newItemPosition));
+        } else {
+            throw new AssertionError();
+        }
     }
 
     /**

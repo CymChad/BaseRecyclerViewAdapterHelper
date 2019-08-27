@@ -67,8 +67,8 @@ public class DiffUtilActivity extends BaseActivity {
                 Warning: You should do multi-thread management yourself to prevent memory leaks.
 
                 异步使用diff刷新
-                用户自己在子线程中进行diff计算，将结果告知adapter即可
-                警告：你应该自己进行多线程管理，防止内存泄漏
+                用户自己在子线程中进行diff计算，在主线程将结果告知adapter即可
+                警告：你应该自己进行多线程管理，防止内存泄漏，此处只是作为示例，所以直接使用了 new Thread()，请勿在你的项目这种使用。
                  */
 //                new Thread(new Runnable() {
 //                    @Override

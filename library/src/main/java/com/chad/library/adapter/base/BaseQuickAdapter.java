@@ -526,7 +526,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @param baseQuickDiffCallback implementation {@link BaseQuickDiffCallback}
      */
     public void setNewDiffData(@NonNull BaseQuickDiffCallback<T> baseQuickDiffCallback) {
-        setNewDiffData(baseQuickDiffCallback, false);
+        setNewDiffData(baseQuickDiffCallback, true);
     }
 
     /**
@@ -555,17 +555,19 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * You only need to tell the calculation result,
      * this adapter does not care about the calculation process.
      *
+     * E.g: Use child threads for result calculation, and execute this method in the main thread.
+     *
      * @param diffResult DiffResult
      * @param newData New Data
      */
-    public void setNewDiffData(@NonNull DiffUtil.DiffResult diffResult, @NonNull List<T> newData) {
+    public void setNewDiffData(@NonNull DiffUtil.DiffResult diffResult, @Nullable List<T> newData) {
         if (getEmptyViewCount() == 1) {
             // If the current view is an empty view, set the new data directly without diff
             setNewData(newData);
             return;
         }
         diffResult.dispatchUpdatesTo(new BaseQuickAdapterListUpdateCallback(BaseQuickAdapter.this));
-        mData = newData;
+        mData = newData == null ? new ArrayList<T>() : newData;
     }
 
     /**
