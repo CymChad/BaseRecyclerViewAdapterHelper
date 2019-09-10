@@ -461,7 +461,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     /**
-     * If you have added headeview, the notification view refreshes.
+     * If you have added headerView, the notification view refreshes.
      * Do not need to care about the number of headview, only need to pass in the position of the final view
      *
      * @param position
@@ -471,7 +471,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     /**
-     * If you have added headeview, the notification view refreshes.
+     * If you have added headerView, the notification view refreshes.
      * Do not need to care about the number of headview, only need to pass in the position of the final view
      *
      * @param position Position other than the number of head layouts. {@link #getHeaderLayoutCount()}
@@ -481,6 +481,16 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      */
     public final void refreshNotifyItemChanged(int position, @Nullable Object payload) {
         notifyItemChanged(position + getHeaderLayoutCount(), payload);
+    }
+
+    /**
+     * If you have added headerView, the notification view refreshes.
+     * @param positionStart
+     * @param itemCount
+     * @param payload
+     */
+    public final void refreshNotifyItemRangeChanged(int positionStart, int itemCount, @Nullable Object payload) {
+        notifyItemRangeChanged(positionStart + getHeaderLayoutCount(), itemCount, payload);
     }
 
     /**
