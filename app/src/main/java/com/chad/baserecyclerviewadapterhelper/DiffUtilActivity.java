@@ -119,7 +119,7 @@ public class DiffUtilActivity extends BaseActivity {
             public void onClick(View v) {
                 // change item 0
                 mAdapter.getData().set(0, new DiffUtilDemoEntity(
-                        1,
+                        0,
                         "😊😊Item " + 0,
                         "Item " + 0 + " content have change (notifyItemChanged)",
                         "06-12"));
