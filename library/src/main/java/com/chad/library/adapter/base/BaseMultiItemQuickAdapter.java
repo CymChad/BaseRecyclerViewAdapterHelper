@@ -140,8 +140,9 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity, K ext
         return -1;
     }
 
+    @Override
     public boolean isExpandable(MultiItemEntity item) {
-        return item != null && item instanceof IExpandable;
+        return item instanceof IExpandable;
     }
 }
 

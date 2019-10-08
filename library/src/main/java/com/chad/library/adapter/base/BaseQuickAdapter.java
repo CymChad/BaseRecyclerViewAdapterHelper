@@ -2050,7 +2050,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     public boolean isExpandable(T item) {
-        return item != null && item instanceof IExpandable;
+        return item instanceof IExpandable;
     }
 
     private IExpandable getExpandableItem(int position) {
