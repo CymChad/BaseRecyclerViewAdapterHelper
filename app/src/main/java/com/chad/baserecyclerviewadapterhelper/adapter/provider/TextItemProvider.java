@@ -1,5 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.adapter.provider;
 
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.R;
@@ -29,7 +30,7 @@ public class TextItemProvider extends BaseItemProvider<NormalMultipleEntity, Bas
     }
 
     @Override
-    public void convert(BaseViewHolder helper, NormalMultipleEntity data, int position) {
+    public void convert(@NonNull BaseViewHolder helper, NormalMultipleEntity data, int position) {
         helper.setText(R.id.tv, data.content);
     }
 

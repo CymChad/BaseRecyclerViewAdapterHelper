@@ -1,5 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.adapter.provider;
 
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.R;
@@ -27,7 +28,7 @@ public class TextImgItemProvider extends BaseItemProvider<NormalMultipleEntity,B
     }
 
     @Override
-    public void convert(BaseViewHolder helper, NormalMultipleEntity data, int position) {
+    public void convert(@NonNull BaseViewHolder helper, NormalMultipleEntity data, int position) {
         helper.setText(R.id.tv, data.content);
         if (position % 2 == 0) {
             helper.setImageResource(R.id.iv, R.mipmap.animation_img1);

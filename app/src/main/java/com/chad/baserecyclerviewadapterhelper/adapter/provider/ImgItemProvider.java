@@ -1,5 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.adapter.provider;
 
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.chad.baserecyclerviewadapterhelper.R;
@@ -29,7 +30,7 @@ public class ImgItemProvider extends BaseItemProvider<NormalMultipleEntity,BaseV
     }
 
     @Override
-    public void convert(BaseViewHolder helper, NormalMultipleEntity data, int position) {
+    public void convert(@NonNull BaseViewHolder helper, NormalMultipleEntity data, int position) {
         if (position % 2 == 0) {
             helper.setImageResource(R.id.iv, R.mipmap.animation_img1);
         }else{
