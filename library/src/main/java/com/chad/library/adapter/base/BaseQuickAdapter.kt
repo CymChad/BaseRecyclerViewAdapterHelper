@@ -4,9 +4,12 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.FrameLayout
+import android.widget.LinearLayout
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
-import com.chad.library.adapter.base.BaseQuickAdapter.*
 import java.lang.reflect.Constructor
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Modifier
@@ -34,7 +37,13 @@ abstract class BaseQuickAdapter2<T, VH : BaseViewHolder>(@LayoutRes val layoutRe
     /** 当显示空布局时，是否显示 Header */
     var headerWithEmptyEnable = false
     /** 当显示空布局时，是否显示 Foot */
-    var footWithEmptyEnable = false
+    var footerWithEmptyEnable = false
+    /** 是否使用空布局 */
+    var isUseEmpty = true
+
+    private lateinit var mHeaderLayout: LinearLayout
+    private lateinit var mFooterLayout: LinearLayout
+    private lateinit var mEmptyLayout: FrameLayout
 
     protected lateinit var context: Context
         private set
@@ -60,25 +69,25 @@ abstract class BaseQuickAdapter2<T, VH : BaseViewHolder>(@LayoutRes val layoutRe
         when (viewType) {
             LOADING_VIEW -> baseViewHolder = getLoadingView(parent)
             HEADER_VIEW -> {
-                val headerLayoutVp = mHeaderLayout.getParent()
+                val headerLayoutVp = mHeaderLayout.parent
                 if (headerLayoutVp is ViewGroup) {
-                    (headerLayoutVp as ViewGroup).removeView(mHeaderLayout)
+                    headerLayoutVp.removeView(mHeaderLayout)
                 }
 
                 baseViewHolder = createBaseViewHolder(mHeaderLayout)
             }
             EMPTY_VIEW -> {
-                val emptyLayoutVp = mEmptyLayout.getParent()
+                val emptyLayoutVp = mEmptyLayout.parent
                 if (emptyLayoutVp is ViewGroup) {
-                    (emptyLayoutVp as ViewGroup).removeView(mEmptyLayout)
+                    emptyLayoutVp.removeView(mEmptyLayout)
                 }
 
                 baseViewHolder = createBaseViewHolder(mEmptyLayout)
             }
             FOOTER_VIEW -> {
-                val footerLayoutVp = mFooterLayout.getParent()
+                val footerLayoutVp = mFooterLayout.parent
                 if (footerLayoutVp is ViewGroup) {
-                    (footerLayoutVp as ViewGroup).removeView(mFooterLayout)
+                    footerLayoutVp.removeView(mFooterLayout)
                 }
 
                 baseViewHolder = createBaseViewHolder(mFooterLayout)
@@ -98,7 +107,7 @@ abstract class BaseQuickAdapter2<T, VH : BaseViewHolder>(@LayoutRes val layoutRe
             if (headerWithEmptyEnable && hasHeaderLayout()) {
                 count++
             }
-            if (footWithEmptyEnable && hasFooterLayout()) {
+            if (footerWithEmptyEnable && hasFooterLayout()) {
                 count++
             }
             return count
@@ -128,19 +137,15 @@ abstract class BaseQuickAdapter2<T, VH : BaseViewHolder>(@LayoutRes val layoutRe
         if (hasEmptyView()) {
             val header = headerWithEmptyEnable && hasHeaderLayout()
             return when (position) {
-                0 -> {
-                    if (header) {
-                        HEADER_VIEW
-                    } else {
-                        EMPTY_VIEW
-                    }
+                0 -> if (header) {
+                    HEADER_VIEW
+                } else {
+                    EMPTY_VIEW
                 }
-                1 -> {
-                    if (header) {
-                        EMPTY_VIEW
-                    } else {
-                        FOOTER_VIEW
-                    }
+                1 -> if (header) {
+                    EMPTY_VIEW
+                } else {
+                    FOOTER_VIEW
                 }
                 2 -> FOOTER_VIEW
                 else -> EMPTY_VIEW
@@ -156,11 +161,11 @@ abstract class BaseQuickAdapter2<T, VH : BaseViewHolder>(@LayoutRes val layoutRe
             } else {
                 position
             }
-            val adapterCount = data.size
-            return if (adjPosition < adapterCount) {
+            val dataSize = data.size
+            return if (adjPosition < dataSize) {
                 getDefItemViewType(adjPosition)
             } else {
-                adjPosition -= adapterCount
+                adjPosition -= dataSize
                 val numFooters = if (hasFooterLayout()) {
                     1
                 } else {
@@ -277,20 +282,228 @@ abstract class BaseQuickAdapter2<T, VH : BaseViewHolder>(@LayoutRes val layoutRe
         return LayoutInflater.from(this).inflate(layoutResId, parent, false)
     }
 
-    fun hasEmptyView(): Boolean {
-        //TODO
-        return false
+
+    /******************************* HeaderView Method ****************************************/
+    @JvmOverloads
+    fun addHeaderView(view: View, index: Int = -1, orientation: Int = LinearLayout.VERTICAL): Int {
+        if (!this::mHeaderLayout.isInitialized) {
+            mHeaderLayout = LinearLayout(view.context)
+        }
+        mHeaderLayout.orientation = orientation
+        mHeaderLayout.layoutParams = if (orientation == LinearLayout.VERTICAL) {
+            ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+        } else {
+            ViewGroup.LayoutParams(WRAP_CONTENT, MATCH_PARENT)
+        }
+
+        val childCount = mHeaderLayout.childCount
+        var mIndex = index
+        if (index < 0 || index > childCount) {
+            mIndex = childCount
+        }
+        mHeaderLayout.addView(view, mIndex)
+        if (mHeaderLayout.childCount == 1) {
+            val position = getHeaderViewPosition()
+            if (position != -1) {
+                notifyItemInserted(position)
+            }
+        }
+        return mIndex
+    }
+
+    @JvmOverloads
+    fun setHeaderView(view: View, index: Int = 0, orientation: Int = LinearLayout.VERTICAL): Int {
+        return if (!this::mHeaderLayout.isInitialized || mHeaderLayout.childCount <= index) {
+            addHeaderView(view, index, orientation)
+        } else {
+            mHeaderLayout.removeViewAt(index)
+            mHeaderLayout.addView(view, index)
+            index
+        }
     }
 
     fun hasHeaderLayout(): Boolean {
-        //TODO
+        if (this::mHeaderLayout.isInitialized && mHeaderLayout.childCount > 0) {
+            return true
+        }
         return false
     }
 
+    fun removeHeaderView(header: View) {
+        if (!hasHeaderLayout()) return
+
+        mHeaderLayout.removeView(header)
+        if (mHeaderLayout.childCount == 0) {
+            val position = getHeaderViewPosition()
+            if (position != -1) {
+                notifyItemRemoved(position)
+            }
+        }
+    }
+
+    fun removeAllHeaderView() {
+        if (!hasHeaderLayout()) return
+
+        mHeaderLayout.removeAllViews()
+        val position = getHeaderViewPosition()
+        if (position != -1) {
+            notifyItemRemoved(position)
+        }
+    }
+
+    private fun getHeaderViewPosition(): Int {
+        //Return to header view notify position
+        if (hasEmptyView()) {
+            if (headerWithEmptyEnable) {
+                return 0
+            }
+        } else {
+            return 0
+        }
+        return -1
+    }
+
+    /******************************* FooterView Method ****************************************/
+    @JvmOverloads
+    fun addFooterView(view: View, index: Int = -1, orientation: Int = LinearLayout.VERTICAL): Int {
+        if (!this::mFooterLayout.isInitialized) {
+            mFooterLayout = LinearLayout(view.context)
+        }
+        mFooterLayout.orientation = orientation
+        mFooterLayout.layoutParams = if (orientation == LinearLayout.VERTICAL) {
+            ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+        } else {
+            ViewGroup.LayoutParams(WRAP_CONTENT, MATCH_PARENT)
+        }
+
+        val childCount = mFooterLayout.childCount
+        var mIndex = index
+        if (index < 0 || index > childCount) {
+            mIndex = childCount
+        }
+        mFooterLayout.addView(view, mIndex)
+        if (mFooterLayout.childCount == 1) {
+            val position = getFooterViewPosition()
+            if (position != -1) {
+                notifyItemInserted(position)
+            }
+        }
+        return mIndex
+    }
+
+    @JvmOverloads
+    fun setFooterView(view: View, index: Int = 0, orientation: Int = LinearLayout.VERTICAL): Int {
+        return if (!this::mFooterLayout.isInitialized || mFooterLayout.childCount <= index) {
+            addHeaderView(view, index, orientation)
+        } else {
+            mFooterLayout.removeViewAt(index)
+            mFooterLayout.addView(view, index)
+            index
+        }
+    }
+
     fun hasFooterLayout(): Boolean {
-        //TODO
+        if (this::mFooterLayout.isInitialized && mFooterLayout.childCount > 0) {
+            return true
+        }
         return false
     }
+
+    fun removeFooterView(footer: View) {
+        if (!hasFooterLayout()) return
+
+        mFooterLayout.removeView(footer)
+        if (mFooterLayout.childCount == 0) {
+            val position = getFooterViewPosition()
+            if (position != -1) {
+                notifyItemRemoved(position)
+            }
+        }
+    }
+
+    fun removeAllFooterView() {
+        if (!hasFooterLayout()) return
+
+        mFooterLayout.removeAllViews()
+        val position = getFooterViewPosition()
+        if (position != -1) {
+            notifyItemRemoved(position)
+        }
+    }
+
+    private fun getFooterViewPosition(): Int {
+        //Return to footer view notify position
+        if (hasEmptyView()) {
+            var position = 1
+            if (headerWithEmptyEnable && hasHeaderLayout()) {
+                position++
+            }
+            if (footerWithEmptyEnable) {
+                return position
+            }
+        } else {
+            val headerCount = if (hasHeaderLayout()) {
+                1
+            } else {
+                0
+            }
+            return headerCount + data.size
+        }
+        return -1
+    }
+
+    /******************************* EmptyView Method ****************************************/
+    fun setEmptyView(emptyView: View) {
+        val oldItemCount = itemCount
+        var insert = false
+        if (!this::mEmptyLayout.isInitialized) {
+            mEmptyLayout = FrameLayout(emptyView.context)
+            val layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+            emptyView.layoutParams?.let {
+                layoutParams.width = it.width
+                layoutParams.height = it.height
+            }
+            mEmptyLayout.layoutParams = layoutParams
+            insert = true
+        }
+        mEmptyLayout.removeAllViews()
+        mEmptyLayout.addView(emptyView)
+        isUseEmpty = true
+        if (insert && hasEmptyView()) {
+            var position = 0
+            if (headerWithEmptyEnable && hasEmptyView()) {
+                position++
+            }
+            if (itemCount > oldItemCount) {
+                notifyItemInserted(position)
+            } else {
+                notifyDataSetChanged()
+            }
+        }
+    }
+
+    fun setEmptyView(layoutResId: Int, context: Context) {
+        val view = LayoutInflater.from(context).inflate(layoutResId, null, false)
+        setEmptyView(view)
+    }
+
+    fun hasEmptyView(): Boolean {
+        if (!this::mEmptyLayout.isInitialized || mEmptyLayout.childCount == 0) {
+            return false
+        }
+        if (!isUseEmpty) {
+            return false
+        }
+        return data.isEmpty()
+    }
+
+    fun getEmptyView(): View? = if (this::mEmptyLayout.isInitialized) {
+        mEmptyLayout
+    } else {
+        null
+    }
+
+    /******************************* LoadMoreView Method ****************************************/
 
     fun hasLoadMoreView(): Boolean {
         //TODO
