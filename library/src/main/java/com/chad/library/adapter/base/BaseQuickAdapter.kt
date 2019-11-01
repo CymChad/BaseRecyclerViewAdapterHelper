@@ -21,6 +21,13 @@ abstract class BaseQuickAdapter2<T, VH : BaseViewHolder>(@LayoutRes val layoutRe
                                                          data: List<T>? = null)
     : RecyclerView.Adapter<VH>() {
 
+    companion object {
+        const val HEADER_VIEW = 0x00000111
+        const val LOADING_VIEW = 0x00000222
+        const val FOOTER_VIEW = 0x00000333
+        const val EMPTY_VIEW = 0x00000555
+    }
+
     /** data 数据 */
     var data: List<T> = data ?: arrayListOf()
         private set
@@ -45,21 +52,7 @@ abstract class BaseQuickAdapter2<T, VH : BaseViewHolder>(@LayoutRes val layoutRe
         this.recyclerView!!.adapter = this
     }
 
-    override fun getItemCount(): Int {
-        var count: Int
-        if (1 == getEmptyViewCount()) {
-            count = 1
-            if (mHeadAndEmptyEnable && getHeaderLayoutCount() != 0) {
-                count++
-            }
-            if (mFootAndEmptyEnable && getFooterLayoutCount() != 0) {
-                count++
-            }
-        } else {
-            count = getHeaderLayoutCount() + data.size + getFooterLayoutCount() + getLoadMoreViewCount()
-        }
-        return count
-    }
+    /******************************* RecyclerView Method ****************************************/
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         this.context = parent.context
@@ -97,6 +90,93 @@ abstract class BaseQuickAdapter2<T, VH : BaseViewHolder>(@LayoutRes val layoutRe
         }
 
         return baseViewHolder
+    }
+
+    override fun getItemCount(): Int {
+        if (hasEmptyView()) {
+            var count = 1
+            if (headerWithEmptyEnable && hasHeaderLayout()) {
+                count++
+            }
+            if (footWithEmptyEnable && hasFooterLayout()) {
+                count++
+            }
+            return count
+        } else {
+            val headerCount = if (hasHeaderLayout()) {
+                1
+            } else {
+                0
+            }
+
+            val footerCount = if (hasFooterLayout()) {
+                1
+            } else {
+                0
+            }
+
+            val loadMoreCount = if (hasLoadMoreView()) {
+                1
+            } else {
+                0
+            }
+            return headerCount + data.size + footerCount + loadMoreCount
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        if (hasEmptyView()) {
+            val header = headerWithEmptyEnable && hasHeaderLayout()
+            return when (position) {
+                0 -> {
+                    if (header) {
+                        HEADER_VIEW
+                    } else {
+                        EMPTY_VIEW
+                    }
+                }
+                1 -> {
+                    if (header) {
+                        EMPTY_VIEW
+                    } else {
+                        FOOTER_VIEW
+                    }
+                }
+                2 -> FOOTER_VIEW
+                else -> EMPTY_VIEW
+            }
+        }
+
+        val hasHeader = hasHeaderLayout()
+        if (hasHeader && position == 0) {
+            return HEADER_VIEW
+        } else {
+            var adjPosition = if (hasHeader) {
+                position - 1
+            } else {
+                position
+            }
+            val adapterCount = data.size
+            return if (adjPosition < adapterCount) {
+                getDefItemViewType(adjPosition)
+            } else {
+                adjPosition -= adapterCount
+                val numFooters = if (hasFooterLayout()) {
+                    1
+                } else {
+                    0
+                }
+                if (adjPosition < numFooters) {
+                    FOOTER_VIEW
+                } else {
+                    LOADING_VIEW
+                }
+            }
+        }
+    }
+
+    protected fun getDefItemViewType(position: Int): Int {
+        return super.getItemViewType(position)
     }
 
     protected fun onCreateDefViewHolder(parent: ViewGroup): VH {
@@ -198,7 +278,23 @@ abstract class BaseQuickAdapter2<T, VH : BaseViewHolder>(@LayoutRes val layoutRe
     }
 
     fun hasEmptyView(): Boolean {
+        //TODO
+        return false
+    }
 
+    fun hasHeaderLayout(): Boolean {
+        //TODO
+        return false
+    }
+
+    fun hasFooterLayout(): Boolean {
+        //TODO
+        return false
+    }
+
+    fun hasLoadMoreView(): Boolean {
+        //TODO
+        return false
     }
 }
 
