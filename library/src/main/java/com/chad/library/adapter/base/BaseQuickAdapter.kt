@@ -461,7 +461,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     /**
      * if addHeaderView will be return 1, if not will be return 0
      */
-    fun getHeaderLayoutCount(): Int =
+    protected fun getHeaderLayoutCount(): Int =
             if (hasHeaderLayout()) {
                 1
             } else {
@@ -549,12 +549,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
                 return position
             }
         } else {
-            val headerCount = if (hasHeaderLayout()) {
-                1
-            } else {
-                0
-            }
-            return headerCount + data.size
+            return getHeaderLayoutCount() + data.size
         }
         return -1
     }
@@ -724,6 +719,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
      *
      * @param gone if true gone the load more view
      */
+    @JvmOverloads
     fun loadMoreEnd(gone: Boolean = false) {
         if (!hasLoadMoreView()) {
             return
@@ -765,9 +761,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     }
 
     //TODO disableLoadMoreIfNotFullPage
-
-
-
 
 
     fun setNewData(data: MutableList<T>?) {
@@ -867,7 +860,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
             notifyDataSetChanged()
         }
     }
-
 
 
     fun setSpanSizeLookup(spanSizeLookup: SpanSizeLookup) {
