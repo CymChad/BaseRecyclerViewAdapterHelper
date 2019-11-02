@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.annotation.IdRes
 import androidx.recyclerview.widget.RecyclerView
 
-class BaseViewHolder2(view: View) : RecyclerView.ViewHolder(view) {
+open class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     /**
      * Views indexed with their IDs
      */
@@ -23,7 +23,7 @@ class BaseViewHolder2(view: View) : RecyclerView.ViewHolder(view) {
     }
 }
 
-fun BaseViewHolder2.setText(@IdRes viewId: Int, value: CharSequence?): BaseViewHolder2 {
+fun BaseViewHolder.setText(@IdRes viewId: Int, value: CharSequence?): BaseViewHolder {
     val view = getView<TextView>(viewId)
     view.text = value
     return this
