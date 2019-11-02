@@ -10,10 +10,12 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.IntRange
 import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.loadmore.BaseLoadMoreView
 import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView
 import com.chad.library.adapter.base.util.getItemView
+import java.lang.ref.WeakReference
 import java.lang.reflect.Constructor
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Modifier
@@ -24,8 +26,8 @@ import java.lang.reflect.ParameterizedType
  * @param T : type of data, 数据类型
  * @param VH : BaseViewHolder
  */
-abstract class BaseQuickAdapter2<T, VH : BaseViewHolder>(@LayoutRes val layoutResId: Int = 0,
-                                                         data: List<T>? = null)
+abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutResId: Int = 0,
+                                                        data: List<T>? = null)
     : RecyclerView.Adapter<VH>() {
 
 
@@ -54,10 +56,18 @@ abstract class BaseQuickAdapter2<T, VH : BaseViewHolder>(@LayoutRes val layoutRe
     var isUseEmpty = true
     /** 加载完成后是否允许点击 */
     var enableLoadMoreEndClick = false
+    /**
+     * if asFlow is true, footer/header will arrange like normal item view.
+     * only works when use [GridLayoutManager],and it will ignore span size.
+     */
+    var headerViewAsFlow: Boolean = false
+    var footerViewAsFlow: Boolean = false
 
     private lateinit var mHeaderLayout: LinearLayout
     private lateinit var mFooterLayout: LinearLayout
     private lateinit var mEmptyLayout: FrameLayout
+
+    private var mSpanSizeLookup: SpanSizeLookup? = null
 
     private var mLoadMoreListener: OnLoadMoreListener? = null
     private var mNextLoadEnable = false
@@ -67,18 +77,20 @@ abstract class BaseQuickAdapter2<T, VH : BaseViewHolder>(@LayoutRes val layoutRe
     protected lateinit var context: Context
         private set
 
-    protected var recyclerView: RecyclerView? = null
-        private set
-        get() {
-            checkNotNull(field) { "please bind recyclerView first!" }
-            return field
-        }
+//    protected var recyclerView: RecyclerView? = null
+//        private set
+//        get() {
+//            checkNotNull(field) { "please bind recyclerView first!" }
+//            return field
+//        }
 
-    fun bindToRecyclerView(recyclerView: RecyclerView) {
-        check(this.recyclerView != recyclerView) { "Don't bind twice" }
-        this.recyclerView = recyclerView
-        this.recyclerView!!.adapter = this
-    }
+    protected lateinit var weakRecyclerView: WeakReference<RecyclerView>
+
+//    fun bindToRecyclerView(recyclerView: RecyclerView) {
+//        check(this.recyclerView != recyclerView) { "Don't bind twice" }
+//        this.recyclerView = recyclerView
+//        this.recyclerView!!.adapter = this
+//    }
 
     /******************************* RecyclerView Method ****************************************/
 
@@ -120,7 +132,7 @@ abstract class BaseQuickAdapter2<T, VH : BaseViewHolder>(@LayoutRes val layoutRe
                 baseViewHolder = createBaseViewHolder(mFooterLayout)
             }
             else -> {
-                baseViewHolder = onCreateDefViewHolder(parent)
+                baseViewHolder = onCreateDefViewHolder(parent, viewType)
                 bindViewClickListener(baseViewHolder)
             }
         }
@@ -198,11 +210,46 @@ abstract class BaseQuickAdapter2<T, VH : BaseViewHolder>(@LayoutRes val layoutRe
     override fun onBindViewHolder(holder: VH, position: Int) {
         //Do not move position, need to change before LoadMoreView binding
         autoLoadMore(position)
-        when(holder.itemViewType) {
+        when (holder.itemViewType) {
             LOAD_MORE_VIEW -> mLoadMoreView.convert(holder)
             HEADER_VIEW, EMPTY_VIEW, FOOTER_VIEW -> return
             else -> convert(holder, getItem(position - getHeaderLayoutCount()))
         }
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        weakRecyclerView = WeakReference(recyclerView)
+
+        val manager = recyclerView.layoutManager
+        if (manager is GridLayoutManager) {
+            val defSpanSizeLookup = manager.spanSizeLookup
+            manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int {
+                    val type = getItemViewType(position)
+                    if (type == HEADER_VIEW && headerViewAsFlow) {
+                        return 1
+                    }
+                    if (type == FOOTER_VIEW && footerViewAsFlow) {
+                        return 1
+                    }
+                    return if (mSpanSizeLookup == null) {
+                        if (isFixedViewType(type)) manager.spanCount else defSpanSizeLookup.getSpanSize(position)
+                    } else {
+                        if (isFixedViewType(type))
+                            manager.spanCount
+                        else
+                            mSpanSizeLookup!!.invoke(manager, position - getHeaderLayoutCount())
+                    }
+                }
+
+
+            }
+        }
+    }
+
+    protected open fun isFixedViewType(type: Int): Boolean {
+        return type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOAD_MORE_VIEW
     }
 
     /**
@@ -219,11 +266,11 @@ abstract class BaseQuickAdapter2<T, VH : BaseViewHolder>(@LayoutRes val layoutRe
             null
     }
 
-    protected fun getDefItemViewType(position: Int): Int {
+    protected open fun getDefItemViewType(position: Int): Int {
         return super.getItemViewType(position)
     }
 
-    protected fun onCreateDefViewHolder(parent: ViewGroup): VH {
+    protected open fun onCreateDefViewHolder(parent: ViewGroup, viewType: Int): VH {
         return createBaseViewHolder(parent, layoutResId)
     }
 
@@ -307,19 +354,6 @@ abstract class BaseQuickAdapter2<T, VH : BaseViewHolder>(@LayoutRes val layoutRe
 
         return null
     }
-
-//    /**
-//     *
-//     * @receiver Context
-//     * @param layoutResId ID for an XML layout resource to load
-//     * @param parent Optional view to be the parent of the generated hierarchy or else simply an object that
-//     *               provides a set of LayoutParams values for root of the returned
-//     *               hierarchy
-//     * @return View
-//     */
-//    protected fun Context.getItemView(@LayoutRes layoutResId: Int, parent: ViewGroup): View {
-//        return LayoutInflater.from(this).inflate(layoutResId, parent, false)
-//    }
 
     /********************************************************************************************/
     /********************************* HeaderView Method ****************************************/
@@ -406,7 +440,7 @@ abstract class BaseQuickAdapter2<T, VH : BaseViewHolder>(@LayoutRes val layoutRe
     /**
      * if addHeaderView will be return 1, if not will be return 0
      */
-    private fun getHeaderLayoutCount(): Int =
+    fun getHeaderLayoutCount(): Int =
             if (hasHeaderLayout()) {
                 1
             } else {
@@ -651,10 +685,11 @@ abstract class BaseQuickAdapter2<T, VH : BaseViewHolder>(@LayoutRes val layoutRe
         mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Loading
         if (!mLoading) {
             mLoading = true
-            mLoadMoreListener?.invoke()
+            weakRecyclerView.get()?.let {
+                it.post { mLoadMoreListener?.invoke() }
+            } ?: mLoadMoreListener?.invoke()
         }
     }
-
 
     fun setOnLoadMoreListener(listener: OnLoadMoreListener) {
         this.mLoadMoreListener = listener
@@ -665,5 +700,12 @@ abstract class BaseQuickAdapter2<T, VH : BaseViewHolder>(@LayoutRes val layoutRe
 
     //TODO disableLoadMoreIfNotFullPage
 
+    fun setSpanSizeLookup(spanSizeLookup: SpanSizeLookup) {
+        this.mSpanSizeLookup = spanSizeLookup
+    }
+
 }
+
+
+typealias SpanSizeLookup = (gridLayoutManager: GridLayoutManager, position: Int) -> Int
 typealias OnLoadMoreListener = () -> Unit

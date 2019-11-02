@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.chad.library.adapter.base.entity.SectionEntity;
+import com.chad.library.adapter.base.util.AdapterUtilsKt;
 
 import java.util.List;
 
@@ -38,7 +39,7 @@ public abstract class BaseSectionQuickAdapter<T extends SectionEntity, K extends
     @Override
     protected K onCreateDefViewHolder(ViewGroup parent, int viewType) {
         if (viewType == SECTION_HEADER_VIEW)
-            return createBaseViewHolder(getItemView(mSectionHeadResId, parent));
+            return createBaseViewHolder(AdapterUtilsKt.getItemView(parent, mSectionHeadResId));
 
         return super.onCreateDefViewHolder(parent, viewType);
     }
