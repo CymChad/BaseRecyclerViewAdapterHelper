@@ -10,6 +10,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.IntRange
 import androidx.annotation.LayoutRes
+import androidx.annotation.NonNull
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.loadmore.BaseLoadMoreView
@@ -27,9 +28,8 @@ import java.lang.reflect.ParameterizedType
  * @param VH : BaseViewHolder
  */
 abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutResId: Int = 0,
-                                                        data: List<T>? = null)
+                                                        data: MutableList<T>? = null)
     : RecyclerView.Adapter<VH>() {
-
 
     companion object {
         const val HEADER_VIEW = 0x00000111
@@ -46,7 +46,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     }
 
     /** data 数据 */
-    var data: List<T> = data ?: arrayListOf()
+    var data: MutableList<T> = data ?: arrayListOf()
         private set
     /** 当显示空布局时，是否显示 Header */
     var headerWithEmptyEnable = false
@@ -73,6 +73,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     private var mNextLoadEnable = false
     private var mLoading = false
     private var mPreLoadNumber = 1
+    private var mLastPosition = -1
 
     protected lateinit var context: Context
         private set
@@ -101,6 +102,8 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
      * @param item   The item that needs to be displayed.
      */
     protected abstract fun convert(helper: VH, item: T?)
+
+    protected open fun convertPayloads(helper: VH, item: T?, payloads: List<Any>) {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         this.context = parent.context
@@ -217,6 +220,20 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         }
     }
 
+    override fun onBindViewHolder(holder: VH, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position)
+            return
+        }
+        //Do not move position, need to change before LoadMoreView binding
+        autoLoadMore(position)
+        when (holder.itemViewType) {
+            LOAD_MORE_VIEW -> mLoadMoreView.convert(holder)
+            HEADER_VIEW, EMPTY_VIEW, FOOTER_VIEW -> return
+            else -> convert(holder, getItem(position - getHeaderLayoutCount()))
+        }
+    }
+
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         weakRecyclerView = WeakReference(recyclerView)
@@ -266,6 +283,10 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
             null
     }
 
+    protected open fun bindViewClickListener(baseViewHolder: VH) {
+        //TODO
+    }
+
     protected open fun getDefItemViewType(position: Int): Int {
         return super.getItemViewType(position)
     }
@@ -274,12 +295,12 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         return createBaseViewHolder(parent, layoutResId)
     }
 
-    protected fun createBaseViewHolder(parent: ViewGroup, layoutResId: Int): VH {
+    protected open fun createBaseViewHolder(parent: ViewGroup, layoutResId: Int): VH {
         return createBaseViewHolder(parent.getItemView(layoutResId))
     }
 
     @Suppress("UNCHECKED_CAST")
-    protected fun createBaseViewHolder(view: View): VH {
+    protected open fun createBaseViewHolder(view: View): VH {
         var temp: Class<*>? = javaClass
         var z: Class<*>? = null
         while (z == null && null != temp) {
@@ -698,12 +719,160 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         mLoading = false
     }
 
+    /**
+     * Refresh end, no more data
+     *
+     * @param gone if true gone the load more view
+     */
+    fun loadMoreEnd(gone: Boolean = false) {
+        if (!hasLoadMoreView()) {
+            return
+        }
+        mLoading = false
+        mNextLoadEnable = false
+        mLoadMoreView.isLoadEndMoreGone = gone
+        if (gone) {
+            notifyItemRemoved(getLoadMoreViewPosition())
+        } else {
+            mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.End
+            notifyItemChanged(getLoadMoreViewPosition())
+        }
+    }
+
+    /**
+     * Refresh complete
+     */
+    fun loadMoreComplete() {
+        if (!hasLoadMoreView()) {
+            return
+        }
+        mLoading = false
+        mNextLoadEnable = true
+        mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Default
+        notifyItemChanged(getLoadMoreViewPosition())
+    }
+
+    /**
+     * Refresh failed
+     */
+    fun loadMoreFail() {
+        if (!hasLoadMoreView()) {
+            return
+        }
+        mLoading = false
+        mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Fail
+        notifyItemChanged(getLoadMoreViewPosition())
+    }
+
     //TODO disableLoadMoreIfNotFullPage
+
+
+
+
+
+    fun setNewData(data: MutableList<T>?) {
+        this.data = data ?: arrayListOf()
+        if (mLoadMoreListener != null) {
+            mNextLoadEnable = true
+            loadMoreEnable = true
+            mLoading = false
+            mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Default
+        }
+        mLastPosition = -1
+        notifyDataSetChanged()
+    }
+
+    /**
+     * add one new data in to certain location
+     *
+     * @param position
+     */
+    fun addData(@IntRange(from = 0) position: Int, data: T) {
+        this.data.add(position, data)
+        notifyItemInserted(position + getHeaderLayoutCount())
+        compatibilityDataSizeChanged(1)
+    }
+
+    /**
+     * add one new data
+     */
+    fun addData(@NonNull data: T) {
+        this.data.add(data)
+        notifyItemInserted(this.data.size + getHeaderLayoutCount())
+        compatibilityDataSizeChanged(1)
+    }
+
+    /**
+     * add new data in to certain location
+     *
+     * @param position the insert position
+     * @param newData  the new data collection
+     */
+    fun addData(@IntRange(from = 0) position: Int, newData: Collection<T>) {
+        this.data.addAll(position, newData)
+        notifyItemRangeInserted(position + getHeaderLayoutCount(), newData.size)
+        compatibilityDataSizeChanged(newData.size)
+    }
+
+    fun addData(@NonNull newData: Collection<T>) {
+        this.data.addAll(newData)
+        notifyItemRangeInserted(this.data.size - newData.size + getHeaderLayoutCount(), newData.size)
+        compatibilityDataSizeChanged(newData.size)
+    }
+
+    /**
+     * remove the item associated with the specified position of adapter
+     *
+     * @param position
+     */
+    fun remove(@IntRange(from = 0) position: Int) {
+        this.data.removeAt(position)
+        val internalPosition = position + getHeaderLayoutCount()
+        notifyItemRemoved(internalPosition)
+        compatibilityDataSizeChanged(0)
+        notifyItemRangeChanged(internalPosition, this.data.size - internalPosition)
+    }
+
+    /**
+     * change data
+     */
+    fun setData(@IntRange(from = 0) index: Int, data: T) {
+        this.data[index] = data
+        notifyItemChanged(index + getHeaderLayoutCount())
+    }
+
+    /**
+     * use data to replace all item in mData. this method is different [.setNewData],
+     * it doesn't change the mData reference
+     *
+     * @param data data collection
+     */
+    fun replaceData(data: Collection<T>) {
+        // 不是同一个引用才清空列表
+        if (data !== this.data) {
+            this.data.clear()
+            this.data.addAll(data)
+        }
+        notifyDataSetChanged()
+    }
+
+    /**
+     * compatible getLoadMoreViewCount and getEmptyViewCount may change
+     *
+     * @param size Need compatible data size
+     */
+    private fun compatibilityDataSizeChanged(size: Int) {
+        val dataSize = this.data.size
+        if (dataSize == size) {
+            notifyDataSetChanged()
+        }
+    }
+
+
 
     fun setSpanSizeLookup(spanSizeLookup: SpanSizeLookup) {
         this.mSpanSizeLookup = spanSizeLookup
     }
-
 }
 
 

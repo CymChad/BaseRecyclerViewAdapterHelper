@@ -21,10 +21,11 @@ open class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         }
         return view as T
     }
+
+    fun setText(@IdRes viewId: Int, value: CharSequence?): BaseViewHolder {
+        val view = getView<TextView>(viewId)
+        view.text = value
+        return this
+    }
 }
 
-fun BaseViewHolder.setText(@IdRes viewId: Int, value: CharSequence?): BaseViewHolder {
-    val view = getView<TextView>(viewId)
-    view.text = value
-    return this
-}
