@@ -82,20 +82,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     protected lateinit var context: Context
         private set
 
-//    protected var recyclerView: RecyclerView? = null
-//        private set
-//        get() {
-//            checkNotNull(field) { "please bind recyclerView first!" }
-//            return field
-//        }
-
     protected lateinit var weakRecyclerView: WeakReference<RecyclerView>
-
-//    fun bindToRecyclerView(recyclerView: RecyclerView) {
-//        check(this.recyclerView != recyclerView) { "Don't bind twice" }
-//        this.recyclerView = recyclerView
-//        this.recyclerView!!.adapter = this
-//    }
 
     /******************************* RecyclerView Method ****************************************/
 
@@ -282,7 +269,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
      */
     fun getItem(@IntRange(from = 0) position: Int): T? {
         return if (position >= 0 && position < data.size)
-            data.get(position)
+            data[position]
         else
             null
     }
@@ -317,7 +304,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
      * @param v
      * @param position
      */
-    fun setOnItemClick(v: View, position: Int) {
+    open fun setOnItemClick(v: View, position: Int) {
         mOnItemClickListener?.invoke(this, v, position)
     }
 
@@ -328,7 +315,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
      * @param position
      * @return
      */
-    fun setOnItemLongClick(v: View, position: Int): Boolean {
+    open fun setOnItemLongClick(v: View, position: Int): Boolean {
         return mOnItemLongClickListener?.invoke(this, v, position) ?: false
     }
 
@@ -641,9 +628,11 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         }
     }
 
-    fun setEmptyView(layoutResId: Int, context: Context) {
-        val view = LayoutInflater.from(context).inflate(layoutResId, null, false)
-        setEmptyView(view)
+    fun setEmptyView(layoutResId: Int) {
+        weakRecyclerView.get()?.let {
+            val view = LayoutInflater.from(it.context).inflate(layoutResId, it, false)
+            setEmptyView(view)
+        }
     }
 
     fun hasEmptyView(): Boolean {
