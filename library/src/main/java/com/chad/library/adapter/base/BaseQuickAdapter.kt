@@ -14,6 +14,7 @@ import androidx.annotation.NonNull
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.loadmore.BaseLoadMoreView
+import com.chad.library.adapter.base.loadmore.OnLoadMoreListener
 import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView
 import com.chad.library.adapter.base.util.getItemView
 import java.lang.ref.WeakReference
@@ -74,6 +75,9 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     private var mLoading = false
     private var mPreLoadNumber = 1
     private var mLastPosition = -1
+
+    private var mOnItemClickListener: OnItemClickListener? = null
+    private var mOnItemLongClickListener: OnItemLongClickListener? = null
 
     protected lateinit var context: Context
         private set
@@ -284,7 +288,48 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     }
 
     protected open fun bindViewClickListener(baseViewHolder: VH) {
+        mOnItemClickListener?.let {
+            baseViewHolder.itemView.setOnClickListener { v ->
+                var position = baseViewHolder.adapterPosition
+                if (position == RecyclerView.NO_POSITION) {
+                    return@setOnClickListener
+                }
+                position -= getHeaderLayoutCount()
+                setOnItemClick(v, position)
+            }
+        }
+        mOnItemLongClickListener?.let {
+            baseViewHolder.itemView.setOnLongClickListener { v ->
+                var position = baseViewHolder.adapterPosition
+                if (position == RecyclerView.NO_POSITION) {
+                    return@setOnLongClickListener false
+                }
+                position -= getHeaderLayoutCount()
+                return@setOnLongClickListener setOnItemLongClick(v, position)
+            }
+        }
         //TODO
+    }
+
+    /**
+     * override this method if you want to override click event logic
+     *
+     * @param v
+     * @param position
+     */
+    fun setOnItemClick(v: View, position: Int) {
+        mOnItemClickListener?.invoke(this, v, position)
+    }
+
+    /**
+     * override this method if you want to override longClick event logic
+     *
+     * @param v
+     * @param position
+     * @return
+     */
+    fun setOnItemLongClick(v: View, position: Int): Boolean {
+        return mOnItemLongClickListener?.invoke(this, v, position) ?: false
     }
 
     protected open fun getDefItemViewType(position: Int): Int {
@@ -862,11 +907,26 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     }
 
 
-    fun setSpanSizeLookup(spanSizeLookup: SpanSizeLookup) {
+    fun setSpanSizeLookup(spanSizeLookup: SpanSizeLookup?) {
         this.mSpanSizeLookup = spanSizeLookup
     }
+
+    fun setOnItemClickListener(listener: OnItemClickListener?) {
+        this.mOnItemClickListener = listener
+    }
+
+    fun setOnItemLongClickListener(listener: OnItemLongClickListener?) {
+        this.mOnItemLongClickListener = listener
+    }
+
+    fun getOnItemClickListener(): OnItemClickListener? = mOnItemClickListener
+
+    fun getOnItemLongClickListener(): OnItemLongClickListener? = mOnItemLongClickListener
 }
 
 
 typealias SpanSizeLookup = (gridLayoutManager: GridLayoutManager, position: Int) -> Int
-typealias OnLoadMoreListener = () -> Unit
+
+typealias OnItemClickListener = (adapter: BaseQuickAdapter<*, *>, view: View, position: Int) -> Unit
+
+typealias OnItemLongClickListener = (adapter: BaseQuickAdapter<*, *>, view: View, position: Int) -> Boolean
