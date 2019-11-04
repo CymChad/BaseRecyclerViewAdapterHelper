@@ -14,6 +14,9 @@ class SimpleLoadMoreView : BaseLoadMoreView() {
     override fun getLoadingView(holder: BaseViewHolder): View =
             holder.getView(R.id.load_more_loading_view)
 
+    override fun getLoadComplete(holder: BaseViewHolder): View =
+            holder.getView(R.id.load_more_load_complete_view)
+
     override fun getLoadEndView(holder: BaseViewHolder): View =
             holder.getView(R.id.load_more_load_end_view)
 

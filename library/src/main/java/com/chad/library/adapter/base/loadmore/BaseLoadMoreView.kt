@@ -11,10 +11,10 @@ import com.chad.library.adapter.base.BaseViewHolder
 abstract class BaseLoadMoreView {
 
     enum class Status {
-        Default, Loading, Fail, End
+        Complete, Loading, Fail, End
     }
 
-    var loadMoreStatus = Status.Default
+    var loadMoreStatus = Status.Complete
 
     var isLoadEndMoreGone: Boolean = false
 
@@ -22,29 +22,35 @@ abstract class BaseLoadMoreView {
 
     abstract fun getLoadingView(holder: BaseViewHolder): View
 
+    abstract fun getLoadComplete(holder: BaseViewHolder): View
+
     abstract fun getLoadEndView(holder: BaseViewHolder): View
 
     abstract fun getLoadFailView(holder: BaseViewHolder): View
 
     fun convert(holder: BaseViewHolder) {
         when (loadMoreStatus) {
-            Status.Default -> {
+            Status.Complete -> {
                 getLoadingView(holder).isVisible(false)
+                getLoadComplete(holder).isVisible(true)
                 getLoadFailView(holder).isVisible(false)
                 getLoadEndView(holder).isVisible(false)
             }
             Status.Loading -> {
                 getLoadingView(holder).isVisible(true)
+                getLoadComplete(holder).isVisible(false)
                 getLoadFailView(holder).isVisible(false)
                 getLoadEndView(holder).isVisible(false)
             }
             Status.Fail -> {
                 getLoadingView(holder).isVisible(false)
+                getLoadComplete(holder).isVisible(false)
                 getLoadFailView(holder).isVisible(true)
                 getLoadEndView(holder).isVisible(false)
             }
             Status.End -> {
                 getLoadingView(holder).isVisible(false)
+                getLoadComplete(holder).isVisible(false)
                 getLoadFailView(holder).isVisible(false)
                 getLoadEndView(holder).isVisible(true)
             }

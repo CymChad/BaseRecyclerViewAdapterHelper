@@ -13,6 +13,7 @@ import androidx.annotation.IntRange
 import androidx.annotation.LayoutRes
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.loadmore.BaseLoadMoreView
 import com.chad.library.adapter.base.loadmore.OnLoadMoreListener
@@ -66,6 +67,11 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     var isUseEmpty = true
     /** 加载完成后是否允许点击 */
     var enableLoadMoreEndClick = false
+    /** 是否打开自动加载更多 */
+    var isAutoLoadMore = true
+
+    val isEnableLoadMoreIfNotFullPage = true
+
     /**
      * if asFlow is true, footer/header will arrange like normal item view.
      * only works when use [GridLayoutManager],and it will ignore span size.
@@ -562,7 +568,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     /**
      * if addHeaderView will be return 1, if not will be return 0
      */
-    protected fun getHeaderLayoutCount(): Int =
+    fun getHeaderLayoutCount(): Int =
             if (hasHeaderLayout()) {
                 1
             } else {
@@ -729,9 +735,11 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         val vh = createBaseViewHolder(view)
         vh.itemView.setOnClickListener {
             if (mLoadMoreView.loadMoreStatus == BaseLoadMoreView.Status.Fail) {
-                notifyLoadMoreToLoading()
+                loadMoreToLoading()
+            } else if (mLoadMoreView.loadMoreStatus == BaseLoadMoreView.Status.Complete && !isAutoLoadMore)  {
+                loadMoreToLoading()
             } else if (enableLoadMoreEndClick && mLoadMoreView.loadMoreStatus == BaseLoadMoreView.Status.End) {
-                notifyLoadMoreToLoading()
+                loadMoreToLoading()
             }
         }
         return vh
@@ -740,11 +748,11 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     /**
      * The notification starts the callback and loads more
      */
-    fun notifyLoadMoreToLoading() {
+    fun loadMoreToLoading() {
         if (mLoadMoreView.loadMoreStatus == BaseLoadMoreView.Status.Loading) {
             return
         }
-        mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Default
+        mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Complete
         notifyItemChanged(getLoadMoreViewPosition())
     }
 
@@ -769,7 +777,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
                 }
             } else {
                 if (newHasLoadMore) {
-                    mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Default
+                    mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Complete
                     notifyItemInserted(getLoadMoreViewPosition())
                 }
             }
@@ -791,17 +799,46 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         }
     }
 
+    private fun checkLoadMore(position: Int) {
+        //TODO 分为手动点击加载 和 自定加载更多
+        val itemCount = itemCount
+        if (position < itemCount - 1) {
+            return
+        }
+        if (mLoadMoreView.loadMoreStatus != BaseLoadMoreView.Status.Loading) {
+            return
+        }
+
+        if (isAutoLoadMore) {
+            autoLoadMore(position)
+        } else {
+
+        }
+    }
+
     private fun autoLoadMore(position: Int) {
+        if (!isAutoLoadMore) {
+            return
+        }
         if (!hasLoadMoreView()) {
             return
         }
         if (position < itemCount - mPreLoadNumber) {
             return
         }
-        if (mLoadMoreView.loadMoreStatus != BaseLoadMoreView.Status.Default) {
+        if (mLoadMoreView.loadMoreStatus != BaseLoadMoreView.Status.Complete) {
             return
         }
         mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Loading
+        if (!mLoading) {
+            mLoading = true
+            weakRecyclerView.get()?.let {
+                it.post { mLoadMoreListener?.invoke() }
+            } ?: mLoadMoreListener?.invoke()
+        }
+    }
+
+    private fun invokeLoadMoreListener(position: Int) {
         if (!mLoading) {
             mLoading = true
             weakRecyclerView.get()?.let {
@@ -830,10 +867,11 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         mLoading = false
         mNextLoadEnable = false
         mLoadMoreView.isLoadEndMoreGone = gone
+
+        mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.End
         if (gone) {
             notifyItemRemoved(getLoadMoreViewPosition())
         } else {
-            mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.End
             notifyItemChanged(getLoadMoreViewPosition())
         }
     }
@@ -847,7 +885,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         }
         mLoading = false
         mNextLoadEnable = true
-        mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Default
+        mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Complete
         notifyItemChanged(getLoadMoreViewPosition())
     }
 
@@ -863,7 +901,8 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         notifyItemChanged(getLoadMoreViewPosition())
     }
 
-    //TODO disableLoadMoreIfNotFullPage
+
+    /******* 设置数据相关 *******/
 
 
     fun setNewData(data: MutableList<T>?) {
@@ -872,7 +911,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
             mNextLoadEnable = true
             loadMoreEnable = true
             mLoading = false
-            mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Default
+            mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Complete
         }
         mLastPosition = -1
         notifyDataSetChanged()
@@ -964,6 +1003,15 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         }
     }
 
+    //TODO disableLoadMoreIfNotFullPage
+    fun disableLoadMoreIfNotFullPage() {
+
+    }
+
+    private fun isFullScreen(llm: LinearLayoutManager): Boolean {
+        return (llm.findLastCompletelyVisibleItemPosition() + 1) != itemCount ||
+                llm.findFirstCompletelyVisibleItemPosition() != 0
+    }
 
     fun setSpanSizeLookup(spanSizeLookup: SpanSizeLookup?) {
         this.mSpanSizeLookup = spanSizeLookup
