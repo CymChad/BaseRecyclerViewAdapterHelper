@@ -8,6 +8,7 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import androidx.annotation.IdRes
 import androidx.annotation.IntRange
 import androidx.annotation.LayoutRes
 import androidx.annotation.NonNull
@@ -22,6 +23,7 @@ import java.lang.reflect.Constructor
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Modifier
 import java.lang.reflect.ParameterizedType
+import java.util.*
 
 /**
  * Base Class
@@ -45,6 +47,9 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
             mLoadMoreView = loadMoreView
         }
     }
+
+    // constructor
+    constructor(data: MutableList<T>?) : this(0, data)
 
     /** data 数据 */
     var data: MutableList<T> = data ?: arrayListOf()
@@ -78,6 +83,8 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
 
     private var mOnItemClickListener: OnItemClickListener? = null
     private var mOnItemLongClickListener: OnItemLongClickListener? = null
+    private var mOnItemChildClickListener: OnItemChildClickListener? = null
+    private var mOnItemChildLongClickListener: OnItemChildLongClickListener? = null
 
     protected lateinit var context: Context
         private set
@@ -94,7 +101,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
      */
     protected abstract fun convert(helper: VH, item: T?)
 
-    protected open fun convertPayloads(helper: VH, item: T?, payloads: List<Any>) {}
+    protected open fun convert(helper: VH, item: T?, payloads: List<Any>) {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         this.context = parent.context
@@ -221,7 +228,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         when (holder.itemViewType) {
             LOAD_MORE_VIEW -> mLoadMoreView.convert(holder)
             HEADER_VIEW, EMPTY_VIEW, FOOTER_VIEW -> return
-            else -> convert(holder, getItem(position - getHeaderLayoutCount()))
+            else -> convert(holder, getItem(position - getHeaderLayoutCount()), payloads)
         }
     }
 
@@ -274,6 +281,18 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
             null
     }
 
+    private val childClickViewIds = LinkedHashSet<Int>()
+
+    fun getChildClickViewIds(): LinkedHashSet<Int> {
+        return childClickViewIds
+    }
+
+    protected fun addItemChildClick(@IdRes vararg viewIds: Int) {
+        for (viewId in viewIds) {
+            childClickViewIds.add(viewId)
+        }
+    }
+
     protected open fun bindViewClickListener(baseViewHolder: VH) {
         mOnItemClickListener?.let {
             baseViewHolder.itemView.setOnClickListener { v ->
@@ -292,10 +311,44 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
                     return@setOnLongClickListener false
                 }
                 position -= getHeaderLayoutCount()
-                return@setOnLongClickListener setOnItemLongClick(v, position)
+                setOnItemLongClick(v, position)
             }
         }
         //TODO
+        mOnItemChildClickListener?.let {
+            for (id in getChildClickViewIds()) {
+                baseViewHolder.itemView.findViewById<View>(id)?.let { childView ->
+                    if (!childView.isClickable) {
+                        childView.isClickable = true
+                    }
+                    childView.setOnClickListener { v ->
+                        var position = baseViewHolder.adapterPosition
+                        if (position == RecyclerView.NO_POSITION) {
+                            return@setOnClickListener
+                        }
+                        position -= getHeaderLayoutCount()
+                        it.invoke(this@BaseQuickAdapter, v, position)
+                    }
+                }
+            }
+        }
+        mOnItemChildLongClickListener?.let {
+            for (id in getChildClickViewIds()) {
+                baseViewHolder.itemView.findViewById<View>(id)?.let { childView ->
+                    if (!childView.isLongClickable) {
+                        childView.isLongClickable = true
+                    }
+                    childView.setOnLongClickListener { v ->
+                        var position = baseViewHolder.adapterPosition
+                        if (position == RecyclerView.NO_POSITION) {
+                            return@setOnLongClickListener false
+                        }
+                        position -= getHeaderLayoutCount()
+                        it.invoke(this@BaseQuickAdapter, v, position)
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -869,16 +922,16 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     }
 
     /**
-     * use data to replace all item in mData. this method is different [.setNewData],
-     * it doesn't change the mData reference
+     * use data to replace all item in mData. this method is different [setNewData],
+     * it doesn't change the [BaseQuickAdapter.data] reference
      *
-     * @param data data collection
+     * @param newData data collection
      */
-    fun replaceData(data: Collection<T>) {
+    fun replaceData(newData: Collection<T>) {
         // 不是同一个引用才清空列表
-        if (data !== this.data) {
+        if (newData !== this.data) {
             this.data.clear()
-            this.data.addAll(data)
+            this.data.addAll(newData)
         }
         notifyDataSetChanged()
     }
@@ -908,9 +961,21 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         this.mOnItemLongClickListener = listener
     }
 
+    fun setOnItemChildClickListener(listener: OnItemChildClickListener) {
+        this.mOnItemChildClickListener = listener
+    }
+
+    fun setOnItemChildLongClickListener(listener: OnItemChildLongClickListener) {
+        this.mOnItemChildLongClickListener = listener
+    }
+
     fun getOnItemClickListener(): OnItemClickListener? = mOnItemClickListener
 
     fun getOnItemLongClickListener(): OnItemLongClickListener? = mOnItemLongClickListener
+
+    fun getOnItemChildClickListener(): OnItemChildClickListener? = mOnItemChildClickListener
+
+    fun getOnItemChildLongClickListener(): OnItemChildLongClickListener? = mOnItemChildLongClickListener
 }
 
 
@@ -919,3 +984,7 @@ typealias SpanSizeLookup = (gridLayoutManager: GridLayoutManager, position: Int)
 typealias OnItemClickListener = (adapter: BaseQuickAdapter<*, *>, view: View, position: Int) -> Unit
 
 typealias OnItemLongClickListener = (adapter: BaseQuickAdapter<*, *>, view: View, position: Int) -> Boolean
+
+typealias OnItemChildClickListener = (adapter: BaseQuickAdapter<*, *>, view: View, position: Int) -> Unit
+
+typealias OnItemChildLongClickListener = (adapter: BaseQuickAdapter<*, *>, view: View, position: Int) -> Boolean

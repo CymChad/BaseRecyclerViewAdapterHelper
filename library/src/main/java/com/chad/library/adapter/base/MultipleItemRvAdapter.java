@@ -14,6 +14,10 @@ import com.chad.library.adapter.base.util.ProviderDelegate;
 
 import java.util.List;
 
+import kotlin.Unit;
+import kotlin.jvm.JvmOverloads;
+import kotlin.jvm.functions.Function3;
+
 /**
  * https://github.com/chaychan
  *
@@ -22,7 +26,6 @@ import java.util.List;
  * 当有多种条目的时候，避免在convert()中做太多的业务逻辑，把逻辑放在对应的ItemProvider中
  * @date 2018/3/21  9:55
  */
-
 public abstract class MultipleItemRvAdapter<T, V extends BaseViewHolder> extends BaseQuickAdapter<T, V> {
 
     private SparseArray<BaseItemProvider> mItemProviders;
@@ -54,7 +57,7 @@ public abstract class MultipleItemRvAdapter<T, V extends BaseViewHolder> extends
         for (int i = 0; i < mItemProviders.size(); i++) {
             int key = mItemProviders.keyAt(i);
             BaseItemProvider provider = mItemProviders.get(key);
-            provider.mData = mData;
+            provider.mData = getData();
             getMultiTypeDelegate().registerItemType(key, provider.layout());
         }
     }
@@ -88,7 +91,7 @@ public abstract class MultipleItemRvAdapter<T, V extends BaseViewHolder> extends
         if (getMultiTypeDelegate() == null) {
             throw new IllegalStateException("please use setMultiTypeDelegate first!");
         }
-        return getMultiTypeDelegate().getDefItemViewType(mData, position);
+        return getMultiTypeDelegate().getDefItemViewType(getData(), position);
     }
 
     @Override
@@ -112,8 +115,8 @@ public abstract class MultipleItemRvAdapter<T, V extends BaseViewHolder> extends
     }
 
     private void bindClick(final V helper) {
-        OnItemClickListener clickListener = getOnItemClickListener();
-        OnItemLongClickListener longClickListener = getOnItemLongClickListener();
+        Function3<BaseQuickAdapter<?, ?>, View, Integer, Unit> clickListener = getOnItemClickListener();
+        Function3<BaseQuickAdapter<?, ?>, View, Integer, Boolean> longClickListener = getOnItemLongClickListener();
 
         if (clickListener != null && longClickListener != null) {
             //如果已经设置了子条目点击监听和子条目长按监听
@@ -136,7 +139,7 @@ public abstract class MultipleItemRvAdapter<T, V extends BaseViewHolder> extends
                     int itemViewType = helper.getItemViewType();
                     BaseItemProvider provider = mItemProviders.get(itemViewType);
 
-                    provider.onClick(helper, mData.get(position), position);
+                    provider.onClick(helper, getData().get(position), position);
                 }
             });
         }
@@ -155,7 +158,7 @@ public abstract class MultipleItemRvAdapter<T, V extends BaseViewHolder> extends
 
                     int itemViewType = helper.getItemViewType();
                     BaseItemProvider provider = mItemProviders.get(itemViewType);
-                    return provider.onLongClick(helper, mData.get(position), position);
+                    return provider.onLongClick(helper, getData().get(position), position);
                 }
             });
         }
