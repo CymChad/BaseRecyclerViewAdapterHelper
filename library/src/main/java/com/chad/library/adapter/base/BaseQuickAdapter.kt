@@ -51,6 +51,10 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     // constructor
     constructor(data: MutableList<T>?) : this(0, data)
 
+    init {
+
+    }
+
     /** data 数据 */
     var data: MutableList<T> = data ?: arrayListOf()
         private set
@@ -293,6 +297,10 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         }
     }
 
+    /**
+     * 绑定 item 点击事件
+     * @param baseViewHolder VH
+     */
     protected open fun bindViewClickListener(baseViewHolder: VH) {
         mOnItemClickListener?.let {
             baseViewHolder.itemView.setOnClickListener { v ->
@@ -314,7 +322,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
                 setOnItemLongClick(v, position)
             }
         }
-        //TODO
+
         mOnItemChildClickListener?.let {
             for (id in getChildClickViewIds()) {
                 baseViewHolder.itemView.findViewById<View>(id)?.let { childView ->
@@ -327,7 +335,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
                             return@setOnClickListener
                         }
                         position -= getHeaderLayoutCount()
-                        it.invoke(this@BaseQuickAdapter, v, position)
+                        setOnItemChildClick(v, position)
                     }
                 }
             }
@@ -344,7 +352,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
                             return@setOnLongClickListener false
                         }
                         position -= getHeaderLayoutCount()
-                        it.invoke(this@BaseQuickAdapter, v, position)
+                        setOnItemChildLongClick(v, position)
                     }
                 }
             }
@@ -370,6 +378,14 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
      */
     open fun setOnItemLongClick(v: View, position: Int): Boolean {
         return mOnItemLongClickListener?.invoke(this, v, position) ?: false
+    }
+
+    open fun setOnItemChildClick(v: View, position: Int) {
+        mOnItemChildClickListener?.invoke(this, v, position)
+    }
+
+    open fun setOnItemChildLongClick(v: View, position: Int): Boolean {
+        return mOnItemChildLongClickListener?.invoke(this, v, position) ?: false
     }
 
     protected open fun getDefItemViewType(position: Int): Int {
@@ -670,7 +686,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         isUseEmpty = true
         if (insert && hasEmptyView()) {
             var position = 0
-            if (headerWithEmptyEnable && hasEmptyView()) {
+            if (headerWithEmptyEnable && hasHeaderLayout()) {
                 position++
             }
             if (itemCount > oldItemCount) {
