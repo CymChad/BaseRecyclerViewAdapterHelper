@@ -9,6 +9,10 @@ import com.chad.library.adapter.base.BaseViewHolder
  */
 class TestAdapter(list: MutableList<TestData>?) : BaseQuickAdapter<TestData, BaseViewHolder>(R.layout.layout_animation, list) {
 
+    init {
+        addItemChildClickViewIds(R.id.img)
+    }
+
     override fun convert(helper: BaseViewHolder, item: TestData?) {
         helper.setText(R.id.tweetName, item?.title)
                 .setText(R.id.tweetText, item?.content)

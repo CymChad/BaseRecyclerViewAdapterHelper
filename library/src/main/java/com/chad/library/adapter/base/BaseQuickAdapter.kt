@@ -15,6 +15,7 @@ import androidx.annotation.NonNull
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.chad.library.adapter.base.loadmore.BaseLoadMoreView
 import com.chad.library.adapter.base.loadmore.OnLoadMoreListener
 import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView
@@ -30,8 +31,9 @@ import java.util.*
  * Base Class
  * @param T : type of data, 数据类型
  * @param VH : BaseViewHolder
+ * @constructor layoutId, data(Can null parameters, the default is empty data)
  */
-abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutResId: Int = 0,
+abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutResId: Int,
                                                         data: MutableList<T>? = null)
     : RecyclerView.Adapter<VH>() {
 
@@ -41,26 +43,37 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         const val FOOTER_VIEW = 0x00000333
         const val EMPTY_VIEW = 0x00000555
 
-        private var mLoadMoreView: BaseLoadMoreView = SimpleLoadMoreView()
+        private var defLoadMoreView: BaseLoadMoreView = SimpleLoadMoreView()
 
+        /**
+         * 设置全局的LodeMoreView
+         * @param loadMoreView BaseLoadMoreView
+         */
         @JvmStatic
         fun setDefLoadMoreView(loadMoreView: BaseLoadMoreView) {
-            mLoadMoreView = loadMoreView
+            defLoadMoreView = loadMoreView
         }
     }
 
-    // constructor
-    constructor(data: MutableList<T>?) : this(0, data)
+    /**
+     *
+     * 因为java无法调用可选参数的主构器，固使用此次级构造器兼容 java 。对于不需要设置初始数据的情况
+     * @param layoutResId Int
+     * @constructor
+     */
+    constructor(@LayoutRes layoutResId: Int) : this(layoutResId, null)
 
-
-    init {
-
-    }
-
-    /** data 数据 */
+    /***************************** Public property settings *************************************/
+    /**
+     * data, Only allowed to get.
+     *
+     * 数据, 只允许 get。
+     */
     var data: MutableList<T> = data ?: arrayListOf()
         private set
-    /** 当显示空布局时，是否显示 Header */
+    /**
+     * 当显示空布局时，是否显示 Header
+     */
     var headerWithEmptyEnable = false
     /** 当显示空布局时，是否显示 Foot */
     var footerWithEmptyEnable = false
@@ -72,7 +85,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     var enableLoadMoreEndClick = false
     /** 是否打开自动加载更多 */
     var isAutoLoadMore = true
-
+    //TODO
     var isEnableLoadMoreIfNotFullPage = true
     var preLoadNumber = 1
         set(value) {
@@ -80,7 +93,8 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
                 field = value
             }
         }
-
+    var loading = false
+        private set
 
     /**
      * if asFlow is true, footer/header will arrange like normal item view.
@@ -88,6 +102,10 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
      */
     var headerViewAsFlow: Boolean = false
     var footerViewAsFlow: Boolean = false
+
+    /********************************* Private property *****************************************/
+
+    private var mLoadMoreView = defLoadMoreView
 
     private lateinit var mHeaderLayout: LinearLayout
     private lateinit var mFooterLayout: LinearLayout
@@ -97,8 +115,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
 
     private var mLoadMoreListener: OnLoadMoreListener? = null
     private var mNextLoadEnable = false
-    private var mLoading = false
-    private var mPreLoadNumber = 1
     private var mLastPosition = -1
 
     private var mOnItemClickListener: OnItemClickListener? = null
@@ -116,11 +132,19 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     /**
      * Implement this method and use the helper to adapt the view to the given item.
      *
+     * 实现此方法，并使用 helper 完成 item 视图的操作
+     *
      * @param helper A fully initialized helper.
      * @param item   The item that needs to be displayed.
      */
     protected abstract fun convert(helper: VH, item: T?)
 
+    /**
+     *
+     * @param helper VH
+     * @param item T?
+     * @param payloads List<Any>
+     */
     protected open fun convert(helper: VH, item: T?, payloads: List<Any>) {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
@@ -307,7 +331,11 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         return childClickViewIds
     }
 
-    protected fun addItemChildClick(@IdRes vararg viewIds: Int) {
+    /**
+     * 设置需要点击事件的子view
+     * @param viewIds IntArray
+     */
+    fun addItemChildClickViewIds(@IdRes vararg viewIds: Int) {
         for (viewId in viewIds) {
             childClickViewIds.add(viewId)
         }
@@ -378,29 +406,31 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     /**
      * override this method if you want to override click event logic
      *
+     * 如果你想重新实现 item 点击事件逻辑，请重写此方法
      * @param v
      * @param position
      */
-    open fun setOnItemClick(v: View, position: Int) {
+    protected open fun setOnItemClick(v: View, position: Int) {
         mOnItemClickListener?.invoke(this, v, position)
     }
 
     /**
      * override this method if you want to override longClick event logic
      *
+     * 如果你想重新实现 item 长按事件逻辑，请重写此方法
      * @param v
      * @param position
      * @return
      */
-    open fun setOnItemLongClick(v: View, position: Int): Boolean {
+    protected open fun setOnItemLongClick(v: View, position: Int): Boolean {
         return mOnItemLongClickListener?.invoke(this, v, position) ?: false
     }
 
-    open fun setOnItemChildClick(v: View, position: Int) {
+    protected open fun setOnItemChildClick(v: View, position: Int) {
         mOnItemChildClickListener?.invoke(this, v, position)
     }
 
-    open fun setOnItemChildLongClick(v: View, position: Int): Boolean {
+    protected open fun setOnItemChildLongClick(v: View, position: Int): Boolean {
         return mOnItemChildLongClickListener?.invoke(this, v, position) ?: false
     }
 
@@ -534,6 +564,10 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         }
     }
 
+    /**
+     * 是否有 HeaderLayout
+     * @return Boolean
+     */
     fun hasHeaderLayout(): Boolean {
         if (this::mHeaderLayout.isInitialized && mHeaderLayout.childCount > 0) {
             return true
@@ -684,6 +718,10 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     /********************************************************************************************/
     /********************************** EmptyView Method ****************************************/
     /********************************************************************************************/
+    /**
+     * 设置空布局视图，注意：[data]必须为空数组
+     * @param emptyView View
+     */
     fun setEmptyView(emptyView: View) {
         val oldItemCount = itemCount
         var insert = false
@@ -730,7 +768,14 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         return data.isEmpty()
     }
 
-    fun getEmptyView(): View? = if (this::mEmptyLayout.isInitialized) {
+    /**
+     * When the current adapter is empty, the BaseQuickAdapter can display a special view
+     * called the empty view. The empty view is used to provide feedback to the user
+     * that no data is available in this AdapterView.
+     *
+     * @return The view to show if the adapter is empty.
+     */
+    fun getEmptyLayout(): FrameLayout? = if (this::mEmptyLayout.isInitialized) {
         mEmptyLayout
     } else {
         null
@@ -763,9 +808,12 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
             return
         }
         mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Loading
-//        mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Complete
         notifyItemChanged(getLoadMoreViewPosition())
         invokeLoadMoreListener()
+    }
+
+    fun setLoadMoreView(loadMoreView: BaseLoadMoreView) {
+        this.mLoadMoreView = loadMoreView
     }
 
     /**
@@ -777,7 +825,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         return getHeaderLayoutCount() + data.size + getFooterLayoutCount()
     }
 
-    var loadMoreEnable = false
+    var isEnableLoadMore = false
         set(value) {
             val oldHasLoadMore = hasLoadMoreView()
             field = value
@@ -796,7 +844,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         }
 
     fun hasLoadMoreView(): Boolean {
-        if (mLoadMoreListener == null || !loadMoreEnable) {
+        if (mLoadMoreListener == null || !isEnableLoadMore) {
             return false
         }
         if (!mNextLoadEnable && mLoadMoreView.isLoadEndMoreGone) {
@@ -805,6 +853,10 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         return data.isNotEmpty()
     }
 
+    /**
+     * 自定加载数据
+     * @param position Int
+     */
     private fun autoLoadMore(position: Int) {
         if (!isAutoLoadMore) {
             //如果不需要自动加载更多，直接返回
@@ -813,7 +865,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         if (!hasLoadMoreView()) {
             return
         }
-        if (position < itemCount - mPreLoadNumber) {
+        if (position < itemCount - preLoadNumber) {
             return
         }
         if (mLoadMoreView.loadMoreStatus != BaseLoadMoreView.Status.Complete) {
@@ -822,22 +874,19 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         invokeLoadMoreListener()
     }
 
+    /**
+     * 触发加载更多监听
+     */
     private fun invokeLoadMoreListener() {
         mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Loading
-        if (!mLoading) {
-            mLoading = true
+        if (!loading) {
+            loading = true
             weakRecyclerView.get()?.let {
                 it.post { mLoadMoreListener?.invoke() }
             } ?: mLoadMoreListener?.invoke()
         }
     }
 
-    fun setOnLoadMoreListener(listener: OnLoadMoreListener) {
-        this.mLoadMoreListener = listener
-        mNextLoadEnable = true
-        loadMoreEnable = true
-        mLoading = false
-    }
 
     /**
      * Refresh end, no more data
@@ -849,7 +898,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         if (!hasLoadMoreView()) {
             return
         }
-        mLoading = false
+        loading = false
         mNextLoadEnable = false
         mLoadMoreView.isLoadEndMoreGone = gone
 
@@ -868,7 +917,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         if (!hasLoadMoreView()) {
             return
         }
-        mLoading = false
+        loading = false
         mNextLoadEnable = true
         mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Complete
         notifyItemChanged(getLoadMoreViewPosition())
@@ -881,21 +930,26 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         if (!hasLoadMoreView()) {
             return
         }
-        mLoading = false
+        loading = false
         mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Fail
         notifyItemChanged(getLoadMoreViewPosition())
     }
 
 
-    /******* 设置数据相关 *******/
+    /*************************** 设置数据相关 ******************************************/
 
-
+    /**
+     * setting up a new instance to data;
+     *
+     * 设置新的数据实例
+     * @param data
+     */
     fun setNewData(data: MutableList<T>?) {
         this.data = data ?: arrayListOf()
         if (mLoadMoreListener != null) {
             mNextLoadEnable = true
-            loadMoreEnable = true
-            mLoading = false
+//            isEnableLoadMore = true
+            loading = false
             mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Complete
         }
         mLastPosition = -1
@@ -988,8 +1042,38 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     }
 
     //TODO disableLoadMoreIfNotFullPage
+    /**
+     * check if full page after [setNewData], if full, it will enable load more again.
+     * <p>
+     * 不是配置项！！
+     * <p>
+     * 这个方法是用来检查是否满一屏的，所以只推荐在 [setNewData] 之后使用
+     * 原理很简单，先关闭 load more，检查完了再决定是否开启
+     * <p>
+     * 不是配置项！！
+     *
+     * @see setNewData
+     */
     fun disableLoadMoreIfNotFullPage() {
-
+        isEnableLoadMore = false
+        val recyclerView = weakRecyclerView.get() ?: return
+        val manager = recyclerView.layoutManager ?: return
+        if (manager is LinearLayoutManager) {
+            recyclerView.postDelayed({
+                if (isFullScreen(manager)) {
+                    isEnableLoadMore = true
+                }
+            }, 50)
+        } else if (manager is StaggeredGridLayoutManager) {
+            recyclerView.postDelayed({
+                val positions = IntArray(manager.spanCount)
+                manager.findLastCompletelyVisibleItemPositions(positions)
+                val pos = getTheBiggestNumber(positions) + 1
+                if (pos != itemCount) {
+                    isEnableLoadMore = true
+                }
+            }, 50)
+        }
     }
 
     private fun isFullScreen(llm: LinearLayoutManager): Boolean {
@@ -997,9 +1081,29 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
                 llm.findFirstCompletelyVisibleItemPosition() != 0
     }
 
-    /****************** Listener *************************/
+    private fun getTheBiggestNumber(numbers: IntArray?): Int {
+        var tmp = -1
+        if (numbers == null || numbers.isEmpty()) {
+            return tmp
+        }
+        for (num in numbers) {
+            if (num > tmp) {
+                tmp = num
+            }
+        }
+        return tmp
+    }
+
+    /************************************** Set Listener ****************************************/
     fun setSpanSizeLookup(spanSizeLookup: SpanSizeLookup?) {
         this.mSpanSizeLookup = spanSizeLookup
+    }
+
+    fun setOnLoadMoreListener(listener: OnLoadMoreListener) {
+        this.mLoadMoreListener = listener
+        mNextLoadEnable = true
+        isEnableLoadMore = true
+        loading = false
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener?) {

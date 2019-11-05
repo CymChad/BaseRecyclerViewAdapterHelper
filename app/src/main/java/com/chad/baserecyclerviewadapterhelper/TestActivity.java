@@ -3,18 +3,19 @@ package com.chad.baserecyclerviewadapterhelper;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import com.chad.baserecyclerviewadapterhelper.adapter.TestAdapter;
 import com.chad.baserecyclerviewadapterhelper.adapter.TestData;
-
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
+import kotlin.jvm.functions.Function3;
 
 /**
  * Created by limuyang
@@ -49,7 +50,7 @@ public class TestActivity extends AppCompatActivity {
 
     private void initRv() {
         List<TestData> list = new ArrayList<>();
-        list.add(new TestData("0","content 0"));
+        list.add(new TestData("0", "content 0"));
 
         mAdapter = new TestAdapter(null);
         mRecyclerView.setAdapter(mAdapter);
@@ -65,16 +66,31 @@ public class TestActivity extends AppCompatActivity {
                 mRecyclerView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.addData(new TestData(mAdapter.getData().size() + "","content 0"));
+                        mAdapter.addData(new TestData(mAdapter.getData().size() + "", "content 0"));
                         mAdapter.loadMoreComplete();
                     }
                 }, 3000);
                 return null;
             }
         });
+        mAdapter.setOnItemChildClickListener(new Function3<BaseQuickAdapter<?, ?>, View, Integer, Unit>() {
+            @Override
+            public Unit invoke(BaseQuickAdapter<?, ?> baseQuickAdapter, View view, Integer integer) {
+                Toast.makeText(TestActivity.this, "index " + integer, Toast.LENGTH_SHORT).show();
+                return null;
+            }
+        });
 
-
+        mAdapter.setEnableLoadMore(false);
         mAdapter.setNewData(list);
+
+
+        mRecyclerView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.setEnableLoadMore(true);
+            }
+        }, 2000);
     }
 
     private void initClick() {
