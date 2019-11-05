@@ -62,7 +62,6 @@ public class TestActivity extends AppCompatActivity {
         mAdapter.setOnLoadMoreListener(new Function0<Unit>() {
             @Override
             public Unit invoke() {
-
                 mRecyclerView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -76,7 +75,6 @@ public class TestActivity extends AppCompatActivity {
 
 
         mAdapter.setNewData(list);
-
     }
 
     private void initClick() {

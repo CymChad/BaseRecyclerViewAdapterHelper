@@ -52,6 +52,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     // constructor
     constructor(data: MutableList<T>?) : this(0, data)
 
+
     init {
 
     }
@@ -65,12 +66,21 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     var footerWithEmptyEnable = false
     /** 是否使用空布局 */
     var isUseEmpty = true
+
+
     /** 加载完成后是否允许点击 */
     var enableLoadMoreEndClick = false
     /** 是否打开自动加载更多 */
     var isAutoLoadMore = true
 
-    val isEnableLoadMoreIfNotFullPage = true
+    var isEnableLoadMoreIfNotFullPage = true
+    var preLoadNumber = 1
+        set(value) {
+            if (value > 1) {
+                field = value
+            }
+        }
+
 
     /**
      * if asFlow is true, footer/header will arrange like normal item view.
@@ -736,7 +746,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         vh.itemView.setOnClickListener {
             if (mLoadMoreView.loadMoreStatus == BaseLoadMoreView.Status.Fail) {
                 loadMoreToLoading()
-            } else if (mLoadMoreView.loadMoreStatus == BaseLoadMoreView.Status.Complete && !isAutoLoadMore)  {
+            } else if (mLoadMoreView.loadMoreStatus == BaseLoadMoreView.Status.Complete && !isAutoLoadMore) {
                 loadMoreToLoading()
             } else if (enableLoadMoreEndClick && mLoadMoreView.loadMoreStatus == BaseLoadMoreView.Status.End) {
                 loadMoreToLoading()
@@ -793,12 +803,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
             return false
         }
         return data.isNotEmpty()
-    }
-
-    fun setPreLoadNumber(preLoadNumber: Int) {
-        if (preLoadNumber > 1) {
-            mPreLoadNumber = preLoadNumber
-        }
     }
 
     private fun autoLoadMore(position: Int) {
@@ -993,6 +997,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
                 llm.findFirstCompletelyVisibleItemPosition() != 0
     }
 
+    /****************** Listener *************************/
     fun setSpanSizeLookup(spanSizeLookup: SpanSizeLookup?) {
         this.mSpanSizeLookup = spanSizeLookup
     }
@@ -1020,16 +1025,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     fun getOnItemChildClickListener(): OnItemChildClickListener? = mOnItemChildClickListener
 
     fun getOnItemChildLongClickListener(): OnItemChildLongClickListener? = mOnItemChildLongClickListener
-}
-
-interface B {
-    class  A {
-
-    }
-
-    fun getA(): A {
-        return A()
-    }
 }
 
 typealias SpanSizeLookup = (gridLayoutManager: GridLayoutManager, position: Int) -> Int
