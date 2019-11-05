@@ -752,8 +752,10 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         if (mLoadMoreView.loadMoreStatus == BaseLoadMoreView.Status.Loading) {
             return
         }
-        mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Complete
+        mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Loading
+//        mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Complete
         notifyItemChanged(getLoadMoreViewPosition())
+        invokeLoadMoreListener()
     }
 
     /**
@@ -767,11 +769,11 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
 
     var loadMoreEnable = false
         set(value) {
-            val oldHasLoadMoret = hasLoadMoreView()
+            val oldHasLoadMore = hasLoadMoreView()
             field = value
             val newHasLoadMore = hasLoadMoreView()
 
-            if (oldHasLoadMoret) {
+            if (oldHasLoadMore) {
                 if (!newHasLoadMore) {
                     notifyItemRemoved(getLoadMoreViewPosition())
                 }
@@ -799,25 +801,9 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         }
     }
 
-    private fun checkLoadMore(position: Int) {
-        //TODO 分为手动点击加载 和 自定加载更多
-        val itemCount = itemCount
-        if (position < itemCount - 1) {
-            return
-        }
-        if (mLoadMoreView.loadMoreStatus != BaseLoadMoreView.Status.Loading) {
-            return
-        }
-
-        if (isAutoLoadMore) {
-            autoLoadMore(position)
-        } else {
-
-        }
-    }
-
     private fun autoLoadMore(position: Int) {
         if (!isAutoLoadMore) {
+            //如果不需要自动加载更多，直接返回
             return
         }
         if (!hasLoadMoreView()) {
@@ -829,16 +815,11 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         if (mLoadMoreView.loadMoreStatus != BaseLoadMoreView.Status.Complete) {
             return
         }
-        mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Loading
-        if (!mLoading) {
-            mLoading = true
-            weakRecyclerView.get()?.let {
-                it.post { mLoadMoreListener?.invoke() }
-            } ?: mLoadMoreListener?.invoke()
-        }
+        invokeLoadMoreListener()
     }
 
-    private fun invokeLoadMoreListener(position: Int) {
+    private fun invokeLoadMoreListener() {
+        mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Loading
         if (!mLoading) {
             mLoading = true
             weakRecyclerView.get()?.let {
@@ -997,8 +978,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
      * @param size Need compatible data size
      */
     private fun compatibilityDataSizeChanged(size: Int) {
-        val dataSize = this.data.size
-        if (dataSize == size) {
+        if (this.data.size == size) {
             notifyDataSetChanged()
         }
     }
@@ -1042,6 +1022,15 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     fun getOnItemChildLongClickListener(): OnItemChildLongClickListener? = mOnItemChildLongClickListener
 }
 
+interface B {
+    class  A {
+
+    }
+
+    fun getA(): A {
+        return A()
+    }
+}
 
 typealias SpanSizeLookup = (gridLayoutManager: GridLayoutManager, position: Int) -> Int
 

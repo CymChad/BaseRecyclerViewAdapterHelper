@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.chad.baserecyclerviewadapterhelper">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/brvah_app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".PullToRefreshUseActivity" />
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,24 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AnimationUseActivity" />
-        <activity android:name=".HeaderAndFooterUseActivity" />
-        <activity android:name=".SectionUseActivity" />
-        <activity android:name=".ChooseMultipleItemUseTypeActivity" />
-        <activity android:name=".MultipleItemUseActivity" />
-        <activity android:name=".MultipleItemRvAdapterUseActivity" />
-        <activity android:name=".EmptyViewUseActivity" />
-        <activity android:name=".ItemDragAndSwipeUseActivity" />
-        <activity android:name=".ExpandableUseActivity" />
-        <activity android:name=".DataBindingUseActivity" />
-        <activity android:name=".ItemClickActivity"></activity>
-        <activity android:name=".base.BaseActivity"></activity>
-        <activity
-            android:name=".HomeActivity"
-            android:launchMode="singleTask"></activity>
-        <activity android:name=".UpFetchUseActivity" />
-        <activity android:name=".SectionMultipleItemUseActivity" />
-        <activity android:name=".DiffUtilActivity" />
+
+        <activity android:name=".TestActivity" />
     </application>
 
 </manifest>
