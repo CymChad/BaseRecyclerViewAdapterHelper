@@ -81,16 +81,8 @@ public class TestActivity extends AppCompatActivity {
             }
         });
 
-        mAdapter.setEnableLoadMore(false);
         mAdapter.setNewData(list);
-
-
-        mRecyclerView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.setEnableLoadMore(true);
-            }
-        }, 2000);
+        mAdapter.disableLoadMoreIfNotFullPage();
     }
 
     private void initClick() {
