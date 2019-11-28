@@ -3,11 +3,12 @@ package com.chad.baserecyclerviewadapterhelper.adapter
 import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.chad.library.adapter.base.module.LoadMoreImp
 
 /**
  * adapter
  */
-class TestAdapter(list: MutableList<TestData>?) : BaseQuickAdapter<TestData, BaseViewHolder>(R.layout.layout_animation, list) {
+class TestAdapter(list: MutableList<TestData>?) : BaseQuickAdapter<TestData, BaseViewHolder>(R.layout.layout_animation, list),LoadMoreImp {
 
     init {
         addItemChildClickViewIds(R.id.img)

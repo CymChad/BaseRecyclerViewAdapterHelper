@@ -59,15 +59,15 @@ public class TestActivity extends AppCompatActivity {
         view.findViewById(R.id.iv).setVisibility(View.GONE);
         mAdapter.addHeaderView(view);
 
-        mAdapter.setAutoLoadMore(true);
-        mAdapter.setOnLoadMoreListener(new Function0<Unit>() {
+        mAdapter.getLoadMoreModule().setAutoLoadMore(true);
+        mAdapter.getLoadMoreModule().setOnLoadMoreListener(new Function0<Unit>() {
             @Override
             public Unit invoke() {
                 mRecyclerView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         mAdapter.addData(new TestData(mAdapter.getData().size() + "", "content 0"));
-                        mAdapter.loadMoreComplete();
+                        mAdapter.getLoadMoreModule().loadMoreComplete();
                     }
                 }, 3000);
                 return null;
@@ -82,7 +82,7 @@ public class TestActivity extends AppCompatActivity {
         });
 
         mAdapter.setNewData(list);
-        mAdapter.disableLoadMoreIfNotFullPage();
+//        mAdapter.getLoadMoreModule().disableLoadMoreIfNotFullPage();
     }
 
     private void initClick() {
