@@ -11,11 +11,12 @@ package com.chad.library.adapter.base.module
  */
 interface UpFetchModule
 
-typealias UpFetchListener = () -> Unit
+typealias KtUpFetchListener = () -> Unit
 
 open class BaseUpFetchModule {
 
-    private var mUpFetchListener: UpFetchListener? = null
+    private var mUpFetchListener: KtUpFetchListener? = null
+    private var interfaceUpFetchListener: UpFetchListener? = null
 
     var isUpFetchEnable = false
     var isUpFetching = false
@@ -30,10 +31,19 @@ open class BaseUpFetchModule {
         }
         if (position <= startUpFetchPosition) {
             mUpFetchListener?.invoke()
+            interfaceUpFetchListener?.onUpFetch()
         }
     }
 
-    fun setUpFetchListener(listener: UpFetchListener) {
+    fun setUpFetchListener(listener: KtUpFetchListener) {
         this.mUpFetchListener = listener
     }
+
+    fun setUpFetchListener(listener: UpFetchListener) {
+        this.interfaceUpFetchListener = listener
+    }
+}
+
+interface UpFetchListener {
+    fun onUpFetch()
 }

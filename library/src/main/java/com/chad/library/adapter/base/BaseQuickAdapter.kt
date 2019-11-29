@@ -13,8 +13,11 @@ import androidx.annotation.IdRes
 import androidx.annotation.IntRange
 import androidx.annotation.LayoutRes
 import androidx.annotation.NonNull
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.chad.library.adapter.base.diff.BaseQuickAdapterListUpdateCallback
+import com.chad.library.adapter.base.diff.BaseQuickDiffCallback
 import com.chad.library.adapter.base.module.BaseLoadMoreModule
 import com.chad.library.adapter.base.module.BaseUpFetchModule
 import com.chad.library.adapter.base.module.LoadMoreModule
@@ -27,7 +30,10 @@ import java.lang.reflect.Modifier
 import java.lang.reflect.ParameterizedType
 import java.util.*
 
-interface BaseQuickAdapterModuleImp {
+/**
+ * 获取模块
+ */
+internal interface BaseQuickAdapterModuleImp {
     fun addLoadMoreModule(baseQuickAdapter: BaseQuickAdapter<*, *>): BaseLoadMoreModule {
         return BaseLoadMoreModule(baseQuickAdapter)
     }
@@ -112,7 +118,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     private var mOnItemChildClickListener: OnItemChildClickListener? = null
     private var mOnItemChildLongClickListener: OnItemChildLongClickListener? = null
 
-
     protected lateinit var context: Context
         private set
 
@@ -144,10 +149,19 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     protected abstract fun convert(helper: VH, item: T?)
 
     /**
+     * Optional implementation this method and use the helper to adapt the view to the given item.
      *
-     * @param helper VH
-     * @param item T?
-     * @param payloads List<Any>
+     * If {@link DiffUtil.Callback#getChangePayload(int, int)} is implemented,
+     * then {@link BaseQuickAdapter#convert(BaseViewHolder, Object)} will not execute, and will
+     * perform this method, Please implement this method for partial refresh.
+     *
+     * If use [RecyclerView.Adapter.notifyItemChanged] with payload,
+     * Will execute this method.
+     *
+     *
+     * @param helper   A fully initialized helper.
+     * @param item     The item that needs to be displayed.
+     * @param payloads payload info.
      */
     protected open fun convert(helper: VH, item: T?, payloads: List<Any>) {}
 
@@ -908,6 +922,51 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         }
     }
 
+    /**
+     * use Diff setting up a new instance to data
+     *
+     * @param baseQuickDiffCallback implementation [BaseQuickDiffCallback]
+     */
+    open fun setNewDiffData(@NonNull baseQuickDiffCallback: BaseQuickDiffCallback<T>) {
+        setNewDiffData(baseQuickDiffCallback, false)
+    }
+
+    /**
+     * use Diff setting up a new instance to data.
+     * this is sync, if you need use async, see [.setNewDiffData].
+     *
+     * @param baseQuickDiffCallback implementation [BaseQuickDiffCallback].
+     * @param detectMoves Whether to detect the movement of the Item
+     */
+    open fun setNewDiffData(@NonNull baseQuickDiffCallback: BaseQuickDiffCallback<T>, detectMoves: Boolean) {
+        if (hasEmptyView()) { // If the current view is an empty view, set the new data directly without diff
+            setNewData(baseQuickDiffCallback.newList)
+            return
+        }
+        baseQuickDiffCallback.setOldList(this.data)
+        val diffResult = DiffUtil.calculateDiff(baseQuickDiffCallback, detectMoves)
+        diffResult.dispatchUpdatesTo(BaseQuickAdapterListUpdateCallback(this))
+        this.data = baseQuickDiffCallback.newList
+    }
+
+    /**
+     * use DiffResult setting up a new instance to data
+     *
+     * If you need to use async computing Diff, please use this method.
+     * You only need to tell the calculation result,
+     * this adapter does not care about the calculation process.
+     *
+     * @param diffResult DiffResult
+     * @param newData New Data
+     */
+    open fun setNewDiffData(@NonNull diffResult: DiffUtil.DiffResult, newData: MutableList<T>) {
+        if (hasEmptyView()) { // If the current view is an empty view, set the new data directly without diff
+            setNewData(newData)
+            return
+        }
+        diffResult.dispatchUpdatesTo(BaseQuickAdapterListUpdateCallback(this@BaseQuickAdapter))
+        this.data = newData
+    }
 
     /************************************** Set Listener ****************************************/
     fun setSpanSizeLookup(spanSizeLookup: SpanSizeLookup?) {
