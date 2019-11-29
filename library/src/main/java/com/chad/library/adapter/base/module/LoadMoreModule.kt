@@ -15,7 +15,7 @@ import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView
  */
 
 /**
- * 需要【向下加载更多】功能的，继承此接口
+ * 需要【向下加载更多】功能的，[BaseQuickAdapter]继承此接口
  */
 interface LoadMoreModule
 

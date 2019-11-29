@@ -1,5 +1,7 @@
 package com.chad.library.adapter.base.module
 
+import com.chad.library.adapter.base.BaseQuickAdapter
+
 /**
  * @author: limuyang
  * @date: 2019-11-29
@@ -7,7 +9,7 @@ package com.chad.library.adapter.base.module
  */
 
 /**
- * 需要【向上加载更多】功能的，继承此接口
+ * 需要【向上加载更多】功能的，[BaseQuickAdapter]继承此接口
  */
 interface UpFetchModule
 

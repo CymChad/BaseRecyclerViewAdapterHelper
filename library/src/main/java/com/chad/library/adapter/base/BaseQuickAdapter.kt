@@ -1,7 +1,6 @@
 package com.chad.library.adapter.base
 
 import android.content.Context
-import android.os.Parcel
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,10 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.diff.BaseQuickAdapterListUpdateCallback
 import com.chad.library.adapter.base.diff.BaseQuickDiffCallback
-import com.chad.library.adapter.base.module.BaseLoadMoreModule
-import com.chad.library.adapter.base.module.BaseUpFetchModule
-import com.chad.library.adapter.base.module.LoadMoreModule
-import com.chad.library.adapter.base.module.UpFetchModule
+import com.chad.library.adapter.base.module.*
 import com.chad.library.adapter.base.util.getItemView
 import java.lang.ref.WeakReference
 import java.lang.reflect.Constructor
@@ -40,6 +36,10 @@ internal interface BaseQuickAdapterModuleImp {
 
     fun addUpFetchModule(): BaseUpFetchModule {
         return BaseUpFetchModule()
+    }
+
+    fun <T>addExpandableModule(baseQuickAdapter: BaseQuickAdapter<T, *>): BaseExpandableModule<T> {
+        return BaseExpandableModule(baseQuickAdapter)
     }
 }
 
@@ -103,6 +103,9 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     var upFetchModule: BaseUpFetchModule? = null
         private set
 
+    var expandableModule: BaseExpandableModule<T>? = null
+        private set
+
     /********************************* Private property *****************************************/
 
     private lateinit var mHeaderLayout: LinearLayout
@@ -135,6 +138,9 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         }
         if (this is UpFetchModule) {
             upFetchModule = this.addUpFetchModule()
+        }
+        if (this is ExpandableModule) {
+            expandableModule = this.addExpandableModule(this)
         }
     }
 
@@ -302,6 +308,10 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         }
     }
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         weakRecyclerView = WeakReference(recyclerView)
@@ -351,18 +361,24 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
             null
     }
 
-    private val childClickViewIds = LinkedHashSet<Int>()
-
-    constructor(parcel: Parcel) : this(
-            parcel.readInt(),
-            TODO("data")) {
-        headerWithEmptyEnable = parcel.readByte() != 0.toByte()
-        footerWithEmptyEnable = parcel.readByte() != 0.toByte()
-        isUseEmpty = parcel.readByte() != 0.toByte()
-        headerViewAsFlow = parcel.readByte() != 0.toByte()
-        footerViewAsFlow = parcel.readByte() != 0.toByte()
-        mLastPosition = parcel.readInt()
+    internal fun getItemPosition(item: T?): Int {
+        return if (item != null && data.isNotEmpty()) data.indexOf(item) else -1
     }
+
+    /**
+     * Get the parent item position of the IExpandable item
+     *
+     * @return return the closest parent item position of the IExpandable.
+     * if the IExpandable item's level is 0, return itself position.
+     * if the item's level is negative which mean do not implement this, return a negative
+     * if the item is not exist in the data list, return a negative.
+     */
+    fun getParentPosition(item: T): Int {
+        // If have ExpandableModule
+        return expandableModule?.getParentPosition(item) ?: getItemPosition(item)
+    }
+
+    private val childClickViewIds = LinkedHashSet<Int>()
 
     fun getChildClickViewIds(): LinkedHashSet<Int> {
         return childClickViewIds
@@ -817,10 +833,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
     } else {
         null
     }
-
-    /********************************************************************************************/
-    /******************************* LoadMoreView Method ****************************************/
-    /********************************************************************************************/
 
     /*************************** 设置数据相关 ******************************************/
 
