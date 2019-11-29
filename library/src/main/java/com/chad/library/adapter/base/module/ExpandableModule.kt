@@ -271,4 +271,45 @@ open class BaseExpandableModule<T>(private val baseQuickAdapter: BaseQuickAdapte
         }
         return -1
     }
+
+    fun removeExpandable(position: Int) {
+        val entity = baseQuickAdapter.data[position]
+        if (entity is ExpandableEntity<*>) {
+            removeAllExpandedChild(entity, position)
+        }
+        removeExpandableDataFromParent(entity)
+    }
+
+    /**
+     * 移除父控件时，若父控件处于展开状态，则先移除其所有的子控件
+     *
+     * @param parent         父控件实体
+     * @param parentPosition 父控件位置
+     */
+    protected fun removeAllExpandedChild(parent: ExpandableEntity<*>, parentPosition: Int) {
+        if (parent.isExpanded) {
+            val chidChilds = parent.subItems
+            if (chidChilds.isNullOrEmpty()) return
+
+            val childSize = chidChilds.size
+            for (i in 0 until childSize) {
+                baseQuickAdapter.remove(parentPosition + 1)
+            }
+        }
+    }
+
+    /**
+     * 移除子控件时，移除父控件实体类中相关子控件数据，避免关闭后再次展开数据重现
+     *
+     * @param child 子控件实体
+     */
+    protected fun removeExpandableDataFromParent(child: T) {
+        val position = getParentPosition(child)
+        if (position >= 0) {
+            val parent = baseQuickAdapter.data[position] as ExpandableEntity<*>
+            if (parent !== child) {
+                parent.subItems.remove(child)
+            }
+        }
+    }
 }

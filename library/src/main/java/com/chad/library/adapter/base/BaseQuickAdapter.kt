@@ -29,7 +29,7 @@ import java.util.*
 /**
  * 获取模块
  */
-internal interface BaseQuickAdapterModuleImp {
+private interface BaseQuickAdapterModuleImp {
     fun addLoadMoreModule(baseQuickAdapter: BaseQuickAdapter<*, *>): BaseLoadMoreModule {
         return BaseLoadMoreModule(baseQuickAdapter)
     }
@@ -893,6 +893,12 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
      * @param position
      */
     fun remove(@IntRange(from = 0) position: Int) {
+        if (position >= data.size) {
+            return
+        }
+        // 如果存在折叠\展开模块，先将其移除
+        expandableModule?.removeExpandable(position)
+
         this.data.removeAt(position)
         val internalPosition = position + getHeaderLayoutCount()
         notifyItemRemoved(internalPosition)
