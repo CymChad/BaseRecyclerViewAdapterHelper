@@ -66,4 +66,3 @@ abstract class BaseLoadMoreView {
     }
 }
 
-typealias OnLoadMoreListener = () -> Unit

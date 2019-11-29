@@ -1,6 +1,7 @@
 package com.chad.library.adapter.base
 
 import android.content.Context
+import android.os.Parcel
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,10 +15,10 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.chad.library.adapter.base.loadmore.BaseLoadMoreView
-import com.chad.library.adapter.base.loadmore.OnLoadMoreListener
 import com.chad.library.adapter.base.module.BaseLoadMoreModule
-import com.chad.library.adapter.base.module.LoadMoreImp
+import com.chad.library.adapter.base.module.BaseUpFetchModule
+import com.chad.library.adapter.base.module.LoadMoreModule
+import com.chad.library.adapter.base.module.UpFetchModule
 import com.chad.library.adapter.base.util.getItemView
 import java.lang.ref.WeakReference
 import java.lang.reflect.Constructor
@@ -26,7 +27,15 @@ import java.lang.reflect.Modifier
 import java.lang.reflect.ParameterizedType
 import java.util.*
 
+interface BaseQuickAdapterModuleImp {
+    fun addLoadMoreModule(baseQuickAdapter: BaseQuickAdapter<*, *>): BaseLoadMoreModule {
+        return BaseLoadMoreModule(baseQuickAdapter)
+    }
 
+    fun addUpFetchModule(): BaseUpFetchModule {
+        return BaseUpFetchModule()
+    }
+}
 
 /**
  * Base Class
@@ -34,26 +43,15 @@ import java.util.*
  * @param VH : BaseViewHolder
  * @constructor layoutId, data(Can null parameters, the default is empty data)
  */
-abstract class BaseQuickAdapter< T, VH : BaseViewHolder>(@LayoutRes val layoutResId: Int,
+abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutResId: Int,
                                                         data: MutableList<T>? = null)
-    : RecyclerView.Adapter<VH>() {
+    : RecyclerView.Adapter<VH>(), BaseQuickAdapterModuleImp {
 
     companion object {
         const val HEADER_VIEW = 0x00000111
         const val LOAD_MORE_VIEW = 0x00000222
         const val FOOTER_VIEW = 0x00000333
         const val EMPTY_VIEW = 0x00000555
-
-//        var defLoadMoreView: BaseLoadMoreView = SimpleLoadMoreView()
-//
-//        /**
-//         * 设置全局的LodeMoreView
-//         * @param loadMoreView BaseLoadMoreView
-//         */
-//        @JvmStatic
-//        fun setDefLoadMoreView(loadMoreView: BaseLoadMoreView) {
-//            defLoadMoreView = loadMoreView
-//        }
     }
 
     /**
@@ -81,22 +79,6 @@ abstract class BaseQuickAdapter< T, VH : BaseViewHolder>(@LayoutRes val layoutRe
     /** 是否使用空布局 */
     var isUseEmpty = true
 
-
-    /** 加载完成后是否允许点击 */
-//    var enableLoadMoreEndClick = false
-    /** 是否打开自动加载更多 */
-//    var isAutoLoadMore = true
-    //TODO
-//    var isEnableLoadMoreIfNotFullPage = true
-//    var preLoadNumber = 1
-//        set(value) {
-//            if (value > 1) {
-//                field = value
-//            }
-//        }
-//    var loading = false
-//        private set
-
     /**
      * if asFlow is true, footer/header will arrange like normal item view.
      * only works when use [GridLayoutManager],and it will ignore span size.
@@ -104,9 +86,18 @@ abstract class BaseQuickAdapter< T, VH : BaseViewHolder>(@LayoutRes val layoutRe
     var headerViewAsFlow: Boolean = false
     var footerViewAsFlow: Boolean = false
 
-    /********************************* Private property *****************************************/
+    /**
+     * 加载更多模块
+     */
+    var loadMoreModule: BaseLoadMoreModule? = null
+        private set
+    /**
+     * 向上加载模块
+     */
+    var upFetchModule: BaseUpFetchModule? = null
+        private set
 
-//    private var mLoadMoreView = defLoadMoreView
+    /********************************* Private property *****************************************/
 
     private lateinit var mHeaderLayout: LinearLayout
     private lateinit var mFooterLayout: LinearLayout
@@ -114,14 +105,13 @@ abstract class BaseQuickAdapter< T, VH : BaseViewHolder>(@LayoutRes val layoutRe
 
     private var mSpanSizeLookup: SpanSizeLookup? = null
 
-    private var mLoadMoreListener: OnLoadMoreListener? = null
-    private var mNextLoadEnable = false
     private var mLastPosition = -1
 
     private var mOnItemClickListener: OnItemClickListener? = null
     private var mOnItemLongClickListener: OnItemLongClickListener? = null
     private var mOnItemChildClickListener: OnItemChildClickListener? = null
     private var mOnItemChildLongClickListener: OnItemChildLongClickListener? = null
+
 
     protected lateinit var context: Context
         private set
@@ -131,22 +121,16 @@ abstract class BaseQuickAdapter< T, VH : BaseViewHolder>(@LayoutRes val layoutRe
     /******************************* RecyclerView Method ****************************************/
 
     init {
-        checkLoadMore()
+        checkModule()
     }
 
-    private fun checkLoadMore() {
-        if (this is LoadMoreImp) {
-            loadMoreModule = this.getLoadMoreModule(this)
+    private fun checkModule() {
+        if (this is LoadMoreModule) {
+            loadMoreModule = this.addLoadMoreModule(this)
         }
-
-
-    }
-
-    var loadMoreModule: BaseLoadMoreModule? = null
-        private set
-
-    fun bindLoadMoreModule(loadMoreModule: BaseLoadMoreModule) {
-        this.loadMoreModule = loadMoreModule
+        if (this is UpFetchModule) {
+            upFetchModule = this.addUpFetchModule()
+        }
     }
 
     /**
@@ -172,7 +156,7 @@ abstract class BaseQuickAdapter< T, VH : BaseViewHolder>(@LayoutRes val layoutRe
         val baseViewHolder: VH
         when (viewType) {
             LOAD_MORE_VIEW -> {
-                val view = loadMoreModule!!.createLoadMoreView(parent)
+                val view = loadMoreModule!!.loadMoreView.getRootView(parent)
                 baseViewHolder = createBaseViewHolder(view)
                 loadMoreModule!!.setupViewHolder(baseViewHolder)
             }
@@ -277,6 +261,8 @@ abstract class BaseQuickAdapter< T, VH : BaseViewHolder>(@LayoutRes val layoutRe
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
+        //Add up fetch logic, almost like load more, but simpler.
+        upFetchModule?.autoUpFetch(position)
         //Do not move position, need to change before LoadMoreView binding
         loadMoreModule?.autoLoadMore(position)
         when (holder.itemViewType) {
@@ -291,8 +277,9 @@ abstract class BaseQuickAdapter< T, VH : BaseViewHolder>(@LayoutRes val layoutRe
             onBindViewHolder(holder, position)
             return
         }
+        //Add up fetch logic, almost like load more, but simpler.
+        upFetchModule?.autoUpFetch(position)
         //Do not move position, need to change before LoadMoreView binding
-//        autoLoadMore(position)
         loadMoreModule?.autoLoadMore(position)
         when (holder.itemViewType) {
             LOAD_MORE_VIEW -> loadMoreModule?.loadMoreView?.convert(holder)
@@ -351,6 +338,17 @@ abstract class BaseQuickAdapter< T, VH : BaseViewHolder>(@LayoutRes val layoutRe
     }
 
     private val childClickViewIds = LinkedHashSet<Int>()
+
+    constructor(parcel: Parcel) : this(
+            parcel.readInt(),
+            TODO("data")) {
+        headerWithEmptyEnable = parcel.readByte() != 0.toByte()
+        footerWithEmptyEnable = parcel.readByte() != 0.toByte()
+        isUseEmpty = parcel.readByte() != 0.toByte()
+        headerViewAsFlow = parcel.readByte() != 0.toByte()
+        footerViewAsFlow = parcel.readByte() != 0.toByte()
+        mLastPosition = parcel.readInt()
+    }
 
     fun getChildClickViewIds(): LinkedHashSet<Int> {
         return childClickViewIds
@@ -471,10 +469,8 @@ abstract class BaseQuickAdapter< T, VH : BaseViewHolder>(@LayoutRes val layoutRe
         return createBaseViewHolder(parent.getItemView(layoutResId))
     }
 
-
-
     @Suppress("UNCHECKED_CAST")
-     open fun createBaseViewHolder(view: View): VH {
+    protected fun createBaseViewHolder(view: View): VH {
         var temp: Class<*>? = javaClass
         var z: Class<*>? = null
         while (z == null && null != temp) {
@@ -812,157 +808,6 @@ abstract class BaseQuickAdapter< T, VH : BaseViewHolder>(@LayoutRes val layoutRe
     /******************************* LoadMoreView Method ****************************************/
     /********************************************************************************************/
 
-//    private fun getLoadMoreViewHolder(parent: ViewGroup): VH {
-//        val view = mLoadMoreView.getRootView(parent)
-//        val vh = createBaseViewHolder(view)
-//        vh.itemView.setOnClickListener {
-//            if (mLoadMoreView.loadMoreStatus == BaseLoadMoreView.Status.Fail) {
-//                loadMoreToLoading()
-//            } else if (mLoadMoreView.loadMoreStatus == BaseLoadMoreView.Status.Complete && !isAutoLoadMore) {
-//                loadMoreToLoading()
-//            } else if (enableLoadMoreEndClick && mLoadMoreView.loadMoreStatus == BaseLoadMoreView.Status.End) {
-//                loadMoreToLoading()
-//            }
-//        }
-//        return vh
-//    }
-//
-//    /**
-//     * The notification starts the callback and loads more
-//     */
-//    fun loadMoreToLoading() {
-//        if (mLoadMoreView.loadMoreStatus == BaseLoadMoreView.Status.Loading) {
-//            return
-//        }
-//        mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Loading
-//        notifyItemChanged(getLoadMoreViewPosition())
-//        invokeLoadMoreListener()
-//    }
-//
-//    fun setLoadMoreView(loadMoreView: BaseLoadMoreView) {
-//        this.mLoadMoreView = loadMoreView
-//    }
-//
-//    /**
-//     * Gets to load more locations
-//     *
-//     * @return
-//     */
-//    fun getLoadMoreViewPosition(): Int {
-//        return getHeaderLayoutCount() + data.size + getFooterLayoutCount()
-//    }
-//
-//    var isEnableLoadMore = false
-//        set(value) {
-//            val oldHasLoadMore = hasLoadMoreView()
-//            field = value
-//            val newHasLoadMore = hasLoadMoreView()
-//
-//            if (oldHasLoadMore) {
-//                if (!newHasLoadMore) {
-//                    notifyItemRemoved(getLoadMoreViewPosition())
-//                }
-//            } else {
-//                if (newHasLoadMore) {
-//                    mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Complete
-//                    notifyItemInserted(getLoadMoreViewPosition())
-//                }
-//            }
-//        }
-//
-//    fun hasLoadMoreView(): Boolean {
-//        if (mLoadMoreListener == null || !isEnableLoadMore) {
-//            return false
-//        }
-//        if (!mNextLoadEnable && mLoadMoreView.isLoadEndMoreGone) {
-//            return false
-//        }
-//        return data.isNotEmpty()
-//    }
-//
-//    /**
-//     * 自定加载数据
-//     * @param position Int
-//     */
-//    private fun autoLoadMore(position: Int) {
-//        if (!isAutoLoadMore) {
-//            //如果不需要自动加载更多，直接返回
-//            return
-//        }
-//        if (!hasLoadMoreView()) {
-//            return
-//        }
-//        if (position < itemCount - preLoadNumber) {
-//            return
-//        }
-//        if (mLoadMoreView.loadMoreStatus != BaseLoadMoreView.Status.Complete) {
-//            return
-//        }
-//        invokeLoadMoreListener()
-//    }
-//
-//    /**
-//     * 触发加载更多监听
-//     */
-//    private fun invokeLoadMoreListener() {
-//        mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Loading
-//        if (!loading) {
-//            loading = true
-//            weakRecyclerView.get()?.let {
-//                it.post { mLoadMoreListener?.invoke() }
-//            } ?: mLoadMoreListener?.invoke()
-//        }
-//    }
-//
-//
-//    /**
-//     * Refresh end, no more data
-//     *
-//     * @param gone if true gone the load more view
-//     */
-//    @JvmOverloads
-//    fun loadMoreEnd(gone: Boolean = false) {
-//        if (!hasLoadMoreView()) {
-//            return
-//        }
-//        loading = false
-//        mNextLoadEnable = false
-//        mLoadMoreView.isLoadEndMoreGone = gone
-//
-//        mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.End
-//        if (gone) {
-//            notifyItemRemoved(getLoadMoreViewPosition())
-//        } else {
-//            notifyItemChanged(getLoadMoreViewPosition())
-//        }
-//    }
-//
-//    /**
-//     * Refresh complete
-//     */
-//    fun loadMoreComplete() {
-//        if (!hasLoadMoreView()) {
-//            return
-//        }
-//        loading = false
-//        mNextLoadEnable = true
-//        mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Complete
-//        notifyItemChanged(getLoadMoreViewPosition())
-//    }
-//
-//    /**
-//     * Refresh failed
-//     */
-//    fun loadMoreFail() {
-//        if (!hasLoadMoreView()) {
-//            return
-//        }
-//        loading = false
-//        mLoadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Fail
-//        notifyItemChanged(getLoadMoreViewPosition())
-//    }
-
-
     /*************************** 设置数据相关 ******************************************/
 
     /**
@@ -973,12 +818,7 @@ abstract class BaseQuickAdapter< T, VH : BaseViewHolder>(@LayoutRes val layoutRe
      */
     fun setNewData(data: MutableList<T>?) {
         this.data = data ?: arrayListOf()
-        if (mLoadMoreListener != null) {
-            mNextLoadEnable = true
-//            isEnableLoadMore = true
-            loadMoreModule?.loading = false
-            loadMoreModule?.loadMoreView?.loadMoreStatus = BaseLoadMoreView.Status.Complete
-        }
+        loadMoreModule?.rest()
         mLastPosition = -1
         notifyDataSetChanged()
     }
@@ -1068,66 +908,10 @@ abstract class BaseQuickAdapter< T, VH : BaseViewHolder>(@LayoutRes val layoutRe
         }
     }
 
-//    //TODO disableLoadMoreIfNotFullPage
-//    /**
-//     * check if full page after [setNewData], if full, it will enable load more again.
-//     * <p>
-//     * 不是配置项！！
-//     * <p>
-//     * 这个方法是用来检查是否满一屏的，所以只推荐在 [setNewData] 之后使用
-//     * 原理很简单，先关闭 load more，检查完了再决定是否开启
-//     * <p>
-//     * 不是配置项！！
-//     *
-//     * @see setNewData
-//     */
-//    fun disableLoadMoreIfNotFullPage() {
-//        isEnableLoadMore = false
-//        val recyclerView = weakRecyclerView.get() ?: return
-//        val manager = recyclerView.layoutManager ?: return
-//        if (manager is LinearLayoutManager) {
-//            recyclerView.postDelayed({
-//                if (isFullScreen(manager)) {
-//                    isEnableLoadMore = true
-//                }
-//            }, 50)
-//        } else if (manager is StaggeredGridLayoutManager) {
-//            recyclerView.postDelayed({
-//                val positions = IntArray(manager.spanCount)
-//                manager.findLastCompletelyVisibleItemPositions(positions)
-//                val pos = getTheBiggestNumber(positions) + 1
-//                if (pos != itemCount) {
-//                    isEnableLoadMore = true
-//                }
-//            }, 50)
-//        }
-//    }
-//
-//    private fun isFullScreen(llm: LinearLayoutManager): Boolean {
-//        return (llm.findLastCompletelyVisibleItemPosition() + 1) != itemCount ||
-//                llm.findFirstCompletelyVisibleItemPosition() != 0
-//    }
-//
-//    private fun getTheBiggestNumber(numbers: IntArray?): Int {
-//        var tmp = -1
-//        if (numbers == null || numbers.isEmpty()) {
-//            return tmp
-//        }
-//        for (num in numbers) {
-//            if (num > tmp) {
-//                tmp = num
-//            }
-//        }
-//        return tmp
-//    }
 
     /************************************** Set Listener ****************************************/
     fun setSpanSizeLookup(spanSizeLookup: SpanSizeLookup?) {
         this.mSpanSizeLookup = spanSizeLookup
-    }
-
-    fun setOnLoadMoreListener(listener: OnLoadMoreListener) {
-        loadMoreModule?.setOnLoadMoreListener(listener)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener?) {

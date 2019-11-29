@@ -1,23 +1,30 @@
 package com.chad.library.adapter.base.module
 
-import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.loadmore.BaseLoadMoreView
-import com.chad.library.adapter.base.loadmore.OnLoadMoreListener
 import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView
 
-interface LoadMoreImp {
-    fun getLoadMoreModule(baseQuickAdapter: BaseQuickAdapter<*, *>): BaseLoadMoreModule {
-        return BaseLoadMoreModule(baseQuickAdapter)
-    }
 
-}
+/**
+ * @author: limuyang
+ * @date: 2019-11-29
+ * @Description: 向下加载更多
+ */
+
+/**
+ * 需要【向下加载更多】功能的，继承此接口
+ */
+interface LoadMoreModule
 
 
+typealias OnLoadMoreListener = () -> Unit
+
+/**
+ * 加载更多基类
+ */
 open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, *>) {
 
     companion object {
@@ -33,6 +40,8 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
         }
     }
 
+    private var mLoadMoreListener: OnLoadMoreListener? = null
+    private var mNextLoadEnable = false
 
     var loadMoreView = defLoadMoreView
 
@@ -42,26 +51,51 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
     var isAutoLoadMore = true
     //TODO
     var isEnableLoadMoreIfNotFullPage = true
+    /**
+     * 预加载
+     */
     var preLoadNumber = 1
         set(value) {
             if (value > 1) {
                 field = value
             }
         }
-    var loading = false
+    /**
+     * 是否加载中
+     */
+    var isLoading = false
         internal set
 
+    /**
+     * Gets to load more locations
+     *
+     * @return
+     */
+    val loadMoreViewPosition: Int
+        get() {
+            return baseQuickAdapter.getHeaderLayoutCount() + baseQuickAdapter.data.size + baseQuickAdapter.getFooterLayoutCount()
+        }
 
-    private var mLoadMoreListener: OnLoadMoreListener? = null
-    private var mNextLoadEnable = false
+    var isEnableLoadMore = false
+        set(value) {
+            val oldHasLoadMore = hasLoadMoreView()
+            field = value
+            val newHasLoadMore = hasLoadMoreView()
+
+            if (oldHasLoadMore) {
+                if (!newHasLoadMore) {
+                    baseQuickAdapter.notifyItemRemoved(loadMoreViewPosition)
+                }
+            } else {
+                if (newHasLoadMore) {
+                    loadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Complete
+                    baseQuickAdapter.notifyItemInserted(loadMoreViewPosition)
+                }
+            }
+        }
 
 
-
-    fun createLoadMoreView(parent: ViewGroup) :View {
-        return loadMoreView.getRootView(parent)
-    }
-
-    fun setupViewHolder(viewHolder: BaseViewHolder) {
+    internal fun setupViewHolder(viewHolder: BaseViewHolder) {
         viewHolder.itemView.setOnClickListener {
             if (loadMoreView.loadMoreStatus == BaseLoadMoreView.Status.Fail) {
                 loadMoreToLoading()
@@ -81,36 +115,10 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
             return
         }
         loadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Loading
-        baseQuickAdapter.notifyItemChanged(getLoadMoreViewPosition())
+        baseQuickAdapter.notifyItemChanged(loadMoreViewPosition)
         invokeLoadMoreListener()
     }
 
-    /**
-     * Gets to load more locations
-     *
-     * @return
-     */
-    fun getLoadMoreViewPosition(): Int {
-        return baseQuickAdapter.getHeaderLayoutCount() + baseQuickAdapter.data.size + baseQuickAdapter.getFooterLayoutCount()
-    }
-
-    var isEnableLoadMore = false
-        set(value) {
-            val oldHasLoadMore = hasLoadMoreView()
-            field = value
-            val newHasLoadMore = hasLoadMoreView()
-
-            if (oldHasLoadMore) {
-                if (!newHasLoadMore) {
-                    baseQuickAdapter.notifyItemRemoved(getLoadMoreViewPosition())
-                }
-            } else {
-                if (newHasLoadMore) {
-                    loadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Complete
-                    baseQuickAdapter.notifyItemInserted(getLoadMoreViewPosition())
-                }
-            }
-        }
 
     fun hasLoadMoreView(): Boolean {
         if (mLoadMoreListener == null || !isEnableLoadMore) {
@@ -123,7 +131,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
     }
 
     /**
-     * 自定加载数据
+     * 自动加载数据
      * @param position Int
      */
     internal fun autoLoadMore(position: Int) {
@@ -148,8 +156,8 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
      */
     private fun invokeLoadMoreListener() {
         loadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Loading
-        if (!loading) {
-            loading = true
+        if (!isLoading) {
+            isLoading = true
             baseQuickAdapter.weakRecyclerView.get()?.let {
                 it.post { mLoadMoreListener?.invoke() }
             } ?: mLoadMoreListener?.invoke()
@@ -158,16 +166,16 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
 
     //TODO disableLoadMoreIfNotFullPage
     /**
-     * check if full page after [setNewData], if full, it will enable load more again.
+     * check if full page after [BaseQuickAdapter.setNewData], if full, it will enable load more again.
      * <p>
      * 不是配置项！！
      * <p>
-     * 这个方法是用来检查是否满一屏的，所以只推荐在 [setNewData] 之后使用
+     * 这个方法是用来检查是否满一屏的，所以只推荐在 [BaseQuickAdapter.setNewData] 之后使用
      * 原理很简单，先关闭 load more，检查完了再决定是否开启
      * <p>
      * 不是配置项！！
      *
-     * @see setNewData
+     * @see BaseQuickAdapter.setNewData
      */
     fun disableLoadMoreIfNotFullPage() {
         isEnableLoadMore = false
@@ -219,15 +227,15 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
         if (!hasLoadMoreView()) {
             return
         }
-        loading = false
+        isLoading = false
         mNextLoadEnable = false
         loadMoreView.isLoadEndMoreGone = gone
 
         loadMoreView.loadMoreStatus = BaseLoadMoreView.Status.End
         if (gone) {
-            baseQuickAdapter.notifyItemRemoved(getLoadMoreViewPosition())
+            baseQuickAdapter.notifyItemRemoved(loadMoreViewPosition)
         } else {
-            baseQuickAdapter.notifyItemChanged(getLoadMoreViewPosition())
+            baseQuickAdapter.notifyItemChanged(loadMoreViewPosition)
         }
     }
 
@@ -238,10 +246,10 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
         if (!hasLoadMoreView()) {
             return
         }
-        loading = false
+        isLoading = false
         mNextLoadEnable = true
         loadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Complete
-        baseQuickAdapter.notifyItemChanged(getLoadMoreViewPosition())
+        baseQuickAdapter.notifyItemChanged(loadMoreViewPosition)
     }
 
     /**
@@ -251,15 +259,27 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
         if (!hasLoadMoreView()) {
             return
         }
-        loading = false
+        isLoading = false
         loadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Fail
-        baseQuickAdapter.notifyItemChanged(getLoadMoreViewPosition())
+        baseQuickAdapter.notifyItemChanged(loadMoreViewPosition)
     }
 
     fun setOnLoadMoreListener(listener: OnLoadMoreListener) {
         this.mLoadMoreListener = listener
         mNextLoadEnable = true
         isEnableLoadMore = true
-        loading = false
+        isLoading = false
+    }
+
+    /**
+     * 重置状态
+     */
+    internal fun rest() {
+        if (mLoadMoreListener != null) {
+            mNextLoadEnable = true
+            isEnableLoadMore = true
+            isLoading = false
+            loadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Complete
+        }
     }
 }
