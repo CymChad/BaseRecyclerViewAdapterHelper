@@ -1015,9 +1015,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         int viewType = holder.getItemViewType();
 
         switch (viewType) {
-            case 0:
-                convert(holder, getItem(position - getHeaderLayoutCount()));
-                break;
             case LOADING_VIEW:
                 mLoadMoreView.convert(holder);
                 break;
@@ -1059,9 +1056,6 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         int viewType = holder.getItemViewType();
 
         switch (viewType) {
-            case 0:
-                convertPayloads(holder, getItem(position - getHeaderLayoutCount()), payloads);
-                break;
             case LOADING_VIEW:
                 mLoadMoreView.convert(holder);
                 break;
