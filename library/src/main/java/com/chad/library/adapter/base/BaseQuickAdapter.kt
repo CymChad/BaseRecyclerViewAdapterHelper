@@ -38,7 +38,7 @@ private interface BaseQuickAdapterModuleImp {
         return BaseUpFetchModule()
     }
 
-    fun <T>addExpandableModule(baseQuickAdapter: BaseQuickAdapter<T, *>): BaseExpandableModule<T> {
+    fun <T> addExpandableModule(baseQuickAdapter: BaseQuickAdapter<T, *>): BaseExpandableModule<T> {
         return BaseExpandableModule(baseQuickAdapter)
     }
 }
@@ -49,7 +49,7 @@ private interface BaseQuickAdapterModuleImp {
  * @param VH : BaseViewHolder
  * @constructor layoutId, data(Can null parameters, the default is empty data)
  */
-abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutResId: Int,
+abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes private val layoutResId: Int,
                                                         data: MutableList<T>? = null)
     : RecyclerView.Adapter<VH>(), BaseQuickAdapterModuleImp {
 
@@ -288,7 +288,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         when (holder.itemViewType) {
             LOAD_MORE_VIEW -> loadMoreModule?.loadMoreView?.convert(holder)
             HEADER_VIEW, EMPTY_VIEW, FOOTER_VIEW -> return
-            else -> convert(holder, getItem(position - getHeaderLayoutCount()))
+            else -> convert(holder, getRealItem(position))
         }
     }
 
@@ -304,7 +304,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         when (holder.itemViewType) {
             LOAD_MORE_VIEW -> loadMoreModule?.loadMoreView?.convert(holder)
             HEADER_VIEW, EMPTY_VIEW, FOOTER_VIEW -> return
-            else -> convert(holder, getItem(position - getHeaderLayoutCount()), payloads)
+            else -> convert(holder, getRealItem(position), payloads)
         }
     }
 
@@ -365,17 +365,19 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         return if (item != null && data.isNotEmpty()) data.indexOf(item) else -1
     }
 
+    fun getRealItem(@IntRange(from = 0) position: Int): T? {
+        return data[position - getHeaderLayoutCount()]
+    }
+
     /**
-     * Get the parent item position of the IExpandable item
+     * 获取此 item 的所属的夫 item 位置。
+     * 如果此 Adapter 没有实现折叠展开模块[ExpandableModule]，则直接返回 -1
      *
-     * @return return the closest parent item position of the IExpandable.
-     * if the IExpandable item's level is 0, return itself position.
-     * if the item's level is negative which mean do not implement this, return a negative
-     * if the item is not exist in the data list, return a negative.
+     * @return position
      */
     fun getParentPosition(item: T): Int {
         // If have ExpandableModule
-        return expandableModule?.getParentPosition(item) ?: getItemPosition(item)
+        return expandableModule?.getParentPosition(item) ?: -1
     }
 
     private val childClickViewIds = LinkedHashSet<Int>()
@@ -780,12 +782,11 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes val layoutRes
         var insert = false
         if (!this::mEmptyLayout.isInitialized) {
             mEmptyLayout = FrameLayout(emptyView.context)
-            val layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-            emptyView.layoutParams?.let {
-                layoutParams.width = it.width
-                layoutParams.height = it.height
-            }
-            mEmptyLayout.layoutParams = layoutParams
+
+            mEmptyLayout.layoutParams = emptyView.layoutParams?.let {
+                return@let ViewGroup.LayoutParams(it.width, it.height)
+            } ?: ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+
             insert = true
         }
         mEmptyLayout.removeAllViews()

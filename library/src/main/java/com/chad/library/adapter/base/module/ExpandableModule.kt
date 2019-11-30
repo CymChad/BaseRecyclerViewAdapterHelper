@@ -231,15 +231,16 @@ open class BaseExpandableModule<T>(private val baseQuickAdapter: BaseQuickAdapte
         if (item == null) {
             return false
         }
-        val list = item.subItems
-        return list.isNotEmpty()
+        return item.subItems.isNotEmpty()
     }
 
     /**
-     * Get the parent item position of the IExpandable item
+     * Get the parent item position of the ExpandableEntity item
+     * 获取此 item 的所属的夫 item 位置。
      *
-     * @return return the closest parent item position of the IExpandable.
-     * if the IExpandable item's level is 0, return itself position.
+     * @return return the closest parent item position of the ExpandableEntity.
+     *         与此 ExpandableEntity 最接近的父项位置。
+     * if the ExpandableEntity item's level is 0, return itself position.
      * if the item's level is negative which mean do not implement this, return a negative
      * if the item is not exist in the data list, return a negative.
      */
@@ -272,6 +273,10 @@ open class BaseExpandableModule<T>(private val baseQuickAdapter: BaseQuickAdapte
         return -1
     }
 
+    /**
+     * 移除可展开折叠的item
+     * @param position Int
+     */
     fun removeExpandable(position: Int) {
         val entity = baseQuickAdapter.data[position]
         if (entity is ExpandableEntity<*>) {

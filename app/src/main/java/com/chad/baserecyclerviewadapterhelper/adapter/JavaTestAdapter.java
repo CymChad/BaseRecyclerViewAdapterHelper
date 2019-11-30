@@ -25,3 +25,4 @@ public class JavaTestAdapter extends BaseQuickAdapter<String, BaseViewHolder> im
     }
 
 }
+
