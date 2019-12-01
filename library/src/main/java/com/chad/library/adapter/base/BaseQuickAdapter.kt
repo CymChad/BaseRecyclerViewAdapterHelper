@@ -398,42 +398,42 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes private val l
 
     /**
      * 绑定 item 点击事件
-     * @param baseViewHolder VH
+     * @param viewHolder VH
      */
-    protected open fun bindViewClickListener(baseViewHolder: VH) {
+    protected open fun bindViewClickListener(viewHolder: VH) {
         mOnItemClickListener?.let {
-            baseViewHolder.itemView.setOnClickListener { v ->
-                var position = baseViewHolder.adapterPosition
-                if (position == RecyclerView.NO_POSITION) {
+            val adapterPosition = viewHolder.adapterPosition
+            viewHolder.itemView.setOnClickListener { v ->
+                if (adapterPosition == RecyclerView.NO_POSITION) {
                     return@setOnClickListener
                 }
-                position -= getHeaderLayoutCount()
+                val position = adapterPosition - getHeaderLayoutCount()
                 setOnItemClick(v, position)
             }
         }
         mOnItemLongClickListener?.let {
-            baseViewHolder.itemView.setOnLongClickListener { v ->
-                var position = baseViewHolder.adapterPosition
-                if (position == RecyclerView.NO_POSITION) {
+            val adapterPosition = viewHolder.adapterPosition
+            viewHolder.itemView.setOnLongClickListener { v ->
+                if (adapterPosition == RecyclerView.NO_POSITION) {
                     return@setOnLongClickListener false
                 }
-                position -= getHeaderLayoutCount()
+                val position = adapterPosition - getHeaderLayoutCount()
                 setOnItemLongClick(v, position)
             }
         }
 
         mOnItemChildClickListener?.let {
             for (id in getChildClickViewIds()) {
-                baseViewHolder.itemView.findViewById<View>(id)?.let { childView ->
+                viewHolder.itemView.findViewById<View>(id)?.let { childView ->
                     if (!childView.isClickable) {
                         childView.isClickable = true
                     }
+                    val adapterPosition = viewHolder.adapterPosition
                     childView.setOnClickListener { v ->
-                        var position = baseViewHolder.adapterPosition
-                        if (position == RecyclerView.NO_POSITION) {
+                        if (adapterPosition == RecyclerView.NO_POSITION) {
                             return@setOnClickListener
                         }
-                        position -= getHeaderLayoutCount()
+                        val position = adapterPosition - getHeaderLayoutCount()
                         setOnItemChildClick(v, position)
                     }
                 }
@@ -441,16 +441,16 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes private val l
         }
         mOnItemChildLongClickListener?.let {
             for (id in getChildClickViewIds()) {
-                baseViewHolder.itemView.findViewById<View>(id)?.let { childView ->
+                viewHolder.itemView.findViewById<View>(id)?.let { childView ->
                     if (!childView.isLongClickable) {
                         childView.isLongClickable = true
                     }
+                    val adapterPosition = viewHolder.adapterPosition
                     childView.setOnLongClickListener { v ->
-                        var position = baseViewHolder.adapterPosition
-                        if (position == RecyclerView.NO_POSITION) {
+                        if (adapterPosition == RecyclerView.NO_POSITION) {
                             return@setOnLongClickListener false
                         }
-                        position -= getHeaderLayoutCount()
+                        val position = adapterPosition - getHeaderLayoutCount()
                         setOnItemChildLongClick(v, position)
                     }
                 }

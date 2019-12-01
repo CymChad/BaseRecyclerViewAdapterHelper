@@ -1,22 +1,24 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
-import com.chad.library.adapter.base.BaseSectionQuickAdapter;
+import com.chad.library.adapter.base.BaseProviderMultiAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.delegate.BaseMultiTypeDelegate;
 import com.chad.library.adapter.base.entity.JSectionEntity;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public class JavaTestAdapter2 extends BaseSectionQuickAdapter<JSectionEntity, BaseViewHolder> {
+import java.util.List;
+
+public class JavaTestAdapter2 extends BaseProviderMultiAdapter<JSectionEntity, BaseViewHolder> {
 
 
-    public JavaTestAdapter2(int layoutResId) {
-        super(layoutResId);
+    public JavaTestAdapter2() {
+        super();
     }
-
 
     @Override
-    protected void convert(@NotNull BaseViewHolder helper, @Nullable JSectionEntity item) {
-
+    protected int getItemType(@NotNull List<? extends JSectionEntity> data, int position) {
+        return 0;
     }
+
 }

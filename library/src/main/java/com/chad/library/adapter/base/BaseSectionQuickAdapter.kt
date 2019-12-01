@@ -3,6 +3,13 @@ package com.chad.library.adapter.base
 import androidx.annotation.LayoutRes
 import com.chad.library.adapter.base.entity.SectionEntity
 
+/**
+ * 带头部的 Adapter，由于本质属于多布局，所有继承自[BaseMultiItemQuickAdapter]
+ * @param T : SectionEntity
+ * @param VH : BaseViewHolder
+ * @property sectionHeadResId Int
+ * @constructor
+ */
 abstract class BaseSectionQuickAdapter<T : SectionEntity, VH : BaseViewHolder>
 @JvmOverloads constructor(@LayoutRes private val sectionHeadResId: Int,
                           data: MutableList<T>? = null)
