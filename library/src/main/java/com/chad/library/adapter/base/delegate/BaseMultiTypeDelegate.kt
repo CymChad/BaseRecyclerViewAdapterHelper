@@ -14,9 +14,6 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter.Companion.TYPE_NO
  * Date: 2017/4/6 08:41.
  * Email: tyshengsx@gmail.com
  *
- *
- *
- *
  * more information: https://github.com/CymChad/BaseRecyclerViewAdapterHelper/issues/968
  */
 

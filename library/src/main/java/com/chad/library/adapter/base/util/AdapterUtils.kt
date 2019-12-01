@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 
 /**
- *
+ * 扩展方法，用于获取View
  * @receiver ViewGroup parent
  * @param layoutResId Int
  * @return View

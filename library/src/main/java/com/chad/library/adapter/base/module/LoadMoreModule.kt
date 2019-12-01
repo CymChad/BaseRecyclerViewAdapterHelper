@@ -43,6 +43,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
     private var mLoadMoreListener: OnLoadMoreListener? = null
     private var mNextLoadEnable = false
 
+    /** 设置加载更多布局 */
     var loadMoreView = defLoadMoreView
 
     /** 加载完成后是否允许点击 */
@@ -76,6 +77,9 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
             return baseQuickAdapter.getHeaderLayoutCount() + baseQuickAdapter.data.size + baseQuickAdapter.getFooterLayoutCount()
         }
 
+    /**
+     * 是否打开加载更多
+     */
     var isEnableLoadMore = false
         set(value) {
             val oldHasLoadMore = hasLoadMoreView()

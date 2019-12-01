@@ -30,6 +30,16 @@ abstract class BaseProviderMultiAdapter<T, VH : BaseViewHolder>(data: MutableLis
      */
     protected abstract fun getItemType(data: List<T>, position: Int): Int
 
+    /**
+     * 必须通过此方法，添加 provider
+     * @param provider BaseItemProvider
+     */
+    fun addItemProvider(provider: BaseItemProvider<T, VH>) {
+        provider.weakAdapter = WeakReference(this)
+        val viewType = provider.itemViewType
+        mItemProviders.put(viewType, provider)
+    }
+
     override fun onCreateDefViewHolder(parent: ViewGroup, viewType: Int): VH {
         val provider = mItemProviders.get(viewType)
         checkNotNull(provider) { "No such provider found，please use addItemProvider() first!" }
@@ -94,13 +104,4 @@ abstract class BaseProviderMultiAdapter<T, VH : BaseViewHolder>(data: MutableLis
         super.bindViewClickListener(viewHolder)
     }
 
-    /**
-     * 必须通过此方法，添加 provider
-     * @param provider BaseItemProvider
-     */
-    fun addItemProvider(provider: BaseItemProvider<T, VH>) {
-        provider.weakAdapter = WeakReference(this)
-        val viewType = provider.itemViewType
-        mItemProviders.put(viewType, provider)
-    }
 }
