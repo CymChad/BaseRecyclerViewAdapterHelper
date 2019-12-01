@@ -52,7 +52,6 @@ import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.Object;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -1579,11 +1578,15 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
                 getRecyclerView().post(new Runnable() {
                     @Override
                     public void run() {
-                        mRequestLoadMoreListener.onLoadMoreRequested();
+                        if (mRequestLoadMoreListener != null) {
+                            mRequestLoadMoreListener.onLoadMoreRequested();
+                        }
                     }
                 });
             } else {
-                mRequestLoadMoreListener.onLoadMoreRequested();
+                if (mRequestLoadMoreListener != null) {
+                    mRequestLoadMoreListener.onLoadMoreRequested();
+                }
             }
         }
     }
