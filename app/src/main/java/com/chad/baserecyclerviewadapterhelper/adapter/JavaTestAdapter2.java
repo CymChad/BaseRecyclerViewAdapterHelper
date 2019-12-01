@@ -2,7 +2,6 @@ package com.chad.baserecyclerviewadapterhelper.adapter;
 
 import com.chad.library.adapter.base.BaseProviderMultiAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.chad.library.adapter.base.delegate.BaseMultiTypeDelegate;
 import com.chad.library.adapter.base.entity.JSectionEntity;
 
 import org.jetbrains.annotations.NotNull;

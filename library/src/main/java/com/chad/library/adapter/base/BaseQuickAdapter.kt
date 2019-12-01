@@ -15,6 +15,7 @@ import androidx.annotation.NonNull
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.chad.library.adapter.base.diff.BaseQuickAdapterListUpdateCallback
 import com.chad.library.adapter.base.diff.BaseQuickDiffCallback
 import com.chad.library.adapter.base.module.*
@@ -673,6 +674,22 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes private val l
             } else {
                 0
             }
+
+    /**
+     * When set to true, the item will layout using all span area. That means, if orientation
+     * is vertical, the view will have full width; if orientation is horizontal, the view will
+     * have full height.
+     * if the hold view use StaggeredGridLayoutManager they should using all span area
+     *
+     * @param holder True if this item should traverse all spans.
+     */
+    protected fun setFullSpan(holder: RecyclerView.ViewHolder) {
+        if (holder.itemView.layoutParams is StaggeredGridLayoutManager.LayoutParams) {
+            val params = holder
+                    .itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams
+            params.isFullSpan = true
+        }
+    }
 
     /********************************************************************************************/
     /********************************* FooterView Method ****************************************/
