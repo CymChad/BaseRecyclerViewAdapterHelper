@@ -50,8 +50,9 @@ private interface BaseQuickAdapterModuleImp {
  * @param VH : BaseViewHolder
  * @constructor layoutId, data(Can null parameters, the default is empty data)
  */
-abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes private val layoutResId: Int,
-                                                        data: MutableList<T>? = null)
+abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
+@JvmOverloads constructor(@LayoutRes private val layoutResId: Int,
+                          data: MutableList<T>? = null)
     : RecyclerView.Adapter<VH>(), BaseQuickAdapterModuleImp {
 
     companion object {
@@ -60,14 +61,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes private val l
         const val FOOTER_VIEW = 0x00000333
         const val EMPTY_VIEW = 0x00000555
     }
-
-    /**
-     *
-     * 因为java无法调用可选参数的主构器，固使用此次级构造器兼容 java 。对于不需要设置初始数据的情况
-     * @param layoutResId Int
-     * @constructor
-     */
-    constructor(@LayoutRes layoutResId: Int) : this(layoutResId, null)
 
     /***************************** Public property settings *************************************/
     /**
@@ -206,8 +199,9 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes private val l
                 baseViewHolder = createBaseViewHolder(mFooterLayout)
             }
             else -> {
-                baseViewHolder = onCreateDefViewHolder(parent, viewType)
-                bindViewClickListener(baseViewHolder)
+                val viewHolder = onCreateDefViewHolder(parent, viewType)
+                bindViewClickListener(viewHolder)
+                baseViewHolder = viewHolder
             }
         }
 
@@ -316,6 +310,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes private val l
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         weakRecyclerView = WeakReference(recyclerView)
+        this.context = recyclerView.context
 
         val manager = recyclerView.layoutManager
         if (manager is GridLayoutManager) {
@@ -403,22 +398,22 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes private val l
      */
     protected open fun bindViewClickListener(viewHolder: VH) {
         mOnItemClickListener?.let {
-            val adapterPosition = viewHolder.adapterPosition
             viewHolder.itemView.setOnClickListener { v ->
-                if (adapterPosition == RecyclerView.NO_POSITION) {
+                var position = viewHolder.adapterPosition
+                if (position == RecyclerView.NO_POSITION) {
                     return@setOnClickListener
                 }
-                val position = adapterPosition - getHeaderLayoutCount()
+                position -= getHeaderLayoutCount()
                 setOnItemClick(v, position)
             }
         }
         mOnItemLongClickListener?.let {
-            val adapterPosition = viewHolder.adapterPosition
             viewHolder.itemView.setOnLongClickListener { v ->
-                if (adapterPosition == RecyclerView.NO_POSITION) {
+                var position = viewHolder.adapterPosition
+                if (position == RecyclerView.NO_POSITION) {
                     return@setOnLongClickListener false
                 }
-                val position = adapterPosition - getHeaderLayoutCount()
+                position -= getHeaderLayoutCount()
                 setOnItemLongClick(v, position)
             }
         }
@@ -429,12 +424,12 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes private val l
                     if (!childView.isClickable) {
                         childView.isClickable = true
                     }
-                    val adapterPosition = viewHolder.adapterPosition
                     childView.setOnClickListener { v ->
-                        if (adapterPosition == RecyclerView.NO_POSITION) {
+                        var position = viewHolder.adapterPosition
+                        if (position == RecyclerView.NO_POSITION) {
                             return@setOnClickListener
                         }
-                        val position = adapterPosition - getHeaderLayoutCount()
+                        position -= getHeaderLayoutCount()
                         setOnItemChildClick(v, position)
                     }
                 }
@@ -446,12 +441,12 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes private val l
                     if (!childView.isLongClickable) {
                         childView.isLongClickable = true
                     }
-                    val adapterPosition = viewHolder.adapterPosition
                     childView.setOnLongClickListener { v ->
-                        if (adapterPosition == RecyclerView.NO_POSITION) {
+                        var position = viewHolder.adapterPosition
+                        if (position == RecyclerView.NO_POSITION) {
                             return@setOnLongClickListener false
                         }
-                        val position = adapterPosition - getHeaderLayoutCount()
+                        position -= getHeaderLayoutCount()
                         setOnItemChildLongClick(v, position)
                     }
                 }
@@ -1008,6 +1003,8 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>(@LayoutRes private val l
     fun setSpanSizeLookup(spanSizeLookup: SpanSizeLookup?) {
         this.mSpanSizeLookup = spanSizeLookup
     }
+
+
 
     fun setOnItemClickListener(listener: OnItemClickListener?) {
         this.mOnItemClickListener = listener
