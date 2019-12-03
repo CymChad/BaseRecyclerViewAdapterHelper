@@ -48,7 +48,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private List<HomeItem> getHomeItemData() {
         return Arrays.asList(
-                new HomeItem("Animation", null, R.mipmap.gv_animation),
+                new HomeItem("Animation", AnimationUseActivity.class, R.mipmap.gv_animation),
                 new HomeItem("MultipleItem", ChooseMultipleItemUseTypeActivity.class, R.mipmap.gv_multipleltem),
                 new HomeItem("Header/Footer", null, R.mipmap.gv_header_and_footer),
                 new HomeItem("PullToRefresh", null, R.mipmap.gv_pulltorefresh),

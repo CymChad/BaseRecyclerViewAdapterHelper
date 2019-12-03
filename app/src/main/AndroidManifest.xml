@@ -11,6 +11,7 @@
         android:label="@string/brvah_app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:name=".MyApplication"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".WelcomeActivity">
             <intent-filter>
@@ -22,6 +23,7 @@
 
         <activity android:name=".HomeActivity" />
         <activity android:name=".ChooseMultipleItemUseTypeActivity" />
+        <activity android:name=".AnimationUseActivity" />
     </application>
 
 </manifest>

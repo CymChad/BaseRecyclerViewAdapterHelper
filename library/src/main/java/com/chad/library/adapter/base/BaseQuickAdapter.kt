@@ -17,8 +17,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.chad.library.adapter.base.animation.AlphaInAnimation
-import com.chad.library.adapter.base.animation.BaseAnimation
+import com.chad.library.adapter.base.animation.*
 import com.chad.library.adapter.base.diff.BaseQuickAdapterListUpdateCallback
 import com.chad.library.adapter.base.diff.BaseQuickDiffCallback
 import com.chad.library.adapter.base.listener.*
@@ -108,7 +107,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     var footerViewAsFlow: Boolean = false
 
     var animationEnable: Boolean = false
-    var animationFirstOnly = true
+    var isAnimationFirstOnly = true
     var adapterAnimation: BaseAnimation? = null
         set(value) {
             animationEnable = true
@@ -900,7 +899,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      */
     private fun addAnimation(holder: RecyclerView.ViewHolder) {
         if (animationEnable) {
-            if (!animationFirstOnly || holder.layoutPosition > mLastPosition) {
+            if (!isAnimationFirstOnly || holder.layoutPosition > mLastPosition) {
                 val animation: BaseAnimation = adapterAnimation?.let {
                     it
                 } ?: AlphaInAnimation()
@@ -920,14 +919,13 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      */
     protected open fun startAnim(anim: Animator, index: Int) {
         anim.start()
-
     }
 
     /**
      * 动画类型枚举
      */
     enum class AnimationType {
-        AlphaIn
+        AlphaIn, ScaleIn, SlideInBottom, SlideInLeft, SlideInRight
     }
 
     /**
@@ -935,8 +933,12 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * @param animationType AnimationType
      */
     fun setAnimationWithDefault(animationType: AnimationType) {
-        adapterAnimation = when(animationType) {
+        adapterAnimation = when (animationType) {
             AnimationType.AlphaIn -> AlphaInAnimation()
+            AnimationType.ScaleIn -> ScaleInAnimation()
+            AnimationType.SlideInBottom -> SlideInBottomAnimation()
+            AnimationType.SlideInLeft -> SlideInLeftAnimation()
+            AnimationType.SlideInRight -> SlideInRightAnimation()
         }
     }
 
