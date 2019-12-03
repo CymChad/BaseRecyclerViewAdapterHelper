@@ -20,8 +20,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".TestActivity" />
         <activity android:name=".HomeActivity" />
+        <activity android:name=".ChooseMultipleItemUseTypeActivity" />
     </application>
 
 </manifest>

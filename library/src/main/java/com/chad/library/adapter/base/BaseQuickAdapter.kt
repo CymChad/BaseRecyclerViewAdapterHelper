@@ -1,5 +1,6 @@
 package com.chad.library.adapter.base
 
+import android.animation.Animator
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.chad.library.adapter.base.animation.AlphaInAnimation
+import com.chad.library.adapter.base.animation.BaseAnimation
 import com.chad.library.adapter.base.diff.BaseQuickAdapterListUpdateCallback
 import com.chad.library.adapter.base.diff.BaseQuickDiffCallback
 import com.chad.library.adapter.base.listener.*
@@ -32,14 +35,29 @@ import java.util.*
  * 获取模块
  */
 private interface BaseQuickAdapterModuleImp {
+    /**
+     * 重写此方法，返回自定义模块
+     * @param baseQuickAdapter BaseQuickAdapter<*, *>
+     * @return BaseLoadMoreModule
+     */
     fun addLoadMoreModule(baseQuickAdapter: BaseQuickAdapter<*, *>): BaseLoadMoreModule {
         return BaseLoadMoreModule(baseQuickAdapter)
     }
 
-    fun addUpFetchModule(): BaseUpFetchModule {
-        return BaseUpFetchModule()
+    /**
+     * 重写此方法，返回自定义模块
+     * @param baseQuickAdapter BaseQuickAdapter<*, *>
+     * @return BaseUpFetchModule
+     */
+    fun addUpFetchModule(baseQuickAdapter: BaseQuickAdapter<*, *>): BaseUpFetchModule {
+        return BaseUpFetchModule(baseQuickAdapter)
     }
 
+    /**
+     * 重写此方法，返回自定义模块
+     * @param baseQuickAdapter BaseQuickAdapter<*, *>
+     * @return BaseExpandableModule
+     */
     fun <T> addExpandableModule(baseQuickAdapter: BaseQuickAdapter<T, *>): BaseExpandableModule<T> {
         return BaseExpandableModule(baseQuickAdapter)
     }
@@ -62,6 +80,8 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         const val FOOTER_VIEW = 0x00000333
         const val EMPTY_VIEW = 0x00000555
     }
+
+    constructor(data: MutableList<T>?) : this(0, data)
 
     /***************************** Public property settings *************************************/
     /**
@@ -86,6 +106,14 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      */
     var headerViewAsFlow: Boolean = false
     var footerViewAsFlow: Boolean = false
+
+    var animationEnable: Boolean = false
+    var animationFirstOnly = true
+    var adapterAnimation: BaseAnimation? = null
+        set(value) {
+            animationEnable = true
+            field = value
+        }
 
     /**
      * 加载更多模块
@@ -131,7 +159,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
             loadMoreModule = this.addLoadMoreModule(this)
         }
         if (this is UpFetchModule) {
-            upFetchModule = this.addUpFetchModule()
+            upFetchModule = this.addUpFetchModule(this)
         }
         if (this is ExpandableModule) {
             expandableModule = this.addExpandableModule(this)
@@ -305,6 +333,23 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 
     override fun getItemId(position: Int): Long {
         return position.toLong()
+    }
+
+    /**
+     * Called when a view created by this adapter has been attached to a window.
+     * simple to solve item will layout using all
+     * [setFullSpan]
+     *
+     * @param holder
+     */
+    override fun onViewAttachedToWindow(holder: VH) {
+        super.onViewAttachedToWindow(holder)
+        val type = holder.itemViewType
+        if (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOAD_MORE_VIEW) {
+            setFullSpan(holder)
+        } else {
+            addAnimation(holder)
+        }
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -497,7 +542,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     }
 
     @Suppress("UNCHECKED_CAST")
-    protected fun createBaseViewHolder(view: View): VH {
+    protected open fun createBaseViewHolder(view: View): VH {
         var temp: Class<*>? = javaClass
         var z: Class<*>? = null
         while (z == null && null != temp) {
@@ -846,6 +891,55 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         null
     }
 
+    /*************************** Animation ******************************************/
+
+    /**
+     * add animation when you want to show time
+     *
+     * @param holder
+     */
+    private fun addAnimation(holder: RecyclerView.ViewHolder) {
+        if (animationEnable) {
+            if (!animationFirstOnly || holder.layoutPosition > mLastPosition) {
+                val animation: BaseAnimation = adapterAnimation?.let {
+                    it
+                } ?: AlphaInAnimation()
+                for (anim in animation.animators(holder.itemView)) {
+                    startAnim(anim, holder.layoutPosition)
+                }
+                mLastPosition = holder.layoutPosition
+            }
+        }
+    }
+
+    /**
+     * set anim to start when loading
+     *
+     * @param anim
+     * @param index
+     */
+    protected open fun startAnim(anim: Animator, index: Int) {
+        anim.start()
+
+    }
+
+    /**
+     * 动画类型枚举
+     */
+    enum class AnimationType {
+        AlphaIn
+    }
+
+    /**
+     * 使用内置默认动画设置
+     * @param animationType AnimationType
+     */
+    fun setAnimationWithDefault(animationType: AnimationType) {
+        adapterAnimation = when(animationType) {
+            AnimationType.AlphaIn -> AlphaInAnimation()
+        }
+    }
+
     /*************************** 设置数据相关 ******************************************/
 
     /**
@@ -1028,5 +1122,3 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 
     fun getOnItemChildLongClickListener(): OnItemChildLongClickListener? = mOnItemChildLongClickListener
 }
-
-//typealias SpanSizeLookup = (gridLayoutManager: GridLayoutManager, position: Int) -> Int

@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/ly_main_actionbar"
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="32dp"
-
-                android:background="@color/spinner_bg"
-    >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ly_main_actionbar"
+    android:layout_width="match_parent"
+    android:layout_height="32dp"
+    android:background="@color/spinner_bg">
 
     <ImageView
         android:id="@+id/img_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:paddingTop="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="10dp"
-        android:paddingTop="10dp"
-        android:layout_centerVertical="true"
-        android:src="@mipmap/back"/>
+        android:src="@mipmap/back" />
 
     <TextView
         android:id="@+id/title"
@@ -26,8 +24,7 @@
         android:gravity="center_vertical"
         android:text="title"
         android:textColor="@color/white_text_color"
-        android:textSize="16sp"
-        />
+        android:textSize="16sp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -37,7 +34,6 @@
         android:gravity="center_vertical"
         android:text="Demo"
         android:textColor="@color/gray_color"
-        android:textSize="12sp"
-        />
+        android:textSize="12sp" />
 
 </RelativeLayout>

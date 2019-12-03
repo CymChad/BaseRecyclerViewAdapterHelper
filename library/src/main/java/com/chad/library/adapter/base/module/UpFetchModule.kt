@@ -15,7 +15,7 @@ import com.chad.library.adapter.base.listener.UpFetchListenerImp
  */
 interface UpFetchModule
 
-open class BaseUpFetchModule : UpFetchListenerImp {
+open class BaseUpFetchModule(private val baseQuickAdapter: BaseQuickAdapter<*, *>) : UpFetchListenerImp {
 
     private var mUpFetchListener: OnUpFetchListener? = null
 

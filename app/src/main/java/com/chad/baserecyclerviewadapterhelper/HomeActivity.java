@@ -1,5 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,13 +32,14 @@ public class HomeActivity extends AppCompatActivity {
 
     private void initRv() {
         HomeAdapter homeAdapter = new HomeAdapter(R.layout.home_item_view, getHomeItemData());
-//        homeAdapter.openLoadAnimation();
+        homeAdapter.setAnimationEnable(true);
         View top = getLayoutInflater().inflate(R.layout.top_view, (ViewGroup) mRecyclerView.getParent(), false);
         homeAdapter.addHeaderView(top);
         homeAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                System.out.println("  ----  >");
+                HomeItem item = (HomeItem) adapter.getData().get(position);
+                startActivity(new Intent(HomeActivity.this, item.getActivity()));
             }
         });
 
@@ -47,7 +49,7 @@ public class HomeActivity extends AppCompatActivity {
     private List<HomeItem> getHomeItemData() {
         return Arrays.asList(
                 new HomeItem("Animation", null, R.mipmap.gv_animation),
-                new HomeItem("MultipleItem", null, R.mipmap.gv_multipleltem),
+                new HomeItem("MultipleItem", ChooseMultipleItemUseTypeActivity.class, R.mipmap.gv_multipleltem),
                 new HomeItem("Header/Footer", null, R.mipmap.gv_header_and_footer),
                 new HomeItem("PullToRefresh", null, R.mipmap.gv_pulltorefresh),
                 new HomeItem("Section", null, R.mipmap.gv_section),
