@@ -11,8 +11,8 @@ import android.view.animation.DecelerateInterpolator
 class SlideInBottomAnimation : BaseAnimation {
     override fun animators(view: View): Array<Animator> {
         val animator = ObjectAnimator.ofFloat(view, "translationY", view.measuredHeight.toFloat(), 0f)
-        animator.duration = 300L
-        animator.interpolator = DecelerateInterpolator()
+        animator.duration = 400L
+        animator.interpolator = DecelerateInterpolator(1.3f)
         return arrayOf(animator)
     }
 }
