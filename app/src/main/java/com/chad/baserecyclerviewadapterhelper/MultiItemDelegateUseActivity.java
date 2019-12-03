@@ -1,12 +1,15 @@
 package com.chad.baserecyclerviewadapterhelper;
 
 import android.os.Bundle;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.chad.baserecyclerviewadapterhelper.adapter.DelegateMultiAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.DelegateMultiEntity;
+
 import java.util.List;
 
 public class MultiItemDelegateUseActivity extends BaseActivity {
@@ -22,7 +25,6 @@ public class MultiItemDelegateUseActivity extends BaseActivity {
         setBackBtn();
 
         initRv();
-        setData();
     }
 
     private void initRv() {
@@ -32,7 +34,9 @@ public class MultiItemDelegateUseActivity extends BaseActivity {
         mRecyclerView.setAdapter(adapter);
     }
 
-    private void setData() {
+    @Override
+    protected void onStart() {
+        super.onStart();
         final List<DelegateMultiEntity> data = DataServer.getDelegateMultiItemData();
         adapter.setNewData(data);
     }
