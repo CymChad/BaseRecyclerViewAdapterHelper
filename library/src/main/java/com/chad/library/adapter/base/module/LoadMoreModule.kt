@@ -4,6 +4,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.chad.library.adapter.base.listener.LoadMoreListenerImp
+import com.chad.library.adapter.base.listener.OnLoadMoreListener
 import com.chad.library.adapter.base.loadmore.BaseLoadMoreView
 import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView
 
@@ -19,13 +21,10 @@ import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView
  */
 interface LoadMoreModule
 
-
-typealias OnLoadMoreListener = () -> Unit
-
 /**
  * 加载更多基类
  */
-open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, *>) {
+open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, *>): LoadMoreListenerImp {
 
     companion object {
         private var defLoadMoreView: BaseLoadMoreView = SimpleLoadMoreView()
@@ -163,8 +162,8 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
         if (!isLoading) {
             isLoading = true
             baseQuickAdapter.weakRecyclerView.get()?.let {
-                it.post { mLoadMoreListener?.invoke() }
-            } ?: mLoadMoreListener?.invoke()
+                it.post { mLoadMoreListener?.onLoadMore() }
+            } ?: mLoadMoreListener?.onLoadMore()
         }
     }
 
@@ -268,7 +267,11 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
         baseQuickAdapter.notifyItemChanged(loadMoreViewPosition)
     }
 
-    fun setOnLoadMoreListener(listener: OnLoadMoreListener) {
+    /**
+     * 设置加载监听事件
+     * @param listener OnLoadMoreListener?
+     */
+    override fun setOnLoadMoreListener(listener: OnLoadMoreListener?) {
         this.mLoadMoreListener = listener
         mNextLoadEnable = true
         isEnableLoadMore = true

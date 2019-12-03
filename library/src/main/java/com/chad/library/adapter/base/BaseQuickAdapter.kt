@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.chad.library.adapter.base.diff.BaseQuickAdapterListUpdateCallback
 import com.chad.library.adapter.base.diff.BaseQuickDiffCallback
+import com.chad.library.adapter.base.listener.*
 import com.chad.library.adapter.base.module.*
 import com.chad.library.adapter.base.util.getItemView
 import java.lang.ref.WeakReference
@@ -53,7 +54,7 @@ private interface BaseQuickAdapterModuleImp {
 abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 @JvmOverloads constructor(@LayoutRes private val layoutResId: Int,
                           data: MutableList<T>? = null)
-    : RecyclerView.Adapter<VH>(), BaseQuickAdapterModuleImp {
+    : RecyclerView.Adapter<VH>(), BaseQuickAdapterModuleImp, BaseListenerImp {
 
     companion object {
         const val HEADER_VIEW = 0x00000111
@@ -106,10 +107,9 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     private lateinit var mFooterLayout: LinearLayout
     private lateinit var mEmptyLayout: FrameLayout
 
-    private var mSpanSizeLookup: SpanSizeLookup? = null
-
     private var mLastPosition = -1
 
+    private var mSpanSizeLookup: GridSpanSizeLookup? = null
     private var mOnItemClickListener: OnItemClickListener? = null
     private var mOnItemLongClickListener: OnItemLongClickListener? = null
     private var mOnItemChildClickListener: OnItemChildClickListener? = null
@@ -330,10 +330,9 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
                         if (isFixedViewType(type))
                             manager.spanCount
                         else
-                            mSpanSizeLookup!!.invoke(manager, position - getHeaderLayoutCount())
+                            mSpanSizeLookup!!.getSpanSize(manager, position - getHeaderLayoutCount())
                     }
                 }
-
 
             }
         }
@@ -462,7 +461,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * @param position
      */
     protected open fun setOnItemClick(v: View, position: Int) {
-        mOnItemClickListener?.invoke(this, v, position)
+        mOnItemClickListener?.onItemClick(this, v, position)
     }
 
     /**
@@ -474,15 +473,15 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * @return
      */
     protected open fun setOnItemLongClick(v: View, position: Int): Boolean {
-        return mOnItemLongClickListener?.invoke(this, v, position) ?: false
+        return mOnItemLongClickListener?.onItemLongClick(this, v, position) ?: false
     }
 
     protected open fun setOnItemChildClick(v: View, position: Int) {
-        mOnItemChildClickListener?.invoke(this, v, position)
+        mOnItemChildClickListener?.onItemChildClick(this, v, position)
     }
 
     protected open fun setOnItemChildLongClick(v: View, position: Int): Boolean {
-        return mOnItemChildLongClickListener?.invoke(this, v, position) ?: false
+        return mOnItemChildLongClickListener?.onItemChildLongClick(this, v, position) ?: false
     }
 
     protected open fun getDefItemViewType(position: Int): Int {
@@ -1000,25 +999,24 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     }
 
     /************************************** Set Listener ****************************************/
-    fun setSpanSizeLookup(spanSizeLookup: SpanSizeLookup?) {
+
+    override fun setGridSpanSizeLookup(spanSizeLookup: GridSpanSizeLookup?) {
         this.mSpanSizeLookup = spanSizeLookup
     }
 
-
-
-    fun setOnItemClickListener(listener: OnItemClickListener?) {
+    override fun setOnItemClickListener(listener: OnItemClickListener?) {
         this.mOnItemClickListener = listener
     }
 
-    fun setOnItemLongClickListener(listener: OnItemLongClickListener?) {
+    override fun setOnItemLongClickListener(listener: OnItemLongClickListener?) {
         this.mOnItemLongClickListener = listener
     }
 
-    fun setOnItemChildClickListener(listener: OnItemChildClickListener) {
+    override fun setOnItemChildClickListener(listener: OnItemChildClickListener?) {
         this.mOnItemChildClickListener = listener
     }
 
-    fun setOnItemChildLongClickListener(listener: OnItemChildLongClickListener) {
+    override fun setOnItemChildLongClickListener(listener: OnItemChildLongClickListener?) {
         this.mOnItemChildLongClickListener = listener
     }
 
@@ -1031,12 +1029,4 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     fun getOnItemChildLongClickListener(): OnItemChildLongClickListener? = mOnItemChildLongClickListener
 }
 
-typealias SpanSizeLookup = (gridLayoutManager: GridLayoutManager, position: Int) -> Int
-
-typealias OnItemClickListener = (adapter: BaseQuickAdapter<*, *>, view: View, position: Int) -> Unit
-
-typealias OnItemLongClickListener = (adapter: BaseQuickAdapter<*, *>, view: View, position: Int) -> Boolean
-
-typealias OnItemChildClickListener = (adapter: BaseQuickAdapter<*, *>, view: View, position: Int) -> Unit
-
-typealias OnItemChildLongClickListener = (adapter: BaseQuickAdapter<*, *>, view: View, position: Int) -> Boolean
+//typealias SpanSizeLookup = (gridLayoutManager: GridLayoutManager, position: Int) -> Int

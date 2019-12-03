@@ -11,12 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.baserecyclerviewadapterhelper.adapter.HomeAdapter;
 import com.chad.baserecyclerviewadapterhelper.entity.HomeItem;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 import java.util.Arrays;
 import java.util.List;
-
-import kotlin.Unit;
-import kotlin.jvm.functions.Function3;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -36,13 +34,10 @@ public class HomeActivity extends AppCompatActivity {
 //        homeAdapter.openLoadAnimation();
         View top = getLayoutInflater().inflate(R.layout.top_view, (ViewGroup) mRecyclerView.getParent(), false);
         homeAdapter.addHeaderView(top);
-        homeAdapter.setOnItemClickListener(new Function3<BaseQuickAdapter<?, ?>, View, Integer, Unit>() {
+        homeAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public Unit invoke(BaseQuickAdapter<?, ?> adapter, View view, Integer position) {
-                HomeItem item = (HomeItem) adapter.getItem(position);
-//                Intent intent = new Intent(HomeActivity.this, item.getActivity());
-//                startActivity(intent);
-                return null;
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                System.out.println("  ----  >");
             }
         });
 

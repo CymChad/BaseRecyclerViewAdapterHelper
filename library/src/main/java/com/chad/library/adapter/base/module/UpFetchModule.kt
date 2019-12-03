@@ -1,6 +1,8 @@
 package com.chad.library.adapter.base.module
 
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.listener.OnUpFetchListener
+import com.chad.library.adapter.base.listener.UpFetchListenerImp
 
 /**
  * @author: limuyang
@@ -13,12 +15,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter
  */
 interface UpFetchModule
 
-typealias KtUpFetchListener = () -> Unit
+open class BaseUpFetchModule : UpFetchListenerImp {
 
-open class BaseUpFetchModule {
-
-    private var mUpFetchListener: KtUpFetchListener? = null
-    private var interfaceUpFetchListener: UpFetchListener? = null
+    private var mUpFetchListener: OnUpFetchListener? = null
 
     var isUpFetchEnable = false
     var isUpFetching = false
@@ -32,20 +31,11 @@ open class BaseUpFetchModule {
             return
         }
         if (position <= startUpFetchPosition) {
-            mUpFetchListener?.invoke()
-            interfaceUpFetchListener?.onUpFetch()
+            mUpFetchListener?.onUpFetch()
         }
     }
 
-    fun setUpFetchListener(listener: KtUpFetchListener) {
+    override fun setOnUpFetchListener(listener: OnUpFetchListener?) {
         this.mUpFetchListener = listener
     }
-
-    fun setUpFetchListener(listener: UpFetchListener) {
-        this.interfaceUpFetchListener = listener
-    }
-}
-
-interface UpFetchListener {
-    fun onUpFetch()
 }
