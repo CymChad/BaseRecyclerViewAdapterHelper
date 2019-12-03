@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="90dp"
     android:layout_height="90dp"
@@ -9,10 +9,10 @@
     android:layout_marginRight="5dp"
     android:layout_gravity="center"
     android:foreground="?android:attr/selectableItemBackground"
-    card_view:cardBackgroundColor="@color/item_bg"
-    card_view:cardCornerRadius="4dp"
-    card_view:cardElevation="2dp"
-    card_view:cardUseCompatPadding="true">
+    app:cardBackgroundColor="@color/item_bg"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="2dp"
+    app:cardUseCompatPadding="true">
 
     <ImageView
         android:id="@+id/iv"
@@ -20,4 +20,4 @@
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:src="@mipmap/click_head_img_0"/>
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

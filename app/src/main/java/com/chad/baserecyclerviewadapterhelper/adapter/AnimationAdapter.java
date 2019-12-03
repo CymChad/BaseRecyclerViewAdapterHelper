@@ -4,15 +4,13 @@ import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.baserecyclerviewadapterhelper.utils.ClickableMovementMethod;
 import com.chad.baserecyclerviewadapterhelper.utils.SpannableStringUtils;
+import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -56,7 +54,7 @@ public class AnimationAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
     private ClickableSpan clickableSpan = new ClickableSpan() {
         @Override
         public void onClick(View widget) {
-            Toast.makeText(getContext(),"事件触发了 landscapes and nedes",Toast.LENGTH_SHORT).show();
+            Tips.show("事件触发了 landscapes and nedes");
         }
 
         @Override

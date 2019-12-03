@@ -2,20 +2,20 @@ package com.chad.baserecyclerviewadapterhelper;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.AnimationAdapter;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
+import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.animation.BaseAnimation;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
@@ -33,7 +33,7 @@ import static java.lang.Math.sin;
  * <p>
  * modify by AllenCoder
  */
-public class AnimationUseActivity extends Activity {
+public class AnimationUseActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private AnimationAdapter mAnimationAdapter;
 
@@ -73,21 +73,17 @@ public class AnimationUseActivity extends Activity {
                 switch (view.getId()) {
                     case R.id.img:
                         content = "img:" + status.getUserAvatar();
-                        Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
                         break;
                     case R.id.tweetName:
                         content = "name:" + status.getUserName();
-                        Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
                         break;
                     case R.id.tweetText:
                         content = "tweetText:" + status.getUserName();
-                        Toast.makeText(AnimationUseActivity.this, content, Toast.LENGTH_LONG).show();
-                        // you have set clickspan .so there should not solve any click event ,just empty
                         break;
                     default:
                         break;
-
                 }
+                Tips.show(content);
             }
         });
         mRecyclerView.setAdapter(mAnimationAdapter);
@@ -186,9 +182,8 @@ public class AnimationUseActivity extends Activity {
         class MyInterpolator2 implements Interpolator {
             @Override
             public float getInterpolation(float input) {
-                float x = input;
                 float factor = 0.7f;
-                return (float) (pow(2.0, -10.0 * x) * sin((x - factor / 4) * (2 * PI) / factor) + 1);
+                return (float) (pow(2.0, -10.0 * input) * sin((input - factor / 4) * (2 * PI) / factor) + 1);
             }
         }
     }

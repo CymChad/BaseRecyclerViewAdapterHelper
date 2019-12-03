@@ -1,6 +1,8 @@
 package com.chad.baserecyclerviewadapterhelper.data;
 
 
+import com.chad.baserecyclerviewadapterhelper.entity.DelegateMultiEntity;
+import com.chad.baserecyclerviewadapterhelper.entity.QuickMultipleEntity;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 
 import java.util.ArrayList;
@@ -109,18 +111,26 @@ public class DataServer {
         return list;
     }
 
-//    public static List<MultipleItem> getMultipleItemData() {
-//        List<MultipleItem> list = new ArrayList<>();
-//        for (int i = 0; i <= 4; i++) {
-//            list.add(new MultipleItem(MultipleItem.IMG, MultipleItem.IMG_SPAN_SIZE));
-//            list.add(new MultipleItem(MultipleItem.TEXT, MultipleItem.TEXT_SPAN_SIZE, CYM_CHAD));
-//            list.add(new MultipleItem(MultipleItem.IMG_TEXT, MultipleItem.IMG_TEXT_SPAN_SIZE));
-//            list.add(new MultipleItem(MultipleItem.IMG_TEXT, MultipleItem.IMG_TEXT_SPAN_SIZE_MIN));
-//            list.add(new MultipleItem(MultipleItem.IMG_TEXT, MultipleItem.IMG_TEXT_SPAN_SIZE_MIN));
-//        }
-//
-//        return list;
-//    }
+    public static List<QuickMultipleEntity> getMultipleItemData() {
+        List<QuickMultipleEntity> list = new ArrayList<>();
+        for (int i = 0; i <= 4; i++) {
+            list.add(new QuickMultipleEntity(QuickMultipleEntity.IMG, QuickMultipleEntity.IMG_SPAN_SIZE));
+            list.add(new QuickMultipleEntity(QuickMultipleEntity.TEXT, QuickMultipleEntity.TEXT_SPAN_SIZE, CYM_CHAD));
+            list.add(new QuickMultipleEntity(QuickMultipleEntity.IMG_TEXT, QuickMultipleEntity.IMG_TEXT_SPAN_SIZE));
+            list.add(new QuickMultipleEntity(QuickMultipleEntity.IMG_TEXT, QuickMultipleEntity.IMG_TEXT_SPAN_SIZE_MIN));
+            list.add(new QuickMultipleEntity(QuickMultipleEntity.IMG_TEXT, QuickMultipleEntity.IMG_TEXT_SPAN_SIZE_MIN));
+        }
+
+        return list;
+    }
+
+    public static List<DelegateMultiEntity> getDelegateMultiItemData() {
+        List<DelegateMultiEntity> list = new ArrayList<>();
+        for (int i = 0; i <= 40; i++) {
+            list.add(new DelegateMultiEntity());
+        }
+        return  list;
+    }
 //
 //    public static List<NormalMultipleEntity> getNormalMultipleEntities() {
 //        List<NormalMultipleEntity> list = new ArrayList<>();

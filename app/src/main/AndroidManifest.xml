@@ -24,6 +24,8 @@
         <activity android:name=".HomeActivity" />
         <activity android:name=".ChooseMultipleItemUseTypeActivity" />
         <activity android:name=".AnimationUseActivity" />
+        <activity android:name=".MultiItemQuickUserActivity" />
+        <activity android:name=".MultiItemDelegateUseActivity" />
     </application>
 
 </manifest>

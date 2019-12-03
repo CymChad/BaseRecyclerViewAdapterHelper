@@ -1,5 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -7,6 +8,7 @@ import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 
 /**
  * https://github.com/chaychan
+ *
  * @author ChayChan
  * @description: ChooseMultipleItemUseType
  * @date 2018/3/30  10:14
@@ -24,14 +26,14 @@ public class ChooseMultipleItemUseTypeActivity extends BaseActivity {
         findViewById(R.id.card_view1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(ChooseMultipleItemUseTypeActivity.this,MultipleItemUseActivity.class));
+                startActivity(new Intent(ChooseMultipleItemUseTypeActivity.this, MultiItemQuickUserActivity.class));
             }
         });
 
         findViewById(R.id.card_view2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(ChooseMultipleItemUseTypeActivity.this,MultipleItemRvAdapterUseActivity.class));
+                startActivity(new Intent(ChooseMultipleItemUseTypeActivity.this, MultiItemDelegateUseActivity.class));
             }
         });
     }
