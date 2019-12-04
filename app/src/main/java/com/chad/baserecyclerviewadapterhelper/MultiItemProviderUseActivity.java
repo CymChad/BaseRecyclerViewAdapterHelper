@@ -14,7 +14,7 @@ import java.util.List;
  * @date: 2019-12-04
  * @Description:
  */
-public class MultiItemProviderUserActivity extends BaseActivity {
+public class MultiItemProviderUseActivity extends BaseActivity {
 
     private ProviderMultiAdapter adapter = new ProviderMultiAdapter();
 

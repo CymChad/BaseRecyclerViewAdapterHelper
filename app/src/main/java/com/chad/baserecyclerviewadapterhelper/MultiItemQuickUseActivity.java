@@ -13,7 +13,7 @@ import com.chad.library.adapter.base.listener.GridSpanSizeLookup;
 
 import java.util.List;
 
-public class MultiItemQuickUserActivity extends BaseActivity {
+public class MultiItemQuickUseActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

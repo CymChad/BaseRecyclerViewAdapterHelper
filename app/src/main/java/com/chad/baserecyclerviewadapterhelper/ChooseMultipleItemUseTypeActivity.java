@@ -26,7 +26,7 @@ public class ChooseMultipleItemUseTypeActivity extends BaseActivity {
         findViewById(R.id.card_view1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChooseMultipleItemUseTypeActivity.this, MultiItemQuickUserActivity.class));
+                startActivity(new Intent(ChooseMultipleItemUseTypeActivity.this, MultiItemQuickUseActivity.class));
             }
         });
 
@@ -40,7 +40,7 @@ public class ChooseMultipleItemUseTypeActivity extends BaseActivity {
         findViewById(R.id.card_view3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChooseMultipleItemUseTypeActivity.this, MultiItemProviderUserActivity.class));
+                startActivity(new Intent(ChooseMultipleItemUseTypeActivity.this, MultiItemProviderUseActivity.class));
             }
         });
     }

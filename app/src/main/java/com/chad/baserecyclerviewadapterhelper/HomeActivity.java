@@ -53,7 +53,7 @@ public class HomeActivity extends AppCompatActivity {
                 new HomeItem("Header/Footer", HeaderAndFooterUseActivity.class, R.mipmap.gv_header_and_footer),
                 new HomeItem("PullToRefresh", LoadMoreRefreshUseActivity.class, R.mipmap.gv_pulltorefresh),
                 new HomeItem("Section", SectionUseActivity.class, R.mipmap.gv_section),
-                new HomeItem("EmptyView", null, R.mipmap.gv_empty),
+                new HomeItem("EmptyView", EmptyViewUseActivity.class, R.mipmap.gv_empty),
                 new HomeItem("DragAndSwipe", null, R.mipmap.gv_drag_and_swipe),
                 new HomeItem("MultipleDragAndSwipe", null, R.mipmap.gv_drag_and_swipe),
                 new HomeItem("ItemClick", null, R.mipmap.gv_item_click),

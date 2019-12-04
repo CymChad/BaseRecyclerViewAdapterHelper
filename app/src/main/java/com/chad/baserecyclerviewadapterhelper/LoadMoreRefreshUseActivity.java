@@ -90,9 +90,9 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mAdapter.getLoadMoreModule().setAutoLoadMore(isChecked);
                 if (isChecked) {
-                    switchCompat.setText("自定加载（开）");
+                    switchCompat.setText("自动加载（开）");
                 } else {
-                    switchCompat.setText("自定加载（关）");
+                    switchCompat.setText("自动加载（关）");
                 }
             }
         });

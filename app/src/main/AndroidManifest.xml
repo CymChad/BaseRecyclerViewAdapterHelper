@@ -24,12 +24,13 @@
         <activity android:name=".HomeActivity" />
         <activity android:name=".ChooseMultipleItemUseTypeActivity" />
         <activity android:name=".AnimationUseActivity" />
-        <activity android:name=".MultiItemQuickUserActivity" />
+        <activity android:name=".MultiItemQuickUseActivity" />
         <activity android:name=".MultiItemDelegateUseActivity" />
-        <activity android:name=".MultiItemProviderUserActivity" />
+        <activity android:name=".MultiItemProviderUseActivity" />
         <activity android:name=".HeaderAndFooterUseActivity" />
         <activity android:name=".LoadMoreRefreshUseActivity" />
         <activity android:name=".SectionUseActivity" />
+        <activity android:name=".EmptyViewUseActivity" />
     </application>
 
 </manifest>
