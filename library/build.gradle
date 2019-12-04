@@ -20,7 +20,9 @@ android {
         abortOnError false
     }
 
-
+    dataBinding {
+        enabled = true
+    }
 }
 
 // 打包源码jar
