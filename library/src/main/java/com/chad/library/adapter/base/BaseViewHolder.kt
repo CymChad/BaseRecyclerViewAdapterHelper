@@ -38,5 +38,11 @@ open class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         view.setImageResource(imageResId)
         return this
     }
+
+    fun setVisible(@IdRes viewId: Int, isVisible: Boolean): BaseViewHolder {
+        val view = getView<View>(viewId)
+        view.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+        return this
+    }
 }
 

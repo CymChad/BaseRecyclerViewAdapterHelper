@@ -29,6 +29,7 @@
         <activity android:name=".MultiItemProviderUserActivity" />
         <activity android:name=".HeaderAndFooterUseActivity" />
         <activity android:name=".LoadMoreRefreshUseActivity" />
+        <activity android:name=".SectionUseActivity" />
     </application>
 
 </manifest>

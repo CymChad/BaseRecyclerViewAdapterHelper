@@ -2,9 +2,11 @@ package com.chad.baserecyclerviewadapterhelper.data;
 
 
 import com.chad.baserecyclerviewadapterhelper.entity.DelegateMultiEntity;
+import com.chad.baserecyclerviewadapterhelper.entity.MySection;
 import com.chad.baserecyclerviewadapterhelper.entity.ProviderMultiEntity;
 import com.chad.baserecyclerviewadapterhelper.entity.QuickMultipleEntity;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
+import com.chad.baserecyclerviewadapterhelper.entity.Video;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,6 +101,20 @@ public class DataServer {
 //        list.add(new SectionMultipleItem(SectionMultipleItem.IMG_TEXT, video));
 //        return list;
 //    }
+
+    public static List<MySection> getSectionData() {
+        List<MySection> list = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            list.add(new MySection(true, "Section " + i));
+            list.add(new MySection(false, new Video(HTTPS_AVATARS1_GITHUBUSERCONTENT_COM_LINK, CYM_CHAD)));
+            list.add(new MySection(false, new Video(HTTPS_AVATARS1_GITHUBUSERCONTENT_COM_LINK, CYM_CHAD)));
+            list.add(new MySection(false, new Video(HTTPS_AVATARS1_GITHUBUSERCONTENT_COM_LINK, CYM_CHAD)));
+            list.add(new MySection(false, new Video(HTTPS_AVATARS1_GITHUBUSERCONTENT_COM_LINK, CYM_CHAD)));
+            list.add(new MySection(false, new Video(HTTPS_AVATARS1_GITHUBUSERCONTENT_COM_LINK, CYM_CHAD)));
+            list.add(new MySection(false, new Video(HTTPS_AVATARS1_GITHUBUSERCONTENT_COM_LINK, CYM_CHAD)));
+        }
+        return list;
+    }
 
     public static List<String> getStrData() {
         List<String> list = new ArrayList<>();

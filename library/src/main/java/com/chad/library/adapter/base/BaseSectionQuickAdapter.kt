@@ -28,6 +28,14 @@ abstract class BaseSectionQuickAdapter<T : SectionEntity, VH : BaseViewHolder>
     protected abstract fun convertHeader(helper: VH, item: T?)
 
     /**
+     * 如果 item 不是多布局，可以使用此方法快速添加 item layout
+     * @param layoutResId Int
+     */
+    protected fun setNormalLayout(@LayoutRes layoutResId: Int) {
+        addItemType(SectionEntity.NORMAL_TYPE, layoutResId)
+    }
+
+    /**
      * 重写此处，设置 Diff Header
      * @param helper VH
      * @param item T?
