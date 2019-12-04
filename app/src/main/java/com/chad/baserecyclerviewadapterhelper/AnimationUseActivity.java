@@ -64,7 +64,7 @@ public class AnimationUseActivity extends AppCompatActivity {
         mAnimationAdapter.setAnimationEnable(true);
         int mFirstPageItemCount = 3;
 //        mAnimationAdapter.setNotDoAnimationCount(mFirstPageItemCount);
-        mAnimationAdapter.addItemChildClickViewIds(R.id.img, R.id.tweetName, R.id.tweetText);
+        mAnimationAdapter.addChildClickViewIds(R.id.img, R.id.tweetName, R.id.tweetText);
         mAnimationAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {

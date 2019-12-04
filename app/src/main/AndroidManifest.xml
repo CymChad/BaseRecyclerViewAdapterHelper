@@ -31,6 +31,7 @@
         <activity android:name=".LoadMoreRefreshUseActivity" />
         <activity android:name=".SectionUseActivity" />
         <activity android:name=".EmptyViewUseActivity" />
+        <activity android:name=".ItemClickActivity" />
     </application>
 
 </manifest>

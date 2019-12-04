@@ -29,7 +29,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection, BaseViewH
         super(sectionHeadResId, data);
         setNormalLayout(layoutResId);
 
-        addItemChildClickViewIds(R.id.more);
+        addChildClickViewIds(R.id.more);
     }
 
     @Override
