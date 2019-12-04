@@ -26,6 +26,7 @@
         <activity android:name=".AnimationUseActivity" />
         <activity android:name=".MultiItemQuickUserActivity" />
         <activity android:name=".MultiItemDelegateUseActivity" />
+        <activity android:name=".MultiItemProviderUserActivity" />
     </application>
 
 </manifest>

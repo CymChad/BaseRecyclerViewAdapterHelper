@@ -68,14 +68,20 @@ abstract class BaseProviderMultiAdapter<T, VH : BaseViewHolder>(data: MutableLis
         provider.convert(helper, item, payloads)
     }
 
-    override fun bindViewClickListener(viewHolder: VH) {
+    override fun bindViewClickListener(viewHolder: VH, viewType: Int) {
+        super.bindViewClickListener(viewHolder, viewType)
+        bindClick(viewHolder)
+        bindChildClick(viewHolder, viewType)
+    }
+
+    protected fun bindClick(viewHolder: VH) {
         if (getOnItemClickListener() == null) {
             //如果没有设置点击监听，则回调给 itemProvider
             //Callback to itemProvider if no click listener is set
-            viewHolder.itemView.setOnClickListener(View.OnClickListener {
+            viewHolder.itemView.setOnClickListener {
                 var position = viewHolder.adapterPosition
                 if (position == RecyclerView.NO_POSITION) {
-                    return@OnClickListener
+                    return@setOnClickListener
                 }
                 position -= getHeaderLayoutCount()
 
@@ -83,25 +89,63 @@ abstract class BaseProviderMultiAdapter<T, VH : BaseViewHolder>(data: MutableLis
                 val provider = mItemProviders.get(itemViewType)
 
                 provider.onClick(viewHolder, data[position], position)
-            })
+            }
         }
         if (getOnItemLongClickListener() == null) {
             //如果没有设置长按监听，则回调给itemProvider
             // If you do not set a long press listener, callback to the itemProvider
-            viewHolder.itemView.setOnLongClickListener(View.OnLongClickListener {
+            viewHolder.itemView.setOnLongClickListener {
                 var position = viewHolder.adapterPosition
                 if (position == RecyclerView.NO_POSITION) {
-                    return@OnLongClickListener false
+                    return@setOnLongClickListener false
                 }
                 position -= getHeaderLayoutCount()
 
                 val itemViewType = viewHolder.itemViewType
                 val provider = mItemProviders.get(itemViewType)
                 provider.onLongClick(viewHolder, data[position], position)
-            })
+            }
         }
-
-        super.bindViewClickListener(viewHolder)
     }
 
+    protected fun bindChildClick(viewHolder: VH, viewType: Int) {
+        if (getOnItemChildClickListener() == null) {
+            val provider = mItemProviders.get(viewType)
+            val ids = provider.getChildClickViewIds()
+            ids.forEach { id ->
+                viewHolder.itemView.findViewById<View>(id)?.let {
+                    if (!it.isClickable) {
+                        it.isClickable = true
+                    }
+                    it.setOnClickListener { v ->
+                        var position: Int = viewHolder.adapterPosition
+                        if (position == RecyclerView.NO_POSITION) {
+                            return@setOnClickListener
+                        }
+                        position -= getHeaderLayoutCount()
+                        provider.onChildClick(viewHolder, v, data[position], position)
+                    }
+                }
+            }
+        }
+        if (getOnItemChildLongClickListener() == null) {
+            val provider = mItemProviders.get(viewType)
+            val ids = provider.getChildClickViewIds()
+            ids.forEach { id ->
+                viewHolder.itemView.findViewById<View>(id)?.let {
+                    if (!it.isLongClickable) {
+                        it.isLongClickable = true
+                    }
+                    it.setOnLongClickListener { v ->
+                        var position: Int = viewHolder.adapterPosition
+                        if (position == RecyclerView.NO_POSITION) {
+                            return@setOnLongClickListener false
+                        }
+                        position -= getHeaderLayoutCount()
+                        provider.onChildLongClick(viewHolder, v, data[position], position)
+                    }
+                }
+            }
+        }
+    }
 }

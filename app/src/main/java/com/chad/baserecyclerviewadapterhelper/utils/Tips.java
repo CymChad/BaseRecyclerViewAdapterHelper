@@ -74,7 +74,7 @@ public class Tips {
         return layout;
     }
 
-    public static int dp2px(float dpValue) {
+    private static int dp2px(float dpValue) {
         final float scale = Utils.getContext().getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }

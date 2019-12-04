@@ -227,7 +227,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
             }
             else -> {
                 val viewHolder = onCreateDefViewHolder(parent, viewType)
-                bindViewClickListener(viewHolder)
+                bindViewClickListener(viewHolder, viewType)
                 baseViewHolder = viewHolder
             }
         }
@@ -421,7 +421,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 
     private val childClickViewIds = LinkedHashSet<Int>()
 
-    fun getChildClickViewIds(): LinkedHashSet<Int> {
+    fun getItemChildClickViewIds(): LinkedHashSet<Int> {
         return childClickViewIds
     }
 
@@ -439,7 +439,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * 绑定 item 点击事件
      * @param viewHolder VH
      */
-    protected open fun bindViewClickListener(viewHolder: VH) {
+    protected open fun bindViewClickListener(viewHolder: VH, viewType: Int) {
         mOnItemClickListener?.let {
             viewHolder.itemView.setOnClickListener { v ->
                 var position = viewHolder.adapterPosition
@@ -462,7 +462,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         }
 
         mOnItemChildClickListener?.let {
-            for (id in getChildClickViewIds()) {
+            for (id in getItemChildClickViewIds()) {
                 viewHolder.itemView.findViewById<View>(id)?.let { childView ->
                     if (!childView.isClickable) {
                         childView.isClickable = true
@@ -479,7 +479,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
             }
         }
         mOnItemChildLongClickListener?.let {
-            for (id in getChildClickViewIds()) {
+            for (id in getItemChildClickViewIds()) {
                 viewHolder.itemView.findViewById<View>(id)?.let { childView ->
                     if (!childView.isLongClickable) {
                         childView.isLongClickable = true

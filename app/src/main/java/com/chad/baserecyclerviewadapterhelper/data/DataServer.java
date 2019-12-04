@@ -2,6 +2,7 @@ package com.chad.baserecyclerviewadapterhelper.data;
 
 
 import com.chad.baserecyclerviewadapterhelper.entity.DelegateMultiEntity;
+import com.chad.baserecyclerviewadapterhelper.entity.ProviderMultiEntity;
 import com.chad.baserecyclerviewadapterhelper.entity.QuickMultipleEntity;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 
@@ -131,6 +132,15 @@ public class DataServer {
         }
         return  list;
     }
+
+    public static List<ProviderMultiEntity> getProviderMultiItemData() {
+        List<ProviderMultiEntity> list = new ArrayList<>();
+        for (int i = 0; i <= 40; i++) {
+            list.add(new ProviderMultiEntity());
+        }
+        return  list;
+    }
+
 //
 //    public static List<NormalMultipleEntity> getNormalMultipleEntities() {
 //        List<NormalMultipleEntity> list = new ArrayList<>();

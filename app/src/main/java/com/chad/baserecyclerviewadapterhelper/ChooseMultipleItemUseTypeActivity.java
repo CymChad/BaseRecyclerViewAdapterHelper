@@ -36,5 +36,12 @@ public class ChooseMultipleItemUseTypeActivity extends BaseActivity {
                 startActivity(new Intent(ChooseMultipleItemUseTypeActivity.this, MultiItemDelegateUseActivity.class));
             }
         });
+
+        findViewById(R.id.card_view3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ChooseMultipleItemUseTypeActivity.this, MultiItemProviderUserActivity.class));
+            }
+        });
     }
 }
