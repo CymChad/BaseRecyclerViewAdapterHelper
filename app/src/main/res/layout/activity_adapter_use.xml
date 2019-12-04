@@ -57,8 +57,6 @@
                 app:kswThumbColor="#555771"
                 app:kswTintColor="#00ddB6"/>
 
-
-
         </LinearLayout>
     </LinearLayout>
 

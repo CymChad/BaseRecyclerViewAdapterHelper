@@ -22,9 +22,9 @@ import org.jetbrains.annotations.Nullable;
  * @date: 2019-12-04
  * @Description:
  */
-public class PullToRefreshAdapter extends BaseQuickAdapter<Status, BaseViewHolder> implements LoadMoreModule {
+public class LoadMoreAdapter extends BaseQuickAdapter<Status, BaseViewHolder> implements LoadMoreModule {
 
-    public PullToRefreshAdapter() {
+    public LoadMoreAdapter() {
         super(R.layout.layout_animation);
     }
 
