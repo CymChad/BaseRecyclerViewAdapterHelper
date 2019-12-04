@@ -50,8 +50,8 @@ public class HomeActivity extends AppCompatActivity {
         return Arrays.asList(
                 new HomeItem("Animation", AnimationUseActivity.class, R.mipmap.gv_animation),
                 new HomeItem("MultipleItem", ChooseMultipleItemUseTypeActivity.class, R.mipmap.gv_multipleltem),
-                new HomeItem("Header/Footer", null, R.mipmap.gv_header_and_footer),
-                new HomeItem("PullToRefresh", null, R.mipmap.gv_pulltorefresh),
+                new HomeItem("Header/Footer", HeaderAndFooterUseActivity.class, R.mipmap.gv_header_and_footer),
+                new HomeItem("PullToRefresh", PullToRefreshUseActivity.class, R.mipmap.gv_pulltorefresh),
                 new HomeItem("Section", null, R.mipmap.gv_section),
                 new HomeItem("EmptyView", null, R.mipmap.gv_empty),
                 new HomeItem("DragAndSwipe", null, R.mipmap.gv_drag_and_swipe),

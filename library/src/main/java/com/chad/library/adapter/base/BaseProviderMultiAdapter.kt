@@ -18,7 +18,7 @@ import java.lang.ref.WeakReference
  * @constructor
  */
 abstract class BaseProviderMultiAdapter<T, VH : BaseViewHolder>(data: MutableList<T>? = null) :
-        BaseDelegateMultiAdapter<T, VH>(data) {
+        BaseQuickAdapter<T, VH>(0, data) {
 
     private val mItemProviders by lazy { SparseArray<BaseItemProvider<T, VH>>() }
 

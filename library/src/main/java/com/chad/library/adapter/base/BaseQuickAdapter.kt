@@ -80,8 +80,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         const val EMPTY_VIEW = 0x00000555
     }
 
-    constructor(data: MutableList<T>?) : this(0, data)
-
     /***************************** Public property settings *************************************/
     /**
      * data, Only allowed to get.
@@ -624,12 +622,12 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     fun addHeaderView(view: View, index: Int = -1, orientation: Int = LinearLayout.VERTICAL): Int {
         if (!this::mHeaderLayout.isInitialized) {
             mHeaderLayout = LinearLayout(view.context)
-        }
-        mHeaderLayout.orientation = orientation
-        mHeaderLayout.layoutParams = if (orientation == LinearLayout.VERTICAL) {
-            ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
-        } else {
-            ViewGroup.LayoutParams(WRAP_CONTENT, MATCH_PARENT)
+            mHeaderLayout.orientation = orientation
+            mHeaderLayout.layoutParams = if (orientation == LinearLayout.VERTICAL) {
+                RecyclerView.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+            } else {
+                RecyclerView.LayoutParams(WRAP_CONTENT, MATCH_PARENT)
+            }
         }
 
         val childCount = mHeaderLayout.childCount
@@ -692,7 +690,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     }
 
     private fun getHeaderViewPosition(): Int {
-        //Return to header view notify position
         if (hasEmptyView()) {
             if (headerWithEmptyEnable) {
                 return 0
@@ -736,12 +733,12 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     fun addFooterView(view: View, index: Int = -1, orientation: Int = LinearLayout.VERTICAL): Int {
         if (!this::mFooterLayout.isInitialized) {
             mFooterLayout = LinearLayout(view.context)
-        }
-        mFooterLayout.orientation = orientation
-        mFooterLayout.layoutParams = if (orientation == LinearLayout.VERTICAL) {
-            ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
-        } else {
-            ViewGroup.LayoutParams(WRAP_CONTENT, MATCH_PARENT)
+            mFooterLayout.orientation = orientation
+            mFooterLayout.layoutParams = if (orientation == LinearLayout.VERTICAL) {
+                RecyclerView.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+            } else {
+                RecyclerView.LayoutParams(WRAP_CONTENT, MATCH_PARENT)
+            }
         }
 
         val childCount = mFooterLayout.childCount

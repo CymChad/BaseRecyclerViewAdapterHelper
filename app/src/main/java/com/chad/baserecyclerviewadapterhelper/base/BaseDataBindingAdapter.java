@@ -29,7 +29,7 @@ public abstract class BaseDataBindingAdapter<T, B extends ViewDataBinding> exten
     }
 
     public BaseDataBindingAdapter(@Nullable List<T> data) {
-        super(data);
+        super(0, data);
     }
 
     public BaseDataBindingAdapter(@LayoutRes int layoutResId) {

@@ -27,6 +27,8 @@
         <activity android:name=".MultiItemQuickUserActivity" />
         <activity android:name=".MultiItemDelegateUseActivity" />
         <activity android:name=".MultiItemProviderUserActivity" />
+        <activity android:name=".HeaderAndFooterUseActivity" />
+        <activity android:name=".PullToRefreshUseActivity" />
     </application>
 
 </manifest>
