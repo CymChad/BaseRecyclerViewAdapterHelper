@@ -29,15 +29,25 @@ interface DraggableModule
 
 open class BaseDraggableModule(private val baseQuickAdapter: BaseQuickAdapter<*, *>) : DraggableListenerImp {
 
-
+    var isDragEnabled = false
     var isSwipeEnabled = false
     var toggleViewId = NO_TOGGLE_VIEW
+    lateinit var itemTouchHelper: ItemTouchHelper
+    lateinit var itemTouchHelperCallback: DragAndSwipeCallback
 
-    private var itemTouchHelper: ItemTouchHelper? = null
     protected var mOnToggleViewTouchListener: OnTouchListener? = null
     protected var mOnToggleViewLongClickListener: OnLongClickListener? = null
     protected var mOnItemDragListener: OnItemDragListener? = null
     protected var mOnItemSwipeListener: OnItemSwipeListener? = null
+
+    init {
+        initItemTouch()
+    }
+
+    private fun initItemTouch() {
+        itemTouchHelperCallback = DragAndSwipeCallback(this)
+        itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+    }
 
     internal fun initView(holder: BaseViewHolder) {
         if (isDragEnabled) {
@@ -57,7 +67,7 @@ open class BaseDraggableModule(private val baseQuickAdapter: BaseQuickAdapter<*,
 
 
     fun attachToRecyclerView(recyclerView: RecyclerView) {
-        itemTouchHelper?.attachToRecyclerView(recyclerView)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
     /**
@@ -78,13 +88,17 @@ open class BaseDraggableModule(private val baseQuickAdapter: BaseQuickAdapter<*,
             if (value) {
                 mOnToggleViewTouchListener = null
                 mOnToggleViewLongClickListener = OnLongClickListener { v ->
-                    itemTouchHelper?.startDrag(v.getTag(R.id.BaseQuickAdapter_viewholder_support) as RecyclerView.ViewHolder)
+                    if (isDragEnabled) {
+                        itemTouchHelper.startDrag(v.getTag(R.id.BaseQuickAdapter_viewholder_support) as RecyclerView.ViewHolder)
+                    }
                     true
                 }
             } else {
                 mOnToggleViewTouchListener = OnTouchListener { v, event ->
                     if (event.action == MotionEvent.ACTION_DOWN && !isDragOnLongPressEnabled) {
-                        itemTouchHelper?.startDrag(v.getTag(R.id.BaseQuickAdapter_viewholder_support) as RecyclerView.ViewHolder)
+                        if (isDragEnabled) {
+                            itemTouchHelper.startDrag(v.getTag(R.id.BaseQuickAdapter_viewholder_support) as RecyclerView.ViewHolder)
+                        }
                         true
                     } else {
                         false
@@ -94,43 +108,6 @@ open class BaseDraggableModule(private val baseQuickAdapter: BaseQuickAdapter<*,
             }
         }
 
-
-    @JvmOverloads
-    open fun enableDragItem(itemTouchHelper: ItemTouchHelper = ItemTouchHelper(DragAndSwipeCallback(this)),
-                            toggleViewId: Int = NO_TOGGLE_VIEW,
-                            dragOnLongPress: Boolean = true) {
-        this.itemTouchHelper = itemTouchHelper
-        this.toggleViewId = toggleViewId
-        isDragOnLongPressEnabled = dragOnLongPress
-
-        baseQuickAdapter.weakRecyclerView.get()?.let {
-            itemTouchHelper.attachToRecyclerView(it)
-        }
-    }
-
-    /**
-     * Disable drag items.
-     */
-    open fun disableDragItem() {
-        this.itemTouchHelper = null
-    }
-
-    open val isDragEnabled: Boolean
-        get() {
-            return itemTouchHelper != null
-        }
-
-
-    /*** ItemTouchHelper.Callback ****/
-//    override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-//    }
-//
-//    override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-//    }
-//
-//    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-//    }
-    /*** ItemTouchHelper.Callback End ****/
 
     protected fun getViewHolderPosition(viewHolder: RecyclerView.ViewHolder): Int {
         return viewHolder.adapterPosition - baseQuickAdapter.getHeaderLayoutCount()

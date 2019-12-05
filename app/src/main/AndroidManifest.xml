@@ -33,6 +33,7 @@
         <activity android:name=".EmptyViewUseActivity" />
         <activity android:name=".ItemClickActivity" />
         <activity android:name=".DataBindingUseActivity" />
+        <activity android:name=".DragAndSwipeUseActivity" />
     </application>
 
 </manifest>

@@ -30,7 +30,7 @@ public class DataBindingAdapter extends BaseQuickAdapter<Movie, BaseDataBindingV
 
         ItemMovieBinding binding = helper.getBinding();
         if (binding != null) {
-            binding.setVariable(com.chad.baserecyclerviewadapterhelper.BR.movie, item);
+            binding.setMovie(item);
             binding.setPresenter(mPresenter);
             binding.executePendingBindings();
         }

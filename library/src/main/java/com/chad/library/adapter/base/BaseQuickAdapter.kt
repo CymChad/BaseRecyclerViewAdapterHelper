@@ -242,6 +242,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
             else -> {
                 val viewHolder = onCreateDefViewHolder(parent, viewType)
                 bindViewClickListener(viewHolder, viewType)
+                draggableModule?.initView(viewHolder)
                 baseViewHolder = viewHolder
             }
         }
@@ -369,6 +370,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         super.onAttachedToRecyclerView(recyclerView)
         weakRecyclerView = WeakReference(recyclerView)
         this.context = recyclerView.context
+        draggableModule?.attachToRecyclerView(recyclerView)
 
         val manager = recyclerView.layoutManager
         if (manager is GridLayoutManager) {

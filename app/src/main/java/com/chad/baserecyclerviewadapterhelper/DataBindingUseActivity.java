@@ -28,7 +28,7 @@ public class DataBindingUseActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiple_item_use);
 
-        setTitle("LoadMore Refresh Use");
+        setTitle("DataBinding Use");
         setBackBtn();
 
         RecyclerView mRecyclerView = findViewById(R.id.rv_list);
