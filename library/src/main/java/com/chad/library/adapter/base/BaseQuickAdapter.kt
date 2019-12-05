@@ -62,6 +62,15 @@ private interface BaseQuickAdapterModuleImp {
     fun <T> addExpandableModule(baseQuickAdapter: BaseQuickAdapter<T, *>): BaseExpandableModule<T> {
         return BaseExpandableModule(baseQuickAdapter)
     }
+
+    /**
+     * 重写此方法，返回自定义模块
+     * @param baseQuickAdapter BaseQuickAdapter<*, *>
+     * @return BaseExpandableModule
+     */
+    fun addDraggableModule(baseQuickAdapter: BaseQuickAdapter<*, *>): BaseDraggableModule {
+        return BaseDraggableModule(baseQuickAdapter)
+    }
 }
 
 /**
@@ -128,6 +137,9 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     var expandableModule: BaseExpandableModule<T>? = null
         private set
 
+    var draggableModule: BaseDraggableModule? = null
+        private set
+
     /********************************* Private property *****************************************/
 
     private lateinit var mHeaderLayout: LinearLayout
@@ -163,6 +175,9 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         if (this is ExpandableModule) {
             expandableModule = this.addExpandableModule(this)
         }
+        if (this is DraggableModule) {
+            draggableModule = this.addDraggableModule(this)
+        }
     }
 
     /**
@@ -193,7 +208,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     protected open fun convert(helper: VH, item: T?, payloads: List<Any>) {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        this.context = parent.context
         val baseViewHolder: VH
         when (viewType) {
             LOAD_MORE_VIEW -> {
