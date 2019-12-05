@@ -1,8 +1,8 @@
 package com.chad.baserecyclerviewadapterhelper;
 
+import android.animation.ValueAnimator;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -44,8 +44,22 @@ public class DragAndSwipeUseActivity extends BaseActivity {
             @Override
             public void onItemDragStart(RecyclerView.ViewHolder viewHolder, int pos) {
                 Log.d(TAG, "drag start");
-                BaseViewHolder holder = ((BaseViewHolder) viewHolder);
-//                holder.setTextColor(R.id.tv, Color.WHITE);
+                final BaseViewHolder holder = ((BaseViewHolder) viewHolder);
+
+                // 开始时，item背景色变化，demo这里使用了一个动画渐变，使得自然
+                int startColor = Color.WHITE;
+                int endColor = Color.rgb(245, 245, 245);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    ValueAnimator v = ValueAnimator.ofArgb(startColor, endColor);
+                    v.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            holder.itemView.setBackgroundColor((int)animation.getAnimatedValue());
+                        }
+                    });
+                    v.setDuration(300);
+                    v.start();
+                }
             }
 
             @Override
@@ -56,29 +70,36 @@ public class DragAndSwipeUseActivity extends BaseActivity {
             @Override
             public void onItemDragEnd(RecyclerView.ViewHolder viewHolder, int pos) {
                 Log.d(TAG, "drag end");
-                BaseViewHolder holder = ((BaseViewHolder) viewHolder);
-//                holder.setTextColor(R.id.tv, Color.BLACK);
+                final BaseViewHolder holder = ((BaseViewHolder) viewHolder);
+                // 结束时，item背景色变化，demo这里使用了一个动画渐变，使得自然
+                int startColor = Color.rgb(245, 245, 245);
+                int endColor = Color.WHITE;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    ValueAnimator v = ValueAnimator.ofArgb(startColor, endColor);
+                    v.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            holder.itemView.setBackgroundColor((int)animation.getAnimatedValue());
+                        }
+                    });
+                    v.setDuration(300);
+                    v.start();
+                }
             }
         };
 
 
-        final Paint paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setTextSize(20);
-        paint.setColor(Color.BLACK);
         OnItemSwipeListener onItemSwipeListener = new OnItemSwipeListener() {
             @Override
             public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int pos) {
                 Log.d(TAG, "view swiped start: " + pos);
                 BaseViewHolder holder = ((BaseViewHolder) viewHolder);
-//                holder.setTextColor(R.id.tv, Color.WHITE);
             }
 
             @Override
             public void clearView(RecyclerView.ViewHolder viewHolder, int pos) {
                 Log.d(TAG, "View reset: " + pos);
                 BaseViewHolder holder = ((BaseViewHolder) viewHolder);
-//                holder.setTextColor(R.id.tv, Color.BLACK);
             }
 
             @Override
@@ -89,7 +110,6 @@ public class DragAndSwipeUseActivity extends BaseActivity {
             @Override
             public void onItemSwipeMoving(Canvas canvas, RecyclerView.ViewHolder viewHolder, float dX, float dY, boolean isCurrentlyActive) {
                 canvas.drawColor(ContextCompat.getColor(DragAndSwipeUseActivity.this, R.color.color_light_blue));
-//                canvas.drawText("Just some text", 0, 40, paint);
             }
         };
 
