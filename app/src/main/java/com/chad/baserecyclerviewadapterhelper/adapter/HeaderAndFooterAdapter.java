@@ -1,7 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
 import androidx.annotation.NonNull;
-
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;

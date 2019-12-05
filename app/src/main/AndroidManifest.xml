@@ -32,6 +32,7 @@
         <activity android:name=".SectionUseActivity" />
         <activity android:name=".EmptyViewUseActivity" />
         <activity android:name=".ItemClickActivity" />
+        <activity android:name=".DataBindingUseActivity" />
     </application>
 
 </manifest>

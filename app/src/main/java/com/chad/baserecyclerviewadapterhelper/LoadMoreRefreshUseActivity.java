@@ -58,7 +58,7 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_load_more);
 
         setTitle("LoadMore Refresh Use");
         setBackBtn();

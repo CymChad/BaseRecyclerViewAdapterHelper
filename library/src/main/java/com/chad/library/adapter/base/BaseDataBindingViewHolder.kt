@@ -1,7 +1,12 @@
 package com.chad.library.adapter.base
 
+import android.view.View
+import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 
-abstract class BaseDataBindingViewHolder<B : ViewDataBinding>(binding: B) : BaseViewHolder(binding.root) {
+open class BaseDataBindingViewHolder<B : ViewDataBinding>(view: View) : BaseViewHolder(view) {
+
+    fun getBinding(): B? = DataBindingUtil.getBinding(itemView)
+
 
 }

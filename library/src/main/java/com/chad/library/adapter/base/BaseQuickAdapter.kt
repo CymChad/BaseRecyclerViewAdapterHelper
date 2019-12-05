@@ -13,6 +13,8 @@ import androidx.annotation.IdRes
 import androidx.annotation.IntRange
 import androidx.annotation.LayoutRes
 import androidx.annotation.NonNull
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -74,10 +76,10 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     : RecyclerView.Adapter<VH>(), BaseQuickAdapterModuleImp, BaseListenerImp {
 
     companion object {
-        const val HEADER_VIEW = 0x00000111
-        const val LOAD_MORE_VIEW = 0x00000222
-        const val FOOTER_VIEW = 0x00000333
-        const val EMPTY_VIEW = 0x00000555
+        const val HEADER_VIEW = 0x10000111
+        const val LOAD_MORE_VIEW = 0x10000222
+        const val FOOTER_VIEW = 0x10000333
+        const val EMPTY_VIEW = 0x10000555
     }
 
     /***************************** Public property settings *************************************/
@@ -196,7 +198,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         when (viewType) {
             LOAD_MORE_VIEW -> {
                 val view = loadMoreModule!!.loadMoreView.getRootView(parent)
-                baseViewHolder = createBaseViewHolder(view)
+                baseViewHolder = createNoneBindingViewHolder(view)
                 loadMoreModule!!.setupViewHolder(baseViewHolder)
             }
             HEADER_VIEW -> {
@@ -205,7 +207,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
                     headerLayoutVp.removeView(mHeaderLayout)
                 }
 
-                baseViewHolder = createBaseViewHolder(mHeaderLayout)
+                baseViewHolder = createNoneBindingViewHolder(mHeaderLayout)
             }
             EMPTY_VIEW -> {
                 val emptyLayoutVp = mEmptyLayout.parent
@@ -213,7 +215,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
                     emptyLayoutVp.removeView(mEmptyLayout)
                 }
 
-                baseViewHolder = createBaseViewHolder(mEmptyLayout)
+                baseViewHolder = createNoneBindingViewHolder(mEmptyLayout)
             }
             FOOTER_VIEW -> {
                 val footerLayoutVp = mFooterLayout.parent
@@ -221,7 +223,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
                     footerLayoutVp.removeView(mFooterLayout)
                 }
 
-                baseViewHolder = createBaseViewHolder(mFooterLayout)
+                baseViewHolder = createNoneBindingViewHolder(mFooterLayout)
             }
             else -> {
                 val viewHolder = onCreateDefViewHolder(parent, viewType)
@@ -306,7 +308,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         //Do not move position, need to change before LoadMoreView binding
         loadMoreModule?.autoLoadMore(position)
         when (holder.itemViewType) {
-            LOAD_MORE_VIEW -> loadMoreModule?.loadMoreView?.convert(holder)
+            LOAD_MORE_VIEW -> loadMoreModule?.loadMoreView?.convert(holder, position)
             HEADER_VIEW, EMPTY_VIEW, FOOTER_VIEW -> return
             else -> convert(holder, getRealItem(position))
         }
@@ -322,7 +324,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         //Do not move position, need to change before LoadMoreView binding
         loadMoreModule?.autoLoadMore(position)
         when (holder.itemViewType) {
-            LOAD_MORE_VIEW -> loadMoreModule?.loadMoreView?.convert(holder)
+            LOAD_MORE_VIEW -> loadMoreModule?.loadMoreView?.convert(holder, position)
             HEADER_VIEW, EMPTY_VIEW, FOOTER_VIEW -> return
             else -> convert(holder, getRealItem(position), payloads)
         }
@@ -550,10 +552,17 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         return createBaseViewHolder(parent, layoutResId)
     }
 
-    protected open fun createBaseViewHolder(parent: ViewGroup, layoutResId: Int): VH {
+    protected open fun createBaseViewHolder(parent: ViewGroup, @LayoutRes layoutResId: Int): VH {
         return createBaseViewHolder(parent.getItemView(layoutResId))
     }
 
+    /**
+     * 创建 ViewHolder。可以重写
+     * 默认实现会判断 ViewHolder 类型，如果是 [BaseDataBindingViewHolder] 类型，则使用 DataBinding
+     *
+     * @param view View
+     * @return VH
+     */
     @Suppress("UNCHECKED_CAST")
     protected open fun createBaseViewHolder(view: View): VH {
         var temp: Class<*>? = javaClass
@@ -566,7 +575,31 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         val vh: VH? = if (z == null) {
             BaseViewHolder(view) as VH
         } else {
-            createGenericKInstance(z, view)
+            createBaseGenericKInstance(z, view, true)
+        }
+        return vh ?: BaseViewHolder(view) as VH
+    }
+
+    /**
+     * 创建 ViewHolder。
+     * 默认实现不会判断 ViewHolder 类型，不论 ViewHolder 的类型是什么，都不使用 DataBinding。例如：头部、尾部、空布局
+     *
+     * @param view View
+     * @return VH
+     */
+    @Suppress("UNCHECKED_CAST")
+    protected open fun createNoneBindingViewHolder(view: View): VH {
+        var temp: Class<*>? = javaClass
+        var z: Class<*>? = null
+        while (z == null && null != temp) {
+            z = getInstancedGenericKClass(temp)
+            temp = temp.superclass
+        }
+        // 泛型擦除会导致z为null
+        val vh: VH? = if (z == null) {
+            BaseViewHolder(view) as VH
+        } else {
+            createBaseGenericKInstance(z, view, false)
         }
         return vh ?: BaseViewHolder(view) as VH
     }
@@ -605,18 +638,34 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    private fun createGenericKInstance(z: Class<*>, view: View): VH? {
+    private fun createBaseGenericKInstance(z: Class<*>, view: View, isCheckBinding: Boolean): VH? {
         try {
             val constructor: Constructor<*>
             // inner and unstatic class
             return if (z.isMemberClass && !Modifier.isStatic(z.modifiers)) {
-                constructor = z.getDeclaredConstructor(javaClass, View::class.java)
-                constructor.isAccessible = true
-                constructor.newInstance(this, view) as VH
+                if (isCheckBinding && BaseDataBindingViewHolder::class.java.isAssignableFrom(z)) {
+                    constructor = z.getDeclaredConstructor(javaClass, View::class.java)
+                    constructor.isAccessible = true
+                    val d = DataBindingUtil.bind<ViewDataBinding>(view)
+                    checkNotNull(d) { "Can't bind view, please check the layout view!" }
+                    constructor.newInstance(this, d.root) as VH
+                } else {
+                    constructor = z.getDeclaredConstructor(javaClass, View::class.java)
+                    constructor.isAccessible = true
+                    constructor.newInstance(this, view) as VH
+                }
             } else {
-                constructor = z.getDeclaredConstructor(View::class.java)
-                constructor.isAccessible = true
-                constructor.newInstance(view) as VH
+                if (isCheckBinding && BaseDataBindingViewHolder::class.java.isAssignableFrom(z)) {
+                    val d = DataBindingUtil.bind<ViewDataBinding>(view)
+                    checkNotNull(d) { "Can't bind view, please check the layout view!" }
+                    constructor = z.getDeclaredConstructor(View::class.java)
+                    constructor.isAccessible = true
+                    constructor.newInstance(d.root) as VH
+                } else {
+                    constructor = z.getDeclaredConstructor(View::class.java)
+                    constructor.isAccessible = true
+                    constructor.newInstance(view) as VH
+                }
             }
         } catch (e: NoSuchMethodException) {
             e.printStackTrace()
@@ -630,6 +679,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 
         return null
     }
+
 
     /********************************************************************************************/
     /********************************* HeaderView Method ****************************************/

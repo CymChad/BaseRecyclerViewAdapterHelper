@@ -12,6 +12,8 @@ import androidx.databinding.ViewDataBinding;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 
@@ -36,15 +38,15 @@ public abstract class BaseDataBindingAdapter<T, B extends ViewDataBinding> exten
         super(layoutResId);
     }
 
-    @NonNull
-    @Override
-    protected BaseBindingViewHolder<B> createBaseViewHolder(@NonNull View view) {
-        return new BaseBindingViewHolder<>(view);
-    }
+//    @NonNull
+//    @Override
+//    protected BaseBindingViewHolder<B> createBaseViewHolder(@NonNull View view) {
+//        return new BaseBindingViewHolder<>(view);
+//    }
 
-    @NonNull
+    @NotNull
     @Override
-    protected BaseBindingViewHolder<B> createBaseViewHolder(@NonNull ViewGroup parent, int layoutResId) {
+    protected BaseBindingViewHolder<B> createBaseViewHolder(@NotNull ViewGroup parent, int layoutResId) {
         B b = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), layoutResId, parent, false);
         View view;
         if (b == null) {
@@ -56,6 +58,7 @@ public abstract class BaseDataBindingAdapter<T, B extends ViewDataBinding> exten
         holder.setBinding(b);
         return holder;
     }
+
 
     @Override
     protected void convert(@NonNull BaseBindingViewHolder<B> helper, T item) {

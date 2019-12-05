@@ -28,7 +28,7 @@ abstract class BaseLoadMoreView {
 
     abstract fun getLoadFailView(holder: BaseViewHolder): View
 
-    open fun convert(holder: BaseViewHolder) {
+    open fun convert(holder: BaseViewHolder, position: Int) {
         when (loadMoreStatus) {
             Status.Complete -> {
                 getLoadingView(holder).isVisible(false)

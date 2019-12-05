@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="movie"
+            type="com.chad.baserecyclerviewadapterhelper.entity.Movie" />
+
+        <variable
+            name="presenter"
+            type="com.chad.baserecyclerviewadapterhelper.entity.MoviePresenter" />
+    </data>
+
+    <androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="175dp"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        app:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
+                android:onClick="@{(view) -> presenter.buyTicket(view, movie)}"
+                android:src="@mipmap/buy_icon"
+                app:backgroundTint="@color/color_light_blue" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true">
+
+                <ImageView
+                    android:id="@+id/iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/databinding_img" />
+
+                <TextView
+                    android:id="@+id/movie_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@id/iv"
+                    android:text="@{movie.name}"
+                    android:textColor="@color/txt_color"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    tools:text="Chad" />
+
+                <TextView
+                    android:id="@+id/movie_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/movie_name"
+                    android:layout_alignStart="@+id/movie_name"
+                    android:layout_alignLeft="@+id/movie_name"
+                    android:text='@{movie.content}'
+                    android:textColor="#888888"
+                    android:textSize="12sp"
+                    tools:text="He was one of Australia's most distinguished artistes" />
+
+                <TextView
+                    android:id="@+id/movie_length"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/movie_content"
+                    android:layout_alignStart="@+id/movie_content"
+                    android:layout_alignLeft="@+id/movie_content"
+                    android:text='@{movie.length+ " minute"}'
+                    android:textColor="#CCCCCC"
+                    android:textSize="12sp"
+                    tools:text="PM 11:28" />
+
+                <TextView
+                    android:id="@+id/movie_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/movie_length"
+                    android:layout_alignLeft="@+id/movie_length"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="17dp"
+                    android:text='@{"$ " + movie.price}'
+                    android:textColor="@color/txt_color"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    tools:text="$ 12" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</layout>
