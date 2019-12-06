@@ -26,12 +26,12 @@ public class DataBindingUseActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_multiple_item_use);
+        setContentView(R.layout.activity_universal_recycler);
 
         setTitle("DataBinding Use");
         setBackBtn();
 
-        RecyclerView mRecyclerView = findViewById(R.id.rv_list);
+        RecyclerView mRecyclerView = findViewById(R.id.rv);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(adapter);

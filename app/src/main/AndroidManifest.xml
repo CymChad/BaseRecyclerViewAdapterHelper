@@ -34,6 +34,7 @@
         <activity android:name=".ItemClickActivity" />
         <activity android:name=".DataBindingUseActivity" />
         <activity android:name=".DragAndSwipeUseActivity" />
+        <activity android:name=".UpFetchUseActivity" />
     </application>
 
 </manifest>

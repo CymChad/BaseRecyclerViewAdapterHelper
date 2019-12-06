@@ -31,12 +31,12 @@ public class ItemClickActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_click);
+        setContentView(R.layout.activity_universal_recycler);
 
         setBackBtn();
         setTitle("ItemClickActivity Activity");
 
-        mRecyclerView = findViewById(R.id.list);
+        mRecyclerView = findViewById(R.id.rv);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         initAdapter();
         adapter.setOnItemClickListener(new OnItemClickListener() {

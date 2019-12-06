@@ -59,7 +59,7 @@ public class HomeActivity extends AppCompatActivity {
                 new HomeItem("ItemClick", ItemClickActivity.class, R.mipmap.gv_item_click),
                 new HomeItem("ExpandableItem", null, R.mipmap.gv_expandable),
                 new HomeItem("DataBinding", DataBindingUseActivity.class, R.mipmap.gv_databinding),
-                new HomeItem("UpFetchData", null, R.drawable.gv_up_fetch),
+                new HomeItem("UpFetchData", UpFetchUseActivity.class, R.drawable.gv_up_fetch),
                 new HomeItem("SectionMultipleItem", null, R.mipmap.gv_multipleltem),
                 new HomeItem("DiffUtil", null, R.mipmap.gv_databinding)
         );

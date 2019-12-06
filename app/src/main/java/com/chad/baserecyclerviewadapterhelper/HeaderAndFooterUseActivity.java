@@ -26,12 +26,12 @@ public class HeaderAndFooterUseActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_header_and_footer_use);
+        setContentView(R.layout.activity_universal_recycler);
 
         setBackBtn();
         setTitle("HeaderAndFooter Use");
 
-        mRecyclerView = findViewById(R.id.rv_list);
+        mRecyclerView = findViewById(R.id.rv);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         initAdapter();
 
