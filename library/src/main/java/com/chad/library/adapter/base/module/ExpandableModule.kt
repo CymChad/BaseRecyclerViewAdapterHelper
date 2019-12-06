@@ -36,7 +36,15 @@ open class BaseExpandableModule<T>(private val baseQuickAdapter: BaseQuickAdapte
         return count
     }
 
-    fun expand(@IntRange(from = 0) position: Int, animate: Boolean, shouldNotify: Boolean): Int {
+    /**
+     * Expand an expandable item
+     *
+     * @param position position of the item, which includes the header layout count.
+     * @param animate  expand items with animation
+     * @return the number of items that have been added.
+     */
+    @JvmOverloads
+    fun expand(@IntRange(from = 0) position: Int, animate: Boolean = true, shouldNotify: Boolean = true): Int {
         val adapterPos = position - baseQuickAdapter.getHeaderLayoutCount()
 
         val expandable = getExpandableItem(adapterPos) ?: return 0
@@ -63,27 +71,6 @@ open class BaseExpandableModule<T>(private val baseQuickAdapter: BaseQuickAdapte
             }
         }
         return subItemCount
-    }
-
-    /**
-     * Expand an expandable item
-     *
-     * @param position position of the item, which includes the header layout count.
-     * @param animate  expand items with animation
-     * @return the number of items that have been added.
-     */
-    fun expand(@IntRange(from = 0) position: Int, animate: Boolean): Int {
-        return expand(position, animate, true)
-    }
-
-    /**
-     * Expand an expandable item with animation.
-     *
-     * @param position position of the item, which includes the header layout count.
-     * @return the number of items that have been added.
-     */
-    fun expand(@IntRange(from = 0) position: Int): Int {
-        return expand(position, animate = true, shouldNotify = true)
     }
 
     fun expandAll(position: Int, animate: Boolean, notify: Boolean): Int {
@@ -177,7 +164,8 @@ open class BaseExpandableModule<T>(private val baseQuickAdapter: BaseQuickAdapte
      * @param notify   notify the recyclerView refresh UI or not.
      * @return the number of subItems collapsed.
      */
-    fun collapse(@IntRange(from = 0) position: Int, animate: Boolean, notify: Boolean): Int {
+    @JvmOverloads
+    fun collapse(@IntRange(from = 0) position: Int, animate: Boolean = true, notify: Boolean = true): Int {
         val adapterPos = position - baseQuickAdapter.getHeaderLayoutCount()
 
         val expandable = getExpandableItem(adapterPos) ?: return 0
@@ -194,26 +182,6 @@ open class BaseExpandableModule<T>(private val baseQuickAdapter: BaseQuickAdapte
         return subItemCount
     }
 
-    /**
-     * Collapse an expandable item that has been expanded..
-     *
-     * @param position the position of the item, which includes the header layout count.
-     * @return the number of subItems collapsed.
-     */
-    fun collapse(@IntRange(from = 0) position: Int): Int {
-        return collapse(position, animate = true, notify = true)
-    }
-
-    /**
-     * Collapse an expandable item that has been expanded..
-     *
-     * @param position the position of the item, which includes the header layout count.
-     * @return the number of subItems collapsed.
-     */
-    fun collapse(@IntRange(from = 0) position: Int, animate: Boolean): Int {
-        return collapse(position, animate, true)
-    }
-
     private fun getExpandableItem(position: Int): ExpandableEntity<*>? {
         val item = baseQuickAdapter.getItem(position)
         return if (isExpandable(item)) {
@@ -224,7 +192,7 @@ open class BaseExpandableModule<T>(private val baseQuickAdapter: BaseQuickAdapte
     }
 
     fun isExpandable(item: T?): Boolean {
-        return item != null && item is ExpandableEntity<*>
+        return item is ExpandableEntity<*>
     }
 
     fun hasSubItems(item: ExpandableEntity<*>?): Boolean {

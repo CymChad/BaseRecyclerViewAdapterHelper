@@ -35,6 +35,7 @@
         <activity android:name=".DataBindingUseActivity" />
         <activity android:name=".DragAndSwipeUseActivity" />
         <activity android:name=".UpFetchUseActivity" />
+        <activity android:name=".ExpandableItemActivity" />
     </application>
 
 </manifest>

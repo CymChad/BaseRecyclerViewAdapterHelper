@@ -44,5 +44,11 @@ open class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         view.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
         return this
     }
+
+    fun setGone(@IdRes viewId: Int, isGone: Boolean): BaseViewHolder {
+        val view = getView<View>(viewId)
+        view.visibility = if (isGone) View.GONE else View.VISIBLE
+        return this
+    }
 }
 

@@ -3,14 +3,13 @@ package com.chad.baserecyclerviewadapterhelper;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.HeaderAndFooterAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
-import com.chad.baserecyclerviewadapterhelper.data.DataServer;
+import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 
@@ -102,8 +101,7 @@ public class HeaderAndFooterUseActivity extends BaseActivity {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                adapter.setNewData(DataServer.getSampleData(PAGE_SIZE));
-                Toast.makeText(HeaderAndFooterUseActivity.this, "" + position, Toast.LENGTH_LONG).show();
+                Tips.show(String.valueOf(position));
             }
 
         });

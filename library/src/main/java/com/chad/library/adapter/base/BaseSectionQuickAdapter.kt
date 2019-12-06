@@ -15,6 +15,11 @@ abstract class BaseSectionQuickAdapter<T : SectionEntity, VH : BaseViewHolder>
                           data: MutableList<T>? = null)
     : BaseMultiItemQuickAdapter<T, VH>(data) {
 
+    constructor(@LayoutRes sectionHeadResId: Int,
+                @LayoutRes layoutResId: Int,
+                data: MutableList<T>? = null) : this(sectionHeadResId, data) {
+        setNormalLayout(layoutResId)
+    }
 
     init {
         addItemType(SectionEntity.HEADER_TYPE, sectionHeadResId)
@@ -28,20 +33,21 @@ abstract class BaseSectionQuickAdapter<T : SectionEntity, VH : BaseViewHolder>
     protected abstract fun convertHeader(helper: VH, item: T?)
 
     /**
-     * 如果 item 不是多布局，可以使用此方法快速添加 item layout
-     * @param layoutResId Int
-     */
-    protected fun setNormalLayout(@LayoutRes layoutResId: Int) {
-        addItemType(SectionEntity.NORMAL_TYPE, layoutResId)
-    }
-
-    /**
      * 重写此处，设置 Diff Header
      * @param helper VH
      * @param item T?
      * @param payloads MutableList<Any>
      */
     protected fun convertHeader(helper: VH, item: T?, payloads: MutableList<Any>) {}
+
+    /**
+     * 如果 item 不是多布局，可以使用此方法快速设置 item layout
+     * 如果需要多布局 item，请使用[addItemType]
+     * @param layoutResId Int
+     */
+    protected fun setNormalLayout(@LayoutRes layoutResId: Int) {
+        addItemType(SectionEntity.NORMAL_TYPE, layoutResId)
+    }
 
     override fun isFixedViewType(type: Int): Boolean {
         return super.isFixedViewType(type) || type == SectionEntity.HEADER_TYPE
