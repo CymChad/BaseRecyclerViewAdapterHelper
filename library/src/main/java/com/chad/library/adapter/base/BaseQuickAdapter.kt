@@ -266,7 +266,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
             } else {
                 0
             }
-            return getHeaderLayoutCount() + data.size + getFooterLayoutCount() + loadMoreCount
+            return getHeaderLayoutCount() + getDefItemCount() + getFooterLayoutCount() + loadMoreCount
         }
     }
 
@@ -560,6 +560,10 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         return mOnItemChildLongClickListener?.onItemChildLongClick(this, v, position) ?: false
     }
 
+    protected open fun getDefItemCount(): Int {
+        return data.size
+    }
+
     protected open fun getDefItemViewType(position: Int): Int {
         return super.getItemViewType(position)
     }
@@ -801,10 +805,9 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * @param holder True if this item should traverse all spans.
      */
     protected fun setFullSpan(holder: RecyclerView.ViewHolder) {
-        if (holder.itemView.layoutParams is StaggeredGridLayoutManager.LayoutParams) {
-            val params = holder
-                    .itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams
-            params.isFullSpan = true
+        val layoutParams = holder.itemView.layoutParams
+        if (layoutParams is StaggeredGridLayoutManager.LayoutParams) {
+            layoutParams.isFullSpan = true
         }
     }
 

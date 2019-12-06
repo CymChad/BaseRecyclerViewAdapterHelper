@@ -24,7 +24,7 @@ open class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         return view as T
     }
 
-    fun <T : View> Int.findView(): T? {
+    fun <T : View> Int.findView(): T {
         return itemView.findViewById(this)
     }
 

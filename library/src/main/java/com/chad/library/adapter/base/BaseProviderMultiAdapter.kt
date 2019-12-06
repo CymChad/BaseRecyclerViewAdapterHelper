@@ -43,6 +43,7 @@ abstract class BaseProviderMultiAdapter<T, VH : BaseViewHolder>(data: MutableLis
     override fun onCreateDefViewHolder(parent: ViewGroup, viewType: Int): VH {
         val provider = mItemProviders.get(viewType)
         checkNotNull(provider) { "No such provider found，please use addItemProvider() first!" }
+        provider.context = parent.context
         return createBaseViewHolder(parent, provider.layoutId)
     }
 
@@ -54,16 +55,12 @@ abstract class BaseProviderMultiAdapter<T, VH : BaseViewHolder>(data: MutableLis
         val itemViewType = helper.itemViewType
         val provider = mItemProviders.get(itemViewType)
 
-        provider.context = helper.itemView.context
-
         provider.convert(helper, item)
     }
 
     override fun convert(helper: VH, item: T?, payloads: List<Any>) {
         val itemViewType = helper.itemViewType
         val provider = mItemProviders.get(itemViewType)
-
-        provider.context = helper.itemView.context
 
         provider.convert(helper, item, payloads)
     }
@@ -74,7 +71,7 @@ abstract class BaseProviderMultiAdapter<T, VH : BaseViewHolder>(data: MutableLis
         bindChildClick(viewHolder, viewType)
     }
 
-    protected fun bindClick(viewHolder: VH) {
+    protected open fun bindClick(viewHolder: VH) {
         if (getOnItemClickListener() == null) {
             //如果没有设置点击监听，则回调给 itemProvider
             //Callback to itemProvider if no click listener is set
@@ -108,7 +105,7 @@ abstract class BaseProviderMultiAdapter<T, VH : BaseViewHolder>(data: MutableLis
         }
     }
 
-    protected fun bindChildClick(viewHolder: VH, viewType: Int) {
+    protected open fun bindChildClick(viewHolder: VH, viewType: Int) {
         if (getOnItemChildClickListener() == null) {
             val provider = mItemProviders.get(viewType)
             val ids = provider.getChildClickViewIds()
@@ -130,7 +127,7 @@ abstract class BaseProviderMultiAdapter<T, VH : BaseViewHolder>(data: MutableLis
         }
         if (getOnItemChildLongClickListener() == null) {
             val provider = mItemProviders.get(viewType)
-            val ids = provider.getChildClickViewIds()
+            val ids = provider.getChildLongClickViewIds()
             ids.forEach { id ->
                 viewHolder.itemView.findViewById<View>(id)?.let {
                     if (!it.isLongClickable) {

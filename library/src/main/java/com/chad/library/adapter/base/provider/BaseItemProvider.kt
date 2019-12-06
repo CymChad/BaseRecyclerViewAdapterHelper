@@ -13,7 +13,8 @@ abstract class BaseItemProvider<T, VH : BaseViewHolder> {
     lateinit var context: Context
     lateinit var weakAdapter: WeakReference<BaseQuickAdapter<T, VH>>
 
-    private var viewIds: ArrayList<Int> = arrayListOf()
+    private val clickViewIds: ArrayList<Int> by lazy { ArrayList<Int>() }
+    private val longClickViewIds: ArrayList<Int> by lazy { ArrayList<Int>() }
 
     abstract val itemViewType: Int
 
@@ -52,9 +53,17 @@ abstract class BaseItemProvider<T, VH : BaseViewHolder> {
 
     fun addChildClickViewIds(@IdRes vararg ids: Int) {
         ids.forEach {
-            this.viewIds.add(it)
+            this.clickViewIds.add(it)
         }
     }
 
-    fun getChildClickViewIds() = this.viewIds
+    fun getChildClickViewIds() = this.clickViewIds
+
+    fun addChildLongClickViewIds(@IdRes vararg ids: Int) {
+        ids.forEach {
+            this.longClickViewIds.add(it)
+        }
+    }
+
+    fun getChildLongClickViewIds() = this.longClickViewIds
 }
