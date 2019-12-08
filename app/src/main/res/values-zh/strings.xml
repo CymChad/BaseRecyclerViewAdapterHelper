@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="see_more">查看更多 ...</string>
+    <string name="network_err">模拟网络错误</string>
+    <string name="empty_no_data">没有数据，点击重试</string>
+    <string name="empty_network_error">网络错误，点击重试</string>
+</resources>

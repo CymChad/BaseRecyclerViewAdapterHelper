@@ -32,7 +32,7 @@ abstract class BaseItemProvider<T, VH : BaseViewHolder> {
      * @param data T
      * @param position Int
      */
-    open fun onClick(helper: VH, data: T, position: Int) {}
+    open fun onClick(helper: VH, view: View, data: T, position: Int) {}
 
     /**
      * item 若想实现条目长按事件则重写该方法
@@ -41,7 +41,7 @@ abstract class BaseItemProvider<T, VH : BaseViewHolder> {
      * @param position Int
      * @return Boolean
      */
-    open fun onLongClick(helper: VH, data: T, position: Int): Boolean {
+    open fun onLongClick(helper: VH, view: View, data: T, position: Int): Boolean {
         return false
     }
 

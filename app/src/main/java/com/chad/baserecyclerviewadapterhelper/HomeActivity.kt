@@ -20,7 +20,9 @@ class HomeActivity : AppCompatActivity() {
             addHeaderView(top)
             setOnItemClickListener { adapter, _, position ->
                 val item = adapter.data[position] as HomeEntity
-                startActivity(Intent(this@HomeActivity, item.activity))
+                if (!item.isHeader) {
+                    startActivity(Intent(this@HomeActivity, item.activity))
+                }
             }
         }
     }
@@ -44,8 +46,8 @@ class HomeActivity : AppCompatActivity() {
 
                 HomeEntity(headerTitle = "Adapter 类型"),
                 HomeEntity("MultipleItem", ChooseMultipleItemUseTypeActivity::class.java, R.mipmap.gv_multipleltem),
-                HomeEntity("Section", SectionUseActivity::class.java, R.mipmap.gv_section),
-
+                HomeEntity("Quick Section", SectionQuickUseActivity::class.java, R.mipmap.gv_section),
+                HomeEntity("Section2", Section2UseActivity::class.java, R.mipmap.gv_section),
 
                 HomeEntity(headerTitle = "功能模块"),
 

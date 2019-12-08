@@ -9,5 +9,5 @@ import androidx.recyclerview.widget.GridLayoutManager;
  */
 public interface GridSpanSizeLookup {
 
-    int getSpanSize(GridLayoutManager gridLayoutManager, int position);
+    int getSpanSize(GridLayoutManager gridLayoutManager, int viewType, int position);
 }

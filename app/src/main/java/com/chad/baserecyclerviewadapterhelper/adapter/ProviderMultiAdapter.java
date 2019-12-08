@@ -19,6 +19,7 @@ import java.util.List;
 public class ProviderMultiAdapter extends BaseProviderMultiAdapter<ProviderMultiEntity, BaseViewHolder> {
 
     public ProviderMultiAdapter() {
+        super();
         addItemProvider(new ImgItemProvider());
         addItemProvider(new TextImgItemProvider());
         addItemProvider(new TextItemProvider());

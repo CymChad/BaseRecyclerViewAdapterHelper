@@ -98,7 +98,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * 数据, 只允许 get。
      */
     var data: MutableList<T> = data ?: arrayListOf()
-        private set
+        internal set
     /**
      * 当显示空布局时，是否显示 Header
      */
@@ -390,7 +390,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
                         if (isFixedViewType(type))
                             manager.spanCount
                         else
-                            mSpanSizeLookup!!.getSpanSize(manager, position - getHeaderLayoutCount())
+                            mSpanSizeLookup!!.getSpanSize(manager, type, position - getHeaderLayoutCount())
                     }
                 }
 
@@ -1026,14 +1026,25 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 
     /*************************** 设置数据相关 ******************************************/
 
+    internal open fun setListNewData(data: MutableList<T>?) {
+        this.data = data ?: arrayListOf()
+    }
+
+    internal open fun addListData(index: Int, data: T) {
+        this.data.add(index, data)
+    }
+
+
+
     /**
      * setting up a new instance to data;
      *
      * 设置新的数据实例
      * @param data
      */
-    fun setNewData(data: MutableList<T>?) {
-        this.data = data ?: arrayListOf()
+    open fun setNewData(data: MutableList<T>?) {
+//        this.data = data ?: arrayListOf()
+        setListNewData(data)
         loadMoreModule?.rest()
         mLastPosition = -1
         notifyDataSetChanged()
@@ -1044,7 +1055,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      *
      * @param position
      */
-    fun addData(@IntRange(from = 0) position: Int, data: T) {
+    open fun addData(@IntRange(from = 0) position: Int, data: T) {
         this.data.add(position, data)
         notifyItemInserted(position + getHeaderLayoutCount())
         compatibilityDataSizeChanged(1)
@@ -1053,7 +1064,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     /**
      * add one new data
      */
-    fun addData(@NonNull data: T) {
+    open fun addData(@NonNull data: T) {
         this.data.add(data)
         notifyItemInserted(this.data.size + getHeaderLayoutCount())
         compatibilityDataSizeChanged(1)
@@ -1065,13 +1076,13 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * @param position the insert position
      * @param newData  the new data collection
      */
-    fun addData(@IntRange(from = 0) position: Int, newData: Collection<T>) {
+    open fun addData(@IntRange(from = 0) position: Int, newData: Collection<T>) {
         this.data.addAll(position, newData)
         notifyItemRangeInserted(position + getHeaderLayoutCount(), newData.size)
         compatibilityDataSizeChanged(newData.size)
     }
 
-    fun addData(@NonNull newData: Collection<T>) {
+    open fun addData(@NonNull newData: Collection<T>) {
         this.data.addAll(newData)
         notifyItemRangeInserted(this.data.size - newData.size + getHeaderLayoutCount(), newData.size)
         compatibilityDataSizeChanged(newData.size)
@@ -1082,7 +1093,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      *
      * @param position
      */
-    fun remove(@IntRange(from = 0) position: Int) {
+    open fun remove(@IntRange(from = 0) position: Int) {
         if (position >= data.size) {
             return
         }
@@ -1099,7 +1110,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     /**
      * change data
      */
-    fun setData(@IntRange(from = 0) index: Int, data: T) {
+    open fun setData(@IntRange(from = 0) index: Int, data: T) {
         this.data[index] = data
         notifyItemChanged(index + getHeaderLayoutCount())
     }
@@ -1110,7 +1121,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      *
      * @param newData data collection
      */
-    fun replaceData(newData: Collection<T>) {
+    open fun replaceData(newData: Collection<T>) {
         // 不是同一个引用才清空列表
         if (newData !== this.data) {
             this.data.clear()

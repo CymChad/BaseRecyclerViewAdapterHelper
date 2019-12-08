@@ -29,13 +29,14 @@
         <activity android:name=".MultiItemProviderUseActivity" />
         <activity android:name=".HeaderAndFooterUseActivity" />
         <activity android:name=".LoadMoreRefreshUseActivity" />
-        <activity android:name=".SectionUseActivity" />
+        <activity android:name=".SectionQuickUseActivity" />
         <activity android:name=".EmptyViewUseActivity" />
         <activity android:name=".ItemClickActivity" />
         <activity android:name=".DataBindingUseActivity" />
         <activity android:name=".DragAndSwipeUseActivity" />
         <activity android:name=".UpFetchUseActivity" />
         <activity android:name=".ExpandableItemActivity" />
+        <activity android:name=".Section2UseActivity" />
     </application>
 
 </manifest>

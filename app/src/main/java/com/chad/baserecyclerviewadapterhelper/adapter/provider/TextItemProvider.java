@@ -1,11 +1,15 @@
 package com.chad.baserecyclerviewadapterhelper.adapter.provider;
 
+import android.view.View;
+
 import androidx.annotation.NonNull;
+
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.ProviderMultiEntity;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.provider.BaseItemProvider;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,12 +38,12 @@ public class TextItemProvider extends BaseItemProvider<ProviderMultiEntity, Base
     }
 
     @Override
-    public void onClick(@NonNull BaseViewHolder helper, ProviderMultiEntity data, int position) {
+    public void onClick(@NonNull BaseViewHolder helper, @NotNull View view, ProviderMultiEntity data, int position) {
         Tips.show("Click: " + position);
     }
 
     @Override
-    public boolean onLongClick(@NotNull BaseViewHolder helper, ProviderMultiEntity data, int position) {
+    public boolean onLongClick(@NotNull BaseViewHolder helper, @NotNull View view, ProviderMultiEntity data, int position) {
         Tips.show("Long Click: " + position);
         return true;
     }

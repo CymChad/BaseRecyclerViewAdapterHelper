@@ -34,7 +34,7 @@ abstract class BaseProviderMultiAdapter<T, VH : BaseViewHolder>(data: MutableLis
      * 必须通过此方法，添加 provider
      * @param provider BaseItemProvider
      */
-    fun addItemProvider(provider: BaseItemProvider<T, VH>) {
+    open fun addItemProvider(provider: BaseItemProvider<T, VH>) {
         provider.weakAdapter = WeakReference(this)
         val viewType = provider.itemViewType
         mItemProviders.put(viewType, provider)
@@ -42,7 +42,7 @@ abstract class BaseProviderMultiAdapter<T, VH : BaseViewHolder>(data: MutableLis
 
     override fun onCreateDefViewHolder(parent: ViewGroup, viewType: Int): VH {
         val provider = mItemProviders.get(viewType)
-        checkNotNull(provider) { "No such provider found，please use addItemProvider() first!" }
+        checkNotNull(provider) { "ViewType: $viewType no such provider found，please use addItemProvider() first!" }
         provider.context = parent.context
         return createBaseViewHolder(parent, provider.layoutId)
     }
@@ -85,7 +85,7 @@ abstract class BaseProviderMultiAdapter<T, VH : BaseViewHolder>(data: MutableLis
                 val itemViewType = viewHolder.itemViewType
                 val provider = mItemProviders.get(itemViewType)
 
-                provider.onClick(viewHolder, data[position], position)
+                provider.onClick(viewHolder, it, data[position], position)
             }
         }
         if (getOnItemLongClickListener() == null) {
@@ -100,7 +100,7 @@ abstract class BaseProviderMultiAdapter<T, VH : BaseViewHolder>(data: MutableLis
 
                 val itemViewType = viewHolder.itemViewType
                 val provider = mItemProviders.get(itemViewType)
-                provider.onLongClick(viewHolder, data[position], position)
+                provider.onLongClick(viewHolder, it, data[position], position)
             }
         }
     }

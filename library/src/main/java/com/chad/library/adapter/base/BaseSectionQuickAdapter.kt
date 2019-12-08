@@ -1,5 +1,6 @@
 package com.chad.library.adapter.base
 
+import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import com.chad.library.adapter.base.entity.SectionEntity
 
@@ -53,9 +54,17 @@ abstract class BaseSectionQuickAdapter<T : SectionEntity, VH : BaseViewHolder>
         return super.isFixedViewType(type) || type == SectionEntity.HEADER_TYPE
     }
 
+    override fun onCreateDefViewHolder(parent: ViewGroup, viewType: Int): VH {
+        val holder = super.onCreateDefViewHolder(parent, viewType)
+        if (viewType == SectionEntity.HEADER_TYPE) {
+            setFullSpan(holder)
+        }
+        return holder
+    }
+
     override fun onBindViewHolder(holder: VH, position: Int) {
         if (holder.itemViewType == SectionEntity.HEADER_TYPE) {
-            setFullSpan(holder)
+//            setFullSpan(holder)
             convertHeader(holder, getRealItem(position))
         } else {
             super.onBindViewHolder(holder, position)

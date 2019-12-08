@@ -1,5 +1,7 @@
 package com.chad.baserecyclerviewadapterhelper.adapter.provider;
 
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -42,12 +44,12 @@ public class ImgItemProvider extends BaseItemProvider<ProviderMultiEntity, BaseV
     }
 
     @Override
-    public void onClick(@NonNull BaseViewHolder helper, ProviderMultiEntity data, int position) {
+    public void onClick(@NonNull BaseViewHolder helper, @NotNull View view, ProviderMultiEntity data, int position) {
         Tips.show("Click: " + position);
     }
 
     @Override
-    public boolean onLongClick(@NotNull BaseViewHolder helper, ProviderMultiEntity data, int position) {
+    public boolean onLongClick(@NotNull BaseViewHolder helper, @NotNull View view, ProviderMultiEntity data, int position) {
         Tips.show("Long Click: " + position);
         return true;
     }

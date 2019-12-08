@@ -48,23 +48,25 @@ public class TextImgItemProvider extends BaseItemProvider<ProviderMultiEntity, B
 
     /**
      * item 点击
+     *
      * @param helper
      * @param data
      * @param position
      */
     @Override
-    public void onClick(@NonNull BaseViewHolder helper, ProviderMultiEntity data, int position) {
+    public void onClick(@NonNull BaseViewHolder helper, @NotNull View view, ProviderMultiEntity data, int position) {
         Tips.show("Click: " + position);
     }
 
     @Override
-    public boolean onLongClick(@NotNull BaseViewHolder helper, ProviderMultiEntity data, int position) {
+    public boolean onLongClick(@NotNull BaseViewHolder helper, @NotNull View view, ProviderMultiEntity data, int position) {
         Tips.show("Long Click: " + position);
         return true;
     }
 
     /**
      * 子控件点击
+     *
      * @param helper
      * @param view
      * @param data

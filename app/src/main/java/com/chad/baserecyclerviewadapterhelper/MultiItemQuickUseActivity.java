@@ -24,13 +24,14 @@ public class MultiItemQuickUseActivity extends BaseActivity {
         setBackBtn();
 
         RecyclerView mRecyclerView = findViewById(R.id.rv_list);
+
         final List<QuickMultipleEntity> data = DataServer.getMultipleItemData();
         final MultipleItemQuickAdapter multipleItemAdapter = new MultipleItemQuickAdapter(data);
         final GridLayoutManager manager = new GridLayoutManager(this, 4);
         mRecyclerView.setLayoutManager(manager);
         multipleItemAdapter.setGridSpanSizeLookup(new GridSpanSizeLookup() {
             @Override
-            public int getSpanSize(GridLayoutManager gridLayoutManager, int position) {
+            public int getSpanSize(GridLayoutManager gridLayoutManager, int viewType, int position) {
                 return data.get(position).getSpanSize();
             }
         });

@@ -16,9 +16,9 @@ import java.util.List;
  */
 public class DataServer {
 
-    private static final String HTTPS_AVATARS1_GITHUBUSERCONTENT_COM_LINK = "https://avatars1.githubusercontent.com/u/7698209?v=3&s=460";
-    private static final String CYM_CHAD = "CymChad";
-    private static final String CHAY_CHAN = "ChayChan";
+    public static final String HTTPS_AVATARS1_GITHUBUSERCONTENT_COM_LINK = "https://avatars1.githubusercontent.com/u/7698209?v=3&s=460";
+    public static final String CYM_CHAD = "CymChad";
+    public static final String CHAY_CHAN = "ChayChan";
 
     private DataServer() {
     }
