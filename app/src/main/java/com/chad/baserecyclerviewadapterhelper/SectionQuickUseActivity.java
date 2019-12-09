@@ -6,7 +6,7 @@ import android.view.View;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.chad.baserecyclerviewadapterhelper.adapter.SectionQuickAdapter;
+import com.chad.baserecyclerviewadapterhelper.adapter.section.SectionQuickAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.decoration.GridSectionAverageGapItemDecoration;

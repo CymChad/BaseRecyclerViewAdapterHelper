@@ -1,8 +1,9 @@
-package com.chad.baserecyclerviewadapterhelper.adapter.provider;
+package com.chad.baserecyclerviewadapterhelper.adapter.multi.provider;
 
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.ProviderMultiEntity;
@@ -11,30 +12,35 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.provider.BaseItemProvider;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
 
 /**
  * https://github.com/chaychan
  *
  * @author ChayChan
- * @description: Text ItemProvider
+ * @description: Img ItemProvider
  * @date 2018/3/30  11:39
  */
 
-public class TextItemProvider extends BaseItemProvider<ProviderMultiEntity, BaseViewHolder> {
+public class ImgItemProvider extends BaseItemProvider<ProviderMultiEntity, BaseViewHolder> {
+
     @Override
     public int getItemViewType() {
-        return ProviderMultiEntity.TEXT;
+        return ProviderMultiEntity.IMG;
     }
 
     @Override
     public int getLayoutId() {
-        return R.layout.item_text_view;
+        return R.layout.item_image_view;
     }
 
     @Override
-    public void convert(@NotNull BaseViewHolder helper, @Nullable ProviderMultiEntity data) {
-        helper.setText(R.id.tv, "CymChad content : " + helper.getAdapterPosition());
+    public void convert(@NonNull BaseViewHolder helper, @Nullable ProviderMultiEntity data) {
+        if (helper.getAdapterPosition() % 2 == 0) {
+            helper.setImageResource(R.id.iv, R.mipmap.animation_img1);
+        } else {
+            helper.setImageResource(R.id.iv, R.mipmap.animation_img2);
+        }
     }
 
     @Override

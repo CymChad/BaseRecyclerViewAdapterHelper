@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.provider.BaseItemProvider
-import java.lang.ref.WeakReference
 
 /**
  * 当有多种条目的时候，避免在convert()中做太多的业务逻辑，把逻辑放在对应的 ItemProvider 中。
@@ -35,7 +34,7 @@ abstract class BaseProviderMultiAdapter<T, VH : BaseViewHolder>(data: MutableLis
      * @param provider BaseItemProvider
      */
     open fun addItemProvider(provider: BaseItemProvider<T, VH>) {
-        provider.weakAdapter = WeakReference(this)
+        provider.setAdapter(this)
         val viewType = provider.itemViewType
         mItemProviders.put(viewType, provider)
     }

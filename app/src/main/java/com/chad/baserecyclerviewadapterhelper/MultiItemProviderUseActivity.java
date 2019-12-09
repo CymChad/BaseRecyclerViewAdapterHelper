@@ -3,7 +3,7 @@ package com.chad.baserecyclerviewadapterhelper;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.chad.baserecyclerviewadapterhelper.adapter.ProviderMultiAdapter;
+import com.chad.baserecyclerviewadapterhelper.adapter.multi.ProviderMultiAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.ProviderMultiEntity;

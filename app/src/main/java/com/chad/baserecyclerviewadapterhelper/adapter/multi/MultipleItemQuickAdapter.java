@@ -1,4 +1,4 @@
-package com.chad.baserecyclerviewadapterhelper.adapter;
+package com.chad.baserecyclerviewadapterhelper.adapter.multi;
 
 import androidx.annotation.NonNull;
 import com.chad.baserecyclerviewadapterhelper.R;

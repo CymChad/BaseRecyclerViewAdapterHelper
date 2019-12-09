@@ -36,7 +36,7 @@
         <activity android:name=".DragAndSwipeUseActivity" />
         <activity android:name=".UpFetchUseActivity" />
         <activity android:name=".ExpandableItemActivity" />
-        <activity android:name=".Section2UseActivity" />
+        <activity android:name=".NodeUseActivity" />
     </application>
 
 </manifest>

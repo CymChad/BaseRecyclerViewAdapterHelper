@@ -47,7 +47,7 @@ class HomeActivity : AppCompatActivity() {
                 HomeEntity(headerTitle = "Adapter 类型"),
                 HomeEntity("MultipleItem", ChooseMultipleItemUseTypeActivity::class.java, R.mipmap.gv_multipleltem),
                 HomeEntity("Quick Section", SectionQuickUseActivity::class.java, R.mipmap.gv_section),
-                HomeEntity("Section2", Section2UseActivity::class.java, R.mipmap.gv_section),
+                HomeEntity("Node", NodeUseActivity::class.java, R.mipmap.gv_section),
 
                 HomeEntity(headerTitle = "功能模块"),
 

@@ -1,7 +1,7 @@
 package com.chad.library.adapter.base.module
 
+import com.chad.library.adapter.base.BaseNodeAdapter
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseSectionAdapter
 import com.chad.library.adapter.base.entity.NSectionEntity
 
 /**
@@ -9,7 +9,7 @@ import com.chad.library.adapter.base.entity.NSectionEntity
  */
 interface ExpandableModule2
 
-open class BaseExpandableModule2(private val adapter: BaseSectionAdapter<*>) {
+open class BaseExpandableModule2(private val adapter: BaseNodeAdapter<*>) {
 
     var isDefaultExpandAll = true
 

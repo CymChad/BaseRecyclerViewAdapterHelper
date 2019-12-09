@@ -1,9 +1,8 @@
-package com.chad.baserecyclerviewadapterhelper.adapter.provider;
+package com.chad.baserecyclerviewadapterhelper.adapter.multi.provider;
 
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.ProviderMultiEntity;
@@ -12,30 +11,34 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.provider.BaseItemProvider;
 
 import org.jetbrains.annotations.NotNull;
-
+import org.jetbrains.annotations.Nullable;
 
 /**
  * https://github.com/chaychan
  *
  * @author ChayChan
- * @description: Img ItemProvider
+ * @description: Text Img ItemProvider
  * @date 2018/3/30  11:39
  */
+public class TextImgItemProvider extends BaseItemProvider<ProviderMultiEntity, BaseViewHolder> {
 
-public class ImgItemProvider extends BaseItemProvider<ProviderMultiEntity, BaseViewHolder> {
+    public TextImgItemProvider() {
+        addChildClickViewIds(R.id.tv);
+    }
 
     @Override
     public int getItemViewType() {
-        return ProviderMultiEntity.IMG;
+        return ProviderMultiEntity.IMG_TEXT;
     }
 
     @Override
     public int getLayoutId() {
-        return R.layout.item_image_view;
+        return R.layout.item_img_text_view;
     }
 
     @Override
-    public void convert(@NonNull BaseViewHolder helper, @Nullable ProviderMultiEntity data) {
+    public void convert(@NotNull BaseViewHolder helper, @Nullable ProviderMultiEntity data) {
+        helper.setText(R.id.tv, "CymChad " + helper.getAdapterPosition());
         if (helper.getAdapterPosition() % 2 == 0) {
             helper.setImageResource(R.id.iv, R.mipmap.animation_img1);
         } else {
@@ -43,6 +46,13 @@ public class ImgItemProvider extends BaseItemProvider<ProviderMultiEntity, BaseV
         }
     }
 
+    /**
+     * item 点击
+     *
+     * @param helper
+     * @param data
+     * @param position
+     */
     @Override
     public void onClick(@NonNull BaseViewHolder helper, @NotNull View view, ProviderMultiEntity data, int position) {
         Tips.show("Click: " + position);
@@ -52,5 +62,20 @@ public class ImgItemProvider extends BaseItemProvider<ProviderMultiEntity, BaseV
     public boolean onLongClick(@NotNull BaseViewHolder helper, @NotNull View view, ProviderMultiEntity data, int position) {
         Tips.show("Long Click: " + position);
         return true;
+    }
+
+    /**
+     * 子控件点击
+     *
+     * @param helper
+     * @param view
+     * @param data
+     * @param position
+     */
+    @Override
+    public void onChildClick(@NotNull BaseViewHolder helper, @NotNull View view, ProviderMultiEntity data, int position) {
+        if (view.getId() == R.id.tv) {
+            Tips.show("TextView Click: " + position);
+        }
     }
 }

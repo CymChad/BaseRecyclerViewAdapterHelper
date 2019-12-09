@@ -1,8 +1,8 @@
-package com.chad.baserecyclerviewadapterhelper.adapter;
+package com.chad.baserecyclerviewadapterhelper.adapter.multi;
 
-import com.chad.baserecyclerviewadapterhelper.adapter.provider.ImgItemProvider;
-import com.chad.baserecyclerviewadapterhelper.adapter.provider.TextImgItemProvider;
-import com.chad.baserecyclerviewadapterhelper.adapter.provider.TextItemProvider;
+import com.chad.baserecyclerviewadapterhelper.adapter.multi.provider.ImgItemProvider;
+import com.chad.baserecyclerviewadapterhelper.adapter.multi.provider.TextImgItemProvider;
+import com.chad.baserecyclerviewadapterhelper.adapter.multi.provider.TextItemProvider;
 import com.chad.baserecyclerviewadapterhelper.entity.ProviderMultiEntity;
 import com.chad.library.adapter.base.BaseProviderMultiAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;

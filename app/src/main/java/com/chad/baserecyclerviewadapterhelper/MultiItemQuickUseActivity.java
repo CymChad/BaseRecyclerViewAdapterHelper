@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.chad.baserecyclerviewadapterhelper.adapter.MultipleItemQuickAdapter;
+import com.chad.baserecyclerviewadapterhelper.adapter.multi.MultipleItemQuickAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.QuickMultipleEntity;
