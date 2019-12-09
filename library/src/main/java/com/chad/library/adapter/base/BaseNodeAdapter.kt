@@ -78,7 +78,6 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
     }
 
 
-
     private fun generateSectionTag(): String? {
         return UUID.randomUUID().toString()
     }
@@ -120,10 +119,9 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
     fun collapse(@IntRange(from = 0) position: Int, animate: Boolean = true, notify: Boolean = true) {
         val node = this.data[position]
 
-
         if (node is BaseExpandNode && node.isExpanded) {
+            node.isExpanded = false
             if (node.childNode.isNullOrEmpty()) {
-                node.isExpanded = false
                 notifyItemChanged(position)
                 return
             }
@@ -131,6 +129,35 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
             this.data.removeAll(items)
             notifyItemChanged(position)
             notifyItemRangeRemoved(position + 1, items.size)
+        }
+    }
+
+    @JvmOverloads
+    fun expand(@IntRange(from = 0) position: Int, animate: Boolean = true, notify: Boolean = true) {
+        val node = this.data[position]
+
+        if (node is BaseExpandNode && !node.isExpanded) {
+            node.isExpanded = true
+            if (node.childNode.isNullOrEmpty()) {
+                notifyItemChanged(position)
+                return
+            }
+            val items = flatData(node.childNode!!)
+            this.data.addAll(position + 1, items)
+            notifyItemChanged(position)
+            notifyItemRangeInserted(position + 1, items.size)
+        }
+    }
+
+    @JvmOverloads
+    fun expandOrCollapse(@IntRange(from = 0) position: Int, animate: Boolean = true, notify: Boolean = true) {
+        val node = this.data[position]
+        if (node is BaseExpandNode) {
+            if (node.isExpanded) {
+                collapse(position, animate, notify)
+            } else {
+                expand(position, animate, notify)
+            }
         }
     }
 
