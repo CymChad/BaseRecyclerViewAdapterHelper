@@ -1,11 +1,13 @@
 package com.chad.baserecyclerviewadapterhelper;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.node.NodeAdapter;
+import com.chad.baserecyclerviewadapterhelper.animator.CustomAnimation3;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.entity.node.RootNode;
 import com.chad.baserecyclerviewadapterhelper.entity.node.SecondNode;
@@ -26,18 +28,20 @@ public class NodeUseActivity extends BaseActivity {
         setContentView(R.layout.activity_section_uer);
 
         setBackBtn();
-        setTitle("Section2 Use");
+        setTitle("Node Use");
 
         mRecyclerView = findViewById(R.id.rv_list);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
 //        mRecyclerView.addItemDecoration(new GridSectionAverageGapItemDecoration(10, 10, 20, 15));
 
-        final NodeAdapter sectionAdapter = new NodeAdapter();
+        final NodeAdapter nodeAdapter = new NodeAdapter();
+        View view = getLayoutInflater().inflate(R.layout.head_view, mRecyclerView, false);
+        nodeAdapter.addHeaderView(view);
 
+        mRecyclerView.setAdapter(nodeAdapter);
 
-        mRecyclerView.setAdapter(sectionAdapter);
-
-        sectionAdapter.setNewData(getEntity());
+        nodeAdapter.setAdapterAnimation(new CustomAnimation3());
+        nodeAdapter.setNewData(getEntity());
 
     }
 
@@ -51,14 +55,13 @@ public class NodeUseActivity extends BaseActivity {
             SecondNode itemEntity3 = new SecondNode(R.mipmap.click_head_img_0, "Root " + i + " - SecondNode 2");
             SecondNode itemEntity4 = new SecondNode(R.mipmap.click_head_img_0, "Root " + i + " - SecondNode 3");
             SecondNode itemEntity5 = new SecondNode(R.mipmap.click_head_img_0, "Root " + i + " - SecondNode 4");
-            SecondNode itemEntity6 = new SecondNode(R.mipmap.click_head_img_0, "Root " + i + " - SecondNode 5");
             List<BaseNode> items = new ArrayList<>();
             items.add(itemEntity1);
             items.add(itemEntity2);
             items.add(itemEntity3);
             items.add(itemEntity4);
             items.add(itemEntity5);
-//            items.add(itemEntity6);
+
 
             RootNode entity = new RootNode(items, "Root Node " + i);
 

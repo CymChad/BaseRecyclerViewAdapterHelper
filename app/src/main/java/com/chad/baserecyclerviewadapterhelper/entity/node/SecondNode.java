@@ -1,11 +1,8 @@
 package com.chad.baserecyclerviewadapterhelper.entity.node;
 
 import androidx.annotation.DrawableRes;
-
 import com.chad.library.adapter.base.entity.node.BaseNode;
-
 import org.jetbrains.annotations.Nullable;
-
 import java.util.List;
 
 public class SecondNode extends BaseNode {

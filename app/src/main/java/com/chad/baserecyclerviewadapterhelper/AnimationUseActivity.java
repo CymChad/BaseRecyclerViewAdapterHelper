@@ -1,11 +1,7 @@
 package com.chad.baserecyclerviewadapterhelper;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.Interpolator;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 
@@ -14,19 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.baserecyclerviewadapterhelper.adapter.AnimationAdapter;
+import com.chad.baserecyclerviewadapterhelper.animator.CustomAnimation1;
+import com.chad.baserecyclerviewadapterhelper.animator.CustomAnimation2;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.animation.BaseAnimation;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.kyleduo.switchbutton.SwitchButton;
-
-import org.jetbrains.annotations.NotNull;
-
-import static java.lang.Math.PI;
-import static java.lang.Math.pow;
-import static java.lang.Math.sin;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
@@ -141,50 +132,5 @@ public class AnimationUseActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * 自定义动画1
-     */
-    public class CustomAnimation1 implements BaseAnimation {
-        @NotNull
-        @Override
-        public Animator[] animators(@NotNull View view) {
-            Animator scaleY = ObjectAnimator.ofFloat(view, "scaleY", 1.3f, 1);
-            Animator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 1.3f, 1);
-            Animator alpha = ObjectAnimator.ofFloat(view, "alpha", 0, 1f);
 
-            scaleY.setDuration(350);
-            scaleX.setDuration(350);
-            alpha.setDuration(350);
-
-            scaleY.setInterpolator(new DecelerateInterpolator());
-            scaleX.setInterpolator(new DecelerateInterpolator());
-
-            return new Animator[]{scaleY, scaleX, alpha};
-        }
-    }
-
-    /**
-     * 自定义动画2
-     */
-    public class CustomAnimation2 implements BaseAnimation {
-        @NotNull
-        @Override
-        public Animator[] animators(@NotNull View view) {
-            Animator translationX =
-                    ObjectAnimator.ofFloat(view, "translationX", -view.getRootView().getWidth(), 0f);
-
-            translationX.setDuration(800);
-            translationX.setInterpolator(new MyInterpolator2());
-
-            return new Animator[]{translationX};
-        }
-
-        class MyInterpolator2 implements Interpolator {
-            @Override
-            public float getInterpolation(float input) {
-                float factor = 0.7f;
-                return (float) (pow(2.0, -10.0 * input) * sin((input - factor / 4) * (2 * PI) / factor) + 1);
-            }
-        }
-    }
 }
