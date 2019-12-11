@@ -1,4 +1,4 @@
-package com.chad.baserecyclerviewadapterhelper.entity.node;
+package com.chad.baserecyclerviewadapterhelper.entity.node.section;
 
 import com.chad.library.adapter.base.entity.node.BaseExpandNode;
 import com.chad.library.adapter.base.entity.node.BaseNode;

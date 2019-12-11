@@ -1,4 +1,4 @@
-package com.chad.baserecyclerviewadapterhelper.entity.node;
+package com.chad.baserecyclerviewadapterhelper.entity.node.tree;
 
 import com.chad.library.adapter.base.entity.node.BaseNode;
 
@@ -6,11 +6,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class RootFooterNode extends BaseNode {
-
+public class ThirdNode extends BaseNode {
     private String title;
 
-    public RootFooterNode(String title) {
+    public ThirdNode(String title) {
         this.title = title;
     }
 

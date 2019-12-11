@@ -7,11 +7,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.baserecyclerviewadapterhelper.R;
-import com.chad.baserecyclerviewadapterhelper.adapter.node.NodeSectionAdapter;
+import com.chad.baserecyclerviewadapterhelper.adapter.node.section.NodeSectionAdapter;
 import com.chad.baserecyclerviewadapterhelper.animator.CustomAnimation3;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
-import com.chad.baserecyclerviewadapterhelper.entity.node.RootNode;
-import com.chad.baserecyclerviewadapterhelper.entity.node.SecondNode;
+import com.chad.baserecyclerviewadapterhelper.entity.node.section.RootNode;
+import com.chad.baserecyclerviewadapterhelper.entity.node.section.ItemNode;
 import com.chad.library.adapter.base.entity.node.BaseNode;
 
 import java.util.ArrayList;
@@ -53,12 +53,12 @@ public class NodeSectionUseActivity extends BaseActivity {
         List<BaseNode> list = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
 
-            //Root Node
-            SecondNode itemEntity1 = new SecondNode(R.mipmap.click_head_img_0, "Root " + i + " - SecondNode 0");
-            SecondNode itemEntity2 = new SecondNode(R.mipmap.click_head_img_0, "Root " + i + " - SecondNode 1");
-            SecondNode itemEntity3 = new SecondNode(R.mipmap.click_head_img_0, "Root " + i + " - SecondNode 2");
-            SecondNode itemEntity4 = new SecondNode(R.mipmap.click_head_img_0, "Root " + i + " - SecondNode 3");
-            SecondNode itemEntity5 = new SecondNode(R.mipmap.click_head_img_0, "Root " + i + " - SecondNode 4");
+            //Item Node
+            ItemNode itemEntity1 = new ItemNode(R.mipmap.click_head_img_0, "Root " + i + " - SecondNode 0");
+            ItemNode itemEntity2 = new ItemNode(R.mipmap.click_head_img_0, "Root " + i + " - SecondNode 1");
+            ItemNode itemEntity3 = new ItemNode(R.mipmap.click_head_img_0, "Root " + i + " - SecondNode 2");
+            ItemNode itemEntity4 = new ItemNode(R.mipmap.click_head_img_0, "Root " + i + " - SecondNode 3");
+            ItemNode itemEntity5 = new ItemNode(R.mipmap.click_head_img_0, "Root " + i + " - SecondNode 4");
             List<BaseNode> items = new ArrayList<>();
             items.add(itemEntity1);
             items.add(itemEntity2);
@@ -66,15 +66,15 @@ public class NodeSectionUseActivity extends BaseActivity {
             items.add(itemEntity4);
             items.add(itemEntity5);
 
-
+            // Root Node
             RootNode entity = new RootNode(items, "Root Node " + i);
 
             if (i == 1) {
+                // 第1号数据默认不展开
                 entity.setExpanded(false);
             }
 
             list.add(entity);
-
         }
         return list;
     }

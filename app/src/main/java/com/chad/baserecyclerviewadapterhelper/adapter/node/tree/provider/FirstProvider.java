@@ -1,9 +1,9 @@
-package com.chad.baserecyclerviewadapterhelper.adapter.node.provider;
+package com.chad.baserecyclerviewadapterhelper.adapter.node.tree.provider;
 
 import android.view.View;
 
 import com.chad.baserecyclerviewadapterhelper.R;
-import com.chad.baserecyclerviewadapterhelper.entity.node.RootNode;
+import com.chad.baserecyclerviewadapterhelper.entity.node.tree.FirstNode;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.node.BaseNode;
 import com.chad.library.adapter.base.provider.BaseNodeProvider;
@@ -11,22 +11,28 @@ import com.chad.library.adapter.base.provider.BaseNodeProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class RootNodeProvider extends BaseNodeProvider<BaseViewHolder> {
+public class FirstProvider extends BaseNodeProvider<BaseViewHolder> {
 
     @Override
     public int getItemViewType() {
-        return 0;
+        return 1;
     }
 
     @Override
     public int getLayoutId() {
-        return R.layout.def_section_head;
+        return R.layout.item_node_first;
     }
 
     @Override
     public void convert(@NotNull BaseViewHolder helper, @Nullable BaseNode data) {
-        RootNode entity = (RootNode) data;
-        helper.setText(R.id.header, entity.getTitle());
+        FirstNode entity = (FirstNode) data;
+        helper.setText(R.id.title, entity.getTitle());
+
+        if (entity.isExpanded()) {
+            helper.setImageResource(R.id.iv, R.mipmap.arrow_b);
+        } else {
+            helper.setImageResource(R.id.iv, R.mipmap.arrow_r);
+        }
     }
 
     @Override

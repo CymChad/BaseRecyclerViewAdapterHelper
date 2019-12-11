@@ -1,8 +1,8 @@
-package com.chad.baserecyclerviewadapterhelper.adapter.node.provider;
+package com.chad.baserecyclerviewadapterhelper.adapter.node.section.provider;
 
 import android.view.View;
 import com.chad.baserecyclerviewadapterhelper.R;
-import com.chad.baserecyclerviewadapterhelper.entity.node.RootFooterNode;
+import com.chad.baserecyclerviewadapterhelper.entity.node.section.RootFooterNode;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.node.BaseNode;

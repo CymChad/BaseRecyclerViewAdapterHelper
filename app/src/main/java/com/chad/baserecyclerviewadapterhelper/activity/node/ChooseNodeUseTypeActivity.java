@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.chad.baserecyclerviewadapterhelper.R;
-import com.chad.baserecyclerviewadapterhelper.activity.multi.MultiItemDelegateUseActivity;
-import com.chad.baserecyclerviewadapterhelper.activity.multi.MultiItemProviderUseActivity;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 
 public class ChooseNodeUseTypeActivity extends BaseActivity {
@@ -27,15 +25,9 @@ public class ChooseNodeUseTypeActivity extends BaseActivity {
         findViewById(R.id.card_view2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChooseNodeUseTypeActivity.this, MultiItemDelegateUseActivity.class));
+                startActivity(new Intent(ChooseNodeUseTypeActivity.this, NodeTreeUseActivity.class));
             }
         });
 
-        findViewById(R.id.card_view3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ChooseNodeUseTypeActivity.this, MultiItemProviderUseActivity.class));
-            }
-        });
     }
 }

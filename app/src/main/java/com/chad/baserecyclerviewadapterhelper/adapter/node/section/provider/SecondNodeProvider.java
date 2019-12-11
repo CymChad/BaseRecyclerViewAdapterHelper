@@ -1,9 +1,9 @@
-package com.chad.baserecyclerviewadapterhelper.adapter.node.provider;
+package com.chad.baserecyclerviewadapterhelper.adapter.node.section.provider;
 
 import android.view.View;
 
 import com.chad.baserecyclerviewadapterhelper.R;
-import com.chad.baserecyclerviewadapterhelper.entity.node.SecondNode;
+import com.chad.baserecyclerviewadapterhelper.entity.node.section.ItemNode;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.node.BaseNode;
 import com.chad.library.adapter.base.provider.BaseNodeProvider;
@@ -29,7 +29,7 @@ public class SecondNodeProvider extends BaseNodeProvider<BaseViewHolder> {
             return;
         }
 
-        SecondNode entity = (SecondNode) data;
+        ItemNode entity = (ItemNode) data;
         helper.setImageResource(R.id.iv, entity.getImg());
         helper.setText(R.id.tv, entity.getName());
     }

@@ -39,6 +39,7 @@
         <activity android:name=".activity.node.NodeSectionUseActivity" />
         <activity android:name=".activity.DiffUtilActivity" />
         <activity android:name=".activity.node.ChooseNodeUseTypeActivity" />
+        <activity android:name=".activity.node.NodeTreeUseActivity" />
     </application>
 
 </manifest>
