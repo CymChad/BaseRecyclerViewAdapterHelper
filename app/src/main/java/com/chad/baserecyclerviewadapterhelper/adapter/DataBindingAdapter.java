@@ -12,7 +12,9 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author: limuyang
  * @date: 2019-12-05
- * @Description:
+ * @Description: DataBinding Adapter
+ *
+ * 这里的ViewHolder使用 {@link BaseDataBindingViewHolder}
  */
 public class DataBindingAdapter extends BaseQuickAdapter<Movie, BaseDataBindingViewHolder<ItemMovieBinding>> {
 

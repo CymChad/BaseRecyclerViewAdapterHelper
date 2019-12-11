@@ -21,7 +21,7 @@ import java.util.Random;
  */
 public class DataBindingUseActivity extends BaseActivity {
 
-    DataBindingAdapter adapter = new DataBindingAdapter();
+    private DataBindingAdapter adapter = new DataBindingAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

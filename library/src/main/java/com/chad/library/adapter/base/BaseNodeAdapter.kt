@@ -72,13 +72,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
         return holder
     }
 
-//    override fun getDefItemCount(): Int {
-//        allDataCount(data, 0)
-//        return super.getDefItemCount()
-//    }
-
-    // TODO 数据设置方法有问题
-
+    /*************************** 重写数据设置方法 ***************************/
     override fun setListNewData(data: MutableList<BaseNode>?) {
         this.data = if (data == null) {
             arrayListOf()
@@ -87,49 +81,79 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
         }
     }
 
-    override fun setListNewData(index: Int, data: BaseNode) {
+    override fun addData(position: Int, data: BaseNode) {
+        addData(position, arrayListOf(data))
+    }
+
+    override fun addData(data: BaseNode) {
+        addData(arrayListOf(data))
+    }
+
+    override fun addData(position: Int, newData: Collection<BaseNode>) {
+        val nodes = flatData(newData)
+        this.data.addAll(position, nodes)
+        notifyItemRangeInserted(position + getHeaderLayoutCount(), nodes.size)
+        compatibilityDataSizeChanged(nodes.size)
+    }
+
+    override fun addData(newData: Collection<BaseNode>) {
+        val nodes = flatData(newData)
+        this.data.addAll(nodes)
+        notifyItemRangeInserted(this.data.size - nodes.size + getHeaderLayoutCount(), nodes.size)
+        compatibilityDataSizeChanged(nodes.size)
+    }
+
+    override fun remove(position: Int) {
+        if (position >= data.size) {
+            return
+        }
+
+        //被移除的item数量
+        var removeCount = 0
+
+        val node = this.data[position]
+        //移除子项
+        if (!node.childNode.isNullOrEmpty()) {
+            val items = flatData(node.childNode!!)
+            this.data.removeAll(items)
+            removeCount = items.size
+        }
+        //移除node自己
+        this.data.removeAt(position)
+        removeCount += 1
+
+        // 移除脚部
+        if (node is NodeFooterImp && node.footerNode != null) {
+            this.data.removeAt(position)
+            removeCount += 1
+        }
+
+        notifyItemRangeRemoved(position + getHeaderLayoutCount(), removeCount)
+        compatibilityDataSizeChanged(0)
+    }
+
+    override fun setData(index: Int, data: BaseNode) {
+        super.setData(index, data)
         val flatData = flatData(arrayListOf(data))
         flatData.forEachIndexed { i, baseNode ->
             this.data[index + i] = baseNode
         }
+        notifyItemRangeChanged(index + getHeaderLayoutCount(), flatData.size)
     }
 
-    override fun addListData(index: Int, data: BaseNode) {
-        this.data.addAll(index, flatData(arrayListOf(data)))
-    }
-
-    override fun addListData(data: BaseNode) {
-        this.data.addAll(flatData(arrayListOf(data)))
-    }
-
-    override fun addListData(newData: Collection<BaseNode>) {
-        this.data.addAll(flatData(newData))
-    }
-
-    override fun addListData(position: Int, newData: Collection<BaseNode>) {
-        this.data.addAll(position, flatData(newData))
-    }
-
-    override fun removeListData(position: Int) {
-        val node = this.data[position]
-
-        if (!node.childNode.isNullOrEmpty()) {
-            val items = flatData(node.childNode!!)
-            this.data.removeAll(items)
-        }
-
-        this.data.removeAt(position)
-    }
-
-    override fun replaceListData(newData: Collection<BaseNode>) {
-        if (newData !== this.data) {
+    override fun replaceData(newData: Collection<BaseNode>) {
+        // 不是同一个引用才清空列表
+        if (newData != this.data) {
             this.data.clear()
             this.data.addAll(flatData(newData))
         }
+        notifyDataSetChanged()
     }
 
+    /*************************** 重写数据设置方法 END ***************************/
+
     /**
-     * 将输入的嵌套类型数组循环递归，扁平化
+     * 将输入的嵌套类型数组循环递归，数据扁平化
      * @param list List<BaseNode>
      * @return MutableList<BaseNode>
      */
@@ -150,7 +174,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
             }
 
             if (element is NodeFooterImp) {
-                element.getSectionFooterEntity()?.let {
+                element.footerNode?.let {
                     newList.add(it)
                 }
             }
@@ -239,24 +263,24 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
         }
     }
 
-
-    fun findParentNode(node: BaseNode): BaseNode? {
-        //TODO
+    /**
+     * 查找父节点。如果不存在，则返回-1
+     * @param node BaseNode
+     * @return Int 父节点的position
+     */
+    fun findParentNode(node: BaseNode): Int {
         val pos = this.data.indexOf(node)
         if (pos == 0) {
-            return null
+            return -1
         }
 
         for (i in pos - 1 downTo 0) {
             val tempNode = this.data[i]
-            tempNode.childNode?.let {
-                if (it.contains(node)) {
-                    return tempNode
-                }
+            if (tempNode.childNode?.contains(node) == true) {
+                return i
             }
         }
-
-        return null
+        return -1
     }
 
     //统计

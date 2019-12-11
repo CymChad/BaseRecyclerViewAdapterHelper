@@ -25,7 +25,7 @@ public class NodeUseActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_section_uer);
+        setContentView(R.layout.activity_node_section);
 
         setBackBtn();
         setTitle("Node Use");
@@ -35,7 +35,10 @@ public class NodeUseActivity extends BaseActivity {
 //        mRecyclerView.addItemDecoration(new GridSectionAverageGapItemDecoration(10, 10, 20, 15));
 
         final NodeAdapter nodeAdapter = new NodeAdapter();
+
+        // 顶部header
         View view = getLayoutInflater().inflate(R.layout.head_view, mRecyclerView, false);
+        view.findViewById(R.id.iv).setVisibility(View.GONE);
         nodeAdapter.addHeaderView(view);
 
         mRecyclerView.setAdapter(nodeAdapter);
@@ -47,6 +50,7 @@ public class NodeUseActivity extends BaseActivity {
             @Override
             public void run() {
                 System.out.println("------------->>>>  " + nodeAdapter.findParentNode(nodeAdapter.getData().get(1)));
+                nodeAdapter.remove(0);
 
             }
         }, 2000);

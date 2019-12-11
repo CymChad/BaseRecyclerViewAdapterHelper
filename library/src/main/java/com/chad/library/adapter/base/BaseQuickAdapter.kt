@@ -1026,42 +1026,9 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 
     /*************************** 设置数据相关 ******************************************/
 
-    protected open fun setListNewData(data: MutableList<T>?) {
+    internal open fun setListNewData(data: MutableList<T>?) {
         this.data = data ?: arrayListOf()
     }
-
-    protected open fun setListNewData(@IntRange(from = 0) index: Int, data: T) {
-        this.data[index] = data
-    }
-
-    protected open fun addListData(index: Int, data: T) {
-        this.data.add(index, data)
-    }
-
-    protected open fun addListData(data: T) {
-        this.data.add(data)
-    }
-
-    protected open fun addListData(@IntRange(from = 0) position: Int, newData: Collection<T>) {
-        this.data.addAll(position, newData)
-    }
-
-    protected open fun addListData(newData: Collection<T>) {
-        this.data.addAll(newData)
-    }
-
-    protected open fun removeListData(@IntRange(from = 0) position: Int) {
-        this.data.removeAt(position)
-    }
-
-    protected open fun replaceListData(newData: Collection<T>) {
-        // 不是同一个引用才清空列表
-        if (newData !== this.data) {
-            this.data.clear()
-            this.data.addAll(newData)
-        }
-    }
-
 
     /**
      * setting up a new instance to data;
@@ -1069,7 +1036,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * 设置新的数据实例
      * @param data
      */
-    fun setNewData(data: MutableList<T>?) {
+    open fun setNewData(data: MutableList<T>?) {
 //        this.data = data ?: arrayListOf()
         setListNewData(data)
         loadMoreModule?.rest()
@@ -1082,9 +1049,8 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      *
      * @param position
      */
-    fun addData(@IntRange(from = 0) position: Int, data: T) {
-//        this.data.add(position, data)
-        addListData(position, data)
+    open fun addData(@IntRange(from = 0) position: Int, data: T) {
+        this.data.add(position, data)
         notifyItemInserted(position + getHeaderLayoutCount())
         compatibilityDataSizeChanged(1)
     }
@@ -1092,9 +1058,8 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     /**
      * add one new data
      */
-    fun addData(@NonNull data: T) {
-//        this.data.add(data)
-        addListData(data)
+    open fun addData(@NonNull data: T) {
+        this.data.add(data)
         notifyItemInserted(this.data.size + getHeaderLayoutCount())
         compatibilityDataSizeChanged(1)
     }
@@ -1105,16 +1070,14 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * @param position the insert position
      * @param newData  the new data collection
      */
-    fun addData(@IntRange(from = 0) position: Int, newData: Collection<T>) {
-//        this.data.addAll(position, newData)
-        addListData(position, newData)
+    open fun addData(@IntRange(from = 0) position: Int, newData: Collection<T>) {
+        this.data.addAll(position, newData)
         notifyItemRangeInserted(position + getHeaderLayoutCount(), newData.size)
         compatibilityDataSizeChanged(newData.size)
     }
 
-    fun addData(@NonNull newData: Collection<T>) {
-//        this.data.addAll(newData)
-        addListData(newData)
+    open fun addData(@NonNull newData: Collection<T>) {
+        this.data.addAll(newData)
         notifyItemRangeInserted(this.data.size - newData.size + getHeaderLayoutCount(), newData.size)
         compatibilityDataSizeChanged(newData.size)
     }
@@ -1124,15 +1087,14 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      *
      * @param position
      */
-    fun remove(@IntRange(from = 0) position: Int) {
+    open fun remove(@IntRange(from = 0) position: Int) {
         if (position >= data.size) {
             return
         }
         // 如果存在折叠\展开模块，先将其移除
         expandableModule?.removeExpandable(position)
 
-//        this.data.removeAt(position)
-        removeListData(position)
+        this.data.removeAt(position)
         val internalPosition = position + getHeaderLayoutCount()
         notifyItemRemoved(internalPosition)
         compatibilityDataSizeChanged(0)
@@ -1142,9 +1104,8 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     /**
      * change data
      */
-    fun setData(@IntRange(from = 0) index: Int, data: T) {
-//        this.data[index] = data
-        setListNewData(index, data)
+    open fun setData(@IntRange(from = 0) index: Int, data: T) {
+        this.data[index] = data
         notifyItemChanged(index + getHeaderLayoutCount())
     }
 
@@ -1156,11 +1117,10 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      */
     open fun replaceData(newData: Collection<T>) {
         // 不是同一个引用才清空列表
-//        if (newData !== this.data) {
-//            this.data.clear()
-//            this.data.addAll(newData)
-//        }
-        replaceListData(newData)
+        if (newData != this.data) {
+            this.data.clear()
+            this.data.addAll(newData)
+        }
         notifyDataSetChanged()
     }
 
@@ -1169,7 +1129,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      *
      * @param size Need compatible data size
      */
-    private fun compatibilityDataSizeChanged(size: Int) {
+    protected fun compatibilityDataSizeChanged(size: Int) {
         if (this.data.size == size) {
             notifyDataSetChanged()
         }
