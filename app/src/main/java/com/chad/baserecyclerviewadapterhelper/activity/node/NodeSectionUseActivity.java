@@ -1,4 +1,4 @@
-package com.chad.baserecyclerviewadapterhelper;
+package com.chad.baserecyclerviewadapterhelper.activity.node;
 
 import android.os.Bundle;
 import android.view.View;
@@ -6,7 +6,8 @@ import android.view.View;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.chad.baserecyclerviewadapterhelper.adapter.node.NodeAdapter;
+import com.chad.baserecyclerviewadapterhelper.R;
+import com.chad.baserecyclerviewadapterhelper.adapter.node.NodeSectionAdapter;
 import com.chad.baserecyclerviewadapterhelper.animator.CustomAnimation3;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.entity.node.RootNode;
@@ -19,7 +20,7 @@ import java.util.List;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class NodeUseActivity extends BaseActivity {
+public class NodeSectionUseActivity extends BaseActivity {
     private RecyclerView mRecyclerView;
 
     @Override
@@ -28,13 +29,13 @@ public class NodeUseActivity extends BaseActivity {
         setContentView(R.layout.activity_node_section);
 
         setBackBtn();
-        setTitle("Node Use");
+        setTitle("Node Use (Section)");
 
         mRecyclerView = findViewById(R.id.rv_list);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
 //        mRecyclerView.addItemDecoration(new GridSectionAverageGapItemDecoration(10, 10, 20, 15));
 
-        final NodeAdapter nodeAdapter = new NodeAdapter();
+        final NodeSectionAdapter nodeAdapter = new NodeSectionAdapter();
 
         // 顶部header
         View view = getLayoutInflater().inflate(R.layout.head_view, mRecyclerView, false);
@@ -46,14 +47,6 @@ public class NodeUseActivity extends BaseActivity {
         nodeAdapter.setAdapterAnimation(new CustomAnimation3());
         nodeAdapter.setNewData(getEntity());
 
-        mRecyclerView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("------------->>>>  " + nodeAdapter.findParentNode(nodeAdapter.getData().get(1)));
-                nodeAdapter.remove(0);
-
-            }
-        }, 2000);
     }
 
     private List<BaseNode> getEntity() {

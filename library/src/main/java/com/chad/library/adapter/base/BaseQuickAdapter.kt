@@ -59,15 +59,6 @@ private interface BaseQuickAdapterModuleImp {
      * @param baseQuickAdapter BaseQuickAdapter<*, *>
      * @return BaseExpandableModule
      */
-    fun <T> addExpandableModule(baseQuickAdapter: BaseQuickAdapter<T, *>): BaseExpandableModule<T> {
-        return BaseExpandableModule(baseQuickAdapter)
-    }
-
-    /**
-     * 重写此方法，返回自定义模块
-     * @param baseQuickAdapter BaseQuickAdapter<*, *>
-     * @return BaseExpandableModule
-     */
     fun addDraggableModule(baseQuickAdapter: BaseQuickAdapter<*, *>): BaseDraggableModule {
         return BaseDraggableModule(baseQuickAdapter)
     }
@@ -134,9 +125,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     var upFetchModule: BaseUpFetchModule? = null
         private set
 
-    var expandableModule: BaseExpandableModule<T>? = null
-        private set
-
     var draggableModule: BaseDraggableModule? = null
         private set
 
@@ -171,9 +159,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         }
         if (this is UpFetchModule) {
             upFetchModule = this.addUpFetchModule(this)
-        }
-        if (this is ExpandableModule) {
-            expandableModule = this.addExpandableModule(this)
         }
         if (this is DraggableModule) {
             draggableModule = this.addDraggableModule(this)
@@ -422,17 +407,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 
     fun getRealItem(@IntRange(from = 0) position: Int): T? {
         return data[position - getHeaderLayoutCount()]
-    }
-
-    /**
-     * 获取此 item 的所属的夫 item 位置。
-     * 如果此 Adapter 没有实现折叠展开模块[ExpandableModule]，则直接返回 -1
-     *
-     * @return position
-     */
-    fun getParentPosition(item: T): Int {
-        // If have ExpandableModule
-        return expandableModule?.getParentPosition(item) ?: -1
     }
 
     private val childClickViewIds = LinkedHashSet<Int>()
@@ -1091,9 +1065,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         if (position >= data.size) {
             return
         }
-        // 如果存在折叠\展开模块，先将其移除
-        expandableModule?.removeExpandable(position)
-
         this.data.removeAt(position)
         val internalPosition = position + getHeaderLayoutCount()
         notifyItemRemoved(internalPosition)

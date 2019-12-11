@@ -1,4 +1,4 @@
-package com.chad.baserecyclerviewadapterhelper;
+package com.chad.baserecyclerviewadapterhelper.activity;
 
 import android.os.Bundle;
 import android.view.View;
@@ -6,6 +6,7 @@ import android.view.View;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.adapter.EmptyViewAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;

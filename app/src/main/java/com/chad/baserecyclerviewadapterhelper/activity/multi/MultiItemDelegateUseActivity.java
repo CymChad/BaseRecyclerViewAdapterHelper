@@ -1,22 +1,21 @@
-package com.chad.baserecyclerviewadapterhelper;
+package com.chad.baserecyclerviewadapterhelper.activity.multi;
 
 import android.os.Bundle;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.chad.baserecyclerviewadapterhelper.adapter.multi.ProviderMultiAdapter;
+
+import com.chad.baserecyclerviewadapterhelper.R;
+import com.chad.baserecyclerviewadapterhelper.adapter.DelegateMultiAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
-import com.chad.baserecyclerviewadapterhelper.entity.ProviderMultiEntity;
+import com.chad.baserecyclerviewadapterhelper.entity.DelegateMultiEntity;
+
 import java.util.List;
 
-/**
- * @author: limuyang
- * @date: 2019-12-04
- * @Description:
- */
-public class MultiItemProviderUseActivity extends BaseActivity {
+public class MultiItemDelegateUseActivity extends BaseActivity {
 
-    private ProviderMultiAdapter adapter = new ProviderMultiAdapter();
+    private DelegateMultiAdapter adapter = new DelegateMultiAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +38,7 @@ public class MultiItemProviderUseActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        final List<ProviderMultiEntity> data = DataServer.getProviderMultiItemData();
+        final List<DelegateMultiEntity> data = DataServer.getDelegateMultiItemData();
         adapter.setNewData(data);
     }
 }

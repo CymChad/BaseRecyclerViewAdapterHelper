@@ -1,4 +1,4 @@
-package com.chad.baserecyclerviewadapterhelper.adapter.section;
+package com.chad.baserecyclerviewadapterhelper.adapter;
 
 import androidx.annotation.NonNull;
 

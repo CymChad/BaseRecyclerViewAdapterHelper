@@ -5,7 +5,7 @@ import androidx.annotation.LayoutRes
 import com.chad.library.adapter.base.entity.SectionEntity
 
 /**
- * 带头部的 Adapter，由于本质属于多布局，所以继承自[BaseMultiItemQuickAdapter]
+ * 快速实现带头部的 Adapter，由于本质属于多布局，所以继承自[BaseMultiItemQuickAdapter]
  * @param T : SectionEntity
  * @param VH : BaseViewHolder
  * @property sectionHeadResId Int

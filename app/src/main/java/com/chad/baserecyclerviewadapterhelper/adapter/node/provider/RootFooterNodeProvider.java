@@ -35,7 +35,7 @@ public class RootFooterNodeProvider extends BaseNodeProvider<BaseViewHolder> {
     @Override
     public void onChildClick(@NotNull BaseViewHolder helper, @NotNull View view, BaseNode data, int position) {
         if (view.getId() == R.id.footerTv) {
-            Tips.show("Footer Node Click");
+            Tips.show("Footer Node Click : " + position);
         }
     }
 }

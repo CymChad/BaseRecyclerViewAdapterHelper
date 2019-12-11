@@ -1,4 +1,4 @@
-package com.chad.baserecyclerviewadapterhelper;
+package com.chad.baserecyclerviewadapterhelper.activity;
 
 import android.animation.ValueAnimator;
 import android.graphics.Canvas;
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.adapter.DragAndSwipeAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
@@ -40,6 +41,7 @@ public class DragAndSwipeUseActivity extends BaseActivity {
         mRecyclerView = findViewById(R.id.rv);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        // 拖拽监听
         OnItemDragListener listener = new OnItemDragListener() {
             @Override
             public void onItemDragStart(RecyclerView.ViewHolder viewHolder, int pos) {
@@ -88,7 +90,7 @@ public class DragAndSwipeUseActivity extends BaseActivity {
             }
         };
 
-
+        // 侧滑监听
         OnItemSwipeListener onItemSwipeListener = new OnItemSwipeListener() {
             @Override
             public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int pos) {
@@ -128,7 +130,7 @@ public class DragAndSwipeUseActivity extends BaseActivity {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Tips.show("点击了" + position);
+                Tips.show("点击了：" + position);
             }
         });
     }

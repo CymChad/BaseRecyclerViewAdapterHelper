@@ -1,8 +1,11 @@
-package com.chad.baserecyclerviewadapterhelper
+package com.chad.baserecyclerviewadapterhelper.activity
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.chad.baserecyclerviewadapterhelper.R
+import com.chad.baserecyclerviewadapterhelper.activity.multi.ChooseMultipleItemUseTypeActivity
+import com.chad.baserecyclerviewadapterhelper.activity.node.ChooseNodeUseTypeActivity
 import com.chad.baserecyclerviewadapterhelper.adapter.HomeAdapter
 import com.chad.baserecyclerviewadapterhelper.entity.HomeEntity
 import kotlinx.android.synthetic.main.activity_home.*
@@ -42,12 +45,12 @@ class HomeActivity : AppCompatActivity() {
                 HomeEntity("EmptyView", EmptyViewUseActivity::class.java, R.mipmap.gv_empty),
                 HomeEntity("ItemClick", ItemClickActivity::class.java, R.mipmap.gv_item_click),
                 HomeEntity("DataBinding", DataBindingUseActivity::class.java, R.mipmap.gv_databinding),
-                HomeEntity("DiffUtil", null, R.mipmap.gv_databinding),
+                HomeEntity("DiffUtil", DiffUtilActivity::class.java, R.mipmap.gv_databinding),
 
                 HomeEntity(headerTitle = "Adapter 类型"),
                 HomeEntity("MultipleItem", ChooseMultipleItemUseTypeActivity::class.java, R.mipmap.gv_multipleltem),
                 HomeEntity("Quick Section", SectionQuickUseActivity::class.java, R.mipmap.gv_section),
-                HomeEntity("Node", NodeUseActivity::class.java, R.mipmap.gv_section),
+                HomeEntity("Node", ChooseNodeUseTypeActivity::class.java, R.mipmap.gv_expandable),
 
                 HomeEntity(headerTitle = "功能模块"),
 
@@ -58,7 +61,6 @@ class HomeActivity : AppCompatActivity() {
                 HomeEntity("DragAndSwipe", DragAndSwipeUseActivity::class.java, R.mipmap.gv_drag_and_swipe),
                 HomeEntity("MultipleDragAndSwipe", null, R.mipmap.gv_drag_and_swipe),
 
-                HomeEntity("ExpandableItem", ExpandableItemActivity::class.java, R.mipmap.gv_expandable),
 
                 HomeEntity("UpFetchData", UpFetchUseActivity::class.java, R.drawable.gv_up_fetch),
                 HomeEntity("SectionMultipleItem", null, R.mipmap.gv_multipleltem)

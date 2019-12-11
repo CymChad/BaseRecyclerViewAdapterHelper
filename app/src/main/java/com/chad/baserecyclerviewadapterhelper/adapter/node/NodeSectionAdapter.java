@@ -14,17 +14,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class NodeAdapter extends BaseNodeAdapter<BaseViewHolder> {
+public class NodeSectionAdapter extends BaseNodeAdapter<BaseViewHolder> {
 
-    public NodeAdapter() {
+    public NodeSectionAdapter() {
         super();
-//        addSectionHeaderProvider(new SectionHeaderProvider());
         addFullSpanNodeProvider(new RootNodeProvider());
         addNodeProvider(new SecondNodeProvider());
         addFooterNodeProvider(new RootFooterNodeProvider());
     }
-
-
 
     @Override
     protected int getItemType(@NotNull List<? extends BaseNode> data, int position) {
