@@ -53,16 +53,11 @@ class HomeActivity : AppCompatActivity() {
                 HomeEntity("Node", ChooseNodeUseTypeActivity::class.java, R.mipmap.gv_expandable),
 
                 HomeEntity(headerTitle = "功能模块"),
-
-
                 HomeEntity("PullToRefresh", LoadMoreRefreshUseActivity::class.java, R.mipmap.gv_pulltorefresh),
-
-
                 HomeEntity("DragAndSwipe", DragAndSwipeUseActivity::class.java, R.mipmap.gv_drag_and_swipe),
-                HomeEntity("MultipleDragAndSwipe", null, R.mipmap.gv_drag_and_swipe),
+                HomeEntity("UpFetchData", UpFetchUseActivity::class.java, R.drawable.gv_up_fetch)
 
-
-                HomeEntity("UpFetchData", UpFetchUseActivity::class.java, R.drawable.gv_up_fetch),
-                HomeEntity("SectionMultipleItem", null, R.mipmap.gv_multipleltem)
+//                HomeEntity("MultipleDragAndSwipe", null, R.mipmap.gv_drag_and_swipe),
+//                HomeEntity("SectionMultipleItem", null, R.mipmap.gv_multipleltem)
         )
 }
