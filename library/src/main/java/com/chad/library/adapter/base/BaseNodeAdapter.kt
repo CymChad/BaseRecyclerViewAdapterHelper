@@ -77,11 +77,20 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
 //        return super.getDefItemCount()
 //    }
 
+    // TODO 数据设置方法有问题
+
     override fun setListNewData(data: MutableList<BaseNode>?) {
         this.data = if (data == null) {
             arrayListOf()
         } else {
             flatData(data)
+        }
+    }
+
+    override fun setListNewData(index: Int, data: BaseNode) {
+        val flatData = flatData(arrayListOf(data))
+        flatData.forEachIndexed { i, baseNode ->
+            this.data[index + i] = baseNode
         }
     }
 
@@ -112,8 +121,15 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
         this.data.removeAt(position)
     }
 
+    override fun replaceListData(newData: Collection<BaseNode>) {
+        if (newData !== this.data) {
+            this.data.clear()
+            this.data.addAll(flatData(newData))
+        }
+    }
+
     /**
-     * 将输入的嵌套类型数组，扁平化
+     * 将输入的嵌套类型数组循环递归，扁平化
      * @param list List<BaseNode>
      * @return MutableList<BaseNode>
      */
@@ -224,8 +240,23 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
     }
 
 
-    fun findParentNode(node: BaseNode) {
+    fun findParentNode(node: BaseNode): BaseNode? {
         //TODO
+        val pos = this.data.indexOf(node)
+        if (pos == 0) {
+            return null
+        }
+
+        for (i in pos - 1 downTo 0) {
+            val tempNode = this.data[i]
+            tempNode.childNode?.let {
+                if (it.contains(node)) {
+                    return tempNode
+                }
+            }
+        }
+
+        return null
     }
 
     //统计

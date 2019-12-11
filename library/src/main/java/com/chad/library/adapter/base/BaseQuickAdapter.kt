@@ -1030,6 +1030,10 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         this.data = data ?: arrayListOf()
     }
 
+    protected open fun setListNewData(@IntRange(from = 0) index: Int, data: T) {
+        this.data[index] = data
+    }
+
     protected open fun addListData(index: Int, data: T) {
         this.data.add(index, data)
     }
@@ -1048,6 +1052,14 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 
     protected open fun removeListData(@IntRange(from = 0) position: Int) {
         this.data.removeAt(position)
+    }
+
+    protected open fun replaceListData(newData: Collection<T>) {
+        // 不是同一个引用才清空列表
+        if (newData !== this.data) {
+            this.data.clear()
+            this.data.addAll(newData)
+        }
     }
 
 
@@ -1130,8 +1142,9 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     /**
      * change data
      */
-    open fun setData(@IntRange(from = 0) index: Int, data: T) {
-        this.data[index] = data
+    fun setData(@IntRange(from = 0) index: Int, data: T) {
+//        this.data[index] = data
+        setListNewData(index, data)
         notifyItemChanged(index + getHeaderLayoutCount())
     }
 
@@ -1143,10 +1156,11 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      */
     open fun replaceData(newData: Collection<T>) {
         // 不是同一个引用才清空列表
-        if (newData !== this.data) {
-            this.data.clear()
-            this.data.addAll(newData)
-        }
+//        if (newData !== this.data) {
+//            this.data.clear()
+//            this.data.addAll(newData)
+//        }
+        replaceListData(newData)
         notifyDataSetChanged()
     }
 

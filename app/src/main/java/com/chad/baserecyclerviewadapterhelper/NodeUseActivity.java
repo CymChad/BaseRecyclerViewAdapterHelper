@@ -43,6 +43,13 @@ public class NodeUseActivity extends BaseActivity {
         nodeAdapter.setAdapterAnimation(new CustomAnimation3());
         nodeAdapter.setNewData(getEntity());
 
+        mRecyclerView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("------------->>>>  " + nodeAdapter.findParentNode(nodeAdapter.getData().get(1)));
+
+            }
+        }, 2000);
     }
 
     private List<BaseNode> getEntity() {
@@ -71,7 +78,6 @@ public class NodeUseActivity extends BaseActivity {
 
             list.add(entity);
 
-//            list.addAll(items);
         }
         return list;
     }
