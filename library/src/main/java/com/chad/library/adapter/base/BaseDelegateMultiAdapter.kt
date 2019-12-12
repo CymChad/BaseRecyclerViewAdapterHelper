@@ -2,6 +2,7 @@ package com.chad.library.adapter.base
 
 import android.view.ViewGroup
 import com.chad.library.adapter.base.delegate.BaseMultiTypeDelegate
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
 /**
  * 多类型布局，通过代理类的方式，返回布局 id 和 item 类型；

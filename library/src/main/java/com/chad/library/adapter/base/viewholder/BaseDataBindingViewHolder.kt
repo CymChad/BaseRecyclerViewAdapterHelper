@@ -1,4 +1,4 @@
-package com.chad.library.adapter.base
+package com.chad.library.adapter.base.viewholder
 
 import android.view.View
 import androidx.databinding.DataBindingUtil

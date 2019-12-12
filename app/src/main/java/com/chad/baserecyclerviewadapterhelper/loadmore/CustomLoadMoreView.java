@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.chad.baserecyclerviewadapterhelper.R;
-import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.chad.library.adapter.base.loadmore.BaseLoadMoreView;
 
 import org.jetbrains.annotations.NotNull;

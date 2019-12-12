@@ -4,7 +4,7 @@ import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.databinding.ItemMovieBinding;
 import com.chad.baserecyclerviewadapterhelper.entity.Movie;
 import com.chad.baserecyclerviewadapterhelper.entity.MoviePresenter;
-import com.chad.library.adapter.base.BaseDataBindingViewHolder;
+import com.chad.library.adapter.base.viewholder.BaseDataBindingViewHolder;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

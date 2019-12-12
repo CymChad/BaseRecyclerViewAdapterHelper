@@ -5,7 +5,7 @@ import android.view.View
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import com.chad.library.adapter.base.BaseProviderMultiAdapter
-import com.chad.library.adapter.base.BaseViewHolder
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import java.lang.ref.WeakReference
 
 abstract class BaseItemProvider<T, VH : BaseViewHolder> {

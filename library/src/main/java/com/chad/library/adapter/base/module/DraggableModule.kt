@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.R
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.chad.library.adapter.base.dragswipe.DragAndSwipeCallback
 import com.chad.library.adapter.base.listener.DraggableListenerImp
 import com.chad.library.adapter.base.listener.OnItemDragListener

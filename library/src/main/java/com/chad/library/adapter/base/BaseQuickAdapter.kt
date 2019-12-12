@@ -25,6 +25,8 @@ import com.chad.library.adapter.base.diff.BaseQuickDiffCallback
 import com.chad.library.adapter.base.listener.*
 import com.chad.library.adapter.base.module.*
 import com.chad.library.adapter.base.util.getItemView
+import com.chad.library.adapter.base.viewholder.BaseDataBindingViewHolder
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import java.lang.ref.WeakReference
 import java.lang.reflect.Constructor
 import java.lang.reflect.InvocationTargetException

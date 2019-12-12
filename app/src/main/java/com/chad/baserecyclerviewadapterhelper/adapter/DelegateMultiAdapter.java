@@ -4,7 +4,7 @@ import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.DelegateMultiEntity;
 import com.chad.baserecyclerviewadapterhelper.entity.QuickMultipleEntity;
 import com.chad.library.adapter.base.BaseDelegateMultiAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.chad.library.adapter.base.delegate.BaseMultiTypeDelegate;
 
 import org.jetbrains.annotations.NotNull;

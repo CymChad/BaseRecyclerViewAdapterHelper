@@ -3,7 +3,7 @@ package com.chad.library.adapter.base.loadmore
 import android.view.View
 import android.view.ViewGroup
 import com.chad.library.R
-import com.chad.library.adapter.base.BaseViewHolder
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.chad.library.adapter.base.util.getItemView
 
 class SimpleLoadMoreView : BaseLoadMoreView() {

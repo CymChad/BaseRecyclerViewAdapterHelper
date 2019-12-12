@@ -8,10 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.adapter.node.section.NodeSectionAdapter;
-import com.chad.baserecyclerviewadapterhelper.animator.CustomAnimation3;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
-import com.chad.baserecyclerviewadapterhelper.entity.node.section.RootNode;
 import com.chad.baserecyclerviewadapterhelper.entity.node.section.ItemNode;
+import com.chad.baserecyclerviewadapterhelper.entity.node.section.RootNode;
 import com.chad.library.adapter.base.entity.node.BaseNode;
 
 import java.util.ArrayList;
@@ -44,9 +43,8 @@ public class NodeSectionUseActivity extends BaseActivity {
 
         mRecyclerView.setAdapter(nodeAdapter);
 
-        nodeAdapter.setAdapterAnimation(new CustomAnimation3());
         nodeAdapter.setNewData(getEntity());
-
+        mRecyclerView.scheduleLayoutAnimation();
     }
 
     private List<BaseNode> getEntity() {

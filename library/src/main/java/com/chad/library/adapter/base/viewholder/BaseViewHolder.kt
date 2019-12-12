@@ -1,4 +1,4 @@
-package com.chad.library.adapter.base
+package com.chad.library.adapter.base.viewholder
 
 import android.util.SparseArray
 import android.view.View

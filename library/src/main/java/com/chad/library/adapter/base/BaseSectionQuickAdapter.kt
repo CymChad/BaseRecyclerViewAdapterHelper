@@ -3,6 +3,7 @@ package com.chad.library.adapter.base
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import com.chad.library.adapter.base.entity.SectionEntity
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
 /**
  * 快速实现带头部的 Adapter，由于本质属于多布局，所以继承自[BaseMultiItemQuickAdapter]

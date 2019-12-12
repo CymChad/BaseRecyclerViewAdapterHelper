@@ -4,6 +4,7 @@ import android.util.SparseIntArray
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import com.chad.library.adapter.base.entity.MultiItemEntity
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
 /**
  * 多类型布局，适用于类型较少，业务不复杂的场景，便于快速使用。

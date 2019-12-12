@@ -7,6 +7,7 @@ import com.chad.library.adapter.base.entity.node.BaseNode
 import com.chad.library.adapter.base.entity.node.NodeFooterImp
 import com.chad.library.adapter.base.provider.BaseItemProvider
 import com.chad.library.adapter.base.provider.BaseNodeProvider
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
 abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>? = null)
     : BaseProviderMultiAdapter<BaseNode, VH>(data) {

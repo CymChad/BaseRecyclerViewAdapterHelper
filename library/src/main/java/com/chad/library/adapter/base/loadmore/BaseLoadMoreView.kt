@@ -2,7 +2,7 @@ package com.chad.library.adapter.base.loadmore
 
 import android.view.View
 import android.view.ViewGroup
-import com.chad.library.adapter.base.BaseViewHolder
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
 /**
  *
