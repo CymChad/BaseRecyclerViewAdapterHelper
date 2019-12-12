@@ -4,11 +4,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.baserecyclerviewadapterhelper.R;
-import com.chad.baserecyclerviewadapterhelper.adapter.diffUtil.DiffDemoCallback;
 import com.chad.baserecyclerviewadapterhelper.adapter.diffUtil.DiffUtilAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
@@ -49,12 +49,27 @@ public class DiffUtilActivity extends BaseActivity {
     }
 
     private void initRv() {
-        mAdapter = new DiffUtilAdapter(DataServer.getDiffUtilDemoEntities());
+        mAdapter = new DiffUtilAdapter(new ArrayList<DiffUtilDemoEntity>());
         mRecyclerView.setAdapter(mAdapter);
 
         View view = getLayoutInflater().inflate(R.layout.head_view, mRecyclerView, false);
         view.findViewById(R.id.iv).setVisibility(View.GONE);
         mAdapter.addHeaderView(view);
+
+        mAdapter.setDiffCallback(new DiffUtil.ItemCallback<DiffUtilDemoEntity>() {
+            @Override
+            public boolean areItemsTheSame(@NonNull DiffUtilDemoEntity oldItem, @NonNull DiffUtilDemoEntity newItem) {
+                return oldItem.getId() == newItem.getId();
+            }
+
+            @Override
+            public boolean areContentsTheSame(@NonNull DiffUtilDemoEntity oldItem, @NonNull DiffUtilDemoEntity newItem) {
+                return oldItem.getTitle().equals(newItem.getTitle())
+                        && oldItem.getContent().equals(newItem.getContent())
+                        && oldItem.getDate().equals(newItem.getDate());
+            }
+        });
+        mAdapter.setAsyncNewData(DataServer.getDiffUtilDemoEntities());
     }
 
     private void initClick() {
@@ -62,8 +77,9 @@ public class DiffUtilActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 List<DiffUtilDemoEntity> newData = getNewList();
-                DiffDemoCallback callback = new DiffDemoCallback(newData);
-                mAdapter.setNewDiffData(callback);
+//                DiffDemoCallback callback = new DiffDemoCallback(newData);
+//                mAdapter.setNewDiffData(callback);
+                mAdapter.setAsyncNewData(newData);
 
                 /*
                 Use async example.
@@ -119,7 +135,9 @@ public class DiffUtilActivity extends BaseActivity {
             Simulate deletion of data No. 1 and No. 3
             模拟删除1号和3号数据
              */
-            if (i == 1 || i == 3) continue;
+            if (i == 1 || i == 3) {
+                continue;
+            }
 
             /*
             Simulate modification title of data No. 0

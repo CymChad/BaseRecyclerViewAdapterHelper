@@ -15,10 +15,7 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.*
 import com.chad.library.adapter.base.animation.*
 import com.chad.library.adapter.base.diff.BaseQuickAdapterListUpdateCallback
 import com.chad.library.adapter.base.diff.BaseQuickDiffCallback
@@ -131,6 +128,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         private set
 
     /********************************* Private property *****************************************/
+    private var mDiffHelper: AsyncListDiffer<T>? = null
 
     private lateinit var mHeaderLayout: LinearLayout
     private lateinit var mFooterLayout: LinearLayout
@@ -1150,8 +1148,24 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
             setNewData(newData)
             return
         }
-        diffResult.dispatchUpdatesTo(BaseQuickAdapterListUpdateCallback(this@BaseQuickAdapter))
+        diffResult.dispatchUpdatesTo(BaseQuickAdapterListUpdateCallback(this))
         this.data = newData
+    }
+
+    fun setDiffCallback(diffCallback: DiffUtil.ItemCallback<T>) {
+        mDiffHelper = AsyncListDiffer(BaseQuickAdapterListUpdateCallback(this),
+                AsyncDifferConfig.Builder(diffCallback).build())
+    }
+
+    fun setAsyncNewData(newData: MutableList<T>) {
+        if (hasEmptyView()) { // If the current view is an empty view, set the new data directly without diff
+            setNewData(newData)
+            return
+        }
+        mDiffHelper?.let {
+            this.data = newData
+            it.submitList(newData)
+        }
     }
 
     /************************************** Set Listener ****************************************/

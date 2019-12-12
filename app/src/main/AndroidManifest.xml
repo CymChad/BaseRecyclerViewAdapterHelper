@@ -8,7 +8,7 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/logo"
-        android:label="@string/brvah_app_name"
+        android:label="BRVAH"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name=".MyApplication"
@@ -35,7 +35,6 @@
         <activity android:name=".activity.DataBindingUseActivity" />
         <activity android:name=".activity.DragAndSwipeUseActivity" />
         <activity android:name=".activity.UpFetchUseActivity" />
-        <activity android:name=".ExpandableItemActivity" />
         <activity android:name=".activity.node.NodeSectionUseActivity" />
         <activity android:name=".activity.DiffUtilActivity" />
         <activity android:name=".activity.node.ChooseNodeUseTypeActivity" />
