@@ -16,8 +16,6 @@ import java.util.List;
  * Create adapter
  */
 public class DiffUtilAdapter extends BaseQuickAdapter<DiffUtilDemoEntity, BaseViewHolder> {
-    public static final int TITLE_PAYLOAD = 899;
-    public static final int CONTENT_PAYLOAD = 900;
     public static final int ITEM_0_PAYLOAD = 901;
 
     public DiffUtilAdapter(List<DiffUtilDemoEntity> list) {
@@ -44,11 +42,7 @@ public class DiffUtilAdapter extends BaseQuickAdapter<DiffUtilDemoEntity, BaseVi
     protected void convert(@NotNull BaseViewHolder helper, @Nullable DiffUtilDemoEntity item, @NotNull List<?> payloads) {
         for (Object p : payloads) {
             int payload = (int) p;
-            if (payload == TITLE_PAYLOAD) {
-                helper.setText(R.id.tweetName, item.getTitle());
-            } else if (payload == CONTENT_PAYLOAD) {
-                helper.setText(R.id.tweetText, item.getContent());
-            } else if (payload == ITEM_0_PAYLOAD) {
+            if (payload == ITEM_0_PAYLOAD) {
                 helper.setText(R.id.tweetName, item.getTitle())
                         .setText(R.id.tweetText, item.getContent());
             }

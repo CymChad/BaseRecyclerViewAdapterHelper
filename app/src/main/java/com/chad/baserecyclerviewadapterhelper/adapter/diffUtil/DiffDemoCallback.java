@@ -1,12 +1,9 @@
 package com.chad.baserecyclerviewadapterhelper.adapter.diffUtil;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 
 import com.chad.baserecyclerviewadapterhelper.entity.DiffUtilDemoEntity;
-
-import java.util.List;
 
 /**
  * Create DiffCallback
@@ -58,13 +55,6 @@ public class DiffDemoCallback extends DiffUtil.ItemCallback<DiffUtilDemoEntity> 
      */
     @Override
     public Object getChangePayload(@NonNull DiffUtilDemoEntity oldItem, @NonNull DiffUtilDemoEntity newItem) {
-        if (!oldItem.getTitle().equals(newItem.getTitle())) {
-            // if only title change（如果标题变化了）
-            return DiffUtilAdapter.TITLE_PAYLOAD;
-        } else if (!oldItem.getContent().equals(newItem.getContent())) {
-            // if only content change（如果内容变化了）
-            return DiffUtilAdapter.CONTENT_PAYLOAD;
-        }
         return null;
     }
 }
