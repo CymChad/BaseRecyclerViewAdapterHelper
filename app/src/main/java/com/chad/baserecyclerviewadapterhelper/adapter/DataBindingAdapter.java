@@ -1,11 +1,14 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
+import androidx.databinding.DataBindingUtil;
+
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.databinding.ItemMovieBinding;
 import com.chad.baserecyclerviewadapterhelper.entity.Movie;
 import com.chad.baserecyclerviewadapterhelper.entity.MoviePresenter;
-import com.chad.library.adapter.base.viewholder.BaseDataBindingViewHolder;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,9 +17,8 @@ import org.jetbrains.annotations.Nullable;
  * @date: 2019-12-05
  * @Description: DataBinding Adapter
  *
- * 这里的ViewHolder使用 {@link BaseDataBindingViewHolder}
  */
-public class DataBindingAdapter extends BaseQuickAdapter<Movie, BaseDataBindingViewHolder<ItemMovieBinding>> {
+public class DataBindingAdapter extends BaseQuickAdapter<Movie, BaseViewHolder> {
 
     private MoviePresenter mPresenter = new MoviePresenter();
 
@@ -25,11 +27,18 @@ public class DataBindingAdapter extends BaseQuickAdapter<Movie, BaseDataBindingV
     }
 
     @Override
-    protected void convert(@NotNull BaseDataBindingViewHolder<ItemMovieBinding> helper, @Nullable Movie item) {
+    protected void onItemViewHolderCreated(@NotNull BaseViewHolder viewHolder, int viewType) {
+        // 绑定 view
+        DataBindingUtil.bind(viewHolder.itemView);
+    }
+
+    @Override
+    protected void convert(@NotNull BaseViewHolder helper, @Nullable Movie item) {
         if (item == null) {
             return;
         }
 
+        // 获取 Binding
         ItemMovieBinding binding = helper.getBinding();
         if (binding != null) {
             binding.setMovie(item);

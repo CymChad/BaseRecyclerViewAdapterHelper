@@ -55,7 +55,7 @@ public class DiffUtilActivity extends BaseActivity {
         view.findViewById(R.id.iv).setVisibility(View.GONE);
         mAdapter.addHeaderView(view);
 
-        // 设置Diff Callback
+        // 必须设置Diff Callback
         mAdapter.setDiffCallback(new DiffDemoCallback());
     }
 

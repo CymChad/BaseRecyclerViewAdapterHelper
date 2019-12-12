@@ -2,6 +2,7 @@ package com.chad.baserecyclerviewadapterhelper.activity;
 
 import android.os.Bundle;
 import android.view.View;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,6 +13,7 @@ import com.chad.baserecyclerviewadapterhelper.entity.Movie;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -33,7 +35,7 @@ public class DataBindingUseActivity extends BaseActivity {
         setTitle("DataBinding Use");
         setBackBtn();
 
-        RecyclerView mRecyclerView = findViewById(R.id.rv);
+        final RecyclerView mRecyclerView = findViewById(R.id.rv);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(adapter);

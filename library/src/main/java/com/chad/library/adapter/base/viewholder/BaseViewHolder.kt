@@ -7,6 +7,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.*
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 
 open class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -14,6 +16,13 @@ open class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
      * Views indexed with their IDs
      */
     private val views: SparseArray<View> = SparseArray()
+
+    /**
+     * 如果使用了 DataBinding 绑定 View，可调用此方法获取 [ViewDataBinding]
+     * @return B?
+     */
+    fun <B : ViewDataBinding> getBinding(): B? = DataBindingUtil.getBinding(itemView)
+
 
     @Suppress("UNCHECKED_CAST")
     fun <T : View> getView(@IdRes viewId: Int): T {
