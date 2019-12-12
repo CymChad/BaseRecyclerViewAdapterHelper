@@ -35,6 +35,12 @@ abstract class BaseItemProvider<T, VH : BaseViewHolder> {
     open fun convert(helper: VH, data: T?, payloads: List<Any>) {}
 
     /**
+     * （可选重写）ViewHolder创建完毕以后的回掉方法。
+     * @param helper VH
+     */
+    open fun onCreatedViewHolder(helper: VH) {}
+
+    /**
      * item 若想实现条目点击事件则重写该方法
      * @param helper VH
      * @param data T

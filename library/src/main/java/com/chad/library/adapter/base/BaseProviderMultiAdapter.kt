@@ -36,15 +36,16 @@ abstract class BaseProviderMultiAdapter<T, VH : BaseViewHolder>(data: MutableLis
      */
     open fun addItemProvider(provider: BaseItemProvider<T, VH>) {
         provider.setAdapter(this)
-        val viewType = provider.itemViewType
-        mItemProviders.put(viewType, provider)
+        mItemProviders.put(provider.itemViewType, provider)
     }
 
     override fun onCreateDefViewHolder(parent: ViewGroup, viewType: Int): VH {
         val provider = mItemProviders.get(viewType)
         checkNotNull(provider) { "ViewType: $viewType no such provider found，please use addItemProvider() first!" }
         provider.context = parent.context
-        return createBaseViewHolder(parent, provider.layoutId)
+        return createBaseViewHolder(parent, provider.layoutId).apply {
+            provider.onCreatedViewHolder(this)
+        }
     }
 
     override fun getDefItemViewType(position: Int): Int {

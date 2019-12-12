@@ -51,6 +51,6 @@ task sourcesJar(type: Jar) {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    api"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compileOnly 'androidx.recyclerview:recyclerview:1.0.0'
 }
