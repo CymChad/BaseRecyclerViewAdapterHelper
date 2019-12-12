@@ -15,10 +15,14 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.*
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.chad.library.adapter.base.animation.*
-import com.chad.library.adapter.base.diff.BaseQuickAdapterListUpdateCallback
-import com.chad.library.adapter.base.diff.BaseQuickDiffCallback
+import com.chad.library.adapter.base.diff.BrvahAsyncDiffer
+import com.chad.library.adapter.base.diff.BrvahAsyncDifferConfig
+import com.chad.library.adapter.base.diff.BrvahListUpdateCallback
 import com.chad.library.adapter.base.listener.*
 import com.chad.library.adapter.base.module.*
 import com.chad.library.adapter.base.util.getItemView
@@ -128,7 +132,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         private set
 
     /********************************* Private property *****************************************/
-    private var mDiffHelper: AsyncListDiffer<T>? = null
+    private var mDiffHelper: BrvahAsyncDiffer<T>? = null
 
     private lateinit var mHeaderLayout: LinearLayout
     private lateinit var mFooterLayout: LinearLayout
@@ -1011,6 +1015,9 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * @param data
      */
     open fun setNewData(data: MutableList<T>?) {
+        if (data == this.data) {
+            return
+        }
 //        this.data = data ?: arrayListOf()
         setListNewData(data)
         loadMoreModule?.rest()
@@ -1107,38 +1114,49 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     }
 
     /**
-     * use Diff setting up a new instance to data
+     * 设置Diff Callback，用于快速生成 Diff Config。
      *
-     * @param baseQuickDiffCallback implementation [BaseQuickDiffCallback]
+     * @param diffCallback ItemCallback<T>
      */
-    open fun setNewDiffData(@NonNull baseQuickDiffCallback: BaseQuickDiffCallback<T>) {
-        setNewDiffData(baseQuickDiffCallback, false)
+    fun setDiffCallback(diffCallback: DiffUtil.ItemCallback<T>) {
+        this.setDiffConfig(BrvahAsyncDifferConfig.Builder(diffCallback).build())
     }
 
     /**
-     * use Diff setting up a new instance to data.
-     * this is sync, if you need use async, see [.setNewDiffData].
-     *
-     * @param baseQuickDiffCallback implementation [BaseQuickDiffCallback].
-     * @param detectMoves Whether to detect the movement of the Item
+     * 设置Diff Config。如需自定义线程，请使用此方法。
+     * 在使用 [setDiffNewData] 前，必须设置此方法
+     * @param config BrvahAsyncDifferConfig<T>
      */
-    open fun setNewDiffData(@NonNull baseQuickDiffCallback: BaseQuickDiffCallback<T>, detectMoves: Boolean) {
+    fun setDiffConfig(config: BrvahAsyncDifferConfig<T>) {
+        mDiffHelper = BrvahAsyncDiffer(this, config)
+    }
+
+    fun getDiffHelper() : BrvahAsyncDiffer<T> {
+        checkNotNull(mDiffHelper) {
+            "Please use first setDiffCallback() or setDiffConfig() !"
+        }
+        return mDiffHelper!!
+    }
+
+    /**
+     * 此方法为异步Diff，无需考虑性能问题
+     *
+     * use DiffResult setting up a new instance to data.
+     * This method is asynchronous.
+     *
+     * @param newData MutableList<T>?
+     */
+    open fun setDiffNewData(newData: MutableList<T>?) {
         if (hasEmptyView()) { // If the current view is an empty view, set the new data directly without diff
-            setNewData(baseQuickDiffCallback.newList)
+            setNewData(newData)
             return
         }
-        baseQuickDiffCallback.setOldList(this.data)
-        val diffResult = DiffUtil.calculateDiff(baseQuickDiffCallback, detectMoves)
-        diffResult.dispatchUpdatesTo(BaseQuickAdapterListUpdateCallback(this))
-        this.data = baseQuickDiffCallback.newList
+        mDiffHelper?.submitList(newData)
     }
 
     /**
+     * 使用 DiffResult 设置新实例
      * use DiffResult setting up a new instance to data
-     *
-     * If you need to use async computing Diff, please use this method.
-     * You only need to tell the calculation result,
-     * this adapter does not care about the calculation process.
      *
      * @param diffResult DiffResult
      * @param newData New Data
@@ -1148,24 +1166,8 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
             setNewData(newData)
             return
         }
-        diffResult.dispatchUpdatesTo(BaseQuickAdapterListUpdateCallback(this))
+        diffResult.dispatchUpdatesTo(BrvahListUpdateCallback(this))
         this.data = newData
-    }
-
-    fun setDiffCallback(diffCallback: DiffUtil.ItemCallback<T>) {
-        mDiffHelper = AsyncListDiffer(BaseQuickAdapterListUpdateCallback(this),
-                AsyncDifferConfig.Builder(diffCallback).build())
-    }
-
-    fun setAsyncNewData(newData: MutableList<T>) {
-        if (hasEmptyView()) { // If the current view is an empty view, set the new data directly without diff
-            setNewData(newData)
-            return
-        }
-        mDiffHelper?.let {
-            this.data = newData
-            it.submitList(newData)
-        }
     }
 
     /************************************** Set Listener ****************************************/

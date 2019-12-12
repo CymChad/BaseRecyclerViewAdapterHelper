@@ -3,7 +3,7 @@ package com.chad.library.adapter.base.diff
 import androidx.recyclerview.widget.ListUpdateCallback
 import com.chad.library.adapter.base.BaseQuickAdapter
 
-class BaseQuickAdapterListUpdateCallback(private val mAdapter: BaseQuickAdapter<*, *>) : ListUpdateCallback {
+class BrvahListUpdateCallback(private val mAdapter: BaseQuickAdapter<*, *>) : ListUpdateCallback {
 
     override fun onInserted(position: Int, count: Int) {
         mAdapter.notifyItemRangeInserted(position + mAdapter.getHeaderLayoutCount(), count)

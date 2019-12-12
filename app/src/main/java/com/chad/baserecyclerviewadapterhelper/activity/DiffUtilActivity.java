@@ -4,11 +4,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.baserecyclerviewadapterhelper.R;
+import com.chad.baserecyclerviewadapterhelper.adapter.diffUtil.DiffDemoCallback;
 import com.chad.baserecyclerviewadapterhelper.adapter.diffUtil.DiffUtilAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
@@ -49,27 +48,15 @@ public class DiffUtilActivity extends BaseActivity {
     }
 
     private void initRv() {
-        mAdapter = new DiffUtilAdapter(new ArrayList<DiffUtilDemoEntity>());
+        mAdapter = new DiffUtilAdapter(DataServer.getDiffUtilDemoEntities());
         mRecyclerView.setAdapter(mAdapter);
 
         View view = getLayoutInflater().inflate(R.layout.head_view, mRecyclerView, false);
         view.findViewById(R.id.iv).setVisibility(View.GONE);
         mAdapter.addHeaderView(view);
 
-        mAdapter.setDiffCallback(new DiffUtil.ItemCallback<DiffUtilDemoEntity>() {
-            @Override
-            public boolean areItemsTheSame(@NonNull DiffUtilDemoEntity oldItem, @NonNull DiffUtilDemoEntity newItem) {
-                return oldItem.getId() == newItem.getId();
-            }
-
-            @Override
-            public boolean areContentsTheSame(@NonNull DiffUtilDemoEntity oldItem, @NonNull DiffUtilDemoEntity newItem) {
-                return oldItem.getTitle().equals(newItem.getTitle())
-                        && oldItem.getContent().equals(newItem.getContent())
-                        && oldItem.getDate().equals(newItem.getDate());
-            }
-        });
-        mAdapter.setAsyncNewData(DataServer.getDiffUtilDemoEntities());
+        // 设置Diff Callback
+        mAdapter.setDiffCallback(new DiffDemoCallback());
     }
 
     private void initClick() {
@@ -77,34 +64,7 @@ public class DiffUtilActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 List<DiffUtilDemoEntity> newData = getNewList();
-//                DiffDemoCallback callback = new DiffDemoCallback(newData);
-//                mAdapter.setNewDiffData(callback);
-                mAdapter.setAsyncNewData(newData);
-
-                /*
-                Use async example.
-                The user performs the diff calculation in the child thread and informs the adapter of the result.
-                Warning: You should do multi-thread management yourself to prevent memory leaks.
-
-                异步使用diff刷新
-                用户自己在子线程中进行diff计算，将结果告知adapter即可
-                警告：你应该自己进行多线程管理，防止内存泄漏
-                 */
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        final List<DiffUtilDemoEntity> newData = getNewList();
-//                        MyDiffCallback callback = new MyDiffCallback(newData, mAdapter.getData());
-//                        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(callback, false);
-//                        runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                mAdapter.setNewDiffData(diffResult, newData);
-//                            }
-//                        });
-//                    }
-//                }).start();
-
+                mAdapter.setDiffNewData(newData);
             }
         });
 
