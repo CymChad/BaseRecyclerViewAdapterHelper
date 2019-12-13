@@ -124,7 +124,9 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      */
     var upFetchModule: BaseUpFetchModule? = null
         private set
-
+    /**
+     * 拖拽模块
+     */
     var draggableModule: BaseDraggableModule? = null
         private set
 
@@ -178,14 +180,11 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 
     /**
      * Optional implementation this method and use the helper to adapt the view to the given item.
-     *
-     * If {@link DiffUtil.Callback#getChangePayload(int, int)} is implemented,
-     * then {@link BaseQuickAdapter#convert(BaseViewHolder, Object)} will not execute, and will
-     * perform this method, Please implement this method for partial refresh.
-     *
+     * If use [payloads], will perform this method, Please implement this method for partial refresh.
      * If use [RecyclerView.Adapter.notifyItemChanged] with payload,
      * Will execute this method.
      *
+     * 可选实现，如果你是用了[payloads]刷新item，请实现此方法，进行局部刷新
      *
      * @param helper   A fully initialized helper.
      * @param item     The item that needs to be displayed.
@@ -320,7 +319,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         when (holder.itemViewType) {
             LOAD_MORE_VIEW -> loadMoreModule?.loadMoreView?.convert(holder, position)
             HEADER_VIEW, EMPTY_VIEW, FOOTER_VIEW -> return
-            else -> convert(holder, getRealItem(position))
+            else -> convert(holder, data[position - getHeaderLayoutCount()])
         }
     }
 
@@ -336,7 +335,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         when (holder.itemViewType) {
             LOAD_MORE_VIEW -> loadMoreModule?.loadMoreView?.convert(holder, position)
             HEADER_VIEW, EMPTY_VIEW, FOOTER_VIEW -> return
-            else -> convert(holder, getRealItem(position), payloads)
+            else -> convert(holder, data[position - getHeaderLayoutCount()], payloads)
         }
     }
 
@@ -415,10 +414,9 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         return if (item != null && data.isNotEmpty()) data.indexOf(item) else -1
     }
 
-    fun getRealItem(@IntRange(from = 0) position: Int): T? {
-        return data[position - getHeaderLayoutCount()]
-    }
-
+    /**
+     * 用于保存需要设置点击事件的 item
+     */
     private val childClickViewIds = LinkedHashSet<Int>()
 
     fun getChildClickViewIds(): LinkedHashSet<Int> {
@@ -435,6 +433,9 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         }
     }
 
+    /**
+     * 用于保存需要设置长按点击事件的 item
+     */
     private val childLongClickViewIds = LinkedHashSet<Int>()
 
     fun getChildLongClickViewIds(): LinkedHashSet<Int> {
@@ -562,7 +563,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 
     /**
      * 创建 ViewHolder。可以重写
-     * 默认实现会判断 ViewHolder 类型，如果是 [BaseDataBindingViewHolder] 类型，则使用 DataBinding
      *
      * @param view View
      * @return VH
@@ -623,13 +623,13 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
             val constructor: Constructor<*>
             // inner and unstatic class
             return if (z.isMemberClass && !Modifier.isStatic(z.modifiers)) {
-                    constructor = z.getDeclaredConstructor(javaClass, View::class.java)
-                    constructor.isAccessible = true
-                    constructor.newInstance(this, view) as VH
+                constructor = z.getDeclaredConstructor(javaClass, View::class.java)
+                constructor.isAccessible = true
+                constructor.newInstance(this, view) as VH
             } else {
-                    constructor = z.getDeclaredConstructor(View::class.java)
-                    constructor.isAccessible = true
-                    constructor.newInstance(view) as VH
+                constructor = z.getDeclaredConstructor(View::class.java)
+                constructor.isAccessible = true
+                constructor.newInstance(view) as VH
             }
         } catch (e: NoSuchMethodException) {
             e.printStackTrace()
@@ -985,17 +985,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         this.data = data ?: arrayListOf()
         loadMoreModule?.reset()
         mLastPosition = -1
-        when {
-            oldDataSize == 0 -> {
-                notifyItemRangeChanged(0, this.data.size)
-            }
-            this.data.isEmpty() -> {
-                notifyItemRangeRemoved(0, oldDataSize)
-            }
-            else -> {
-                notifyDataSetChanged()
-            }
-        }
+        notifyDataSetChanged()
     }
 
     /**
@@ -1104,7 +1094,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         mDiffHelper = BrvahAsyncDiffer(this, config)
     }
 
-    fun getDiffHelper() : BrvahAsyncDiffer<T> {
+    fun getDiffHelper(): BrvahAsyncDiffer<T> {
         checkNotNull(mDiffHelper) {
             "Please use setDiffCallback() or setDiffConfig() first!"
         }

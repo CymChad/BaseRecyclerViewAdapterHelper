@@ -73,6 +73,9 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
      */
     val loadMoreViewPosition: Int
         get() {
+            if (baseQuickAdapter.hasEmptyView()) {
+                return -1
+            }
             return baseQuickAdapter.getHeaderLayoutCount() + baseQuickAdapter.data.size + baseQuickAdapter.getFooterLayoutCount()
         }
 
@@ -235,6 +238,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
         loadMoreView.isLoadEndMoreGone = gone
 
         loadMoreView.loadMoreStatus = BaseLoadMoreView.Status.End
+
         if (gone) {
             baseQuickAdapter.notifyItemRemoved(loadMoreViewPosition)
         } else {
@@ -252,6 +256,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
         isLoading = false
         mNextLoadEnable = true
         loadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Complete
+
         baseQuickAdapter.notifyItemChanged(loadMoreViewPosition)
     }
 

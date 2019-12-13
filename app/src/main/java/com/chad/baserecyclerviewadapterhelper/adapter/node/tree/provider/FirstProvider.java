@@ -39,9 +39,9 @@ public class FirstProvider extends BaseNodeProvider<BaseViewHolder> {
     public void onClick(@NotNull BaseViewHolder helper, @NotNull View view, BaseNode data, int position) {
         FirstNode node = (FirstNode) data;
         if (node.isExpanded()) {
-            getAdapter().collapse(position, true);
+            getAdapter().collapse(position);
         } else {
-            getAdapter().expand(position, false);
+            getAdapter().expand(position);
         }
     }
 }
