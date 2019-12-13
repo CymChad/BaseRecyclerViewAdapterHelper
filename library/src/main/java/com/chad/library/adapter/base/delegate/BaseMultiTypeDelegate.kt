@@ -1,10 +1,7 @@
 package com.chad.library.adapter.base.delegate
 
 import android.util.SparseIntArray
-
 import androidx.annotation.LayoutRes
-
-import com.chad.library.adapter.base.BaseMultiItemQuickAdapter.Companion.TYPE_NOT_FOUND
 
 /**
  * help you to achieve multi type easily
@@ -31,10 +28,12 @@ abstract class BaseMultiTypeDelegate<T>(private var layouts: SparseIntArray = Sp
     abstract fun getItemType(data: List<T>, position: Int): Int
 
     fun getLayoutId(viewType: Int): Int {
-        return this.layouts.get(viewType, TYPE_NOT_FOUND)
+        val layoutResId = layouts.get(viewType)
+        require(layoutResId != 0) { "ViewType: $viewType found layoutResId，please use registerItemType() first!" }
+        return layoutResId
     }
 
-    private fun addItemType(type: Int, @LayoutRes layoutResId: Int) {
+    private fun registerItemType(type: Int, @LayoutRes layoutResId: Int) {
         this.layouts.put(type, layoutResId)
     }
 
@@ -44,11 +43,11 @@ abstract class BaseMultiTypeDelegate<T>(private var layouts: SparseIntArray = Sp
      * @param layoutResIds layout id arrays
      * @return MultiTypeDelegate
      */
-    fun registerItemTypeAutoIncrease(@LayoutRes vararg layoutResIds: Int): BaseMultiTypeDelegate<T> {
+    fun addItemTypeAutoIncrease(@LayoutRes vararg layoutResIds: Int): BaseMultiTypeDelegate<T> {
         autoMode = true
         checkMode(selfMode)
         for (i in layoutResIds.indices) {
-            addItemType(i, layoutResIds[i])
+            registerItemType(i, layoutResIds[i])
         }
         return this
     }
@@ -60,10 +59,10 @@ abstract class BaseMultiTypeDelegate<T>(private var layouts: SparseIntArray = Sp
      * @param layoutResId layout id
      * @return MultiTypeDelegate
      */
-    fun registerItemType(type: Int, @LayoutRes layoutResId: Int): BaseMultiTypeDelegate<T> {
+    fun addItemType(type: Int, @LayoutRes layoutResId: Int): BaseMultiTypeDelegate<T> {
         selfMode = true
         checkMode(autoMode)
-        addItemType(type, layoutResId)
+        registerItemType(type, layoutResId)
         return this
     }
 

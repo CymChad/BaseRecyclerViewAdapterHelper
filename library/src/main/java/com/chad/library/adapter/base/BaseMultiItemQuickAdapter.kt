@@ -20,10 +20,6 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 abstract class BaseMultiItemQuickAdapter<T : MultiItemEntity, VH : BaseViewHolder>(data: MutableList<T>? = null)
     : BaseQuickAdapter<T, VH>(0, data) {
 
-    companion object {
-        const val TYPE_NOT_FOUND = -404
-    }
-
     private val layouts: SparseIntArray by lazy(LazyThreadSafetyMode.NONE) { SparseIntArray() }
 
     override fun getDefItemViewType(position: Int): Int {
@@ -31,7 +27,9 @@ abstract class BaseMultiItemQuickAdapter<T : MultiItemEntity, VH : BaseViewHolde
     }
 
     override fun onCreateDefViewHolder(parent: ViewGroup, viewType: Int): VH {
-        return createBaseViewHolder(parent, layouts.get(viewType, TYPE_NOT_FOUND))
+        val layoutResId = layouts.get(viewType)
+        require(layoutResId != 0) { "ViewType: $viewType found layoutResId，please use addItemType() first!" }
+        return createBaseViewHolder(parent, layoutResId)
     }
 
     /**
