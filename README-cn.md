@@ -56,7 +56,7 @@
 # 如何使用它来创建Adapter？
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/item_view.png)
 ```java
-public class QuickAdapter extends BaseQuickAdapter<Status> {
+public class QuickAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
     public QuickAdapter() {
         super(R.layout.tweet, DataServer.getSampleData());
     }
@@ -238,7 +238,7 @@ mQuickAdapter.setLoadingView(customView);
 # 使用分组
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/section_headers.gif)
 ```java
-public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
+public class SectionAdapter extends BaseSectionQuickAdapter<MySection, BaseViewHolder> {
      public SectionAdapter(int layoutResId, int sectionHeadResId, List data) {
         super(layoutResId, sectionHeadResId, data);
     }
@@ -261,7 +261,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<MySection> {
 # 如何添加多种类型item？
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/multiple_item.gif)
 ```java
-public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem> {
+public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<MultipleItem, BaseViewHolder> {
 
     public MultipleItemQuickAdapter(List data) {
         super(data);
@@ -349,7 +349,7 @@ public class Person {...}
 in adapter code
 ```Java
 
-public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity> { 
+public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> { 
     public ExpandableItemAdapter(List<MultiItemEntity> data) {    
         super(data);
         addItemType(TYPE_LEVEL_0, R.layout.item_expandable_lv0);   
