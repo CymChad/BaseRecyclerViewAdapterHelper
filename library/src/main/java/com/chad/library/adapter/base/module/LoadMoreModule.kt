@@ -3,11 +3,11 @@ package com.chad.library.adapter.base.module
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.chad.library.adapter.base.listener.LoadMoreListenerImp
 import com.chad.library.adapter.base.listener.OnLoadMoreListener
 import com.chad.library.adapter.base.loadmore.BaseLoadMoreView
 import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
 
 /**
@@ -281,7 +281,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
     /**
      * 重置状态
      */
-    internal fun rest() {
+    internal fun reset() {
         if (mLoadMoreListener != null) {
             mNextLoadEnable = true
             isEnableLoadMore = true

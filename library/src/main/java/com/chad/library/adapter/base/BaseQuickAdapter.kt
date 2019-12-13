@@ -970,10 +970,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 
     /*************************** 设置数据相关 ******************************************/
 
-    internal open fun setListNewData(data: MutableList<T>?) {
-        this.data = data ?: arrayListOf()
-    }
-
     /**
      * setting up a new instance to data;
      *
@@ -984,11 +980,22 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         if (data == this.data) {
             return
         }
-//        this.data = data ?: arrayListOf()
-        setListNewData(data)
-        loadMoreModule?.rest()
+        val oldDataSize = this.data.size
+
+        this.data = data ?: arrayListOf()
+        loadMoreModule?.reset()
         mLastPosition = -1
-        notifyDataSetChanged()
+        when {
+            oldDataSize == 0 -> {
+                notifyItemRangeChanged(0, this.data.size)
+            }
+            this.data.isEmpty() -> {
+                notifyItemRangeRemoved(0, oldDataSize)
+            }
+            else -> {
+                notifyDataSetChanged()
+            }
+        }
     }
 
     /**
@@ -1127,8 +1134,9 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * @param diffResult DiffResult
      * @param newData New Data
      */
-    open fun setNewDiffData(@NonNull diffResult: DiffUtil.DiffResult, newData: MutableList<T>) {
-        if (hasEmptyView()) { // If the current view is an empty view, set the new data directly without diff
+    open fun setDiffNewData(@NonNull diffResult: DiffUtil.DiffResult, newData: MutableList<T>) {
+        if (hasEmptyView()) {
+            // If the current view is an empty view, set the new data directly without diff
             setNewData(newData)
             return
         }

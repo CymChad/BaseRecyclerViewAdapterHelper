@@ -2,6 +2,7 @@ package com.chad.library.adapter.base
 
 import android.view.ViewGroup
 import androidx.annotation.IntRange
+import androidx.recyclerview.widget.DiffUtil
 import com.chad.library.adapter.base.entity.node.BaseExpandNode
 import com.chad.library.adapter.base.entity.node.BaseNode
 import com.chad.library.adapter.base.entity.node.NodeFooterImp
@@ -74,12 +75,12 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
     }
 
     /*************************** 重写数据设置方法 ***************************/
-    override fun setListNewData(data: MutableList<BaseNode>?) {
-        this.data = if (data == null) {
-            arrayListOf()
-        } else {
-            flatData(data)
+
+    override fun setNewData(data: MutableList<BaseNode>?) {
+        if (data == this.data) {
+            return
         }
+        super.setNewData(flatData(data ?: arrayListOf()))
     }
 
     override fun addData(position: Int, data: BaseNode) {
@@ -92,16 +93,12 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
 
     override fun addData(position: Int, newData: Collection<BaseNode>) {
         val nodes = flatData(newData)
-        this.data.addAll(position, nodes)
-        notifyItemRangeInserted(position + getHeaderLayoutCount(), nodes.size)
-        compatibilityDataSizeChanged(nodes.size)
+        super.addData(position, nodes)
     }
 
     override fun addData(newData: Collection<BaseNode>) {
         val nodes = flatData(newData)
-        this.data.addAll(nodes)
-        notifyItemRangeInserted(this.data.size - nodes.size + getHeaderLayoutCount(), nodes.size)
-        compatibilityDataSizeChanged(nodes.size)
+        super.addData(nodes)
     }
 
     override fun remove(position: Int) {
@@ -145,10 +142,24 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
     override fun replaceData(newData: Collection<BaseNode>) {
         // 不是同一个引用才清空列表
         if (newData != this.data) {
-            this.data.clear()
-            this.data.addAll(flatData(newData))
+            super.replaceData(flatData(newData))
         }
-        notifyDataSetChanged()
+    }
+
+    override fun setDiffNewData(newData: MutableList<BaseNode>?) {
+        if (hasEmptyView()) {
+            setNewData(newData)
+            return
+        }
+        super.setDiffNewData(flatData(newData ?: arrayListOf()))
+    }
+
+    override fun setDiffNewData(diffResult: DiffUtil.DiffResult, newData: MutableList<BaseNode>) {
+        if (hasEmptyView()) {
+            setNewData(newData)
+            return
+        }
+        super.setDiffNewData(diffResult, flatData(newData))
     }
 
     /*************************** 重写数据设置方法 END ***************************/
@@ -284,14 +295,5 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
         return -1
     }
 
-    //统计
-    private fun allDataCount(list: List<BaseNode>, count: Int): Int {
-        var newCount = list.size + count
-        list.map {
-            if (!it.childNode.isNullOrEmpty()) {
-                newCount += allDataCount(it.childNode!!, newCount)
-            }
-        }
-        return newCount
-    }
+
 }
