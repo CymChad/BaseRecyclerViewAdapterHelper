@@ -164,70 +164,23 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
     /*************************** 重写数据设置方法 END ***************************/
 
     /**
-     * 将输入的嵌套类型数组循环递归，数据扁平化
-     * @param list List<BaseNode>
-     * @param isSetExpanded 是否设置为展开状态，不变化设置为null
-     * @return MutableList<BaseNode>
-     */
-    private fun flatData(list: Collection<BaseNode>): MutableList<BaseNode> {
-        val newList = ArrayList<BaseNode>()
-
-        for (element in list) {
-            newList.add(element)
-
-//            if (element is BaseExpandNode && !element.isExpanded) {
-//                //什么都不做
-//            } else {
-//                val childNode = element.childNode
-//                if (!childNode.isNullOrEmpty()) {
-//                    val items = flatData(childNode, isExpanded)
-//                    newList.addAll(items)
-//                }
-//            }
-
-            if (element is BaseExpandNode) {
-                if (element.isExpanded) {
-                    val childNode = element.childNode
-                    if (!childNode.isNullOrEmpty()) {
-                        val items = flatData(childNode)
-                        newList.addAll(items)
-                    }
-                }
-            } else {
-                val childNode = element.childNode
-                if (!childNode.isNullOrEmpty()) {
-                    val items = flatData(childNode)
-                    newList.addAll(items)
-                }
-            }
-
-            if (element is NodeFooterImp) {
-                element.footerNode?.let {
-                    newList.add(it)
-                }
-            }
-        }
-
-        return newList
-    }
-
-    /**
-     * 在扁平化数据的同时，设置展开状态
+     * 将输入的嵌套类型数组循环递归，在扁平化数据的同时，设置展开状态
      * @param list Collection<BaseNode>
+     * @param isExpanded Boolean? 如果不需要改变状态，设置为null。true 为展开，false 为收起
      * @return MutableList<BaseNode>
      */
-    private fun flatDataWhitSetExpanded(list: Collection<BaseNode>, isExpanded: Boolean? = null): MutableList<BaseNode> {
+    private fun flatData(list: Collection<BaseNode>, isExpanded: Boolean? = null): MutableList<BaseNode> {
         val newList = ArrayList<BaseNode>()
 
         for (element in list) {
             newList.add(element)
 
             if (element is BaseExpandNode) {
-                // TODO 判断有问题
+                // 如果是展开状态 或者需要设置为展开状态
                 if (isExpanded == true || element.isExpanded) {
                     val childNode = element.childNode
                     if (!childNode.isNullOrEmpty()) {
-                        val items = flatDataWhitSetExpanded(childNode, isExpanded)
+                        val items = flatData(childNode, isExpanded)
                         newList.addAll(items)
                     }
                 }
@@ -238,7 +191,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
             } else {
                 val childNode = element.childNode
                 if (!childNode.isNullOrEmpty()) {
-                    val items = flatDataWhitSetExpanded(childNode, isExpanded)
+                    val items = flatData(childNode, isExpanded)
                     newList.addAll(items)
                 }
             }
@@ -255,13 +208,14 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
 
     /**
      * 收起Node
+     * 私有方法，为减少递归复杂度，不对外暴露 isChangeChildExpand 参数，防止错误设置
+     *
      * @param position Int
      * @param isChangeChildCollapse Boolean 是否改变子 node 的状态为收起，true 为跟随变为收起，false 表示保持原状态。
      * @param animate Boolean
      * @param notify Boolean
      */
-    @JvmOverloads
-    fun collapse(@IntRange(from = 0) position: Int,
+    private fun collapse(@IntRange(from = 0) position: Int,
                  isChangeChildCollapse: Boolean = false,
                  animate: Boolean = true,
                  notify: Boolean = true) {
@@ -275,7 +229,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
                 notifyItemChanged(adapterPosition)
                 return
             }
-            val items = flatDataWhitSetExpanded(node.childNode!!, if (isChangeChildCollapse) false else null)
+            val items = flatData(node.childNode!!, if (isChangeChildCollapse) false else null)
             this.data.removeAll(items)
             if (notify) {
                 if (animate) {
@@ -290,13 +244,14 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
 
     /**
      * 展开Node
+     * 私有方法，为减少递归复杂度，不对外暴露 isChangeChildExpand 参数，防止错误设置
+     *
      * @param position Int
      * @param isChangeChildExpand Boolean 是否改变子 node 的状态为展开，true 为跟随变为展开，false 表示保持原状态。
      * @param animate Boolean
      * @param notify Boolean
      */
-    @JvmOverloads
-    fun expand(@IntRange(from = 0) position: Int,
+    private fun expand(@IntRange(from = 0) position: Int,
                isChangeChildExpand: Boolean = false,
                animate: Boolean = true,
                notify: Boolean = true) {
@@ -310,7 +265,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
                 notifyItemChanged(adapterPosition)
                 return
             }
-            val items = flatDataWhitSetExpanded(node.childNode!!, if (isChangeChildExpand) true else null)
+            val items = flatData(node.childNode!!, if (isChangeChildExpand) true else null)
             this.data.addAll(position + 1, items)
             if (notify) {
                 if (animate) {
@@ -322,6 +277,32 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
             }
 
         }
+    }
+
+    /**
+     * 收起 node
+     * @param position Int
+     * @param animate Boolean
+     * @param notify Boolean
+     */
+    @JvmOverloads
+    fun collapse(@IntRange(from = 0) position: Int,
+                 animate: Boolean = true,
+                 notify: Boolean = true) {
+        collapse(position, false, animate, notify)
+    }
+
+    /**
+     * 展开 node
+     * @param position Int
+     * @param animate Boolean
+     * @param notify Boolean
+     */
+    @JvmOverloads
+    fun expand(@IntRange(from = 0) position: Int,
+               animate: Boolean = true,
+               notify: Boolean = true) {
+        expand(position, false, animate, notify)
     }
 
     /**
