@@ -281,7 +281,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
      */
     fun findParentNode(node: BaseNode): Int {
         val pos = this.data.indexOf(node)
-        if (pos == 0) {
+        if (pos == -1 || pos == 0) {
             return -1
         }
 
@@ -294,7 +294,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
         return -1
     }
 
-    fun findParentNode(position: Int) : Int {
+    fun findParentNode(position: Int): Int {
         if (position == 0) {
             return -1
         }
