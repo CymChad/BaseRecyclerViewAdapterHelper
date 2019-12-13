@@ -216,7 +216,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
      * @param list Collection<BaseNode>
      * @return MutableList<BaseNode>
      */
-    private fun flatDataWhitSetExpanded(list: Collection<BaseNode>, isSetExpanded: Boolean? = null): MutableList<BaseNode> {
+    private fun flatDataWhitSetExpanded(list: Collection<BaseNode>, isExpanded: Boolean? = null): MutableList<BaseNode> {
         val newList = ArrayList<BaseNode>()
 
         for (element in list) {
@@ -227,23 +227,18 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
                 if (element.isExpanded) {
                     val childNode = element.childNode
                     if (!childNode.isNullOrEmpty()) {
-                        val items = flatDataWhitSetExpanded(childNode, isSetExpanded)
+                        val items = flatDataWhitSetExpanded(childNode, isExpanded)
                         newList.addAll(items)
                     }
                 }
-                if (isSetExpanded != null) {
-                    val childNode = element.childNode
-                    if (!childNode.isNullOrEmpty()) {
-                        flatDataWhitSetExpanded(childNode, isSetExpanded)
-                    }
-
-                    element.isExpanded = isSetExpanded
+                isExpanded?.let {
+                    element.isExpanded = it
                 }
 
             } else {
                 val childNode = element.childNode
                 if (!childNode.isNullOrEmpty()) {
-                    val items = flatDataWhitSetExpanded(childNode, isSetExpanded)
+                    val items = flatDataWhitSetExpanded(childNode, isExpanded)
                     newList.addAll(items)
                 }
             }
@@ -266,7 +261,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
      */
     @JvmOverloads
     fun collapse(@IntRange(from = 0) position: Int,
-                 isChildExpand: Boolean? = null,
+                 isChildCollapse: Boolean = false,
                  animate: Boolean = true,
                  notify: Boolean = true) {
         val node = this.data[position]
@@ -279,7 +274,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
                 notifyItemChanged(adapterPosition)
                 return
             }
-            val items = flatDataWhitSetExpanded(node.childNode!!, isChildExpand)
+            val items = flatDataWhitSetExpanded(node.childNode!!, if (isChildCollapse) false else null)
             this.data.removeAll(items)
             if (notify) {
                 if (animate) {
@@ -300,7 +295,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
      */
     @JvmOverloads
     fun expand(@IntRange(from = 0) position: Int,
-               isChildExpand: Boolean? = null,
+               isChildExpand: Boolean = false,
                animate: Boolean = true,
                notify: Boolean = true) {
         val node = this.data[position]
@@ -313,7 +308,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
                 notifyItemChanged(adapterPosition)
                 return
             }
-            val items = flatDataWhitSetExpanded(node.childNode!!, isChildExpand)
+            val items = flatDataWhitSetExpanded(node.childNode!!, if (isChildExpand) true else null)
             this.data.addAll(position + 1, items)
             if (notify) {
                 if (animate) {
@@ -338,9 +333,9 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
         val node = this.data[position]
         if (node is BaseExpandNode) {
             if (node.isExpanded) {
-                collapse(position, null, animate, notify)
+                collapse(position, false, animate, notify)
             } else {
-                expand(position, null, animate, notify)
+                expand(position, false, animate, notify)
             }
         }
     }
@@ -352,7 +347,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
 
     @JvmOverloads
     fun collapseAndChild(@IntRange(from = 0) position: Int, animate: Boolean = true, notify: Boolean = true) {
-        collapse(position, false, animate, notify)
+        collapse(position, true, animate, notify)
     }
 
     /**
