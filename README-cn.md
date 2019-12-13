@@ -42,10 +42,16 @@
 然后在dependencies添加:
 ```
 	dependencies {
-	        compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.47'
+	        implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50'
 	}
 ```
 ## [androidX 迁移库版本](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/releases/tag/2.9.47-androidx)
+
+> 欢迎尝试 3.x alpha版本，此版本使用`AndroidX`构建：
+>
+> ```css
+> implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.x-alpha-0.3-g74b1327-1'
+> ```
 
 # 如何使用它来创建Adapter？
 ![demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/demo_res/item_view.png)
