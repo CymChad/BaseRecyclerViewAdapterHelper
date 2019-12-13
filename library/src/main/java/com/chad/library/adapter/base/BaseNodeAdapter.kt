@@ -224,7 +224,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
 
             if (element is BaseExpandNode) {
                 // TODO 判断有问题
-                if (element.isExpanded) {
+                if (isExpanded == true || element.isExpanded) {
                     val childNode = element.childNode
                     if (!childNode.isNullOrEmpty()) {
                         val items = flatDataWhitSetExpanded(childNode, isExpanded)
@@ -256,12 +256,13 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
     /**
      * 收起Node
      * @param position Int
+     * @param isChangeChildCollapse Boolean 是否改变子 node 的状态为收起，true 为跟随变为收起，false 表示保持原状态。
      * @param animate Boolean
      * @param notify Boolean
      */
     @JvmOverloads
     fun collapse(@IntRange(from = 0) position: Int,
-                 isChildCollapse: Boolean = false,
+                 isChangeChildCollapse: Boolean = false,
                  animate: Boolean = true,
                  notify: Boolean = true) {
         val node = this.data[position]
@@ -274,7 +275,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
                 notifyItemChanged(adapterPosition)
                 return
             }
-            val items = flatDataWhitSetExpanded(node.childNode!!, if (isChildCollapse) false else null)
+            val items = flatDataWhitSetExpanded(node.childNode!!, if (isChangeChildCollapse) false else null)
             this.data.removeAll(items)
             if (notify) {
                 if (animate) {
@@ -290,12 +291,13 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
     /**
      * 展开Node
      * @param position Int
+     * @param isChangeChildExpand Boolean 是否改变子 node 的状态为展开，true 为跟随变为展开，false 表示保持原状态。
      * @param animate Boolean
      * @param notify Boolean
      */
     @JvmOverloads
     fun expand(@IntRange(from = 0) position: Int,
-               isChildExpand: Boolean = false,
+               isChangeChildExpand: Boolean = false,
                animate: Boolean = true,
                notify: Boolean = true) {
         val node = this.data[position]
@@ -308,7 +310,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
                 notifyItemChanged(adapterPosition)
                 return
             }
-            val items = flatDataWhitSetExpanded(node.childNode!!, if (isChildExpand) true else null)
+            val items = flatDataWhitSetExpanded(node.childNode!!, if (isChangeChildExpand) true else null)
             this.data.addAll(position + 1, items)
             if (notify) {
                 if (animate) {
