@@ -131,7 +131,6 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
     }
 
     override fun setData(index: Int, data: BaseNode) {
-        super.setData(index, data)
         val flatData = flatData(arrayListOf(data))
         flatData.forEachIndexed { i, baseNode ->
             this.data[index + i] = baseNode
@@ -295,5 +294,17 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
         return -1
     }
 
-
+    fun findParentNode(position: Int) : Int {
+        if (position == 0) {
+            return -1
+        }
+        val node = this.data[position]
+        for (i in position - 1 downTo 0) {
+            val tempNode = this.data[i]
+            if (tempNode.childNode?.contains(node) == true) {
+                return i
+            }
+        }
+        return -1
+    }
 }
