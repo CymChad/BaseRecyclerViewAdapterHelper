@@ -294,7 +294,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
         return -1
     }
 
-    fun findParentNode(position: Int): Int {
+    fun findParentNode(@IntRange(from = 0) position: Int): Int {
         if (position == 0) {
             return -1
         }
