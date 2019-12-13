@@ -4,9 +4,9 @@ import android.view.View;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.node.tree.FirstNode;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.chad.library.adapter.base.entity.node.BaseNode;
 import com.chad.library.adapter.base.provider.BaseNodeProvider;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,6 +37,11 @@ public class FirstProvider extends BaseNodeProvider<BaseViewHolder> {
 
     @Override
     public void onClick(@NotNull BaseViewHolder helper, @NotNull View view, BaseNode data, int position) {
-        getAdapter().expandOrCollapse(position);
+        FirstNode node = (FirstNode) data;
+        if (node.isExpanded()) {
+            getAdapter().collapse(position);
+        } else {
+            getAdapter().expand(position, false);
+        }
     }
 }

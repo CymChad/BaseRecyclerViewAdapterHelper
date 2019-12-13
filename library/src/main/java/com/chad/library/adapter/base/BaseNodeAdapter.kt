@@ -166,6 +166,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
     /**
      * 将输入的嵌套类型数组循环递归，数据扁平化
      * @param list List<BaseNode>
+     * @param isSetExpanded 是否设置为展开状态，不变化设置为null
      * @return MutableList<BaseNode>
      */
     private fun flatData(list: Collection<BaseNode>): MutableList<BaseNode> {
@@ -174,8 +175,24 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
         for (element in list) {
             newList.add(element)
 
-            if (element is BaseExpandNode && !element.isExpanded) {
-                //什么都不做
+//            if (element is BaseExpandNode && !element.isExpanded) {
+//                //什么都不做
+//            } else {
+//                val childNode = element.childNode
+//                if (!childNode.isNullOrEmpty()) {
+//                    val items = flatData(childNode, isExpanded)
+//                    newList.addAll(items)
+//                }
+//            }
+
+            if (element is BaseExpandNode) {
+                if (element.isExpanded) {
+                    val childNode = element.childNode
+                    if (!childNode.isNullOrEmpty()) {
+                        val items = flatData(childNode)
+                        newList.addAll(items)
+                    }
+                }
             } else {
                 val childNode = element.childNode
                 if (!childNode.isNullOrEmpty()) {
@@ -194,6 +211,52 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
         return newList
     }
 
+    /**
+     * 在扁平化数据的同时，设置展开状态
+     * @param list Collection<BaseNode>
+     * @return MutableList<BaseNode>
+     */
+    private fun flatDataWhitSetExpanded(list: Collection<BaseNode>, isSetExpanded: Boolean? = null): MutableList<BaseNode> {
+        val newList = ArrayList<BaseNode>()
+
+        for (element in list) {
+            newList.add(element)
+
+            if (element is BaseExpandNode) {
+                // TODO 判断有问题
+                if (element.isExpanded) {
+                    val childNode = element.childNode
+                    if (!childNode.isNullOrEmpty()) {
+                        val items = flatDataWhitSetExpanded(childNode, isSetExpanded)
+                        newList.addAll(items)
+                    }
+                }
+                if (isSetExpanded != null) {
+                    val childNode = element.childNode
+                    if (!childNode.isNullOrEmpty()) {
+                        flatDataWhitSetExpanded(childNode, isSetExpanded)
+                    }
+
+                    element.isExpanded = isSetExpanded
+                }
+
+            } else {
+                val childNode = element.childNode
+                if (!childNode.isNullOrEmpty()) {
+                    val items = flatDataWhitSetExpanded(childNode, isSetExpanded)
+                    newList.addAll(items)
+                }
+            }
+
+            if (element is NodeFooterImp) {
+                element.footerNode?.let {
+                    newList.add(it)
+                }
+            }
+        }
+        return newList
+    }
+
 
     /**
      * 收起Node
@@ -202,17 +265,21 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
      * @param notify Boolean
      */
     @JvmOverloads
-    fun collapse(@IntRange(from = 0) position: Int, animate: Boolean = true, notify: Boolean = true) {
+    fun collapse(@IntRange(from = 0) position: Int,
+                 isChildExpand: Boolean? = null,
+                 animate: Boolean = true,
+                 notify: Boolean = true) {
         val node = this.data[position]
-        val adapterPosition = position + getHeaderLayoutCount()
 
         if (node is BaseExpandNode && node.isExpanded) {
+            val adapterPosition = position + getHeaderLayoutCount()
+
             node.isExpanded = false
             if (node.childNode.isNullOrEmpty()) {
                 notifyItemChanged(adapterPosition)
                 return
             }
-            val items = flatData(node.childNode!!)
+            val items = flatDataWhitSetExpanded(node.childNode!!, isChildExpand)
             this.data.removeAll(items)
             if (notify) {
                 if (animate) {
@@ -232,17 +299,21 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
      * @param notify Boolean
      */
     @JvmOverloads
-    fun expand(@IntRange(from = 0) position: Int, animate: Boolean = true, notify: Boolean = true) {
+    fun expand(@IntRange(from = 0) position: Int,
+               isChildExpand: Boolean? = null,
+               animate: Boolean = true,
+               notify: Boolean = true) {
         val node = this.data[position]
-        val adapterPosition = position + getHeaderLayoutCount()
 
         if (node is BaseExpandNode && !node.isExpanded) {
+            val adapterPosition = position + getHeaderLayoutCount()
+
             node.isExpanded = true
             if (node.childNode.isNullOrEmpty()) {
                 notifyItemChanged(adapterPosition)
                 return
             }
-            val items = flatData(node.childNode!!)
+            val items = flatDataWhitSetExpanded(node.childNode!!, isChildExpand)
             this.data.addAll(position + 1, items)
             if (notify) {
                 if (animate) {
@@ -267,11 +338,21 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
         val node = this.data[position]
         if (node is BaseExpandNode) {
             if (node.isExpanded) {
-                collapse(position, animate, notify)
+                collapse(position, null, animate, notify)
             } else {
-                expand(position, animate, notify)
+                expand(position, null, animate, notify)
             }
         }
+    }
+
+    @JvmOverloads
+    fun expandAndChild(@IntRange(from = 0) position: Int, animate: Boolean = true, notify: Boolean = true) {
+        expand(position, true, animate, notify)
+    }
+
+    @JvmOverloads
+    fun collapseAndChild(@IntRange(from = 0) position: Int, animate: Boolean = true, notify: Boolean = true) {
+        collapse(position, false, animate, notify)
     }
 
     /**

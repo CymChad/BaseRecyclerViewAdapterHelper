@@ -1106,7 +1106,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 
     fun getDiffHelper() : BrvahAsyncDiffer<T> {
         checkNotNull(mDiffHelper) {
-            "Please use first setDiffCallback() or setDiffConfig() !"
+            "Please use setDiffCallback() or setDiffConfig() first!"
         }
         return mDiffHelper!!
     }
