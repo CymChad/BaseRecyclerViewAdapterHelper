@@ -319,7 +319,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         when (holder.itemViewType) {
             LOAD_MORE_VIEW -> loadMoreModule?.loadMoreView?.convert(holder, position)
             HEADER_VIEW, EMPTY_VIEW, FOOTER_VIEW -> return
-            else -> convert(holder, data[position - getHeaderLayoutCount()])
+            else -> convert(holder, data.getOrNull(position - getHeaderLayoutCount()))
         }
     }
 
@@ -335,7 +335,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         when (holder.itemViewType) {
             LOAD_MORE_VIEW -> loadMoreModule?.loadMoreView?.convert(holder, position)
             HEADER_VIEW, EMPTY_VIEW, FOOTER_VIEW -> return
-            else -> convert(holder, data[position - getHeaderLayoutCount()], payloads)
+            else -> convert(holder, data.getOrNull(position - getHeaderLayoutCount()), payloads)
         }
     }
 
@@ -404,10 +404,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * @return The data at the specified position.
      */
     fun getItem(@IntRange(from = 0) position: Int): T? {
-        return if (position >= 0 && position < data.size)
-            data[position]
-        else
-            null
+        return data.getOrNull(position)
     }
 
     internal fun getItemPosition(item: T?): Int {
@@ -980,8 +977,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         if (data == this.data) {
             return
         }
-        val oldDataSize = this.data.size
-
         this.data = data ?: arrayListOf()
         loadMoreModule?.reset()
         mLastPosition = -1
