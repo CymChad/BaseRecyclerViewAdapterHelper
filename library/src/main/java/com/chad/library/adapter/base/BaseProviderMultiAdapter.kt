@@ -13,14 +13,16 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
  * 1、实体类不方便扩展，此Adapter的数据类型可以是任意类型，只需要在[getItemType]中返回对应类型
  * 2、item 类型较多，在convert()中管理起来复杂
  *
+ * ViewHolder 由 [BaseItemProvider] 实现，并且每个[BaseItemProvider]可以拥有自己类型的ViewHolder类型。
+ *
  * @param T data 数据类型
  * @param VH : BaseViewHolder
  * @constructor
  */
-abstract class BaseProviderMultiAdapter<T, VH : BaseViewHolder>(data: MutableList<T>? = null) :
-        BaseQuickAdapter<T, VH>(0, data) {
+abstract class BaseProviderMultiAdapter<T>(data: MutableList<T>? = null) :
+        BaseQuickAdapter<T, BaseViewHolder>(0, data) {
 
-    private val mItemProviders by lazy { SparseArray<BaseItemProvider<T, VH>>() }
+    private val mItemProviders by lazy { SparseArray<BaseItemProvider<T>>() }
 
     /**
      * 返回 item 类型
@@ -34,16 +36,16 @@ abstract class BaseProviderMultiAdapter<T, VH : BaseViewHolder>(data: MutableLis
      * 必须通过此方法，添加 provider
      * @param provider BaseItemProvider
      */
-    open fun addItemProvider(provider: BaseItemProvider<T, VH>) {
+    open fun addItemProvider(provider: BaseItemProvider<T>) {
         provider.setAdapter(this)
         mItemProviders.put(provider.itemViewType, provider)
     }
 
-    override fun onCreateDefViewHolder(parent: ViewGroup, viewType: Int): VH {
+    override fun onCreateDefViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
         val provider = mItemProviders.get(viewType)
         checkNotNull(provider) { "ViewType: $viewType no such provider found，please use addItemProvider() first!" }
         provider.context = parent.context
-        return createBaseViewHolder(parent, provider.layoutId).apply {
+        return provider.onCreateViewHolder(parent).apply {
             provider.onViewHolderCreated(this)
         }
     }
@@ -52,27 +54,27 @@ abstract class BaseProviderMultiAdapter<T, VH : BaseViewHolder>(data: MutableLis
         return getItemType(data, position)
     }
 
-    override fun convert(helper: VH, item: T?) {
+    override fun convert(helper: BaseViewHolder, item: T?) {
         val itemViewType = helper.itemViewType
         val provider = mItemProviders.get(itemViewType)
 
         provider.convert(helper, item)
     }
 
-    override fun convert(helper: VH, item: T?, payloads: List<Any>) {
+    override fun convert(helper: BaseViewHolder, item: T?, payloads: List<Any>) {
         val itemViewType = helper.itemViewType
         val provider = mItemProviders.get(itemViewType)
 
         provider.convert(helper, item, payloads)
     }
 
-    override fun bindViewClickListener(viewHolder: VH, viewType: Int) {
+    override fun bindViewClickListener(viewHolder: BaseViewHolder, viewType: Int) {
         super.bindViewClickListener(viewHolder, viewType)
         bindClick(viewHolder)
         bindChildClick(viewHolder, viewType)
     }
 
-    protected open fun bindClick(viewHolder: VH) {
+    protected open fun bindClick(viewHolder: BaseViewHolder) {
         if (getOnItemClickListener() == null) {
             //如果没有设置点击监听，则回调给 itemProvider
             //Callback to itemProvider if no click listener is set
@@ -106,7 +108,7 @@ abstract class BaseProviderMultiAdapter<T, VH : BaseViewHolder>(data: MutableLis
         }
     }
 
-    protected open fun bindChildClick(viewHolder: VH, viewType: Int) {
+    protected open fun bindChildClick(viewHolder: BaseViewHolder, viewType: Int) {
         if (getOnItemChildClickListener() == null) {
             val provider = mItemProviders.get(viewType)
             val ids = provider.getChildClickViewIds()

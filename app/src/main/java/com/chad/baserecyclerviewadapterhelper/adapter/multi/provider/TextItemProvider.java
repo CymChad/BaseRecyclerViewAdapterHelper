@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
  * @date 2018/3/30  11:39
  */
 
-public class TextItemProvider extends BaseItemProvider<ProviderMultiEntity, BaseViewHolder> {
+public class TextItemProvider extends BaseItemProvider<ProviderMultiEntity> {
     @Override
     public int getItemViewType() {
         return ProviderMultiEntity.TEXT;

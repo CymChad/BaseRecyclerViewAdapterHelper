@@ -10,8 +10,8 @@ import com.chad.library.adapter.base.provider.BaseItemProvider
 import com.chad.library.adapter.base.provider.BaseNodeProvider
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
-abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>? = null)
-    : BaseProviderMultiAdapter<BaseNode, VH>(data) {
+abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
+    : BaseProviderMultiAdapter<BaseNode>(data) {
 
     private val fullSpanNodeTypeSet = HashSet<Int>()
 
@@ -28,7 +28,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
      * 添加 node provider
      * @param provider BaseItemProvider
      */
-    fun addNodeProvider(provider: BaseNodeProvider<VH>) {
+    fun addNodeProvider(provider: BaseNodeProvider) {
         addItemProvider(provider)
     }
 
@@ -36,7 +36,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
      * 添加需要铺满的 node provider
      * @param provider BaseItemProvider
      */
-    fun addFullSpanNodeProvider(provider: BaseNodeProvider<VH>) {
+    fun addFullSpanNodeProvider(provider: BaseNodeProvider) {
         fullSpanNodeTypeSet.add(provider.itemViewType)
         addItemProvider(provider)
     }
@@ -46,7 +46,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
      * 铺满一行或者一列
      * @param provider BaseItemProvider
      */
-    fun addFooterNodeProvider(provider: BaseNodeProvider<VH>) {
+    fun addFooterNodeProvider(provider: BaseNodeProvider) {
         addFullSpanNodeProvider(provider)
     }
 
@@ -54,7 +54,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
      * 请勿直接通过此方法添加 node provider！
      * @param provider BaseItemProvider<BaseNode, VH>
      */
-    override fun addItemProvider(provider: BaseItemProvider<BaseNode, VH>) {
+    override fun addItemProvider(provider: BaseItemProvider<BaseNode>) {
         if (provider is BaseNodeProvider) {
             super.addItemProvider(provider)
         } else {
@@ -66,7 +66,7 @@ abstract class BaseNodeAdapter<VH : BaseViewHolder>(data: MutableList<BaseNode>?
         return super.isFixedViewType(type) || fullSpanNodeTypeSet.contains(type)
     }
 
-    override fun onCreateDefViewHolder(parent: ViewGroup, viewType: Int): VH {
+    override fun onCreateDefViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
         val holder = super.onCreateDefViewHolder(parent, viewType)
         if (fullSpanNodeTypeSet.contains(viewType)) {
             setFullSpan(holder)

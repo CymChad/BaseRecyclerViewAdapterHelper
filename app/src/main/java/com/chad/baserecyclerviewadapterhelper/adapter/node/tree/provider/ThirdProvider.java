@@ -8,7 +8,7 @@ import com.chad.library.adapter.base.provider.BaseNodeProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ThirdProvider extends BaseNodeProvider<BaseViewHolder> {
+public class ThirdProvider extends BaseNodeProvider {
 
     @Override
     public int getItemViewType() {

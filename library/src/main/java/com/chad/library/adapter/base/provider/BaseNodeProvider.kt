@@ -1,13 +1,12 @@
 package com.chad.library.adapter.base.provider
 
 import com.chad.library.adapter.base.BaseNodeAdapter
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.chad.library.adapter.base.entity.node.BaseNode
 
-abstract class BaseNodeProvider<VH : BaseViewHolder> : BaseItemProvider<BaseNode, VH>() {
+abstract class BaseNodeProvider : BaseItemProvider<BaseNode>() {
 
-    override fun getAdapter(): BaseNodeAdapter<VH>? {
-        return super.getAdapter() as? BaseNodeAdapter<VH>
+    override fun getAdapter(): BaseNodeAdapter? {
+        return super.getAdapter() as? BaseNodeAdapter
     }
 
 }

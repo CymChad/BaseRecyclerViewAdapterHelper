@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
  * @description: Text Img ItemProvider
  * @date 2018/3/30  11:39
  */
-public class TextImgItemProvider extends BaseItemProvider<ProviderMultiEntity, BaseViewHolder> {
+public class TextImgItemProvider extends BaseItemProvider<ProviderMultiEntity> {
 
     public TextImgItemProvider() {
         addChildClickViewIds(R.id.tv);

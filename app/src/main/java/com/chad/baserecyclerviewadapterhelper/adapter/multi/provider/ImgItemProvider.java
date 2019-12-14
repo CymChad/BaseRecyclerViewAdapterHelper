@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
  * @date 2018/3/30  11:39
  */
 
-public class ImgItemProvider extends BaseItemProvider<ProviderMultiEntity, BaseViewHolder> {
+public class ImgItemProvider extends BaseItemProvider<ProviderMultiEntity> {
 
     @Override
     public int getItemViewType() {

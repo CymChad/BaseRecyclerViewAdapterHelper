@@ -36,9 +36,9 @@ public class DelegateMultiAdapter extends BaseDelegateMultiAdapter<DelegateMulti
         });
         // 第二部，绑定 item 类型
         getMultiTypeDelegate()
-                .registerItemType(DelegateMultiEntity.TEXT, R.layout.item_text_view)
-                .registerItemType(DelegateMultiEntity.IMG, R.layout.item_image_view)
-                .registerItemType(DelegateMultiEntity.IMG_TEXT, R.layout.item_img_text_view);
+                .addItemType(DelegateMultiEntity.TEXT, R.layout.item_text_view)
+                .addItemType(DelegateMultiEntity.IMG, R.layout.item_image_view)
+                .addItemType(DelegateMultiEntity.IMG_TEXT, R.layout.item_img_text_view);
 
 
         //******************************************************************************************
@@ -74,9 +74,9 @@ public class DelegateMultiAdapter extends BaseDelegateMultiAdapter<DelegateMulti
     class MyMultiTypeDelegate extends BaseMultiTypeDelegate<DelegateMultiEntity> {
 
         public MyMultiTypeDelegate() {
-            registerItemType(DelegateMultiEntity.TEXT, R.layout.item_text_view);
-            registerItemType(DelegateMultiEntity.IMG, R.layout.item_image_view);
-            registerItemType(DelegateMultiEntity.IMG_TEXT, R.layout.item_img_text_view);
+            addItemType(DelegateMultiEntity.TEXT, R.layout.item_text_view);
+            addItemType(DelegateMultiEntity.IMG, R.layout.item_image_view);
+            addItemType(DelegateMultiEntity.IMG_TEXT, R.layout.item_img_text_view);
         }
 
         @Override

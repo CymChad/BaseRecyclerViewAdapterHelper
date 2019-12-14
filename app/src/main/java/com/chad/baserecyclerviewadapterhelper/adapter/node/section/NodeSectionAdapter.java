@@ -3,18 +3,17 @@ package com.chad.baserecyclerviewadapterhelper.adapter.node.section;
 import com.chad.baserecyclerviewadapterhelper.adapter.node.section.provider.RootFooterNodeProvider;
 import com.chad.baserecyclerviewadapterhelper.adapter.node.section.provider.RootNodeProvider;
 import com.chad.baserecyclerviewadapterhelper.adapter.node.section.provider.SecondNodeProvider;
+import com.chad.baserecyclerviewadapterhelper.entity.node.section.ItemNode;
 import com.chad.baserecyclerviewadapterhelper.entity.node.section.RootFooterNode;
 import com.chad.baserecyclerviewadapterhelper.entity.node.section.RootNode;
-import com.chad.baserecyclerviewadapterhelper.entity.node.section.ItemNode;
 import com.chad.library.adapter.base.BaseNodeAdapter;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.chad.library.adapter.base.entity.node.BaseNode;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class NodeSectionAdapter extends BaseNodeAdapter<BaseViewHolder> {
+public class NodeSectionAdapter extends BaseNodeAdapter {
 
     public NodeSectionAdapter() {
         super();

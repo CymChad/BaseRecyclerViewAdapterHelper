@@ -10,7 +10,7 @@ import com.chad.library.adapter.base.provider.BaseNodeProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class RootFooterNodeProvider extends BaseNodeProvider<BaseViewHolder> {
+public class RootFooterNodeProvider extends BaseNodeProvider {
 
     public RootFooterNodeProvider() {
         addChildClickViewIds(R.id.footerTv);
