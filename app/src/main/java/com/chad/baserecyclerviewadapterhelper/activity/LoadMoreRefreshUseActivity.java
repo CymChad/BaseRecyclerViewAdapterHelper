@@ -70,10 +70,10 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         initAdapter();
-        initSwitch();
         addHeadView();
         initRefreshLayout();
         initLoadMore();
+        initSwitch();
     }
 
     @Override
@@ -82,21 +82,6 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
         // 进入页面，刷新数据
         mSwipeRefreshLayout.setRefreshing(true);
         refresh();
-    }
-
-    private void initSwitch() {
-        switchCompat.setChecked(true);
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mAdapter.getLoadMoreModule().setAutoLoadMore(isChecked);
-                if (isChecked) {
-                    switchCompat.setText("自动加载（开）");
-                } else {
-                    switchCompat.setText("自动加载（关）");
-                }
-            }
-        });
     }
 
     private void initAdapter() {
@@ -145,6 +130,21 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
             }
         });
         mAdapter.getLoadMoreModule().setAutoLoadMore(true);
+    }
+
+    private void initSwitch() {
+        switchCompat.setChecked(mAdapter.getLoadMoreModule().isAutoLoadMore());
+        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mAdapter.getLoadMoreModule().setAutoLoadMore(isChecked);
+                if (isChecked) {
+                    switchCompat.setText("自动加载（开）");
+                } else {
+                    switchCompat.setText("自动加载（关）");
+                }
+            }
+        });
     }
 
     /**
@@ -227,7 +227,7 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
         @Override
         public void run() {
             try {
-                Thread.sleep(500);
+                Thread.sleep(800);
             } catch (InterruptedException e) {
             }
 

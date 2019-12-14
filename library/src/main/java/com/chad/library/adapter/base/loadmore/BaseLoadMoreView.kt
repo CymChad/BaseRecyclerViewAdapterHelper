@@ -14,9 +14,11 @@ abstract class BaseLoadMoreView {
         Complete, Loading, Fail, End
     }
 
-    internal var loadMoreStatus = Status.Complete
+    var loadMoreStatus = Status.Complete
+        internal set
 
     var isLoadEndMoreGone: Boolean = false
+        internal set
 
     abstract fun getRootView(parent: ViewGroup): View
 

@@ -982,6 +982,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         loadMoreModule?.reset()
         mLastPosition = -1
         notifyDataSetChanged()
+        loadMoreModule?.checkDisableLoadMoreIfNotFullPage()
     }
 
     /**

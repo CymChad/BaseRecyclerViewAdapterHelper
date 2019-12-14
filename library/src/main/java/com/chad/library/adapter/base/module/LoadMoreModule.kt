@@ -40,7 +40,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
     }
 
     private var mLoadMoreListener: OnLoadMoreListener? = null
-    private var mNextLoadEnable = false
+    private var mNextLoadEnable = true
 
     /** 设置加载更多布局 */
     var loadMoreView = defLoadMoreView
@@ -49,8 +49,8 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
     var enableLoadMoreEndClick = false
     /** 是否打开自动加载更多 */
     var isAutoLoadMore = true
-    //TODO
-//    var isEnableLoadMoreIfNotFullPage = true
+    /** 当自动加载开启，同时数据不满一屏时，是否继续执行自动加载更多 */
+    var isEnableLoadMoreIfNotFullPage = true
     /**
      * 预加载
      */
@@ -78,7 +78,9 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
             if (baseQuickAdapter.hasEmptyView()) {
                 return -1
             }
-            return baseQuickAdapter.getHeaderLayoutCount() + baseQuickAdapter.data.size + baseQuickAdapter.getFooterLayoutCount()
+            return baseQuickAdapter.let {
+                it.getHeaderLayoutCount() + it.data.size + it.getFooterLayoutCount()
+            }
         }
 
     /**
@@ -107,7 +109,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
         viewHolder.itemView.setOnClickListener {
             if (loadMoreView.loadMoreStatus == BaseLoadMoreView.Status.Fail) {
                 loadMoreToLoading()
-            } else if (loadMoreView.loadMoreStatus == BaseLoadMoreView.Status.Complete && !isAutoLoadMore) {
+            } else if (loadMoreView.loadMoreStatus == BaseLoadMoreView.Status.Complete) {
                 loadMoreToLoading()
             } else if (enableLoadMoreEndClick && loadMoreView.loadMoreStatus == BaseLoadMoreView.Status.End) {
                 loadMoreToLoading()
@@ -132,7 +134,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
         if (mLoadMoreListener == null || !isEnableLoadMore) {
             return false
         }
-        if (!mNextLoadEnable && loadMoreView.isLoadEndMoreGone) {
+        if (loadMoreView.loadMoreStatus == BaseLoadMoreView.Status.End && loadMoreView.isLoadEndMoreGone) {
             return false
         }
         return baseQuickAdapter.data.isNotEmpty()
@@ -159,6 +161,10 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
         if (loadMoreView.loadMoreStatus == BaseLoadMoreView.Status.Loading) {
             return
         }
+        if (!mNextLoadEnable) {
+            return
+        }
+
         invokeLoadMoreListener()
     }
 
@@ -172,27 +178,25 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
         } ?: mLoadMoreListener?.onLoadMore()
     }
 
-    //TODO disableLoadMoreIfNotFullPage
     /**
      * check if full page after [BaseQuickAdapter.setNewData], if full, it will enable load more again.
-     * <p>
-     * 不是配置项！！
-     * <p>
-     * 这个方法是用来检查是否满一屏的，所以只推荐在 [BaseQuickAdapter.setNewData] 之后使用
-     * 原理很简单，先关闭 load more，检查完了再决定是否开启
-     * <p>
-     * 不是配置项！！
+     *
+     * 用来检查数据是否满一屏，如果满足条件，再开启
      *
      * @see BaseQuickAdapter.setNewData
      */
-    fun disableLoadMoreIfNotFullPage() {
-        isEnableLoadMore = false
+    fun checkDisableLoadMoreIfNotFullPage() {
+        if (!isEnableLoadMoreIfNotFullPage) {
+            return
+        }
+        // 先把标记位设置为false
+        mNextLoadEnable = false
         val recyclerView = baseQuickAdapter.weakRecyclerView.get() ?: return
         val manager = recyclerView.layoutManager ?: return
         if (manager is LinearLayoutManager) {
             recyclerView.postDelayed({
                 if (isFullScreen(manager)) {
-                    isEnableLoadMore = true
+                    mNextLoadEnable = true
                 }
             }, 50)
         } else if (manager is StaggeredGridLayoutManager) {
@@ -201,7 +205,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
                 manager.findLastCompletelyVisibleItemPositions(positions)
                 val pos = getTheBiggestNumber(positions) + 1
                 if (pos != baseQuickAdapter.itemCount) {
-                    isEnableLoadMore = true
+                    mNextLoadEnable = true
                 }
             }, 50)
         }
@@ -235,7 +239,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
         if (!hasLoadMoreView()) {
             return
         }
-        mNextLoadEnable = false
+//        mNextLoadEnable = false
         loadMoreView.isLoadEndMoreGone = gone
 
         loadMoreView.loadMoreStatus = BaseLoadMoreView.Status.End
@@ -254,10 +258,12 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
         if (!hasLoadMoreView()) {
             return
         }
-        mNextLoadEnable = true
+//        mNextLoadEnable = true
         loadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Complete
 
         baseQuickAdapter.notifyItemChanged(loadMoreViewPosition)
+
+        checkDisableLoadMoreIfNotFullPage()
     }
 
     /**
@@ -277,7 +283,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
      */
     override fun setOnLoadMoreListener(listener: OnLoadMoreListener?) {
         this.mLoadMoreListener = listener
-        mNextLoadEnable = true
+//        mNextLoadEnable = true
         isEnableLoadMore = true
     }
 
@@ -286,7 +292,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
      */
     internal fun reset() {
         if (mLoadMoreListener != null) {
-            mNextLoadEnable = true
+//            mNextLoadEnable = true
             isEnableLoadMore = true
             loadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Complete
         }
