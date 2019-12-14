@@ -14,7 +14,7 @@ abstract class BaseLoadMoreView {
         Complete, Loading, Fail, End
     }
 
-    var loadMoreStatus = Status.Complete
+    internal var loadMoreStatus = Status.Complete
 
     var isLoadEndMoreGone: Boolean = false
 

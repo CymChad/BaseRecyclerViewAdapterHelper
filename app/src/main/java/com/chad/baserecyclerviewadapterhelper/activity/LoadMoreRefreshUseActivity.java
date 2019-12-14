@@ -227,7 +227,7 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
         @Override
         public void run() {
             try {
-                Thread.sleep(800);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
             }
 
