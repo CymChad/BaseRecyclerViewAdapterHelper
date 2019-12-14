@@ -50,7 +50,7 @@
 > 欢迎尝试 3.x alpha版本，此版本使用`AndroidX`构建：
 >
 > ```css
-> implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.x-alpha-0.3-g74b1327-1'
+> implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.x-alpha-0.4-gfa0745b-1'
 > ```
 
 # 如何使用它来创建Adapter？
