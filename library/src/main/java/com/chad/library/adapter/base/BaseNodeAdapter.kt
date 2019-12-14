@@ -58,7 +58,7 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
         if (provider is BaseNodeProvider) {
             super.addItemProvider(provider)
         } else {
-            throw IllegalStateException("please add BaseNodeProvider, no BaseItemProvider!")
+            throw IllegalStateException("Please add BaseNodeProvider, no BaseItemProvider!")
         }
     }
 
@@ -67,11 +67,11 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
     }
 
     override fun onCreateDefViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-        val holder = super.onCreateDefViewHolder(parent, viewType)
-        if (fullSpanNodeTypeSet.contains(viewType)) {
-            setFullSpan(holder)
+        return super.onCreateDefViewHolder(parent, viewType).apply {
+            if (fullSpanNodeTypeSet.contains(viewType)) {
+                setFullSpan(this)
+            }
         }
-        return holder
     }
 
     /*************************** 重写数据设置方法 ***************************/

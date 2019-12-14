@@ -33,14 +33,14 @@ abstract class BaseDelegateMultiAdapter<T, VH : BaseViewHolder>(data: MutableLis
 
     override fun onCreateDefViewHolder(parent: ViewGroup, viewType: Int): VH {
         val delegate = getMultiTypeDelegate()
-        checkNotNull(delegate) { "please use setMultiTypeDelegate first!" }
+        checkNotNull(delegate) { "Please use setMultiTypeDelegate first!" }
         val layoutId = delegate.getLayoutId(viewType)
         return createBaseViewHolder(parent, layoutId)
     }
 
     override fun getDefItemViewType(position: Int): Int {
         val delegate = getMultiTypeDelegate()
-        checkNotNull(delegate) { "please use setMultiTypeDelegate first!" }
+        checkNotNull(delegate) { "Please use setMultiTypeDelegate first!" }
         return delegate.getItemType(data, position)
     }
 }

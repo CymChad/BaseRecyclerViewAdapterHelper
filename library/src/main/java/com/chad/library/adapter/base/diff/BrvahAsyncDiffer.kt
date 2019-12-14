@@ -119,7 +119,7 @@ class BrvahAsyncDiffer<T>(private val adapter: BaseQuickAdapter<T, *>,
     }
 
     private fun onCurrentListChanged(previousList: List<T>,
-                                     commitCallback: Runnable?) { // current list is always mReadOnlyList
+                                     commitCallback: Runnable?) {
         for (listener in mListeners) {
             listener.onCurrentListChanged(previousList, adapter.data)
         }

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.view.ViewParent
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.IdRes
@@ -209,7 +210,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
                 loadMoreModule!!.setupViewHolder(baseViewHolder)
             }
             HEADER_VIEW -> {
-                val headerLayoutVp = mHeaderLayout.parent
+                val headerLayoutVp: ViewParent? = mHeaderLayout.parent
                 if (headerLayoutVp is ViewGroup) {
                     headerLayoutVp.removeView(mHeaderLayout)
                 }
@@ -217,7 +218,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
                 baseViewHolder = createBaseViewHolder(mHeaderLayout)
             }
             EMPTY_VIEW -> {
-                val emptyLayoutVp = mEmptyLayout.parent
+                val emptyLayoutVp: ViewParent? = mEmptyLayout.parent
                 if (emptyLayoutVp is ViewGroup) {
                     emptyLayoutVp.removeView(mEmptyLayout)
                 }
@@ -225,7 +226,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
                 baseViewHolder = createBaseViewHolder(mEmptyLayout)
             }
             FOOTER_VIEW -> {
-                val footerLayoutVp = mFooterLayout.parent
+                val footerLayoutVp: ViewParent? = mFooterLayout.parent
                 if (footerLayoutVp is ViewGroup) {
                     footerLayoutVp.removeView(mFooterLayout)
                 }
@@ -945,7 +946,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     }
 
     /**
-     * 动画类型枚举
+     * 内置默认动画类型
      */
     enum class AnimationType {
         AlphaIn, ScaleIn, SlideInBottom, SlideInLeft, SlideInRight
@@ -1098,6 +1099,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 
     /**
      * 此方法为异步Diff，无需考虑性能问题
+     * 使用之前请先设置 [setDiffCallback] 或者 [setDiffConfig]
      *
      * use DiffResult setting up a new instance to data.
      * This method is asynchronous.
@@ -1105,7 +1107,8 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * @param newData MutableList<T>?
      */
     open fun setDiffNewData(newData: MutableList<T>?) {
-        if (hasEmptyView()) { // If the current view is an empty view, set the new data directly without diff
+        if (hasEmptyView()) {
+            // If the current view is an empty view, set the new data directly without diff
             setNewData(newData)
             return
         }

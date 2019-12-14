@@ -55,17 +55,11 @@ abstract class BaseProviderMultiAdapter<T>(data: MutableList<T>? = null) :
     }
 
     override fun convert(helper: BaseViewHolder, item: T?) {
-        val itemViewType = helper.itemViewType
-        val provider = mItemProviders.get(itemViewType)
-
-        provider.convert(helper, item)
+        mItemProviders.get(helper.itemViewType).convert(helper, item)
     }
 
     override fun convert(helper: BaseViewHolder, item: T?, payloads: List<Any>) {
-        val itemViewType = helper.itemViewType
-        val provider = mItemProviders.get(itemViewType)
-
-        provider.convert(helper, item, payloads)
+        mItemProviders.get(helper.itemViewType).convert(helper, item, payloads)
     }
 
     override fun bindViewClickListener(viewHolder: BaseViewHolder, viewType: Int) {
