@@ -47,10 +47,10 @@
 ```
 ## [androidX 迁移库版本](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/releases/tag/2.9.47-androidx)
 
-> 欢迎尝试 3.x alpha版本，此版本使用`AndroidX`构建：
+> 欢迎尝试 3.x alpha版本，此版本使用`AndroidX`构建，欢迎反馈BUG：（相关说明文档，正在编写）
 >
 > ```css
-> implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.x-alpha-0.4-gfa0745b-1'
+> implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.x-alpha-0.5-g85084eb-1'
 > ```
 
 # 如何使用它来创建Adapter？
