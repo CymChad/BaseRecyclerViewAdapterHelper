@@ -18,7 +18,7 @@ Of course, you can continue to use the [2.x](https://github.com/CymChad/BaseRecy
 
 # Document
 - English Writing ...
-- [中文1](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/0-BaseRecyclerViewAdapterHelper.md)
+- [中文](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/0-BaseRecyclerViewAdapterHelper.md)
 
   
 
@@ -39,19 +39,4 @@ Of course, you can continue to use the [2.x](https://github.com/CymChad/BaseRecy
 # Thanks  
 [JoanZapata / base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper)
 
-# License
-```
-Copyright 2016 陈宇明
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-```
+# [License](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/LICENSE)
