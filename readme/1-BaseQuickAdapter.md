@@ -104,11 +104,11 @@ adapter.setOnItemClickListener(new OnItemClickListener() {
 
 ```java
 adapter.setOnItemLongClickListener(new OnItemLongClickListener() {
-	@Override
-	public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-		Tips.show("onItemLongClick " + position);
-		return true;
-	}
+    @Override
+    public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+        Tips.show("onItemLongClick " + position);
+        return true;
+    }
 });
 ```
 
@@ -121,12 +121,12 @@ adapter.setOnItemLongClickListener(new OnItemLongClickListener() {
 adapter.addChildClickViewIds(R.id.btn, R.id.iv_num_add, R.id.item_click);
 // 设置子控件点击监听
 adapter.setOnItemChildClickListener(new OnItemChildClickListener() {
-	@Override
-	public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-		if (view.getId() == R.id.btn) {
+    @Override
+    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+        if (view.getId() == R.id.btn) {
 			Tips.show("onItemChildClick " + position);
         }
-	}
+    }
 });
 ```
 
@@ -137,13 +137,13 @@ adapter.setOnItemChildClickListener(new OnItemChildClickListener() {
 adapter.addChildLongClickViewIds(R.id.btn, R.id.iv_num_add, R.id.item_click);
 // 设置子控件长按监听
 adapter.setOnItemChildLongClickListener(new OnItemChildLongClickListener() {
-	@Override
+    @Override
 	public boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
-		if (view.getId() == R.id.btn) {
-          	Tips.show("onItemChildLongClick " + position);
-		}
-		return true;
-	}
+        if (view.getId() == R.id.btn) {
+           Tips.show("onItemChildLongClick " + position);
+        }
+        return true;
+    }
 });
 ```
 
