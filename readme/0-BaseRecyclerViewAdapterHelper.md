@@ -15,17 +15,17 @@
 ### 将JitPack存储库添加到您的构建文件中(项目根目录下build.gradle文件)
 ```
 allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
+    repositories {
+        ...
+	maven { url 'https://jitpack.io' }
+    }
 }
 ```
 
 ### 添加依赖项
 ```
 dependencies {
-	    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.0-beta1'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.0-beta1'
 }
 ```
 
