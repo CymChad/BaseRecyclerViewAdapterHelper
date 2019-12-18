@@ -17,7 +17,7 @@ Of course, you can continue to use the [2.x](https://github.com/CymChad/BaseRecy
 当然，你也可以继续使用[2.x](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/tree/2.x) 版本。
 
 # Document
-- Writing ...
+- English Writing ...
 - [中文1](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/0-BaseRecyclerViewAdapterHelper.md)
 
   
