@@ -5,20 +5,18 @@ http://www.recyclerview.org/
 Powerful and flexible RecyclerAdapter,
 Please feel free to use this. (Welcome to **Star** and **Fork**)  
 
-kotlin demo :[BRVAH_kotlin](https://github.com/AllenCoder/BRVAH_kotlin)
+**New version 3.x beta release, use `kotlin` and `AndroidX`**. Fixed many legacy issues, strengthened support for DataBinding, and ‘multi-layout’ is more flexible.
 
-## [androidX stable version ](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/releases/tag/2.9.45-androidx)
 # Document
-- [English](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki)
-- [中文1](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/README-cn.md)
-- [中文2](http://www.jianshu.com/p/b343fcff51b0)
+- Writing ...
+- [中文1](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/0-BaseRecyclerViewAdapterHelper.md)
 
-## [UI](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/issues/694)
+  
+
 ## Demo
+![](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/demo.png)
 
-[![Get it on Google Play](https://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=com.chad.baserecyclerviewadapterhelper)
-
-[国内下载地址](https://fir.im/s91g)  
+[国内下载地址](https://www.lanzous.com/i83z4kf)  
 
 # proguard-rules.pro
 > 此资源库自带混淆规则，并且会自动导入，正常情况下无需手动导入。
@@ -26,10 +24,7 @@ kotlin demo :[BRVAH_kotlin](https://github.com/AllenCoder/BRVAH_kotlin)
 > You can also go here to view [proguard-rules](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/library/proguard-rules.pro)
 
 
-# Extension library
-[PinnedSectionItemDecoration](https://github.com/oubowu/PinnedSectionItemDecoration)  
-[EasyRefreshLayout](https://github.com/anzaizai/EasyRefreshLayout)  
-[EasySwipeMenuLayout](https://github.com/anzaizai/EasySwipeMenuLayout)
+
 
 # Thanks  
 [JoanZapata / base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper)

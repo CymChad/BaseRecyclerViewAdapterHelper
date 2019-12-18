@@ -2,8 +2,6 @@ package com.chad.baserecyclerviewadapterhelper.base;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -11,8 +9,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.chad.baserecyclerviewadapterhelper.R;
-import com.orhanobut.logger.Logger;
 
 /**
  * 文 件 名: BaseActivity
@@ -22,7 +22,7 @@ import com.orhanobut.logger.Logger;
  * 修改时间：
  * 修改备注：
  */
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
     /**
      * 日志输出标志getSupportActionBar().
      **/
@@ -50,7 +50,7 @@ public class BaseActivity extends AppCompatActivity {
                 }
             });
         } else {
-            Logger.t(TAG).e("back is null ,please check out");
+//            Logger.t(TAG).e("back is null ,please check out");
         }
 
     }
@@ -60,7 +60,7 @@ public class BaseActivity extends AppCompatActivity {
             back.setVisibility(View.VISIBLE);
             back.setOnClickListener(l);
         } else {
-            Logger.t(TAG).e("back is null ,please check out");
+//            Logger.t(TAG).e("back is null ,please check out");
         }
 
     }
@@ -80,7 +80,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }
@@ -90,8 +90,8 @@ public class BaseActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         }
-        back = (ImageView) findViewById(R.id.img_back);
-        title = (TextView) findViewById(R.id.title);
+        back = findViewById(R.id.img_back);
+        title = findViewById(R.id.title);
     }
 
 
@@ -102,7 +102,7 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public void setContentView(View view) {
-        rootLayout = (LinearLayout) findViewById(R.id.root_layout);
+        rootLayout = findViewById(R.id.root_layout);
         if (rootLayout == null) {
             return;
         }

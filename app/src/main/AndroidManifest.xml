@@ -1,43 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.chad.baserecyclerviewadapterhelper"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.chad.baserecyclerviewadapterhelper">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/logo"
-        android:label="@string/brvah_app_name"
+        android:label="BRVAH"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".PullToRefreshUseActivity"/>
-        <activity android:name=".WelcomeActivity">
+        android:theme="@style/AppTheme"
+        android:name=".MyApplication"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".activity.WelcomeActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AnimationUseActivity"/>
-        <activity android:name=".HeaderAndFooterUseActivity"/>
-        <activity android:name=".SectionUseActivity"/>
-        <activity android:name=".ChooseMultipleItemUseTypeActivity"/>
-        <activity android:name=".MultipleItemUseActivity"/>
-        <activity android:name=".MultipleItemRvAdapterUseActivity"/>
-        <activity android:name=".EmptyViewUseActivity"/>
-        <activity android:name=".ItemDragAndSwipeUseActivity"/>
-        <activity android:name=".ExpandableUseActivity"/>
-        <activity android:name=".DataBindingUseActivity"/>
-        <activity android:name=".ItemClickActivity"/>
-        <activity android:name=".base.BaseActivity"/>
-        <activity android:name=".MultipleItemAndDragUseActivity"/>
-        <activity
-            android:name=".HomeActivity"
-            android:launchMode="singleTask"/>
-        <activity android:name=".UpFetchUseActivity"/>
-        <activity android:name=".SectionMultipleItemUseActivity"/>
-        <activity android:name=".DiffUtilActivity"/>
+
+        <activity android:name=".activity.HomeActivity" />
+        <activity android:name=".activity.multi.ChooseMultipleItemUseTypeActivity" />
+        <activity android:name=".activity.AnimationUseActivity" />
+        <activity android:name=".activity.multi.MultiItemQuickUseActivity" />
+        <activity android:name=".activity.multi.MultiItemDelegateUseActivity" />
+        <activity android:name=".activity.multi.MultiItemProviderUseActivity" />
+        <activity android:name=".activity.HeaderAndFooterUseActivity" />
+        <activity android:name=".activity.LoadMoreRefreshUseActivity" />
+        <activity android:name=".activity.SectionQuickUseActivity" />
+        <activity android:name=".activity.EmptyViewUseActivity" />
+        <activity android:name=".activity.ItemClickActivity" />
+        <activity android:name=".activity.DataBindingUseActivity" />
+        <activity android:name=".activity.DragAndSwipeUseActivity" />
+        <activity android:name=".activity.UpFetchUseActivity" />
+        <activity android:name=".activity.node.NodeSectionUseActivity" />
+        <activity android:name=".activity.DiffUtilActivity" />
+        <activity android:name=".activity.node.ChooseNodeUseTypeActivity" />
+        <activity android:name=".activity.node.NodeTreeUseActivity" />
     </application>
 
 </manifest>

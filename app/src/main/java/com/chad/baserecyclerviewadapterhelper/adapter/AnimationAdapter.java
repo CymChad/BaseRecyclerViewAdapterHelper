@@ -1,20 +1,20 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
-import android.support.annotation.NonNull;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
-import com.chad.baserecyclerviewadapterhelper.util.ClickableMovementMethod;
-import com.chad.baserecyclerviewadapterhelper.util.SpannableStringUtils;
-import com.chad.baserecyclerviewadapterhelper.util.ToastUtils;
-import com.chad.baserecyclerviewadapterhelper.util.Utils;
+import com.chad.baserecyclerviewadapterhelper.utils.ClickableMovementMethod;
+import com.chad.baserecyclerviewadapterhelper.utils.SpannableStringUtils;
+import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
 /**
  * 文 件 名: AnimationAdapter
@@ -31,7 +31,6 @@ public class AnimationAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
 
     @Override
     protected void convert(@NonNull BaseViewHolder helper, Status item) {
-        helper.addOnClickListener(R.id.img).addOnClickListener(R.id.tweetName);
         switch (helper.getLayoutPosition() % 3) {
             case 0:
                 helper.setImageResource(R.id.img, R.mipmap.animation_img1);
@@ -56,13 +55,13 @@ public class AnimationAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
 
     private ClickableSpan clickableSpan = new ClickableSpan() {
         @Override
-        public void onClick(View widget) {
-            ToastUtils.showShortToast("事件触发了 landscapes and nedes");
+        public void onClick(@NonNull View widget) {
+            Tips.show("事件触发了 landscapes and nedes");
         }
 
         @Override
         public void updateDrawState(TextPaint ds) {
-            ds.setColor(Utils.getContext().getResources().getColor(R.color.clickspan_color));
+            ds.setColor(getContext().getResources().getColor(R.color.clickspan_color));
             ds.setUnderlineText(true);
         }
     };

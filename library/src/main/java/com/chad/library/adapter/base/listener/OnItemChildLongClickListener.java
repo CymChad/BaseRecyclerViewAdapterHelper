@@ -5,31 +5,18 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 /**
- * Created by AllenCoder on 2016/8/03.
- * A convenience class to extend when you only want to OnItemChildLongClickListener for a subset
- * of all the SimpleClickListener. This implements all methods in the
- * {@link SimpleClickListener}
- **/
-public abstract class OnItemChildLongClickListener extends SimpleClickListener {
-    @Override
-    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-
-    }
-
-    @Override
-    public void onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-
-    }
-
-    @Override
-    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-
-    }
-
-    @Override
-    public void onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
-        onSimpleItemChildLongClick(adapter, view, position);
-    }
-
-    public abstract void onSimpleItemChildLongClick(BaseQuickAdapter adapter, View view, int position);
+ * @author: limuyang
+ * @date: 2019-12-03
+ * @Description:
+ */
+public interface OnItemChildLongClickListener {
+    /**
+     * callback method to be invoked when an item in this view has been
+     * click and held
+     * @param adapter  this BaseQuickAdapter adapter
+     * @param view     The childView whihin the itemView that was clicked and held.
+     * @param position The position of the view int the adapter
+     * @return true if the callback consumed the long click ,false otherwise
+     */
+    boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position);
 }

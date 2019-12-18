@@ -1,21 +1,14 @@
 package com.chad.baserecyclerviewadapterhelper.adapter.diffUtil;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 
 import com.chad.baserecyclerviewadapterhelper.entity.DiffUtilDemoEntity;
-import com.chad.library.adapter.base.diff.BaseQuickDiffCallback;
-
-import java.util.List;
 
 /**
  * Create DiffCallback
  */
-public class DiffDemoCallback extends BaseQuickDiffCallback<DiffUtilDemoEntity> {
-
-    public DiffDemoCallback(@Nullable List<DiffUtilDemoEntity> newList) {
-        super(newList);
-    }
+public class DiffDemoCallback extends DiffUtil.ItemCallback<DiffUtilDemoEntity> {
 
     /**
      * Determine if it is the same item
@@ -27,7 +20,7 @@ public class DiffDemoCallback extends BaseQuickDiffCallback<DiffUtilDemoEntity> 
      * @return
      */
     @Override
-    protected boolean areItemsTheSame(@NonNull DiffUtilDemoEntity oldItem, @NonNull DiffUtilDemoEntity newItem) {
+    public boolean areItemsTheSame(@NonNull DiffUtilDemoEntity oldItem, @NonNull DiffUtilDemoEntity newItem) {
         return oldItem.getId() == newItem.getId();
     }
 
@@ -41,7 +34,7 @@ public class DiffDemoCallback extends BaseQuickDiffCallback<DiffUtilDemoEntity> 
      * @return
      */
     @Override
-    protected boolean areContentsTheSame(@NonNull DiffUtilDemoEntity oldItem, @NonNull DiffUtilDemoEntity newItem) {
+    public boolean areContentsTheSame(@NonNull DiffUtilDemoEntity oldItem, @NonNull DiffUtilDemoEntity newItem) {
         return oldItem.getTitle().equals(newItem.getTitle())
                 && oldItem.getContent().equals(newItem.getContent())
                 && oldItem.getDate().equals(newItem.getDate());
@@ -61,14 +54,7 @@ public class DiffDemoCallback extends BaseQuickDiffCallback<DiffUtilDemoEntity> 
      * @return Payload info. if return null, the entire item will be refreshed.
      */
     @Override
-    protected Object getChangePayload(@NonNull DiffUtilDemoEntity oldItem, @NonNull DiffUtilDemoEntity newItem) {
-        if (!oldItem.getTitle().equals(newItem.getTitle())) {
-            // if only title change（如果标题变化了）
-            return DiffUtilAdapter.TITLE_PAYLOAD;
-        } else if (!oldItem.getContent().equals(newItem.getContent())) {
-            // if only content change（如果内容变化了）
-            return DiffUtilAdapter.CONTENT_PAYLOAD;
-        }
+    public Object getChangePayload(@NonNull DiffUtilDemoEntity oldItem, @NonNull DiffUtilDemoEntity newItem) {
         return null;
     }
 }

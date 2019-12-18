@@ -2,15 +2,16 @@ package com.chad.baserecyclerviewadapterhelper.decoration;
 
 import android.graphics.Rect;
 import android.os.Build;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.chad.library.adapter.base.BaseSectionQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.chad.library.adapter.base.entity.SectionEntity;
 
 import java.util.ArrayList;
@@ -47,17 +48,17 @@ public class GridSectionAverageGapItemDecoration extends RecyclerView.ItemDecora
         }
     }
 
-    private float gapHorizontalDp;
-    private float gapVerticalDp;
-    private float sectionEdgeHPaddingDp;
-    private float sectionEdgeVPaddingDp;
-    private int gapHSizePx = -1;
-    private int gapVSizePx = -1;
-    private int sectionEdgeHPaddingPx;
-    private int eachItemHPaddingPx; //每个条目应该在水平方向上加的padding 总大小，即=paddingLeft+paddingRight
-    private int sectionEdgeVPaddingPx;
-    private List<Section> mSectionList = new ArrayList<>();
-    private BaseSectionQuickAdapter mAdapter;
+    private float                            gapHorizontalDp;
+    private float                            gapVerticalDp;
+    private float                            sectionEdgeHPaddingDp;
+    private float                            sectionEdgeVPaddingDp;
+    private int                              gapHSizePx = -1;
+    private int                              gapVSizePx = -1;
+    private int                              sectionEdgeHPaddingPx;
+    private int                              eachItemHPaddingPx; //每个条目应该在水平方向上加的padding 总大小，即=paddingLeft+paddingRight
+    private int                              sectionEdgeVPaddingPx;
+    private List<Section>                    mSectionList = new ArrayList<>();
+    private BaseSectionQuickAdapter          mAdapter;
     private RecyclerView.AdapterDataObserver mDataObserver = new RecyclerView.AdapterDataObserver() {
         @Override
         public void onChanged() {
@@ -116,7 +117,7 @@ public class GridSectionAverageGapItemDecoration extends RecyclerView.ItemDecora
             int position = parent.getChildAdapterPosition(view) - mAdapter.getHeaderLayoutCount();
             SectionEntity entity = adapter.getItem(position);
 
-            if (entity == null || entity.isHeader) {
+            if (entity == null || entity.isHeader()) {
                 //不处理header
                 outRect.set(0, 0, 0, 0);
 //                Log.w("GridAverageGapItem", "pos=" + position + "," + outRect.toShortString());
@@ -179,7 +180,7 @@ public class GridSectionAverageGapItemDecoration extends RecyclerView.ItemDecora
             Section section = new Section();
             for (int i = 0, size = adapter.getItemCount(); i < size; i++) {
                 sectionEntity = adapter.getItem(i);
-                if (sectionEntity != null && sectionEntity.isHeader) {
+                if (sectionEntity != null && sectionEntity.isHeader()) {
                     //找到新Section起点
                     if (section != null && i != 0) {
                         //已经有待添加的section

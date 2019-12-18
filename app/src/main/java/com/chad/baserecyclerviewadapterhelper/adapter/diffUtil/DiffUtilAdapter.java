@@ -1,11 +1,14 @@
 package com.chad.baserecyclerviewadapterhelper.adapter.diffUtil;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.DiffUtilDemoEntity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -13,8 +16,6 @@ import java.util.List;
  * Create adapter
  */
 public class DiffUtilAdapter extends BaseQuickAdapter<DiffUtilDemoEntity, BaseViewHolder> {
-    public static final int TITLE_PAYLOAD = 899;
-    public static final int CONTENT_PAYLOAD = 900;
     public static final int ITEM_0_PAYLOAD = 901;
 
     public DiffUtilAdapter(List<DiffUtilDemoEntity> list) {
@@ -38,14 +39,10 @@ public class DiffUtilAdapter extends BaseQuickAdapter<DiffUtilDemoEntity, BaseVi
      * @param payloads payload info.
      */
     @Override
-    protected void convertPayloads(@NonNull BaseViewHolder helper, DiffUtilDemoEntity item, @NonNull List<Object> payloads) {
+    protected void convert(@NotNull BaseViewHolder helper, @Nullable DiffUtilDemoEntity item, @NotNull List<?> payloads) {
         for (Object p : payloads) {
             int payload = (int) p;
-            if (payload == TITLE_PAYLOAD) {
-                helper.setText(R.id.tweetName, item.getTitle());
-            } else if (payload == CONTENT_PAYLOAD) {
-                helper.setText(R.id.tweetText, item.getContent());
-            } else if (payload == ITEM_0_PAYLOAD) {
+            if (payload == ITEM_0_PAYLOAD) {
                 helper.setText(R.id.tweetName, item.getTitle())
                         .setText(R.id.tweetText, item.getContent());
             }
