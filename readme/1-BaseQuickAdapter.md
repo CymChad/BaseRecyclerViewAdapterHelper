@@ -1,7 +1,5 @@
 # BaseRecyclerViewAdapterHelper
 
-![logo](http://upload-images.jianshu.io/upload_images/972352-1d77e0a75a4a7c0a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)  
-一个强大并且灵活的RecyclerViewAdapter，欢迎使用。（喜欢的可以**Star**一下）
 
 # 说明
 1、`BaseQuickAdapter<T, VH>`为最基本的类型，提供最基础的功能，所有子类都继承于此。
