@@ -11,6 +11,24 @@
 
 *<u>加载更多、向上加载、拖拽为模块，并不集成在某一个Adapter中，根据需要集成即可。</u>*
 
+## 导入方式
+### 将JitPack存储库添加到您的构建文件中(项目根目录下build.gradle文件)
+```
+allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+}
+```
+
+### 添加依赖项
+```
+dependencies {
+	    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.0-beta1'
+}
+```
+
 ## Adapter 的使用
 
 1、[BaseQuickAdapter](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/1-BaseQuickAdapter.md)
