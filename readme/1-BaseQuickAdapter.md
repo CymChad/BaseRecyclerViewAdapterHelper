@@ -15,7 +15,7 @@
 `BaseQuickAdapter<T, VH>`为最基础的类型，直接使用`BaseQuickAdapter<T, VH>`即可简单快速实现一个`Adapter`：
 
 ```java
-	public class DemoAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
+public class DemoAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
 		/**
 		 * 构造方法，此示例中，在实例化Adapter时就传入了一个List。
@@ -51,7 +51,7 @@
 如果不想使用xml布局，想直接使用View代码方式创建，那么构造函数使用`super(0)`，并且在`Adapter`中重写`onCreateDefViewHolder`方法：
 
 ```java
-	public class DemoAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
+public class DemoAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
     public DemoAdapter(list List<String>) {
       	//布局传递0
