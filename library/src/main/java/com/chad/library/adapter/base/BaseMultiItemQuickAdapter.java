@@ -52,7 +52,11 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity, K ext
     }
 
     private int getLayoutId(int viewType) {
-        return layouts.get(viewType, TYPE_NOT_FOUND);
+        int layoutId = layouts.get(viewType, TYPE_NOT_FOUND);
+        if (layoutId == TYPE_NOT_FOUND) {
+            throw new IllegalStateException("please use addItemType() first!");
+        }
+        return layoutId;
     }
 
     protected void addItemType(int type, @LayoutRes int layoutResId) {
