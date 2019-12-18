@@ -45,7 +45,11 @@ public abstract class MultiTypeDelegate<T> {
     protected abstract int getItemType(T t);
 
     public final int getLayoutId(int viewType) {
-        return this.layouts.get(viewType, TYPE_NOT_FOUND);
+        int layoutId = layouts.get(viewType, TYPE_NOT_FOUND);
+        if (layoutId == TYPE_NOT_FOUND) {
+            throw new IllegalStateException("please use registerItemType() first!");
+        }
+        return layoutId;
     }
 
     private void addItemType(int type, @LayoutRes int layoutResId) {
