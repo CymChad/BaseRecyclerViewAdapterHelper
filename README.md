@@ -10,7 +10,7 @@ kotlin demo :[BRVAH_kotlin](https://github.com/AllenCoder/BRVAH_kotlin)
 ## [androidX stable version ](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/releases/tag/2.9.45-androidx)
 # Document
 - [English](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki)
-- [中文1](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/README-cn.md)
+- [中文1](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/2.x/README-cn.md)
 - [中文2](http://www.jianshu.com/p/b343fcff51b0)
 
 ## [UI](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/issues/694)
