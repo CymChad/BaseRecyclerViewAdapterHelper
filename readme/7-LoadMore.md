@@ -112,7 +112,7 @@ public final class CustomLoadMoreView extends BaseLoadMoreView {
     @NotNull
     @Override
     public View getLoadingView(@NotNull BaseViewHolder holder) {
-      	// 布局中 “加载中”的View
+        // 布局中 “加载中”的View
         return holder.findView(R.id.load_more_loading_view);
     }
 

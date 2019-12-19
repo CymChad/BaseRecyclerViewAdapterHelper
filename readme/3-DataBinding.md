@@ -13,10 +13,10 @@ public class DataBindingAdapter extends BaseQuickAdapter<Movie, BaseViewHolder> 
         super(R.layout.item_movie);
     }
 		
-  	/**
-  	 * 当 ViewHolder 创建完毕以后，会执行此回掉
-  	 * 可以在这里做任何你想做的事情
-  	 */
+    /**
+     * 当 ViewHolder 创建完毕以后，会执行此回掉
+     * 可以在这里做任何你想做的事情
+     */
     @Override
     protected void onItemViewHolderCreated(@NotNull BaseViewHolder viewHolder, int viewType) {
         // 绑定 view
@@ -94,10 +94,10 @@ public class ImgItemProvider extends BaseItemProvider<ProviderMultiEntity> {
         return R.layout.item_image_view;
     }
 
-  	/**
-  	 * 当 ViewHolder 创建完毕以后，会执行此回掉
-  	 * 可以在这里做任何你想做的事情
-  	 */
+    /**
+     * 当 ViewHolder 创建完毕以后，会执行此回掉
+     * 可以在这里做任何你想做的事情
+     */
     @Override
     public void onViewHolderCreated(@NotNull BaseViewHolder viewHolder) {
         // 绑定View

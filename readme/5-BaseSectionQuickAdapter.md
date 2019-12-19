@@ -33,7 +33,7 @@ public class SectionQuickAdapter extends BaseSectionQuickAdapter<MySection, Base
         super(sectionHeadResId, data);
         // 设置普通item布局（如果item类型只有一种，使用此方法）
         setNormalLayout(layoutResId);
-				// 注册需要点击的子view id
+        // 注册需要点击的子view id
         addChildClickViewIds(R.id.more);
     }
 		
@@ -76,9 +76,9 @@ public class MySection extends JSectionEntity {
         return object;
     }
 		
-  	/**
-  	 * 重写此方法，返回 boolen 值，告知是否是header
-  	 */
+    /**
+     * 重写此方法，返回 boolen 值，告知是否是header
+     */
     @Override
     public boolean isHeader() {
         return isHeader;
@@ -93,14 +93,14 @@ public class MySection extends JSectionEntity {
 class DataBean: SectionEntity {
 		// 你的数据实体内容
     ...
-  	...
+    ...
 
-  	/**
-  	 * 重写此方法，返回 boolen 值，告知是否是header
-  	 */
+    /**
+     * 重写此方法，返回 boolen 值，告知是否是header
+     */
     override val isHeader: Boolean
         get() {
-          	// 根据数据实体内的数据，判断是否是header
+            // 根据数据实体内的数据，判断是否是header
             return false
         }
 }
@@ -120,7 +120,7 @@ public class SectionQuickAdapter extends BaseSectionQuickAdapter<MySection, Base
      */
     public SectionQuickAdapter(int layoutResId, int sectionHeadResId, List<MySection> data) {
         super(sectionHeadResId, data);
-      	// （只有这里有变化）
+        // （只有这里有变化）
         // 添加 item 布局、类型
         addItemType(类型, 你的布局id_1)
 				addItemType(类型2, 你的布局id_2)
@@ -159,15 +159,15 @@ public class MySection extends JSectionEntity {
         return object;
     }
 		
-  	/**
-  	 * 重写此方法，返回 boolen 值，告知是否是header
-  	 */
+    /**
+     * 重写此方法，返回 boolen 值，告知是否是header
+     */
     @Override
     public boolean isHeader() {
         return isHeader;
     }
   
-  	/**
+    /**
      * 重写此方法，返回你的item类型
      */
   	@Override
@@ -189,13 +189,13 @@ public class MySection extends JSectionEntity {
  * kotlin
  */
 class DataBean : SectionEntity {
-		// 你的数据实体内容
+    // 你的数据实体内容
     ...
-  	...
+    ...
 
     /**
-  	 * 重写此方法，返回 boolen 值，告知是否是header
-  	 */
+     * 重写此方法，返回 boolen 值，告知是否是header
+     */
     override val isHeader: Boolean
         get() {
             return false

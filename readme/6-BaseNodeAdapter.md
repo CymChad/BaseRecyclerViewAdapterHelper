@@ -13,17 +13,17 @@ public class NodeAdapter extends BaseNodeAdapter {
 
     public NodeSectionAdapter() {
         super();
-      	// 注册Provider，总共有如下三种方式
+        // 注册Provider，总共有如下三种方式
       
-      	// 需要占满一行的，使用此方法（例如section）
+        // 需要占满一行的，使用此方法（例如section）
         addFullSpanNodeProvider(new RootNodeProvider());
-      	// 普通的item provider
+        // 普通的item provider
         addNodeProvider(new SecondNodeProvider());
-      	// 脚布局的 provider
+        // 脚布局的 provider
         addFooterNodeProvider(new RootFooterNodeProvider());
     }
   
-		/**
+    /**
      * 自行根据数据、位置等信息，返回 item 类型
      */
     @Override
@@ -58,7 +58,7 @@ public class RootNodeProvider extends BaseNodeProvider {
 
     @Override
     public void convert(@NotNull BaseViewHolder helper, @Nullable BaseNode data) {
-      	// 数据类型需要自己强转
+        // 数据类型需要自己强转
         RootNode entity = (RootNode) data;
         helper.setText(R.id.header, entity.getTitle());
     }
@@ -98,9 +98,9 @@ public class FirstNode extends BaseNode {
         return title;
     }
 
-		/**
-		 * 重写此方法，返回子节点
-		 */
+    /**
+     * 重写此方法，返回子节点
+     */
     @Nullable
     @Override
     public List<BaseNode> getChildNode() {
@@ -126,8 +126,8 @@ public class SecondNode extends BaseNode {
     }
   
     /**
-		 * 重写此方法，返回子节点
-		 */
+     * 重写此方法，返回子节点
+     */
     @Nullable
     @Override
     public List<BaseNode> getChildNode() {

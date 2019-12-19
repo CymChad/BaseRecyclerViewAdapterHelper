@@ -17,7 +17,7 @@
 allprojects {
     repositories {
         ...
-	maven { url 'https://jitpack.io' }
+        maven { url 'https://jitpack.io' }
     }
 }
 ```
@@ -28,6 +28,8 @@ dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.0-beta1'
 }
 ```
+
+（稳定仍在补全当中……  代码是最好的老师，如遇问题，请先查看demo）
 
 ## Adapter 的使用
 

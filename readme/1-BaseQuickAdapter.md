@@ -36,11 +36,11 @@ public class DemoAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 ```
 `Activity`中设置：
 ```java
- DemoAdapter adapter = new DemoAdapter(new ArrayList<String>());
- mRecyclerView.setAdapter(adapter);
+DemoAdapter adapter = new DemoAdapter(new ArrayList<String>());
+mRecyclerView.setAdapter(adapter);
  
  // 设置新的数据方法
- adapter.setNewData(list)
+adapter.setNewData(list)
 ```
 
 
@@ -89,10 +89,10 @@ DemoAdapter adapter = new DemoAdapter();
 
 // 设置点击事件
 adapter.setOnItemClickListener(new OnItemClickListener() {
-	@Override
-	public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-		Tips.show("onItemClick " + position);
-	}
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        Tips.show("onItemClick " + position);
+    }
 });
 ```
 
@@ -124,7 +124,7 @@ adapter.setOnItemChildClickListener(new OnItemChildClickListener() {
     @Override
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
         if (view.getId() == R.id.btn) {
-			Tips.show("onItemChildClick " + position);
+            Tips.show("onItemChildClick " + position);
         }
     }
 });
@@ -138,7 +138,7 @@ adapter.addChildLongClickViewIds(R.id.btn, R.id.iv_num_add, R.id.item_click);
 // 设置子控件长按监听
 adapter.setOnItemChildLongClickListener(new OnItemChildLongClickListener() {
     @Override
-	public boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
+    public boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
         if (view.getId() == R.id.btn) {
            Tips.show("onItemChildLongClick " + position);
         }
