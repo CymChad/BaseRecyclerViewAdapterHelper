@@ -60,8 +60,7 @@ open class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     }
 
     fun setImageResource(@IdRes viewId: Int, @DrawableRes imageResId: Int): BaseViewHolder {
-        val view = getView<ImageView>(viewId)
-        view.setImageResource(imageResId)
+        getView<ImageView>(viewId).setImageResource(imageResId)
         return this
     }
 
@@ -96,5 +95,12 @@ open class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         view.visibility = if (isGone) View.GONE else View.VISIBLE
         return this
     }
+
+    fun setEnabled(@IdRes viewId: Int, isEnabled: Boolean): BaseViewHolder {
+        getView<View>(viewId).isEnabled = isEnabled
+        return this
+    }
+
+
 }
 
