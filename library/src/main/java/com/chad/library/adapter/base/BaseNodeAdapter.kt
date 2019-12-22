@@ -218,7 +218,7 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
     private fun collapse(@IntRange(from = 0) position: Int,
                          isChangeChildCollapse: Boolean = false,
                          animate: Boolean = true,
-                         notify: Boolean = true) {
+                         notify: Boolean = true): Int {
         val node = this.data[position]
 
         if (node is BaseExpandNode && node.isExpanded) {
@@ -227,19 +227,22 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
             node.isExpanded = false
             if (node.childNode.isNullOrEmpty()) {
                 notifyItemChanged(adapterPosition)
-                return
+                return 0
             }
             val items = flatData(node.childNode!!, if (isChangeChildCollapse) false else null)
+            val size = items.size
             this.data.removeAll(items)
             if (notify) {
                 if (animate) {
                     notifyItemChanged(adapterPosition)
-                    notifyItemRangeRemoved(adapterPosition + 1, items.size)
+                    notifyItemRangeRemoved(adapterPosition + 1, size)
                 } else {
                     notifyDataSetChanged()
                 }
             }
+            return size
         }
+        return 0
     }
 
     /**
@@ -254,7 +257,7 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
     private fun expand(@IntRange(from = 0) position: Int,
                        isChangeChildExpand: Boolean = false,
                        animate: Boolean = true,
-                       notify: Boolean = true) {
+                       notify: Boolean = true): Int {
         val node = this.data[position]
 
         if (node is BaseExpandNode && !node.isExpanded) {
@@ -263,20 +266,22 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
             node.isExpanded = true
             if (node.childNode.isNullOrEmpty()) {
                 notifyItemChanged(adapterPosition)
-                return
+                return 0
             }
             val items = flatData(node.childNode!!, if (isChangeChildExpand) true else null)
+            val size = items.size
             this.data.addAll(position + 1, items)
             if (notify) {
                 if (animate) {
                     notifyItemChanged(adapterPosition)
-                    notifyItemRangeInserted(adapterPosition + 1, items.size)
+                    notifyItemRangeInserted(adapterPosition + 1, size)
                 } else {
                     notifyDataSetChanged()
                 }
             }
-
+            return size
         }
+        return 0
     }
 
     /**
@@ -288,8 +293,8 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
     @JvmOverloads
     fun collapse(@IntRange(from = 0) position: Int,
                  animate: Boolean = true,
-                 notify: Boolean = true) {
-        collapse(position, false, animate, notify)
+                 notify: Boolean = true): Int {
+        return collapse(position, false, animate, notify)
     }
 
     /**
@@ -301,8 +306,8 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
     @JvmOverloads
     fun expand(@IntRange(from = 0) position: Int,
                animate: Boolean = true,
-               notify: Boolean = true) {
-        expand(position, false, animate, notify)
+               notify: Boolean = true): Int {
+        return expand(position, false, animate, notify)
     }
 
     /**
@@ -312,25 +317,70 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
      * @param notify Boolean
      */
     @JvmOverloads
-    fun expandOrCollapse(@IntRange(from = 0) position: Int, animate: Boolean = true, notify: Boolean = true) {
+    fun expandOrCollapse(@IntRange(from = 0) position: Int, animate: Boolean = true, notify: Boolean = true): Int {
         val node = this.data[position]
         if (node is BaseExpandNode) {
-            if (node.isExpanded) {
+            return if (node.isExpanded) {
                 collapse(position, false, animate, notify)
             } else {
                 expand(position, false, animate, notify)
             }
         }
+        return 0
     }
 
     @JvmOverloads
-    fun expandAndChild(@IntRange(from = 0) position: Int, animate: Boolean = true, notify: Boolean = true) {
-        expand(position, true, animate, notify)
+    fun expandAndChild(@IntRange(from = 0) position: Int, animate: Boolean = true, notify: Boolean = true): Int {
+        return expand(position, true, animate, notify)
     }
 
     @JvmOverloads
-    fun collapseAndChild(@IntRange(from = 0) position: Int, animate: Boolean = true, notify: Boolean = true) {
-        collapse(position, true, animate, notify)
+    fun collapseAndChild(@IntRange(from = 0) position: Int, animate: Boolean = true, notify: Boolean = true): Int {
+        return collapse(position, true, animate, notify)
+    }
+
+    /**
+     * 展开某一个node的时候，折叠其他node
+     * @param position Int
+     * @param isExpandedChild Boolean 展开的时候，是否展开子项目
+     * @param isCollapseChild Boolean 折叠其他node的时候，是否折叠子项目
+     * @param animate Boolean
+     * @param notify Boolean
+     */
+    @JvmOverloads
+    fun expandAndCollapseOther(@IntRange(from = 0) position: Int,
+                               isExpandedChild: Boolean = false,
+                               isCollapseChild: Boolean = true,
+                               animate: Boolean = true,
+                               notify: Boolean = true) {
+        val count = expand(position, isExpandedChild, animate, notify)
+
+        //如果此 position 之前有 node
+        if (position > 0) {
+            // 在此之前的 node 总数
+            val beforeAllSize = position
+            // 记录被折叠了 node 的总数
+            var collapseSize = 0
+            var i = 0
+            // 总数 - 折叠后的总数即为此前还剩余的 node 总数，再减去 1 即为索引。
+            while (i < (beforeAllSize - collapseSize - 1)) {
+                collapseSize += collapse(i, isCollapseChild, animate, notify)
+                i++
+            }
+        }
+
+        //如果此 position 之后有 node
+        if ((position + count + 1) < data.size) {
+            // 后面的 node 总数 = 总data的size - （展开位置的索引 + 展开的数量 + 1）
+            val afterAllSize = data.size - position - count - 1
+            var collapseSize = 0
+            // 展开的位置索引 + 展开的数量 即为循环开始的索引
+            var i = position + count
+            while (i < (afterAllSize - collapseSize - 1)) {
+                collapseSize += collapse(i, isCollapseChild, animate, notify)
+                i++
+            }
+        }
     }
 
     /**
