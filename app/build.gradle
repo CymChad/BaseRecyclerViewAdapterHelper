@@ -10,8 +10,8 @@ android {
         applicationId "com.chad.baserecyclerviewadapterhelper"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 5
-        versionName "2.1"
+        versionCode 6
+        versionName "3.0"
     }
     buildTypes {
         release {
@@ -19,7 +19,11 @@ android {
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-        
+        debug {
+            minifyEnabled true
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
     }
     dataBinding {
         enabled = true
