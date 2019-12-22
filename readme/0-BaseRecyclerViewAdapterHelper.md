@@ -25,7 +25,7 @@ allprojects {
 ### 添加依赖项
 ```
 dependencies {
-    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.0-beta1'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.0-beta2'
 }
 ```
 
@@ -49,6 +49,6 @@ dependencies {
 
 7、[LoadMoew](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/7-LoadMore.md)
 
-8、[UpFetch]()
+8、[UpFetch]()编写中...
 
-9、[Draggable]()
+9、[Draggable]()编写中...
