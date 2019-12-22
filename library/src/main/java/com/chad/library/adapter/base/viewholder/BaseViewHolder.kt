@@ -11,6 +11,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 
+/**
+ * ViewHolder 基类
+ */
 open class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     /**
      * Views indexed with their IDs
@@ -21,21 +24,27 @@ open class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
      * 如果使用了 DataBinding 绑定 View，可调用此方法获取 [ViewDataBinding]
      * @return B?
      */
-    fun <B : ViewDataBinding> getBinding(): B? = DataBindingUtil.getBinding(itemView)
+    open fun <B : ViewDataBinding> getBinding(): B? = DataBindingUtil.getBinding(itemView)
 
-
-    @Suppress("UNCHECKED_CAST")
     fun <T : View> getView(@IdRes viewId: Int): T {
-        var view = views.get(viewId)
-        if (view == null) {
-            view = itemView.findViewById(viewId)
-            checkNotNull(view) { "No view found with id $viewId" }
-            views.put(viewId, view)
-        }
-        return view as T
+        val view = getViewOrNull<T>(viewId)
+        checkNotNull(view) { "No view found with id $viewId" }
+        return view
     }
 
-    fun <T : View> Int.findView(): T {
+    @Suppress("UNCHECKED_CAST")
+    fun <T : View> getViewOrNull(@IdRes viewId: Int): T? {
+        val view = views.get(viewId)
+        if (view == null) {
+            itemView.findViewById<T>(viewId)?.let {
+                views.put(viewId, it)
+                return it
+            }
+        }
+        return view as? T
+    }
+
+    fun <T : View> Int.findView(): T? {
         return itemView.findViewById(this)
     }
 
