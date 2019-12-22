@@ -16,6 +16,9 @@ android {
         release {
             consumerProguardFiles 'proguard-rules.pro'
         }
+        debug {
+            consumerProguardFiles 'proguard-rules.pro'
+        }
     }
     lintOptions {
         abortOnError false
