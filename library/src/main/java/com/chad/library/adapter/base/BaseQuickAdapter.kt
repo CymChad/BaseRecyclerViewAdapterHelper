@@ -601,21 +601,29 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * @return
      */
     private fun getInstancedGenericKClass(z: Class<*>): Class<*>? {
-        val type = z.genericSuperclass
-        if (type is ParameterizedType) {
-            val types = type.actualTypeArguments
-            for (temp in types) {
-                if (temp is Class<*>) {
-                    if (BaseViewHolder::class.java.isAssignableFrom(temp)) {
-                        return temp
-                    }
-                } else if (temp is ParameterizedType) {
-                    val rawType = temp.rawType
-                    if (rawType is Class<*> && BaseViewHolder::class.java.isAssignableFrom(rawType)) {
-                        return rawType
+        try {
+            val type = z.genericSuperclass
+            if (type is ParameterizedType) {
+                val types = type.actualTypeArguments
+                for (temp in types) {
+                    if (temp is Class<*>) {
+                        if (BaseViewHolder::class.java.isAssignableFrom(temp)) {
+                            return temp
+                        }
+                    } else if (temp is ParameterizedType) {
+                        val rawType = temp.rawType
+                        if (rawType is Class<*> && BaseViewHolder::class.java.isAssignableFrom(rawType)) {
+                            return rawType
+                        }
                     }
                 }
             }
+        } catch (e: java.lang.reflect.GenericSignatureFormatError) {
+            e.printStackTrace()
+        } catch (e: TypeNotPresentException) {
+            e.printStackTrace()
+        } catch (e: java.lang.reflect.MalformedParameterizedTypeException) {
+            e.printStackTrace()
         }
         return null
     }
