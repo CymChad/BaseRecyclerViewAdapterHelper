@@ -939,8 +939,8 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
                 val animation: BaseAnimation = adapterAnimation?.let {
                     it
                 } ?: AlphaInAnimation()
-                for (anim in animation.animators(holder.itemView)) {
-                    startAnim(anim, holder.layoutPosition)
+                animation.animators(holder.itemView).forEach {
+                    startAnim(it, holder.layoutPosition)
                 }
                 mLastPosition = holder.layoutPosition
             }
