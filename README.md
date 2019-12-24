@@ -10,7 +10,9 @@ Please feel free to use this. (Welcome to **Star** and **Fork**)
 
 
     
-**New version 3.x beta release, use `kotlin` and `AndroidX`**. Fixed many legacy issues, strengthened support for DataBinding, and ‘multi-layout’ is more flexible.
+**New version 3.x beta release, Written using `kotlin` and `AndroidX`**, Support `java` use. Fixed many legacy issues, strengthened support for DataBinding, and ‘multi-layout’ is more flexible.
+
+**新版3.x测试版已发布，使用`kotlin`和`AndroidX`编写**，支持`java`使用。解决了许多遗留问题，增强了对DataBinding的支持，并且“多重布局”更加灵活。
 
 Of course, you can continue to use the [2.x](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/tree/2.x) version.
 
