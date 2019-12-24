@@ -19,9 +19,10 @@
 此种处理处理措施，必定影响使用者 java 数据类的类继承问题，对此表示抱歉，由于`java`特性的缺失，不得不做出的妥协。如果实在无法继承`JSectionEntity`抽象类，请自己再次封装一下，或者请使用`BaseDelegateMultiAdapter`自行参考实现Section。
 
 > 如果需要更灵活`Section`功能的，可以使用`BaseNodeAdapter`
->
 
-## `Adapter`代码如下：
+## 1、快速使用
+
+`Adapter`代码如下：
 
 ```java
 public class SectionQuickAdapter extends BaseSectionQuickAdapter<MySection, BaseViewHolder> {
@@ -108,7 +109,7 @@ class DataBean: SectionEntity {
 
 
 
-## 多布局类型 BaseSectionQuickAdapter
+## 2、多布局类型 BaseSectionQuickAdapter
 
 ### `Adapter`代码如下：
 

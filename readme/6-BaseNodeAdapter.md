@@ -6,7 +6,7 @@
 
 如果某一个节点需要脚部，则此节点还需要实现`NodeFooterImp`接口。
 
-## `Adapter`代码如下：
+## 1、`Adapter`代码如下：
 
 ```java
 public class NodeAdapter extends BaseNodeAdapter {
@@ -41,7 +41,7 @@ public class NodeAdapter extends BaseNodeAdapter {
 }
 ```
 
-## `Provider`写法和`BaseProviderMultiAdapter`中的相同，只是继承类改为`BaseNodeProvider`，其他没有区别：
+## 2、`Provider`写法和`BaseProviderMultiAdapter`中的相同，只是继承类改为`BaseNodeProvider`，其他没有区别：
 
 ```java
 public class RootNodeProvider extends BaseNodeProvider {
@@ -72,13 +72,13 @@ public class RootNodeProvider extends BaseNodeProvider {
 
 
 
-## 设置数据
+## 3、设置数据
 
 注意，数据需要遵循`树形结构`，简单来说就是：套娃形式。
 
 下面给出一组示例：
 
-### 1、先定义几个节点类，继承于`BaseNode`，用于封装数据
+### 先定义几个节点类，继承于`BaseNode`，用于封装数据：
 
 ```java
 /**
@@ -136,7 +136,7 @@ public class SecondNode extends BaseNode {
 }
 ```
 
-### 2、模拟生成数据
+### 模拟生成数据：
 
 ```java
     private List<BaseNode> getEntity() {
@@ -183,9 +183,11 @@ FirstNode
 …………
 ```
 
-## 脚部Node
+## 4、脚部Node
 
 如果此`Node`需要脚部，那么此`Node`实现`NodeFooterImp`接口。
+
+> 每一个 node 都可以有自己的脚部
 
 示例如下：
 
@@ -209,7 +211,7 @@ public class RootNode extends BaseNode implements NodeFooterImp {
 
 
 
-## 折叠展开
+## 5、折叠展开
 
 如果此`Node`需要折叠展开功能，请继承`BaseExpandNode`。
 

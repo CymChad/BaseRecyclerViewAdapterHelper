@@ -1,6 +1,6 @@
 # BaseQuickAdapter 空布局\头部\脚部
 
-## 空布局
+## 1、空布局
 
 说明：当`adapter`中数据不为空时，空布局不会生效
 
@@ -37,7 +37,7 @@ adapter.isUseEmpty = false
 
 
 
-## 头部
+## 2、头部
 
 说明：此头部并不是item的头部，而是整个`Adapter`的头部
 
@@ -61,7 +61,7 @@ adapter.removeHeaderView(view);
 adapter.removeAllHeaderView();
 ```
 
-## 脚部
+## 3、脚部
 
 说明：此脚部不是item的脚部，而是整个`Adapter`的
 

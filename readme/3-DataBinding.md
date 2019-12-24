@@ -1,6 +1,6 @@
 # DataBinding
 
-## BaseQuickAdapter 用法：
+## 基于 BaseQuickAdapter 的用法：
 
 代码如下：
 
@@ -43,7 +43,7 @@ public class DataBindingAdapter extends BaseQuickAdapter<Movie, BaseViewHolder> 
 
 
 
-## BaseProviderMultiAdapter 用法
+## 基于 BaseProviderMultiAdapter 的用法
 
 由于使用了`Provider`，所以相关事务并不在`Adapter`里处理。需要在`Provider`中对数据进行绑定。
 

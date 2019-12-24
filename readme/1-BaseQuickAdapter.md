@@ -10,7 +10,7 @@
 
 # BaseQuickAdapter<T, VH>
 
-## 快速使用
+## 1、快速使用
 
 `BaseQuickAdapter<T, VH>`为最基础的类型，直接使用`BaseQuickAdapter<T, VH>`即可简单快速实现一个`Adapter`：
 
@@ -46,7 +46,7 @@ adapter.setNewData(list)
 
 
 
-## 纯View创建Item
+## 2、纯View创建Item
 
 如果不想使用xml布局，想直接使用View代码方式创建，那么构造函数使用`super(0)`，并且在`Adapter`中重写`onCreateDefViewHolder`方法：
 
@@ -78,7 +78,7 @@ public class DemoAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 }
 ```
 
-## BaseQuickAdapter 点击事件
+## 3、BaseQuickAdapter 点击事件
 
 ### Item 点击事件
 
@@ -149,7 +149,7 @@ adapter.setOnItemChildLongClickListener(new OnItemChildLongClickListener() {
 
 
 
-## BaseQuickAdapter主要属性、方法说明
+## 4、BaseQuickAdapter主要属性、方法说明
 
 |  | Java | Kotlin | 说明 |
 | :--- | ---- | ---- | ---- |

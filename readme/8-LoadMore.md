@@ -7,6 +7,7 @@
 代码如下：
 
 ```java
+// adapter 实现接口 LoadMoreModule
 public class LoadMoreAdapter extends BaseQuickAdapter<Status, BaseViewHolder> implements LoadMoreModule {
     ………………
 }
@@ -66,7 +67,7 @@ mAdapter.getLoadMoreModule().loadMoreToLoading();
 
 
 
-## 设置LoadMore View
+## 设置自定义的LoadMore View
 
 默认自带了一套`LoadMore`视图，你可以根据需要，设置自己的视图。设置视图分为两种方式：
 

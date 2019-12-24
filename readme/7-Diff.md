@@ -2,7 +2,7 @@
 
 Diff现在使用更加简单方便快速了。
 
-## 快速使用
+## 1、快速使用
 
 ### 实现 DiffUtil.ItemCallback
 
@@ -75,7 +75,7 @@ mAdapter.setDiffNewData(newData);
 mAdapter.setDiffNewData(newData2);
 ```
 
-## 自定义 Diff 配置
+## 2、自定义 Diff 配置（可选）
 
 > 自定义配置不需要使用`setDiffCallback()`方法！
 
