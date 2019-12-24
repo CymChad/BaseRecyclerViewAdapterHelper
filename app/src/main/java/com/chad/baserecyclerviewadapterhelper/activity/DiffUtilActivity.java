@@ -12,6 +12,7 @@ import com.chad.baserecyclerviewadapterhelper.adapter.diffUtil.DiffUtilAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.DiffUtilDemoEntity;
+import com.chad.library.adapter.base.diff.BrvahAsyncDifferConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,12 @@ public class DiffUtilActivity extends BaseActivity {
 
         // 必须设置Diff Callback
         mAdapter.setDiffCallback(new DiffDemoCallback());
+
+        BrvahAsyncDifferConfig config =  new BrvahAsyncDifferConfig.Builder(new DiffDemoCallback())
+                .setMainThreadExecutor()
+                .setBackgroundThreadExecutor()
+                .build();
+        mAdapter.setDiffConfig(config);
     }
 
     private void initClick() {

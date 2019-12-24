@@ -45,10 +45,12 @@ dependencies {
 
 6、[BaseNodeAdapter](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/6-BaseNodeAdapter.md)
 
+7、[DiffUtils](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/7-Diff.md)
+
 ## 模块的使用
 
-7、[LoadMoew](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/7-LoadMore.md)
+8、[LoadMoew](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/8-LoadMore.md)
 
-8、[UpFetch]()编写中...
+9、[UpFetch]()编写中...
 
-9、[Draggable]()编写中...
+10、[Draggable]()编写中...

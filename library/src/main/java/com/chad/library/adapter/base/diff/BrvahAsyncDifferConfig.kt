@@ -31,7 +31,6 @@ class BrvahAsyncDifferConfig<T>(
          *
          * @hide
          */
-        @RestrictTo(RestrictTo.Scope.LIBRARY)
         fun setMainThreadExecutor(executor: Executor?): Builder<T> {
             mMainThreadExecutor = executor
             return this
