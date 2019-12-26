@@ -1198,22 +1198,30 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @return
      */
     private Class getInstancedGenericKClass(Class z) {
-        Type type = z.getGenericSuperclass();
-        if (type instanceof ParameterizedType) {
-            Type[] types = ((ParameterizedType) type).getActualTypeArguments();
-            for (Type temp : types) {
-                if (temp instanceof Class) {
-                    Class tempClass = (Class) temp;
-                    if (BaseViewHolder.class.isAssignableFrom(tempClass)) {
-                        return tempClass;
-                    }
-                } else if (temp instanceof ParameterizedType) {
-                    Type rawType = ((ParameterizedType) temp).getRawType();
-                    if (rawType instanceof Class && BaseViewHolder.class.isAssignableFrom((Class<?>) rawType)) {
-                        return (Class<?>) rawType;
+        try {
+            Type type = z.getGenericSuperclass();
+            if (type instanceof ParameterizedType) {
+                Type[] types = ((ParameterizedType) type).getActualTypeArguments();
+                for (Type temp : types) {
+                    if (temp instanceof Class) {
+                        Class tempClass = (Class) temp;
+                        if (BaseViewHolder.class.isAssignableFrom(tempClass)) {
+                            return tempClass;
+                        }
+                    } else if (temp instanceof ParameterizedType) {
+                        Type rawType = ((ParameterizedType) temp).getRawType();
+                        if (rawType instanceof Class && BaseViewHolder.class.isAssignableFrom((Class<?>) rawType)) {
+                            return (Class<?>) rawType;
+                        }
                     }
                 }
             }
+        } catch (java.lang.reflect.GenericSignatureFormatError e) {
+            e.printStackTrace();
+        } catch (TypeNotPresentException e) {
+            e.printStackTrace();
+        } catch (java.lang.reflect.MalformedParameterizedTypeException e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -1996,7 +2004,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     }
 
     public boolean isExpandable(T item) {
-        return item != null && item instanceof IExpandable;
+        return item instanceof IExpandable;
     }
 
     private IExpandable getExpandableItem(int position) {
