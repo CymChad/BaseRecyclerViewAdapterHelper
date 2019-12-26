@@ -20,8 +20,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            minifyEnabled true
-            zipAlignEnabled true
+            minifyEnabled false
+            zipAlignEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

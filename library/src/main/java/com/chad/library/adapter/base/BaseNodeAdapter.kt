@@ -353,7 +353,18 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
                                isCollapseChild: Boolean = true,
                                animate: Boolean = true,
                                notify: Boolean = true) {
+
+        val parentPosition = findParentNode(position)
+        if (parentPosition != -1) {
+            // 如果是子节点
+            childExpandAndCollapseOther(position, parentPosition, isExpandedChild, isCollapseChild, animate, notify)
+            return
+        }
+
         val count = expand(position, isExpandedChild, animate, notify)
+
+        // 当前 position 之前有 node 收起以后，position的位置就会变化
+        var newPosition = position
 
         //如果此 position 之前有 node
         if (position > 0) {
@@ -362,24 +373,82 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
             // 记录被折叠了 node 的总数
             var collapseSize = 0
             var i = 0
-            // 总数 - 折叠后的总数即为此前还剩余的 node 总数，再减去 1 即为索引。
-            while (i < (beforeAllSize - collapseSize - 1)) {
+            // 循环添加： 总数 - 折叠后的总数即为此前还剩余的 node 总数。
+            do {
                 collapseSize += collapse(i, isCollapseChild, animate, notify)
                 i++
-            }
+                println("-------->> $beforeAllSize  i: $i   size: $collapseSize")
+            } while (i < (beforeAllSize - collapseSize))
+
+            newPosition = position - collapseSize
         }
 
         //如果此 position 之后有 node
-        if ((position + count + 1) < data.size) {
+        println("22-------->> $newPosition   i: ${(newPosition + count + 1)}   size: ${data.size}")
+        if ((newPosition + count + 1) < data.size) {
             // 后面的 node 总数 = 总data的size - （展开位置的索引 + 展开的数量 + 1）
-            val afterAllSize = data.size - position - count - 1
-            var collapseSize = 0
-            // 展开的位置索引 + 展开的数量 即为循环开始的索引
-            var i = position + count
-            while (i < (afterAllSize - collapseSize - 1)) {
-                collapseSize += collapse(i, isCollapseChild, animate, notify)
+//            val afterAllSize = data.size - position - count - 1
+//            var collapseSize = 0
+            // 位置索引 + 展开的数量 + 1 即为循环开始的索引
+            var i = newPosition + count + 1
+            while (i < (data.size)) {
+                println("11-------->>   i: $i   size: ${data.size}")
+                collapse(i, isCollapseChild, animate, notify)
                 i++
             }
+
+        }
+    }
+
+    private fun childExpandAndCollapseOther(@IntRange(from = 0) position: Int,
+                                            parentPosition: Int,
+                                            isExpandedChild: Boolean = false,
+                                            isCollapseChild: Boolean = true,
+                                            animate: Boolean = true,
+                                            notify: Boolean = true) {
+        val count = expand(position, isExpandedChild, animate, notify)
+
+        val firstPosition: Int
+//        var dataSize: Int
+        if (parentPosition == -1) {
+            firstPosition = 0
+        } else {
+            firstPosition = parentPosition + 1
+        }
+
+        // 当前 position 之前有 node 收起以后，position的位置就会变化
+        var newPosition = position
+
+
+        val bSize = position - firstPosition
+        //如果此 position 之前有 node
+        if (bSize > 0) {
+            // TODO
+            // 在此之前的 node 总数
+            val beforeAllSize = position
+            // 记录被折叠了 node 的总数
+            var collapseSize = 0
+            var i = 0
+            // 循环添加： 总数 - 折叠后的总数即为此前还剩余的 node 总数。
+            do {
+                collapseSize += collapse(i, isCollapseChild, animate, notify)
+                i++
+                println("-------->> $beforeAllSize  i: $i   size: $collapseSize")
+            } while (i < (beforeAllSize - collapseSize))
+
+            newPosition = position - collapseSize
+        }
+
+        //如果此 position 之后有 node
+        println("22-------->> $newPosition   i: ${(newPosition + count + 1)}   size: ${data.size}")
+        if ((newPosition + count + 1) < data.size) {
+            var i = newPosition + count + 1
+            while (i < (data.size)) {
+                println("11-------->>   i: $i   size: ${data.size}")
+                collapse(i, isCollapseChild, animate, notify)
+                i++
+            }
+
         }
     }
 
