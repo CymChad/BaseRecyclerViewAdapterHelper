@@ -766,7 +766,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      *
      * @param holder True if this item should traverse all spans.
      */
-    protected fun setFullSpan(holder: RecyclerView.ViewHolder) {
+    protected open fun setFullSpan(holder: RecyclerView.ViewHolder) {
         val layoutParams = holder.itemView.layoutParams
         if (layoutParams is StaggeredGridLayoutManager.LayoutParams) {
             layoutParams.isFullSpan = true
@@ -806,7 +806,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     @JvmOverloads
     fun setFooterView(view: View, index: Int = 0, orientation: Int = LinearLayout.VERTICAL): Int {
         return if (!this::mFooterLayout.isInitialized || mFooterLayout.childCount <= index) {
-            addHeaderView(view, index, orientation)
+            addFooterView(view, index, orientation)
         } else {
             mFooterLayout.removeViewAt(index)
             mFooterLayout.addView(view, index)
