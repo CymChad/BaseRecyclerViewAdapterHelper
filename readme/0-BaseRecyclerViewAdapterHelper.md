@@ -25,7 +25,7 @@ allprojects {
 ### 添加依赖项
 ```
 dependencies {
-    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.0-beta2'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.0-beta3'
 }
 ```
 
