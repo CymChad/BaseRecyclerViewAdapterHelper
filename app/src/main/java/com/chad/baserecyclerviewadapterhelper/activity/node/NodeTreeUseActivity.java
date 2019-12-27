@@ -52,6 +52,10 @@ public class NodeTreeUseActivity extends BaseActivity {
             }
 
             FirstNode entity = new FirstNode(secondNodeList, "First Node " + i);
+
+            // 模拟 默认第0个是展开的
+            entity.setExpanded(i == 0);
+
             list.add(entity);
         }
         return list;
