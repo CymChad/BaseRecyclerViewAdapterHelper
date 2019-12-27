@@ -47,7 +47,7 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
         }
     }
 
-    private static final int PAGE_SIZE = 6;
+    private static final int PAGE_SIZE = 1;
 
     private SwitchCompat       switchCompat;
     private RecyclerView       mRecyclerView;
@@ -130,6 +130,8 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
             }
         });
         mAdapter.getLoadMoreModule().setAutoLoadMore(true);
+        //当自动加载开启，同时数据不满一屏时，是否继续执行自动加载更多(默认为true)
+        mAdapter.getLoadMoreModule().setEnableLoadMoreIfNotFullPage(false);
     }
 
     private void initSwitch() {

@@ -182,7 +182,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
      * @see BaseQuickAdapter.setNewData
      */
     fun checkDisableLoadMoreIfNotFullPage() {
-        if (!isEnableLoadMoreIfNotFullPage) {
+        if (isEnableLoadMoreIfNotFullPage) {
             return
         }
         // 先把标记位设置为false
