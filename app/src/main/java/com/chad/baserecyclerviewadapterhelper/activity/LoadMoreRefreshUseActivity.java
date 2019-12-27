@@ -47,7 +47,7 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
         }
     }
 
-    private static final int PAGE_SIZE = 1;
+    private static final int PAGE_SIZE = 5;
 
     private SwitchCompat       switchCompat;
     private RecyclerView       mRecyclerView;
