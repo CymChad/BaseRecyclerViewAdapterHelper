@@ -354,103 +354,57 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
                                animate: Boolean = true,
                                notify: Boolean = true) {
 
-        val parentPosition = findParentNode(position)
-        if (parentPosition != -1) {
-            // 如果是子节点
-            childExpandAndCollapseOther(position, parentPosition, isExpandedChild, isCollapseChild, animate, notify)
+        val expandCount = expand(position, isExpandedChild, animate, notify)
+        if (expandCount == 0) {
             return
         }
 
-        val count = expand(position, isExpandedChild, animate, notify)
-
-        // 当前 position 之前有 node 收起以后，position的位置就会变化
-        var newPosition = position
-
-        //如果此 position 之前有 node
-        if (position > 0) {
-            // 在此之前的 node 总数
-            val beforeAllSize = position
-            // 记录被折叠了 node 的总数
-            var collapseSize = 0
-            var i = 0
-            // 循环添加： 总数 - 折叠后的总数即为此前还剩余的 node 总数。
-            do {
-                collapseSize += collapse(i, isCollapseChild, animate, notify)
-                i++
-                println("-------->> $beforeAllSize  i: $i   size: $collapseSize")
-            } while (i < (beforeAllSize - collapseSize))
-
-            newPosition = position - collapseSize
-        }
-
-        //如果此 position 之后有 node
-        println("22-------->> $newPosition   i: ${(newPosition + count + 1)}   size: ${data.size}")
-        if ((newPosition + count + 1) < data.size) {
-            // 后面的 node 总数 = 总data的size - （展开位置的索引 + 展开的数量 + 1）
-//            val afterAllSize = data.size - position - count - 1
-//            var collapseSize = 0
-            // 位置索引 + 展开的数量 + 1 即为循环开始的索引
-            var i = newPosition + count + 1
-            while (i < (data.size)) {
-                println("11-------->>   i: $i   size: ${data.size}")
-                collapse(i, isCollapseChild, animate, notify)
-                i++
-            }
-
-        }
-    }
-
-    private fun childExpandAndCollapseOther(@IntRange(from = 0) position: Int,
-                                            parentPosition: Int,
-                                            isExpandedChild: Boolean = false,
-                                            isCollapseChild: Boolean = true,
-                                            animate: Boolean = true,
-                                            notify: Boolean = true) {
-        val count = expand(position, isExpandedChild, animate, notify)
-
-        val firstPosition: Int
-//        var dataSize: Int
-        if (parentPosition == -1) {
-            firstPosition = 0
+        val parentPosition = findParentNode(position)
+        // 当前层级顶部开始位置
+        val firstPosition: Int = if (parentPosition == -1) {
+            0 // 如果没有父节点，则为最外层，从0开始
         } else {
-            firstPosition = parentPosition + 1
+            parentPosition + 1 // 如果有父节点，则为子节点，从 父节点+1 的位置开始
         }
 
         // 当前 position 之前有 node 收起以后，position的位置就会变化
         var newPosition = position
 
-
-        val bSize = position - firstPosition
-        //如果此 position 之前有 node
-        if (bSize > 0) {
-            // TODO
-            // 在此之前的 node 总数
-            val beforeAllSize = position
-            // 记录被折叠了 node 的总数
-            var collapseSize = 0
-            var i = 0
-            // 循环添加： 总数 - 折叠后的总数即为此前还剩余的 node 总数。
+        // 在此之前的 node 总数
+        val beforeAllSize = position - firstPosition
+        // 如果此 position 之前有 node
+        if (beforeAllSize > 0) {
+            // 从顶部开始位置循环
+            var i = firstPosition
             do {
-                collapseSize += collapse(i, isCollapseChild, animate, notify)
+                val collapseSize = collapse(i, isCollapseChild, animate, notify)
                 i++
-                println("-------->> $beforeAllSize  i: $i   size: $collapseSize")
-            } while (i < (beforeAllSize - collapseSize))
+                // 每次折叠后，重新计算新的 Position
+                newPosition -= collapseSize
+            } while (i < newPosition)
+        }
 
-            newPosition = position - collapseSize
+        // 当前层级最后的位置
+        var lastPosition: Int = if (parentPosition == -1) {
+            data.size - 1 // 如果没有父节点，则为最外层
+        } else {
+            val dataSize = data[parentPosition].childNode?.size ?: 0
+            parentPosition + dataSize + expandCount // 如果有父节点，则为子节点，父节点 + 子节点数量 + 展开的数量
         }
 
         //如果此 position 之后有 node
-        println("22-------->> $newPosition   i: ${(newPosition + count + 1)}   size: ${data.size}")
-        if ((newPosition + count + 1) < data.size) {
-            var i = newPosition + count + 1
-            while (i < (data.size)) {
-                println("11-------->>   i: $i   size: ${data.size}")
-                collapse(i, isCollapseChild, animate, notify)
+        if ((newPosition + expandCount) < lastPosition) {
+            var i = newPosition + expandCount + 1
+            while (i <= lastPosition) {
+                val collapseSize = collapse(i, isCollapseChild, animate, notify)
                 i++
+                lastPosition -= collapseSize
             }
 
         }
+
     }
+
 
     /**
      * 查找父节点。如果不存在，则返回-1
