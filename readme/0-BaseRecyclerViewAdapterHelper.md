@@ -43,7 +43,7 @@ dependencies {
 
 5、[BaseSectionQuickAdapter](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/5-BaseSectionQuickAdapter.md)
 
-6、[BaseNodeAdapter](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/6-BaseNodeAdapter.md)
+6、[BaseNodeAdapter（折叠\展开）](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/6-BaseNodeAdapter.md)
 
 7、[DiffUtils](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/7-Diff.md)
 
