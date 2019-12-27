@@ -5,11 +5,11 @@ http://www.recyclerview.org/
 
 Powerful and flexible RecyclerView Adapter,
 Please feel free to use this. (Welcome to **Star** and **Fork**)  
-  
+
 强大而灵活的RecyclerView Adapter（欢迎 **Star** 和 **Fork**）
 
 
-    
+​    
 **New version 3.x beta release, Written using `kotlin` and `AndroidX`**, Support `java` use. Fixed many legacy issues, strengthened support for DataBinding, and ‘multi-layout’ is more flexible.
 
 **新版3.x测试版已发布，使用`kotlin`和`AndroidX`编写**，支持`java`使用。解决了许多遗留问题，增强了对DataBinding的支持，并且“多重布局”更加灵活。
@@ -27,11 +27,11 @@ Of course, you can continue to use the [2.x](https://github.com/CymChad/BaseRecy
 ## Demo
 ![](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/demo.png)
 
-[国内下载地址](https://www.lanzous.com/i83z4kf)  
+[国内下载地址](https://www.lanzous.com/i8ate4f)  
 
 # proguard-rules.pro
 > 此资源库自带混淆规则，并且会自动导入，正常情况下无需手动导入。
-  
+
 > The library comes with `proguard-rules.pro` rules and is automatically imported. Normally no manual import is required.
 > You can also go here to view [proguard-rules](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/library/proguard-rules.pro)
 
