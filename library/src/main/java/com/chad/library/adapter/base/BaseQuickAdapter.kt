@@ -330,7 +330,11 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         //Do not move position, need to change before LoadMoreView binding
         loadMoreModule?.autoLoadMore(position)
         when (holder.itemViewType) {
-            LOAD_MORE_VIEW -> loadMoreModule?.loadMoreView?.convert(holder, position)
+            LOAD_MORE_VIEW -> {
+                loadMoreModule?.let {
+                    it.loadMoreView.convert(holder, position, it.loadMoreStatus)
+                }
+            }
             HEADER_VIEW, EMPTY_VIEW, FOOTER_VIEW -> return
             else -> convert(holder, data.getOrNull(position - getHeaderLayoutCount()))
         }
@@ -346,7 +350,11 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         //Do not move position, need to change before LoadMoreView binding
         loadMoreModule?.autoLoadMore(position)
         when (holder.itemViewType) {
-            LOAD_MORE_VIEW -> loadMoreModule?.loadMoreView?.convert(holder, position)
+            LOAD_MORE_VIEW -> {
+                loadMoreModule?.let {
+                    it.loadMoreView.convert(holder, position, it.loadMoreStatus)
+                }
+            }
             HEADER_VIEW, EMPTY_VIEW, FOOTER_VIEW -> return
             else -> convert(holder, data.getOrNull(position - getHeaderLayoutCount()), payloads)
         }

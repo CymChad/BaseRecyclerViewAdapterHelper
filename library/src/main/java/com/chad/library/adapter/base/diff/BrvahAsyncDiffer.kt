@@ -11,7 +11,7 @@ import java.util.concurrent.Executor
 
 class BrvahAsyncDiffer<T>(private val adapter: BaseQuickAdapter<T, *>,
                           private val config: BrvahAsyncDifferConfig<T>) : DifferImp<T> {
-    private var mUpdateCallback: ListUpdateCallback = BrvahListUpdateCallback(adapter)
+    private val mUpdateCallback: ListUpdateCallback = BrvahListUpdateCallback(adapter)
     private var mMainThreadExecutor: Executor
 
     private class MainThreadExecutor internal constructor() : Executor {
@@ -29,7 +29,7 @@ class BrvahAsyncDiffer<T>(private val adapter: BaseQuickAdapter<T, *>,
 
     private val mListeners: MutableList<ListChangeListener<T>> = CopyOnWriteArrayList()
 
-    var mMaxScheduledGeneration = 0
+    private var mMaxScheduledGeneration = 0
 
     @JvmOverloads
     fun submitList(newList: MutableList<T>?, commitCallback: Runnable? = null) {

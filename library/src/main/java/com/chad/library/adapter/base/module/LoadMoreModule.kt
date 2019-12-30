@@ -6,6 +6,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.listener.LoadMoreListenerImp
 import com.chad.library.adapter.base.listener.OnLoadMoreListener
 import com.chad.library.adapter.base.loadmore.BaseLoadMoreView
+import com.chad.library.adapter.base.loadmore.LoadMoreStatus
 import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
@@ -39,6 +40,12 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
     /** 不满一屏时，是否可以继续加载的标记位 */
     private var mNextLoadEnable = true
 
+    var loadMoreStatus = LoadMoreStatus.Complete
+        private set
+
+    var isLoadEndMoreGone: Boolean = false
+        private set
+
     /** 设置加载更多布局 */
     var loadMoreView = LoadMoreModuleConfig.defLoadMoreView
     /** 加载完成后是否允许点击 */
@@ -61,7 +68,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
      */
     val isLoading: Boolean
         get() {
-            return loadMoreView.loadMoreStatus == BaseLoadMoreView.Status.Loading
+            return loadMoreStatus == LoadMoreStatus.Loading
         }
 
     /**
@@ -94,7 +101,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
                 }
             } else {
                 if (newHasLoadMore) {
-                    loadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Complete
+                    loadMoreStatus = LoadMoreStatus.Complete
                     baseQuickAdapter.notifyItemInserted(loadMoreViewPosition)
                 }
             }
@@ -103,11 +110,11 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
 
     internal fun setupViewHolder(viewHolder: BaseViewHolder) {
         viewHolder.itemView.setOnClickListener {
-            if (loadMoreView.loadMoreStatus == BaseLoadMoreView.Status.Fail) {
+            if (loadMoreStatus == LoadMoreStatus.Fail) {
                 loadMoreToLoading()
-            } else if (loadMoreView.loadMoreStatus == BaseLoadMoreView.Status.Complete) {
+            } else if (loadMoreStatus == LoadMoreStatus.Complete) {
                 loadMoreToLoading()
-            } else if (enableLoadMoreEndClick && loadMoreView.loadMoreStatus == BaseLoadMoreView.Status.End) {
+            } else if (enableLoadMoreEndClick && loadMoreStatus == LoadMoreStatus.End) {
                 loadMoreToLoading()
             }
         }
@@ -117,10 +124,10 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
      * The notification starts the callback and loads more
      */
     fun loadMoreToLoading() {
-        if (loadMoreView.loadMoreStatus == BaseLoadMoreView.Status.Loading) {
+        if (loadMoreStatus == LoadMoreStatus.Loading) {
             return
         }
-        loadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Loading
+        loadMoreStatus = LoadMoreStatus.Loading
         baseQuickAdapter.notifyItemChanged(loadMoreViewPosition)
         invokeLoadMoreListener()
     }
@@ -130,7 +137,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
         if (mLoadMoreListener == null || !isEnableLoadMore) {
             return false
         }
-        if (loadMoreView.loadMoreStatus == BaseLoadMoreView.Status.End && loadMoreView.isLoadEndMoreGone) {
+        if (loadMoreStatus == LoadMoreStatus.End && isLoadEndMoreGone) {
             return false
         }
         return baseQuickAdapter.data.isNotEmpty()
@@ -151,10 +158,10 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
         if (position < baseQuickAdapter.itemCount - preLoadNumber) {
             return
         }
-        if (loadMoreView.loadMoreStatus != BaseLoadMoreView.Status.Complete) {
+        if (loadMoreStatus != LoadMoreStatus.Complete) {
             return
         }
-        if (loadMoreView.loadMoreStatus == BaseLoadMoreView.Status.Loading) {
+        if (loadMoreStatus == LoadMoreStatus.Loading) {
             return
         }
         if (!mNextLoadEnable) {
@@ -168,7 +175,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
      * 触发加载更多监听
      */
     private fun invokeLoadMoreListener() {
-        loadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Loading
+        loadMoreStatus = LoadMoreStatus.Loading
         baseQuickAdapter.weakRecyclerView.get()?.let {
             it.post { mLoadMoreListener?.onLoadMore() }
         } ?: mLoadMoreListener?.onLoadMore()
@@ -236,9 +243,9 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
             return
         }
 //        mNextLoadEnable = false
-        loadMoreView.isLoadEndMoreGone = gone
+        isLoadEndMoreGone = gone
 
-        loadMoreView.loadMoreStatus = BaseLoadMoreView.Status.End
+        loadMoreStatus = LoadMoreStatus.End
 
         if (gone) {
             baseQuickAdapter.notifyItemRemoved(loadMoreViewPosition)
@@ -255,7 +262,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
             return
         }
 //        mNextLoadEnable = true
-        loadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Complete
+        loadMoreStatus = LoadMoreStatus.Complete
 
         baseQuickAdapter.notifyItemChanged(loadMoreViewPosition)
 
@@ -269,7 +276,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
         if (!hasLoadMoreView()) {
             return
         }
-        loadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Fail
+        loadMoreStatus = LoadMoreStatus.Fail
         baseQuickAdapter.notifyItemChanged(loadMoreViewPosition)
     }
 
@@ -288,7 +295,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
     internal fun reset() {
         if (mLoadMoreListener != null) {
             isEnableLoadMore = true
-            loadMoreView.loadMoreStatus = BaseLoadMoreView.Status.Complete
+            loadMoreStatus = LoadMoreStatus.Complete
         }
     }
 }
