@@ -77,7 +77,7 @@ mAdapter.setDiffNewData(newData2);
 
 ## 2、自定义 Diff 配置（可选）
 
-> 自定义配置不需要使用`setDiffCallback()`方法！
+> 自定义配置不使用`setDiffCallback()`方法！
 
 目前提供自定义工作线程
 
