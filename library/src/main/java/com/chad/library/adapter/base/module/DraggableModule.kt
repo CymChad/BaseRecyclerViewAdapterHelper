@@ -9,11 +9,11 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.R
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.chad.library.adapter.base.dragswipe.DragAndSwipeCallback
 import com.chad.library.adapter.base.listener.DraggableListenerImp
 import com.chad.library.adapter.base.listener.OnItemDragListener
 import com.chad.library.adapter.base.listener.OnItemSwipeListener
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import java.util.*
 
 /**
@@ -115,8 +115,8 @@ open class BaseDraggableModule(private val baseQuickAdapter: BaseQuickAdapter<*,
 
     /************************* Drag *************************/
 
-    open fun onItemDragStart(viewHolder: RecyclerView.ViewHolder?) {
-        mOnItemDragListener?.onItemDragStart(viewHolder, getViewHolderPosition(viewHolder!!))
+    open fun onItemDragStart(viewHolder: RecyclerView.ViewHolder) {
+        mOnItemDragListener?.onItemDragStart(viewHolder, getViewHolderPosition(viewHolder))
     }
 
     open fun onItemDragMoving(source: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder) {
@@ -137,21 +137,21 @@ open class BaseDraggableModule(private val baseQuickAdapter: BaseQuickAdapter<*,
         mOnItemDragListener?.onItemDragMoving(source, from, target, to)
     }
 
-    open fun onItemDragEnd(viewHolder: RecyclerView.ViewHolder?) {
-        mOnItemDragListener?.onItemDragEnd(viewHolder, getViewHolderPosition(viewHolder!!))
+    open fun onItemDragEnd(viewHolder: RecyclerView.ViewHolder) {
+        mOnItemDragListener?.onItemDragEnd(viewHolder, getViewHolderPosition(viewHolder))
     }
 
     /************************* Swipe *************************/
 
-    open fun onItemSwipeStart(viewHolder: RecyclerView.ViewHolder?) {
+    open fun onItemSwipeStart(viewHolder: RecyclerView.ViewHolder) {
         if (isSwipeEnabled) {
-            mOnItemSwipeListener?.onItemSwipeStart(viewHolder, getViewHolderPosition(viewHolder!!))
+            mOnItemSwipeListener?.onItemSwipeStart(viewHolder, getViewHolderPosition(viewHolder))
         }
     }
 
-    open fun onItemSwipeClear(viewHolder: RecyclerView.ViewHolder?) {
+    open fun onItemSwipeClear(viewHolder: RecyclerView.ViewHolder) {
         if (isSwipeEnabled) {
-            mOnItemSwipeListener?.clearView(viewHolder, getViewHolderPosition(viewHolder!!))
+            mOnItemSwipeListener?.clearView(viewHolder, getViewHolderPosition(viewHolder))
         }
     }
 
