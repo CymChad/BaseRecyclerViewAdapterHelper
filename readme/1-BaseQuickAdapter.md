@@ -115,9 +115,9 @@ adapter.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 
 ### Item 内子View的点击事件：
-
+**注意，请不要在convert方法里注册控件id**
 ```java
-// 先注册需要点击的子控件id
+// 先注册需要点击的子控件id（注意，请不要写在convert方法里）
 adapter.addChildClickViewIds(R.id.btn, R.id.iv_num_add, R.id.item_click);
 // 设置子控件点击监听
 adapter.setOnItemChildClickListener(new OnItemChildClickListener() {
@@ -131,9 +131,9 @@ adapter.setOnItemChildClickListener(new OnItemChildClickListener() {
 ```
 
 ### Item 内子View的长按事件：
-
+**注意，请不要在convert方法里注册控件id**
 ```java
-// 先注册需要长按的子控件id
+// 先注册需要长按的子控件id（注意，请不要写在convert方法里）
 adapter.addChildLongClickViewIds(R.id.btn, R.id.iv_num_add, R.id.item_click);
 // 设置子控件长按监听
 adapter.setOnItemChildLongClickListener(new OnItemChildLongClickListener() {
