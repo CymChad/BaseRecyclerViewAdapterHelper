@@ -745,7 +745,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         }
     }
 
-    private fun getHeaderViewPosition(): Int {
+    fun getHeaderViewPosition(): Int {
         if (hasEmptyView()) {
             if (headerWithEmptyEnable) {
                 return 0
@@ -851,7 +851,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         }
     }
 
-    private fun getFooterViewPosition(): Int {
+    fun getFooterViewPosition(): Int {
         //Return to footer view notify position
         if (hasEmptyView()) {
             var position = 1
