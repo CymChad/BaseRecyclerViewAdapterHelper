@@ -428,7 +428,12 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         return data.getOrNull(position)
     }
 
-    internal fun getItemPosition(item: T?): Int {
+    /**
+     * 如果返回 -1，表示不存在
+     * @param item T?
+     * @return Int
+     */
+    fun getItemPosition(item: T?): Int {
         return if (item != null && data.isNotEmpty()) data.indexOf(item) else -1
     }
 
