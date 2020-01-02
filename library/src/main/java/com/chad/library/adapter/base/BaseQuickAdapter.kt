@@ -1091,6 +1091,14 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         notifyItemRangeChanged(internalPosition, this.data.size - internalPosition)
     }
 
+    open fun remove(data: T) {
+        val index = this.data.indexOf(data)
+        if(index == -1) {
+            return
+        }
+        remove(index)
+    }
+
     /**
      * change data
      * 改变数据
