@@ -272,7 +272,7 @@ getAdapter().findParentNode(position)
 getAdapter().findParentNode(node)
 ```
 
-## 指定的夫Node添加\删除\替换子node
+## 指定的父Node添加\删除\替换子node
 ```java
 // 父 node 下添加子 node
 adapter.nodeAddData(parentNode, data)
