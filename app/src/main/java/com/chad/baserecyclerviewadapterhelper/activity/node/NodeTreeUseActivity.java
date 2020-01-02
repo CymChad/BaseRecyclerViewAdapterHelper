@@ -34,11 +34,13 @@ public class NodeTreeUseActivity extends BaseActivity {
 
         adapter.setNewData(getEntity());
 
+        // 模拟新增node
         mRecyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
-                SecondNode seNode = new SecondNode(new ArrayList<BaseNode>(), "this is Add Second Node");
-                adapter.nodeAddData(adapter.getData().get(0), 1,seNode);
+                SecondNode seNode = new SecondNode(new ArrayList<BaseNode>(), "Second Node(This is added)");
+                //第一个夫node，位置为子node的3号位置
+                adapter.nodeAddData(adapter.getData().get(0), 3, seNode);
                 Tips.show("新增node");
             }
         }, 3000);
