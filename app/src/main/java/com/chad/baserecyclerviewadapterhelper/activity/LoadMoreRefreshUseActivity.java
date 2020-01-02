@@ -186,7 +186,7 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
                 }
 
                 if (data.size() < PAGE_SIZE) {
-                    //第一页如果不够一页就不显示没有更多数据布局
+                    //如果不够一页,显示没有更多数据布局
                     mAdapter.getLoadMoreModule().loadMoreEnd();
                     Tips.show("no more data");
                 } else {
