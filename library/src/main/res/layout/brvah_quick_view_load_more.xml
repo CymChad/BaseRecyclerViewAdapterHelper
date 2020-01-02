@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="点击加载更多"
+            android:text="@string/brvah_load_complete"
             android:textColor="@android:color/darker_gray"/>
     </FrameLayout>
 
