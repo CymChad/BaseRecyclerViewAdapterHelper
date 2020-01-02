@@ -1,6 +1,7 @@
 package com.chad.baserecyclerviewadapterhelper.activity.node;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,11 +40,15 @@ public class NodeTreeUseActivity extends BaseActivity {
             @Override
             public void run() {
                 SecondNode seNode = new SecondNode(new ArrayList<BaseNode>(), "Second Node(This is added)");
+                SecondNode seNode2 = new SecondNode(new ArrayList<BaseNode>(), "Second Node(This is added)");
+                List<SecondNode> nodes = new ArrayList<>();
+                nodes.add(seNode);
+                nodes.add(seNode2);
                 //第一个夫node，位置为子node的3号位置
-                adapter.nodeAddData(adapter.getData().get(0), 3, seNode);
-                Tips.show("新增node");
+                adapter.nodeAddData(adapter.getData().get(0), 2, nodes);
+                Tips.show("新插入了两个node", Toast.LENGTH_LONG);
             }
-        }, 3000);
+        }, 2000);
     }
 
     private List<BaseNode> getEntity() {

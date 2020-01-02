@@ -218,6 +218,19 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
         }
     }
 
+    fun nodeAddData(parentNode: BaseNode, childIndex: Int, newData: Collection<BaseNode>) {
+        parentNode.childNode?.let {
+            it.addAll(childIndex, newData)
+
+            if (parentNode is BaseExpandNode && !parentNode.isExpanded) {
+                return
+            }
+            val parentIndex = this.data.indexOf(parentNode)
+            val pos = parentIndex + 1 + childIndex
+            addData(parentIndex + pos, newData)
+        }
+    }
+
     /**
      * 对指定的父node下对子node进行移除
      * @param parentNode BaseNode 夫node
