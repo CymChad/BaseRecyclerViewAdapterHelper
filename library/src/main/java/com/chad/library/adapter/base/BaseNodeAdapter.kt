@@ -161,6 +161,42 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
         super.setDiffNewData(diffResult, flatData(newData))
     }
 
+    /*************************** Node 数据操作 ***************************/
+
+    /**
+     * 对指定的父node，添加子node
+     * @param parentNode BaseNode 父node
+     * @param data BaseNode 子node
+     */
+    fun nodeAddData(parentNode: BaseNode, data: BaseNode) {
+        val parentIndex = this.data.indexOf(parentNode)
+        var childIndex = 0
+        parentNode.childNode?.let {
+            it.add(data)
+            childIndex = it.size
+
+            addData(parentIndex + childIndex, data)
+        }
+    }
+
+    /**
+     * 对指定的父node，在指定位置添加添加子node
+     * @param parentNode BaseNode 父node
+     * @param position Int 此位置是相对于其childNodes数据的位置！并不是整个data
+     * @param data BaseNode 添加的数据
+     */
+    fun nodeAddData(parentNode: BaseNode, position: Int, data: BaseNode) {
+        val parentIndex = this.data.indexOf(parentNode)
+        var pos = 0
+        parentNode.childNode?.let {
+            it.add(position, data)
+            pos = parentIndex + position + 1
+
+            addData(parentIndex + pos, data)
+        }
+
+    }
+
     /*************************** 重写数据设置方法 END ***************************/
 
     /**

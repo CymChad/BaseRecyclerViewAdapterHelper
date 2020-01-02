@@ -11,13 +11,14 @@ import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.entity.node.tree.FirstNode;
 import com.chad.baserecyclerviewadapterhelper.entity.node.tree.SecondNode;
 import com.chad.baserecyclerviewadapterhelper.entity.node.tree.ThirdNode;
+import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.entity.node.BaseNode;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class NodeTreeUseActivity extends BaseActivity {
-    private RecyclerView mRecyclerView;
+    private RecyclerView    mRecyclerView;
     private NodeTreeAdapter adapter = new NodeTreeAdapter();
 
     @Override
@@ -32,6 +33,15 @@ public class NodeTreeUseActivity extends BaseActivity {
         mRecyclerView.setAdapter(adapter);
 
         adapter.setNewData(getEntity());
+
+        mRecyclerView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                SecondNode seNode = new SecondNode(new ArrayList<BaseNode>(), "this is Add Second Node");
+                adapter.nodeAddData(adapter.getData().get(0), 1,seNode);
+                Tips.show("新增node");
+            }
+        }, 3000);
     }
 
     private List<BaseNode> getEntity() {
