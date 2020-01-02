@@ -9,6 +9,7 @@ import com.chad.library.adapter.base.entity.node.NodeFooterImp
 import com.chad.library.adapter.base.provider.BaseItemProvider
 import com.chad.library.adapter.base.provider.BaseNodeProvider
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import kotlin.math.max
 
 abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
     : BaseProviderMultiAdapter<BaseNode>(data) {
@@ -102,40 +103,18 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
     }
 
     override fun remove(position: Int) {
-        if (position >= data.size) {
-            return
-        }
-
-        //被移除的item数量
-        var removeCount = 0
-
-        val node = this.data[position]
-        //移除子项
-        if (!node.childNode.isNullOrEmpty()) {
-            val items = flatData(node.childNode!!)
-            this.data.removeAll(items)
-            removeCount = items.size
-        }
-        //移除node自己
-        this.data.removeAt(position)
-        removeCount += 1
-
-        // 移除脚部
-        if (node is NodeFooterImp && node.footerNode != null) {
-            this.data.removeAt(position)
-            removeCount += 1
-        }
-
+        val removeCount = removeAt(position)
         notifyItemRangeRemoved(position + getHeaderLayoutCount(), removeCount)
         compatibilityDataSizeChanged(0)
     }
 
     override fun setData(index: Int, data: BaseNode) {
-        val flatData = flatData(arrayListOf(data))
-        flatData.forEachIndexed { i, baseNode ->
-            this.data[index + i] = baseNode
-        }
-        notifyItemRangeChanged(index + getHeaderLayoutCount(), flatData.size)
+        val removeCount = removeAt(index)
+
+        val newFlatData = flatData(arrayListOf(data))
+        this.data.addAll(index, newFlatData)
+
+        notifyItemRangeChanged(index + getHeaderLayoutCount(), max(removeCount, newFlatData.size))
     }
 
     override fun replaceData(newData: Collection<BaseNode>) {
@@ -161,6 +140,43 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
         super.setDiffNewData(diffResult, flatData(newData))
     }
 
+    private fun removeAt(position: Int) :Int{
+        if (position >= data.size) {
+            return 0
+        }
+        //被移除的item数量
+        var removeCount = 0
+
+        val node = this.data[position]
+        //移除子项
+        if (!node.childNode.isNullOrEmpty()) {
+            if (node is BaseExpandNode) {
+                if (node.isExpanded) {
+                    val items = flatData(node.childNode!!)
+                    this.data.removeAll(items)
+                    removeCount = items.size
+                }
+            } else {
+                val items = flatData(node.childNode!!)
+                this.data.removeAll(items)
+                removeCount = items.size
+            }
+        }
+        //移除node自己
+        this.data.removeAt(position)
+        removeCount += 1
+
+        // 移除脚部
+        if (node is NodeFooterImp && node.footerNode != null) {
+            this.data.removeAt(position)
+            removeCount += 1
+        }
+        return removeCount
+    }
+
+    /*************************** 重写数据设置方法 END ***************************/
+
+
     /*************************** Node 数据操作 ***************************/
 
     /**
@@ -169,12 +185,15 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
      * @param data BaseNode 子node
      */
     fun nodeAddData(parentNode: BaseNode, data: BaseNode) {
-        val parentIndex = this.data.indexOf(parentNode)
-        var childIndex = 0
         parentNode.childNode?.let {
             it.add(data)
-            childIndex = it.size
+            val childIndex = it.size
 
+            if (parentNode is BaseExpandNode && !parentNode.isExpanded) {
+                return
+            }
+
+            val parentIndex = this.data.indexOf(parentNode)
             addData(parentIndex + childIndex, data)
         }
     }
@@ -182,22 +201,82 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
     /**
      * 对指定的父node，在指定位置添加添加子node
      * @param parentNode BaseNode 父node
-     * @param position Int 此位置是相对于其childNodes数据的位置！并不是整个data
+     * @param childIndex Int 此位置是相对于其childNodes数据的位置！并不是整个data
      * @param data BaseNode 添加的数据
      */
-    fun nodeAddData(parentNode: BaseNode, position: Int, data: BaseNode) {
-        val parentIndex = this.data.indexOf(parentNode)
-        var pos = 0
+    fun nodeAddData(parentNode: BaseNode, childIndex: Int, data: BaseNode) {
         parentNode.childNode?.let {
-            it.add(position, data)
-            pos = parentIndex + position + 1
+            it.add(childIndex, data)
 
+            if (parentNode is BaseExpandNode && !parentNode.isExpanded) {
+                return
+            }
+
+            val parentIndex = this.data.indexOf(parentNode)
+            val pos = parentIndex + 1 + childIndex
             addData(parentIndex + pos, data)
         }
-
     }
 
-    /*************************** 重写数据设置方法 END ***************************/
+    /**
+     * 对指定的父node下对子node进行移除
+     * @param parentNode BaseNode 夫node
+     * @param childIndex Int 此位置是相对于其childNodes数据的位置！并不是整个data
+     */
+    fun nodeRemoveData(parentNode: BaseNode, childIndex: Int) {
+        parentNode.childNode?.let {
+            it.removeAt(childIndex)
+
+            if (parentNode is BaseExpandNode && !parentNode.isExpanded) {
+                return
+            }
+
+            val parentIndex = this.data.indexOf(parentNode)
+            val pos = parentIndex + 1 + childIndex
+            remove(parentIndex + pos)
+        }
+    }
+
+    /**
+     * 对指定的父node下对子node进行移除
+     * @param parentNode BaseNode 夫node
+     * @param childNode BaseNode 子node
+     */
+    fun nodeRemoveData(parentNode: BaseNode, childNode: BaseNode) {
+        parentNode.childNode?.let {
+            val isOk = it.remove(childNode)
+
+            if (!isOk) {
+                return
+            }
+
+            if (parentNode is BaseExpandNode && !parentNode.isExpanded) {
+                return
+            }
+            remove(childNode)
+        }
+    }
+
+    /**
+     * 改变指定的父node下的对子node数据
+     * @param parentNode BaseNode
+     * @param childIndex Int 此位置是相对于其childNodes数据的位置！并不是整个data
+     * @param data BaseNode 新数据
+     */
+    fun nodeSetData(parentNode: BaseNode, childIndex: Int, data: BaseNode) {
+        parentNode.childNode?.let {
+            if (childIndex >= it.size) {
+                return
+            }
+            it[childIndex] = data
+
+            val parentIndex = this.data.indexOf(parentNode)
+            val pos = parentIndex + 1 + childIndex
+            setData(pos, data)
+        }
+    }
+
+    /*************************** Node 数据操作 END ***************************/
 
     /**
      * 将输入的嵌套类型数组循环递归，在扁平化数据的同时，设置展开状态

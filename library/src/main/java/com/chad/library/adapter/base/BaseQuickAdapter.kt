@@ -1101,9 +1101,12 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 
     /**
      * change data
-     * 改变数据
+     * 改变某一位置数据
      */
     open fun setData(@IntRange(from = 0) index: Int, data: T) {
+        if (index >= this.data.size) {
+            return
+        }
         this.data[index] = data
         notifyItemChanged(index + getHeaderLayoutCount())
     }
