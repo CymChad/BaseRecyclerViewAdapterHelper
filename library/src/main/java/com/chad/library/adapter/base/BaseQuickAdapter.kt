@@ -670,6 +670,20 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         return null
     }
 
+    /**
+     * When set to true, the item will layout using all span area. That means, if orientation
+     * is vertical, the view will have full width; if orientation is horizontal, the view will
+     * have full height.
+     * if the hold view use StaggeredGridLayoutManager they should using all span area
+     *
+     * @param holder True if this item should traverse all spans.
+     */
+    protected open fun setFullSpan(holder: RecyclerView.ViewHolder) {
+        val layoutParams = holder.itemView.layoutParams
+        if (layoutParams is StaggeredGridLayoutManager.LayoutParams) {
+            layoutParams.isFullSpan = true
+        }
+    }
 
     /********************************************************************************************/
     /********************************* HeaderView Method ****************************************/
@@ -767,18 +781,13 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
             }
 
     /**
-     * When set to true, the item will layout using all span area. That means, if orientation
-     * is vertical, the view will have full width; if orientation is horizontal, the view will
-     * have full height.
-     * if the hold view use StaggeredGridLayoutManager they should using all span area
-     *
-     * @param holder True if this item should traverse all spans.
+     * 获取头布局
+     * @return LinearLayout?
      */
-    protected open fun setFullSpan(holder: RecyclerView.ViewHolder) {
-        val layoutParams = holder.itemView.layoutParams
-        if (layoutParams is StaggeredGridLayoutManager.LayoutParams) {
-            layoutParams.isFullSpan = true
-        }
+    fun getHeaderLayout(): LinearLayout? = if (this::mHeaderLayout.isInitialized) {
+        mHeaderLayout
+    } else {
+        null
     }
 
     /********************************************************************************************/
@@ -876,6 +885,16 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
             } else {
                 0
             }
+
+    /**
+     * 获取脚布局
+     * @return LinearLayout?
+     */
+    fun getFooterLayout(): LinearLayout? = if (this::mFooterLayout.isInitialized) {
+        mFooterLayout
+    } else {
+        null
+    }
 
     /********************************************************************************************/
     /********************************** EmptyView Method ****************************************/
