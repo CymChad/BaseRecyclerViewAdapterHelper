@@ -84,6 +84,12 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
         super.setNewData(flatData(data ?: arrayListOf()))
     }
 
+    /**
+     * 如果需要对某节点下的子节点进行数据操作，请使用[nodeAddData]！
+     *
+     * @param position Int 整个 data 的 index
+     * @param data BaseNode
+     */
     override fun addData(position: Int, data: BaseNode) {
         addData(position, arrayListOf(data))
     }
@@ -102,12 +108,22 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
         super.addData(nodes)
     }
 
+    /**
+     * 如果需要对某节点下的子节点进行数据操作，请使用[nodeRemoveData]！
+     *
+     * @param position Int 整个 data 的 index
+     */
     override fun remove(position: Int) {
         val removeCount = removeAt(position)
         notifyItemRangeRemoved(position + getHeaderLayoutCount(), removeCount)
         compatibilityDataSizeChanged(0)
     }
 
+    /**
+     * 如果需要对某节点下的子节点进行数据操作，请使用[nodeSetData]！
+     * @param index Int
+     * @param data BaseNode
+     */
     override fun setData(index: Int, data: BaseNode) {
         // 先移除，再添加
         val removeCount = removeAt(index)
