@@ -134,6 +134,10 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
         notifyItemRangeChanged(index + getHeaderLayoutCount(), max(removeCount, newFlatData.size))
     }
 
+    /**
+     * 替换整个列表数据，如果需要对某节点下的子节点进行替换，请使用[nodeReplaceChildData]！
+     * @param newData Collection<BaseNode>
+     */
     override fun replaceData(newData: Collection<BaseNode>) {
         // 不是同一个引用才清空列表
         if (newData != this.data) {
@@ -196,6 +200,31 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
         return removeCount
     }
 
+    private fun removeChildAt(position: Int): Int {
+        if (position >= data.size) {
+            return 0
+        }
+        // 记录被移除的item数量
+        var removeCount = 0
+
+        val node = this.data[position]
+        // 先移除子项
+        if (!node.childNode.isNullOrEmpty()) {
+            if (node is BaseExpandNode) {
+                if (node.isExpanded) {
+                    val items = flatData(node.childNode!!)
+                    this.data.removeAll(items)
+                    removeCount = items.size
+                }
+            } else {
+                val items = flatData(node.childNode!!)
+                this.data.removeAll(items)
+                removeCount = items.size
+            }
+        }
+        return removeCount
+    }
+
     /*************************** 重写数据设置方法 END ***************************/
 
 
@@ -221,7 +250,7 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
     }
 
     /**
-     * 对指定的父node，在指定位置添加添加子node
+     * 对指定的父node，在指定位置添加子node
      * @param parentNode BaseNode 父node
      * @param childIndex Int 此位置是相对于其childNodes数据的位置！并不是整个data
      * @param data BaseNode 添加的数据
@@ -236,10 +265,16 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
 
             val parentIndex = this.data.indexOf(parentNode)
             val pos = parentIndex + 1 + childIndex
-            addData(parentIndex + pos, data)
+            addData(pos, data)
         }
     }
 
+    /**
+     * 对指定的父node，在指定位置添加子node集合
+     * @param parentNode BaseNode 父node
+     * @param childIndex Int 此位置是相对于其childNodes数据的位置！并不是整个data
+     * @param newData 添加的数据集合
+     */
     fun nodeAddData(parentNode: BaseNode, childIndex: Int, newData: Collection<BaseNode>) {
         parentNode.childNode?.let {
             it.addAll(childIndex, newData)
@@ -249,7 +284,7 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
             }
             val parentIndex = this.data.indexOf(parentNode)
             val pos = parentIndex + 1 + childIndex
-            addData(parentIndex + pos, newData)
+            addData(pos, newData)
         }
     }
 
@@ -264,15 +299,16 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
                 return
             }
 
-            it.removeAt(childIndex)
-
             if (parentNode is BaseExpandNode && !parentNode.isExpanded) {
+                it.removeAt(childIndex)
                 return
             }
 
             val parentIndex = this.data.indexOf(parentNode)
             val pos = parentIndex + 1 + childIndex
-            remove(parentIndex + pos)
+            remove(pos)
+
+            it.removeAt(childIndex)
         }
     }
 
@@ -283,16 +319,13 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
      */
     fun nodeRemoveData(parentNode: BaseNode, childNode: BaseNode) {
         parentNode.childNode?.let {
-            val isOk = it.remove(childNode)
-
-            if (!isOk) {
-                return
-            }
-
             if (parentNode is BaseExpandNode && !parentNode.isExpanded) {
+                it.remove(childNode)
                 return
             }
             remove(childNode)
+
+            it.remove(childNode)
         }
     }
 
@@ -307,11 +340,45 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
             if (childIndex >= it.size) {
                 return
             }
-            it[childIndex] = data
+
+            if (parentNode is BaseExpandNode && !parentNode.isExpanded) {
+                it[childIndex] = data
+                return
+            }
 
             val parentIndex = this.data.indexOf(parentNode)
             val pos = parentIndex + 1 + childIndex
             setData(pos, data)
+
+            it[childIndex] = data
+        }
+    }
+
+    /**
+     * 替换父节点下的子节点集合
+     * @param parentNode BaseNode
+     * @param newData Collection<BaseNode>
+     */
+    fun nodeReplaceChildData(parentNode: BaseNode, newData: Collection<BaseNode>) {
+        parentNode.childNode?.let {
+            if (parentNode is BaseExpandNode && !parentNode.isExpanded) {
+                it.clear()
+                it.addAll(newData)
+                return
+            }
+
+            val parentIndex = this.data.indexOf(parentNode)
+            val removeCount = removeChildAt(parentIndex)
+            notifyItemRangeRemoved(parentIndex + 1 + getHeaderLayoutCount(), removeCount)
+
+            it.clear()
+            it.addAll(newData)
+
+            val newFlatData = flatData(newData)
+            this.data.addAll(parentIndex + 1, newFlatData)
+
+            notifyItemRangeInserted(parentIndex + 1 + getHeaderLayoutCount(), newFlatData.size)
+//            notifyItemRangeChanged(parentIndex + 1 + getHeaderLayoutCount(), max(removeCount, newFlatData.size))
         }
     }
 
