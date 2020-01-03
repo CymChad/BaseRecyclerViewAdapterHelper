@@ -141,15 +141,20 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
         super.setDiffNewData(diffResult, flatData(newData))
     }
 
+    /**
+     * 从数组中移除
+     * @param position Int
+     * @return Int 被移除的数量
+     */
     private fun removeAt(position: Int): Int {
         if (position >= data.size) {
             return 0
         }
-        //被移除的item数量
+        // 记录被移除的item数量
         var removeCount = 0
 
         val node = this.data[position]
-        //移除子项
+        // 先移除子项
         if (!node.childNode.isNullOrEmpty()) {
             if (node is BaseExpandNode) {
                 if (node.isExpanded) {
@@ -163,7 +168,7 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
                 removeCount = items.size
             }
         }
-        //移除node自己
+        // 移除node自己
         this.data.removeAt(position)
         removeCount += 1
 
