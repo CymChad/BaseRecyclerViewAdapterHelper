@@ -109,6 +109,7 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
     }
 
     override fun setData(index: Int, data: BaseNode) {
+        // 先移除，再添加
         val removeCount = removeAt(index)
 
         val newFlatData = flatData(arrayListOf(data))
@@ -140,7 +141,7 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
         super.setDiffNewData(diffResult, flatData(newData))
     }
 
-    private fun removeAt(position: Int) :Int{
+    private fun removeAt(position: Int): Int {
         if (position >= data.size) {
             return 0
         }
@@ -233,11 +234,15 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
 
     /**
      * 对指定的父node下对子node进行移除
-     * @param parentNode BaseNode 夫node
+     * @param parentNode BaseNode 父node
      * @param childIndex Int 此位置是相对于其childNodes数据的位置！并不是整个data
      */
     fun nodeRemoveData(parentNode: BaseNode, childIndex: Int) {
         parentNode.childNode?.let {
+            if (childIndex >= it.size) {
+                return
+            }
+
             it.removeAt(childIndex)
 
             if (parentNode is BaseExpandNode && !parentNode.isExpanded) {
@@ -252,7 +257,7 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
 
     /**
      * 对指定的父node下对子node进行移除
-     * @param parentNode BaseNode 夫node
+     * @param parentNode BaseNode 父node
      * @param childNode BaseNode 子node
      */
     fun nodeRemoveData(parentNode: BaseNode, childNode: BaseNode) {
@@ -315,7 +320,6 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
                 isExpanded?.let {
                     element.isExpanded = it
                 }
-
             } else {
                 val childNode = element.childNode
                 if (!childNode.isNullOrEmpty()) {
