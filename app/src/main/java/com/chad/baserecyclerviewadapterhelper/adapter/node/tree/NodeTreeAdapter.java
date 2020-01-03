@@ -34,4 +34,6 @@ public class NodeTreeAdapter extends BaseNodeAdapter {
         }
         return -1;
     }
+
+    public static final int EXPAND_COLLAPSE_PAYLOAD = 110;
 }

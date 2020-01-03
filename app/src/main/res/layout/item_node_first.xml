@@ -5,7 +5,8 @@
     android:layout_marginBottom="1dp"
     android:background="@android:color/white"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingRight="16dp">
 
     <ImageView
         android:id="@+id/iv_head"
@@ -30,6 +31,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|center"
-        android:paddingRight="16dp"
         android:src="@mipmap/arrow_r" />
 </LinearLayout>

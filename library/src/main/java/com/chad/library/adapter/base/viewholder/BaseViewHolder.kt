@@ -73,22 +73,22 @@ open class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         return this
     }
 
-    open fun setImageDrawable(@IdRes viewId: Int, drawable: Drawable?): BaseViewHolder? {
+    open fun setImageDrawable(@IdRes viewId: Int, drawable: Drawable?): BaseViewHolder {
         getView<ImageView>(viewId).setImageDrawable(drawable)
         return this
     }
 
-    open fun setImageBitmap(@IdRes viewId: Int, bitmap: Bitmap?): BaseViewHolder? {
+    open fun setImageBitmap(@IdRes viewId: Int, bitmap: Bitmap?): BaseViewHolder {
         getView<ImageView>(viewId).setImageBitmap(bitmap)
         return this
     }
 
-    open fun setBackgroundColor(@IdRes viewId: Int, @ColorInt color: Int): BaseViewHolder? {
+    open fun setBackgroundColor(@IdRes viewId: Int, @ColorInt color: Int): BaseViewHolder {
         getView<View>(viewId).setBackgroundColor(color)
         return this
     }
 
-    open fun setBackgroundResource(@IdRes viewId: Int, @DrawableRes backgroundRes: Int): BaseViewHolder? {
+    open fun setBackgroundResource(@IdRes viewId: Int, @DrawableRes backgroundRes: Int): BaseViewHolder {
         getView<View>(viewId).setBackgroundResource(backgroundRes)
         return this
     }
