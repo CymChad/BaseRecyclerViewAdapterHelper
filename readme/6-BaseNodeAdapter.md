@@ -1,8 +1,9 @@
 # BaseNodeAdapter
 
-说明：继承自`BaseProviderMultiAdapter`，这是一个类似节点树功能的`Adapter`，具有展开\收起节点的功能。可以实现更自由的`Section`功能，或者树形结构，每个item都可以有自己的`Footer`
+说明：
+继承自`BaseProviderMultiAdapter`，这是一个类似节点树功能的`Adapter`，具有展开\收起节点的功能。可以实现更自由的`Section`功能，或者树形结构，每个item都可以有自己的`Footer`
 
-此`Adapter`中的数据类型`T`固定为`BaseNode`类，你的数据需要使用`BaseNode`进行包装。
+**此`Adapter`中的数据类型`T`固定为`BaseNode`类，你的数据需要使用`BaseNode`进行包装。**
 
 如果某一个节点需要脚部，则此节点还需要实现`NodeFooterImp`接口。
 
