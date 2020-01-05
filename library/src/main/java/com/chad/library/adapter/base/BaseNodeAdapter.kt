@@ -336,7 +336,7 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
     }
 
     /**
-     * 改变指定的父node下的对子node数据
+     * 改变指定的父node下的子node数据
      * @param parentNode BaseNode
      * @param childIndex Int 此位置是相对于其childNodes数据的位置！并不是整个data
      * @param data BaseNode 新数据

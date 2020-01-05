@@ -283,6 +283,9 @@ adapter.nodeAddData(parentNode, childIndex: Int, dataList)
 adapter.nodeRemoveData(parentNode, childIndex)
 adapter.nodeRemoveData(parentNode, childNode)
 
-//替换node
+// 改变指定的父node下的子node数据
 adapter.nodeSetData(parentNode, childIndex: Int, data)
+  
+// 替换父node下的，全部子node
+adapter.nodeReplaceChildData(parentNode, newDataList)
 ```
