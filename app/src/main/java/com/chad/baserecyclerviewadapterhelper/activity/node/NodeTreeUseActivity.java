@@ -45,9 +45,9 @@ public class NodeTreeUseActivity extends BaseActivity {
                 nodes.add(seNode);
                 nodes.add(seNode2);
                 //第一个夫node，位置为子node的3号位置
-//                adapter.nodeAddData(adapter.getData().get(0), 2, nodes);
+                adapter.nodeAddData(adapter.getData().get(0), 2, nodes);
 //                adapter.nodeSetData(adapter.getData().get(0), 2, seNode2);
-                adapter.nodeReplaceChildData(adapter.getData().get(0), nodes);
+//                adapter.nodeReplaceChildData(adapter.getData().get(0), nodes);
                 Tips.show("新插入了两个node", Toast.LENGTH_LONG);
             }
         }, 2000);
