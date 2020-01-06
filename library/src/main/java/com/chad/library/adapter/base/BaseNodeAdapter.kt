@@ -113,7 +113,7 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
      */
     override fun remove(position: Int) {
         val removeCount = removeAt(position)
-        notifyItemRangeRemoved(position + getHeaderLayoutCount(), removeCount)
+        notifyItemRangeRemoved(position + headerLayoutCount, removeCount)
         compatibilityDataSizeChanged(0)
     }
 
@@ -130,10 +130,10 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
         this.data.addAll(index, newFlatData)
 
         if (removeCount == newFlatData.size) {
-            notifyItemRangeChanged(index + getHeaderLayoutCount(), removeCount)
+            notifyItemRangeChanged(index + headerLayoutCount, removeCount)
         } else {
-            notifyItemRangeRemoved(index + getHeaderLayoutCount(), removeCount)
-            notifyItemRangeInserted(index + getHeaderLayoutCount(), newFlatData.size)
+            notifyItemRangeRemoved(index + headerLayoutCount, removeCount)
+            notifyItemRangeInserted(index + headerLayoutCount, newFlatData.size)
 
 //        notifyItemRangeChanged(index + getHeaderLayoutCount(), max(removeCount, newFlatData.size)
         }
@@ -381,7 +381,7 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
             val newFlatData = flatData(newData)
             this.data.addAll(parentIndex + 1, newFlatData)
 
-            val positionStart = parentIndex + 1 + getHeaderLayoutCount()
+            val positionStart = parentIndex + 1 + headerLayoutCount
             if (removeCount == newFlatData.size) {
                 notifyItemRangeChanged(positionStart, removeCount)
             } else {
@@ -453,7 +453,7 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
         val node = this.data[position]
 
         if (node is BaseExpandNode && node.isExpanded) {
-            val adapterPosition = position + getHeaderLayoutCount()
+            val adapterPosition = position + headerLayoutCount
 
             node.isExpanded = false
             if (node.childNode.isNullOrEmpty()) {
@@ -493,7 +493,7 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
         val node = this.data[position]
 
         if (node is BaseExpandNode && !node.isExpanded) {
-            val adapterPosition = position + getHeaderLayoutCount()
+            val adapterPosition = position + headerLayoutCount
 
             node.isExpanded = true
             if (node.childNode.isNullOrEmpty()) {

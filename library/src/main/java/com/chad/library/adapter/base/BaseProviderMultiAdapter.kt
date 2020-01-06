@@ -76,7 +76,7 @@ abstract class BaseProviderMultiAdapter<T>(data: MutableList<T>? = null) :
                 if (position == RecyclerView.NO_POSITION) {
                     return@setOnClickListener
                 }
-                position -= getHeaderLayoutCount()
+                position -= headerLayoutCount
 
                 val itemViewType = viewHolder.itemViewType
                 val provider = mItemProviders.get(itemViewType)
@@ -92,7 +92,7 @@ abstract class BaseProviderMultiAdapter<T>(data: MutableList<T>? = null) :
                 if (position == RecyclerView.NO_POSITION) {
                     return@setOnLongClickListener false
                 }
-                position -= getHeaderLayoutCount()
+                position -= headerLayoutCount
 
                 val itemViewType = viewHolder.itemViewType
                 val provider = mItemProviders.get(itemViewType)
@@ -115,7 +115,7 @@ abstract class BaseProviderMultiAdapter<T>(data: MutableList<T>? = null) :
                         if (position == RecyclerView.NO_POSITION) {
                             return@setOnClickListener
                         }
-                        position -= getHeaderLayoutCount()
+                        position -= headerLayoutCount
                         provider.onChildClick(viewHolder, v, data[position], position)
                     }
                 }
@@ -134,7 +134,7 @@ abstract class BaseProviderMultiAdapter<T>(data: MutableList<T>? = null) :
                         if (position == RecyclerView.NO_POSITION) {
                             return@setOnLongClickListener false
                         }
-                        position -= getHeaderLayoutCount()
+                        position -= headerLayoutCount
                         provider.onChildLongClick(viewHolder, v, data[position], position)
                     }
                 }

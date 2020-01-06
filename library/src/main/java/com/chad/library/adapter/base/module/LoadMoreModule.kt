@@ -82,7 +82,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
                 return -1
             }
             return baseQuickAdapter.let {
-                it.getHeaderLayoutCount() + it.data.size + it.getFooterLayoutCount()
+                it.headerLayoutCount + it.data.size + it.footerLayoutCount
             }
         }
 

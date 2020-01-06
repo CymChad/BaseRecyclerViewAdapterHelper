@@ -273,7 +273,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
             } else {
                 0
             }
-            return getHeaderLayoutCount() + getDefItemCount() + getFooterLayoutCount() + loadMoreCount
+            return headerLayoutCount + getDefItemCount() + footerLayoutCount + loadMoreCount
         }
     }
 
@@ -336,7 +336,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
                 }
             }
             HEADER_VIEW, EMPTY_VIEW, FOOTER_VIEW -> return
-            else -> convert(holder, data.getOrNull(position - getHeaderLayoutCount()))
+            else -> convert(holder, data.getOrNull(position - headerLayoutCount))
         }
     }
 
@@ -356,7 +356,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
                 }
             }
             HEADER_VIEW, EMPTY_VIEW, FOOTER_VIEW -> return
-            else -> convert(holder, data.getOrNull(position - getHeaderLayoutCount()), payloads)
+            else -> convert(holder, data.getOrNull(position - headerLayoutCount), payloads)
         }
     }
 
@@ -405,7 +405,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
                         if (isFixedViewType(type))
                             manager.spanCount
                         else
-                            mSpanSizeLookup!!.getSpanSize(manager, type, position - getHeaderLayoutCount())
+                            mSpanSizeLookup!!.getSpanSize(manager, type, position - headerLayoutCount)
                     }
                 }
 
@@ -486,7 +486,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
                 if (position == RecyclerView.NO_POSITION) {
                     return@setOnClickListener
                 }
-                position -= getHeaderLayoutCount()
+                position -= headerLayoutCount
                 setOnItemClick(v, position)
             }
         }
@@ -496,7 +496,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
                 if (position == RecyclerView.NO_POSITION) {
                     return@setOnLongClickListener false
                 }
-                position -= getHeaderLayoutCount()
+                position -= headerLayoutCount
                 setOnItemLongClick(v, position)
             }
         }
@@ -512,7 +512,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
                         if (position == RecyclerView.NO_POSITION) {
                             return@setOnClickListener
                         }
-                        position -= getHeaderLayoutCount()
+                        position -= headerLayoutCount
                         setOnItemChildClick(v, position)
                     }
                 }
@@ -529,7 +529,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
                         if (position == RecyclerView.NO_POSITION) {
                             return@setOnLongClickListener false
                         }
-                        position -= getHeaderLayoutCount()
+                        position -= headerLayoutCount
                         setOnItemChildLongClick(v, position)
                     }
                 }
@@ -712,7 +712,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         }
         mHeaderLayout.addView(view, mIndex)
         if (mHeaderLayout.childCount == 1) {
-            val position = getHeaderViewPosition()
+            val position = headerViewPosition
             if (position != -1) {
                 notifyItemInserted(position)
             }
@@ -747,7 +747,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 
         mHeaderLayout.removeView(header)
         if (mHeaderLayout.childCount == 0) {
-            val position = getHeaderViewPosition()
+            val position = headerViewPosition
             if (position != -1) {
                 notifyItemRemoved(position)
             }
@@ -758,42 +758,49 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         if (!hasHeaderLayout()) return
 
         mHeaderLayout.removeAllViews()
-        val position = getHeaderViewPosition()
+        val position = headerViewPosition
         if (position != -1) {
             notifyItemRemoved(position)
         }
     }
 
-    fun getHeaderViewPosition(): Int {
-        if (hasEmptyView()) {
-            if (headerWithEmptyEnable) {
+    val headerViewPosition: Int
+        get() {
+            if (hasEmptyView()) {
+                if (headerWithEmptyEnable) {
+                    return 0
+                }
+            } else {
                 return 0
             }
-        } else {
-            return 0
+            return -1
         }
-        return -1
-    }
 
     /**
      * if addHeaderView will be return 1, if not will be return 0
      */
-    fun getHeaderLayoutCount(): Int =
-            if (hasHeaderLayout()) {
+    val headerLayoutCount: Int
+        get() {
+            return if (hasHeaderLayout()) {
                 1
             } else {
                 0
             }
+        }
+
 
     /**
      * 获取头布局
      * @return LinearLayout?
      */
-    fun getHeaderLayout(): LinearLayout? = if (this::mHeaderLayout.isInitialized) {
-        mHeaderLayout
-    } else {
-        null
-    }
+    val headerLayout: LinearLayout?
+        get() {
+            return if (this::mHeaderLayout.isInitialized) {
+                mHeaderLayout
+            } else {
+                null
+            }
+        }
 
     /********************************************************************************************/
     /********************************* FooterView Method ****************************************/
@@ -817,7 +824,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         }
         mFooterLayout.addView(view, mIndex)
         if (mFooterLayout.childCount == 1) {
-            val position = getFooterViewPosition()
+            val position = footerViewPosition
             if (position != -1) {
                 notifyItemInserted(position)
             }
@@ -836,19 +843,12 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         }
     }
 
-    fun hasFooterLayout(): Boolean {
-        if (this::mFooterLayout.isInitialized && mFooterLayout.childCount > 0) {
-            return true
-        }
-        return false
-    }
-
     fun removeFooterView(footer: View) {
         if (!hasFooterLayout()) return
 
         mFooterLayout.removeView(footer)
         if (mFooterLayout.childCount == 0) {
-            val position = getFooterViewPosition()
+            val position = footerViewPosition
             if (position != -1) {
                 notifyItemRemoved(position)
             }
@@ -859,47 +859,59 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         if (!hasFooterLayout()) return
 
         mFooterLayout.removeAllViews()
-        val position = getFooterViewPosition()
+        val position = footerViewPosition
         if (position != -1) {
             notifyItemRemoved(position)
         }
     }
 
-    fun getFooterViewPosition(): Int {
-        //Return to footer view notify position
-        if (hasEmptyView()) {
-            var position = 1
-            if (headerWithEmptyEnable && hasHeaderLayout()) {
-                position++
-            }
-            if (footerWithEmptyEnable) {
-                return position
-            }
-        } else {
-            return getHeaderLayoutCount() + data.size
+    fun hasFooterLayout(): Boolean {
+        if (this::mFooterLayout.isInitialized && mFooterLayout.childCount > 0) {
+            return true
         }
-        return -1
+        return false
     }
+
+    val footerViewPosition: Int
+        get() {
+            if (hasEmptyView()) {
+                var position = 1
+                if (headerWithEmptyEnable && hasHeaderLayout()) {
+                    position++
+                }
+                if (footerWithEmptyEnable) {
+                    return position
+                }
+            } else {
+                return headerLayoutCount + data.size
+            }
+            return -1
+        }
 
     /**
      * if addHeaderView will be return 1, if not will be return 0
      */
-    fun getFooterLayoutCount(): Int =
-            if (hasFooterLayout()) {
+    val footerLayoutCount: Int
+        get() {
+            return if (hasFooterLayout()) {
                 1
             } else {
                 0
             }
+        }
 
     /**
      * 获取脚布局
      * @return LinearLayout?
      */
-    fun getFooterLayout(): LinearLayout? = if (this::mFooterLayout.isInitialized) {
-        mFooterLayout
-    } else {
-        null
-    }
+    val footerLayout: LinearLayout?
+        get() {
+            return if (this::mFooterLayout.isInitialized) {
+                mFooterLayout
+            } else {
+                null
+            }
+        }
 
     /********************************************************************************************/
     /********************************** EmptyView Method ****************************************/
@@ -960,11 +972,15 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      *
      * @return The view to show if the adapter is empty.
      */
-    fun getEmptyLayout(): FrameLayout? = if (this::mEmptyLayout.isInitialized) {
-        mEmptyLayout
-    } else {
-        null
-    }
+    val emptyLayout: FrameLayout?
+        get() {
+            return if (this::mEmptyLayout.isInitialized) {
+                mEmptyLayout
+            } else {
+                null
+            }
+        }
+
 
     /*************************** Animation ******************************************/
 
@@ -1046,7 +1062,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      */
     open fun addData(@IntRange(from = 0) position: Int, data: T) {
         this.data.add(position, data)
-        notifyItemInserted(position + getHeaderLayoutCount())
+        notifyItemInserted(position + headerLayoutCount)
         compatibilityDataSizeChanged(1)
     }
 
@@ -1056,7 +1072,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      */
     open fun addData(@NonNull data: T) {
         this.data.add(data)
-        notifyItemInserted(this.data.size + getHeaderLayoutCount())
+        notifyItemInserted(this.data.size + headerLayoutCount)
         compatibilityDataSizeChanged(1)
     }
 
@@ -1069,13 +1085,13 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      */
     open fun addData(@IntRange(from = 0) position: Int, newData: Collection<T>) {
         this.data.addAll(position, newData)
-        notifyItemRangeInserted(position + getHeaderLayoutCount(), newData.size)
+        notifyItemRangeInserted(position + headerLayoutCount, newData.size)
         compatibilityDataSizeChanged(newData.size)
     }
 
     open fun addData(@NonNull newData: Collection<T>) {
         this.data.addAll(newData)
-        notifyItemRangeInserted(this.data.size - newData.size + getHeaderLayoutCount(), newData.size)
+        notifyItemRangeInserted(this.data.size - newData.size + headerLayoutCount, newData.size)
         compatibilityDataSizeChanged(newData.size)
     }
 
@@ -1090,7 +1106,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
             return
         }
         this.data.removeAt(position)
-        val internalPosition = position + getHeaderLayoutCount()
+        val internalPosition = position + headerLayoutCount
         notifyItemRemoved(internalPosition)
         compatibilityDataSizeChanged(0)
         notifyItemRangeChanged(internalPosition, this.data.size - internalPosition)
@@ -1098,7 +1114,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 
     open fun remove(data: T) {
         val index = this.data.indexOf(data)
-        if(index == -1) {
+        if (index == -1) {
             return
         }
         remove(index)
@@ -1113,7 +1129,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
             return
         }
         this.data[index] = data
-        notifyItemChanged(index + getHeaderLayoutCount())
+        notifyItemChanged(index + headerLayoutCount)
     }
 
     /**

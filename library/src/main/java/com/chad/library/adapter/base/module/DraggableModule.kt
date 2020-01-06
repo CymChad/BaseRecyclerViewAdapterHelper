@@ -110,7 +110,7 @@ open class BaseDraggableModule(private val baseQuickAdapter: BaseQuickAdapter<*,
 
 
     protected fun getViewHolderPosition(viewHolder: RecyclerView.ViewHolder): Int {
-        return viewHolder.adapterPosition - baseQuickAdapter.getHeaderLayoutCount()
+        return viewHolder.adapterPosition - baseQuickAdapter.headerLayoutCount
     }
 
     /************************* Drag *************************/
