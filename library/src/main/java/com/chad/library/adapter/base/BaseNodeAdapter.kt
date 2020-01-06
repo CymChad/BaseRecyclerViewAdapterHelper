@@ -10,16 +10,15 @@ import com.chad.library.adapter.base.provider.BaseItemProvider
 import com.chad.library.adapter.base.provider.BaseNodeProvider
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
-abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
-    : BaseProviderMultiAdapter<BaseNode>(data) {
+abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
+    : BaseProviderMultiAdapter<BaseNode>(null) {
 
     private val fullSpanNodeTypeSet = HashSet<Int>()
 
     init {
-        if (!data.isNullOrEmpty()) {
-            val flatData = flatData(data)
-            data.clear()
-            data.addAll(flatData)
+        if (!nodeList.isNullOrEmpty()) {
+            val flatData = flatData(nodeList)
+            this.data.addAll(flatData)
         }
     }
 
@@ -244,13 +243,13 @@ abstract class BaseNodeAdapter(data: MutableList<BaseNode>? = null)
     fun nodeAddData(parentNode: BaseNode, data: BaseNode) {
         parentNode.childNode?.let {
             it.add(data)
-            val childIndex = it.size
 
             if (parentNode is BaseExpandNode && !parentNode.isExpanded) {
                 return
             }
 
             val parentIndex = this.data.indexOf(parentNode)
+            val childIndex = it.size
             addData(parentIndex + childIndex, data)
         }
     }
