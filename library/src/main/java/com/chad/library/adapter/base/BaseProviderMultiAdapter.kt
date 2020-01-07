@@ -45,7 +45,7 @@ abstract class BaseProviderMultiAdapter<T>(data: MutableList<T>? = null) :
         checkNotNull(provider) { "ViewType: $viewType no such provider found，please use addItemProvider() first!" }
         provider.context = parent.context
         return provider.onCreateViewHolder(parent, viewType).apply {
-            provider.onViewHolderCreated(this)
+            provider.onViewHolderCreated(this, viewType)
         }
     }
 

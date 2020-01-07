@@ -54,7 +54,7 @@ abstract class BaseItemProvider<T> {
      * （可选重写）ViewHolder创建完毕以后的回掉方法。
      * @param viewHolder VH
      */
-    open fun onViewHolderCreated(viewHolder: BaseViewHolder) {}
+    open fun onViewHolderCreated(viewHolder: BaseViewHolder, viewType: Int) {}
 
     /**
      * item 若想实现条目点击事件则重写该方法
