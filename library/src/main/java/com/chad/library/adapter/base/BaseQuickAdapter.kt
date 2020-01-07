@@ -690,6 +690,18 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         }
     }
 
+    /**
+     * get the specific view by position,e.g. getViewByPosition(2, R.id.textView)
+     *
+     * bind [RecyclerView.setAdapter] before use!
+     */
+    fun getViewByPosition(position: Int, @IdRes viewId: Int): View? {
+        val recyclerView = weakRecyclerView.get() ?: return null
+        val viewHolder = recyclerView.findViewHolderForLayoutPosition(position) as BaseViewHolder?
+                ?: return null
+        return viewHolder.getViewOrNull(viewId)
+    }
+
     /********************************************************************************************/
     /********************************* HeaderView Method ****************************************/
     /********************************************************************************************/
@@ -791,7 +803,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 
     /**
      * 获取头布局
-     * @return LinearLayout?
      */
     val headerLayout: LinearLayout?
         get() {
