@@ -21,7 +21,7 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 abstract class BaseProviderMultiAdapter<T>(data: MutableList<T>? = null) :
         BaseQuickAdapter<T, BaseViewHolder>(0, data) {
 
-    private val mItemProviders by lazy { SparseArray<BaseItemProvider<T>>() }
+    private val mItemProviders by lazy(LazyThreadSafetyMode.NONE) { SparseArray<BaseItemProvider<T>>() }
 
     /**
      * 返回 item 类型
@@ -41,7 +41,7 @@ abstract class BaseProviderMultiAdapter<T>(data: MutableList<T>? = null) :
     }
 
     override fun onCreateDefViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-        val provider = mItemProviders.get(viewType)
+        val provider = getItemProvider(viewType)
         checkNotNull(provider) { "ViewType: $viewType no such provider found，please use addItemProvider() first!" }
         provider.context = parent.context
         return provider.onCreateViewHolder(parent).apply {
@@ -54,17 +54,21 @@ abstract class BaseProviderMultiAdapter<T>(data: MutableList<T>? = null) :
     }
 
     override fun convert(helper: BaseViewHolder, item: T?) {
-        mItemProviders.get(helper.itemViewType).convert(helper, item)
+        getItemProvider(helper.itemViewType)!!.convert(helper, item)
     }
 
     override fun convert(helper: BaseViewHolder, item: T?, payloads: List<Any>) {
-        mItemProviders.get(helper.itemViewType).convert(helper, item, payloads)
+        getItemProvider(helper.itemViewType)!!.convert(helper, item, payloads)
     }
 
     override fun bindViewClickListener(viewHolder: BaseViewHolder, viewType: Int) {
         super.bindViewClickListener(viewHolder, viewType)
         bindClick(viewHolder)
         bindChildClick(viewHolder, viewType)
+    }
+
+    protected open fun getItemProvider(viewType: Int): BaseItemProvider<T>? {
+        return mItemProviders.get(viewType)
     }
 
     protected open fun bindClick(viewHolder: BaseViewHolder) {
