@@ -44,7 +44,7 @@ abstract class BaseProviderMultiAdapter<T>(data: MutableList<T>? = null) :
         val provider = getItemProvider(viewType)
         checkNotNull(provider) { "ViewType: $viewType no such provider found，please use addItemProvider() first!" }
         provider.context = parent.context
-        return provider.onCreateViewHolder(parent).apply {
+        return provider.onCreateViewHolder(parent, viewType).apply {
             provider.onViewHolderCreated(this)
         }
     }

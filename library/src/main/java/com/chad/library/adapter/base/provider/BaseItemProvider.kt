@@ -46,7 +46,7 @@ abstract class BaseItemProvider<T> {
      *
      * @param parent
      */
-    open fun onCreateViewHolder(parent: ViewGroup): BaseViewHolder {
+    open fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
         return BaseViewHolder(parent.getItemView(layoutId))
     }
 
