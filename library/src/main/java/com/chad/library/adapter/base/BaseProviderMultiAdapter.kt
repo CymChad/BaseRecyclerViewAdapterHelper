@@ -67,6 +67,14 @@ abstract class BaseProviderMultiAdapter<T>(data: MutableList<T>? = null) :
         bindChildClick(viewHolder, viewType)
     }
 
+    /**
+     * 通过 ViewType 获取 BaseItemProvider
+     * 例如：如果ViewType经过特殊处理，可以重写此方法，获取正确的Provider
+     * （比如 ViewType 通过位运算进行的组合的）
+     *
+     * @param viewType Int
+     * @return BaseItemProvider
+     */
     protected open fun getItemProvider(viewType: Int): BaseItemProvider<T>? {
         return mItemProviders.get(viewType)
     }
