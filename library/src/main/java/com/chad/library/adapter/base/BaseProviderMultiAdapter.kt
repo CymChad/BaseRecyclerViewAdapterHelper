@@ -115,7 +115,7 @@ abstract class BaseProviderMultiAdapter<T>(data: MutableList<T>? = null) :
 
     protected open fun bindChildClick(viewHolder: BaseViewHolder, viewType: Int) {
         if (getOnItemChildClickListener() == null) {
-            val provider = mItemProviders.get(viewType)
+            val provider = getItemProvider(viewType) ?: return
             val ids = provider.getChildClickViewIds()
             ids.forEach { id ->
                 viewHolder.itemView.findViewById<View>(id)?.let {
@@ -134,7 +134,7 @@ abstract class BaseProviderMultiAdapter<T>(data: MutableList<T>? = null) :
             }
         }
         if (getOnItemChildLongClickListener() == null) {
-            val provider = mItemProviders.get(viewType)
+            val provider = getItemProvider(viewType) ?: return
             val ids = provider.getChildLongClickViewIds()
             ids.forEach { id ->
                 viewHolder.itemView.findViewById<View>(id)?.let {
