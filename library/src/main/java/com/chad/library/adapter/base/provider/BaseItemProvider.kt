@@ -19,8 +19,8 @@ abstract class BaseItemProvider<T> {
     lateinit var context: Context
 
     private var weakAdapter: WeakReference<BaseProviderMultiAdapter<T>>? = null
-    private val clickViewIds: ArrayList<Int> by lazy { ArrayList<Int>() }
-    private val longClickViewIds: ArrayList<Int> by lazy { ArrayList<Int>() }
+    private val clickViewIds: ArrayList<Int> by lazy(LazyThreadSafetyMode.NONE) { ArrayList<Int>() }
+    private val longClickViewIds: ArrayList<Int> by lazy(LazyThreadSafetyMode.NONE) { ArrayList<Int>() }
 
     internal fun setAdapter(adapter: BaseProviderMultiAdapter<T>) {
         weakAdapter = WeakReference(adapter)
