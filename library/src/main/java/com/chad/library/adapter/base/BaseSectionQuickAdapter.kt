@@ -66,7 +66,7 @@ abstract class BaseSectionQuickAdapter<T : SectionEntity, VH : BaseViewHolder>
     override fun onBindViewHolder(holder: VH, position: Int) {
         if (holder.itemViewType == SectionEntity.HEADER_TYPE) {
 //            setFullSpan(holder)
-            convertHeader(holder, data.getOrNull(position - headerLayoutCount))
+            convertHeader(holder, getItem(position - headerLayoutCount))
         } else {
             super.onBindViewHolder(holder, position)
         }
@@ -79,7 +79,7 @@ abstract class BaseSectionQuickAdapter<T : SectionEntity, VH : BaseViewHolder>
         }
 
         if (holder.itemViewType == SectionEntity.HEADER_TYPE) {
-            convertHeader(holder, data.getOrNull(position - headerLayoutCount), payloads)
+            convertHeader(holder, getItem(position - headerLayoutCount), payloads)
         } else {
             super.onBindViewHolder(holder, position, payloads)
         }

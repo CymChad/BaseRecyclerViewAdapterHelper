@@ -336,7 +336,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
                 }
             }
             HEADER_VIEW, EMPTY_VIEW, FOOTER_VIEW -> return
-            else -> convert(holder, data.getOrNull(position - headerLayoutCount))
+            else -> convert(holder, getItem(position - headerLayoutCount))
         }
     }
 
@@ -356,7 +356,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
                 }
             }
             HEADER_VIEW, EMPTY_VIEW, FOOTER_VIEW -> return
-            else -> convert(holder, data.getOrNull(position - headerLayoutCount), payloads)
+            else -> convert(holder, getItem(position - headerLayoutCount), payloads)
         }
     }
 
@@ -424,7 +424,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * data set.
      * @return The data at the specified position.
      */
-    fun getItem(@IntRange(from = 0) position: Int): T? {
+    open fun getItem(@IntRange(from = 0) position: Int): T? {
         return data.getOrNull(position)
     }
 
