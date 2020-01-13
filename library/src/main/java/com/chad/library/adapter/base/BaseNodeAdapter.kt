@@ -178,25 +178,14 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
         // 记录被移除的item数量
         var removeCount = 0
 
-        val node = this.data[position]
         // 先移除子项
-        if (!node.childNode.isNullOrEmpty()) {
-            if (node is BaseExpandNode) {
-                if (node.isExpanded) {
-                    val items = flatData(node.childNode!!)
-                    this.data.removeAll(items)
-                    removeCount = items.size
-                }
-            } else {
-                val items = flatData(node.childNode!!)
-                this.data.removeAll(items)
-                removeCount = items.size
-            }
-        }
+        removeCount = removeChildAt(position)
+
         // 移除node自己
         this.data.removeAt(position)
         removeCount += 1
 
+        val node = this.data[position]
         // 移除脚部
         if (node is NodeFooterImp && node.footerNode != null) {
             this.data.removeAt(position)
@@ -213,7 +202,7 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
         var removeCount = 0
 
         val node = this.data[position]
-        // 先移除子项
+        // 移除子项
         if (!node.childNode.isNullOrEmpty()) {
             if (node is BaseExpandNode) {
                 if (node.isExpanded) {
