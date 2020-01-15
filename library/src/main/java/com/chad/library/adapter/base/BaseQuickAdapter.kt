@@ -966,6 +966,12 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         }
     }
 
+    fun removeEmptyView() {
+        if (this::mEmptyLayout.isInitialized) {
+            mEmptyLayout.removeAllViews()
+        }
+    }
+
     fun hasEmptyView(): Boolean {
         if (!this::mEmptyLayout.isInitialized || mEmptyLayout.childCount == 0) {
             return false
