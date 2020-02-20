@@ -2,15 +2,18 @@ package com.chad.baserecyclerviewadapterhelper.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.baserecyclerviewadapterhelper.activity.multi.ChooseMultipleItemUseTypeActivity
 import com.chad.baserecyclerviewadapterhelper.activity.node.ChooseNodeUseTypeActivity
 import com.chad.baserecyclerviewadapterhelper.adapter.HomeAdapter
 import com.chad.baserecyclerviewadapterhelper.entity.HomeEntity
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.listener.OnItemClickListener
 import kotlinx.android.synthetic.main.activity_home.*
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(), OnItemClickListener {
 
     /**
      * RV适配器
@@ -21,12 +24,20 @@ class HomeActivity : AppCompatActivity() {
 
             val top = layoutInflater.inflate(R.layout.top_view, recyclerView, false)
             addHeaderView(top)
-            setOnItemClickListener { adapter, _, position ->
-                val item = adapter.data[position] as HomeEntity
-                if (!item.isHeader) {
-                    startActivity(Intent(this@HomeActivity, item.activity))
-                }
-            }
+            setOnItemClickListener(this@HomeActivity)
+//            setOnItemClickListener { adapter, _, position ->
+//                val item = adapter.data[position] as HomeEntity
+//                if (!item.isHeader) {
+//                    startActivity(Intent(this@HomeActivity, item.activity))
+//                }
+//            }
+        }
+    }
+
+    override fun onItemClick(adapter: BaseQuickAdapter<*, *>, view: View, position: Int) {
+        val item = adapter.data[position] as HomeEntity
+        if (!item.isHeader) {
+            startActivity(Intent(this@HomeActivity, item.activity))
         }
     }
 

@@ -148,4 +148,8 @@ class BrvahAsyncDiffer<T>(private val adapter: BaseQuickAdapter<T, *>,
     fun removeListListener(listener: ListChangeListener<T>) {
         mListeners.remove(listener)
     }
+
+    fun clearAllListListener() {
+        mListeners.clear()
+    }
 }

@@ -1,5 +1,6 @@
 package com.chad.library.adapter.base.listener;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 /**
@@ -9,5 +10,5 @@ import androidx.recyclerview.widget.GridLayoutManager;
  */
 public interface GridSpanSizeLookup {
 
-    int getSpanSize(GridLayoutManager gridLayoutManager, int viewType, int position);
+    int getSpanSize(@NonNull GridLayoutManager gridLayoutManager, int viewType, int position);
 }
