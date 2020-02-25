@@ -24,6 +24,7 @@ allprojects {
 
 ### 添加依赖项
 [![](https://jitpack.io/v/CymChad/BaseRecyclerViewAdapterHelper.svg)](https://jitpack.io/#CymChad/BaseRecyclerViewAdapterHelper)
+仅支持`AndroidX`
 ```
 dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.0'
