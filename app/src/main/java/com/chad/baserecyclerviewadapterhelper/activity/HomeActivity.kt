@@ -27,12 +27,6 @@ class HomeActivity : AppCompatActivity(), OnItemClickListener {
             val top = layoutInflater.inflate(R.layout.top_view, binding.recyclerView, false)
             addHeaderView(top)
             setOnItemClickListener(this@HomeActivity)
-//            setOnItemClickListener { adapter, _, position ->
-//                val item = adapter.data[position] as HomeEntity
-//                if (!item.isHeader) {
-//                    startActivity(Intent(this@HomeActivity, item.activity))
-//                }
-//            }
         }
     }
 

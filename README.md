@@ -27,7 +27,7 @@ Of course, you can continue to use the [2.x](https://github.com/CymChad/BaseRecy
 ## Demo
 ![](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/demo.png)
 
-[国内下载地址](https://www.lanzous.com/i8ate4f)  
+[国内下载地址](https://www.lanzous.com/i9onlzc)  
 
 # proguard-rules.pro
 > 此资源库自带混淆规则，并且会自动导入，正常情况下无需手动导入。

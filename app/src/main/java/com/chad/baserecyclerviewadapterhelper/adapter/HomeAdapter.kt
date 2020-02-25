@@ -19,6 +19,6 @@ class HomeAdapter(data: MutableList<HomeEntity>) :
 
     override fun convertHeader(helper: BaseViewHolder, item: HomeEntity) {
         helper.setGone(R.id.more, true)
-        helper.setText(R.id.header, item?.headerTitle)
+        helper.setText(R.id.header, item.headerTitle)
     }
 }
