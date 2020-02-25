@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -101,7 +102,7 @@ public class HeaderAndFooterUseActivity extends BaseActivity {
 
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
                 Tips.show(String.valueOf(position));
             }
 

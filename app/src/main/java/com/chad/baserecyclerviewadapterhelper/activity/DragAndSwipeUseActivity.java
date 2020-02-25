@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,10 +18,10 @@ import com.chad.baserecyclerviewadapterhelper.adapter.DragAndSwipeAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.chad.library.adapter.base.listener.OnItemSwipeListener;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -129,7 +130,7 @@ public class DragAndSwipeUseActivity extends BaseActivity {
 
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
                 Tips.show("点击了：" + position);
             }
         });

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,26 +43,26 @@ public class ItemClickActivity extends BaseActivity {
         initAdapter();
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
                 Tips.show("onItemClick " + position);
             }
         });
         adapter.setOnItemLongClickListener(new OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+            public boolean onItemLongClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
                 Tips.show("onItemLongClick " + position);
                 return true;
             }
         });
         adapter.setOnItemChildClickListener(new OnItemChildClickListener() {
             @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
                 Tips.show("onItemChildClick " + position);
             }
         });
         adapter.setOnItemChildLongClickListener(new OnItemChildLongClickListener() {
             @Override
-            public boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
+            public boolean onItemChildLongClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
                 Tips.show("onItemChildLongClick " + position);
                 return true;
             }

@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -59,7 +60,7 @@ public class AnimationUseActivity extends AppCompatActivity {
         mAnimationAdapter.addChildClickViewIds(R.id.img, R.id.tweetName, R.id.tweetText);
         mAnimationAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
             @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
                 String content = null;
                 Status status = (Status) adapter.getItem(position);
                 switch (view.getId()) {

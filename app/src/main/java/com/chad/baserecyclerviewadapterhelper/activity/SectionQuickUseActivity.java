@@ -3,6 +3,7 @@ package com.chad.baserecyclerviewadapterhelper.activity;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,7 +45,7 @@ public class SectionQuickUseActivity extends BaseActivity {
 
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
                 MySection mySection = mData.get(position);
                 if (mySection.isHeader()) {
                     Tips.show((String) mySection.getObject());
@@ -56,7 +57,7 @@ public class SectionQuickUseActivity extends BaseActivity {
         });
         adapter.setOnItemChildClickListener(new OnItemChildClickListener() {
             @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
                 Tips.show("onItemChildClick: " + position);
             }
         });
