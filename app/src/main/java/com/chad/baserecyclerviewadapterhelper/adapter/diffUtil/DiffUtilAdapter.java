@@ -8,7 +8,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class DiffUtilAdapter extends BaseQuickAdapter<DiffUtilDemoEntity, BaseVi
      * @param payloads payload info.
      */
     @Override
-    protected void convert(@NotNull BaseViewHolder helper, @Nullable DiffUtilDemoEntity item, @NotNull List<?> payloads) {
+    protected void convert(@NotNull BaseViewHolder helper, @NotNull DiffUtilDemoEntity item, @NotNull List<?> payloads) {
         for (Object p : payloads) {
             int payload = (int) p;
             if (payload == ITEM_0_PAYLOAD) {

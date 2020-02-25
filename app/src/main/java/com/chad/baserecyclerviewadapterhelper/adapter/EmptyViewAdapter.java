@@ -6,7 +6,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class EmptyViewAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
 
@@ -15,7 +14,7 @@ public class EmptyViewAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
     }
 
     @Override
-    protected void convert(@NotNull BaseViewHolder helper, @Nullable Status item) {
+    protected void convert(@NotNull BaseViewHolder helper, @NotNull Status item) {
         switch (helper.getLayoutPosition() % 3) {
             case 0:
                 helper.setImageResource(R.id.img, R.mipmap.animation_img1);

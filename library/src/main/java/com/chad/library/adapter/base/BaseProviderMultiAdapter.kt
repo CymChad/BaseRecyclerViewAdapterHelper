@@ -53,11 +53,11 @@ abstract class BaseProviderMultiAdapter<T>(data: MutableList<T>? = null) :
         return getItemType(data, position)
     }
 
-    override fun convert(helper: BaseViewHolder, item: T?) {
+    override fun convert(helper: BaseViewHolder, item: T) {
         getItemProvider(helper.itemViewType)!!.convert(helper, item)
     }
 
-    override fun convert(helper: BaseViewHolder, item: T?, payloads: List<Any>) {
+    override fun convert(helper: BaseViewHolder, item: T, payloads: List<Any>) {
         getItemProvider(helper.itemViewType)!!.convert(helper, item, payloads)
     }
 

@@ -4,11 +4,10 @@ import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.DelegateMultiEntity;
 import com.chad.baserecyclerviewadapterhelper.entity.QuickMultipleEntity;
 import com.chad.library.adapter.base.BaseDelegateMultiAdapter;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.chad.library.adapter.base.delegate.BaseMultiTypeDelegate;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -47,7 +46,7 @@ public class DelegateMultiAdapter extends BaseDelegateMultiAdapter<DelegateMulti
     }
 
     @Override
-    protected void convert(@NotNull BaseViewHolder helper, @Nullable DelegateMultiEntity item) {
+    protected void convert(@NotNull BaseViewHolder helper, @NotNull DelegateMultiEntity item) {
         switch (helper.getItemViewType()) {
             case QuickMultipleEntity.TEXT:
                 helper.setText(R.id.tv, "CymChad " + helper.getAdapterPosition());

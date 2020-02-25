@@ -14,7 +14,6 @@ import com.chad.library.adapter.base.provider.BaseNodeProvider;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class FirstProvider extends BaseNodeProvider {
     }
 
     @Override
-    public void convert(@NotNull BaseViewHolder helper, @Nullable BaseNode data) {
+    public void convert(@NotNull BaseViewHolder helper, @NotNull BaseNode data) {
         FirstNode entity = (FirstNode) data;
         helper.setText(R.id.title, entity.getTitle());
         helper.setImageResource(R.id.iv, R.mipmap.arrow_r);
@@ -40,7 +39,7 @@ public class FirstProvider extends BaseNodeProvider {
     }
 
     @Override
-    public void convert(@NotNull BaseViewHolder helper, @Nullable BaseNode data, @NotNull List<?> payloads) {
+    public void convert(@NotNull BaseViewHolder helper, @NotNull BaseNode data, @NotNull List<?> payloads) {
         for (Object payload : payloads) {
             if (payload instanceof Integer && (int) payload == NodeTreeAdapter.EXPAND_COLLAPSE_PAYLOAD) {
                 // 增量刷新，使用动画变化箭头

@@ -3,10 +3,10 @@ package com.chad.baserecyclerviewadapterhelper.adapter;
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.Movie;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.chad.library.adapter.base.module.UpFetchModule;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
+
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author: limuyang
@@ -20,7 +20,7 @@ public class UpFetchAdapter extends BaseQuickAdapter<Movie, BaseViewHolder> impl
     }
 
     @Override
-    protected void convert(@NotNull BaseViewHolder helper, @Nullable Movie item) {
+    protected void convert(@NotNull BaseViewHolder helper, @NotNull Movie item) {
         switch (helper.getLayoutPosition() %
                 3) {
             case 0:

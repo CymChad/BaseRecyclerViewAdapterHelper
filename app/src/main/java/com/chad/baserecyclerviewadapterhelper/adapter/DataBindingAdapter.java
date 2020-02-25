@@ -10,7 +10,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author: limuyang
@@ -33,10 +32,7 @@ public class DataBindingAdapter extends BaseQuickAdapter<Movie, BaseViewHolder> 
     }
 
     @Override
-    protected void convert(@NotNull BaseViewHolder helper, @Nullable Movie item) {
-        if (item == null) {
-            return;
-        }
+    protected void convert(@NotNull BaseViewHolder helper, @NotNull Movie item) {
 
         // 获取 Binding
         ItemMovieBinding binding = helper.getBinding();

@@ -36,9 +36,9 @@ abstract class BaseItemProvider<T> {
         @LayoutRes
         get
 
-    abstract fun convert(helper: BaseViewHolder, data: T?)
+    abstract fun convert(helper: BaseViewHolder, data: T)
 
-    open fun convert(helper: BaseViewHolder, data: T?, payloads: List<Any>) {}
+    open fun convert(helper: BaseViewHolder, data: T, payloads: List<Any>) {}
 
     /**
      * （可选重写）创建 ViewHolder。

@@ -1,7 +1,5 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
-import androidx.annotation.NonNull;
-
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.MySection;
 import com.chad.baserecyclerviewadapterhelper.entity.Video;
@@ -9,7 +7,6 @@ import com.chad.library.adapter.base.BaseSectionQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -33,16 +30,15 @@ public class SectionQuickAdapter extends BaseSectionQuickAdapter<MySection, Base
     }
 
     @Override
-    protected void convertHeader(@NotNull BaseViewHolder helper, @Nullable MySection item) {
-        if (item != null && item.getObject() instanceof String) {
+    protected void convertHeader(@NotNull BaseViewHolder helper, @NotNull MySection item) {
+        if (item.getObject() instanceof String) {
             helper.setText(R.id.header, (String) item.getObject());
         }
     }
 
 
-
     @Override
-    protected void convert(@NonNull BaseViewHolder helper, MySection item) {
+    protected void convert(@NotNull BaseViewHolder helper, @NotNull MySection item) {
         Video video = (Video) item.getObject();
         switch (helper.getLayoutPosition() % 2) {
             case 0:

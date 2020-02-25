@@ -188,7 +188,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * @param helper A fully initialized helper.
      * @param item   The item that needs to be displayed.
      */
-    protected abstract fun convert(helper: VH, item: T?)
+    protected abstract fun convert(helper: VH, item: T)
 
     /**
      * Optional implementation this method and use the helper to adapt the view to the given item.
@@ -202,7 +202,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * @param item     The item that needs to be displayed.
      * @param payloads payload info.
      */
-    protected open fun convert(helper: VH, item: T?, payloads: List<Any>) {}
+    protected open fun convert(helper: VH, item: T, payloads: List<Any>) {}
 
     /**
      * （可选重写）当 item 的 ViewHolder创建完毕后，执行此方法。
@@ -424,7 +424,11 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * data set.
      * @return The data at the specified position.
      */
-    open fun getItem(@IntRange(from = 0) position: Int): T? {
+    open fun getItem(@IntRange(from = 0) position: Int): T {
+        return data[position]
+    }
+
+    open fun getItemOrNull(@IntRange(from = 0) position: Int): T? {
         return data.getOrNull(position)
     }
 
