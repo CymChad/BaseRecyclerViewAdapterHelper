@@ -42,14 +42,14 @@ public class SectionQuickAdapter extends BaseSectionQuickAdapter<MySection, Base
      * 设置header数据
      */
     @Override
-    protected void convertHeader(@NotNull BaseViewHolder helper, @Nullable MySection item) {
+    protected void convertHeader(@NotNull BaseViewHolder helper, @NotNull MySection item) {
         if (item != null && item.getObject() instanceof String) {
             helper.setText(R.id.header, (String) item.getObject());
         }
     }
 
     @Override
-    protected void convert(@NonNull BaseViewHolder helper, MySection item) {
+    protected void convert(@NotNull BaseViewHolder helper, MySection item) {
         //设置item数据
         Video video = (Video) item.getObject();
         helper.setText(R.id.tv, video.getName());
@@ -131,11 +131,11 @@ public class SectionQuickAdapter extends BaseSectionQuickAdapter<MySection, Base
      * 设置header数据
      */
     @Override
-    protected void convertHeader(@NotNull BaseViewHolder helper, @Nullable MySection item) {
+    protected void convertHeader(@NotNull BaseViewHolder helper, @NotNull MySection item) {
     }
 
     @Override
-    protected void convert(@NonNull BaseViewHolder helper, MySection item) {
+    protected void convert(@NotNull BaseViewHolder helper, MySection item) {
         //设置item数据
     }
 }

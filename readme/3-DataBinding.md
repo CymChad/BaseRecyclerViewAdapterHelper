@@ -24,7 +24,7 @@ public class DataBindingAdapter extends BaseQuickAdapter<Movie, BaseViewHolder> 
     }
 
     @Override
-    protected void convert(@NotNull BaseViewHolder helper, @Nullable Movie item) {
+    protected void convert(@NotNull BaseViewHolder helper, @NotNull Movie item) {
         if (item == null) {
             return;
         }
@@ -105,7 +105,7 @@ public class ImgItemProvider extends BaseItemProvider<ProviderMultiEntity> {
     }
 
     @Override
-    public void convert(@NonNull BaseViewHolder helper, @Nullable ProviderMultiEntity data) {
+    public void convert(@NotNull BaseViewHolder helper, @NotNull ProviderMultiEntity data) {
         Movie movie = data.getMovie();
         // 获取 Binding
         ItemMovieBinding binding = helper.getBinding();

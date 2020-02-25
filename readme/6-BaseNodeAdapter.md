@@ -58,7 +58,7 @@ public class RootNodeProvider extends BaseNodeProvider {
     }
 
     @Override
-    public void convert(@NotNull BaseViewHolder helper, @Nullable BaseNode data) {
+    public void convert(@NotNull BaseViewHolder helper, @NotNull BaseNode data) {
         // 数据类型需要自己强转
         RootNode entity = (RootNode) data;
         helper.setText(R.id.header, entity.getTitle());

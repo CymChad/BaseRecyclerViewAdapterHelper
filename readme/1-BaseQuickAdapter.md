@@ -29,7 +29,7 @@ public class DemoAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
      * 在此方法中设置item数据
      */
     @Override
-    protected void convert(@NotNull BaseViewHolder helper, @Nullable String item) {
+    protected void convert(@NotNull BaseViewHolder helper, @NotNull String item) {
         helper.setText(R.id.tweetName, "This is an Item, pos: " + (helper.getAdapterPosition() - getHeaderLayoutCount()));
     }
 }
@@ -72,7 +72,7 @@ public class DemoAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
     }
 
     @Override
-    protected void convert(@NotNull BaseViewHolder helper, @Nullable String item) {
+    protected void convert(@NotNull BaseViewHolder helper, @NotNull String item) {
       	...
     }
 }
@@ -90,7 +90,7 @@ DemoAdapter adapter = new DemoAdapter();
 // 设置点击事件
 adapter.setOnItemClickListener(new OnItemClickListener() {
     @Override
-    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+    public void onItemClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
         Tips.show("onItemClick " + position);
     }
 });
@@ -105,7 +105,7 @@ adapter.setOnItemClickListener(new OnItemClickListener() {
 ```java
 adapter.setOnItemLongClickListener(new OnItemLongClickListener() {
     @Override
-    public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+    public boolean onItemLongClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
         Tips.show("onItemLongClick " + position);
         return true;
     }
@@ -122,7 +122,7 @@ adapter.addChildClickViewIds(R.id.btn, R.id.iv_num_add, R.id.item_click);
 // 设置子控件点击监听
 adapter.setOnItemChildClickListener(new OnItemChildClickListener() {
     @Override
-    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+    public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
         if (view.getId() == R.id.btn) {
             Tips.show("onItemChildClick " + position);
         }
@@ -138,7 +138,7 @@ adapter.addChildLongClickViewIds(R.id.btn, R.id.iv_num_add, R.id.item_click);
 // 设置子控件长按监听
 adapter.setOnItemChildLongClickListener(new OnItemChildLongClickListener() {
     @Override
-    public boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
+    public boolean onItemChildLongClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
         if (view.getId() == R.id.btn) {
            Tips.show("onItemChildLongClick " + position);
         }
