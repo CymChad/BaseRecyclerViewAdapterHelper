@@ -40,7 +40,7 @@ abstract class BaseSectionQuickAdapter<T : SectionEntity, VH : BaseViewHolder>
      * @param item T?
      * @param payloads MutableList<Any>
      */
-    protected fun convertHeader(helper: VH, item: T?, payloads: MutableList<Any>) {}
+    protected open fun convertHeader(helper: VH, item: T?, payloads: MutableList<Any>) {}
 
     /**
      * 如果 item 不是多布局，可以使用此方法快速设置 item layout
