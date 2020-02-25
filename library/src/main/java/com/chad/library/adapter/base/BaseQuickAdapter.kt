@@ -433,7 +433,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * @param item T?
      * @return Int
      */
-    fun getItemPosition(item: T?): Int {
+    open fun getItemPosition(item: T?): Int {
         return if (item != null && data.isNotEmpty()) data.indexOf(item) else -1
     }
 
@@ -942,7 +942,15 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
             } ?: ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
 
             insert = true
+        } else {
+            emptyView.layoutParams?.let {
+                val lp = mEmptyLayout.layoutParams
+                lp.width = it.width
+                lp.height = it.height
+                mEmptyLayout.layoutParams = lp
+            }
         }
+
         mEmptyLayout.removeAllViews()
         mEmptyLayout.addView(emptyView)
         isUseEmpty = true

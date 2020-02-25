@@ -8,12 +8,14 @@ import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.baserecyclerviewadapterhelper.activity.multi.ChooseMultipleItemUseTypeActivity
 import com.chad.baserecyclerviewadapterhelper.activity.node.ChooseNodeUseTypeActivity
 import com.chad.baserecyclerviewadapterhelper.adapter.HomeAdapter
+import com.chad.baserecyclerviewadapterhelper.databinding.ActivityHomeBinding
 import com.chad.baserecyclerviewadapterhelper.entity.HomeEntity
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.listener.OnItemClickListener
-import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : AppCompatActivity(), OnItemClickListener {
+
+    private lateinit var binding: ActivityHomeBinding
 
     /**
      * RV适配器
@@ -22,7 +24,7 @@ class HomeActivity : AppCompatActivity(), OnItemClickListener {
         HomeAdapter(homeItemData).apply {
             animationEnable = true
 
-            val top = layoutInflater.inflate(R.layout.top_view, recyclerView, false)
+            val top = layoutInflater.inflate(R.layout.top_view, binding.recyclerView, false)
             addHeaderView(top)
             setOnItemClickListener(this@HomeActivity)
 //            setOnItemClickListener { adapter, _, position ->
@@ -43,9 +45,10 @@ class HomeActivity : AppCompatActivity(), OnItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        recyclerView.adapter = homeAdapter
+        binding.recyclerView.adapter = homeAdapter
     }
 
     private val homeItemData: ArrayList<HomeEntity>
