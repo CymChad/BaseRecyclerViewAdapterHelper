@@ -1073,7 +1073,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * @param data
      */
     open fun setNewData(data: MutableList<T>?) {
-        if (data == this.data) {
+        if (data === this.data) {
             return
         }
         this.data = data ?: arrayListOf()

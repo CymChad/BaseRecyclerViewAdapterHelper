@@ -35,7 +35,7 @@ class BrvahAsyncDiffer<T>(private val adapter: BaseQuickAdapter<T, *>,
     fun submitList(newList: MutableList<T>?, commitCallback: Runnable? = null) {
         // incrementing generation means any currently-running diffs are discarded when they finish
         val runGeneration: Int = ++mMaxScheduledGeneration
-        if (newList == adapter.data) {
+        if (newList === adapter.data) {
             // nothing to do (Note - still had to inc generation, since may have ongoing work)
             commitCallback?.run()
             return
