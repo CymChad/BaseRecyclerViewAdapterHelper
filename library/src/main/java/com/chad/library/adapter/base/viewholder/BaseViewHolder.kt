@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 /**
  * ViewHolder 基类
  */
+@Keep
 open class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     /**
      * Views indexed with their IDs
@@ -22,9 +23,14 @@ open class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     /**
      * 如果使用了 DataBinding 绑定 View，可调用此方法获取 [ViewDataBinding]
+     *
+     * Deprecated, Please use [BaseDataBindingHolder]
+     *
      * @return B?
      */
+    @Deprecated("Please use BaseDataBindingHolder class", ReplaceWith("DataBindingUtil.getBinding(itemView)", "androidx.databinding.DataBindingUtil"))
     open fun <B : ViewDataBinding> getBinding(): B? = DataBindingUtil.getBinding(itemView)
+
 
     fun <T : View> getView(@IdRes viewId: Int): T {
         val view = getViewOrNull<T>(viewId)

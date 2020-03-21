@@ -53,12 +53,12 @@ abstract class BaseProviderMultiAdapter<T>(data: MutableList<T>? = null) :
         return getItemType(data, position)
     }
 
-    override fun convert(helper: BaseViewHolder, item: T) {
-        getItemProvider(helper.itemViewType)!!.convert(helper, item)
+    override fun convert(holder: BaseViewHolder, item: T) {
+        getItemProvider(holder.itemViewType)!!.convert(holder, item)
     }
 
-    override fun convert(helper: BaseViewHolder, item: T, payloads: List<Any>) {
-        getItemProvider(helper.itemViewType)!!.convert(helper, item, payloads)
+    override fun convert(holder: BaseViewHolder, item: T, payloads: List<Any>) {
+        getItemProvider(holder.itemViewType)!!.convert(holder, item, payloads)
     }
 
     override fun bindViewClickListener(viewHolder: BaseViewHolder, viewType: Int) {

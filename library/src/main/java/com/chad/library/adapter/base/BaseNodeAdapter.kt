@@ -1,6 +1,5 @@
 package com.chad.library.adapter.base
 
-import android.view.ViewGroup
 import androidx.annotation.IntRange
 import androidx.recyclerview.widget.DiffUtil
 import com.chad.library.adapter.base.entity.node.BaseExpandNode
@@ -8,7 +7,6 @@ import com.chad.library.adapter.base.entity.node.BaseNode
 import com.chad.library.adapter.base.entity.node.NodeFooterImp
 import com.chad.library.adapter.base.provider.BaseItemProvider
 import com.chad.library.adapter.base.provider.BaseNodeProvider
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
 abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
     : BaseProviderMultiAdapter<BaseNode>(null) {
@@ -65,21 +63,15 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
         return super.isFixedViewType(type) || fullSpanNodeTypeSet.contains(type)
     }
 
-    override fun onCreateDefViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-        return super.onCreateDefViewHolder(parent, viewType).apply {
-            if (fullSpanNodeTypeSet.contains(viewType)) {
-                setFullSpan(this)
-            }
-        }
+    override fun setNewInstance(list: MutableList<BaseNode>?) {
+        super.setNewInstance(flatData(list ?: arrayListOf()))
     }
 
-    /*************************** 重写数据设置方法 ***************************/
-
-    override fun setNewData(data: MutableList<BaseNode>?) {
-        if (data == this.data) {
-            return
-        }
-        super.setNewData(flatData(data ?: arrayListOf()))
+    /**
+     * 替换整个列表数据，如果需要对某节点下的子节点进行替换，请使用[nodeReplaceChildData]！
+     */
+    override fun setList(list: Collection<BaseNode>?) {
+        super.setList(flatData(list ?: arrayListOf()))
     }
 
     /**
@@ -139,31 +131,20 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
         }
     }
 
-    /**
-     * 替换整个列表数据，如果需要对某节点下的子节点进行替换，请使用[nodeReplaceChildData]！
-     * @param newData Collection<BaseNode>
-     */
-    override fun replaceData(newData: Collection<BaseNode>) {
-        // 不是同一个引用才清空列表
-        if (newData != this.data) {
-            super.replaceData(flatData(newData))
-        }
-    }
-
-    override fun setDiffNewData(newData: MutableList<BaseNode>?) {
+    override fun setDiffNewData(list: MutableList<BaseNode>?) {
         if (hasEmptyView()) {
-            setNewData(newData)
+            setNewInstance(list)
             return
         }
-        super.setDiffNewData(flatData(newData ?: arrayListOf()))
+        super.setDiffNewData(flatData(list ?: arrayListOf()))
     }
 
-    override fun setDiffNewData(diffResult: DiffUtil.DiffResult, newData: MutableList<BaseNode>) {
+    override fun setDiffNewData(diffResult: DiffUtil.DiffResult, list: MutableList<BaseNode>) {
         if (hasEmptyView()) {
-            setNewData(newData)
+            setNewInstance(list)
             return
         }
-        super.setDiffNewData(diffResult, flatData(newData))
+        super.setDiffNewData(diffResult, flatData(list))
     }
 
     /**

@@ -9,7 +9,7 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
  * 适用于:
  * 1、实体类不方便扩展，此Adapter的数据类型可以是任意类型，只需要在[BaseMultiTypeDelegate.getItemType]中返回对应类型
  * 2、item 类型较少
- * 如果类型较多，为了方便隔离各类型的业务逻辑，推荐使用[BaseProviderMultiAdapter]
+ * 如果类型较多，为了方便隔离各类型的业务逻辑，推荐使用[BaseBinderAdapter]
  *
  * @param T
  * @param VH : BaseViewHolder

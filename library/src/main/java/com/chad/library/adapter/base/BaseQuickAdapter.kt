@@ -90,12 +90,15 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      */
     var data: MutableList<T> = data ?: arrayListOf()
         internal set
+
     /**
      * 当显示空布局时，是否显示 Header
      */
     var headerWithEmptyEnable = false
+
     /** 当显示空布局时，是否显示 Foot */
     var footerWithEmptyEnable = false
+
     /** 是否使用空布局 */
     var isUseEmpty = true
 
@@ -110,10 +113,12 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * 是否打开动画
      */
     var animationEnable: Boolean = false
+
     /**
      * 动画是否仅第一次执行
      */
     var isAnimationFirstOnly = true
+
     /**
      * 设置自定义动画
      */
@@ -126,18 +131,29 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     /**
      * 加载更多模块
      */
-    var loadMoreModule: BaseLoadMoreModule? = null
-        private set
+    val loadMoreModule: BaseLoadMoreModule
+        get() {
+            checkNotNull(mLoadMoreModule) { "Please first implements LoadMoreModule" }
+            return mLoadMoreModule!!
+        }
+
     /**
      * 向上加载模块
      */
-    var upFetchModule: BaseUpFetchModule? = null
-        private set
+    val upFetchModule: BaseUpFetchModule
+        get() {
+            checkNotNull(mUpFetchModule) { "Please first implements UpFetchModule" }
+            return mUpFetchModule!!
+        }
+
     /**
      * 拖拽模块
      */
-    var draggableModule: BaseDraggableModule? = null
-        private set
+    val draggableModule: BaseDraggableModule
+        get() {
+            checkNotNull(mDraggableModule) { "Please first implements DraggableModule" }
+            return mDraggableModule!!
+        }
 
     /********************************* Private property *****************************************/
     private var mDiffHelper: BrvahAsyncDiffer<T>? = null
@@ -153,6 +169,9 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     private var mOnItemLongClickListener: OnItemLongClickListener? = null
     private var mOnItemChildClickListener: OnItemChildClickListener? = null
     private var mOnItemChildLongClickListener: OnItemChildLongClickListener? = null
+    private var mLoadMoreModule: BaseLoadMoreModule? = null
+    private var mUpFetchModule: BaseUpFetchModule? = null
+    private var mDraggableModule: BaseDraggableModule? = null
 
     protected lateinit var context: Context
         private set
@@ -170,13 +189,13 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      */
     private fun checkModule() {
         if (this is LoadMoreModule) {
-            loadMoreModule = this.addLoadMoreModule(this)
+            mLoadMoreModule = this.addLoadMoreModule(this)
         }
         if (this is UpFetchModule) {
-            upFetchModule = this.addUpFetchModule(this)
+            mUpFetchModule = this.addUpFetchModule(this)
         }
         if (this is DraggableModule) {
-            draggableModule = this.addDraggableModule(this)
+            mDraggableModule = this.addDraggableModule(this)
         }
     }
 
@@ -188,7 +207,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * @param helper A fully initialized helper.
      * @param item   The item that needs to be displayed.
      */
-    protected abstract fun convert(helper: VH, item: T)
+    protected abstract fun convert(holder: VH, item: T)
 
     /**
      * Optional implementation this method and use the helper to adapt the view to the given item.
@@ -202,7 +221,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * @param item     The item that needs to be displayed.
      * @param payloads payload info.
      */
-    protected open fun convert(helper: VH, item: T, payloads: List<Any>) {}
+    protected open fun convert(holder: VH, item: T, payloads: List<Any>) {}
 
     /**
      * （可选重写）当 item 的 ViewHolder创建完毕后，执行此方法。
@@ -217,9 +236,9 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         val baseViewHolder: VH
         when (viewType) {
             LOAD_MORE_VIEW -> {
-                val view = loadMoreModule!!.loadMoreView.getRootView(parent)
+                val view = mLoadMoreModule!!.loadMoreView.getRootView(parent)
                 baseViewHolder = createBaseViewHolder(view)
-                loadMoreModule!!.setupViewHolder(baseViewHolder)
+                mLoadMoreModule!!.setupViewHolder(baseViewHolder)
             }
             HEADER_VIEW -> {
                 val headerLayoutVp: ViewParent? = mHeaderLayout.parent
@@ -248,7 +267,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
             else -> {
                 val viewHolder = onCreateDefViewHolder(parent, viewType)
                 bindViewClickListener(viewHolder, viewType)
-                draggableModule?.initView(viewHolder)
+                mDraggableModule?.initView(viewHolder)
                 onItemViewHolderCreated(viewHolder, viewType)
                 baseViewHolder = viewHolder
             }
@@ -268,7 +287,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
             }
             return count
         } else {
-            val loadMoreCount = if (loadMoreModule?.hasLoadMoreView() == true) {
+            val loadMoreCount = if (mLoadMoreModule?.hasLoadMoreView() == true) {
                 1
             } else {
                 0
@@ -326,12 +345,12 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         //Add up fetch logic, almost like load more, but simpler.
-        upFetchModule?.autoUpFetch(position)
+        mUpFetchModule?.autoUpFetch(position)
         //Do not move position, need to change before LoadMoreView binding
-        loadMoreModule?.autoLoadMore(position)
+        mLoadMoreModule?.autoLoadMore(position)
         when (holder.itemViewType) {
             LOAD_MORE_VIEW -> {
-                loadMoreModule?.let {
+                mLoadMoreModule?.let {
                     it.loadMoreView.convert(holder, position, it.loadMoreStatus)
                 }
             }
@@ -346,12 +365,12 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
             return
         }
         //Add up fetch logic, almost like load more, but simpler.
-        upFetchModule?.autoUpFetch(position)
+        mUpFetchModule?.autoUpFetch(position)
         //Do not move position, need to change before LoadMoreView binding
-        loadMoreModule?.autoLoadMore(position)
+        mLoadMoreModule?.autoLoadMore(position)
         when (holder.itemViewType) {
             LOAD_MORE_VIEW -> {
-                loadMoreModule?.let {
+                mLoadMoreModule?.let {
                     it.loadMoreView.convert(holder, position, it.loadMoreStatus)
                 }
             }
@@ -365,7 +384,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     }
 
     /**
-     * Called when a view created by this adapter has been attached to a window.
+     * Called when a view created by this holder has been attached to a window.
      * simple to solve item will layout using all
      * [setFullSpan]
      *
@@ -374,7 +393,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     override fun onViewAttachedToWindow(holder: VH) {
         super.onViewAttachedToWindow(holder)
         val type = holder.itemViewType
-        if (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOAD_MORE_VIEW) {
+        if (isFixedViewType(type)) {
             setFullSpan(holder)
         } else {
             addAnimation(holder)
@@ -385,7 +404,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         super.onAttachedToRecyclerView(recyclerView)
         weakRecyclerView = WeakReference(recyclerView)
         this.context = recyclerView.context
-        draggableModule?.attachToRecyclerView(recyclerView)
+        mDraggableModule?.attachToRecyclerView(recyclerView)
 
         val manager = recyclerView.layoutManager
         if (manager is GridLayoutManager) {
@@ -1072,15 +1091,78 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      *
      * @param data
      */
+    @Deprecated("Please use setNewInstance()", replaceWith = ReplaceWith("setNewInstance(data)"))
     open fun setNewData(data: MutableList<T>?) {
-        if (data === this.data) {
+        setNewInstance(data)
+    }
+
+    /**
+     * setting up a new instance to data;
+     * 设置新的数据实例，替换原有内存引用。
+     * 通常情况下，如非必要，请使用[setList]修改内容
+     *
+     * @param data
+     */
+    open fun setNewInstance(list: MutableList<T>?) {
+        if (list === this.data) {
             return
         }
-        this.data = data ?: arrayListOf()
-        loadMoreModule?.reset()
+
+        this.data = list ?: arrayListOf()
+        mLoadMoreModule?.reset()
         mLastPosition = -1
         notifyDataSetChanged()
-        loadMoreModule?.checkDisableLoadMoreIfNotFullPage()
+        mLoadMoreModule?.checkDisableLoadMoreIfNotFullPage()
+    }
+
+    /**
+     * use data to replace all item in mData. this method is different [setNewData],
+     * it doesn't change the [BaseQuickAdapter.data] reference
+     * Deprecated, Please use [setList]
+     *
+     * @param newData data collection
+     */
+    @Deprecated("Please use setData()", replaceWith = ReplaceWith("setData(newData)"))
+    open fun replaceData(newData: Collection<T>) {
+        // 不是同一个引用才清空列表
+//        if (newData !== this.data) {
+//            this.data.clear()
+//            this.data.addAll(newData)
+//        }
+//        notifyDataSetChanged()
+        setList(newData)
+    }
+
+    /**
+     * 使用新的数据集合，改变原有数据集合内容。
+     * 注意：不会替换原有的内存引用，只是替换内容
+     *
+     * @param list Collection<T>?
+     */
+    open fun setList(list: Collection<T>?) {
+        // 不是同一个引用才清空列表
+        if (list !== this.data) {
+            this.data.clear()
+            if (!list.isNullOrEmpty()) {
+                this.data.addAll(list)
+            }
+            mLoadMoreModule?.reset()
+            mLastPosition = -1
+            notifyDataSetChanged()
+            mLoadMoreModule?.checkDisableLoadMoreIfNotFullPage()
+        }
+    }
+
+    /**
+     * change data
+     * 改变某一位置数据
+     */
+    open fun setData(@IntRange(from = 0) index: Int, data: T) {
+        if (index >= this.data.size) {
+            return
+        }
+        this.data[index] = data
+        notifyItemChanged(index + headerLayoutCount)
     }
 
     /**
@@ -1149,32 +1231,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         remove(index)
     }
 
-    /**
-     * change data
-     * 改变某一位置数据
-     */
-    open fun setData(@IntRange(from = 0) index: Int, data: T) {
-        if (index >= this.data.size) {
-            return
-        }
-        this.data[index] = data
-        notifyItemChanged(index + headerLayoutCount)
-    }
-
-    /**
-     * use data to replace all item in mData. this method is different [setNewData],
-     * it doesn't change the [BaseQuickAdapter.data] reference
-     *
-     * @param newData data collection
-     */
-    open fun replaceData(newData: Collection<T>) {
-        // 不是同一个引用才清空列表
-        if (newData != this.data) {
-            this.data.clear()
-            this.data.addAll(newData)
-        }
-        notifyDataSetChanged()
-    }
 
     /**
      * compatible getLoadMoreViewCount and getEmptyViewCount may change
@@ -1213,38 +1269,39 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     }
 
     /**
-     * 此方法为异步Diff，无需考虑性能问题
-     * 使用之前请先设置 [setDiffCallback] 或者 [setDiffConfig]
+     * 使用 Diff 设置新实例.
+     * 此方法为异步Diff，无需考虑性能问题.
+     * 使用之前请先设置 [setDiffCallback] 或者 [setDiffConfig].
      *
-     * use DiffResult setting up a new instance to data.
+     * Use Diff setting up a new instance to data.
      * This method is asynchronous.
      *
      * @param newData MutableList<T>?
      */
-    open fun setDiffNewData(newData: MutableList<T>?) {
+    open fun setDiffNewData(list: MutableList<T>?) {
         if (hasEmptyView()) {
             // If the current view is an empty view, set the new data directly without diff
-            setNewData(newData)
+            setNewInstance(list)
             return
         }
-        mDiffHelper?.submitList(newData)
+        mDiffHelper?.submitList(list)
     }
 
     /**
-     * 使用 DiffResult 设置新实例
-     * use DiffResult setting up a new instance to data
+     * 使用 DiffResult 设置新实例.
+     * Use DiffResult setting up a new instance to data.
      *
      * @param diffResult DiffResult
      * @param newData New Data
      */
-    open fun setDiffNewData(@NonNull diffResult: DiffUtil.DiffResult, newData: MutableList<T>) {
+    open fun setDiffNewData(@NonNull diffResult: DiffUtil.DiffResult, list: MutableList<T>) {
         if (hasEmptyView()) {
             // If the current view is an empty view, set the new data directly without diff
-            setNewData(newData)
+            setNewInstance(list)
             return
         }
         diffResult.dispatchUpdatesTo(BrvahListUpdateCallback(this))
-        this.data = newData
+        this.data = list
     }
 
     /************************************** Set Listener ****************************************/

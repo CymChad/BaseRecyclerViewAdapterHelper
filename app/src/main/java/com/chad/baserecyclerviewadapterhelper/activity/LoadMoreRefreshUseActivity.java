@@ -97,7 +97,7 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
         headView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAdapter.setNewData(null);
+                mAdapter.setList(null);
                 mAdapter.getLoadMoreModule().setLoadMoreView(new CustomLoadMoreView());
                 mRecyclerView.setAdapter(mAdapter);
                 Tips.show("Change Complete");
@@ -178,8 +178,8 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
                 mAdapter.getLoadMoreModule().setEnableLoadMore(true);
 
                 if (pageInfo.isFirstPage()) {
-                    //如果是加载的第一页数据，用setNew
-                    mAdapter.setNewData(data);
+                    //如果是加载的第一页数据，用 setData()
+                    mAdapter.setList(data);
                 } else {
                     //不是第一页，则用add
                     mAdapter.addData(data);

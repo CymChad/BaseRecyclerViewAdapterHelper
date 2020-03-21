@@ -55,14 +55,6 @@ abstract class BaseSectionQuickAdapter<T : SectionEntity, VH : BaseViewHolder>
         return super.isFixedViewType(type) || type == SectionEntity.HEADER_TYPE
     }
 
-    override fun onCreateDefViewHolder(parent: ViewGroup, viewType: Int): VH {
-        return super.onCreateDefViewHolder(parent, viewType).apply {
-            if (viewType == SectionEntity.HEADER_TYPE) {
-                setFullSpan(this)
-            }
-        }
-    }
-
     override fun onBindViewHolder(holder: VH, position: Int) {
         if (holder.itemViewType == SectionEntity.HEADER_TYPE) {
 //            setFullSpan(holder)
