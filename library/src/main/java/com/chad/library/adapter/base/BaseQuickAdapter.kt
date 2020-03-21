@@ -212,7 +212,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     /**
      * Optional implementation this method and use the helper to adapt the view to the given item.
      * If use [payloads], will perform this method, Please implement this method for partial refresh.
-     * If use [RecyclerView.Adapter.notifyItemChanged] with payload,
+     * If use [RecyclerView.Adapter.notifyItemChanged(Int, Object)] with payload,
      * Will execute this method.
      *
      * 可选实现，如果你是用了[payloads]刷新item，请实现此方法，进行局部刷新
@@ -222,15 +222,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * @param payloads payload info.
      */
     protected open fun convert(holder: VH, item: T, payloads: List<Any>) {}
-
-    /**
-     * （可选重写）当 item 的 ViewHolder创建完毕后，执行此方法。
-     * 可在此对 ViewHolder 进行处理，例如进行 DataBinding 绑定 view
-     *
-     * @param viewHolder VH
-     * @param viewType Int
-     */
-    protected open fun onItemViewHolderCreated(viewHolder: VH, viewType: Int) {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         val baseViewHolder: VH
@@ -276,6 +267,11 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         return baseViewHolder
     }
 
+    /**
+     * Don't override this method. If need, please override [getItemCount]
+     * 不要重写此方法，如果有需要，请重写[getDefItemViewType]
+     * @return Int
+     */
     override fun getItemCount(): Int {
         if (hasEmptyView()) {
             var count = 1
@@ -296,6 +292,13 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         }
     }
 
+    /**
+     * Don't override this method. If need, please override [getDefItemViewType]
+     * 不要重写此方法，如果有需要，请重写[getDefItemViewType]
+     *
+     * @param position Int
+     * @return Int
+     */
     override fun getItemViewType(position: Int): Int {
         if (hasEmptyView()) {
             val header = headerWithEmptyEnable && hasHeaderLayout()
@@ -591,14 +594,35 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         return mOnItemChildLongClickListener?.onItemChildLongClick(this, v, position) ?: false
     }
 
+    /**
+     * （可选重写）当 item 的 ViewHolder创建完毕后，执行此方法。
+     * 可在此对 ViewHolder 进行处理，例如进行 DataBinding 绑定 view
+     *
+     * @param viewHolder VH
+     * @param viewType Int
+     */
+    protected open fun onItemViewHolderCreated(viewHolder: VH, viewType: Int) {}
+
+    /**
+     * Override this method and return your data size.
+     * 重写此方法，返回你的数据数量。
+     */
     protected open fun getDefItemCount(): Int {
         return data.size
     }
 
+    /**
+     * Override this method and return your ViewType.
+     * 重写此方法，返回你的ViewType。
+     */
     protected open fun getDefItemViewType(position: Int): Int {
         return super.getItemViewType(position)
     }
 
+    /**
+     * Override this method and return your ViewHolder.
+     * 重写此方法，返回你的ViewHolder。
+     */
     protected open fun onCreateDefViewHolder(parent: ViewGroup, viewType: Int): VH {
         return createBaseViewHolder(parent, layoutResId)
     }
@@ -1091,7 +1115,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      *
      * @param data
      */
-    @Deprecated("Please use setNewInstance()", replaceWith = ReplaceWith("setNewInstance(data)"))
+    @Deprecated("Please use setNewInstance(), This method will be removed in the next version", replaceWith = ReplaceWith("setNewInstance(data)"))
     open fun setNewData(data: MutableList<T>?) {
         setNewInstance(data)
     }
@@ -1116,7 +1140,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     }
 
     /**
-     * use data to replace all item in mData. this method is different [setNewData],
+     * use data to replace all item in mData. this method is different [setList],
      * it doesn't change the [BaseQuickAdapter.data] reference
      * Deprecated, Please use [setList]
      *
@@ -1124,12 +1148,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      */
     @Deprecated("Please use setData()", replaceWith = ReplaceWith("setData(newData)"))
     open fun replaceData(newData: Collection<T>) {
-        // 不是同一个引用才清空列表
-//        if (newData !== this.data) {
-//            this.data.clear()
-//            this.data.addAll(newData)
-//        }
-//        notifyDataSetChanged()
         setList(newData)
     }
 

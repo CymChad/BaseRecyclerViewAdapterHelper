@@ -182,11 +182,11 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
     }
 
     /**
-     * check if full page after [BaseQuickAdapter.setNewData], if full, it will enable load more again.
+     * check if full page after [BaseQuickAdapter.setNewInstance] [BaseQuickAdapter.setList],
+     * if full, it will enable load more again.
      *
      * 用来检查数据是否满一屏，如果满足条件，再开启
      *
-     * @see BaseQuickAdapter.setNewData
      */
     fun checkDisableLoadMoreIfNotFullPage() {
         if (isEnableLoadMoreIfNotFullPage) {

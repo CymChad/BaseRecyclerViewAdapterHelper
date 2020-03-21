@@ -39,6 +39,6 @@ public class MultiItemDelegateUseActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         final List<DelegateMultiEntity> data = DataServer.getDelegateMultiItemData();
-        adapter.setNewData(data);
+        adapter.setList(data);
     }
 }

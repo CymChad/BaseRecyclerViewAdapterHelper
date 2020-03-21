@@ -42,6 +42,6 @@ public class MultiItemProviderUseActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         final List<ProviderMultiEntity> data = DataServer.getProviderMultiItemData();
-        adapter.setNewData(data);
+        adapter.setList(data);
     }
 }

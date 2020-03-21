@@ -41,7 +41,9 @@ import java.util.Random;
  */
 public class BinderUseActivity extends BaseActivity {
 
+    // 可以直接快速使用，也可以继承BaseBinderAdapter类，重写自己的相关方法
     private BaseBinderAdapter adapter = new BaseBinderAdapter();
+
     private ActivityMultipleItemUseBinding binding;
 
     @Override

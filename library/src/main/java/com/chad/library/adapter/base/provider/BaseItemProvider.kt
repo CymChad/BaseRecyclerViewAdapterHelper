@@ -19,8 +19,8 @@ abstract class BaseItemProvider<T> {
     lateinit var context: Context
 
     private var weakAdapter: WeakReference<BaseProviderMultiAdapter<T>>? = null
-    private val clickViewIds: ArrayList<Int> by lazy(LazyThreadSafetyMode.NONE) { ArrayList<Int>() }
-    private val longClickViewIds: ArrayList<Int> by lazy(LazyThreadSafetyMode.NONE) { ArrayList<Int>() }
+    private val clickViewIds by lazy(LazyThreadSafetyMode.NONE) { ArrayList<Int>() }
+    private val longClickViewIds by lazy(LazyThreadSafetyMode.NONE) { ArrayList<Int>() }
 
     internal fun setAdapter(adapter: BaseProviderMultiAdapter<T>) {
         weakAdapter = WeakReference(adapter)
@@ -36,9 +36,9 @@ abstract class BaseItemProvider<T> {
         @LayoutRes
         get
 
-    abstract fun convert(helper: BaseViewHolder, data: T)
+    abstract fun convert(helper: BaseViewHolder, item: T)
 
-    open fun convert(helper: BaseViewHolder, data: T, payloads: List<Any>) {}
+    open fun convert(helper: BaseViewHolder, item: T, payloads: List<Any>) {}
 
     /**
      * （可选重写）创建 ViewHolder。

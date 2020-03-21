@@ -43,7 +43,7 @@ public class NodeSectionUseActivity extends BaseActivity {
 
         mRecyclerView.setAdapter(nodeAdapter);
 
-        nodeAdapter.setNewData(getEntity());
+        nodeAdapter.setList(getEntity());
         mRecyclerView.scheduleLayoutAnimation();
     }
 

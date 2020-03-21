@@ -33,7 +33,7 @@ public class NodeTreeUseActivity extends BaseActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(adapter);
 
-        adapter.setNewData(getEntity());
+        adapter.setList(getEntity());
 
         // 模拟新增node
         mRecyclerView.postDelayed(new Runnable() {

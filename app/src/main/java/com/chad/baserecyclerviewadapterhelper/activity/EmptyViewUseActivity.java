@@ -47,7 +47,7 @@ public class EmptyViewUseActivity extends BaseActivity {
     private void reset() {
         mError = true;
         mNoData = true;
-        mAdapter.setNewData(null);
+        mAdapter.setList(null);
         onRefresh();
     }
 
@@ -88,7 +88,7 @@ public class EmptyViewUseActivity extends BaseActivity {
                         mAdapter.setEmptyView(getEmptyDataView());
                         mNoData = false;
                     } else {
-                        mAdapter.setNewData(DataServer.getSampleData(10));
+                        mAdapter.setList(DataServer.getSampleData(10));
                     }
                 }
             }

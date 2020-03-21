@@ -56,7 +56,7 @@ public class DataBindingUseActivity extends BaseActivity {
         });
 
         //设置数据
-        adapter.setNewData(genData());
+        adapter.setList(genData());
     }
 
     private List<Movie> genData() {

@@ -47,7 +47,7 @@ public class UpFetchUseActivity extends BaseActivity {
             }
         });
         mAdapter.getUpFetchModule().setUpFetchEnable(true);
-        mAdapter.setNewData(genData());
+        mAdapter.setList(genData());
     }
 
     @Override
