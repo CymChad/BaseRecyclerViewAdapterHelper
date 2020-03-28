@@ -12,6 +12,8 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 /**
  * 使用 Binder 来实现adapter，既可以实现单布局，也能实现多布局
  * 数据实体类也不存继承问题
+ *
+ * 数据类型为Any
  */
 open class BaseBinderAdapter(list: MutableList<Any>? = null) : BaseQuickAdapter<Any, BaseViewHolder>(0, list) {
 
@@ -46,7 +48,7 @@ open class BaseBinderAdapter(list: MutableList<Any>? = null) : BaseQuickAdapter<
      * kotlin 可以使用如下方法添加 ItemBinder，更加简单
      */
     inline fun <reified T : Any> addItemBinder(baseItemBinder: BaseItemBinder<T, *>, callback: DiffUtil.ItemCallback<T>? = null): BaseBinderAdapter {
-        addItemBinder(T::class.java, baseItemBinder)
+        addItemBinder(T::class.java, baseItemBinder, callback)
         return this
     }
 
