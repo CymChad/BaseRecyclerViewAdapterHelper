@@ -22,5 +22,5 @@ public interface OnItemClickListener {
      *                 will be a view provided by the adapter)
      * @param position The position of the view in the adapter.
      */
-    void onItemClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position);
+    void onItemClick(@NonNull BaseQuickAdapter<?,?> adapter, @NonNull View view, int position);
 }

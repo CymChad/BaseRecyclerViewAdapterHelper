@@ -152,7 +152,7 @@ public class BinderUseActivity extends BaseActivity {
 
         @Override
         public void convert(@NotNull BinderVBHolder<ItemImgTextViewBinding> holder, Video data) {
-            holder.getViewBinding().tv.setText(data.getName());
+            holder.getViewBinding().tv.setText("(ViewBinding) " + data.getName());
         }
 
         /**

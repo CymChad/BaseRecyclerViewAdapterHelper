@@ -43,7 +43,7 @@ public class ItemClickActivity extends BaseActivity {
         initAdapter();
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
+            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
                 Tips.show("onItemClick " + position);
             }
         });

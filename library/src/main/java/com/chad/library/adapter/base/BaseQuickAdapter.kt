@@ -32,6 +32,7 @@ import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Modifier
 import java.lang.reflect.ParameterizedType
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * 获取模块
@@ -1158,17 +1159,24 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * @param list Collection<T>?
      */
     open fun setList(list: Collection<T>?) {
-        // 不是同一个引用才清空列表
         if (list !== this.data) {
             this.data.clear()
             if (!list.isNullOrEmpty()) {
                 this.data.addAll(list)
             }
-            mLoadMoreModule?.reset()
-            mLastPosition = -1
-            notifyDataSetChanged()
-            mLoadMoreModule?.checkDisableLoadMoreIfNotFullPage()
+        } else {
+            if (!list.isNullOrEmpty()) {
+                val newList = ArrayList(list)
+                this.data.clear()
+                this.data.addAll(newList)
+            } else {
+                this.data.clear()
+            }
         }
+        mLoadMoreModule?.reset()
+        mLastPosition = -1
+        notifyDataSetChanged()
+        mLoadMoreModule?.checkDisableLoadMoreIfNotFullPage()
     }
 
     /**

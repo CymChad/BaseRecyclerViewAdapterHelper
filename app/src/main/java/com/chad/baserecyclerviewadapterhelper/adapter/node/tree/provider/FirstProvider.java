@@ -9,12 +9,14 @@ import androidx.core.view.ViewCompat;
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.adapter.node.tree.NodeTreeAdapter;
 import com.chad.baserecyclerviewadapterhelper.entity.node.tree.FirstNode;
+import com.chad.baserecyclerviewadapterhelper.entity.node.tree.SecondNode;
 import com.chad.library.adapter.base.entity.node.BaseNode;
 import com.chad.library.adapter.base.provider.BaseNodeProvider;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FirstProvider extends BaseNodeProvider {
@@ -77,6 +79,8 @@ public class FirstProvider extends BaseNodeProvider {
     @Override
     public void onClick(@NotNull BaseViewHolder helper, @NotNull View view, BaseNode data, int position) {
         // 这里使用payload进行增量刷新（避免整个item刷新导致的闪烁，不自然）
-        getAdapter().expandOrCollapse(position, true, true, NodeTreeAdapter.EXPAND_COLLAPSE_PAYLOAD);
+//        getAdapter().expandOrCollapse(position, true, true, NodeTreeAdapter.EXPAND_COLLAPSE_PAYLOAD);
+        getAdapter().nodeAddData(data,new SecondNode(new ArrayList<>(),"p:"+position));
+        getAdapter().notifyDataSetChanged();
     }
 }
