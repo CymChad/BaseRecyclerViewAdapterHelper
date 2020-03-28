@@ -36,15 +36,11 @@ public class SecondProvider extends BaseNodeProvider {
 
     @Override
     public void onClick(@NotNull BaseViewHolder helper, @NotNull View view, BaseNode data, int position) {
-//        SecondNode entity = (SecondNode) data;
-//        if (entity.isExpanded()) {
-//            getAdapter().collapse(position);
-//        } else {
-//            getAdapter().expandAndCollapseOther(position);
-//        }
-
-//        BaseNode fNode = getAdapter().findParentNode(position);
-//        getAdapter().nodeRemoveData();
-//        getAdapter().notifyItemRemoved(position);
+        SecondNode entity = (SecondNode) data;
+        if (entity.isExpanded()) {
+            getAdapter().collapse(position);
+        } else {
+            getAdapter().expandAndCollapseOther(position);
+        }
     }
 }
