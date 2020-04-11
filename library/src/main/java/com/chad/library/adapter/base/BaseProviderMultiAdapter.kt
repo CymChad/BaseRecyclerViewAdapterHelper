@@ -18,7 +18,6 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
  * @param T data 数据类型
  * @constructor
  */
-@Deprecated("please use Class BaseBinderAdapter")
 abstract class BaseProviderMultiAdapter<T>(data: MutableList<T>? = null) :
         BaseQuickAdapter<T, BaseViewHolder>(0, data) {
 

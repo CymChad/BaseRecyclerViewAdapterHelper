@@ -1238,7 +1238,18 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      *
      * @param position
      */
+    @Deprecated("Please use removeAt()", replaceWith = ReplaceWith("removeAt(position)"))
     open fun remove(@IntRange(from = 0) position: Int) {
+        removeAt(position)
+    }
+
+    /**
+     * remove the item associated with the specified position of adapter
+     * 删除指定位置的数据
+     *
+     * @param position
+     */
+    open fun removeAt(@IntRange(from = 0) position: Int) {
         if (position >= data.size) {
             return
         }

@@ -103,8 +103,8 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
      *
      * @param position Int 整个 data 的 index
      */
-    override fun remove(position: Int) {
-        val removeCount = removeAt(position)
+    override fun removeAt(position: Int) {
+        val removeCount = removeNodesAt(position)
         notifyItemRangeRemoved(position + headerLayoutCount, removeCount)
         compatibilityDataSizeChanged(0)
     }
@@ -116,7 +116,7 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
      */
     override fun setData(index: Int, data: BaseNode) {
         // 先移除，再添加
-        val removeCount = removeAt(index)
+        val removeCount = removeNodesAt(index)
 
         val newFlatData = flatData(arrayListOf(data))
         this.data.addAll(index, newFlatData)
@@ -152,7 +152,7 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
      * @param position Int
      * @return Int 被移除的数量
      */
-    private fun removeAt(position: Int): Int {
+    private fun removeNodesAt(position: Int): Int {
         if (position >= data.size) {
             return 0
         }
