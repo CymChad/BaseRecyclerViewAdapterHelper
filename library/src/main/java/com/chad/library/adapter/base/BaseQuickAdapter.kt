@@ -170,9 +170,9 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     private var mOnItemLongClickListener: OnItemLongClickListener? = null
     private var mOnItemChildClickListener: OnItemChildClickListener? = null
     private var mOnItemChildLongClickListener: OnItemChildLongClickListener? = null
-    private var mLoadMoreModule: BaseLoadMoreModule? = null
     private var mUpFetchModule: BaseUpFetchModule? = null
     private var mDraggableModule: BaseDraggableModule? = null
+    internal var mLoadMoreModule: BaseLoadMoreModule? = null
 
     protected lateinit var context: Context
         private set
@@ -1319,7 +1319,12 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         mDiffHelper = BrvahAsyncDiffer(this, config)
     }
 
+    @Deprecated("User getDiffer()", replaceWith = ReplaceWith("getDiffer()"))
     fun getDiffHelper(): BrvahAsyncDiffer<T> {
+        return getDiffer()
+    }
+
+    fun getDiffer(): BrvahAsyncDiffer<T> {
         checkNotNull(mDiffHelper) {
             "Please use setDiffCallback() or setDiffConfig() first!"
         }
