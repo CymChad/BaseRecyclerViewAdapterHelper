@@ -31,6 +31,63 @@ class BrvahAsyncDiffer<T>(private val adapter: BaseQuickAdapter<T, *>,
 
     private var mMaxScheduledGeneration = 0
 
+    fun addData(index: Int, data: T) {
+        val previousList: List<T> = adapter.data
+        adapter.data.add(index, data)
+        //        final List<T> previousList = mReadOnlyList;
+//        mReadOnlyList = Collections.unmodifiableList(adapterData);
+        mUpdateCallback.onInserted(index, 1)
+        onCurrentListChanged(previousList, null)
+    }
+
+    fun addList(list: List<T>?) {
+        if (list == null) return
+        val previousList: List<T> = adapter.data
+        adapter.data.addAll(list)
+        //        final List<T> previousList = mReadOnlyList;
+//        mReadOnlyList = Collections.unmodifiableList(adapterData);
+        mUpdateCallback.onInserted(previousList.size, list.size)
+        onCurrentListChanged(previousList, null)
+    }
+
+    /**
+     * 改变某一个数据
+     */
+    fun changeData(index: Int, newData: T, payload: T?) {
+        val previousList: List<T> = adapter.data
+        adapter.data[index] = newData
+        //        final List<T> previousList = mReadOnlyList;
+//        mReadOnlyList = Collections.unmodifiableList(adapterData);
+        mUpdateCallback.onChanged(index, 1, payload)
+        onCurrentListChanged(previousList, null)
+    }
+
+    /**
+     * 移除某一个数据
+     */
+    fun removeAt(index: Int) {
+        val previousList: List<T> = adapter.data
+        adapter.data.removeAt(index)
+
+//        final List<T> previousList = mReadOnlyList;
+//        mReadOnlyList = Collections.unmodifiableList(adapterData);
+        mUpdateCallback.onRemoved(index, 1)
+        onCurrentListChanged(previousList, null)
+    }
+
+    fun remove(t: T) {
+        val previousList: List<T> = adapter.data
+        val index = adapter.data.indexOf(t)
+        if (index == -1) return
+        adapter.data.removeAt(index)
+
+//        final List<T> previousList = mReadOnlyList;
+//        mReadOnlyList = Collections.unmodifiableList(adapterData);
+        mUpdateCallback.onRemoved(index, 1)
+        onCurrentListChanged(previousList, null)
+    }
+
+
     @JvmOverloads
     fun submitList(newList: MutableList<T>?, commitCallback: Runnable? = null) {
         // incrementing generation means any currently-running diffs are discarded when they finish

@@ -176,7 +176,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
      */
     private fun invokeLoadMoreListener() {
         loadMoreStatus = LoadMoreStatus.Loading
-        baseQuickAdapter.weakRecyclerView.get()?.let {
+        baseQuickAdapter.mRecyclerView?.let {
             it.post { mLoadMoreListener?.onLoadMore() }
         } ?: mLoadMoreListener?.onLoadMore()
     }
@@ -194,7 +194,7 @@ open class BaseLoadMoreModule(private val baseQuickAdapter: BaseQuickAdapter<*, 
         }
         // 先把标记位设置为false
         mNextLoadEnable = false
-        val recyclerView = baseQuickAdapter.weakRecyclerView.get() ?: return
+        val recyclerView = baseQuickAdapter.mRecyclerView ?: return
         val manager = recyclerView.layoutManager ?: return
         if (manager is LinearLayoutManager) {
             recyclerView.postDelayed({

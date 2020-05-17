@@ -177,7 +177,21 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     protected lateinit var context: Context
         private set
 
+    @Deprecated("Please use recyclerView", replaceWith = ReplaceWith("recyclerView"))
     lateinit var weakRecyclerView: WeakReference<RecyclerView>
+
+    internal var mRecyclerView: RecyclerView? = null
+
+    var recyclerView: RecyclerView
+        set(value) {
+            mRecyclerView = value
+        }
+        get() {
+            checkNotNull(mRecyclerView) {
+                "Please get it after onAttachedToRecyclerView()"
+            }
+            return mRecyclerView!!
+        }
 
     /******************************* RecyclerView Method ****************************************/
 
@@ -407,6 +421,8 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         weakRecyclerView = WeakReference(recyclerView)
+        mRecyclerView = recyclerView
+
         this.context = recyclerView.context
         mDraggableModule?.attachToRecyclerView(recyclerView)
 
@@ -434,6 +450,11 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 
             }
         }
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        mRecyclerView = null
     }
 
     protected open fun isFixedViewType(type: Int): Boolean {
@@ -744,7 +765,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * bind [RecyclerView.setAdapter] before use!
      */
     fun getViewByPosition(position: Int, @IdRes viewId: Int): View? {
-        val recyclerView = weakRecyclerView.get() ?: return null
+        val recyclerView = mRecyclerView ?: return null
         val viewHolder = recyclerView.findViewHolderForLayoutPosition(position) as BaseViewHolder?
                 ?: return null
         return viewHolder.getViewOrNull(viewId)
@@ -1016,7 +1037,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     }
 
     fun setEmptyView(layoutResId: Int) {
-        weakRecyclerView.get()?.let {
+        mRecyclerView?.let {
             val view = LayoutInflater.from(it.context).inflate(layoutResId, it, false)
             setEmptyView(view)
         }
@@ -1265,7 +1286,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         if (index == -1) {
             return
         }
-        remove(index)
+        removeAt(index)
     }
 
 
