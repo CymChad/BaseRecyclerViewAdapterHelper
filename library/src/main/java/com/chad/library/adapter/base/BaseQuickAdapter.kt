@@ -283,8 +283,8 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     }
 
     /**
-     * Don't override this method. If need, please override [getItemCount]
-     * 不要重写此方法，如果有需要，请重写[getDefItemViewType]
+     * Don't override this method. If need, please override [getDefItemCount]
+     * 不要重写此方法，如果有需要，请重写[getDefItemCount]
      * @return Int
      */
     override fun getItemCount(): Int {
