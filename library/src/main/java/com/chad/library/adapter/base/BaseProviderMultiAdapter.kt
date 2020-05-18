@@ -79,6 +79,16 @@ abstract class BaseProviderMultiAdapter<T>(data: MutableList<T>? = null) :
         return mItemProviders.get(viewType)
     }
 
+    override fun onViewAttachedToWindow(holder: BaseViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        getItemProvider(holder.itemViewType)?.onViewAttachedToWindow(holder)
+    }
+
+    override fun onViewDetachedFromWindow(holder: BaseViewHolder) {
+        super.onViewDetachedFromWindow(holder)
+        getItemProvider(holder.itemViewType)?.onViewDetachedFromWindow(holder)
+    }
+
     protected open fun bindClick(viewHolder: BaseViewHolder) {
         if (getOnItemClickListener() == null) {
             //如果没有设置点击监听，则回调给 itemProvider

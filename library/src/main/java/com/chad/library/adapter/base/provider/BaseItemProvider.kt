@@ -57,6 +57,32 @@ abstract class BaseItemProvider<T> {
     open fun onViewHolderCreated(viewHolder: BaseViewHolder, viewType: Int) {}
 
     /**
+     * Called when a view created by this [BaseItemProvider] has been attached to a window.
+     * 当此[BaseItemProvider]出现在屏幕上的时候，会调用此方法
+     *
+     * This can be used as a reasonable signal that the view is about to be seen
+     * by the user. If the [BaseItemProvider] previously freed any resources in
+     * [onViewDetachedFromWindow][.onViewDetachedFromWindow]
+     * those resources should be restored here.
+     *
+     * @param holder Holder of the view being attached
+     */
+    open fun onViewAttachedToWindow(holder: BaseViewHolder) {}
+
+    /**
+     * Called when a view created by this [BaseItemProvider] has been detached from its
+     * window.
+     * 当此[BaseItemProvider]从屏幕上移除的时候，会调用此方法
+     *
+     * Becoming detached from the window is not necessarily a permanent condition;
+     * the consumer of an Adapter's views may choose to cache views offscreen while they
+     * are not visible, attaching and detaching them as appropriate.
+     *
+     * @param holder Holder of the view being detached
+     */
+    open fun onViewDetachedFromWindow(holder: BaseViewHolder) {}
+
+    /**
      * item 若想实现条目点击事件则重写该方法
      * @param helper VH
      * @param data T
