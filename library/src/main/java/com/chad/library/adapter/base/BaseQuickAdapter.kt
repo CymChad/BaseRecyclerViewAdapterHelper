@@ -1086,9 +1086,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     private fun addAnimation(holder: RecyclerView.ViewHolder) {
         if (animationEnable) {
             if (!isAnimationFirstOnly || holder.layoutPosition > mLastPosition) {
-                val animation: BaseAnimation = adapterAnimation?.let {
-                    it
-                } ?: AlphaInAnimation()
+                val animation: BaseAnimation = adapterAnimation ?: AlphaInAnimation()
                 animation.animators(holder.itemView).forEach {
                     startAnim(it, holder.layoutPosition)
                 }
@@ -1147,7 +1145,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * 设置新的数据实例，替换原有内存引用。
      * 通常情况下，如非必要，请使用[setList]修改内容
      *
-     * @param data
+     * @param list
      */
     open fun setNewInstance(list: MutableList<T>?) {
         if (list === this.data) {
@@ -1339,7 +1337,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * Use Diff setting up a new instance to data.
      * This method is asynchronous.
      *
-     * @param newData MutableList<T>?
+     * @param list MutableList<T>?
      */
     open fun setDiffNewData(list: MutableList<T>?) {
         if (hasEmptyView()) {
@@ -1355,7 +1353,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * Use DiffResult setting up a new instance to data.
      *
      * @param diffResult DiffResult
-     * @param newData New Data
+     * @param list New Data
      */
     open fun setDiffNewData(@NonNull diffResult: DiffUtil.DiffResult, list: MutableList<T>) {
         if (hasEmptyView()) {
