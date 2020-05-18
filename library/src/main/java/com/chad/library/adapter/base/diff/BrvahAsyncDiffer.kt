@@ -40,6 +40,14 @@ class BrvahAsyncDiffer<T>(private val adapter: BaseQuickAdapter<T, *>,
         onCurrentListChanged(previousList, null)
     }
 
+    fun addData(data: T) {
+        val previousList: List<T> = adapter.data
+        adapter.data.add(data)
+
+        mUpdateCallback.onInserted(previousList.size, 1)
+        onCurrentListChanged(previousList, null)
+    }
+
     fun addList(list: List<T>?) {
         if (list == null) return
         val previousList: List<T> = adapter.data

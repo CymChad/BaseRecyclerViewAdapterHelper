@@ -32,14 +32,14 @@ open class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     open fun <B : ViewDataBinding> getBinding(): B? = DataBindingUtil.getBinding(itemView)
 
 
-    fun <T : View> getView(@IdRes viewId: Int): T {
+    open fun <T : View> getView(@IdRes viewId: Int): T {
         val view = getViewOrNull<T>(viewId)
         checkNotNull(view) { "No view found with id $viewId" }
         return view
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T : View> getViewOrNull(@IdRes viewId: Int): T? {
+    open fun <T : View> getViewOrNull(@IdRes viewId: Int): T? {
         val view = views.get(viewId)
         if (view == null) {
             itemView.findViewById<T>(viewId)?.let {
@@ -50,7 +50,7 @@ open class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         return view as? T
     }
 
-    fun <T : View> Int.findView(): T? {
+    open fun <T : View> Int.findView(): T? {
         return itemView.findViewById(this)
     }
 
