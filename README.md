@@ -1,57 +1,44 @@
 ![](https://user-images.githubusercontent.com/7698209/33198075-ef8f2230-d123-11e7-85a3-4cb9b22f877d.png)
 [![](https://jitpack.io/v/CymChad/BaseRecyclerViewAdapterHelper.svg)](https://jitpack.io/#CymChad/BaseRecyclerViewAdapterHelper)![](https://travis-ci.org/CymChad/BaseRecyclerViewAdapterHelper.svg?branch=master)[![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-BaseRecyclerViewAdapterHelper-green.svg?style=true)](https://android-arsenal.com/details/1/3644)[![CircleCI](https://circleci.com/gh/CymChad/BaseRecyclerViewAdapterHelper/tree/master.svg?style=svg)](https://circleci.com/gh/CymChad/BaseRecyclerViewAdapterHelper/tree/master)[![Codacy Badge](https://api.codacy.com/project/badge/Grade/2302d0084d0048eaa0f9bac4350837a0)](https://www.codacy.com/app/CymChad/BaseRecyclerViewAdapterHelper?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=CymChad/BaseRecyclerViewAdapterHelper&amp;utm_campaign=Badge_Grade)[![](https://img.shields.io/badge/%E4%BD%9C%E8%80%85-%E9%99%88%E5%AE%87%E6%98%8E-7AD6FD.svg)](https://www.zhihu.com/people/chen-yu-ming-98/activities)  
 # BRVAH
-http://www.recyclerview.org/  
-Powerful and flexible RecyclerAdapter,
+http://www.recyclerview.org/
+
+Powerful and flexible RecyclerView Adapter,
 Please feel free to use this. (Welcome to **Star** and **Fork**)  
 
-kotlin demo :[BRVAH_kotlin](https://github.com/AllenCoder/BRVAH_kotlin)
+强大而灵活的RecyclerView Adapter（欢迎 **Star** 和 **Fork**）
 
-## [androidX stable version ](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/releases/tag/2.9.45-androidx)
+
+​    
+**New version 3.x release, Written using `kotlin` and `AndroidX`**, Support `java` use. Fixed many legacy issues, strengthened support for DataBinding, and ‘multi-layout’ is more flexible.
+
+**新版3.x版已发布，使用`kotlin`和`AndroidX`编写**，支持`java`使用。解决了许多遗留问题，增强了对DataBinding的支持，并且“多重布局”更加灵活。
+
+Of course, you can continue to use the [2.x](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/tree/2.x) version.
+
+当然，你也可以继续使用[2.x](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/tree/2.x) 版本。
+
 # Document
-- [English](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki)
-- [中文](http://www.jianshu.com/p/b343fcff51b0)
+- English Writing ...
+- [中文](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/0-BaseRecyclerViewAdapterHelper.md)
 
-## [UI](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/issues/694)
+(由于各位项目成员工作较为繁忙，请各位同学谅解)
+
 ## Demo
+![](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/demo.png)
 
-[![Get it on Google Play](https://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=com.chad.baserecyclerviewadapterhelper)
-
-[国内下载地址](https://fir.im/s91g)  
+[国内下载地址](https://www.lanzous.com/iaqt3ha)  
 
 # proguard-rules.pro
-```
--keep class com.chad.library.adapter.** {
-*;
-}
--keep public class * extends com.chad.library.adapter.base.BaseQuickAdapter
--keep public class * extends com.chad.library.adapter.base.BaseViewHolder
--keepclassmembers  class **$** extends com.chad.library.adapter.base.BaseViewHolder {
-     <init>(...);
-}
-```
+> 此资源库自带混淆规则，并且会自动导入，正常情况下无需手动导入。
 
-# Extension library
-[PinnedSectionItemDecoration](https://github.com/oubowu/PinnedSectionItemDecoration)  
-[EasyRefreshLayout](https://github.com/anzaizai/EasyRefreshLayout)  
-[EasySwipeMenuLayout](https://github.com/anzaizai/EasySwipeMenuLayout)
+> The library comes with `proguard-rules.pro` rules and is automatically imported. Normally no manual import is required.
+> You can also go here to view [proguard-rules](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/library/proguard-rules.pro)
+
+
+
 
 # Thanks  
 [JoanZapata / base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper)
 
-# License
-```
-Copyright 2016 陈宇明
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-```
+# [License](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/LICENSE)

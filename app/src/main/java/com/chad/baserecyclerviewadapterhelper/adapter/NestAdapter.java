@@ -5,15 +5,15 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.TextView;
-
+import androidx.annotation.NonNull;
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
-import com.chad.baserecyclerviewadapterhelper.util.SpannableStringUtils;
-import com.chad.baserecyclerviewadapterhelper.util.ToastUtils;
-import com.chad.baserecyclerviewadapterhelper.util.Utils;
+import com.chad.baserecyclerviewadapterhelper.utils.SpannableStringUtils;
+import com.chad.baserecyclerviewadapterhelper.utils.Tips;
+import com.chad.baserecyclerviewadapterhelper.utils.Utils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
 /**
  * 文 件 名: AnimationAdapter
@@ -26,11 +26,11 @@ import com.chad.library.adapter.base.BaseViewHolder;
 public class NestAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
     public NestAdapter() {
         super(R.layout.layout_nest_item, DataServer.getSampleData(20));
+        addChildClickViewIds(R.id.tweetText);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, Status item) {
-        helper.addOnClickListener(R.id.tweetText);
+    protected void convert(@NonNull BaseViewHolder helper, Status item) {
         switch (helper.getLayoutPosition() % 3) {
             case 0:
                 helper.setImageResource(R.id.img, R.mipmap.animation_img1);
@@ -53,7 +53,7 @@ public class NestAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
     private ClickableSpan clickableSpan = new ClickableSpan() {
         @Override
         public void onClick(View widget) {
-            ToastUtils.showShortToast("事件触发了 landscapes and nedes");
+            Tips.show("事件触发了 landscapes and nedes");
         }
 
         @Override

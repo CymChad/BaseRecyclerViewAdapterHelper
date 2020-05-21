@@ -2,4 +2,5 @@
     <string name="brvah_loading">Loading...</string>
     <string name="brvah_load_failed">load more failed</string>
     <string name="brvah_load_end">No more data</string>
+    <string name="brvah_load_complete">Click to load more</string>
 </resources>

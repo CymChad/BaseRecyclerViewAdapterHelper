@@ -1,23 +1,39 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
 import com.chad.baserecyclerviewadapterhelper.R;
-import com.chad.baserecyclerviewadapterhelper.base.BaseDataBindingAdapter;
-import com.chad.baserecyclerviewadapterhelper.databinding.ItemMovieBinding;
 import com.chad.baserecyclerviewadapterhelper.entity.Movie;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.module.UpFetchModule;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Created by tysheng
- * Date: 2017/5/25 10:47.
- * Email: tyshengsx@gmail.com
+ * @author: limuyang
+ * @date: 2019-12-06
+ * @Description:
  */
+public class UpFetchAdapter extends BaseQuickAdapter<Movie, BaseViewHolder> implements UpFetchModule {
 
-public class UpFetchAdapter extends BaseDataBindingAdapter<Movie, ItemMovieBinding> {
     public UpFetchAdapter() {
-        super(R.layout.item_movie, null);
+        super(R.layout.item_header_and_footer);
     }
 
     @Override
-    protected void convert(ItemMovieBinding binding, Movie item) {
-        binding.setMovie(item);
+    protected void convert(@NotNull BaseViewHolder helper, @NotNull Movie item) {
+        switch (helper.getLayoutPosition() %
+                3) {
+            case 0:
+                helper.setImageResource(R.id.iv, R.mipmap.animation_img1);
+                break;
+            case 1:
+                helper.setImageResource(R.id.iv, R.mipmap.animation_img2);
+                break;
+            case 2:
+                helper.setImageResource(R.id.iv, R.mipmap.animation_img3);
+                break;
+            default:
+                break;
+        }
     }
 }

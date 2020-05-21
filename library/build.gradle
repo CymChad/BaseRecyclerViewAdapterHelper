@@ -1,4 +1,7 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+//apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 28
 
@@ -10,43 +13,33 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            consumerProguardFiles 'proguard-rules.pro'
+        }
+        debug {
+            consumerProguardFiles 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        kotlinOptions.freeCompilerArgs += ['-module-name', "com.github.CymChad.brvah"]
+    }
+
     lintOptions {
         abortOnError false
     }
 
-
+    dataBinding {
+        enabled = true
+    }
 }
 
 // 打包源码jar
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-task javadoc(type: Javadoc) {
-    failOnError  false
-    source = android.sourceSets.main.java.sourceFiles
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    classpath += configurations.compile
-}
-
-// 打包文档jar
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
+    archiveClassifier = 'sources'
 }
 
 dependencies {
-
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    compileOnly 'com.android.support:recyclerview-v7:28.0.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 }

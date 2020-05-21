@@ -1,6 +1,6 @@
 package com.chad.library.adapter.base.listener;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by luoxw on 2016/6/20.

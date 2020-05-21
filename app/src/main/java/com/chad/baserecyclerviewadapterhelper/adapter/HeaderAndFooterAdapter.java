@@ -1,10 +1,11 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
+import androidx.annotation.NonNull;
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
@@ -16,7 +17,7 @@ public class HeaderAndFooterAdapter extends BaseQuickAdapter<Status, BaseViewHol
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, Status item) {
+    protected void convert(@NonNull BaseViewHolder helper, Status item) {
         switch (helper.getLayoutPosition() %
                 3) {
             case 0:

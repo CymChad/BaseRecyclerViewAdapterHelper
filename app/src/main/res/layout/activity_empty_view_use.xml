@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".EmptyViewUseActivity">
-    <android.support.design.widget.FloatingActionButton
+    tools:context=".activity.EmptyViewUseActivity">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_reset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:backgroundTint="@color/color_light_blue"
-        android:src="@mipmap/reset_icon"
-        android:layout_margin="20dp"
         android:layout_gravity="end|bottom"
-        />
+        android:layout_margin="20dp"
+        android:src="@mipmap/reset_icon"
+        app:backgroundTint="@color/color_light_blue" />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fadingEdge="none"/>
+        android:fadingEdge="none" />
 
 </FrameLayout>

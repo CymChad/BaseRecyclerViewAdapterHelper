@@ -47,6 +47,20 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/load_more_load_complete_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="戳我，还有更多惊喜内容👇"
+            android:textColor="@android:color/darker_gray"/>
+    </FrameLayout>
+
+    <FrameLayout
         android:id="@+id/load_more_load_end_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -15,10 +15,7 @@
 package com.chad.baserecyclerviewadapterhelper;
 
 import android.app.Application;
-
-import com.chad.baserecyclerviewadapterhelper.util.Utils;
-import com.orhanobut.logger.AndroidLogAdapter;
-import com.orhanobut.logger.Logger;
+import com.chad.baserecyclerviewadapterhelper.utils.Utils;
 
 /**
  * 文 件 名: MyApplication
@@ -40,10 +37,6 @@ public class MyApplication extends Application {
         super.onCreate();
         appContext = this;
         Utils.init(this);
-        if (BuildConfig.DEBUG) {
-            Logger.addLogAdapter(new AndroidLogAdapter());
 
-
-        }
     }
 }

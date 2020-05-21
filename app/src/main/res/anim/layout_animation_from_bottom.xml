@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layoutAnimation xmlns:android="http://schemas.android.com/apk/res/android"
+    android:animation="@anim/item_animation_from_bottom"
+    android:animationOrder="normal"
+    android:delay="15%" />

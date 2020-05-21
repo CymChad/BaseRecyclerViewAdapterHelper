@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="50dp"
-              android:layout_marginBottom="1dp"
-              android:background="@color/dull_blue"
-              android:gravity="center"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_marginBottom="1dp"
+    android:background="@color/dull_blue"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/iv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@mipmap/add_icon"/>
+        android:src="@mipmap/add_icon" />
 
     <TextView
         android:id="@+id/tv"
@@ -19,5 +19,5 @@
         android:layout_height="wrap_content"
         android:text="Footer"
         android:textColor="@android:color/white"
-        android:textSize="18sp"/>
+        android:textSize="18sp" />
 </LinearLayout>
