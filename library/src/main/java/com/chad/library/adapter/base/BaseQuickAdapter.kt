@@ -26,12 +26,14 @@ import com.chad.library.adapter.base.listener.*
 import com.chad.library.adapter.base.module.*
 import com.chad.library.adapter.base.util.getItemView
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.jakewharton.rxbinding4.view.clicks
 import java.lang.ref.WeakReference
 import java.lang.reflect.Constructor
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Modifier
 import java.lang.reflect.ParameterizedType
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 /**
@@ -173,6 +175,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     private var mUpFetchModule: BaseUpFetchModule? = null
     private var mDraggableModule: BaseDraggableModule? = null
     internal var mLoadMoreModule: BaseLoadMoreModule? = null
+    private var throttleTime: Long = 1000
 
     protected lateinit var context: Context
         private set
@@ -524,19 +527,40 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     }
 
     /**
+     * Execute only once in tTime millisecond
+     *
+     * 设置tTime 毫秒内 点击事件只响应一次
+     */
+    fun addThrottleTime(@NonNull tTime: Long) {
+        throttleTime = tTime
+    }
+
+    /**
      * 绑定 item 点击事件
      * @param viewHolder VH
      */
     protected open fun bindViewClickListener(viewHolder: VH, viewType: Int) {
         mOnItemClickListener?.let {
-            viewHolder.itemView.setOnClickListener { v ->
-                var position = viewHolder.adapterPosition
-                if (position == RecyclerView.NO_POSITION) {
-                    return@setOnClickListener
-                }
-                position -= headerLayoutCount
-                setOnItemClick(v, position)
+            with(viewHolder.itemView) {
+                clicks()
+                        .throttleFirst(throttleTime, TimeUnit.MILLISECONDS)
+                        .subscribe {
+                            var position = viewHolder.adapterPosition
+                            if (position == RecyclerView.NO_POSITION) {
+                                return@subscribe
+                            }
+                            position -= headerLayoutCount
+                            setOnItemClick(this, position)
+                        }
             }
+//            viewHolder.itemView.setOnClickListener { v ->
+//                var position = viewHolder.adapterPosition
+//                if (position == RecyclerView.NO_POSITION) {
+//                    return@setOnClickListener
+//                }
+//                position -= headerLayoutCount
+//                setOnItemClick(v, position)
+//            }
         }
         mOnItemLongClickListener?.let {
             viewHolder.itemView.setOnLongClickListener { v ->
@@ -555,14 +579,25 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
                     if (!childView.isClickable) {
                         childView.isClickable = true
                     }
-                    childView.setOnClickListener { v ->
-                        var position = viewHolder.adapterPosition
-                        if (position == RecyclerView.NO_POSITION) {
-                            return@setOnClickListener
-                        }
-                        position -= headerLayoutCount
-                        setOnItemChildClick(v, position)
-                    }
+                    childView.clicks()
+                            .throttleFirst(throttleTime, TimeUnit.MILLISECONDS)
+                            .subscribe {
+                                var position = viewHolder.adapterPosition
+                                if (position == RecyclerView.NO_POSITION) {
+                                    return@subscribe
+                                }
+                                position -= headerLayoutCount
+                                setOnItemChildClick(childView, position)
+                            }
+
+//                            .setOnClickListener { v ->
+//                                var position = viewHolder.adapterPosition
+//                                if (position == RecyclerView.NO_POSITION) {
+//                                    return@setOnClickListener
+//                                }
+//                                position -= headerLayoutCount
+//                                setOnItemChildClick(v, position)
+//                            }
                 }
             }
         }
