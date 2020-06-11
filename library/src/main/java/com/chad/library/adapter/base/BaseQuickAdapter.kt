@@ -527,9 +527,9 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     }
 
     /**
-     * Execute only once in tTime millisecond
+     * set a millisecond,itemClick or itemChildClick Execute only once in tTime millisecond
      *
-     * 设置tTime 毫秒内 点击事件只响应一次
+     * 设置一个毫秒时间tTime ，是的在改时间诶点击事件只响应一次
      */
     fun addThrottleTime(@NonNull tTime: Long) {
         throttleTime = tTime
