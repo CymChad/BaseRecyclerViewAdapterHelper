@@ -51,7 +51,7 @@ dependencies {
 
 ## 模块的使用
 
-8、[LoadMoew](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/8-LoadMore.md)
+8、[LoadMore](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/8-LoadMore.md)
 
 9、[UpFetch]()编写中...
 
