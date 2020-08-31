@@ -174,9 +174,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     private var mDraggableModule: BaseDraggableModule? = null
     internal var mLoadMoreModule: BaseLoadMoreModule? = null
 
-    protected lateinit var context: Context
-        private set
-
     @Deprecated("Please use recyclerView", replaceWith = ReplaceWith("recyclerView"))
     lateinit var weakRecyclerView: WeakReference<RecyclerView>
 
@@ -191,6 +188,11 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
                 "Please get it after onAttachedToRecyclerView()"
             }
             return mRecyclerView!!
+        }
+
+    val context: Context
+        get() {
+            return recyclerView.context
         }
 
     /******************************* RecyclerView Method ****************************************/
@@ -219,7 +221,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      *
      * 实现此方法，并使用 helper 完成 item 视图的操作
      *
-     * @param helper A fully initialized helper.
+     * @param holder A fully initialized helper.
      * @param item   The item that needs to be displayed.
      */
     protected abstract fun convert(holder: VH, item: T)
@@ -232,7 +234,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      *
      * 可选实现，如果你是用了[payloads]刷新item，请实现此方法，进行局部刷新
      *
-     * @param helper   A fully initialized helper.
+     * @param holder   A fully initialized helper.
      * @param item     The item that needs to be displayed.
      * @param payloads payload info.
      */
@@ -423,7 +425,6 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         weakRecyclerView = WeakReference(recyclerView)
         mRecyclerView = recyclerView
 
-        this.context = recyclerView.context
         mDraggableModule?.attachToRecyclerView(recyclerView)
 
         val manager = recyclerView.layoutManager

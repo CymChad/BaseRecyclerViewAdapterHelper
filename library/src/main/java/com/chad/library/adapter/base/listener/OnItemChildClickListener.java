@@ -19,5 +19,5 @@ public interface OnItemChildClickListener {
      * @param view     The view whihin the ItemView that was clicked
      * @param position The position of the view int the adapter
      */
-    void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position);
+    void onItemChildClick(@NonNull BaseQuickAdapter<?,?> adapter, @NonNull View view, int position);
 }
