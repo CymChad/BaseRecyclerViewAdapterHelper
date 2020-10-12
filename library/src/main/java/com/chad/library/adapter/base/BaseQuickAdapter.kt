@@ -1340,13 +1340,15 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      *
      * @param list MutableList<T>?
      */
-    open fun setDiffNewData(list: MutableList<T>?) {
+    @JvmOverloads
+    open fun setDiffNewData(list: MutableList<T>?, commitCallback: Runnable? = null) {
         if (hasEmptyView()) {
             // If the current view is an empty view, set the new data directly without diff
             setNewInstance(list)
+            commitCallback?.run()
             return
         }
-        mDiffHelper?.submitList(list)
+        mDiffHelper?.submitList(list, commitCallback)
     }
 
     /**
