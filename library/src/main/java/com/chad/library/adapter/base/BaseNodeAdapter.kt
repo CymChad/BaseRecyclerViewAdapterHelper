@@ -131,12 +131,12 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
         }
     }
 
-    override fun setDiffNewData(list: MutableList<BaseNode>?) {
+    override fun setDiffNewData(list: MutableList<BaseNode>?, commitCallback: Runnable?) {
         if (hasEmptyView()) {
             setNewInstance(list)
             return
         }
-        super.setDiffNewData(flatData(list ?: arrayListOf()))
+        super.setDiffNewData(flatData(list ?: arrayListOf()), commitCallback)
     }
 
     override fun setDiffNewData(diffResult: DiffUtil.DiffResult, list: MutableList<BaseNode>) {
