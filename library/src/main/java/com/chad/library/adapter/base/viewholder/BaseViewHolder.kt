@@ -59,7 +59,7 @@ open class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         return this
     }
 
-    open fun setText(@IdRes viewId: Int, @StringRes strId: Int): BaseViewHolder? {
+    open fun setText(@IdRes viewId: Int, @StringRes strId: Int): BaseViewHolder {
         getView<TextView>(viewId).setText(strId)
         return this
     }
