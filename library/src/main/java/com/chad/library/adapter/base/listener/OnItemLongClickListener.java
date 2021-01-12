@@ -21,5 +21,5 @@ public interface OnItemLongClickListener {
      * @param position The position of the view int the adapter
      * @return true if the callback consumed the long click ,false otherwise
      */
-    boolean onItemLongClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position);
+    boolean onItemLongClick(@NonNull BaseQuickAdapter<?,?> adapter, @NonNull View view, int position);
 }

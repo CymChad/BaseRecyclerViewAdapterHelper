@@ -26,7 +26,6 @@ import com.chad.library.adapter.base.listener.*
 import com.chad.library.adapter.base.module.*
 import com.chad.library.adapter.base.util.getItemView
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
-import java.lang.ref.WeakReference
 import java.lang.reflect.Constructor
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Modifier
@@ -75,7 +74,7 @@ private interface BaseQuickAdapterModuleImp {
 abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 @JvmOverloads constructor(@LayoutRes private val layoutResId: Int,
                           data: MutableList<T>? = null)
-    : RecyclerView.Adapter<VH>(), BaseQuickAdapterModuleImp, BaseListenerImp {
+    : RecyclerView.Adapter<VH>(), BaseQuickAdapterModuleImp {
 
     companion object {
         const val HEADER_VIEW = 0x10000111
@@ -174,20 +173,15 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     private var mDraggableModule: BaseDraggableModule? = null
     internal var mLoadMoreModule: BaseLoadMoreModule? = null
 
-    @Deprecated("Please use recyclerView", replaceWith = ReplaceWith("recyclerView"))
-    lateinit var weakRecyclerView: WeakReference<RecyclerView>
+    var recyclerViewOrNull: RecyclerView? = null
+        private set
 
-    internal var mRecyclerView: RecyclerView? = null
-
-    var recyclerView: RecyclerView
-        set(value) {
-            mRecyclerView = value
-        }
+    val recyclerView: RecyclerView
         get() {
-            checkNotNull(mRecyclerView) {
+            checkNotNull(recyclerViewOrNull) {
                 "Please get it after onAttachedToRecyclerView()"
             }
-            return mRecyclerView!!
+            return recyclerViewOrNull!!
         }
 
     val context: Context
@@ -422,8 +416,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
-        weakRecyclerView = WeakReference(recyclerView)
-        mRecyclerView = recyclerView
+        recyclerViewOrNull = recyclerView
 
         mDraggableModule?.attachToRecyclerView(recyclerView)
 
@@ -455,7 +448,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
-        mRecyclerView = null
+        recyclerViewOrNull = null
     }
 
     protected open fun isFixedViewType(type: Int): Boolean {
@@ -766,7 +759,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      * bind [RecyclerView.setAdapter] before use!
      */
     fun getViewByPosition(position: Int, @IdRes viewId: Int): View? {
-        val recyclerView = mRecyclerView ?: return null
+        val recyclerView = recyclerViewOrNull ?: return null
         val viewHolder = recyclerView.findViewHolderForLayoutPosition(position) as BaseViewHolder?
                 ?: return null
         return viewHolder.getViewOrNull(viewId)
@@ -1038,7 +1031,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     }
 
     fun setEmptyView(layoutResId: Int) {
-        mRecyclerView?.let {
+        recyclerViewOrNull?.let {
             val view = LayoutInflater.from(it.context).inflate(layoutResId, it, false)
             setEmptyView(view)
         }
@@ -1370,23 +1363,23 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
 
     /************************************** Set Listener ****************************************/
 
-    override fun setGridSpanSizeLookup(spanSizeLookup: GridSpanSizeLookup?) {
+    fun setGridSpanSizeLookup(spanSizeLookup: GridSpanSizeLookup?) {
         this.mSpanSizeLookup = spanSizeLookup
     }
 
-    override fun setOnItemClickListener(listener: OnItemClickListener?) {
+    fun setOnItemClickListener(listener: OnItemClickListener?) {
         this.mOnItemClickListener = listener
     }
 
-    override fun setOnItemLongClickListener(listener: OnItemLongClickListener?) {
+    fun setOnItemLongClickListener(listener: OnItemLongClickListener?) {
         this.mOnItemLongClickListener = listener
     }
 
-    override fun setOnItemChildClickListener(listener: OnItemChildClickListener?) {
+    fun setOnItemChildClickListener(listener: OnItemChildClickListener?) {
         this.mOnItemChildClickListener = listener
     }
 
-    override fun setOnItemChildLongClickListener(listener: OnItemChildLongClickListener?) {
+    fun setOnItemChildLongClickListener(listener: OnItemChildLongClickListener?) {
         this.mOnItemChildLongClickListener = listener
     }
 
