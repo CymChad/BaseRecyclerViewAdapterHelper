@@ -1160,7 +1160,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
      *
      * @param newData data collection
      */
-    @Deprecated("Please use setData()", replaceWith = ReplaceWith("setData(newData)"))
+    @Deprecated("Please use setData()", replaceWith = ReplaceWith("setList(newData)"))
     open fun replaceData(newData: Collection<T>) {
         setList(newData)
     }
