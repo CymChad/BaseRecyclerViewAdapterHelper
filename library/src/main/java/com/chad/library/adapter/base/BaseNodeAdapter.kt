@@ -166,6 +166,7 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
         this.data.removeAt(position)
         removeCount += 1
 
+        if (position == data.size) return removeCount
         val node = this.data[position]
         // 移除脚部
         if (node is NodeFooterImp && node.footerNode != null) {
