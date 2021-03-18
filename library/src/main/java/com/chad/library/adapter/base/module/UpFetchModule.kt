@@ -13,7 +13,16 @@ import com.chad.library.adapter.base.listener.UpFetchListenerImp
 /**
  * 需要【向上加载更多】功能的，[BaseQuickAdapter]继承此接口
  */
-interface UpFetchModule
+interface UpFetchModule {
+    /**
+     * 重写此方法，返回自定义模块
+     * @param baseQuickAdapter BaseQuickAdapter<*, *>
+     * @return BaseUpFetchModule
+     */
+    fun addUpFetchModule(baseQuickAdapter: BaseQuickAdapter<*, *>): BaseUpFetchModule {
+        return BaseUpFetchModule(baseQuickAdapter)
+    }
+}
 
 open class BaseUpFetchModule(private val baseQuickAdapter: BaseQuickAdapter<*, *>) : UpFetchListenerImp {
 
