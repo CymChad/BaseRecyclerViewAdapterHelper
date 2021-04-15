@@ -432,7 +432,12 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
             }
             val items = flatData(node.childNode!!, if (isChangeChildCollapse) false else null)
             val size = items.size
-            this.data.removeAll(items)
+//            this.data.removeAll(items)
+            //修改移除方法解决删除大数据卡顿问题
+            this.data.subList(
+                    position + 1,
+                    position + 1 + size
+            ).clear()
             if (notify) {
                 if (animate) {
                     notifyItemChanged(adapterPosition, parentPayload)
