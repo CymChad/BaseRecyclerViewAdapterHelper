@@ -40,6 +40,7 @@ open class BaseDraggableModule(private val baseQuickAdapter: BaseQuickAdapter<*,
 
     var isDragEnabled = false
     var isSwipeEnabled = false
+    var isSwipeRemoveView = true
     var toggleViewId = NO_TOGGLE_VIEW
     lateinit var itemTouchHelper: ItemTouchHelper
     lateinit var itemTouchHelperCallback: DragAndSwipeCallback
@@ -167,8 +168,13 @@ open class BaseDraggableModule(private val baseQuickAdapter: BaseQuickAdapter<*,
     open fun onItemSwiped(viewHolder: RecyclerView.ViewHolder) {
         val pos = getViewHolderPosition(viewHolder)
         if (inRange(pos)) {
-            baseQuickAdapter.data.removeAt(pos)
-            baseQuickAdapter.notifyItemRemoved(viewHolder.adapterPosition)
+            if (isSwipeRemoveView) {
+                baseQuickAdapter.data.removeAt(pos)
+                baseQuickAdapter.notifyItemRemoved(viewHolder.adapterPosition)
+            } else {
+                baseQuickAdapter.notifyItemChanged(viewHolder.adapterPosition)
+            }
+
             if (isSwipeEnabled) {
                 mOnItemSwipeListener?.onItemSwiped(viewHolder, pos)
             }
