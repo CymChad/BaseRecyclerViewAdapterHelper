@@ -32,4 +32,10 @@ public class DragAndSwipeAdapter extends BaseQuickAdapter<String, BaseViewHolder
         }
         helper.setText(R.id.tv, item);
     }
+    
+    @NotNull
+    @Override
+    public BaseDraggableModule addDraggableModule(@NotNull BaseQuickAdapter<?, ?> baseQuickAdapter) {
+        return new BaseDraggableModule(baseQuickAdapter);
+    }
 }
