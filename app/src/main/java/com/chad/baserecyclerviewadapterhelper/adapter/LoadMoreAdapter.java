@@ -61,4 +61,10 @@ public class LoadMoreAdapter extends BaseQuickAdapter<Status, BaseViewHolder> im
             ds.setUnderlineText(true);
         }
     };
+    
+    @NotNull
+    @Override
+    public BaseLoadMoreModule addLoadMoreModule(@NotNull BaseQuickAdapter<?, ?> baseQuickAdapter) {
+        return new BaseLoadMoreModule(baseQuickAdapter);
+    }
 }
