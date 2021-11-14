@@ -28,8 +28,8 @@ android {
         abortOnError false
     }
 
-    buildFeatures {
-        dataBinding = true
+    viewBinding {
+        enabled = true
     }
 }
 
@@ -42,7 +42,7 @@ task sourcesJar(type: Jar) {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.annotation:annotation:1.2.0'
 
-    compileOnly 'androidx.recyclerview:recyclerview:1.1.0'
+    compileOnly 'androidx.recyclerview:recyclerview:1.2.1'
 }
