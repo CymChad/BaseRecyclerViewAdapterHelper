@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.*
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
@@ -70,7 +71,7 @@ open class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     }
 
     open fun setTextColorRes(@IdRes viewId: Int, @ColorRes colorRes: Int): BaseViewHolder {
-        getView<TextView>(viewId).setTextColor(itemView.resources.getColor(colorRes))
+        getView<TextView>(viewId).setTextColor(ContextCompat.getColor(itemView.context, colorRes))
         return this
     }
 

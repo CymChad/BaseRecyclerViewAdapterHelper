@@ -492,7 +492,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     protected open fun bindViewClickListener(viewHolder: VH, viewType: Int) {
         mOnItemClickListener?.let {
             viewHolder.itemView.setOnClickListener { v ->
-                var position = viewHolder.adapterPosition
+                var position = viewHolder.bindingAdapterPosition
                 if (position == RecyclerView.NO_POSITION) {
                     return@setOnClickListener
                 }
@@ -502,7 +502,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         }
         mOnItemLongClickListener?.let {
             viewHolder.itemView.setOnLongClickListener { v ->
-                var position = viewHolder.adapterPosition
+                var position = viewHolder.bindingAdapterPosition
                 if (position == RecyclerView.NO_POSITION) {
                     return@setOnLongClickListener false
                 }
@@ -518,7 +518,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
                         childView.isClickable = true
                     }
                     childView.setOnClickListener { v ->
-                        var position = viewHolder.adapterPosition
+                        var position = viewHolder.bindingAdapterPosition
                         if (position == RecyclerView.NO_POSITION) {
                             return@setOnClickListener
                         }
@@ -535,7 +535,7 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
                         childView.isLongClickable = true
                     }
                     childView.setOnLongClickListener { v ->
-                        var position = viewHolder.adapterPosition
+                        var position = viewHolder.bindingAdapterPosition
                         if (position == RecyclerView.NO_POSITION) {
                             return@setOnLongClickListener false
                         }

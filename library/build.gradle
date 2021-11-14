@@ -31,6 +31,9 @@ android {
     viewBinding {
         enabled = true
     }
+    buildFeatures {
+        dataBinding = true
+    }
 }
 
 // 打包源码jar
