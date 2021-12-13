@@ -23,6 +23,13 @@ android {
     compileOptions {
         kotlinOptions.freeCompilerArgs += ['-module-name', "com.github.CymChad.brvah"]
     }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        freeCompilerArgs += [
+                '-Xjvm-default', 'all'
+        ]
+    }
+
 
     lintOptions {
         abortOnError false
