@@ -9,10 +9,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.adapter.DataBindingAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
+import com.chad.baserecyclerviewadapterhelper.databinding.ItemMovieBinding;
 import com.chad.baserecyclerviewadapterhelper.entity.Movie;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.chad.library.adapter.base.viewholder.BaseDataBindingHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,9 +50,9 @@ public class DataBindingUseActivity extends BaseActivity {
         adapter.addHeaderView(view);
 
         //item 点击事件
-        adapter.setOnItemClickListener(new OnItemClickListener() {
+        adapter.setOnItemClickListener(new OnItemClickListener<Movie, BaseDataBindingHolder<ItemMovieBinding>>() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemClick(BaseQuickAdapter<Movie, BaseDataBindingHolder<ItemMovieBinding>> adapter, View view, int position) {
                 Tips.show("onItemClick: " + position);
             }
         });

@@ -18,6 +18,7 @@ import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.chad.library.adapter.base.listener.OnItemChildLongClickListener;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnItemLongClickListener;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,28 +42,28 @@ public class ItemClickActivity extends BaseActivity {
         mRecyclerView = findViewById(R.id.rv);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         initAdapter();
-        adapter.setOnItemClickListener(new OnItemClickListener() {
+        adapter.setOnItemClickListener(new OnItemClickListener<ClickEntity, BaseViewHolder>() {
             @Override
-            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+            public void onItemClick(@NonNull BaseQuickAdapter<ClickEntity, BaseViewHolder> adapter, @NonNull View view, int position) {
                 Tips.show("onItemClick " + position);
             }
         });
-        adapter.setOnItemLongClickListener(new OnItemLongClickListener() {
+        adapter.setOnItemLongClickListener(new OnItemLongClickListener<ClickEntity, BaseViewHolder>() {
             @Override
-            public boolean onItemLongClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
+            public boolean onItemLongClick(@NonNull BaseQuickAdapter<ClickEntity, BaseViewHolder> adapter, @NonNull View view, int position) {
                 Tips.show("onItemLongClick " + position);
                 return true;
             }
         });
-        adapter.setOnItemChildClickListener(new OnItemChildClickListener() {
+        adapter.setOnItemChildClickListener(new OnItemChildClickListener<ClickEntity, BaseViewHolder>() {
             @Override
-            public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
+            public void onItemChildClick(@NonNull BaseQuickAdapter<ClickEntity, BaseViewHolder> adapter, @NonNull View view, int position) {
                 Tips.show("onItemChildClick " + position);
             }
         });
-        adapter.setOnItemChildLongClickListener(new OnItemChildLongClickListener() {
+        adapter.setOnItemChildLongClickListener(new OnItemChildLongClickListener<ClickEntity, BaseViewHolder>() {
             @Override
-            public boolean onItemChildLongClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
+            public boolean onItemChildLongClick(@NonNull BaseQuickAdapter<ClickEntity, BaseViewHolder> adapter, @NonNull View view, int position) {
                 Tips.show("onItemChildLongClick " + position);
                 return true;
             }
