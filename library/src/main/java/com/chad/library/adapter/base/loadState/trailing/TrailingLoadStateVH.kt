@@ -8,7 +8,7 @@ import com.chad.library.databinding.BrvahTrailingLoadMoreBinding
 /**
  * 继承基类，实现默认的"加载更多"VH
  */
-class TrailingLoadMoreVH(
+internal class TrailingLoadStateVH(
     parent: ViewGroup,
     viewBinding: BrvahTrailingLoadMoreBinding = BrvahTrailingLoadMoreBinding.inflate(
         LayoutInflater.from(parent.context), parent, false

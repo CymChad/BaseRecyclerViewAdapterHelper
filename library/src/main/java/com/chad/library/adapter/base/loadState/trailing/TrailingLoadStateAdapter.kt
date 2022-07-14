@@ -12,9 +12,9 @@ import com.chad.library.adapter.base.loadState.LoadStateAdapter
 import com.chad.library.adapter.base.loadState.OnLoadMoreListener
 
 /**
- * 默认实现的尾部加载更多 Adapter
+ * 尾部加载更多 Adapter
  *
- * 可以通过自定义[TrailingLoadStateAdapter.ViewHolder]来修改布局
+ * 自定义布局：可以通过继承此类，并自定义[TrailingLoadStateAdapter.ViewHolder]来修改布局
  *
  */
 open class TrailingLoadStateAdapter : LoadStateAdapter<TrailingLoadStateAdapter.ViewHolder>() {
@@ -139,8 +139,11 @@ open class TrailingLoadStateAdapter : LoadStateAdapter<TrailingLoadStateAdapter.
      */
     var isDisableLoadMoreIfNotFullPage = false
 
+    /**
+     * 可以重写此方法，返回自定义的 [ViewHolder]
+     */
     override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): ViewHolder =
-        TrailingLoadMoreVH(parent).apply {
+        TrailingLoadStateVH(parent).apply {
             getLoadFailView(itemView).setOnClickListener {
                 // 失败重试点击事件
                 loadMoreListener?.failRetry()
