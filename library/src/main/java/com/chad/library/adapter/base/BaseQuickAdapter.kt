@@ -2,6 +2,7 @@ package com.chad.library.adapter.base
 
 import android.animation.Animator
 import android.content.Context
+import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -72,11 +73,12 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     private var mLastPosition = -1
 
-    private var mSpanSizeLookup: GridSpanSizeLookup? = null
-    private var mOnItemClickListener: OnItemClickListener? = null
-    private var mOnItemLongClickListener: OnItemLongClickListener? = null
-    private var mOnItemChildClickListener: OnItemChildClickListener? = null
-    private var mOnItemChildLongClickListener: OnItemChildLongClickListener? = null
+    private var mOnItemClickListener: OnItemClickListener<T>? = null
+    private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
+
+    private val mOnItemChildClickArray = SparseArray<OnItemChildClickListener<T>>(3)
+    private val mOnItemChildLongClickArray = SparseArray<OnItemChildLongClickListener<T>>(3)
+
 //    private var mUpFetchModule: BaseUpFetchModule? = null
     private var mDraggableModule: BaseDraggableModule? = null
 
@@ -130,8 +132,9 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 
     /**
-     * Don't override this method. If need, please override [getDefItemCount]
-     * 不要重写此方法，如果有需要，请重写[getDefItemCount]
+     * Don't override this method.
+     * 不要重写此方法
+     *
      * @return Int
      */
     final override fun getItemCount(): Int {
@@ -143,8 +146,8 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 
     /**
-     * Don't override this method. If need, please override [getDefItemViewType]
-     * 不要重写此方法，如果有需要，请重写[getDefItemViewType]
+     * Don't override this method.
+     * 不要重写此方法
      *
      * @param position Int
      * @return Int
@@ -282,7 +285,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
                 if (position == RecyclerView.NO_POSITION) {
                     return@setOnClickListener
                 }
-                setOnItemClick(v, position)
+                onItemClick(v, position)
             }
         }
         mOnItemLongClickListener?.let {
@@ -291,39 +294,36 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
                 if (position == RecyclerView.NO_POSITION) {
                     return@setOnLongClickListener false
                 }
-                setOnItemLongClick(v, position)
+                onItemLongClick(v, position)
             }
         }
 
-        mOnItemChildClickListener?.let {
-            for (id in getChildClickViewIds()) {
-                viewHolder.itemView.findViewById<View>(id)?.let { childView ->
-                    if (!childView.isClickable) {
-                        childView.isClickable = true
+
+        for (i in 0 until mOnItemChildClickArray.size()) {
+            val id = mOnItemChildClickArray.keyAt(i)
+
+            viewHolder.itemView.findViewById<View>(id)?.let { childView ->
+                childView.setOnClickListener { v ->
+                    val position = viewHolder.bindingAdapterPosition
+                    if (position == RecyclerView.NO_POSITION) {
+                        return@setOnClickListener
                     }
-                    childView.setOnClickListener { v ->
-                        val position = viewHolder.bindingAdapterPosition
-                        if (position == RecyclerView.NO_POSITION) {
-                            return@setOnClickListener
-                        }
-                        setOnItemChildClick(v, position)
-                    }
+                    onItemChildClick(v, position)
                 }
             }
         }
-        mOnItemChildLongClickListener?.let {
-            for (id in getChildLongClickViewIds()) {
-                viewHolder.itemView.findViewById<View>(id)?.let { childView ->
-                    if (!childView.isLongClickable) {
-                        childView.isLongClickable = true
+
+
+        for (i in 0 until mOnItemChildLongClickArray.size()) {
+            val id = mOnItemChildLongClickArray.keyAt(i)
+
+            viewHolder.itemView.findViewById<View>(id)?.let { childView ->
+                childView.setOnLongClickListener { v ->
+                    val position = viewHolder.bindingAdapterPosition
+                    if (position == RecyclerView.NO_POSITION) {
+                        return@setOnLongClickListener false
                     }
-                    childView.setOnLongClickListener { v ->
-                        val position = viewHolder.bindingAdapterPosition
-                        if (position == RecyclerView.NO_POSITION) {
-                            return@setOnLongClickListener false
-                        }
-                        setOnItemChildLongClick(v, position)
-                    }
+                    onItemChildLongClick(v, position)
                 }
             }
         }
@@ -336,7 +336,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * @param v
      * @param position
      */
-    protected open fun setOnItemClick(v: View, position: Int) {
+    protected open fun onItemClick(v: View, position: Int) {
         mOnItemClickListener?.onItemClick(this, v, position)
     }
 
@@ -348,16 +348,16 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * @param position
      * @return
      */
-    protected open fun setOnItemLongClick(v: View, position: Int): Boolean {
+    protected open fun onItemLongClick(v: View, position: Int): Boolean {
         return mOnItemLongClickListener?.onItemLongClick(this, v, position) ?: false
     }
 
-    protected open fun setOnItemChildClick(v: View, position: Int) {
-        mOnItemChildClickListener?.onItemChildClick(this, v, position)
+    protected open fun onItemChildClick(v: View, position: Int) {
+        mOnItemChildClickArray.get(v.id)?.onItemChildClick(this, v, position)
     }
 
-    protected open fun setOnItemChildLongClick(v: View, position: Int): Boolean {
-        return mOnItemChildLongClickListener?.onItemChildLongClick(this, v, position) ?: false
+    protected open fun onItemChildLongClick(v: View, position: Int): Boolean {
+        return mOnItemChildLongClickArray.get(v.id)?.onItemChildLongClick(this, v, position) ?: false
     }
 
 
@@ -451,7 +451,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     /********************************** EmptyView Method ****************************************/
     /********************************************************************************************/
     /**
-     * 设置空布局视图，注意：[data]必须为空数组
+     * 设置空布局视图，注意：[items]必须为空数组
      * @param emptyView View
      */
     fun setEmptyView(emptyView: View) {
@@ -757,32 +757,51 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     /************************************** Set Listener ****************************************/
 
-    fun setGridSpanSizeLookup(spanSizeLookup: GridSpanSizeLookup?) {
-        this.mSpanSizeLookup = spanSizeLookup
-    }
 
-    fun setOnItemClickListener(listener: OnItemClickListener?) {
+    fun setOnItemClickListener(listener: OnItemClickListener<T>?) {
         this.mOnItemClickListener = listener
     }
 
-    fun setOnItemLongClickListener(listener: OnItemLongClickListener?) {
+    fun getOnItemClickListener(): OnItemClickListener<T>? = mOnItemClickListener
+
+
+    fun setOnItemLongClickListener(listener: OnItemLongClickListener<T>?) {
         this.mOnItemLongClickListener = listener
     }
 
-    fun setOnItemChildClickListener(listener: OnItemChildClickListener?) {
-        this.mOnItemChildClickListener = listener
+    fun getOnItemLongClickListener(): OnItemLongClickListener<T>? = mOnItemLongClickListener
+
+
+    fun addOnItemChildClickListener(@IdRes id:Int, listener: OnItemChildClickListener<T>) = apply {
+        mOnItemChildClickArray[id] = listener
     }
 
-    fun setOnItemChildLongClickListener(listener: OnItemChildLongClickListener?) {
-        this.mOnItemChildLongClickListener = listener
+    fun removeOnItemChildClickListener(@IdRes id:Int)  = apply {
+        mOnItemChildClickArray.remove(id)
     }
 
-    fun getOnItemClickListener(): OnItemClickListener? = mOnItemClickListener
+    fun addOnItemChildLongClickListener(@IdRes id:Int, listener: OnItemChildLongClickListener<T>) = apply {
+        mOnItemChildLongClickArray[id] = listener
+    }
 
-    fun getOnItemLongClickListener(): OnItemLongClickListener? = mOnItemLongClickListener
+    fun removeOnItemChildLongClickListener(@IdRes id:Int) = apply {
+        mOnItemChildLongClickArray.remove(id)
+    }
 
-    fun getOnItemChildClickListener(): OnItemChildClickListener? = mOnItemChildClickListener
 
-    fun getOnItemChildLongClickListener(): OnItemChildLongClickListener? =
-        mOnItemChildLongClickListener
+    fun interface OnItemClickListener<T> {
+        fun onItemClick(adapter: BaseQuickAdapter<T, *>, view: View, position: Int)
+    }
+
+    fun interface OnItemLongClickListener<T> {
+        fun onItemLongClick(adapter: BaseQuickAdapter<T, *>, view: View, position: Int): Boolean
+    }
+
+    fun interface OnItemChildClickListener<T> {
+        fun onItemChildClick(adapter: BaseQuickAdapter<T, *>, view: View, position: Int)
+    }
+
+    fun interface OnItemChildLongClickListener<T> {
+        fun onItemChildLongClick(adapter: BaseQuickAdapter<T, *>, view: View, position: Int): Boolean
+    }
 }

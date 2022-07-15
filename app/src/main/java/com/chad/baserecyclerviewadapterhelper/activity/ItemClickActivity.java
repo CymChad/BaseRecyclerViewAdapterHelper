@@ -14,10 +14,6 @@ import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.entity.ClickEntity;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemChildClickListener;
-import com.chad.library.adapter.base.listener.OnItemChildLongClickListener;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
-import com.chad.library.adapter.base.listener.OnItemLongClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,33 +37,52 @@ public class ItemClickActivity extends BaseActivity {
         mRecyclerView = findViewById(R.id.rv);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         initAdapter();
-        adapter.setOnItemClickListener(new OnItemClickListener() {
+
+        // 设置点击事件
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener<ClickEntity>() {
             @Override
-            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+            public void onItemClick(@NonNull BaseQuickAdapter<ClickEntity, ?> adapter, @NonNull View view, int position) {
                 Tips.show("onItemClick " + position);
             }
         });
-        adapter.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+        // 设置item 长按事件
+        adapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener<ClickEntity>() {
             @Override
-            public boolean onItemLongClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
+            public boolean onItemLongClick(@NonNull BaseQuickAdapter<ClickEntity, ?> adapter, @NonNull View view, int position) {
                 Tips.show("onItemLongClick " + position);
                 return true;
             }
         });
-        adapter.setOnItemChildClickListener(new OnItemChildClickListener() {
+
+        // 添加子 view 的点击事件
+        adapter.addOnItemChildClickListener(R.id.btn, new BaseQuickAdapter.OnItemChildClickListener<ClickEntity>() {
             @Override
-            public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
-                Tips.show("onItemChildClick " + position);
+            public void onItemChildClick(@NonNull BaseQuickAdapter<ClickEntity, ?> adapter, @NonNull View view, int position) {
+                Tips.show("onItemChildClick: " + position);
             }
         });
-        adapter.setOnItemChildLongClickListener(new OnItemChildLongClickListener() {
+        adapter.addOnItemChildClickListener(R.id.iv_num_reduce, new BaseQuickAdapter.OnItemChildClickListener<ClickEntity>() {
             @Override
-            public boolean onItemChildLongClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
+            public void onItemChildClick(@NonNull BaseQuickAdapter<ClickEntity, ?> adapter, @NonNull View view, int position) {
+                Tips.show("onItemChildClick:  reduce " + position);
+            }
+        });
+        adapter.addOnItemChildClickListener(R.id.iv_num_add, new BaseQuickAdapter.OnItemChildClickListener<ClickEntity>() {
+            @Override
+            public void onItemChildClick(@NonNull BaseQuickAdapter<ClickEntity, ?> adapter, @NonNull View view, int position) {
+                Tips.show("onItemChildClick:  add " + position);
+            }
+        });
+
+        // 设置子 view 长按事件
+        adapter.addOnItemChildLongClickListener(R.id.btn_long, new BaseQuickAdapter.OnItemChildLongClickListener<ClickEntity>() {
+            @Override
+            public boolean onItemChildLongClick(@NonNull BaseQuickAdapter<ClickEntity, ?> adapter, @NonNull View view, int position) {
                 Tips.show("onItemChildLongClick " + position);
                 return true;
             }
         });
-
     }
 
     private void initAdapter() {
@@ -76,7 +91,6 @@ public class ItemClickActivity extends BaseActivity {
         data.add(new ClickEntity(ClickEntity.CLICK_ITEM_CHILD_VIEW));
         data.add(new ClickEntity(ClickEntity.LONG_CLICK_ITEM_VIEW));
         data.add(new ClickEntity(ClickEntity.LONG_CLICK_ITEM_CHILD_VIEW));
-        data.add(new ClickEntity(ClickEntity.NEST_CLICK_ITEM_CHILD_VIEW));
         adapter = new ItemClickAdapter(data);
         adapter.setAnimationEnable(true);
         mRecyclerView.setAdapter(adapter);

@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,10 +13,7 @@ import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.adapter.AnimationAdapter;
 import com.chad.baserecyclerviewadapterhelper.animator.CustomAnimation1;
 import com.chad.baserecyclerviewadapterhelper.animator.CustomAnimation2;
-import com.chad.baserecyclerviewadapterhelper.entity.Status;
-import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.kyleduo.switchbutton.SwitchButton;
 
@@ -55,30 +51,7 @@ public class AnimationUseActivity extends AppCompatActivity {
     private void initAdapter() {
         mAnimationAdapter = new AnimationAdapter();
         mAnimationAdapter.setAnimationEnable(true);
-        int mFirstPageItemCount = 3;
-//        mAnimationAdapter.setNotDoAnimationCount(mFirstPageItemCount);
-        mAnimationAdapter.addChildClickViewIds(R.id.img, R.id.tweetName, R.id.tweetText);
-        mAnimationAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
-                String content = null;
-                Status status = (Status) adapter.getItem(position);
-                switch (view.getId()) {
-                    case R.id.img:
-                        content = "img:" + status.getUserAvatar();
-                        break;
-                    case R.id.tweetName:
-                        content = "name:" + status.getUserName();
-                        break;
-                    case R.id.tweetText:
-                        content = "tweetText:" + status.getUserName();
-                        break;
-                    default:
-                        break;
-                }
-                Tips.show(content);
-            }
-        });
+
         mRecyclerView.setAdapter(mAnimationAdapter);
     }
 

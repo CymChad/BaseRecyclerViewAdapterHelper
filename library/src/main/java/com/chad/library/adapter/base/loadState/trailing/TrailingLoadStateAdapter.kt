@@ -216,6 +216,7 @@ open class TrailingLoadStateAdapter : LoadStateAdapter<TrailingLoadStateAdapter.
             }
         } else if (manager is StaggeredGridLayoutManager) {
             recyclerView.post {
+                // TODO
 //                val positions = IntArray(manager.spanCount)
 //                manager.findLastCompletelyVisibleItemPositions(positions)
 //                val pos = getTheBiggestNumber(positions) + 1

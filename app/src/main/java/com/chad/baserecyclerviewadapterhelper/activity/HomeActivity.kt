@@ -2,18 +2,15 @@ package com.chad.baserecyclerviewadapterhelper.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.baserecyclerviewadapterhelper.adapter.HomeAdapter
 import com.chad.baserecyclerviewadapterhelper.adapter.HomeTopHeaderAdapter
 import com.chad.baserecyclerviewadapterhelper.databinding.ActivityHomeBinding
 import com.chad.baserecyclerviewadapterhelper.entity.HomeEntity
-import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.QuickAdapterHelper
-import com.chad.library.adapter.base.listener.OnItemClickListener
 
-class HomeActivity : AppCompatActivity(), OnItemClickListener {
+class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
 
@@ -23,7 +20,6 @@ class HomeActivity : AppCompatActivity(), OnItemClickListener {
     private val homeAdapter by lazy(LazyThreadSafetyMode.NONE) {
         HomeAdapter(homeItemData).apply {
             animationEnable = true
-            setOnItemClickListener(this@HomeActivity)
         }
     }
 
@@ -40,16 +36,13 @@ class HomeActivity : AppCompatActivity(), OnItemClickListener {
 
         // 从 QuickAdapterHelper 获取 adapter，设置给 RecycleView
         binding.recyclerView.adapter = helper.adapter
-    }
 
-    /**
-     * 实现的 OnItemClickListener 接口
-     * item 点击事件
-     */
-    override fun onItemClick(adapter: BaseQuickAdapter<*, *>, view: View, position: Int) {
-        val item = adapter.items[position] as HomeEntity
-        if (!item.isSection) {
-            startActivity(Intent(this@HomeActivity, item.activity))
+        // item 点击事件
+        homeAdapter.setOnItemClickListener { adapter, _, position ->
+            val item = adapter.items[position]
+            if (!item.isSection) {
+                startActivity(Intent(this@HomeActivity, item.activity))
+            }
         }
     }
 

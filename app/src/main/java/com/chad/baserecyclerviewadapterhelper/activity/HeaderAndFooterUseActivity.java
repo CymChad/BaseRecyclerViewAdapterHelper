@@ -13,10 +13,10 @@ import com.chad.baserecyclerviewadapterhelper.adapter.HeaderAdapter;
 import com.chad.baserecyclerviewadapterhelper.adapter.HeaderAndFooterAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
+import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.QuickAdapterHelper;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
@@ -38,10 +38,10 @@ public class HeaderAndFooterUseActivity extends BaseActivity {
 
         HeaderAndFooterAdapter adapter1 = new HeaderAndFooterAdapter(DataServer.getSampleData(PAGE_SIZE));
         adapter1.setAnimationEnable(true);
-        adapter1.setOnItemClickListener(new OnItemClickListener() {
+        adapter1.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener<Status>() {
             @Override
-            public void onItemClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
-                Tips.show(String.valueOf(position));
+            public void onItemClick(@NonNull BaseQuickAdapter<Status, ?> adapter, @NonNull View view, int position) {
+                Tips.show("position: " + position);
             }
         });
 

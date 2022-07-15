@@ -1,7 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.activity;
 
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,8 +10,6 @@ import com.chad.baserecyclerviewadapterhelper.adapter.DataBindingAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.entity.Movie;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,12 +45,7 @@ public class DataBindingUseActivity extends BaseActivity {
 //        adapter.addHeaderView(view);
 
         //item 点击事件
-        adapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Tips.show("onItemClick: " + position);
-            }
-        });
+        adapter.setOnItemClickListener((adapter, view, position) -> Tips.show("onItemClick: " + position));
 
         //设置数据
         adapter.setList(genData());

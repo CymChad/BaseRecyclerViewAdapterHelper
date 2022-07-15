@@ -2,11 +2,9 @@ package com.chad.baserecyclerviewadapterhelper.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.baserecyclerviewadapterhelper.R;
@@ -14,24 +12,15 @@ import com.chad.baserecyclerviewadapterhelper.databinding.ItemClickChildviewBind
 import com.chad.baserecyclerviewadapterhelper.databinding.ItemClickViewBinding;
 import com.chad.baserecyclerviewadapterhelper.databinding.ItemLongClickChildviewBinding;
 import com.chad.baserecyclerviewadapterhelper.databinding.ItemLongClickViewBinding;
-import com.chad.baserecyclerviewadapterhelper.databinding.ItemNestClickBinding;
 import com.chad.baserecyclerviewadapterhelper.entity.ClickEntity;
-import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.chad.library.adapter.base.listener.OnItemChildClickListener;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 import java.util.List;
 
 /**
  *
  */
-public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity> implements OnItemClickListener, OnItemChildClickListener {
-
-    private static final int  ITEM_TYPE = 0;
-    private static final int SECTION_TYPE = 1;
+public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity> {
 
     static class ItemViewVH extends RecyclerView.ViewHolder {
 
@@ -89,19 +78,6 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity> imp
         }
     }
 
-    static class NestChildClickVH extends RecyclerView.ViewHolder {
-
-        ItemNestClickBinding viewBinding;
-
-        public NestChildClickVH(@NonNull ItemNestClickBinding viewBinding) {
-            super(viewBinding.getRoot());
-            this.viewBinding = viewBinding;
-        }
-
-        public NestChildClickVH(@NonNull ViewGroup parent) {
-            this(ItemNestClickBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
-        }
-    }
 
     public ItemClickAdapter(List<ClickEntity> data) {
         super(data);
@@ -155,29 +131,6 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity> imp
             @Override
             public void onBind(@NonNull ItemChildLongClickVH holder, int position, ClickEntity item) {
             }
-        }).addItemType(ClickEntity.NEST_CLICK_ITEM_CHILD_VIEW, NestChildClickVH.class, new OnViewHolderListener<ClickEntity, NestChildClickVH>() {
-
-            @NonNull
-            @Override
-            public NestChildClickVH onCreate(@NonNull Context context, @NonNull ViewGroup parent, int viewType) {
-                return new NestChildClickVH(parent);
-            }
-
-            @Override
-            public void onBind(@NonNull NestChildClickVH holder, int position, ClickEntity item) {
-                RecyclerView recyclerView = holder.viewBinding.nestList;
-                recyclerView.setHasFixedSize(true);
-
-                if (recyclerView.getLayoutManager() == null) {
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-                }
-                if (recyclerView.getAdapter() == null) {
-                    NestAdapter nestAdapter = new NestAdapter();
-                    nestAdapter.setOnItemClickListener(ItemClickAdapter.this);
-                    nestAdapter.setOnItemChildClickListener(ItemClickAdapter.this);
-                    recyclerView.setAdapter(nestAdapter);
-                }
-            }
         }).onItemViewType(new OnItemViewTypeListener<ClickEntity>() {
             @Override
             public int onItemViewType(int position, @NonNull List<? extends ClickEntity> list) {
@@ -186,55 +139,13 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity> imp
         });
 
 
-        addChildClickViewIds(R.id.btn,
-                R.id.iv_num_reduce, R.id.iv_num_add,
-                R.id.item_click);
+//        addChildClickViewIds(R.id.btn,
+//                R.id.iv_num_reduce, R.id.iv_num_add,
+//                R.id.item_click);
 
         addChildLongClickViewIds(R.id.iv_num_reduce, R.id.iv_num_add,
-                R.id.btn);
+                R.id.btn_long);
     }
 
 
-//    @Override
-    protected void convert(@NonNull final BaseViewHolder helper, final ClickEntity item) {
-        switch (helper.getItemViewType()) {
-            case ClickEntity.CLICK_ITEM_VIEW:
-                break;
-            case ClickEntity.CLICK_ITEM_CHILD_VIEW:
-                // set img data
-                break;
-            case ClickEntity.LONG_CLICK_ITEM_VIEW:
-                break;
-            case ClickEntity.LONG_CLICK_ITEM_CHILD_VIEW:
-                break;
-            case ClickEntity.NEST_CLICK_ITEM_CHILD_VIEW:
-                // u can set nestview id
-                RecyclerView recyclerView = helper.getView(R.id.nest_list);
-                recyclerView.setHasFixedSize(true);
-
-                if (recyclerView.getLayoutManager() == null) {
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-                }
-                if (recyclerView.getAdapter() == null) {
-                    NestAdapter nestAdapter = new NestAdapter();
-                    nestAdapter.setOnItemClickListener(this);
-                    nestAdapter.setOnItemChildClickListener(this);
-                    recyclerView.setAdapter(nestAdapter);
-                }
-
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
-    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-        Tips.show("childView click");
-    }
-
-    @Override
-    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        Tips.show("嵌套RecycleView item 收到: " + "点击了第 " + position + " 一次");
-    }
 }
