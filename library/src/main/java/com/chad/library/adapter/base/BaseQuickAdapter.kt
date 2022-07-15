@@ -30,35 +30,13 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
-        //        const val FOOTER_VIEW = 0x10000333
         const val EMPTY_VIEW = 0x10000555
     }
 
     /***************************** Public property settings *************************************/
-    /**
-     * data, Only allowed to get.
-     * 数据, 只允许 get。
-     */
-//    var data: MutableList<T> = items ?: arrayListOf()
-//        internal set
-
-//    /**
-//     * 当显示空布局时，是否显示 Header
-//     */
-//    var headerWithEmptyEnable = false
-
-    /** 当显示空布局时，是否显示 Foot */
-//    var footerWithEmptyEnable = false
 
     /** 是否使用空布局 */
     var isUseEmpty = true
-
-    /**
-     * if asFlow is true, footer/header will arrange like normal item view.
-     * only works when use [GridLayoutManager],and it will ignore span size.
-     */
-//    var headerViewAsFlow: Boolean = false
-//    var footerViewAsFlow: Boolean = false
 
     /**
      * 是否打开动画
@@ -79,14 +57,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             field = value
         }
 
-//    /**
-//     * 向上加载模块
-//     */
-//    val upFetchModule: BaseUpFetchModule
-//        get() {
-//            checkNotNull(mUpFetchModule) { "Please first implements UpFetchModule" }
-//            return mUpFetchModule!!
-//        }
 
     /**
      * 拖拽模块
@@ -98,10 +68,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         }
 
     /********************************* Private property *****************************************/
-//    private var mDiffHelper: BrvahAsyncDiffer<T>? = null
-
-    //    private lateinit var mHeaderLayout: LinearLayout
-//    private lateinit var mFooterLayout: LinearLayout
     private lateinit var mEmptyLayout: FrameLayout
 
     private var mLastPosition = -1
@@ -140,9 +106,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * 检查模块
      */
     private fun checkModule() {
-//        if (this is UpFetchModule) {
-//            mUpFetchModule = this.addUpFetchModule(this)
-//        }
         if (this is DraggableModule) {
             mDraggableModule = this.addDraggableModule(this)
         }
@@ -239,40 +202,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         recyclerViewOrNull = recyclerView
 
         mDraggableModule?.attachToRecyclerView(recyclerView)
-
-//        val manager = recyclerView.layoutManager
-//        if (manager is GridLayoutManager) {
-//            val originalSpanSizeLookup = manager.spanSizeLookup
-//            manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-//                override fun getSpanSize(position: Int): Int {
-//                    val adapter = recyclerView.adapter
-//                    if (adapter is ConcatAdapter) {
-//                        val  pair = adapter.getWrappedAdapterAndPosition(position)
-//
-//                        return if ( pair.first is BaseQuickAdapter<*,*>) {
-//                            val type =  pair.first.getItemViewType(pair.second)
-//
-//                            if (isFullSpanItem(type)) {
-//                                manager.spanCount
-//                            }else {
-//                                originalSpanSizeLookup.getSpanSize(position)
-//                            }
-//                        } else {
-//                            originalSpanSizeLookup.getSpanSize(position)
-//                        }
-//                    } else {
-//                        val type = getItemViewType(position)
-//
-//                        return if (isFullSpanItem(type)) {
-//                            manager.spanCount
-//                        } else {
-//                            originalSpanSizeLookup.getSpanSize(position)
-//                        }
-//                    }
-//                }
-//
-//            }
-//        }
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
@@ -488,99 +417,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     inline val RecyclerView.ViewHolder.isEmptyViewHolder: Boolean
         get() = this is EmptyLayoutVH
 
-//    /**
-//     * 创建 ViewHolder。可以重写
-//     *
-//     * @param view View
-//     * @return VH
-//     */
-//    @Suppress("UNCHECKED_CAST")
-//    protected open fun createBaseViewHolder(view: View): VH {
-//        var temp: Class<*>? = javaClass
-//        var z: Class<*>? = null
-//        while (z == null && null != temp) {
-//            z = getInstancedGenericKClass(temp)
-//            temp = temp.superclass
-//        }
-//        // 泛型擦除会导致z为null
-//        val vh: VH? = if (z == null) {
-//            BaseViewHolder(view) as VH
-//        } else {
-//            createBaseGenericKInstance(z, view)
-//        }
-//        return vh ?: BaseViewHolder(view) as VH
-//    }
 
-//    /**
-//     * get generic parameter VH
-//     *
-//     * @param z
-//     * @return
-//     */
-//    private fun getInstancedGenericKClass(z: Class<*>): Class<*>? {
-//        try {
-//            val type = z.genericSuperclass
-//            if (type is ParameterizedType) {
-//                val types = type.actualTypeArguments
-//                for (temp in types) {
-//                    if (temp is Class<*>) {
-//                        if (BaseViewHolder::class.java.isAssignableFrom(temp)) {
-//                            return temp
-//                        }
-//                    } else if (temp is ParameterizedType) {
-//                        val rawType = temp.rawType
-//                        if (rawType is Class<*> && BaseViewHolder::class.java.isAssignableFrom(
-//                                rawType
-//                            )
-//                        ) {
-//                            return rawType
-//                        }
-//                    }
-//                }
-//            }
-//        } catch (e: java.lang.reflect.GenericSignatureFormatError) {
-//            e.printStackTrace()
-//        } catch (e: TypeNotPresentException) {
-//            e.printStackTrace()
-//        } catch (e: java.lang.reflect.MalformedParameterizedTypeException) {
-//            e.printStackTrace()
-//        }
-//        return null
-//    }
-
-//    /**
-//     * try to create Generic VH instance
-//     *
-//     * @param z
-//     * @param view
-//     * @return
-//     */
-//    @Suppress("UNCHECKED_CAST")
-//    private fun createBaseGenericKInstance(z: Class<*>, view: View): VH? {
-//        try {
-//            val constructor: Constructor<*>
-//            // inner and unstatic class
-//            return if (z.isMemberClass && !Modifier.isStatic(z.modifiers)) {
-//                constructor = z.getDeclaredConstructor(javaClass, View::class.java)
-//                constructor.isAccessible = true
-//                constructor.newInstance(this, view) as VH
-//            } else {
-//                constructor = z.getDeclaredConstructor(View::class.java)
-//                constructor.isAccessible = true
-//                constructor.newInstance(view) as VH
-//            }
-//        } catch (e: NoSuchMethodException) {
-//            e.printStackTrace()
-//        } catch (e: IllegalAccessException) {
-//            e.printStackTrace()
-//        } catch (e: InstantiationException) {
-//            e.printStackTrace()
-//        } catch (e: InvocationTargetException) {
-//            e.printStackTrace()
-//        }
-//
-//        return null
-//    }
 
     /**
      * When set to true, the item will layout using all span area. That means, if orientation
@@ -609,227 +446,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         return viewHolder.getViewOrNull(viewId)
     }
 
-    /********************************************************************************************/
-    /********************************* HeaderView Method ****************************************/
-    /********************************************************************************************/
-//    @JvmOverloads
-//    fun addHeaderView(view: View, index: Int = -1, orientation: Int = LinearLayout.VERTICAL): Int {
-//        if (!this::mHeaderLayout.isInitialized) {
-//            mHeaderLayout = LinearLayout(view.context)
-//            mHeaderLayout.orientation = orientation
-//            mHeaderLayout.layoutParams = if (orientation == LinearLayout.VERTICAL) {
-//                RecyclerView.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
-//            } else {
-//                RecyclerView.LayoutParams(WRAP_CONTENT, MATCH_PARENT)
-//            }
-//        }
-//
-//        val childCount = mHeaderLayout.childCount
-//        var mIndex = index
-//        if (index < 0 || index > childCount) {
-//            mIndex = childCount
-//        }
-//        mHeaderLayout.addView(view, mIndex)
-//        if (mHeaderLayout.childCount == 1) {
-//            val position = headerViewPosition
-//            if (position != -1) {
-//                notifyItemInserted(position)
-//            }
-//        }
-//        return mIndex
-//    }
-//
-//    @JvmOverloads
-//    fun setHeaderView(view: View, index: Int = 0, orientation: Int = LinearLayout.VERTICAL): Int {
-//        return if (!this::mHeaderLayout.isInitialized || mHeaderLayout.childCount <= index) {
-//            addHeaderView(view, index, orientation)
-//        } else {
-//            mHeaderLayout.removeViewAt(index)
-//            mHeaderLayout.addView(view, index)
-//            index
-//        }
-//    }
-//
-//    /**
-//     * 是否有 HeaderLayout
-//     * @return Boolean
-//     */
-//    fun hasHeaderLayout(): Boolean {
-//        if (this::mHeaderLayout.isInitialized && mHeaderLayout.childCount > 0) {
-//            return true
-//        }
-//        return false
-//    }
-//
-//    fun removeHeaderView(header: View) {
-//        if (!hasHeaderLayout()) return
-//
-//        mHeaderLayout.removeView(header)
-//        if (mHeaderLayout.childCount == 0) {
-//            val position = headerViewPosition
-//            if (position != -1) {
-//                notifyItemRemoved(position)
-//            }
-//        }
-//    }
-//
-//    fun removeAllHeaderView() {
-//        if (!hasHeaderLayout()) return
-//
-//        mHeaderLayout.removeAllViews()
-//        val position = headerViewPosition
-//        if (position != -1) {
-//            notifyItemRemoved(position)
-//        }
-//    }
-//
-//    val headerViewPosition: Int
-//        get() {
-//            if (hasEmptyView()) {
-//                if (headerWithEmptyEnable) {
-//                    return 0
-//                }
-//            } else {
-//                return 0
-//            }
-//            return -1
-//        }
-//
-//    /**
-//     * if addHeaderView will be return 1, if not will be return 0
-//     */
-//    val headerLayoutCount: Int
-//        get() {
-//            return if (hasHeaderLayout()) {
-//                1
-//            } else {
-//                0
-//            }
-//        }
-//
-//
-//    /**
-//     * 获取头布局
-//     */
-//    val headerLayout: LinearLayout?
-//        get() {
-//            return if (this::mHeaderLayout.isInitialized) {
-//                mHeaderLayout
-//            } else {
-//                null
-//            }
-//        }
-
-    /********************************************************************************************/
-    /********************************* FooterView Method ****************************************/
-    /********************************************************************************************/
-//    @JvmOverloads
-//    fun addFooterView(view: View, index: Int = -1, orientation: Int = LinearLayout.VERTICAL): Int {
-//        if (!this::mFooterLayout.isInitialized) {
-//            mFooterLayout = LinearLayout(view.context)
-//            mFooterLayout.orientation = orientation
-//            mFooterLayout.layoutParams = if (orientation == LinearLayout.VERTICAL) {
-//                RecyclerView.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
-//            } else {
-//                RecyclerView.LayoutParams(WRAP_CONTENT, MATCH_PARENT)
-//            }
-//        }
-//
-//        val childCount = mFooterLayout.childCount
-//        var mIndex = index
-//        if (index < 0 || index > childCount) {
-//            mIndex = childCount
-//        }
-//        mFooterLayout.addView(view, mIndex)
-//        if (mFooterLayout.childCount == 1) {
-//            val position = footerViewPosition
-//            if (position != -1) {
-//                notifyItemInserted(position)
-//            }
-//        }
-//        return mIndex
-//    }
-//
-//    @JvmOverloads
-//    fun setFooterView(view: View, index: Int = 0, orientation: Int = LinearLayout.VERTICAL): Int {
-//        return if (!this::mFooterLayout.isInitialized || mFooterLayout.childCount <= index) {
-//            addFooterView(view, index, orientation)
-//        } else {
-//            mFooterLayout.removeViewAt(index)
-//            mFooterLayout.addView(view, index)
-//            index
-//        }
-//    }
-//
-//    fun removeFooterView(footer: View) {
-//        if (!hasFooterLayout()) return
-//
-//        mFooterLayout.removeView(footer)
-//        if (mFooterLayout.childCount == 0) {
-//            val position = footerViewPosition
-//            if (position != -1) {
-//                notifyItemRemoved(position)
-//            }
-//        }
-//    }
-//
-//    fun removeAllFooterView() {
-//        if (!hasFooterLayout()) return
-//
-//        mFooterLayout.removeAllViews()
-//        val position = footerViewPosition
-//        if (position != -1) {
-//            notifyItemRemoved(position)
-//        }
-//    }
-//
-//    fun hasFooterLayout(): Boolean {
-//        if (this::mFooterLayout.isInitialized && mFooterLayout.childCount > 0) {
-//            return true
-//        }
-//        return false
-//    }
-
-//    val footerViewPosition: Int
-//        get() {
-//            if (hasEmptyView()) {
-//                var position = 1
-//                if (headerWithEmptyEnable && hasHeaderLayout()) {
-//                    position++
-//                }
-//                if (footerWithEmptyEnable) {
-//                    return position
-//                }
-//            } else {
-//                return headerLayoutCount + data.size
-//            }
-//            return -1
-//        }
-
-    /**
-     * if addHeaderView will be return 1, if not will be return 0
-     */
-//    val footerLayoutCount: Int
-//        get() {
-//            return if (hasFooterLayout()) {
-//                1
-//            } else {
-//                0
-//            }
-//        }
-
-//    /**
-//     * 获取脚布局
-//     * @return LinearLayout?
-//     */
-//    val footerLayout: LinearLayout?
-//        get() {
-//            return if (this::mFooterLayout.isInitialized) {
-//                mFooterLayout
-//            } else {
-//                null
-//            }
-//        }
 
     /********************************************************************************************/
     /********************************** EmptyView Method ****************************************/
@@ -993,22 +609,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * @param newItems data collection
      */
     open fun replaceList(newItems: Collection<T>) {
-//        if (newData !== this.items) {
-//            this.items.clear()
-//            if (!items.isNullOrEmpty()) {
-//                this.data.addAll(list)
-//            }
-//        } else {
-//            if (!list.isNullOrEmpty()) {
-//                val newList = ArrayList(list)
-//                this.data.clear()
-//                this.data.addAll(newList)
-//            } else {
-//                this.data.clear()
-//            }
-//        }
-//        mLastPosition = -1
-//        notifyDataSetChanged()
+    // TODO
     }
 
     /**
@@ -1153,73 +754,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         }
     }
 
-//    /**
-//     * 设置Diff Callback，用于快速生成 Diff Config。
-//     *
-//     * @param diffCallback ItemCallback<T>
-//     */
-//    fun setDiffCallback(diffCallback: DiffUtil.ItemCallback<T>) {
-//        this.setDiffConfig(BrvahAsyncDifferConfig.Builder(diffCallback).build())
-//    }
-//
-//    /**
-//     * 设置Diff Config。如需自定义线程，请使用此方法。
-//     * 在使用 [setDiffNewData] 前，必须设置此方法
-//     * @param config BrvahAsyncDifferConfig<T>
-//     */
-//    fun setDiffConfig(config: BrvahAsyncDifferConfig<T>) {
-//        mDiffHelper = BrvahAsyncDiffer(this, config)
-//    }
-//
-//    @Deprecated("User getDiffer()", replaceWith = ReplaceWith("getDiffer()"))
-//    fun getDiffHelper(): BrvahAsyncDiffer<T> {
-//        return getDiffer()
-//    }
-//
-//    fun getDiffer(): BrvahAsyncDiffer<T> {
-//        checkNotNull(mDiffHelper) {
-//            "Please use setDiffCallback() or setDiffConfig() first!"
-//        }
-//        return mDiffHelper!!
-//    }
-//
-//    /**
-//     * 使用 Diff 设置新实例.
-//     * 此方法为异步Diff，无需考虑性能问题.
-//     * 使用之前请先设置 [setDiffCallback] 或者 [setDiffConfig].
-//     *
-//     * Use Diff setting up a new instance to data.
-//     * This method is asynchronous.
-//     *
-//     * @param list MutableList<T>?
-//     */
-//    @JvmOverloads
-//    open fun setDiffNewData(list: MutableList<T>?, commitCallback: Runnable? = null) {
-//        if (hasEmptyView()) {
-//            // If the current view is an empty view, set the new data directly without diff
-//            setNewInstance(list)
-//            commitCallback?.run()
-//            return
-//        }
-//        mDiffHelper?.submitList(list, commitCallback)
-//    }
-//
-//    /**
-//     * 使用 DiffResult 设置新实例.
-//     * Use DiffResult setting up a new instance to data.
-//     *
-//     * @param diffResult DiffResult
-//     * @param list New Data
-//     */
-//    open fun setDiffNewData(@NonNull diffResult: DiffUtil.DiffResult, list: MutableList<T>) {
-//        if (hasEmptyView()) {
-//            // If the current view is an empty view, set the new data directly without diff
-//            setNewInstance(list)
-//            return
-//        }
-//        diffResult.dispatchUpdatesTo(BrvahListUpdateCallback(this))
-//        this.data = list
-//    }
 
     /************************************** Set Listener ****************************************/
 
