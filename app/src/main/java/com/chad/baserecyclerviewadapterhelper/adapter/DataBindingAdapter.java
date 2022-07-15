@@ -1,13 +1,16 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
+import android.content.Context;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.databinding.ItemMovieBinding;
 import com.chad.baserecyclerviewadapterhelper.entity.Movie;
 import com.chad.baserecyclerviewadapterhelper.entity.MoviePresenter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.viewholder.BaseDataBindingHolder;
-
-import org.jetbrains.annotations.NotNull;
+import com.chad.library.adapter.base.viewholder.DataBindingHolder;
 
 /**
  * @author: limuyang
@@ -15,22 +18,23 @@ import org.jetbrains.annotations.NotNull;
  * @Description: DataBinding Adapter
  *
  */
-public class DataBindingAdapter extends BaseQuickAdapter<Movie, BaseDataBindingHolder<ItemMovieBinding>> {
+public class DataBindingAdapter extends BaseQuickAdapter<Movie, DataBindingHolder<ItemMovieBinding>> {
 
-    private MoviePresenter mPresenter = new MoviePresenter();
+    private final MoviePresenter mPresenter = new MoviePresenter();
 
-    public DataBindingAdapter() {
-        super(R.layout.item_movie);
+    @NonNull
+    @Override
+    protected DataBindingHolder<ItemMovieBinding> onCreateViewHolder(@NonNull Context context, @NonNull ViewGroup parent, int viewType) {
+        return new DataBindingHolder<>(parent, R.layout.item_movie);
     }
 
     @Override
-    protected void convert(@NotNull BaseDataBindingHolder<ItemMovieBinding> holder, Movie item) {
+    protected void onBindViewHolder(@NonNull DataBindingHolder<ItemMovieBinding> holder, int position, Movie item) {
         // 获取 Binding
-        ItemMovieBinding binding = holder.getDataBinding();
-        if (binding != null) {
-            binding.setMovie(item);
-            binding.setPresenter(mPresenter);
-            binding.executePendingBindings();
-        }
+        ItemMovieBinding binding = holder.getBinding();
+        binding.setMovie(item);
+        binding.setPresenter(mPresenter);
+        binding.executePendingBindings();
     }
+
 }

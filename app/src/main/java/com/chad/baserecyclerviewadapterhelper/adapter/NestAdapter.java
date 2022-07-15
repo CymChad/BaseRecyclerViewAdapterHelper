@@ -1,19 +1,24 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
+import android.content.Context;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
+import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
+import com.chad.baserecyclerviewadapterhelper.databinding.LayoutNestItemBinding;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.baserecyclerviewadapterhelper.utils.SpannableStringUtils;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.baserecyclerviewadapterhelper.utils.Utils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
 /**
  * 文 件 名: AnimationAdapter
@@ -23,32 +28,50 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
  * 修改时间：
  * 修改备注：
  */
-public class NestAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
+public class NestAdapter extends BaseQuickAdapter<Status, NestAdapter.VH> {
     public NestAdapter() {
-        super(R.layout.layout_nest_item, DataServer.getSampleData(20));
+        super(DataServer.getSampleData(20));
         addChildClickViewIds(R.id.tweetText);
     }
 
+    class VH extends RecyclerView.ViewHolder {
+        public final LayoutNestItemBinding viewBinding;
+
+        public VH(@NonNull LayoutNestItemBinding viewBinding) {
+            super(viewBinding.getRoot());
+            this.viewBinding = viewBinding;
+        }
+    }
+
+    @NonNull
     @Override
-    protected void convert(@NonNull BaseViewHolder helper, Status item) {
-        switch (helper.getLayoutPosition() % 3) {
+    protected VH onCreateViewHolder(@NonNull Context context, @NonNull ViewGroup parent, int viewType) {
+        LayoutNestItemBinding viewBinding = LayoutNestItemBinding.inflate(LayoutInflater.from(context), parent, false);
+        return new VH(viewBinding);
+    }
+
+    @Override
+    protected void onBindViewHolder(@NonNull VH holder, int position, Status item) {
+        switch (holder.getLayoutPosition() % 3) {
             case 0:
-                helper.setImageResource(R.id.img, R.mipmap.animation_img1);
+                holder.viewBinding.img.setImageResource(R.mipmap.animation_img1);
                 break;
             case 1:
-                helper.setImageResource(R.id.img, R.mipmap.animation_img2);
+                holder.viewBinding.img.setImageResource( R.mipmap.animation_img2);
                 break;
             case 2:
-                helper.setImageResource(R.id.img, R.mipmap.animation_img3);
+                holder.viewBinding.img.setImageResource( R.mipmap.animation_img3);
                 break;
             default:
                 break;
         }
-        helper.setText(R.id.tweetName, "Hoteis in Rio de Janeiro");
+        holder.viewBinding.tweetName.setText( "Hoteis in Rio de Janeiro");
+
         String msg = "\"He was one of Australia's most of distinguished artistes, renowned for his portraits\"";
-        ((TextView) helper.getView(R.id.tweetText)).setText(SpannableStringUtils.getBuilder(msg).append("landscapes and nedes").setClickSpan(clickableSpan).create());
-        ((TextView) helper.getView(R.id.tweetText)).setMovementMethod(LinkMovementMethod.getInstance());
+        holder.viewBinding.tweetText.setText(SpannableStringUtils.getBuilder(msg).append("landscapes and nedes").setClickSpan(clickableSpan).create());
+        holder.viewBinding.tweetText.setMovementMethod(LinkMovementMethod.getInstance());
     }
+
 
     private ClickableSpan clickableSpan = new ClickableSpan() {
         @Override

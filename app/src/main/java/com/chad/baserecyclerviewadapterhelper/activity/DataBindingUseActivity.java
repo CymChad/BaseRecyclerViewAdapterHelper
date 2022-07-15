@@ -25,7 +25,7 @@ import java.util.Random;
  */
 public class DataBindingUseActivity extends BaseActivity {
 
-    private DataBindingAdapter adapter = new DataBindingAdapter();
+    private final DataBindingAdapter adapter = new DataBindingAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +43,9 @@ public class DataBindingUseActivity extends BaseActivity {
         //demo 添加的 Header
         //Header 是自行添加进去的 View，所以 Adapter 不管理 Header 的 DataBinding。
         //请在外部自行完成数据的绑定
-        View view = getLayoutInflater().inflate(R.layout.head_view, null, false);
-        view.findViewById(R.id.iv).setVisibility(View.GONE);
-        adapter.addHeaderView(view);
+//        View view = getLayoutInflater().inflate(R.layout.head_view, null, false);
+//        view.findViewById(R.id.iv).setVisibility(View.GONE);
+//        adapter.addHeaderView(view);
 
         //item 点击事件
         adapter.setOnItemClickListener(new OnItemClickListener() {

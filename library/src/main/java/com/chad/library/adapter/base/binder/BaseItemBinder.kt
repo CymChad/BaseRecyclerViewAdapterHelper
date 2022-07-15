@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.IdRes
-import com.chad.library.adapter.base.BaseBinderAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
 /**
@@ -15,17 +14,17 @@ abstract class BaseItemBinder<T, VH : BaseViewHolder> {
     private val clickViewIds by lazy(LazyThreadSafetyMode.NONE) { ArrayList<Int>() }
     private val longClickViewIds by lazy(LazyThreadSafetyMode.NONE) { ArrayList<Int>() }
 
-    internal var _adapter: BaseBinderAdapter? = null
+//    internal var _adapter: BaseBinderAdapter? = null
     internal var _context: Context? = null
 
-    val adapter: BaseBinderAdapter
-        get() {
-            checkNotNull(_adapter) {
-                """This $this has not been attached to BaseBinderAdapter yet.
-                    You should not call the method before addItemBinder()."""
-            }
-            return _adapter!!
-        }
+//    val adapter: BaseBinderAdapter
+//        get() {
+//            checkNotNull(_adapter) {
+//                """This $this has not been attached to BaseBinderAdapter yet.
+//                    You should not call the method before addItemBinder()."""
+//            }
+//            return _adapter!!
+//        }
 
     val context: Context
         get() {
@@ -36,7 +35,7 @@ abstract class BaseItemBinder<T, VH : BaseViewHolder> {
             return _context!!
         }
 
-    val data: MutableList<Any> get() = adapter.data
+//    val data: MutableList<Any> get() = adapter.data
 
     abstract fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH
 

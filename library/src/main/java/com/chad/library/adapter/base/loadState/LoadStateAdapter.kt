@@ -2,10 +2,13 @@ package com.chad.library.adapter.base.loadState
 
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.chad.library.adapter.base.fullspan.FullSpanAdapterType
 
-abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>() {
+abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>(),
+    FullSpanAdapterType {
     /**
      * LoadState to present in the adapter.
      *
@@ -58,26 +61,28 @@ abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ada
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         this.recyclerView = recyclerView
 
-        val manager = recyclerView.layoutManager
-        if (manager is GridLayoutManager) {
-            val originalSpanSizeLookup = manager.spanSizeLookup
-            val spanCount = manager.spanCount
-
-            manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                override fun getSpanSize(position: Int): Int {
-
-                    val vh = recyclerView.findViewHolderForAdapterPosition(position)
-                    val isLoadStateAdapter = vh?.bindingAdapter is LoadStateAdapter
-
-                    if (isLoadStateAdapter) {
-                        return spanCount
-                    }
-
-                    return originalSpanSizeLookup.getSpanSize(position)
-                }
-
-            }
-        }
+//        val manager = recyclerView.layoutManager
+//        if (manager is GridLayoutManager) {
+//            val originalSpanSizeLookup = manager.spanSizeLookup
+//            val spanCount = manager.spanCount
+//
+//            manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+//                override fun getSpanSize(position: Int): Int {
+//
+//                    val adapter = recyclerView.adapter
+//                    if (adapter is ConcatAdapter) {
+//                        val  pair = adapter.getWrappedAdapterAndPosition(position)
+//
+//                        if (pair.first is LoadStateAdapter) {
+//                            return spanCount
+//                        }
+//                    }
+//
+//                    return originalSpanSizeLookup.getSpanSize(position)
+//                }
+//
+//            }
+//        }
     }
 
     @CallSuper

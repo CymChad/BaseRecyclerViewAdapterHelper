@@ -1,43 +1,112 @@
 package com.chad.library.adapter.base
 
-import android.util.SparseIntArray
+import android.content.Context
+import android.util.SparseArray
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
-import com.chad.library.adapter.base.entity.MultiItemEntity
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import androidx.recyclerview.widget.RecyclerView
 
 /**
- * 多类型布局，适用于类型较少，业务不复杂的场景，便于快速使用。
- * data[T]必须实现[MultiItemEntity]
+ * 多类型布局
  *
- * 如果数据类无法实现[MultiItemEntity]，请使用[BaseDelegateMultiAdapter]
- * 如果类型较多，为了方便隔离各类型的业务逻辑，推荐使用[BaseProviderMultiAdapter]
- *
- * @param T : MultiItemEntity
- * @param VH : BaseViewHolder
- * @constructor
  */
-abstract class BaseMultiItemQuickAdapter<T : MultiItemEntity, VH : BaseViewHolder>(data: MutableList<T>? = null)
-    : BaseQuickAdapter<T, VH>(0, data) {
+abstract class BaseMultiItemQuickAdapter<T>(items: List<T> = emptyList()) :
+    BaseQuickAdapter<T, RecyclerView.ViewHolder>(items) {
 
-    private val layouts: SparseIntArray by lazy(LazyThreadSafetyMode.NONE) { SparseIntArray() }
+    private val typeViewHolders = SparseArray<OnViewHolderListener<T, RecyclerView.ViewHolder>>(1)
+    private val viewHoldersClass =
+        HashMap<Class<*>, OnViewHolderListener<T, RecyclerView.ViewHolder>>(1)
 
-    override fun getDefItemViewType(position: Int): Int {
-        return data[position].itemType
+    private var onItemViewTypeListener: OnItemViewTypeListener<T>? = null
+
+    override fun onCreateViewHolder(
+        context: Context, parent: ViewGroup, viewType: Int
+    ): RecyclerView.ViewHolder {
+        val listener = typeViewHolders.get(viewType)
+            ?: throw IllegalArgumentException("ViewType: $viewType not found onViewHolderListener，please use addItemType() first!")
+
+        return listener.onCreate(parent.context, parent, viewType)
     }
 
-    override fun onCreateDefViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val layoutResId = layouts.get(viewType)
-        require(layoutResId != 0) { "ViewType: $viewType found layoutResId，please use addItemType() first!" }
-        return createBaseViewHolder(parent, layoutResId)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, item: T) {
+//        for ((clazz, listener) in viewHoldersClass) {
+//            if (holder::class.java.isAssignableFrom(clazz)) {
+//                listener.onBind(holder, position, item)
+//                return
+//            }
+//        }
+        viewHoldersClass[holder::class.java]?.onBind(holder, position, item)
+
+    }
+
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder, position: Int, item: T, payloads: List<Any>
+    ) {
+        viewHoldersClass[holder::class.java]?.onBind(holder, position, item, payloads)
     }
 
     /**
      * 调用此方法，设置多布局
      * @param type Int
-     * @param layoutResId Int
+     * @param listener Int
      */
-    protected fun addItemType(type: Int, @LayoutRes layoutResId: Int) {
-        layouts.put(type, layoutResId)
+    inline fun <reified V : RecyclerView.ViewHolder> addItemType(
+        type: Int, listener: OnViewHolderListener<T, V>
+    ) = addItemType(type, V::class.java, listener)
+
+    fun <V : RecyclerView.ViewHolder> addItemType(
+        type: Int, holderClazz: Class<V>, listener: OnViewHolderListener<T, V>
+    ) = apply {
+        typeViewHolders.put(type, listener as OnViewHolderListener<T, RecyclerView.ViewHolder>)
+        viewHoldersClass[holderClazz] = listener
+    }
+
+    fun onItemViewType(listener: OnItemViewTypeListener<T>?) = apply {
+        this.onItemViewTypeListener = listener
+    }
+
+//    protected fun oneToMany() {
+//
+//    }
+
+    override fun getItemViewType(position: Int, list: List<T>): Int {
+        return onItemViewTypeListener?.onItemViewType(position, list)
+            ?: super.getItemViewType(position, list)
+//        return super.getItemViewType(position, item)
+    }
+
+    override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        viewHoldersClass[holder::class.java]?.onViewAttachedToWindow(holder)
+    }
+
+    override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
+        super.onViewDetachedFromWindow(holder)
+        viewHoldersClass[holder::class.java]?.onViewDetachedFromWindow(holder)
+    }
+
+    override fun isFullSpanItem(itemType: Int): Boolean {
+        return super.isFullSpanItem(itemType) ||
+                (typeViewHolders.get(itemType)?.isFullSpanItem(itemType) == true)
+    }
+
+
+    interface OnViewHolderListener<T, V : RecyclerView.ViewHolder> {
+        fun onCreate(context: Context, parent: ViewGroup, viewType: Int): V
+
+        fun onBind(holder: V, position: Int, item: T)
+
+        fun onBind(holder: V, position: Int, item: T, payloads: List<Any>) {}
+
+        fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {}
+
+        fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {}
+
+        fun isFullSpanItem(itemType: Int): Boolean {
+            return false
+        }
+    }
+
+    fun interface OnItemViewTypeListener<T> {
+        fun onItemViewType(position: Int, list: List<T>): Int
     }
 }

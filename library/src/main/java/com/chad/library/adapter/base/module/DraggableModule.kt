@@ -58,7 +58,7 @@ open class BaseDraggableModule(private val baseQuickAdapter: BaseQuickAdapter<*,
         itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
     }
 
-    internal fun initView(holder: BaseViewHolder) {
+    internal fun initView(holder: RecyclerView.ViewHolder) {
         if (isDragEnabled) {
             if (hasToggleView()) {
                 val toggleView = holder.itemView.findViewById<View>(toggleViewId)
@@ -119,7 +119,7 @@ open class BaseDraggableModule(private val baseQuickAdapter: BaseQuickAdapter<*,
 
 
     protected fun getViewHolderPosition(viewHolder: RecyclerView.ViewHolder): Int {
-        return viewHolder.adapterPosition - baseQuickAdapter.headerLayoutCount
+        return viewHolder.bindingAdapterPosition
     }
 
     /************************* Drag *************************/
@@ -134,11 +134,11 @@ open class BaseDraggableModule(private val baseQuickAdapter: BaseQuickAdapter<*,
         if (inRange(from) && inRange(to)) {
             if (from < to) {
                 for (i in from until to) {
-                    Collections.swap(baseQuickAdapter.data, i, i + 1)
+                    Collections.swap(baseQuickAdapter.items, i, i + 1)
                 }
             } else {
                 for (i in from downTo to + 1) {
-                    Collections.swap(baseQuickAdapter.data, i, i - 1)
+                    Collections.swap(baseQuickAdapter.items, i, i - 1)
                 }
             }
             baseQuickAdapter.notifyItemMoved(source.adapterPosition, target.adapterPosition)
@@ -167,7 +167,7 @@ open class BaseDraggableModule(private val baseQuickAdapter: BaseQuickAdapter<*,
     open fun onItemSwiped(viewHolder: RecyclerView.ViewHolder) {
         val pos = getViewHolderPosition(viewHolder)
         if (inRange(pos)) {
-            baseQuickAdapter.data.removeAt(pos)
+//            baseQuickAdapter.items.removeAt(pos)
             baseQuickAdapter.notifyItemRemoved(viewHolder.adapterPosition)
             if (isSwipeEnabled) {
                 mOnItemSwipeListener?.onItemSwiped(viewHolder, pos)
@@ -182,7 +182,7 @@ open class BaseDraggableModule(private val baseQuickAdapter: BaseQuickAdapter<*,
     }
 
     private fun inRange(position: Int): Boolean {
-        return position >= 0 && position < baseQuickAdapter.data.size
+        return position >= 0 && position < baseQuickAdapter.items.size
     }
 
     /**

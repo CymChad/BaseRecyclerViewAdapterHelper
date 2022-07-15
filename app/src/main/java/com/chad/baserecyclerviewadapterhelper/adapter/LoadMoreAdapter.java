@@ -1,55 +1,74 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
+import android.content.Context;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.baserecyclerviewadapterhelper.R;
+import com.chad.baserecyclerviewadapterhelper.databinding.LayoutAnimationBinding;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.baserecyclerviewadapterhelper.utils.SpannableStringUtils;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.chad.library.adapter.base.module.LoadMoreModule;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author: limuyang
  * @date: 2019-12-04
  * @Description:
  */
-public class LoadMoreAdapter extends BaseQuickAdapter<Status, BaseViewHolder> implements LoadMoreModule {
+public class LoadMoreAdapter extends BaseQuickAdapter<Status, LoadMoreAdapter.VH> {
 
-    public LoadMoreAdapter() {
-        super(R.layout.layout_animation);
+    static class VH extends RecyclerView.ViewHolder {
+
+        LayoutAnimationBinding viewBinding;
+
+        public VH(@NonNull LayoutAnimationBinding binding) {
+            super(binding.getRoot());
+            this.viewBinding = binding;
+        }
+
+        public VH(@NonNull ViewGroup parent) {
+            this(LayoutAnimationBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        }
+    }
+
+    @NonNull
+    @Override
+    protected VH onCreateViewHolder(@NonNull Context context, @NonNull ViewGroup parent, int viewType) {
+        return new VH(parent);
     }
 
     @Override
-    protected void convert(@NotNull BaseViewHolder helper, @Nullable Status item) {
-        switch (helper.getLayoutPosition() % 3) {
+    protected void onBindViewHolder(@NonNull VH holder, int position, Status item) {
+        switch (holder.getLayoutPosition() % 3) {
             case 0:
-                helper.setImageResource(R.id.img, R.mipmap.animation_img1);
+                holder.viewBinding.img.setImageResource(R.mipmap.animation_img1);
                 break;
             case 1:
-                helper.setImageResource(R.id.img, R.mipmap.animation_img2);
+                holder.viewBinding.img.setImageResource(R.mipmap.animation_img2);
                 break;
             case 2:
-                helper.setImageResource(R.id.img, R.mipmap.animation_img3);
+                holder.viewBinding.img.setImageResource(R.mipmap.animation_img3);
                 break;
             default:
                 break;
         }
-        helper.setText(R.id.tweetName, "Hoteis in Rio de Janeiro");
+        holder.viewBinding.tweetName.setText("Hoteis in Rio de Janeiro");
+
         String msg = "\"He was one of Australia's most of distinguished artistes, renowned for his portraits\"";
-        ((TextView) helper.getView(R.id.tweetText)).setText(SpannableStringUtils.getBuilder(msg).append("landscapes and nedes").setClickSpan(clickableSpan).create());
-        ((TextView) helper.getView(R.id.tweetText)).setMovementMethod(LinkMovementMethod.getInstance());
+        holder.viewBinding.tweetText.setText(SpannableStringUtils.getBuilder(msg).append("landscapes and nedes").setClickSpan(clickableSpan).create());
+        holder.viewBinding.tweetText.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-    ClickableSpan clickableSpan = new ClickableSpan() {
+
+    private final ClickableSpan clickableSpan = new ClickableSpan() {
         @Override
         public void onClick(View widget) {
             Tips.show("事件触发了 landscapes and nedes");

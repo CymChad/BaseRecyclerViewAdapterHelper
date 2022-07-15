@@ -115,7 +115,7 @@ open class TrailingLoadStateAdapter : LoadStateAdapter<TrailingLoadStateAdapter.
     }
 
     /**
-     *
+     * 加载更多的事件
      */
     protected var loadMoreListener: OnLoadMoreListener? = null
 

@@ -1,38 +1,60 @@
 package com.chad.baserecyclerviewadapterhelper.adapter;
 
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.chad.baserecyclerviewadapterhelper.R;
-import com.chad.baserecyclerviewadapterhelper.data.DataServer;
+import com.chad.baserecyclerviewadapterhelper.databinding.ItemHeaderAndFooterBinding;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
+
+import java.util.List;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class HeaderAndFooterAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
+public class HeaderAndFooterAdapter extends BaseQuickAdapter<Status, HeaderAndFooterAdapter.VH> {
 
-    public HeaderAndFooterAdapter(int dataSize) {
-        super(R.layout.item_header_and_footer, DataServer.getSampleData(dataSize));
+    public HeaderAndFooterAdapter(List<Status> list) {
+        super(list);
+    }
+
+    static class VH extends RecyclerView.ViewHolder {
+
+        ItemHeaderAndFooterBinding binding;
+
+        public VH(@NonNull ItemHeaderAndFooterBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+    }
+
+    @NonNull
+    @Override
+    protected HeaderAndFooterAdapter.VH onCreateViewHolder(@NonNull Context context, @NonNull ViewGroup parent, int viewType) {
+        ItemHeaderAndFooterBinding binding = ItemHeaderAndFooterBinding.inflate(LayoutInflater.from(context), parent, false);
+        return new VH(binding);
     }
 
     @Override
-    protected void convert(@NonNull BaseViewHolder helper, Status item) {
-        switch (helper.getLayoutPosition() %
-                3) {
+    protected void onBindViewHolder(@NonNull HeaderAndFooterAdapter.VH holder, int position, Status item) {
+        switch (holder.getLayoutPosition() % 3) {
             case 0:
-                helper.setImageResource(R.id.iv, R.mipmap.animation_img1);
+                holder.binding.iv.setImageResource(R.mipmap.animation_img1);
                 break;
             case 1:
-                helper.setImageResource(R.id.iv, R.mipmap.animation_img2);
+                holder.binding.iv.setImageResource(R.mipmap.animation_img2);
                 break;
             case 2:
-                helper.setImageResource(R.id.iv, R.mipmap.animation_img3);
+                holder.binding.iv.setImageResource(R.mipmap.animation_img3);
                 break;
             default:
                 break;
         }
     }
-
 
 }

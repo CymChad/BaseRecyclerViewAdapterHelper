@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme"
         android:name=".MyApplication"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.WelcomeActivity">
+        <activity android:name=".activity.WelcomeActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

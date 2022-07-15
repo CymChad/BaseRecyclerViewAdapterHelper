@@ -14,7 +14,7 @@ import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 public class EmptyViewUseActivity extends BaseActivity {
 
     private RecyclerView mRecyclerView;
-    private EmptyViewAdapter mAdapter = new EmptyViewAdapter();
+    private final EmptyViewAdapter mAdapter = new EmptyViewAdapter();
     private boolean mError = true;
     private boolean mNoData = true;
 

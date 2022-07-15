@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.TextView;
 
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,13 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.chad.baserecyclerviewadapterhelper.R;
+import com.chad.baserecyclerviewadapterhelper.adapter.CustomLoadMoreAdapter;
+import com.chad.baserecyclerviewadapterhelper.adapter.HeaderAdapter;
 import com.chad.baserecyclerviewadapterhelper.adapter.LoadMoreAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
-import com.chad.baserecyclerviewadapterhelper.loadmore.CustomLoadMoreView;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
-import com.chad.library.adapter.base.listener.OnLoadMoreListener;
+import com.chad.library.adapter.base.QuickAdapterHelper;
+import com.chad.library.adapter.base.loadState.LoadState;
+import com.chad.library.adapter.base.loadState.OnLoadMoreListener;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ import java.util.List;
  */
 public class LoadMoreRefreshUseActivity extends BaseActivity {
 
-    class PageInfo {
+    static class PageInfo {
         int page = 0;
 
         void nextPage() {
@@ -49,12 +50,14 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
 
     private static final int PAGE_SIZE = 5;
 
-    private SwitchCompat       switchCompat;
-    private RecyclerView       mRecyclerView;
+    private SwitchCompat switchCompat;
+    private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private LoadMoreAdapter    mAdapter;
+    private LoadMoreAdapter mAdapter;
 
-    private PageInfo pageInfo = new PageInfo();
+    private final PageInfo pageInfo = new PageInfo();
+
+    private QuickAdapterHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +75,6 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
         initAdapter();
         addHeadView();
         initRefreshLayout();
-        initLoadMore();
         initSwitch();
     }
 
@@ -87,26 +89,57 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
     private void initAdapter() {
         mAdapter = new LoadMoreAdapter();
         mAdapter.setAnimationEnable(true);
-        mRecyclerView.setAdapter(mAdapter);
+
+        // 自定义"加载更多"的样式
+        CustomLoadMoreAdapter loadMoreAdapter = new CustomLoadMoreAdapter();
+        loadMoreAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public boolean isCanLoadMore() {
+                return !mSwipeRefreshLayout.isRefreshing();
+            }
+
+            @Override
+            public void loadMore() {
+                request();
+            }
+
+            @Override
+            public void failRetry() {
+                request();
+            }
+        });
+
+        helper = new QuickAdapterHelper.Builder(mAdapter).setTrailingLoadStateAdapter(loadMoreAdapter).build();
+
+//        helper = new QuickAdapterHelper.Builder(mAdapter).setTrailingLoadStateAdapter(new OnLoadMoreListener() {
+//            @Override
+//            public boolean isCanLoadMore() {
+//                return !mSwipeRefreshLayout.isRefreshing();
+//            }
+//
+//            @Override
+//            public void loadMore() {
+//                request();
+//            }
+//
+//            @Override
+//            public void failRetry() {
+//                request();
+//            }
+//        }).build();
+
+        mRecyclerView.setAdapter(helper.getAdapter());
     }
 
     private void addHeadView() {
-        View headView = getLayoutInflater().inflate(R.layout.head_view, (ViewGroup) mRecyclerView.getParent(), false);
-        headView.findViewById(R.id.iv).setVisibility(View.GONE);
-        ((TextView) headView.findViewById(R.id.tv)).setText("Change Custom LoadView");
-        headView.setOnClickListener(new View.OnClickListener() {
+        HeaderAdapter headerAdapter = new HeaderAdapter(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAdapter.setList(null);
-                mAdapter.getLoadMoreModule().setLoadMoreView(new CustomLoadMoreView());
-                mRecyclerView.setAdapter(mAdapter);
-                Tips.show("Change Complete");
-
-                mSwipeRefreshLayout.setRefreshing(true);
-                refresh();
+                addHeadView();
             }
         });
-        mAdapter.addHeaderView(headView);
+
+        helper.addHeader(headerAdapter);
     }
 
     private void initRefreshLayout() {
@@ -119,27 +152,19 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
         });
     }
 
-    /**
-     * 初始化加载更多
-     */
-    private void initLoadMore() {
-        mAdapter.getLoadMoreModule().setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                loadMore();
-            }
-        });
-        mAdapter.getLoadMoreModule().setAutoLoadMore(true);
-        //当自动加载开启，同时数据不满一屏时，是否继续执行自动加载更多(默认为true)
-        mAdapter.getLoadMoreModule().setEnableLoadMoreIfNotFullPage(false);
-    }
-
     private void initSwitch() {
-        switchCompat.setChecked(mAdapter.getLoadMoreModule().isAutoLoadMore());
+        if (helper.getTrailingLoadStateAdapter() != null) {
+            switchCompat.setChecked(helper.getTrailingLoadStateAdapter().isAutoLoadMore());
+        }
+
         switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mAdapter.getLoadMoreModule().setAutoLoadMore(isChecked);
+
+                if (helper.getTrailingLoadStateAdapter() != null) {
+                    helper.getTrailingLoadStateAdapter().setAutoLoadMore(isChecked);
+                }
+
                 if (isChecked) {
                     switchCompat.setText("自动加载（开）");
                 } else {
@@ -153,8 +178,6 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
      * 刷新
      */
     private void refresh() {
-        // 这里的作用是防止下拉刷新的时候还可以上拉加载
-        mAdapter.getLoadMoreModule().setEnableLoadMore(false);
         // 下拉刷新，需要重置页数
         pageInfo.reset();
         request();
@@ -171,11 +194,12 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
      * 请求数据
      */
     private void request() {
+        helper.setTrailingLoadState(LoadState.Loading.INSTANCE);
+
         new Request(pageInfo.page, new RequestCallBack() {
             @Override
             public void success(List<Status> data) {
                 mSwipeRefreshLayout.setRefreshing(false);
-                mAdapter.getLoadMoreModule().setEnableLoadMore(true);
 
                 if (pageInfo.isFirstPage()) {
                     //如果是加载的第一页数据，用 setData()
@@ -185,12 +209,14 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
                     mAdapter.addData(data);
                 }
 
-                if (data.size() < PAGE_SIZE) {
-                    //如果不够一页,显示没有更多数据布局
-                    mAdapter.getLoadMoreModule().loadMoreEnd();
+                helper.getTrailingLoadStateAdapter().checkDisableLoadMoreIfNotFullPage();
+
+                if (pageInfo.page >= PAGE_SIZE) {
+                    // 如果数据彻底加载完毕, 显示没有更多数据布局
+                    helper.setTrailingLoadState(new LoadState.NotLoading(true));
                     Tips.show("no more data");
                 } else {
-                    mAdapter.getLoadMoreModule().loadMoreComplete();
+                    helper.setTrailingLoadState(new LoadState.NotLoading(false));
                 }
 
                 // page加一
@@ -201,9 +227,8 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
             public void fail(Exception e) {
                 Tips.show(getResources().getString(R.string.network_err));
                 mSwipeRefreshLayout.setRefreshing(false);
-                mAdapter.getLoadMoreModule().setEnableLoadMore(true);
 
-                mAdapter.getLoadMoreModule().loadMoreFail();
+                helper.setTrailingLoadState(new LoadState.Error(e));
             }
         }).start();
     }
@@ -213,9 +238,9 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
      * 模拟加载数据的类，不用特别关注
      */
     static class Request extends Thread {
-        private int             mPage;
-        private RequestCallBack mCallBack;
-        private Handler         mHandler;
+        private final int mPage;
+        private final RequestCallBack mCallBack;
+        private final Handler mHandler;
 
         private static boolean mFirstPageNoMore;
         private static boolean mFirstError = true;
@@ -229,8 +254,8 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
         @Override
         public void run() {
             try {
-                Thread.sleep(800);
-            } catch (InterruptedException e) {
+                Thread.sleep(1800);
+            } catch (InterruptedException ignored) {
             }
 
             if (mPage == 2 && mFirstError) {
@@ -238,7 +263,7 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        mCallBack.fail(new RuntimeException("fail"));
+                        mCallBack.fail(new RuntimeException("load fail"));
                     }
                 });
             } else {

@@ -209,7 +209,9 @@ public class DragAndSwipeCallback extends ItemTouchHelper.Callback {
 
     private boolean isViewCreateByAdapter(@NonNull RecyclerView.ViewHolder viewHolder) {
         int type = viewHolder.getItemViewType();
-        return type == BaseQuickAdapter.HEADER_VIEW || type == BaseQuickAdapter.LOAD_MORE_VIEW
-                || type == BaseQuickAdapter.FOOTER_VIEW || type == BaseQuickAdapter.EMPTY_VIEW;
+        return
+//                type == BaseQuickAdapter.HEADER_VIEW ||
+//                        type == BaseQuickAdapter.FOOTER_VIEW ||
+                        type == BaseQuickAdapter.EMPTY_VIEW;
     }
 }
