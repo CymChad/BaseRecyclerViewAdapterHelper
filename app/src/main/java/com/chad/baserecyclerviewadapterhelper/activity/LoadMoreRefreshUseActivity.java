@@ -22,7 +22,7 @@ import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.QuickAdapterHelper;
 import com.chad.library.adapter.base.loadState.LoadState;
-import com.chad.library.adapter.base.loadState.OnLoadMoreListener;
+import com.chad.library.adapter.base.loadState.trailing.OnLoadMoreListener;
 
 import java.util.List;
 

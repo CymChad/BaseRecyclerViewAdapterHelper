@@ -12,7 +12,6 @@ import androidx.viewbinding.ViewBinding
 import com.chad.library.R
 import com.chad.library.adapter.base.loadState.LoadState
 import com.chad.library.adapter.base.loadState.LoadStateAdapter
-import com.chad.library.adapter.base.loadState.OnLoadMoreListener
 import com.chad.library.databinding.BrvahTrailingLoadMoreBinding
 
 /**

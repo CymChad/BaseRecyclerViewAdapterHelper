@@ -1,4 +1,4 @@
-package com.chad.library.adapter.base.loadState
+package com.chad.library.adapter.base.loadState.trailing
 
 interface OnLoadMoreListener {
 

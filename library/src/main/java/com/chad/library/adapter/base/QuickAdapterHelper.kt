@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.loadState.LoadState
 import com.chad.library.adapter.base.loadState.LoadStateAdapter
-import com.chad.library.adapter.base.loadState.OnLoadMoreListener
+import com.chad.library.adapter.base.loadState.trailing.OnLoadMoreListener
 import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
 
 class QuickAdapterHelper private constructor(
