@@ -237,44 +237,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 
     /**
-     * 用于保存需要设置点击事件的 item
-     */
-    private val childClickViewIds = LinkedHashSet<Int>()
-
-    fun getChildClickViewIds(): LinkedHashSet<Int> {
-        return childClickViewIds
-    }
-
-    /**
-     * 设置需要点击事件的子view
-     * @param viewIds IntArray
-     */
-    fun addChildClickViewIds(@IdRes vararg viewIds: Int) {
-        for (viewId in viewIds) {
-            childClickViewIds.add(viewId)
-        }
-    }
-
-    /**
-     * 用于保存需要设置长按点击事件的 item
-     */
-    private val childLongClickViewIds = LinkedHashSet<Int>()
-
-    fun getChildLongClickViewIds(): LinkedHashSet<Int> {
-        return childLongClickViewIds
-    }
-
-    /**
-     * 设置需要长按点击事件的子view
-     * @param viewIds IntArray
-     */
-    fun addChildLongClickViewIds(@IdRes vararg viewIds: Int) {
-        for (viewId in viewIds) {
-            childLongClickViewIds.add(viewId)
-        }
-    }
-
-    /**
      * 绑定 item 点击事件
      * @param viewHolder VH
      */

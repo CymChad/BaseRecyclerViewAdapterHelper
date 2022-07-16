@@ -138,13 +138,6 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity> {
             }
         });
 
-
-//        addChildClickViewIds(R.id.btn,
-//                R.id.iv_num_reduce, R.id.iv_num_add,
-//                R.id.item_click);
-
-        addChildLongClickViewIds(R.id.iv_num_reduce, R.id.iv_num_add,
-                R.id.btn_long);
     }
 
 
