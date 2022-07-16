@@ -26,20 +26,16 @@ open class QuickViewHolder(view: View) : RecyclerView.ViewHolder(view) {
      */
     private val views: SparseArray<View> = SparseArray()
 
-    open fun <T : View> getView(@IdRes viewId: Int): T {
+    fun <T : View> getView(@IdRes viewId: Int): T {
         val view = getViewOrNull<T>(viewId)
         checkNotNull(view) { "No view found with id $viewId" }
         return view
     }
 
     @Suppress("UNCHECKED_CAST")
-    open fun <T : View> getViewOrNull(@IdRes viewId: Int): T? {
-        val view = views.get(viewId)
-        if (view == null) {
-            itemView.findViewById<T>(viewId)?.let {
-                views.put(viewId, it)
-                return it
-            }
+    fun <T : View> getViewOrNull(@IdRes viewId: Int): T? {
+        val view = views.get(viewId) ?: return itemView.findViewById<T>(viewId)?.apply {
+            views.put(viewId, this)
         }
         return view as? T
     }
@@ -48,60 +44,62 @@ open class QuickViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         return itemView.findViewById(this)
     }
 
-    open fun setText(@IdRes viewId: Int, value: CharSequence?): QuickViewHolder = apply {
+    fun setText(@IdRes viewId: Int, value: CharSequence?) = apply {
         getView<TextView>(viewId).text = value
     }
 
-    open fun setText(@IdRes viewId: Int, @StringRes strId: Int): QuickViewHolder? = apply {
+    fun setText(@IdRes viewId: Int, @StringRes strId: Int) = apply {
         getView<TextView>(viewId).setText(strId)
     }
 
-    open fun setTextColor(@IdRes viewId: Int, @ColorInt color: Int): QuickViewHolder = apply {
+    fun setTextColor(@IdRes viewId: Int, @ColorInt color: Int) = apply {
         getView<TextView>(viewId).setTextColor(color)
     }
 
-    open fun setTextColorRes(@IdRes viewId: Int, @ColorRes colorRes: Int): QuickViewHolder = apply {
+    fun setTextColorRes(@IdRes viewId: Int, @ColorRes colorRes: Int) = apply {
         getView<TextView>(viewId).setTextColor(ContextCompat.getColor(itemView.context, colorRes))
     }
 
-    fun setImageResource(
-        @IdRes viewId: Int, @DrawableRes imageResId: Int
-    ): QuickViewHolder = apply {
+    fun setImageResource(@IdRes viewId: Int, @DrawableRes imageResId: Int) = apply {
         getView<ImageView>(viewId).setImageResource(imageResId)
     }
 
-    fun setImageDrawable(@IdRes viewId: Int, drawable: Drawable?): QuickViewHolder = apply {
+    fun setImageDrawable(@IdRes viewId: Int, drawable: Drawable?) = apply {
         getView<ImageView>(viewId).setImageDrawable(drawable)
     }
 
-    fun setImageBitmap(@IdRes viewId: Int, bitmap: Bitmap?): QuickViewHolder = apply {
+    fun setImageBitmap(@IdRes viewId: Int, bitmap: Bitmap?) = apply {
         getView<ImageView>(viewId).setImageBitmap(bitmap)
     }
 
-    fun setBackgroundColor(@IdRes viewId: Int, @ColorInt color: Int): QuickViewHolder = apply {
+    fun setBackgroundColor(@IdRes viewId: Int, @ColorInt color: Int) = apply {
         getView<View>(viewId).setBackgroundColor(color)
     }
 
-    fun setBackgroundResource(
-        @IdRes viewId: Int,
-        @DrawableRes backgroundRes: Int
-    ): QuickViewHolder = apply {
+    fun setBackgroundResource(@IdRes viewId: Int, @DrawableRes backgroundRes: Int) = apply {
         getView<View>(viewId).setBackgroundResource(backgroundRes)
     }
 
-    fun setVisible(@IdRes viewId: Int, isVisible: Boolean): QuickViewHolder = apply {
-        val view = getView<View>(viewId)
-        view.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+    fun setVisible(@IdRes viewId: Int, isVisible: Boolean) = apply {
+        getView<View>(viewId).visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
     }
 
-    fun setGone(@IdRes viewId: Int, isGone: Boolean): QuickViewHolder = apply {
-        val view = getView<View>(viewId)
-        view.visibility = if (isGone) View.GONE else View.VISIBLE
+    fun setGone(@IdRes viewId: Int, isGone: Boolean) = apply {
+        getView<View>(viewId).visibility = if (isGone) View.GONE else View.VISIBLE
     }
 
-    fun setEnabled(@IdRes viewId: Int, isEnabled: Boolean): QuickViewHolder = apply {
+    fun setEnabled(@IdRes viewId: Int, isEnabled: Boolean) = apply {
+        getView<View>(viewId).isSelected
         getView<View>(viewId).isEnabled = isEnabled
     }
+
+    fun isEnabled(@IdRes viewId: Int) = getView<View>(viewId).isEnabled
+
+    fun setSelected(@IdRes viewId: Int, isSelected: Boolean) = apply {
+        getView<View>(viewId).isSelected = isSelected
+    }
+
+    fun isSelected(@IdRes viewId: Int) = getView<View>(viewId).isSelected
 
 
 }
