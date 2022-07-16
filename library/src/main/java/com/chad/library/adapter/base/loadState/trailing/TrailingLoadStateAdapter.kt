@@ -1,7 +1,10 @@
 package com.chad.library.adapter.base.loadState.trailing
 
+import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.CallSuper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -10,114 +13,20 @@ import com.chad.library.R
 import com.chad.library.adapter.base.loadState.LoadState
 import com.chad.library.adapter.base.loadState.LoadStateAdapter
 import com.chad.library.adapter.base.loadState.OnLoadMoreListener
+import com.chad.library.databinding.BrvahTrailingLoadMoreBinding
 
 /**
  * 尾部加载更多 Adapter
  *
- * 自定义布局：可以通过继承此类，并自定义[TrailingLoadStateAdapter.ViewHolder]来修改布局
+ * 自定义布局：可以通过继承此类，并自定义[TrailingLoadStateAdapter.TrailingViewHolder]来修改布局
  *
  */
-open class TrailingLoadStateAdapter : LoadStateAdapter<TrailingLoadStateAdapter.ViewHolder>() {
-
-    /**
-     * viewBinding 方式创建 "加载更多" 的 ViewHolder
-     * @param V : ViewBinding
-     * @property viewBinding V
-     * @constructor
-     */
-    abstract class ViewBindingViewHolder<V : ViewBinding>(
-        private val viewBinding: V,
-    ) : ViewHolder(viewBinding.root) {
-        final override fun getLoadComplete(itemView: View): View = getLoadComplete(viewBinding)
-
-        final override fun getLoadingView(itemView: View): View = getLoadingView(viewBinding)
-
-        final override fun getLoadEndView(itemView: View): View = getLoadEndView(viewBinding)
-
-        final override fun getLoadFailView(itemView: View): View = getLoadFailView(viewBinding)
-
-        abstract fun getLoadComplete(viewBinding: V): View
-
-        abstract fun getLoadingView(viewBinding: V): View
-
-        abstract fun getLoadEndView(viewBinding: V): View
-
-        abstract fun getLoadFailView(viewBinding: V): View
-    }
-
-    /**
-     * 基类，创建 "加载更多" 的 ViewHolder
-     */
-    abstract class ViewHolder(
-        view: View
-    ) : RecyclerView.ViewHolder(view) {
-
-        init {
-            val layoutParams = this.itemView.layoutParams
-            if (layoutParams is StaggeredGridLayoutManager.LayoutParams) {
-                layoutParams.isFullSpan = true
-            }
-        }
-
-        /**
-         * 布局中的 加载更多视图
-         */
-        abstract fun getLoadingView(itemView: View): View
-
-        /**
-         * 布局中的 加载完成布局
-         */
-        abstract fun getLoadComplete(itemView: View): View
-
-        /**
-         * 布局中的 加载结束布局
-         */
-        abstract fun getLoadEndView(itemView: View): View
-
-        /**
-         * 布局中的 加载失败布局
-         */
-        abstract fun getLoadFailView(itemView: View): View
-
-        /**
-         * 可以重写此方法，实行自定义逻辑
-         * @param loadState LoadState
-         */
-        open fun onBind(loadState: LoadState) {
-            when (loadState) {
-                is LoadState.NotLoading -> {
-                    if (loadState.endOfPaginationReached) {
-                        getLoadComplete(itemView).visibility = View.GONE
-                        getLoadingView(itemView).visibility = View.GONE
-                        getLoadFailView(itemView).visibility = View.GONE
-                        getLoadEndView(itemView).visibility = View.VISIBLE
-                    } else {
-                        getLoadComplete(itemView).visibility = View.VISIBLE
-                        getLoadingView(itemView).visibility = View.GONE
-                        getLoadFailView(itemView).visibility = View.GONE
-                        getLoadEndView(itemView).visibility = View.GONE
-                    }
-                }
-                is LoadState.Loading -> {
-                    getLoadComplete(itemView).visibility = View.GONE
-                    getLoadingView(itemView).visibility = View.VISIBLE
-                    getLoadFailView(itemView).visibility = View.GONE
-                    getLoadEndView(itemView).visibility = View.GONE
-                }
-                is LoadState.Error -> {
-                    getLoadComplete(itemView).visibility = View.GONE
-                    getLoadingView(itemView).visibility = View.GONE
-                    getLoadFailView(itemView).visibility = View.VISIBLE
-                    getLoadEndView(itemView).visibility = View.GONE
-                }
-            }
-        }
-    }
+open class TrailingLoadStateAdapter : LoadStateAdapter<TrailingLoadStateAdapter.TrailingViewHolder>() {
 
     /**
      * 加载更多的事件
      */
-    protected var loadMoreListener: OnLoadMoreListener? = null
+    private var loadMoreListener: OnLoadMoreListener? = null
 
     /**
      * 不满一屏时，是否可以继续加载的标记位
@@ -140,10 +49,10 @@ open class TrailingLoadStateAdapter : LoadStateAdapter<TrailingLoadStateAdapter.
     var isDisableLoadMoreIfNotFullPage = false
 
     /**
-     * 可以重写此方法，返回自定义的 [ViewHolder]
+     * 不可以重写
      */
-    override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): ViewHolder =
-        TrailingLoadStateVH(parent).apply {
+    final override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): TrailingViewHolder =
+        onCreateViewHolder(parent.context, parent, loadState).apply {
             getLoadFailView(itemView).setOnClickListener {
                 // 失败重试点击事件
                 loadMoreListener?.failRetry()
@@ -154,7 +63,7 @@ open class TrailingLoadStateAdapter : LoadStateAdapter<TrailingLoadStateAdapter.
             }
         }
 
-    override fun onBindViewHolder(holder: ViewHolder, loadState: LoadState) =
+    final override fun onBindViewHolder(holder: TrailingViewHolder, loadState: LoadState) =
         holder.onBind(loadState)
 
     override fun getStateViewType(loadState: LoadState): Int = R.layout.brvah_trailing_load_more
@@ -168,8 +77,16 @@ open class TrailingLoadStateAdapter : LoadStateAdapter<TrailingLoadStateAdapter.
         }
     }
 
-    override fun onViewAttachedToWindow(holder: ViewHolder) {
+    @CallSuper
+    override fun onViewAttachedToWindow(holder: TrailingViewHolder) {
         loadMoreAction()
+    }
+
+    /**
+     * 可以重写此方法，返回自定义的 [TrailingViewHolder]
+     */
+    open fun onCreateViewHolder(context: Context, parent: ViewGroup, loadState: LoadState) : TrailingViewHolder {
+        return TrailingLoadStateVH(parent)
     }
 
     /**
@@ -238,4 +155,125 @@ open class TrailingLoadStateAdapter : LoadStateAdapter<TrailingLoadStateAdapter.
         this.loadMoreListener = onLoadMoreListener
     }
 
+    /**
+     * viewBinding 方式创建 "加载更多" 的 ViewHolder
+     * @param V : ViewBinding
+     * @property viewBinding V
+     * @constructor
+     */
+    abstract class TrailingViewBindingVH<V : ViewBinding>(
+        private val viewBinding: V,
+    ) : TrailingViewHolder(viewBinding.root) {
+        final override fun getLoadComplete(itemView: View): View = getLoadComplete(viewBinding)
+
+        final override fun getLoadingView(itemView: View): View = getLoadingView(viewBinding)
+
+        final override fun getLoadEndView(itemView: View): View = getLoadEndView(viewBinding)
+
+        final override fun getLoadFailView(itemView: View): View = getLoadFailView(viewBinding)
+
+        abstract fun getLoadComplete(viewBinding: V): View
+
+        abstract fun getLoadingView(viewBinding: V): View
+
+        abstract fun getLoadEndView(viewBinding: V): View
+
+        abstract fun getLoadFailView(viewBinding: V): View
+    }
+
+    /**
+     * 基类，创建 "加载更多" 的 ViewHolder
+     */
+    abstract class TrailingViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+        init {
+            val layoutParams = this.itemView.layoutParams
+            if (layoutParams is StaggeredGridLayoutManager.LayoutParams) {
+                layoutParams.isFullSpan = true
+            }
+        }
+
+        /**
+         * 布局中的 加载更多视图
+         */
+        abstract fun getLoadingView(itemView: View): View
+
+        /**
+         * 布局中的 加载完成布局
+         */
+        abstract fun getLoadComplete(itemView: View): View
+
+        /**
+         * 布局中的 加载结束布局
+         */
+        abstract fun getLoadEndView(itemView: View): View
+
+        /**
+         * 布局中的 加载失败布局
+         */
+        abstract fun getLoadFailView(itemView: View): View
+
+        /**
+         * 可以重写此方法，实行自定义逻辑
+         * @param loadState LoadState
+         */
+        open fun onBind(loadState: LoadState) {
+            when (loadState) {
+                is LoadState.NotLoading -> {
+                    if (loadState.endOfPaginationReached) {
+                        getLoadComplete(itemView).visibility = View.GONE
+                        getLoadingView(itemView).visibility = View.GONE
+                        getLoadFailView(itemView).visibility = View.GONE
+                        getLoadEndView(itemView).visibility = View.VISIBLE
+                    } else {
+                        getLoadComplete(itemView).visibility = View.VISIBLE
+                        getLoadingView(itemView).visibility = View.GONE
+                        getLoadFailView(itemView).visibility = View.GONE
+                        getLoadEndView(itemView).visibility = View.GONE
+                    }
+                }
+                is LoadState.Loading -> {
+                    getLoadComplete(itemView).visibility = View.GONE
+                    getLoadingView(itemView).visibility = View.VISIBLE
+                    getLoadFailView(itemView).visibility = View.GONE
+                    getLoadEndView(itemView).visibility = View.GONE
+                }
+                is LoadState.Error -> {
+                    getLoadComplete(itemView).visibility = View.GONE
+                    getLoadingView(itemView).visibility = View.GONE
+                    getLoadFailView(itemView).visibility = View.VISIBLE
+                    getLoadEndView(itemView).visibility = View.GONE
+                }
+            }
+        }
+    }
+
+    /**
+     * 继承基类，实现默认的"加载更多"VH
+     */
+    private class TrailingLoadStateVH(
+        parent: ViewGroup,
+        viewBinding: BrvahTrailingLoadMoreBinding = BrvahTrailingLoadMoreBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
+    ) : TrailingLoadStateAdapter.TrailingViewBindingVH<BrvahTrailingLoadMoreBinding>(
+        viewBinding
+    ) {
+
+        override fun getLoadComplete(viewBinding: BrvahTrailingLoadMoreBinding): View {
+            return viewBinding.loadMoreLoadCompleteView
+        }
+
+        override fun getLoadingView(viewBinding: BrvahTrailingLoadMoreBinding): View {
+            return viewBinding.loadMoreLoadingView
+        }
+
+        override fun getLoadEndView(viewBinding: BrvahTrailingLoadMoreBinding): View {
+            return viewBinding.loadMoreLoadEndView
+        }
+
+        override fun getLoadFailView(viewBinding: BrvahTrailingLoadMoreBinding): View {
+            return viewBinding.loadMoreLoadFailView
+        }
+    }
 }

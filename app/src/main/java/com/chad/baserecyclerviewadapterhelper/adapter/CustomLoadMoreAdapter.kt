@@ -1,5 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,20 +15,15 @@ import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
  */
 class CustomLoadMoreAdapter : TrailingLoadStateAdapter() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): ViewHolder {
-        val viewBinding = ViewLoadMoreBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return CustomVH(viewBinding).apply {
-            viewBinding.loadMoreLoadFailView.setOnClickListener {
-                loadMoreListener?.failRetry()
-            }
-            viewBinding.loadMoreLoadCompleteView.setOnClickListener {
-                loadMoreListener?.loadMore()
-            }
-        }
+    override fun onCreateViewHolder(
+        context: Context, parent: ViewGroup, loadState: LoadState
+    ): TrailingViewHolder {
+        val viewBinding = ViewLoadMoreBinding.inflate(LayoutInflater.from(context), parent, false)
+        return CustomVH(viewBinding)
     }
 
     class CustomVH(viewBinding: ViewLoadMoreBinding) :
-        TrailingLoadStateAdapter.ViewBindingViewHolder<ViewLoadMoreBinding>(viewBinding) {
+        TrailingLoadStateAdapter.TrailingViewBindingVH<ViewLoadMoreBinding>(viewBinding) {
 
         override fun getLoadComplete(viewBinding: ViewLoadMoreBinding): View {
             return viewBinding.loadMoreLoadCompleteView
