@@ -3,7 +3,6 @@ package com.chad.baserecyclerviewadapterhelper.adapter;
 import android.content.Context;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -17,7 +16,7 @@ import com.chad.baserecyclerviewadapterhelper.utils.ClickableMovementMethod;
 import com.chad.baserecyclerviewadapterhelper.utils.SpannableStringUtils;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
+import com.chad.library.adapter.base.viewholder.QuickViewHolder;
 
 /**
  * 文 件 名: AnimationAdapter
@@ -27,7 +26,7 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
  * 修改时间：
  * 修改备注：
  */
-public class AnimationAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
+public class AnimationAdapter extends BaseQuickAdapter<Status, QuickViewHolder> {
 
     public AnimationAdapter() {
         super(DataServer.getSampleData(100));
@@ -35,13 +34,12 @@ public class AnimationAdapter extends BaseQuickAdapter<Status, BaseViewHolder> {
 
     @NonNull
     @Override
-    protected BaseViewHolder onCreateViewHolder(@NonNull Context context, @NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.layout_animation, parent, false);
-        return new BaseViewHolder(view);
+    protected QuickViewHolder onCreateViewHolder(@NonNull Context context, @NonNull ViewGroup parent, int viewType) {
+        return new QuickViewHolder(R.layout.layout_animation , parent);
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull BaseViewHolder holder, int position, Status item) {
+    protected void onBindViewHolder(@NonNull QuickViewHolder holder, int position, Status item) {
         switch (holder.getLayoutPosition() % 3) {
             case 0:
                 holder.setImageResource(R.id.img, R.mipmap.animation_img1);

@@ -27,7 +27,7 @@ public class DataBindingHolder<DB extends ViewDataBinding> extends RecyclerView.
             throw new NullPointerException("DataBinding is Null. Please check Layout resource or ItemView");
     }
 
-    public DataBindingHolder(@NonNull ViewGroup parent, @LayoutRes int resId) {
+    public DataBindingHolder(@LayoutRes int resId, @NonNull ViewGroup parent) {
         this(LayoutInflater.from(parent.getContext()).inflate(resId, parent, false));
     }
 

@@ -25,7 +25,7 @@ public class DataBindingAdapter extends BaseQuickAdapter<Movie, DataBindingHolde
     @NonNull
     @Override
     protected DataBindingHolder<ItemMovieBinding> onCreateViewHolder(@NonNull Context context, @NonNull ViewGroup parent, int viewType) {
-        return new DataBindingHolder<>(parent, R.layout.item_movie);
+        return new DataBindingHolder<>(R.layout.item_movie, parent);
     }
 
     @Override

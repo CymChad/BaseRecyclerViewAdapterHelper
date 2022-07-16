@@ -3,7 +3,7 @@ package com.chad.library.adapter.base.binder
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.chad.library.adapter.base.viewholder.QuickViewHolder
 
 /**
  * 使用 DataBinding 快速构建 Binder
@@ -15,7 +15,7 @@ abstract class QuickDataBindingItemBinder<T, DB : ViewDataBinding> : BaseItemBin
     /**
      * 此 Holder 不适用于其他 BaseAdapter，仅针对[BaseBinderAdapter]
      */
-    class BinderDataBindingHolder<DB : ViewDataBinding>(val dataBinding: DB) : BaseViewHolder(dataBinding.root)
+    class BinderDataBindingHolder<DB : ViewDataBinding>(val dataBinding: DB) : QuickViewHolder(dataBinding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BinderDataBindingHolder<DB> {
         return BinderDataBindingHolder(onCreateDataBinding(LayoutInflater.from(parent.context), parent, viewType))

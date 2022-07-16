@@ -13,7 +13,6 @@ import com.chad.library.adapter.base.dragswipe.DragAndSwipeCallback
 import com.chad.library.adapter.base.listener.DraggableListenerImp
 import com.chad.library.adapter.base.listener.OnItemDragListener
 import com.chad.library.adapter.base.listener.OnItemSwipeListener
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import java.util.*
 
 /**

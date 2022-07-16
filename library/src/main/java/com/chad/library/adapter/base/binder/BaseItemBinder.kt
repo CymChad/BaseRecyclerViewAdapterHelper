@@ -4,12 +4,12 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.IdRes
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.chad.library.adapter.base.viewholder.QuickViewHolder
 
 /**
  * Binder 的基类
  */
-abstract class BaseItemBinder<T, VH : BaseViewHolder> {
+abstract class BaseItemBinder<T, VH : QuickViewHolder> {
 
     private val clickViewIds by lazy(LazyThreadSafetyMode.NONE) { ArrayList<Int>() }
     private val longClickViewIds by lazy(LazyThreadSafetyMode.NONE) { ArrayList<Int>() }

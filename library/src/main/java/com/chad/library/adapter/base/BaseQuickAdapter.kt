@@ -17,7 +17,7 @@ import com.chad.library.adapter.base.animation.*
 import com.chad.library.adapter.base.listener.*
 import com.chad.library.adapter.base.module.BaseDraggableModule
 import com.chad.library.adapter.base.module.DraggableModule
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.chad.library.adapter.base.viewholder.QuickViewHolder
 import com.chad.library.adapter.base.viewholder.EmptyLayoutVH
 
 /**
@@ -403,7 +403,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      */
     fun getViewByPosition(position: Int, @IdRes viewId: Int): View? {
         val recyclerView = recyclerViewOrNull ?: return null
-        val viewHolder = recyclerView.findViewHolderForLayoutPosition(position) as BaseViewHolder?
+        val viewHolder = recyclerView.findViewHolderForLayoutPosition(position) as QuickViewHolder?
             ?: return null
         return viewHolder.getViewOrNull(viewId)
     }

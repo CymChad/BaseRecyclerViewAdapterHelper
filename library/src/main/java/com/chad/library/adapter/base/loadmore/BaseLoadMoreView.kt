@@ -2,7 +2,7 @@ package com.chad.library.adapter.base.loadmore
 
 import android.view.View
 import android.view.ViewGroup
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.chad.library.adapter.base.viewholder.QuickViewHolder
 
 /**
  *
@@ -30,28 +30,28 @@ abstract class BaseLoadMoreView {
      * @param holder BaseViewHolder
      * @return View
      */
-    abstract fun getLoadingView(holder: BaseViewHolder): View
+    abstract fun getLoadingView(holder: QuickViewHolder): View
 
     /**
      * 布局中的 加载完成布局
      * @param holder BaseViewHolder
      * @return View
      */
-    abstract fun getLoadComplete(holder: BaseViewHolder): View
+    abstract fun getLoadComplete(holder: QuickViewHolder): View
 
     /**
      * 布局中的 加载结束布局
      * @param holder BaseViewHolder
      * @return View
      */
-    abstract fun getLoadEndView(holder: BaseViewHolder): View
+    abstract fun getLoadEndView(holder: QuickViewHolder): View
 
     /**
      * 布局中的 加载失败布局
      * @param holder BaseViewHolder
      * @return View
      */
-    abstract fun getLoadFailView(holder: BaseViewHolder): View
+    abstract fun getLoadFailView(holder: QuickViewHolder): View
 
     /**
      * 可重写此方式，实行自定义逻辑
@@ -59,7 +59,7 @@ abstract class BaseLoadMoreView {
      * @param position Int
      * @param loadMoreStatus LoadMoreStatus
      */
-    open fun convert(holder: BaseViewHolder, position: Int, loadMoreStatus: LoadMoreStatus) {
+    open fun convert(holder: QuickViewHolder, position: Int, loadMoreStatus: LoadMoreStatus) {
         when (loadMoreStatus) {
             LoadMoreStatus.Complete -> {
                 getLoadingView(holder).isVisible(false)
