@@ -17,8 +17,8 @@ import com.chad.library.adapter.base.animation.*
 import com.chad.library.adapter.base.listener.*
 import com.chad.library.adapter.base.module.BaseDraggableModule
 import com.chad.library.adapter.base.module.DraggableModule
-import com.chad.library.adapter.base.viewholder.QuickViewHolder
 import com.chad.library.adapter.base.viewholder.EmptyLayoutVH
+import com.chad.library.adapter.base.viewholder.QuickViewHolder
 
 /**
  * Base Class
@@ -97,6 +97,8 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         get() {
             return recyclerView.context
         }
+
+    private var onViewAttachStateChangeListeners: MutableList<OnViewAttachStateChangeListener>? = null
 
     /******************************* RecyclerView Method ****************************************/
 
@@ -197,6 +199,16 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             setStaggeredGridFullSpan(holder)
         } else {
             addAnimation(holder)
+        }
+
+        onViewAttachStateChangeListeners?.forEach {
+            it.onViewAttachedToWindow(holder)
+        }
+    }
+
+    override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
+        onViewAttachStateChangeListeners?.forEach {
+            it.onViewDetachedFromWindow(holder)
         }
     }
 
@@ -750,6 +762,21 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         mOnItemChildLongClickArray.remove(id)
     }
 
+    fun addOnViewAttachStateChangeListener(listener: OnViewAttachStateChangeListener) {
+        if (onViewAttachStateChangeListeners == null) {
+            onViewAttachStateChangeListeners = ArrayList()
+        }
+        onViewAttachStateChangeListeners?.add(listener)
+    }
+
+    fun removeOnViewAttachStateChangeListener(listener: OnViewAttachStateChangeListener) {
+        onViewAttachStateChangeListeners?.remove(listener)
+    }
+
+    fun clearOnViewAttachStateChangeListener() {
+        onViewAttachStateChangeListeners?.clear()
+    }
+
 
     fun interface OnItemClickListener<T> {
         fun onItemClick(adapter: BaseQuickAdapter<T, *>, view: View, position: Int)
@@ -765,5 +792,18 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     fun interface OnItemChildLongClickListener<T> {
         fun onItemChildLongClick(adapter: BaseQuickAdapter<T, *>, view: View, position: Int): Boolean
+    }
+
+    interface OnViewAttachStateChangeListener {
+
+        /**
+         * Called when a view is attached to the RecyclerView.
+         */
+        fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder)
+
+        /**
+         * Called when a view is detached from RecyclerView.
+         */
+        fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder)
     }
 }

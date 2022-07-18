@@ -3,17 +3,28 @@ package com.chad.library.adapter.base.loadState
 sealed class LoadState(
     val endOfPaginationReached: Boolean
 ) {
+
+
+    object None: LoadState(false) {
+        override fun equals(other: Any?): Boolean {
+            return other is None &&
+                    endOfPaginationReached == other.endOfPaginationReached
+        }
+
+        override fun hashCode(): Int {
+            return endOfPaginationReached.hashCode()
+        }
+
+        override fun toString(): String {
+            return "None(endOfPaginationReached=$endOfPaginationReached)"
+        }
+    }
+
     /**
      * Is not currently loading, and no error currently observed.
      *
-     * @param endOfPaginationReached `false` if there is more data to load in the [LoadType] this
-     * [LoadState] is associated with, `true` otherwise. This parameter informs [Pager] if it
-     * should continue to make requests for additional data in this direction or if it should
-     * halt as the end of the dataset has been reached.
+     * @param endOfPaginationReached
      */
-
-    //TODO 添加NONE
-
     class NotLoading(
         endOfPaginationReached: Boolean
     ) : LoadState(endOfPaginationReached) {
@@ -30,9 +41,9 @@ sealed class LoadState(
             return endOfPaginationReached.hashCode()
         }
 
-        internal companion object {
-            internal val Complete = NotLoading(endOfPaginationReached = true)
-            internal val Incomplete = NotLoading(endOfPaginationReached = false)
+        companion object {
+            val Complete = NotLoading(endOfPaginationReached = true)
+            val Incomplete = NotLoading(endOfPaginationReached = false)
         }
     }
 
@@ -58,8 +69,6 @@ sealed class LoadState(
      * Loading hit an error.
      *
      * @param error [Throwable] that caused the load operation to generate this error state.
-     *
-     * @see androidx.paging.PagedList.retry
      */
     class Error(
         val error: Throwable

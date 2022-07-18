@@ -2,21 +2,25 @@ package com.chad.library.adapter.base.loadState
 
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
-import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.fullspan.FullSpanAdapterType
 
+/**
+ * Load state adapter
+ * 加载状态的夫类，"加载更多"、"向上加载"都继承于此
+ *
+ */
 abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>(),
     FullSpanAdapterType {
     /**
-     * LoadState to present in the adapter.
-     *
-     * null 为初始状态
      * Changing this property will immediately notify the Adapter to change the item it's
      * presenting.
+     * [LoadState.None] is the initial state.
+     *
+     * 要在适配器中显示的 LoadState。更改此属性将立即通知适配器更改 item 的样式。
+     * [LoadState.None] 为初始状态。
      */
-    var loadState: LoadState = LoadState.NotLoading(endOfPaginationReached = false)
+    var loadState: LoadState = LoadState.None
         set(loadState) {
             if (field != loadState) {
                 val oldItem = displayLoadStateAsItem(field)
@@ -34,6 +38,8 @@ abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ada
         }
 
     /**
+     * Is it loading.
+     *
      * 是否加载中
      */
     val isLoading: Boolean
@@ -42,6 +48,9 @@ abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ada
         }
 
     var recyclerView: RecyclerView? = null
+        private set
+
+    var onAllowLoadingListener: OnAllowLoadingListener? = null
         private set
 
     final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
@@ -56,33 +65,9 @@ abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ada
 
     final override fun getItemCount(): Int = if (displayLoadStateAsItem(loadState)) 1 else 0
 
-
     @CallSuper
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         this.recyclerView = recyclerView
-
-//        val manager = recyclerView.layoutManager
-//        if (manager is GridLayoutManager) {
-//            val originalSpanSizeLookup = manager.spanSizeLookup
-//            val spanCount = manager.spanCount
-//
-//            manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-//                override fun getSpanSize(position: Int): Int {
-//
-//                    val adapter = recyclerView.adapter
-//                    if (adapter is ConcatAdapter) {
-//                        val  pair = adapter.getWrappedAdapterAndPosition(position)
-//
-//                        if (pair.first is LoadStateAdapter) {
-//                            return spanCount
-//                        }
-//                    }
-//
-//                    return originalSpanSizeLookup.getSpanSize(position)
-//                }
-//
-//            }
-//        }
     }
 
     @CallSuper
@@ -123,9 +108,24 @@ abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ada
      * Returns true if the LoadState should be displayed as a list item when active.
      *
      * By default, [LoadState.Loading] and [LoadState.Error] present as list items, others do not.
+     *
+     *
+     * 如果 LoadState 在活动时需要显示item，则返回 true。
+     * 默认情况下，[LoadState.Loading] 和 [LoadState.Error] 将会显示，其他则不显示。
      */
     open fun displayLoadStateAsItem(loadState: LoadState): Boolean {
-        return loadState is LoadState.Loading || loadState is LoadState.Error || (loadState is LoadState.NotLoading && !loadState.endOfPaginationReached)
+        return loadState is LoadState.Loading || loadState is LoadState.Error
     }
 
+    fun setOnAllowLoadingListener(listener: OnAllowLoadingListener?) = apply {
+        this.onAllowLoadingListener = listener
+    }
+
+    interface OnAllowLoadingListener {
+        /**
+         * Whether to allow loading.
+         * 是否允许进行加载
+         */
+        fun isAllowLoading(): Boolean = true
+    }
 }

@@ -22,7 +22,8 @@ import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.QuickAdapterHelper;
 import com.chad.library.adapter.base.loadState.LoadState;
-import com.chad.library.adapter.base.loadState.trailing.OnLoadMoreListener;
+import com.chad.library.adapter.base.loadState.LoadStateAdapter;
+import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter;
 
 import java.util.List;
 
@@ -92,22 +93,24 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
 
         // 自定义"加载更多"的样式
         CustomLoadMoreAdapter loadMoreAdapter = new CustomLoadMoreAdapter();
-        loadMoreAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+        loadMoreAdapter.setOnLoadMoreListener(new TrailingLoadStateAdapter.OnTrailingListener() {
             @Override
-            public boolean isCanLoadMore() {
+            public void onLoad() {
+                request();
+            }
+
+            @Override
+            public void onFailRetry() {
+                request();
+            }
+
+        }).setOnAllowLoadingListener(new LoadStateAdapter.OnAllowLoadingListener() {
+            @Override
+            public boolean isAllowLoading() {
                 return !mSwipeRefreshLayout.isRefreshing();
             }
-
-            @Override
-            public void loadMore() {
-                request();
-            }
-
-            @Override
-            public void failRetry() {
-                request();
-            }
         });
+
 
         helper = new QuickAdapterHelper.Builder(mAdapter).setTrailingLoadStateAdapter(loadMoreAdapter).build();
 
@@ -183,18 +186,12 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
         request();
     }
 
-    /**
-     * 加载更多
-     */
-    private void loadMore() {
-        request();
-    }
 
     /**
      * 请求数据
      */
     private void request() {
-        helper.setTrailingLoadState(LoadState.Loading.INSTANCE);
+//        helper.setTrailingLoadState(LoadState.Loading.INSTANCE);
 
         new Request(pageInfo.page, new RequestCallBack() {
             @Override

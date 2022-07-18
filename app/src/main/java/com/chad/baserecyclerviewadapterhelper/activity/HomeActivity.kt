@@ -64,7 +64,7 @@ class HomeActivity : AppCompatActivity() {
                 HomeEntity(sectionTitle = "功能模块"),
                 HomeEntity("LoadMore", LoadMoreRefreshUseActivity::class.java, R.mipmap.gv_pulltorefresh),
 //                HomeEntity("DragAndSwipe", DragAndSwipeUseActivity::class.java, R.mipmap.gv_drag_and_swipe),
-//                HomeEntity("UpFetch", UpFetchUseActivity::class.java, R.drawable.gv_up_fetch)
+                HomeEntity("UpFetch", UpFetchUseActivity::class.java, R.drawable.gv_up_fetch)
 
 
         )

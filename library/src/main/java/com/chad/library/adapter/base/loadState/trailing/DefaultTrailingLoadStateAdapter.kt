@@ -1,24 +1,34 @@
-package com.chad.baserecyclerviewadapterhelper.adapter
+package com.chad.library.adapter.base.loadState.trailing
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.chad.baserecyclerviewadapterhelper.databinding.ViewLoadMoreBinding
+import com.chad.library.R
 import com.chad.library.adapter.base.loadState.LoadState
-import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
+import com.chad.library.databinding.BrvahTrailingLoadMoreBinding
 
 /**
- * 自定义的"加载更多"。
- * 这里可以做很多事情，这里仅展示了更改自定义布局的使用。
+ * Default trailing load state adapter
  *
- * There are many things that can be done here, only the use of changing custom layouts is shown here.
+ * 默认实现的尾部"加载更多" Adapter
  */
-class CustomLoadMoreAdapter : TrailingLoadStateAdapter<CustomLoadMoreAdapter.CustomVH>() {
+internal class DefaultTrailingLoadStateAdapter: TrailingLoadStateAdapter<DefaultTrailingLoadStateAdapter.TrailingLoadStateVH>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): CustomVH {
-        val viewBinding = ViewLoadMoreBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return CustomVH(viewBinding).apply {
+    /**
+     * Default implementation of "load more" ViewHolder
+     *
+     * 默认实现的"加载更多" ViewHolder
+     */
+    internal class TrailingLoadStateVH(
+        parent: ViewGroup,
+        val viewBinding: BrvahTrailingLoadMoreBinding = BrvahTrailingLoadMoreBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
+    ) : RecyclerView.ViewHolder(viewBinding.root)
+
+    override fun onCreateViewHolder( parent: ViewGroup, loadState: LoadState): TrailingLoadStateVH {
+        return TrailingLoadStateVH(parent).apply {
             viewBinding.loadMoreLoadFailView.setOnClickListener {
                 // 失败重试点击事件
                 invokeFailRetry()
@@ -30,7 +40,12 @@ class CustomLoadMoreAdapter : TrailingLoadStateAdapter<CustomLoadMoreAdapter.Cus
         }
     }
 
-    override fun onBindViewHolder(holder: CustomVH, loadState: LoadState) {
+    /**
+     * bind LoadState
+     *
+     * 绑定加载状态
+     */
+    override fun onBindViewHolder(holder: TrailingLoadStateVH, loadState: LoadState) {
         when (loadState) {
             is LoadState.NotLoading -> {
                 if (loadState.endOfPaginationReached) {
@@ -66,6 +81,5 @@ class CustomLoadMoreAdapter : TrailingLoadStateAdapter<CustomLoadMoreAdapter.Cus
         }
     }
 
-
-    class CustomVH(val viewBinding: ViewLoadMoreBinding) : RecyclerView.ViewHolder(viewBinding.root)
+    override fun getStateViewType(loadState: LoadState): Int = R.layout.brvah_trailing_load_more
 }

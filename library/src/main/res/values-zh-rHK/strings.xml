@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="brvah_loading">加載中...</string>
     <string name="brvah_load_failed">加載失敗，點擊重試</string>
     <string name="brvah_load_end">沒有更多數據</string>
     <string name="brvah_load_complete">點擊加載更多</string>
-    <string name="brvah_loading">正在加載中...</string>
 </resources>

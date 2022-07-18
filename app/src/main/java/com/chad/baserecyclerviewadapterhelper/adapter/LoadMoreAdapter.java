@@ -60,7 +60,7 @@ public class LoadMoreAdapter extends BaseQuickAdapter<Status, LoadMoreAdapter.VH
             default:
                 break;
         }
-        holder.viewBinding.tweetName.setText("Hoteis in Rio de Janeiro");
+        holder.viewBinding.tweetName.setText("Hoteis in Rio de Janeiro " + position + "  " + item.getUserName());
 
         String msg = "\"He was one of Australia's most of distinguished artistes, renowned for his portraits\"";
         holder.viewBinding.tweetText.setText(SpannableStringUtils.getBuilder(msg).append("landscapes and nedes").setClickSpan(clickableSpan).create());

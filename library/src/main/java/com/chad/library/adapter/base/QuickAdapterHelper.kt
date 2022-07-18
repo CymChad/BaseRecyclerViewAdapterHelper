@@ -4,21 +4,23 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.loadState.LoadState
 import com.chad.library.adapter.base.loadState.LoadStateAdapter
-import com.chad.library.adapter.base.loadState.trailing.OnLoadMoreListener
+import com.chad.library.adapter.base.loadState.leading.DefaultLeadingLoadStateAdapter
+import com.chad.library.adapter.base.loadState.leading.LeadingLoadStateAdapter
+import com.chad.library.adapter.base.loadState.trailing.DefaultTrailingLoadStateAdapter
 import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
 
 class QuickAdapterHelper private constructor(
-    val contentAdapter: RecyclerView.Adapter<*>,
+    val contentAdapter: BaseQuickAdapter<*, *>,
 
     /**
      * 首部"加载跟多"Adapter
      */
-    val leadingLoadStateAdapter: LoadStateAdapter<*>?,
+    val leadingLoadStateAdapter: LeadingLoadStateAdapter<*>?,
 
     /**
      * 尾部"加载跟多"Adapter
      */
-    val trailingLoadStateAdapter: TrailingLoadStateAdapter?,
+    val trailingLoadStateAdapter: TrailingLoadStateAdapter<*>?,
 
     config: ConcatAdapter.Config
 ) {
@@ -29,7 +31,8 @@ class QuickAdapterHelper private constructor(
     /**
      * 最终设置给 RecyclerView 的 adapter
      */
-    val adapter = ConcatAdapter(config)
+    private val mAdapter = ConcatAdapter(config)
+    val adapter: RecyclerView.Adapter<*> get() = mAdapter
 
     /**
      * 首部的加载状态
@@ -57,13 +60,40 @@ class QuickAdapterHelper private constructor(
 
     init {
         leadingLoadStateAdapter?.let {
-            adapter.addAdapter(it)
+            mAdapter.addAdapter(it)
+
+            contentAdapter.addOnViewAttachStateChangeListener(object :
+                BaseQuickAdapter.OnViewAttachStateChangeListener {
+
+                override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
+                    leadingLoadStateAdapter.checkPreload(holder.bindingAdapterPosition)
+                }
+
+                override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
+
+                }
+            })
         }
 
-        adapter.addAdapter(contentAdapter)
+        mAdapter.addAdapter(contentAdapter)
 
         trailingLoadStateAdapter?.let {
-            adapter.addAdapter(it)
+            mAdapter.addAdapter(it)
+
+            contentAdapter.addOnViewAttachStateChangeListener(object :
+                BaseQuickAdapter.OnViewAttachStateChangeListener {
+
+                override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
+                    trailingLoadStateAdapter.checkPreload(
+                        contentAdapter.items.size,
+                        holder.bindingAdapterPosition
+                    )
+                }
+
+                override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
+
+                }
+            })
         }
     }
 
@@ -85,7 +115,7 @@ class QuickAdapterHelper private constructor(
             1
         }
 
-        adapter.addAdapter(startIndex + index, headerAdapter)
+        mAdapter.addAdapter(startIndex + index, headerAdapter)
         mHeaderList.add(headerAdapter)
     }
 
@@ -94,7 +124,7 @@ class QuickAdapterHelper private constructor(
      */
     fun clearHeader() = apply {
         mHeaderList.forEach {
-            adapter.removeAdapter(it)
+            mAdapter.removeAdapter(it)
         }
         mHeaderList.clear()
     }
@@ -106,9 +136,9 @@ class QuickAdapterHelper private constructor(
      */
     fun addFooter(footerAdapter: RecyclerView.Adapter<*>) = apply {
         if (trailingLoadStateAdapter == null) {
-            adapter.addAdapter(footerAdapter)
+            mAdapter.addAdapter(footerAdapter)
         } else {
-            adapter.addAdapter(adapter.adapters.size - 1, footerAdapter)
+            mAdapter.addAdapter(mAdapter.adapters.size - 1, footerAdapter)
         }
         mFooterList.add(footerAdapter)
     }
@@ -117,12 +147,12 @@ class QuickAdapterHelper private constructor(
         if (index < 0 || index > mFooterList.size) throw IndexOutOfBoundsException("Index must be between 0 and ${mFooterList.size}. Given:${index}")
 
         val realIndex = if (trailingLoadStateAdapter == null) {
-            adapter.adapters.size - mFooterList.size + index
+            mAdapter.adapters.size - mFooterList.size + index
         } else {
-            adapter.adapters.size - 1 - mFooterList.size + index
+            mAdapter.adapters.size - 1 - mFooterList.size + index
         }
 
-        adapter.addAdapter(realIndex, footerAdapter)
+        mAdapter.addAdapter(realIndex, footerAdapter)
         mFooterList.add(footerAdapter)
     }
 
@@ -131,7 +161,7 @@ class QuickAdapterHelper private constructor(
      */
     fun clearfooter() = apply {
         mFooterList.forEach {
-            adapter.removeAdapter(it)
+            mAdapter.removeAdapter(it)
         }
         mFooterList.clear()
     }
@@ -147,19 +177,19 @@ class QuickAdapterHelper private constructor(
     val footerList: List<RecyclerView.Adapter<*>> get() = mFooterList
 
     fun removeAdapter(a: RecyclerView.Adapter<*>) = apply {
-        if(a == contentAdapter) {
+        if (a == contentAdapter) {
             return@apply
         }
 
-        adapter.removeAdapter(a)
+        mAdapter.removeAdapter(a)
         mHeaderList.remove(a)
         mFooterList.remove(a)
     }
 
     class Builder(private val contentAdapter: BaseQuickAdapter<*, *>) {
 
-        private var leadingLoadStateAdapter: LoadStateAdapter<*>? = null
-        private var trailingLoadStateAdapter: TrailingLoadStateAdapter? = null
+        private var leadingLoadStateAdapter: LeadingLoadStateAdapter<*>? = null
+        private var trailingLoadStateAdapter: TrailingLoadStateAdapter<*>? = null
 
         private var config: ConcatAdapter.Config = ConcatAdapter.Config.DEFAULT
 
@@ -168,21 +198,33 @@ class QuickAdapterHelper private constructor(
          * @param loadStateAdapter LoadStateAdapter<*>?
          * @return Builder
          */
-        fun setTrailingLoadStateAdapter(loadStateAdapter: TrailingLoadStateAdapter?) = apply {
+        fun setTrailingLoadStateAdapter(loadStateAdapter: TrailingLoadStateAdapter<*>?) = apply {
             this.trailingLoadStateAdapter = loadStateAdapter
         }
 
         fun setTrailingLoadStateAdapter(
-            loadMoreListener: OnLoadMoreListener,
+            loadMoreListener: TrailingLoadStateAdapter.OnTrailingListener?,
+            loadStateListener: LoadStateAdapter.OnAllowLoadingListener?
         ) = setTrailingLoadStateAdapter(
-            TrailingLoadStateAdapter().apply {
+            DefaultTrailingLoadStateAdapter().apply {
                 setOnLoadMoreListener(loadMoreListener)
+                setOnAllowLoadingListener(loadStateListener)
             }
         )
 
-        fun setLeadingLoadStateAdapter(loadStateAdapter: LoadStateAdapter<*>?) = apply {
+        fun setLeadingLoadStateAdapter(loadStateAdapter: LeadingLoadStateAdapter<*>?) = apply {
             this.leadingLoadStateAdapter = loadStateAdapter
         }
+
+        fun setLeadingLoadStateAdapter(
+            loadListener: LeadingLoadStateAdapter.OnLeadingListener?,
+            loadStateListener: LoadStateAdapter.OnAllowLoadingListener?
+        ) = setLeadingLoadStateAdapter(
+            DefaultLeadingLoadStateAdapter().apply {
+                setOnLeadingListener(loadListener)
+                setOnAllowLoadingListener(loadStateListener)
+            }
+        )
 
         fun setConfig(config: ConcatAdapter.Config) = apply {
             this.config = config
