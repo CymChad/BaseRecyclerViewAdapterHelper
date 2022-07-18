@@ -7,7 +7,9 @@ import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 
 internal class EmptyLayoutVH(private val emptyLayout:FrameLayout ): RecyclerView.ViewHolder(emptyLayout) {
-    fun changeEmptyView(view: View) {
+    fun changeEmptyView(view: View?) {
+        if (view == null) return
+
         val emptyLayoutVp: ViewParent? = view.parent
         if (emptyLayoutVp is ViewGroup) {
             emptyLayoutVp.removeView(view)

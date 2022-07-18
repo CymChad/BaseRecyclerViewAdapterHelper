@@ -31,7 +31,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     /***************************** Public property settings *************************************/
 
     /** 是否使用空布局 */
-    var isUseEmpty = true
+    var isEmptyViewEnable = false
 
     /**
      * 是否打开动画
@@ -63,7 +63,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         }
 
     /********************************* Private property *****************************************/
-    internal var mLastPosition = -1
+    private var mLastPosition = -1
 
     private var mOnItemClickListener: OnItemClickListener<T>? = null
     private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
@@ -199,7 +199,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     final override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is EmptyLayoutVH) {
-            holder.changeEmptyView(emptyView!!)
+            holder.changeEmptyView(emptyView)
             return
         }
 
@@ -215,7 +215,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         }
 
         if (holder is EmptyLayoutVH) {
-            holder.changeEmptyView(emptyView!!)
+            holder.changeEmptyView(emptyView)
             return
         }
 
@@ -431,7 +431,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         set(value) {
             val oldDisplayEmptyLayout = displayEmptyView()
             field = value
-            isUseEmpty = true
+            isEmptyViewEnable = true
 
             val newDisplayEmptyLayout = displayEmptyView()
 
@@ -440,7 +440,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             } else if (newDisplayEmptyLayout && !oldDisplayEmptyLayout) {
                 notifyItemInserted(0)
             } else if (oldDisplayEmptyLayout && newDisplayEmptyLayout) {
-                notifyItemChanged(0, "")
+                notifyItemChanged(0, 1)
             }
         }
 
@@ -464,7 +464,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         if (emptyView == null) {
             return false
         }
-        if (!isUseEmpty) {
+        if (!isEmptyViewEnable) {
             return false
         }
         return items.isEmpty()
@@ -536,6 +536,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         if (list === this.items) {
             return
         }
+
 
         this.items = list ?: emptyList()
         mLastPosition = -1
@@ -625,6 +626,11 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         if (items is MutableList) {
             (items as MutableList<T>).removeAt(position)
             notifyItemRemoved(position)
+        }
+
+        // 处理空视图的情况
+        if (displayEmptyView()) {
+            notifyItemInserted(0)
         }
 
 //        compatibilityDataSizeChanged(0)
