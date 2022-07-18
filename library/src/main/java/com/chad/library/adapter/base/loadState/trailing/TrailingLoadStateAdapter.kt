@@ -62,7 +62,7 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder> : LoadStat
      * 执行加载的操作
      */
     private fun loadAction() {
-        if (!isAutoLoadMore || onAllowLoadingListener?.isAllowLoading() == false) {
+        if (!isAutoLoadMore || onTrailingListener?.isAllowLoading() == false) {
             // 不允许进行加载更多（例如：正在进行下拉刷新）
             return
         }
@@ -153,5 +153,11 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder> : LoadStat
          * 失败的情况下，点击重试执行的逻辑
          */
         fun onFailRetry()
+
+        /**
+         * Whether to allow loading.
+         * 是否允许进行加载
+         */
+        fun isAllowLoading(): Boolean = true
     }
 }

@@ -22,7 +22,6 @@ import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.QuickAdapterHelper;
 import com.chad.library.adapter.base.loadState.LoadState;
-import com.chad.library.adapter.base.loadState.LoadStateAdapter;
 import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter;
 
 import java.util.List;
@@ -104,9 +103,9 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
                 request();
             }
 
-        }).setOnAllowLoadingListener(new LoadStateAdapter.OnAllowLoadingListener() {
             @Override
             public boolean isAllowLoading() {
+                // 下拉刷新的适合，不允许进行"加载更多"
                 return !mSwipeRefreshLayout.isRefreshing();
             }
         });

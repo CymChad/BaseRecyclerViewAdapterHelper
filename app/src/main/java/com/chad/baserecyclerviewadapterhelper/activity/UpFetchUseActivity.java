@@ -11,7 +11,6 @@ import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.entity.Movie;
 import com.chad.library.adapter.base.QuickAdapterHelper;
 import com.chad.library.adapter.base.loadState.LoadState;
-import com.chad.library.adapter.base.loadState.LoadStateAdapter;
 import com.chad.library.adapter.base.loadState.leading.LeadingLoadStateAdapter;
 
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ public class UpFetchUseActivity extends BaseActivity {
             public void onLoad() {
                 requestUoFetch();
             }
-        }, new LoadStateAdapter.OnAllowLoadingListener() {
+
             @Override
             public boolean isAllowLoading() {
                 return true;

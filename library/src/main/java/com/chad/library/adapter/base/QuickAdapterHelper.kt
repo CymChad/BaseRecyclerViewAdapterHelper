@@ -3,7 +3,6 @@ package com.chad.library.adapter.base
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.loadState.LoadState
-import com.chad.library.adapter.base.loadState.LoadStateAdapter
 import com.chad.library.adapter.base.loadState.leading.DefaultLeadingLoadStateAdapter
 import com.chad.library.adapter.base.loadState.leading.LeadingLoadStateAdapter
 import com.chad.library.adapter.base.loadState.trailing.DefaultTrailingLoadStateAdapter
@@ -203,12 +202,10 @@ class QuickAdapterHelper private constructor(
         }
 
         fun setTrailingLoadStateAdapter(
-            loadMoreListener: TrailingLoadStateAdapter.OnTrailingListener?,
-            loadStateListener: LoadStateAdapter.OnAllowLoadingListener?
+            loadMoreListener: TrailingLoadStateAdapter.OnTrailingListener?
         ) = setTrailingLoadStateAdapter(
             DefaultTrailingLoadStateAdapter().apply {
                 setOnLoadMoreListener(loadMoreListener)
-                setOnAllowLoadingListener(loadStateListener)
             }
         )
 
@@ -217,12 +214,10 @@ class QuickAdapterHelper private constructor(
         }
 
         fun setLeadingLoadStateAdapter(
-            loadListener: LeadingLoadStateAdapter.OnLeadingListener?,
-            loadStateListener: LoadStateAdapter.OnAllowLoadingListener?
+            loadListener: LeadingLoadStateAdapter.OnLeadingListener?
         ) = setLeadingLoadStateAdapter(
             DefaultLeadingLoadStateAdapter().apply {
                 setOnLeadingListener(loadListener)
-                setOnAllowLoadingListener(loadStateListener)
             }
         )
 

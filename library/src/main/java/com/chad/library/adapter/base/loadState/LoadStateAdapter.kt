@@ -50,9 +50,6 @@ abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ada
     var recyclerView: RecyclerView? = null
         private set
 
-    var onAllowLoadingListener: OnAllowLoadingListener? = null
-        private set
-
     final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         return onCreateViewHolder(parent, loadState)
     }
@@ -117,15 +114,4 @@ abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ada
         return loadState is LoadState.Loading || loadState is LoadState.Error
     }
 
-    fun setOnAllowLoadingListener(listener: OnAllowLoadingListener?) = apply {
-        this.onAllowLoadingListener = listener
-    }
-
-    interface OnAllowLoadingListener {
-        /**
-         * Whether to allow loading.
-         * 是否允许进行加载
-         */
-        fun isAllowLoading(): Boolean = true
-    }
 }

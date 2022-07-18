@@ -40,7 +40,7 @@ abstract class LeadingLoadStateAdapter<VH: RecyclerView.ViewHolder> : LoadStateA
      * 加载更多执行的操作
      */
     private fun loadAction() {
-        if (!isLoadEnable || onAllowLoadingListener?.isAllowLoading() == false) return
+        if (!isLoadEnable || onLeadingListener?.isAllowLoading() == false) return
 
         if (loadState is LoadState.NotLoading && !loadState.endOfPaginationReached) {
             val recyclerView = recyclerView ?: return
@@ -80,5 +80,11 @@ abstract class LeadingLoadStateAdapter<VH: RecyclerView.ViewHolder> : LoadStateA
          * "加载更多"执行逻辑
          */
         fun onLoad()
+
+        /**
+         * Whether to allow loading.
+         * 是否允许进行加载
+         */
+        fun isAllowLoading(): Boolean = true
     }
 }
