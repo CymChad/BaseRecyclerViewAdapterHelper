@@ -62,7 +62,7 @@ class QuickAdapterHelper private constructor(
             mAdapter.addAdapter(it)
 
             contentAdapter.addOnViewAttachStateChangeListener(object :
-                BaseQuickAdapter.OnViewAttachStateChangeListener {
+                BrvahAdapter.OnViewAttachStateChangeListener {
 
                 override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
                     leadingLoadStateAdapter.checkPreload(holder.bindingAdapterPosition)
@@ -80,7 +80,7 @@ class QuickAdapterHelper private constructor(
             mAdapter.addAdapter(it)
 
             contentAdapter.addOnViewAttachStateChangeListener(object :
-                BaseQuickAdapter.OnViewAttachStateChangeListener {
+                BrvahAdapter.OnViewAttachStateChangeListener {
 
                 override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
                     trailingLoadStateAdapter.checkPreload(

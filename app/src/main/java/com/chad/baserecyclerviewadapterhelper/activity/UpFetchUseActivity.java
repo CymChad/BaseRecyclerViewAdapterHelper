@@ -18,14 +18,13 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * @author: limuyang
- * @date: 2019-12-06
- * @Description:
+ * @author limuyang
+ * 2019-12-06
  */
 public class UpFetchUseActivity extends BaseActivity {
 
     private RecyclerView   mRecyclerView;
-    private final UpFetchAdapter mAdapter = new UpFetchAdapter();;
+    private final UpFetchAdapter mAdapter = new UpFetchAdapter();
 
     private QuickAdapterHelper helper;
 
@@ -61,15 +60,20 @@ public class UpFetchUseActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
 
-        mAdapter.setList(genData());
-        scrollToBottom();
-        helper.setLeadingLoadState(new LoadState.NotLoading(false));
-
+        requestUoFetch();
     }
 
     private int count = 0;
 
     private void requestUoFetch() {
+        if (count == 0) {
+            // 首次进入页面，设置数据
+            mAdapter.setList(genData());
+            scrollToBottom();
+            helper.setLeadingLoadState(new LoadState.NotLoading(false));
+            return;
+        }
+
         count++;
 
         // set fetching on when start network request.

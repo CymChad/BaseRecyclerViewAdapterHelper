@@ -16,6 +16,7 @@ import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BrvahAdapter;
 import com.chad.library.adapter.base.QuickAdapterHelper;
 
 /**
@@ -38,9 +39,9 @@ public class HeaderAndFooterUseActivity extends BaseActivity {
 
         HeaderAndFooterAdapter adapter1 = new HeaderAndFooterAdapter(DataServer.getSampleData(PAGE_SIZE));
         adapter1.setAnimationEnable(true);
-        adapter1.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener<Status>() {
+        adapter1.setOnItemClickListener(new BrvahAdapter.OnItemClickListener<Status>() {
             @Override
-            public void onItemClick(@NonNull BaseQuickAdapter<Status, ?> adapter, @NonNull View view, int position) {
+            public void onItemClick(@NonNull BrvahAdapter<Status, ?> adapter, @NonNull View view, int position) {
                 Tips.show("position: " + position);
             }
         });

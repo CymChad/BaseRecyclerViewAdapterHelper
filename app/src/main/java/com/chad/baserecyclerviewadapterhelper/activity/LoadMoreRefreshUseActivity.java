@@ -202,7 +202,7 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
                     mAdapter.setList(data);
                 } else {
                     //不是第一页，则用add
-                    mAdapter.addData(data);
+                    mAdapter.addAll(data);
                 }
 
                 helper.getTrailingLoadStateAdapter().checkDisableLoadMoreIfNotFullPage();

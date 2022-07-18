@@ -75,7 +75,8 @@ public class EmptyViewUseActivity extends BaseActivity {
 
     private void onRefresh() {
         // 方式一：直接传入 layout id
-        mAdapter.setEmptyView(R.layout.loading_view);
+        mAdapter.setEmptyViewLayout(R.layout.loading_view);
+
         mRecyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
