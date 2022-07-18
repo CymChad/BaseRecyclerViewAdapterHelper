@@ -68,7 +68,7 @@ public class UpFetchUseActivity extends BaseActivity {
     private void requestUoFetch() {
         if (count == 0) {
             // 首次进入页面，设置数据
-            mAdapter.setList(genData());
+            mAdapter.submitList(genData());
             scrollToBottom();
             helper.setLeadingLoadState(new LoadState.NotLoading(false));
             return;

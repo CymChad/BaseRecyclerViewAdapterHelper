@@ -199,7 +199,7 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
 
                 if (pageInfo.isFirstPage()) {
                     //如果是加载的第一页数据，用 setData()
-                    mAdapter.setList(data);
+                    mAdapter.submitList(data);
                 } else {
                     //不是第一页，则用add
                     mAdapter.addAll(data);

@@ -48,7 +48,7 @@ public class DataBindingUseActivity extends BaseActivity {
         adapter.setOnItemClickListener((adapter, view, position) -> Tips.show("onItemClick: " + position));
 
         //设置数据
-        adapter.setList(genData());
+        adapter.submitList(genData());
     }
 
     private List<Movie> genData() {
