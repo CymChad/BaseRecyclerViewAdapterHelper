@@ -47,15 +47,14 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     //    private var mUpFetchModule: BaseUpFetchModule? = null
     private var mDraggableModule: BaseDraggableModule? = null
 
-    var recyclerViewOrNull: RecyclerView? = null
-        private set
+    private var _recyclerView: RecyclerView? = null
 
     val recyclerView: RecyclerView
         get() {
-            checkNotNull(recyclerViewOrNull) {
+            checkNotNull(_recyclerView) {
                 "Please get it after onAttachedToRecyclerView()"
             }
-            return recyclerViewOrNull!!
+            return _recyclerView!!
         }
 
     val context: Context
@@ -206,10 +205,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * @return Int
      */
     final override fun getItemViewType(position: Int): Int {
-        if (displayEmptyView()) {
-            return EMPTY_VIEW
-        }
-
+        if (displayEmptyView()) return EMPTY_VIEW
         return getItemViewType(position, items)
     }
 
@@ -292,7 +288,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     @CallSuper
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
-        recyclerViewOrNull = recyclerView
+        _recyclerView = recyclerView
 
         mDraggableModule?.attachToRecyclerView(recyclerView)
     }
@@ -300,7 +296,8 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     @CallSuper
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
-        recyclerViewOrNull = null
+        _recyclerView = null
+        clearOnViewAttachStateChangeListener()
     }
 
 
@@ -433,7 +430,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * @return Int
      */
     fun getItemPosition(item: T?): Int {
-        return if (item != null && items.isNotEmpty()) items.indexOf(item) else -1
+        return items.indexOfFirst { item == it }
     }
 
 
@@ -444,20 +441,15 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * @param layoutResId
      */
     fun setEmptyViewLayout(context: Context, @LayoutRes layoutResId: Int) {
-        val view = LayoutInflater.from(context).inflate(layoutResId, FrameLayout(context), false)
-        emptyView = view
+        emptyView = LayoutInflater.from(context).inflate(layoutResId, FrameLayout(context), false)
     }
 
     /**
      * 是否需要显示空状态布局
      */
     fun displayEmptyView/*?*/(list: List<T> = this.items): Boolean {
-        if (emptyView == null) {
-            return false
-        }
-        if (!isEmptyViewEnable) {
-            return false
-        }
+        if (emptyView == null) return false
+        if (!isEmptyViewEnable) return false
         return list.isEmpty()
     }
 
@@ -511,9 +503,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * @param list 新数据集
      */
     open fun submitList(list: List<T>?) {
-        if (list === this.items) {
-            return
-        }
+        if (list === this.items) return
 
         mLastPosition = -1
 
@@ -548,10 +538,10 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
 
-        if (items is MutableList) {
-            (items as MutableList<T>)[position] = data
+        if (dataListType()) {
+            itemsTypeToMutable()[position] = data
         } else {
-            items = ArrayList(items).apply { set(position, data) }
+            items = itemsTypeToArrayList().apply { set(position, data) }
         }
         notifyItemChanged(position)
     }
@@ -572,10 +562,10 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             notifyItemRemoved(0)
         }
 
-        if (items is MutableList) {
-            (items as MutableList<T>).add(position, data)
+        if (dataListType()) {
+            itemsTypeToMutable().add(position, data)
         } else {
-            items = ArrayList(items).apply { add(position, data) }
+            items = itemsTypeToArrayList().apply { add(position, data) }
         }
         notifyItemInserted(position)
 
@@ -591,10 +581,10 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             notifyItemRemoved(0)
         }
 
-        if (items is MutableList) {
-            (items as MutableList<T>).add(data)
+        if (dataListType()) {
+            itemsTypeToMutable().add(data)
         } else {
-            items = ArrayList(items).apply { add(data) }
+            items = itemsTypeToArrayList().apply { add(data) }
         }
         notifyItemInserted(items.size - 1)
     }
@@ -616,14 +606,15 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             notifyItemRemoved(0)
         }
 
-        if (items is MutableList) {
-            (items as MutableList<T>).addAll(position, newCollection)
+        if (dataListType()) {
+            itemsTypeToMutable().addAll(position, newCollection)
         } else {
-            items = ArrayList(items).apply { addAll(position, newCollection) }
+            items = itemsTypeToArrayList().apply { addAll(position, newCollection) }
         }
 
         notifyItemRangeInserted(position, newCollection.size)
     }
+
 
     open fun addAll(@NonNull newCollection: Collection<T>) {
         if (displayEmptyView()) {
@@ -632,10 +623,10 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         }
 
         val oldSize = items.size
-        if (items is MutableList) {
-            (items as MutableList<T>).addAll(newCollection)
+        if (dataListType()) {
+            itemsTypeToMutable().addAll(newCollection)
         } else {
-            items = ArrayList(items).apply { addAll(newCollection) }
+            items = itemsTypeToArrayList().apply { addAll(newCollection) }
         }
 
         notifyItemRangeInserted(oldSize, newCollection.size)
@@ -652,10 +643,10 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
 
-        if (items is MutableList) {
-            (items as MutableList<T>).removeAt(position)
+        if (dataListType()) {
+            itemsTypeToMutable().removeAt(position)
         } else {
-            items = ArrayList(items).apply { removeAt(position) }
+            items = itemsTypeToArrayList().apply { removeAt(position) }
         }
 
         notifyItemRemoved(position)
@@ -666,13 +657,29 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         }
     }
 
+
     open fun remove(data: T) {
         val index = items.indexOf(data)
-        if (index == -1) {
-            return
-        }
+        if (index == -1) return
         removeAt(index)
     }
+
+
+    /**
+     * items 转化为ArrayList
+     */
+    private fun itemsTypeToArrayList() = ArrayList(items)
+
+    /**
+     * items 转化为MutableList
+     */
+    private fun itemsTypeToMutable() = (items as MutableList<T>)
+
+
+    /**
+     * 数据列表的类型
+     */
+    private fun dataListType() = items is MutableList
 
     /************************************** Set Listener ****************************************/
 
@@ -704,18 +711,18 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         mOnItemChildLongClickArray.remove(id)
     }
 
-    fun addOnViewAttachStateChangeListener(listener: OnViewAttachStateChangeListener) {
+     fun addOnViewAttachStateChangeListener(listener: OnViewAttachStateChangeListener) {
         if (onViewAttachStateChangeListeners == null) {
             onViewAttachStateChangeListeners = ArrayList()
         }
         onViewAttachStateChangeListeners?.add(listener)
     }
 
-    fun removeOnViewAttachStateChangeListener(listener: OnViewAttachStateChangeListener) {
+     fun removeOnViewAttachStateChangeListener(listener: OnViewAttachStateChangeListener) {
         onViewAttachStateChangeListeners?.remove(listener)
     }
 
-    fun clearOnViewAttachStateChangeListener() {
+     fun clearOnViewAttachStateChangeListener() {
         onViewAttachStateChangeListeners?.clear()
     }
 
