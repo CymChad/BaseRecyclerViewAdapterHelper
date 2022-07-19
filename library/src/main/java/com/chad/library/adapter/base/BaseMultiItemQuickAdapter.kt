@@ -35,7 +35,6 @@ abstract class BaseMultiItemQuickAdapter<T>(items: List<T> = emptyList()) :
 //            }
 //        }
         viewHoldersClass[holder::class.java]?.onBind(holder, position, item)
-
     }
 
     override fun onBindViewHolder(
@@ -64,14 +63,9 @@ abstract class BaseMultiItemQuickAdapter<T>(items: List<T> = emptyList()) :
         this.onItemViewTypeListener = listener
     }
 
-//    protected fun oneToMany() {
-//
-//    }
-
     override fun getItemViewType(position: Int, list: List<T>): Int {
         return onItemViewTypeListener?.onItemViewType(position, list)
             ?: super.getItemViewType(position, list)
-//        return super.getItemViewType(position, item)
     }
 
     override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
@@ -82,6 +76,15 @@ abstract class BaseMultiItemQuickAdapter<T>(items: List<T> = emptyList()) :
     override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
         super.onViewDetachedFromWindow(holder)
         viewHoldersClass[holder::class.java]?.onViewDetachedFromWindow(holder)
+    }
+
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        super.onViewRecycled(holder)
+        viewHoldersClass[holder::class.java]?.onViewRecycled(holder)
+    }
+
+    override fun onFailedToRecycleView(holder: RecyclerView.ViewHolder): Boolean {
+        return viewHoldersClass[holder::class.java]?.onFailedToRecycleView(holder) ?: super.onFailedToRecycleView(holder)
     }
 
     override fun isFullSpanItem(itemType: Int): Boolean {
@@ -100,6 +103,10 @@ abstract class BaseMultiItemQuickAdapter<T>(items: List<T> = emptyList()) :
         fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {}
 
         fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {}
+
+        fun onViewRecycled(holder: RecyclerView.ViewHolder) {}
+
+        fun onFailedToRecycleView(holder: RecyclerView.ViewHolder): Boolean = false
 
         fun isFullSpanItem(itemType: Int): Boolean {
             return false
