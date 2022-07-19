@@ -30,9 +30,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     /***************************** Public property settings *************************************/
 
-    /** 是否使用空布局 */
-    var isEmptyViewEnable = false
-
     /**
      * 是否打开动画
      */
@@ -401,7 +398,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      *
      * @param holder True if this item should traverse all spans.
      */
-    protected open fun setStaggeredGridFullSpan(holder: RecyclerView.ViewHolder) {
+    protected fun setStaggeredGridFullSpan(holder: RecyclerView.ViewHolder) {
         val layoutParams = holder.itemView.layoutParams
         if (layoutParams is StaggeredGridLayoutManager.LayoutParams) {
             layoutParams.isFullSpan = true
@@ -424,14 +421,13 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     /********************************************************************************************/
     /********************************** EmptyView Method ****************************************/
     /********************************************************************************************/
-    /**
-     * 空视图，注意：[items]为空数组才会生效
-     */
-    var emptyView: View? = null
+
+    /** 是否使用空布局 */
+    var isEmptyViewEnable = true
         set(value) {
             val oldDisplayEmptyLayout = displayEmptyView()
+
             field = value
-            isEmptyViewEnable = true
 
             val newDisplayEmptyLayout = displayEmptyView()
 
@@ -440,7 +436,27 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             } else if (newDisplayEmptyLayout && !oldDisplayEmptyLayout) {
                 notifyItemInserted(0)
             } else if (oldDisplayEmptyLayout && newDisplayEmptyLayout) {
-                notifyItemChanged(0, 1)
+                notifyItemChanged(0, EMPTY_PAYLOAD)
+            }
+        }
+
+    /**
+     * 空视图，注意：[items]为空数组才会生效
+     */
+    var emptyView: View? = null
+        set(value) {
+            val oldDisplayEmptyLayout = displayEmptyView()
+
+            field = value
+
+            val newDisplayEmptyLayout = displayEmptyView()
+
+            if (oldDisplayEmptyLayout && !newDisplayEmptyLayout) {
+                notifyItemRemoved(0)
+            } else if (newDisplayEmptyLayout && !oldDisplayEmptyLayout) {
+                notifyItemInserted(0)
+            } else if (oldDisplayEmptyLayout && newDisplayEmptyLayout) {
+                notifyItemChanged(0, EMPTY_PAYLOAD)
             }
         }
 
@@ -460,14 +476,14 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     /**
      * 是否需要显示空状态布局
      */
-    fun displayEmptyView(): Boolean {
+    fun displayEmptyView/*?*/(list: List<T> = this.items): Boolean {
         if (emptyView == null) {
             return false
         }
         if (!isEmptyViewEnable) {
             return false
         }
-        return items.isEmpty()
+        return list.isEmpty()
     }
 
     /*************************** Animation ******************************************/
@@ -527,20 +543,37 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     /**
      * setting up a new instance to data;
      *
-     * 使用新的数据集合，改变原有数据集合内容。
-     * 注意：不会替换原有的内存引用，只是替换内容
+     * 设置新的数据集合
      *
-     * @param list Collection<T>?
+     * @param list 新数据集
      */
     open fun submitList(list: List<T>?) {
         if (list === this.items) {
             return
         }
 
-
-        this.items = list ?: emptyList()
         mLastPosition = -1
-        notifyDataSetChanged()
+
+        val newList = list ?: emptyList()
+
+        val oldDisplayEmptyLayout = displayEmptyView()
+        val newDisplayEmptyLayout = displayEmptyView(newList)
+
+        if (oldDisplayEmptyLayout && !newDisplayEmptyLayout) {
+            notifyItemRemoved(0)
+            this.items = newList
+            notifyItemRangeInserted(0, newList.size)
+        } else if (newDisplayEmptyLayout && !oldDisplayEmptyLayout) {
+            notifyItemRangeRemoved(0, items.size)
+            this.items = newList
+            notifyItemInserted(0)
+        } else if (oldDisplayEmptyLayout && newDisplayEmptyLayout) {
+            this.items = newList
+            notifyItemChanged(0, EMPTY_PAYLOAD)
+        } else {
+            this.items = newList
+            notifyDataSetChanged()
+        }
     }
 
     /**
@@ -549,13 +582,15 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      */
     open operator fun set(@IntRange(from = 0) position: Int, data: T) {
         if (position >= this.items.size) {
-            return
+            throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
 
         if (items is MutableList) {
             (items as MutableList<T>)[position] = data
-            notifyItemChanged(position)
+        } else {
+            items = ArrayList(items).apply { set(position, data) }
         }
+        notifyItemChanged(position)
     }
 
     /**
@@ -565,12 +600,22 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * @param position
      */
     open fun add(@IntRange(from = 0) position: Int, data: T) {
-        if (items is MutableList) {
-            (items as MutableList<T>).add(position, data)
-            notifyItemInserted(position)
+        if (position > items.size || position < 0) {
+            throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
 
-//        compatibilityDataSizeChanged(1)
+        if (displayEmptyView()) {
+            // 如果之前在显示空布局，需要先移除
+            notifyItemRemoved(0)
+        }
+
+        if (items is MutableList) {
+            (items as MutableList<T>).add(position, data)
+        } else {
+            items = ArrayList(items).apply { add(position, data) }
+        }
+        notifyItemInserted(position)
+
     }
 
     /**
@@ -578,12 +623,17 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * 添加一条新数据
      */
     open fun add(@NonNull data: T) {
-        if (items is MutableList) {
-            (items as MutableList<T>).add(data)
-            notifyItemInserted(items.size)
+        if (displayEmptyView()) {
+            // 如果之前在显示空布局，需要先移除
+            notifyItemRemoved(0)
         }
 
-//        compatibilityDataSizeChanged(1)
+        if (items is MutableList) {
+            (items as MutableList<T>).add(data)
+        } else {
+            items = ArrayList(items).apply { add(data) }
+        }
+        notifyItemInserted(items.size - 1)
     }
 
     /**
@@ -593,23 +643,39 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * @param position the insert position
      * @param newData  the new data collection
      */
-    open fun add(@IntRange(from = 0) position: Int, newData: Collection<T>) {
-        if (items is MutableList) {
-            (items as MutableList<T>).addAll(position, newData)
-            notifyItemRangeInserted(position, newData.size)
+    open fun addAll(@IntRange(from = 0) position: Int, newData: Collection<T>) {
+        if (position > items.size || position < 0) {
+            throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
 
-//        compatibilityDataSizeChanged(newData.size)
+        if (displayEmptyView()) {
+            // 如果之前在显示空布局，需要先移除
+            notifyItemRemoved(0)
+        }
+
+        if (items is MutableList) {
+            (items as MutableList<T>).addAll(position, newData)
+        } else {
+            items = ArrayList(items).apply { addAll(position, newData) }
+        }
+
+        notifyItemRangeInserted(position, newData.size)
     }
 
     open fun addAll(@NonNull newData: Collection<T>) {
-        if (items is MutableList) {
-            val oldSize = items.size
-            (items as MutableList<T>).addAll(newData)
-            notifyItemRangeInserted(oldSize, newData.size)
+        if (displayEmptyView()) {
+            // 如果之前在显示空布局，需要先移除
+            notifyItemRemoved(0)
         }
 
-//        compatibilityDataSizeChanged(newData.size)
+        val oldSize = items.size
+        if (items is MutableList) {
+            (items as MutableList<T>).addAll(newData)
+        } else {
+            items = ArrayList(items).apply { addAll(newData) }
+        }
+
+        notifyItemRangeInserted(oldSize, newData.size)
     }
 
     /**
@@ -620,21 +686,21 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      */
     open fun removeAt(@IntRange(from = 0) position: Int) {
         if (position >= items.size) {
-            return
+            throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
 
         if (items is MutableList) {
             (items as MutableList<T>).removeAt(position)
-            notifyItemRemoved(position)
+        } else {
+            items = ArrayList(items).apply { removeAt(position) }
         }
+
+        notifyItemRemoved(position)
 
         // 处理空视图的情况
         if (displayEmptyView()) {
             notifyItemInserted(0)
         }
-
-//        compatibilityDataSizeChanged(0)
-//        notifyItemRangeChanged(position, this.data.size - position)
     }
 
     open fun remove(data: T) {
@@ -643,18 +709,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             return
         }
         removeAt(index)
-    }
-
-
-    /**
-     * compatible getLoadMoreViewCount and getEmptyViewCount may change
-     *
-     * @param size Need compatible data size
-     */
-    protected fun compatibilityDataSizeChanged(size: Int) {
-        if (items.size == size) {
-            notifyDataSetChanged()
-        }
     }
 
 
@@ -744,5 +798,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     companion object {
         const val EMPTY_VIEW = 0x10000555
+
+        private const val EMPTY_PAYLOAD = 0
     }
 }

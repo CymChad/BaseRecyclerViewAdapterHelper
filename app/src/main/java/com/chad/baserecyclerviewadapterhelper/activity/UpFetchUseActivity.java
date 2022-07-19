@@ -85,7 +85,7 @@ public class UpFetchUseActivity extends BaseActivity {
         mRecyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mAdapter.add(0, genData());
+                mAdapter.addAll(0, genData());
 
                 if (count > 5) {
                     /*
