@@ -7,16 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.annotation.IdRes
+import androidx.annotation.*
 import androidx.annotation.IntRange
-import androidx.annotation.LayoutRes
-import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.chad.library.adapter.base.animation.*
 import com.chad.library.adapter.base.module.BaseDraggableModule
 import com.chad.library.adapter.base.viewholder.EmptyLayoutVH
-import com.chad.library.adapter.base.viewholder.QuickViewHolder
 
 /**
  * Base Class
@@ -27,27 +24,6 @@ import com.chad.library.adapter.base.viewholder.QuickViewHolder
 abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     open var items: List<T> = emptyList()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    /***************************** Public property settings *************************************/
-
-    /**
-     * 是否打开动画
-     */
-    var animationEnable: Boolean = false
-
-    /**
-     * 动画是否仅第一次执行
-     */
-    var isAnimationFirstOnly = true
-
-    /**
-     * 设置自定义动画
-     */
-    var adapterAnimation: BaseAnimation? = null
-        set(value) {
-            animationEnable = true
-            field = value
-        }
 
 
     /**
@@ -61,12 +37,12 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     /********************************* Private property *****************************************/
     private var mLastPosition = -1
-
     private var mOnItemClickListener: OnItemClickListener<T>? = null
     private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
-
     private val mOnItemChildClickArray = SparseArray<OnItemChildClickListener<T>>(3)
     private val mOnItemChildLongClickArray = SparseArray<OnItemChildLongClickListener<T>>(3)
+    private var onViewAttachStateChangeListeners: MutableList<OnViewAttachStateChangeListener>? =
+        null
 
     //    private var mUpFetchModule: BaseUpFetchModule? = null
     private var mDraggableModule: BaseDraggableModule? = null
@@ -87,10 +63,71 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             return recyclerView.context
         }
 
-    private var onViewAttachStateChangeListeners: MutableList<OnViewAttachStateChangeListener>? =
-        null
 
-    /******************************* RecyclerView Method ****************************************/
+    /**
+     * 判断 ViewHolder 是否是 EmptyLayoutVH
+     * @receiver RecyclerView.ViewHolder
+     * @return Boolean
+     */
+    inline val RecyclerView.ViewHolder.isEmptyViewHolder: Boolean
+        get() = this is EmptyLayoutVH
+
+    /** 是否使用空布局 */
+    var isEmptyViewEnable = true
+        set(value) {
+            val oldDisplayEmptyLayout = displayEmptyView()
+
+            field = value
+
+            val newDisplayEmptyLayout = displayEmptyView()
+
+            if (oldDisplayEmptyLayout && !newDisplayEmptyLayout) {
+                notifyItemRemoved(0)
+            } else if (newDisplayEmptyLayout && !oldDisplayEmptyLayout) {
+                notifyItemInserted(0)
+            } else if (oldDisplayEmptyLayout && newDisplayEmptyLayout) {
+                notifyItemChanged(0, EMPTY_PAYLOAD)
+            }
+        }
+
+    /**
+     * 空视图，注意：[items]为空数组才会生效
+     */
+    var emptyView: View? = null
+        set(value) {
+            val oldDisplayEmptyLayout = displayEmptyView()
+
+            field = value
+
+            val newDisplayEmptyLayout = displayEmptyView()
+
+            if (oldDisplayEmptyLayout && !newDisplayEmptyLayout) {
+                notifyItemRemoved(0)
+            } else if (newDisplayEmptyLayout && !oldDisplayEmptyLayout) {
+                notifyItemInserted(0)
+            } else if (oldDisplayEmptyLayout && newDisplayEmptyLayout) {
+                notifyItemChanged(0, EMPTY_PAYLOAD)
+            }
+        }
+
+    /**
+     * 是否打开动画
+     */
+    var animationEnable: Boolean = false
+
+    /**
+     * 动画是否仅第一次执行
+     */
+    var isAnimationFirstOnly = true
+
+    /**
+     * 设置自定义动画
+     */
+    var itemAnimation: BaseAnimation? = null
+        set(value) {
+            animationEnable = true
+            field = value
+        }
 
     init {
         checkModule()
@@ -134,8 +171,8 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     protected open fun onBindViewHolder(holder: VH, position: Int, item: T, payloads: List<Any>) {}
 
     /**
-     * Override this method and return your data size.
-     * 重写此方法，返回你的数据数量。
+     * Override this method and return your item size.
+     * 重写此方法，返回你的item数量。
      */
     protected open fun getItemCount(items: List<T>): Int {
         return items.size
@@ -230,6 +267,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      *
      * @param holder
      */
+    @CallSuper
     override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
         super.onViewAttachedToWindow(holder)
 
@@ -244,12 +282,14 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         }
     }
 
+    @CallSuper
     override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
         onViewAttachStateChangeListeners?.forEach {
             it.onViewDetachedFromWindow(holder)
         }
     }
 
+    @CallSuper
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         recyclerViewOrNull = recyclerView
@@ -257,6 +297,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         mDraggableModule?.attachToRecyclerView(recyclerView)
     }
 
+    @CallSuper
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
         recyclerViewOrNull = null
@@ -350,6 +391,32 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             ?: false
     }
 
+    /**
+     * When set to true, the item will layout using all span area. That means, if orientation
+     * is vertical, the view will have full width; if orientation is horizontal, the view will
+     * have full height.
+     * if the hold view use StaggeredGridLayoutManager they should using all span area
+     *
+     * @param holder True if this item should traverse all spans.
+     */
+    protected fun setStaggeredGridFullSpan(holder: RecyclerView.ViewHolder) {
+        val layoutParams = holder.itemView.layoutParams
+        if (layoutParams is StaggeredGridLayoutManager.LayoutParams) {
+            layoutParams.isFullSpan = true
+        }
+    }
+
+
+    /**
+     * Is full span item
+     * 是否是完整跨度的item
+     *
+     * @param itemType
+     * @return
+     */
+    open fun isFullSpanItem(itemType: Int): Boolean {
+        return itemType == EMPTY_VIEW
+    }
 
     /**
      * Get the data item associated with the specified position in the data set.
@@ -369,96 +436,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         return if (item != null && items.isNotEmpty()) items.indexOf(item) else -1
     }
 
-
-    /**
-     * Is full span item
-     * 是否是完整跨度的item
-     *
-     * @param itemType
-     * @return
-     */
-    open fun isFullSpanItem(itemType: Int): Boolean {
-        return itemType == EMPTY_VIEW
-    }
-
-    /**
-     * 判断 ViewHolder 是否是 EmptyLayoutVH
-     * @receiver RecyclerView.ViewHolder
-     * @return Boolean
-     */
-    inline val RecyclerView.ViewHolder.isEmptyViewHolder: Boolean
-        get() = this is EmptyLayoutVH
-
-
-    /**
-     * When set to true, the item will layout using all span area. That means, if orientation
-     * is vertical, the view will have full width; if orientation is horizontal, the view will
-     * have full height.
-     * if the hold view use StaggeredGridLayoutManager they should using all span area
-     *
-     * @param holder True if this item should traverse all spans.
-     */
-    protected fun setStaggeredGridFullSpan(holder: RecyclerView.ViewHolder) {
-        val layoutParams = holder.itemView.layoutParams
-        if (layoutParams is StaggeredGridLayoutManager.LayoutParams) {
-            layoutParams.isFullSpan = true
-        }
-    }
-
-    /**
-     * get the specific view by position,e.g. getViewByPosition(2, R.id.textView)
-     *
-     * bind [RecyclerView.setAdapter] before use!
-     */
-    fun getViewByPosition(position: Int, @IdRes viewId: Int): View? {
-        val recyclerView = recyclerViewOrNull ?: return null
-        val viewHolder = recyclerView.findViewHolderForLayoutPosition(position) as QuickViewHolder?
-            ?: return null
-        return viewHolder.getViewOrNull(viewId)
-    }
-
-
-    /********************************************************************************************/
-    /********************************** EmptyView Method ****************************************/
-    /********************************************************************************************/
-
-    /** 是否使用空布局 */
-    var isEmptyViewEnable = true
-        set(value) {
-            val oldDisplayEmptyLayout = displayEmptyView()
-
-            field = value
-
-            val newDisplayEmptyLayout = displayEmptyView()
-
-            if (oldDisplayEmptyLayout && !newDisplayEmptyLayout) {
-                notifyItemRemoved(0)
-            } else if (newDisplayEmptyLayout && !oldDisplayEmptyLayout) {
-                notifyItemInserted(0)
-            } else if (oldDisplayEmptyLayout && newDisplayEmptyLayout) {
-                notifyItemChanged(0, EMPTY_PAYLOAD)
-            }
-        }
-
-    /**
-     * 空视图，注意：[items]为空数组才会生效
-     */
-    var emptyView: View? = null
-        set(value) {
-            val oldDisplayEmptyLayout = displayEmptyView()
-
-            field = value
-
-            val newDisplayEmptyLayout = displayEmptyView()
-
-            if (oldDisplayEmptyLayout && !newDisplayEmptyLayout) {
-                notifyItemRemoved(0)
-            } else if (newDisplayEmptyLayout && !oldDisplayEmptyLayout) {
-                notifyItemInserted(0)
-            } else if (oldDisplayEmptyLayout && newDisplayEmptyLayout) {
-                notifyItemChanged(0, EMPTY_PAYLOAD)
-            }
-        }
 
     /**
      * Set empty view layout
@@ -486,8 +463,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         return list.isEmpty()
     }
 
-    /*************************** Animation ******************************************/
-
     /**
      * add animation when you want to show time
      *
@@ -496,9 +471,9 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     private fun addAnimation(holder: RecyclerView.ViewHolder) {
         if (animationEnable) {
             if (!isAnimationFirstOnly || holder.layoutPosition > mLastPosition) {
-                val animation: BaseAnimation = adapterAnimation ?: AlphaInAnimation()
+                val animation: BaseAnimation = itemAnimation ?: AlphaInAnimation()
                 animation.animators(holder.itemView).forEach {
-                    startAnim(it, holder.layoutPosition)
+                    startAnim(it, holder)
                 }
                 mLastPosition = holder.layoutPosition
             }
@@ -510,25 +485,18 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * 可以重写此方法，实行更多行为
      *
      * @param anim
-     * @param index
+     * @param holder
      */
-    protected open fun startAnim(anim: Animator, index: Int) {
+    protected open fun startAnim(anim: Animator, holder: RecyclerView.ViewHolder) {
         anim.start()
-    }
-
-    /**
-     * 内置默认动画类型
-     */
-    enum class AnimationType {
-        AlphaIn, ScaleIn, SlideInBottom, SlideInLeft, SlideInRight
     }
 
     /**
      * 使用内置默认动画设置
      * @param animationType AnimationType
      */
-    fun setAnimationWithDefault(animationType: AnimationType) {
-        adapterAnimation = when (animationType) {
+    fun setItemAnimation(animationType: AnimationType) {
+        itemAnimation = when (animationType) {
             AnimationType.AlphaIn -> AlphaInAnimation()
             AnimationType.ScaleIn -> ScaleInAnimation()
             AnimationType.SlideInBottom -> SlideInBottomAnimation()
@@ -536,9 +504,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             AnimationType.SlideInRight -> SlideInRightAnimation()
         }
     }
-
-
-    /*************************** 设置数据相关 ******************************************/
 
     /**
      * setting up a new instance to data;
@@ -711,7 +676,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         removeAt(index)
     }
 
-
     /************************************** Set Listener ****************************************/
 
 
@@ -720,15 +684,11 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 
     fun getOnItemClickListener(): OnItemClickListener<T>? = mOnItemClickListener
-
-
     fun setOnItemLongClickListener(listener: OnItemLongClickListener<T>?) {
         this.mOnItemLongClickListener = listener
     }
 
     fun getOnItemLongClickListener(): OnItemLongClickListener<T>? = mOnItemLongClickListener
-
-
     fun addOnItemChildClickListener(@IdRes id: Int, listener: OnItemChildClickListener<T>) = apply {
         mOnItemChildClickArray[id] = listener
     }
@@ -761,6 +721,12 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         onViewAttachStateChangeListeners?.clear()
     }
 
+    /**
+     * 内置默认动画类型
+     */
+    enum class AnimationType {
+        AlphaIn, ScaleIn, SlideInBottom, SlideInLeft, SlideInRight
+    }
 
     fun interface OnItemClickListener<T> {
         fun onItemClick(adapter: BaseQuickAdapter<T, *>, view: View, position: Int)
@@ -794,7 +760,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
          */
         fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder)
     }
-
 
     companion object {
         const val EMPTY_VIEW = 0x10000555

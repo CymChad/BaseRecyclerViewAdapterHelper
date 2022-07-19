@@ -64,25 +64,25 @@ public class AnimationUseActivity extends AppCompatActivity {
             public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                 switch (position) {
                     case 0:
-                        mAnimationAdapter.setAnimationWithDefault(BaseQuickAdapter.AnimationType.AlphaIn);
+                        mAnimationAdapter.setItemAnimation(BaseQuickAdapter.AnimationType.AlphaIn);
                         break;
                     case 1:
-                        mAnimationAdapter.setAnimationWithDefault(BaseQuickAdapter.AnimationType.ScaleIn);
+                        mAnimationAdapter.setItemAnimation(BaseQuickAdapter.AnimationType.ScaleIn);
                         break;
                     case 2:
-                        mAnimationAdapter.setAnimationWithDefault(BaseQuickAdapter.AnimationType.SlideInBottom);
+                        mAnimationAdapter.setItemAnimation(BaseQuickAdapter.AnimationType.SlideInBottom);
                         break;
                     case 3:
-                        mAnimationAdapter.setAnimationWithDefault(BaseQuickAdapter.AnimationType.SlideInLeft);
+                        mAnimationAdapter.setItemAnimation(BaseQuickAdapter.AnimationType.SlideInLeft);
                         break;
                     case 4:
-                        mAnimationAdapter.setAnimationWithDefault(BaseQuickAdapter.AnimationType.SlideInRight);
+                        mAnimationAdapter.setItemAnimation(BaseQuickAdapter.AnimationType.SlideInRight);
                         break;
                     case 5:
-                        mAnimationAdapter.setAdapterAnimation(new CustomAnimation1());
+                        mAnimationAdapter.setItemAnimation(new CustomAnimation1());
                         break;
                     case 6:
-                        mAnimationAdapter.setAdapterAnimation(new CustomAnimation2());
+                        mAnimationAdapter.setItemAnimation(new CustomAnimation2());
                         break;
                     default:
                         break;
@@ -96,11 +96,7 @@ public class AnimationUseActivity extends AppCompatActivity {
         switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
-                if (isChecked) {
-                    mAnimationAdapter.setAnimationFirstOnly(true);
-                } else {
-                    mAnimationAdapter.setAnimationFirstOnly(false);
-                }
+                mAnimationAdapter.setAnimationFirstOnly(isChecked);
                 mAnimationAdapter.notifyDataSetChanged();
             }
         });
