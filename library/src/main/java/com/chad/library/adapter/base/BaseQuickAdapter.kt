@@ -525,8 +525,8 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         val newDisplayEmptyLayout = displayEmptyView(newList)
 
         if (oldDisplayEmptyLayout && !newDisplayEmptyLayout) {
-            notifyItemRemoved(0)
             this.items = newList
+            notifyItemRemoved(0)
             notifyItemRangeInserted(0, newList.size)
         } else if (newDisplayEmptyLayout && !oldDisplayEmptyLayout) {
             notifyItemRangeRemoved(0, items.size)
@@ -764,6 +764,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     companion object {
         const val EMPTY_VIEW = 0x10000555
 
-        private const val EMPTY_PAYLOAD = 0
+        internal const val EMPTY_PAYLOAD = 0
     }
 }
