@@ -473,7 +473,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             if (!isAnimationFirstOnly || holder.layoutPosition > mLastPosition) {
                 val animation: BaseAnimation = itemAnimation ?: AlphaInAnimation()
                 animation.animators(holder.itemView).forEach {
-                    startAnim(it, holder)
+                    startItemAnim(it, holder)
                 }
                 mLastPosition = holder.layoutPosition
             }
@@ -487,7 +487,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * @param anim
      * @param holder
      */
-    protected open fun startAnim(anim: Animator, holder: RecyclerView.ViewHolder) {
+    protected open fun startItemAnim(anim: Animator, holder: RecyclerView.ViewHolder) {
         anim.start()
     }
 
