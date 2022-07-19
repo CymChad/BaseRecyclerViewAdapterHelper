@@ -7,7 +7,6 @@ import android.widget.Button;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.baserecyclerviewadapterhelper.R;
-import com.chad.baserecyclerviewadapterhelper.adapter.diffUtil.DiffDemoCallback;
 import com.chad.baserecyclerviewadapterhelper.adapter.diffUtil.DiffUtilAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
@@ -18,12 +17,13 @@ import java.util.List;
 
 /**
  * Created by limuyang
- * Date: 2019/7/14
+ * Date: 2019/7/14O
  */
-public class DiffUtilActivity extends BaseActivity {
+public class DifferActivity extends BaseActivity {
     private RecyclerView mRecyclerView;
     private Button itemChangeBtn;
-    private Button notifyChangeBtn;
+    private Button removeBtn;
+    private Button addBtn;
 
     private DiffUtilAdapter mAdapter;
 
@@ -36,7 +36,6 @@ public class DiffUtilActivity extends BaseActivity {
         setTitle("DiffUtil Use");
 
 
-
         findView();
         initRv();
         initClick();
@@ -47,34 +46,33 @@ public class DiffUtilActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
 
-        // 传入 空布局 layout id
-        mAdapter.setEmptyViewLayout(R.layout.loading_view);
+        // 增加延迟，模拟网络加载
         mRecyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
                 mAdapter.submitList(DataServer.getDiffUtilDemoEntities());
             }
-        }, 2000);
+        }, 1500);
     }
 
     private void findView() {
         mRecyclerView = findViewById(R.id.diff_rv);
         itemChangeBtn = findViewById(R.id.item_change_btn);
-        notifyChangeBtn = findViewById(R.id.notify_change_btn);
+        removeBtn = findViewById(R.id.btn_remove);
+        addBtn = findViewById(R.id.btn_add);
     }
 
     private void initRv() {
         mAdapter = new DiffUtilAdapter();
+        // 打开空布局功能
+        mAdapter.setEmptyViewEnable(true);
+        // 传入 空布局 layout id
+        mAdapter.setEmptyViewLayout(this, R.layout.loading_view);
+
         mRecyclerView.setAdapter(mAdapter);
-
-//        View view = getLayoutInflater().inflate(R.layout.head_view, mRecyclerView, false);
-//        view.findViewById(R.id.iv).setVisibility(View.GONE);
-//        mAdapter.addHeaderView(view);
-
-        // 必须设置Diff Callback
-//        mAdapter.setDiffCallback(new DiffDemoCallback());
-
     }
+
+    private int idAdd = 0;
 
     private void initClick() {
         itemChangeBtn.setOnClickListener(new View.OnClickListener() {
@@ -85,16 +83,22 @@ public class DiffUtilActivity extends BaseActivity {
             }
         });
 
-        notifyChangeBtn.setOnClickListener(new View.OnClickListener() {
+        addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // change item 0
-                mAdapter.getItems().set(0, new DiffUtilDemoEntity(
-                        1,
-                        "😊😊Item " + 0,
+                mAdapter.add(2, new DiffUtilDemoEntity(
+                        1111111 + idAdd,
+                        "add - 😊😊Item " + 1111111 + idAdd,
                         "Item " + 0 + " content have change (notifyItemChanged)",
                         "06-12"));
-                mAdapter.notifyItemChanged(0, DiffUtilAdapter.ITEM_0_PAYLOAD);
+                idAdd++;
+            }
+        });
+
+        removeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAdapter.removeAt(2);
             }
         });
     }

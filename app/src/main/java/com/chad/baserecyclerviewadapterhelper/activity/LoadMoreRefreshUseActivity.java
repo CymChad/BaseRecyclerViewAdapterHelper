@@ -82,7 +82,7 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         // 进入页面，刷新数据
-        mAdapter.setEmptyViewLayout(R.layout.loading_view);
+        mAdapter.setEmptyViewLayout(this, R.layout.loading_view);
         mSwipeRefreshLayout.setRefreshing(true);
         refresh();
     }

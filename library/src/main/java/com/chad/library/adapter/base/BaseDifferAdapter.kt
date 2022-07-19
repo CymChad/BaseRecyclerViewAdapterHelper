@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.*
 import androidx.recyclerview.widget.AsyncListDiffer.ListListener
 
 
-abstract class BaseDifferAdapter<T, VH : RecyclerView.ViewHolder> (
+abstract class BaseDifferAdapter<T, VH : RecyclerView.ViewHolder>(
     config: AsyncDifferConfig<T>, items: List<T>
 ) : BaseQuickAdapter<T, VH>() {
 
@@ -17,10 +17,24 @@ abstract class BaseDifferAdapter<T, VH : RecyclerView.ViewHolder> (
     constructor(config: AsyncDifferConfig<T>) : this(config, emptyList())
 
 
-    private val mDiffer: AsyncListDiffer<T> = AsyncListDiffer(AdapterListUpdateCallback(this), config)
+    private val mDiffer: AsyncListDiffer<T> =
+        AsyncListDiffer(AdapterListUpdateCallback(this), config)
 
 
     private val mListener: ListListener<T> = ListListener<T> { previousList, currentList ->
+
+        val oldDisplayEmptyLayout = displayEmptyView(previousList)
+        val newDisplayEmptyLayout = displayEmptyView(currentList)
+
+        if (oldDisplayEmptyLayout && !newDisplayEmptyLayout) {
+            notifyItemRemoved(0)
+            recyclerView.scrollToPosition(0)
+        } else if (newDisplayEmptyLayout && !oldDisplayEmptyLayout) {
+            notifyItemInserted(0)
+        } else if (oldDisplayEmptyLayout && newDisplayEmptyLayout) {
+            notifyItemChanged(0, EMPTY_PAYLOAD)
+        }
+
         this.onCurrentListChanged(previousList, currentList)
     }
 
@@ -35,7 +49,6 @@ abstract class BaseDifferAdapter<T, VH : RecyclerView.ViewHolder> (
             mDiffer.submitList(value)
         }
 
-
     open fun onCurrentListChanged(previousList: List<T>, currentList: List<T>) {}
 
     override fun submitList(list: List<T>?) {
@@ -43,31 +56,55 @@ abstract class BaseDifferAdapter<T, VH : RecyclerView.ViewHolder> (
     }
 
     fun submitList(list: List<T>?, commitCallback: Runnable?) {
-//        mDiffer.submitList(list, runnable)
+        mDiffer.submitList(list, commitCallback)
+    }
 
-        val newList = list ?: emptyList()
+    override operator fun set(position: Int, data: T) {
+        ArrayList(items).also {
+            it[position] = data
+            submitList(it)
+        }
+    }
 
-        val oldDisplayEmptyLayout = displayEmptyView()
-        val newDisplayEmptyLayout = displayEmptyView(newList)
+    override fun add(data: T) {
+        ArrayList(items).also {
+            it.add(data)
+            submitList(it)
+        }
+    }
 
-        if (oldDisplayEmptyLayout && !newDisplayEmptyLayout) {
-            notifyItemRemoved(0)
-//            mDiffer.submitList(list, commitCallback)
-        } else if (newDisplayEmptyLayout && !oldDisplayEmptyLayout) {
-//            notifyItemRangeRemoved(0, items.size)
-//            this.items = newList
-//            notifyItemInserted(0)
+    override fun add(position: Int, data: T) {
+        ArrayList(items).also {
+            it.add(position, data)
+            submitList(it)
+        }
+    }
 
-            mDiffer.submitList(list) {
-                notifyItemInserted(0)
-                commitCallback?.run()
-            }
+    override fun addAll(newCollection: Collection<T>) {
+        ArrayList(items).also {
+            it.addAll(newCollection)
+            submitList(it)
+        }
+    }
 
-        } else if (oldDisplayEmptyLayout && newDisplayEmptyLayout) {
-            notifyItemChanged(0, EMPTY_PAYLOAD)
-            mDiffer.submitList(list, commitCallback)
-        } else {
-            mDiffer.submitList(list, commitCallback)
+    override fun addAll(position: Int, newCollection: Collection<T>) {
+        ArrayList(items).also {
+            it.addAll(position, newCollection)
+            submitList(it)
+        }
+    }
+
+    override fun removeAt(position: Int) {
+        ArrayList(items).also {
+            it.removeAt(position)
+            submitList(it)
+        }
+    }
+
+    override fun remove(data: T) {
+        ArrayList(items).also {
+            it.remove(data)
+            submitList(it)
         }
     }
 }

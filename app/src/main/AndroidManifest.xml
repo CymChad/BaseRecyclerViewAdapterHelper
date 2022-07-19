@@ -36,7 +36,7 @@
         <activity android:name=".activity.DragAndSwipeUseActivity" />
         <activity android:name=".activity.UpFetchUseActivity" />
         <activity android:name=".activity.node.NodeSectionUseActivity" />
-        <activity android:name=".activity.DiffUtilActivity" />
+        <activity android:name=".activity.DifferActivity" />
         <activity android:name=".activity.node.ChooseNodeUseTypeActivity" />
         <activity android:name=".activity.node.NodeTreeUseActivity" />
         <activity android:name=".activity.multi.BinderUseActivity" />

@@ -36,6 +36,9 @@ public class EmptyViewUseActivity extends BaseActivity {
         mRecyclerView = findViewById(R.id.rv_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);
+
+        // 打开空布局功能
+        mAdapter.setEmptyViewEnable(true);
     }
 
     @Override
@@ -75,7 +78,7 @@ public class EmptyViewUseActivity extends BaseActivity {
 
     private void onRefresh() {
         // 方式一：直接传入 layout id
-        mAdapter.setEmptyViewLayout(R.layout.loading_view);
+        mAdapter.setEmptyViewLayout(this, R.layout.loading_view);
 
         mRecyclerView.postDelayed(new Runnable() {
             @Override

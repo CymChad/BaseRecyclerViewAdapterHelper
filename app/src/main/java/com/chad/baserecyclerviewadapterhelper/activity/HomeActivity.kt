@@ -54,7 +54,7 @@ class HomeActivity : AppCompatActivity() {
                 HomeEntity("EmptyView", EmptyViewUseActivity::class.java, R.mipmap.gv_empty),
                 HomeEntity("ItemClick", ItemClickActivity::class.java, R.mipmap.gv_item_click),
                 HomeEntity("DataBinding", DataBindingUseActivity::class.java, R.mipmap.gv_databinding),
-                HomeEntity("DiffUtil", DiffUtilActivity::class.java, R.mipmap.gv_databinding),
+                HomeEntity("DiffUtil", DifferActivity::class.java, R.mipmap.gv_databinding),
 
 //                HomeEntity(sectionTitle = "Adapter 类型"),
 //                HomeEntity("MultipleItem", ChooseMultipleItemUseTypeActivity::class.java, R.mipmap.gv_multipleltem),

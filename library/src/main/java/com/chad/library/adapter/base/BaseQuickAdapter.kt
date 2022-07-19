@@ -73,7 +73,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         get() = this is EmptyLayoutVH
 
     /** 是否使用空布局 */
-    var isEmptyViewEnable = true
+    var isEmptyViewEnable = false
         set(value) {
             val oldDisplayEmptyLayout = displayEmptyView()
 
@@ -443,11 +443,9 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      *
      * @param layoutResId
      */
-    fun setEmptyViewLayout(@LayoutRes layoutResId: Int) {
-        recyclerViewOrNull?.let {
-            val view = LayoutInflater.from(it.context).inflate(layoutResId, it, false)
-            emptyView = view
-        }
+    fun setEmptyViewLayout(context: Context, @LayoutRes layoutResId: Int) {
+        val view = LayoutInflater.from(context).inflate(layoutResId, FrameLayout(context), false)
+        emptyView = view
     }
 
     /**
@@ -606,9 +604,9 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * 在指定位置添加数据
      *
      * @param position the insert position
-     * @param newData  the new data collection
+     * @param newCollection  the new data collection
      */
-    open fun addAll(@IntRange(from = 0) position: Int, newData: Collection<T>) {
+    open fun addAll(@IntRange(from = 0) position: Int, newCollection: Collection<T>) {
         if (position > items.size || position < 0) {
             throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
@@ -619,15 +617,15 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         }
 
         if (items is MutableList) {
-            (items as MutableList<T>).addAll(position, newData)
+            (items as MutableList<T>).addAll(position, newCollection)
         } else {
-            items = ArrayList(items).apply { addAll(position, newData) }
+            items = ArrayList(items).apply { addAll(position, newCollection) }
         }
 
-        notifyItemRangeInserted(position, newData.size)
+        notifyItemRangeInserted(position, newCollection.size)
     }
 
-    open fun addAll(@NonNull newData: Collection<T>) {
+    open fun addAll(@NonNull newCollection: Collection<T>) {
         if (displayEmptyView()) {
             // 如果之前在显示空布局，需要先移除
             notifyItemRemoved(0)
@@ -635,12 +633,12 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
         val oldSize = items.size
         if (items is MutableList) {
-            (items as MutableList<T>).addAll(newData)
+            (items as MutableList<T>).addAll(newCollection)
         } else {
-            items = ArrayList(items).apply { addAll(newData) }
+            items = ArrayList(items).apply { addAll(newCollection) }
         }
 
-        notifyItemRangeInserted(oldSize, newData.size)
+        notifyItemRangeInserted(oldSize, newCollection.size)
     }
 
     /**

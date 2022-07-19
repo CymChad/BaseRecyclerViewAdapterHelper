@@ -1,5 +1,7 @@
 package com.chad.baserecyclerviewadapterhelper.entity;
 
+import java.util.Objects;
+
 public class DiffUtilDemoEntity {
 
     private int id;
@@ -44,5 +46,18 @@ public class DiffUtilDemoEntity {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DiffUtilDemoEntity)) return false;
+        DiffUtilDemoEntity that = (DiffUtilDemoEntity) o;
+        return id == that.id && Objects.equals(title, that.title) && Objects.equals(content, that.content) && Objects.equals(date, that.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, content, date);
     }
 }
