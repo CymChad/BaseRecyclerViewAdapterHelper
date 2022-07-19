@@ -4,9 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.CallSuper
-import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.baserecyclerviewadapterhelper.databinding.DefSectionHeadBinding
@@ -25,7 +22,7 @@ class HomeAdapter(data: MutableList<HomeEntity>) : BaseMultiItemQuickAdapter<Hom
     class HeaderVH(val viewBinding: DefSectionHeadBinding) : RecyclerView.ViewHolder(viewBinding.root)
 
     init {
-        addItemType(ITEM_TYPE, object : OnViewHolderListener<HomeEntity, ItemVH> {
+        addItemType(ITEM_TYPE, object : OnMultiItemAdapterListener<HomeEntity, ItemVH> {
             override fun onCreate(context: Context, parent: ViewGroup, viewType: Int): ItemVH {
                 val viewBinding =
                     HomeItemViewBinding.inflate(LayoutInflater.from(context), parent, false)
@@ -36,7 +33,7 @@ class HomeAdapter(data: MutableList<HomeEntity>) : BaseMultiItemQuickAdapter<Hom
                 holder.viewBinding.textView.text = item.name
                 holder.viewBinding.icon.setImageResource(item.imageResource)
             }
-        }).addItemType(SECTION_TYPE, object : OnViewHolderListener<HomeEntity, HeaderVH> {
+        }).addItemType(SECTION_TYPE, object : OnMultiItemAdapterListener<HomeEntity, HeaderVH> {
             override fun onCreate(context: Context, parent: ViewGroup, viewType: Int): HeaderVH {
                 val viewBinding =
                     DefSectionHeadBinding.inflate(LayoutInflater.from(context), parent, false)

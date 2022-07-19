@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 abstract class BaseMultiItemQuickAdapter<T>(items: List<T> = emptyList()) :
     BaseQuickAdapter<T, RecyclerView.ViewHolder>(items) {
 
-    private val typeViewHolders = SparseArray<OnViewHolderListener<T, RecyclerView.ViewHolder>>(1)
+    private val typeViewHolders = SparseArray<OnMultiItemAdapterListener<T, RecyclerView.ViewHolder>>(1)
     private val viewHoldersClass =
-        HashMap<Class<*>, OnViewHolderListener<T, RecyclerView.ViewHolder>>(1)
+        HashMap<Class<*>, OnMultiItemAdapterListener<T, RecyclerView.ViewHolder>>(1)
 
     private var onItemViewTypeListener: OnItemViewTypeListener<T>? = null
 
@@ -50,13 +50,13 @@ abstract class BaseMultiItemQuickAdapter<T>(items: List<T> = emptyList()) :
      * @param listener Int
      */
     inline fun <reified V : RecyclerView.ViewHolder> addItemType(
-        type: Int, listener: OnViewHolderListener<T, V>
+        type: Int, listener: OnMultiItemAdapterListener<T, V>
     ) = addItemType(type, V::class.java, listener)
 
     fun <V : RecyclerView.ViewHolder> addItemType(
-        type: Int, holderClazz: Class<V>, listener: OnViewHolderListener<T, V>
+        type: Int, holderClazz: Class<V>, listener: OnMultiItemAdapterListener<T, V>
     ) = apply {
-        typeViewHolders.put(type, listener as OnViewHolderListener<T, RecyclerView.ViewHolder>)
+        typeViewHolders.put(type, listener as OnMultiItemAdapterListener<T, RecyclerView.ViewHolder>)
         viewHoldersClass[holderClazz] = listener
     }
 
@@ -90,7 +90,7 @@ abstract class BaseMultiItemQuickAdapter<T>(items: List<T> = emptyList()) :
     }
 
 
-    interface OnViewHolderListener<T, V : RecyclerView.ViewHolder> {
+    interface OnMultiItemAdapterListener<T, V : RecyclerView.ViewHolder> {
         fun onCreate(context: Context, parent: ViewGroup, viewType: Int): V
 
         fun onBind(holder: V, position: Int, item: T)

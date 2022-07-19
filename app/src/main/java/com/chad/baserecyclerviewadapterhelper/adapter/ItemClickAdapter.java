@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.databinding.ItemClickChildviewBinding;
 import com.chad.baserecyclerviewadapterhelper.databinding.ItemClickViewBinding;
 import com.chad.baserecyclerviewadapterhelper.databinding.ItemLongClickChildviewBinding;
@@ -87,7 +86,7 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity> {
 //        addItemType(ClickEntity.LONG_CLICK_ITEM_CHILD_VIEW, R.layout.item_long_click_childview);
 //        addItemType(ClickEntity.NEST_CLICK_ITEM_CHILD_VIEW, R.layout.item_nest_click);
 
-        addItemType(ClickEntity.CLICK_ITEM_VIEW, ItemViewVH.class, new OnViewHolderListener<ClickEntity, ItemViewVH>() {
+        addItemType(ClickEntity.CLICK_ITEM_VIEW, ItemViewVH.class, new OnMultiItemAdapterListener<ClickEntity, ItemViewVH>() {
 
             @NonNull
             @Override
@@ -98,7 +97,7 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity> {
             @Override
             public void onBind(@NonNull ItemViewVH holder, int position, ClickEntity item) {
             }
-        }).addItemType(ClickEntity.CLICK_ITEM_CHILD_VIEW, ItemChildVH.class, new OnViewHolderListener<ClickEntity, ItemChildVH>() {
+        }).addItemType(ClickEntity.CLICK_ITEM_CHILD_VIEW, ItemChildVH.class, new OnMultiItemAdapterListener<ClickEntity, ItemChildVH>() {
 
             @NonNull
             @Override
@@ -109,7 +108,7 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity> {
             @Override
             public void onBind(@NonNull ItemChildVH holder, int position, ClickEntity item) {
             }
-        }).addItemType(ClickEntity.LONG_CLICK_ITEM_VIEW, ItemLongClickVH.class, new OnViewHolderListener<ClickEntity, ItemLongClickVH>() {
+        }).addItemType(ClickEntity.LONG_CLICK_ITEM_VIEW, ItemLongClickVH.class, new OnMultiItemAdapterListener<ClickEntity, ItemLongClickVH>() {
 
             @NonNull
             @Override
@@ -120,7 +119,7 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity> {
             @Override
             public void onBind(@NonNull ItemLongClickVH holder, int position, ClickEntity item) {
             }
-        }).addItemType(ClickEntity.LONG_CLICK_ITEM_CHILD_VIEW, ItemChildLongClickVH.class, new OnViewHolderListener<ClickEntity, ItemChildLongClickVH>() {
+        }).addItemType(ClickEntity.LONG_CLICK_ITEM_CHILD_VIEW, ItemChildLongClickVH.class, new OnMultiItemAdapterListener<ClickEntity, ItemChildLongClickVH>() {
 
             @NonNull
             @Override
