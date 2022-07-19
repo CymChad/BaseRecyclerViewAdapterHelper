@@ -67,6 +67,7 @@ public class UpFetchUseActivity extends BaseActivity {
 
     private void requestUoFetch() {
         if (count == 0) {
+            count++;
             // 首次进入页面，设置数据
             mAdapter.submitList(genData());
             scrollToBottom();
