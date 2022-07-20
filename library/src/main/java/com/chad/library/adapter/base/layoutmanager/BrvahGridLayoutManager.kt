@@ -43,6 +43,9 @@ class BrvahGridLayoutManager : GridLayoutManager {
                 val pair = adapter.getWrappedAdapterAndPosition(position)
 
                 return when (val wrappedAdapter = pair.first) {
+                    is FullSpanAdapterType -> {
+                        spanCount
+                    }
                     is BaseQuickAdapter<*, *> -> {
                         val type = wrappedAdapter.getItemViewType(pair.second)
 
@@ -52,25 +55,23 @@ class BrvahGridLayoutManager : GridLayoutManager {
                             1
                         }
                     }
-
-                    is FullSpanAdapterType -> {
-                        spanCount
-                    }
-
                     else -> 1
                 }
             } else {
-                return if (adapter is BaseQuickAdapter<*, *>) {
-                    val type = adapter.getItemViewType(position)
-                    if (adapter.isFullSpanItem(type)) {
+                return when (adapter) {
+                    is FullSpanAdapterType -> {
                         spanCount
-                    } else {
-                        1
                     }
-                } else if (adapter is FullSpanAdapterType) {
-                    spanCount
-                } else {
-                    1
+                    is BaseQuickAdapter<*, *> -> {
+                        val type = adapter.getItemViewType(position)
+
+                        if (adapter.isFullSpanItem(type)) {
+                            spanCount
+                        } else {
+                            1
+                        }
+                    }
+                    else -> 1
                 }
             }
         }
