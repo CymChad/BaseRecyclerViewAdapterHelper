@@ -58,6 +58,10 @@ abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ada
         onBindViewHolder(holder, loadState)
     }
 
+    final override fun onBindViewHolder(holder: VH, position: Int, payloads: MutableList<Any>) {
+        super.onBindViewHolder(holder, position, payloads)
+    }
+
     final override fun getItemViewType(position: Int): Int = getStateViewType(loadState)
 
     final override fun getItemCount(): Int = if (displayLoadStateAsItem(loadState)) 1 else 0

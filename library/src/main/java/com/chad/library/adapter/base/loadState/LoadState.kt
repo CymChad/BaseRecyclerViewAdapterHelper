@@ -1,10 +1,21 @@
 package com.chad.library.adapter.base.loadState
 
+/**
+ * Load state
+ *
+ * 加载状态
+ *
+ * @property endOfPaginationReached 是否已到达分页末尾
+ */
 sealed class LoadState(
     val endOfPaginationReached: Boolean
 ) {
 
-
+    /**
+     * There is currently no status.
+     *
+     * 当前没有任何状态
+     */
     object None: LoadState(false) {
         override fun equals(other: Any?): Boolean {
             return other is None &&
@@ -23,7 +34,9 @@ sealed class LoadState(
     /**
      * Is not currently loading, and no error currently observed.
      *
-     * @param endOfPaginationReached
+     * 当前未加载，并且当前未发生错误。
+     *
+     * @param endOfPaginationReached 是否已到达分页末尾
      */
     class NotLoading(
         endOfPaginationReached: Boolean
@@ -49,6 +62,8 @@ sealed class LoadState(
 
     /**
      * Loading is in progress.
+     *
+     * 正在加载
      */
     object Loading : LoadState(false) {
         override fun toString(): String {
@@ -67,6 +82,8 @@ sealed class LoadState(
 
     /**
      * Loading hit an error.
+     *
+     * 加载时出错
      *
      * @param error [Throwable] that caused the load operation to generate this error state.
      */

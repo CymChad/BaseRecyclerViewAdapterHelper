@@ -7,6 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.loadState.LoadState
 import com.chad.library.databinding.BrvahLeadingLoadMoreBinding
 
+/**
+ * Default leading load state adapter
+ *
+ * 默认实现的尾部"向上加载更多" Adapter
+ */
 internal class DefaultLeadingLoadStateAdapter :LeadingLoadStateAdapter<DefaultLeadingLoadStateAdapter.LeadingLoadStateVH>() {
 
     /**

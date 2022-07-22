@@ -23,6 +23,8 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder> : LoadStat
         private set
 
     /**
+     * Whether to display "Loading end" after all data is loaded.
+     *
      * 所有数据加载完毕后，是否显示"加载结束"
      */
     var isLoadEndDisplay: Boolean = true
@@ -38,6 +40,8 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder> : LoadStat
     var isDisableLoadMoreIfNotFullPage = false
 
     /**
+     * Preload, the number of items from the tail.
+     *
      * 预加载，距离尾部 item 的个数
      */
     var preloadSize = 0
