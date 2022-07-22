@@ -75,6 +75,8 @@ abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ada
     /**
      * Called to create a ViewHolder for the given LoadState.
      *
+     * 调用此方法，为给定的 LoadState 创建一个 ViewHolder。
+     *
      * @param parent The ViewGroup into which the new View will be added after it is bound to
      *               an adapter position.
      * @param loadState The LoadState to be initially presented by the new ViewHolder.
@@ -87,6 +89,8 @@ abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ada
     /**
      * Called to bind the passed LoadState to the ViewHolder.
      *
+     * 调用此方法，将 LoadState 状态绑定至 ViewHolder
+     *
      * @param loadState LoadState to display.
      *
      * @see [getItemViewType]
@@ -96,6 +100,7 @@ abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ada
 
     /**
      * Override this method to use different view types per LoadState.
+     * 重写此方法以对每个 LoadState 使用不同的视图类型。
      *
      * By default, this LoadStateAdapter only uses a single view type.
      */
@@ -107,7 +112,7 @@ abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ada
      * By default, [LoadState.Loading] and [LoadState.Error] present as list items, others do not.
      *
      *
-     * 如果 LoadState 在活动时需要显示item，则返回 true。
+     * 如果 LoadState 在激活时需要显示item，则返回 true。
      * 默认情况下，[LoadState.Loading] 和 [LoadState.Error] 将会显示，其他则不显示。
      */
     open fun displayLoadStateAsItem(loadState: LoadState): Boolean {

@@ -3,7 +3,14 @@ package com.chad.library.adapter.base
 import androidx.recyclerview.widget.*
 import androidx.recyclerview.widget.AsyncListDiffer.ListListener
 
-
+/**
+ * Base differ adapter
+ *
+ * 使用 Differ 的父类
+ *
+ * @param T 数据类型
+ * @param VH ViewHolder 类型
+ */
 abstract class BaseDifferAdapter<T, VH : RecyclerView.ViewHolder>(
     config: AsyncDifferConfig<T>, items: List<T>
 ) : BaseQuickAdapter<T, VH>() {
@@ -43,14 +50,30 @@ abstract class BaseDifferAdapter<T, VH : RecyclerView.ViewHolder>(
         mDiffer.submitList(items)
     }
 
+    /**
+     * item 数据集
+     */
     final override var items: List<T>
         get() = mDiffer.currentList
         set(value) {
             mDiffer.submitList(value)
         }
 
+    /**
+     * (Optional) Override this method to monitor changes in the dataset before and after..
+     * （可选）重写此方法，监听前后数据集变化
+     *
+     * @param previousList 原数据集
+     * @param currentList 当前数据集
+     */
     open fun onCurrentListChanged(previousList: List<T>, currentList: List<T>) {}
 
+    /**
+     * Submit List
+     * 提交数据集
+     *
+     * @param list
+     */
     override fun submitList(list: List<T>?) {
         submitList(list, null)
     }

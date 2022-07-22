@@ -10,6 +10,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * ViewDataBinding 快速使用的 ViewHolder
+ * @param <DB> ViewDataBinding
+ */
 public class DataBindingHolder<DB extends ViewDataBinding> extends RecyclerView.ViewHolder {
 
     private final DB binding;
