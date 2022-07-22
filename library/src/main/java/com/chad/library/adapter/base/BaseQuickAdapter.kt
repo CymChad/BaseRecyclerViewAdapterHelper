@@ -22,7 +22,7 @@ import com.chad.library.adapter.base.viewholder.EmptyLayoutVH
  * @constructor layoutId, data(Can null parameters, the default is empty data)
  */
 abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
-    open var items: MutableList<T> = mutableListOf()
+    open var items: List<T> = emptyList()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
@@ -505,24 +505,24 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
         mLastPosition = -1
 
-        val newList = list ?: mutableListOf()
+        val newList = list ?: emptyList()
 
         val oldDisplayEmptyLayout = displayEmptyView()
         val newDisplayEmptyLayout = displayEmptyView(newList)
 
         if (oldDisplayEmptyLayout && !newDisplayEmptyLayout) {
-            items.addAll(newList)
+            items = newList
             notifyItemRemoved(0)
             notifyItemRangeInserted(0, newList.size)
         } else if (newDisplayEmptyLayout && !oldDisplayEmptyLayout) {
             notifyItemRangeRemoved(0, items.size)
-            items.addAll(newList)
+            items = newList
             notifyItemInserted(0)
         } else if (oldDisplayEmptyLayout && newDisplayEmptyLayout) {
-            items.addAll(newList)
+            items = newList
             notifyItemChanged(0, EMPTY_PAYLOAD)
         } else {
-            items.addAll(newList)
+            items = newList
             notifyDataSetChanged()
         }
     }
@@ -535,7 +535,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         if (position >= items.size) {
             throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
-        items[position] = data
+        mutableItems[position] = data
         notifyItemChanged(position)
     }
 
@@ -554,7 +554,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             // 如果之前在显示空布局，需要先移除
             notifyItemRemoved(0)
         }
-        items.add(position, data)
+        mutableItems.add(position, data)
         notifyItemInserted(position)
     }
 
@@ -567,7 +567,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             // 如果之前在显示空布局，需要先移除
             notifyItemRemoved(0)
         }
-        items.add(data)
+        mutableItems.add(data)
         notifyItemInserted(items.size - 1)
     }
 
@@ -587,7 +587,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             // 如果之前在显示空布局，需要先移除
             notifyItemRemoved(0)
         }
-        items.addAll(position, newCollection)
+        mutableItems.addAll(position, newCollection)
         notifyItemRangeInserted(position, newCollection.size)
     }
 
@@ -599,7 +599,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         }
 
         val oldSize = items.size
-        items.addAll(newCollection)
+        mutableItems.addAll(newCollection)
         notifyItemRangeInserted(oldSize, newCollection.size)
     }
 
@@ -613,7 +613,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         if (position >= items.size) {
             throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
-        items.removeAt(position)
+        mutableItems.removeAt(position)
         notifyItemRemoved(position)
 
         // 处理空视图的情况
@@ -622,29 +622,25 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         }
     }
 
-
     open fun remove(data: T) {
         val index = items.indexOf(data)
         if (index == -1) return
         removeAt(index)
     }
 
-
     /**
-     * items 转化为ArrayList
+     * items 转化为 MutableList
      */
-    private fun itemsTypeToArrayList() = ArrayList(items)
-
-    /**
-     * items 转化为MutableList
-     */
-    private fun itemsTypeToMutable() = (items as MutableList<T>)
-
-
-    /**
-     * 数据列表的类型
-     */
-    private fun dataListType() = items is MutableList
+    private val mutableItems: MutableList<T>
+        get() {
+            return if (items is MutableList) {
+                items as MutableList<T>
+            } else {
+                ArrayList(items).also {
+                    items = it
+                }
+            }
+        }
 
     /************************************** Set Listener ****************************************/
 

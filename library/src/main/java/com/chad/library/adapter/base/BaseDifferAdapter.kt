@@ -53,7 +53,7 @@ abstract class BaseDifferAdapter<T, VH : RecyclerView.ViewHolder>(
     /**
      * item 数据集
      */
-    final override var items: MutableList<T>
+    final override var items: List<T>
         get() = mDiffer.currentList
         set(value) {
             mDiffer.submitList(value)
@@ -75,7 +75,7 @@ abstract class BaseDifferAdapter<T, VH : RecyclerView.ViewHolder>(
      * @param list
      */
     override fun submitList(list: List<T>?) {
-        submitList(list, null)
+        mDiffer.submitList(list, null)
     }
 
     fun submitList(list: List<T>?, commitCallback: Runnable?) {
