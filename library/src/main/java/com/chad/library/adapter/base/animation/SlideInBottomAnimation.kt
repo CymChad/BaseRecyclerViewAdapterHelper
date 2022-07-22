@@ -8,13 +8,15 @@ import android.view.animation.DecelerateInterpolator
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-class SlideInBottomAnimation : ItemAnimation {
+class SlideInBottomAnimation @JvmOverloads constructor(
+    private val duration: Long = 400L,
+) : ItemAnimation {
 
     private val interpolator = DecelerateInterpolator(1.3f)
 
     override fun animator(view: View): Animator {
         val animator = ObjectAnimator.ofFloat(view, "translationY", view.measuredHeight.toFloat(), 0f)
-        animator.duration = 400L
+        animator.duration = duration
         animator.interpolator = interpolator
         return animator
     }
