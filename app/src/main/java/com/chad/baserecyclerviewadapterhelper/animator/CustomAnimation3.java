@@ -6,11 +6,11 @@ import android.animation.ObjectAnimator;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
-import com.chad.library.adapter.base.animation.ItemAnimation;
+import com.chad.library.adapter.base.animation.ItemAnimator;
 
 import org.jetbrains.annotations.NotNull;
 
-public class CustomAnimation3 implements ItemAnimation {
+public class CustomAnimation3 implements ItemAnimator {
 
     @NotNull
     @Override

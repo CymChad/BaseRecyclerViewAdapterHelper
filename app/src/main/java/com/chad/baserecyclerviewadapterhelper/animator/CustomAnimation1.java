@@ -5,13 +5,13 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
-import com.chad.library.adapter.base.animation.ItemAnimation;
+import com.chad.library.adapter.base.animation.ItemAnimator;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * 自定义动画1
  */
-public class CustomAnimation1 implements ItemAnimation {
+public class CustomAnimation1 implements ItemAnimator {
     @NotNull
     @Override
     public Animator animator(@NotNull View view) {

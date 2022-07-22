@@ -10,7 +10,7 @@ import android.view.animation.DecelerateInterpolator
  */
 class SlideInRightAnimation @JvmOverloads constructor(
     private val duration: Long = 400L,
-) : ItemAnimation {
+) : ItemAnimator {
     private val interpolator = DecelerateInterpolator(1.8f)
 
     override fun animator(view: View): Animator {

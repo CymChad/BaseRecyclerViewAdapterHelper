@@ -11,7 +11,7 @@ import android.view.animation.LinearInterpolator
 class AlphaInAnimation @JvmOverloads constructor(
     private val duration: Long = 300,
     private val mFrom: Float = DEFAULT_ALPHA_FROM
-) : ItemAnimation {
+) : ItemAnimator {
 
     private val interpolator = LinearInterpolator()
 

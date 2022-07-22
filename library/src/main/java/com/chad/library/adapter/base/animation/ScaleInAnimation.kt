@@ -11,7 +11,7 @@ import android.view.animation.DecelerateInterpolator
  */
 class ScaleInAnimation @JvmOverloads constructor(
     private val duration: Long = 300,
-    private val mFrom: Float = DEFAULT_SCALE_FROM) : ItemAnimation {
+    private val mFrom: Float = DEFAULT_SCALE_FROM) : ItemAnimator {
 
     private val interpolator = DecelerateInterpolator()
 

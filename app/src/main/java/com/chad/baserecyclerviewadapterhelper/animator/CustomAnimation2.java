@@ -5,7 +5,7 @@ import android.animation.ObjectAnimator;
 import android.view.View;
 import android.view.animation.Interpolator;
 
-import com.chad.library.adapter.base.animation.ItemAnimation;
+import com.chad.library.adapter.base.animation.ItemAnimator;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +17,7 @@ import static java.lang.Math.sin;
 /**
  * 自定义动画2
  */
-public class CustomAnimation2 implements ItemAnimation {
+public class CustomAnimation2 implements ItemAnimator {
     @NotNull
     @Override
     public Animator animator(@NotNull View view) {

@@ -6,6 +6,6 @@ import android.view.View
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-interface ItemAnimation {
+interface ItemAnimator {
     fun animator(view: View): Animator
 }

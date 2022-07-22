@@ -122,7 +122,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     /**
      * 设置自定义动画
      */
-    var itemAnimation: ItemAnimation? = null
+    var itemAnimation: ItemAnimator? = null
         set(value) {
             animationEnable = true
             field = value
@@ -270,7 +270,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         if (isFullSpanItem(getItemViewType(holder.bindingAdapterPosition))) {
             setStaggeredGridFullSpan(holder)
         } else {
-            addAnimation(holder)
+            runAnimator(holder)
         }
 
         onViewAttachStateChangeListeners?.forEach {
@@ -452,16 +452,16 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 
     /**
-     * add animation when you want to show time
+     * run animation when you want to show time
      *
      * @param holder
      */
-    private fun addAnimation(holder: RecyclerView.ViewHolder) {
+    private fun runAnimator(holder: RecyclerView.ViewHolder) {
         if (animationEnable) {
             if (!isAnimationFirstOnly || holder.layoutPosition > mLastPosition) {
-                val animation: ItemAnimation = itemAnimation ?: AlphaInAnimation()
+                val animation: ItemAnimator = itemAnimation ?: AlphaInAnimation()
                 animation.animator(holder.itemView).apply {
-                    startItemAnim(this, holder)
+                    startItemAnimator(this, holder)
                 }
                 mLastPosition = holder.layoutPosition
             }
@@ -475,7 +475,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * @param anim
      * @param holder
      */
-    protected open fun startItemAnim(anim: Animator, holder: RecyclerView.ViewHolder) {
+    protected open fun startItemAnimator(anim: Animator, holder: RecyclerView.ViewHolder) {
         anim.start()
     }
 
