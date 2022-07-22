@@ -122,7 +122,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     /**
      * 设置自定义动画
      */
-    var itemAnimation: BaseAnimation? = null
+    var itemAnimation: ItemAnimation? = null
         set(value) {
             animationEnable = true
             field = value
@@ -459,9 +459,9 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     private fun addAnimation(holder: RecyclerView.ViewHolder) {
         if (animationEnable) {
             if (!isAnimationFirstOnly || holder.layoutPosition > mLastPosition) {
-                val animation: BaseAnimation = itemAnimation ?: AlphaInAnimation()
-                animation.animators(holder.itemView).forEach {
-                    startItemAnim(it, holder)
+                val animation: ItemAnimation = itemAnimation ?: AlphaInAnimation()
+                animation.animator(holder.itemView).apply {
+                    startItemAnim(this, holder)
                 }
                 mLastPosition = holder.layoutPosition
             }

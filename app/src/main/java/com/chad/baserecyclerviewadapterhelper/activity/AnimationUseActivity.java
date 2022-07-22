@@ -13,6 +13,7 @@ import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.adapter.AnimationAdapter;
 import com.chad.baserecyclerviewadapterhelper.animator.CustomAnimation1;
 import com.chad.baserecyclerviewadapterhelper.animator.CustomAnimation2;
+import com.chad.baserecyclerviewadapterhelper.animator.CustomAnimation3;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.kyleduo.switchbutton.SwitchButton;
@@ -57,7 +58,7 @@ public class AnimationUseActivity extends AppCompatActivity {
 
     private void initMenu() {
         MaterialSpinner spinner = findViewById(R.id.spinner);
-        spinner.setItems("AlphaIn", "ScaleIn", "SlideInBottom", "SlideInLeft", "SlideInRight", "Custom1", "Custom2");
+        spinner.setItems("AlphaIn", "ScaleIn", "SlideInBottom", "SlideInLeft", "SlideInRight", "Custom1", "Custom2", "Custom3");
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 
             @Override
@@ -83,6 +84,9 @@ public class AnimationUseActivity extends AppCompatActivity {
                         break;
                     case 6:
                         mAnimationAdapter.setItemAnimation(new CustomAnimation2());
+                        break;
+                    case 7:
+                        mAnimationAdapter.setItemAnimation(new CustomAnimation3());
                         break;
                     default:
                         break;
