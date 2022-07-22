@@ -98,7 +98,9 @@ abstract class BaseMultiItemQuickAdapter<T>(items: MutableList<T> = mutableListO
 
         fun onBind(holder: V, position: Int, item: T)
 
-        fun onBind(holder: V, position: Int, item: T, payloads: List<Any>) {}
+        fun onBind(holder: V, position: Int, item: T, payloads: List<Any>) {
+            onBind(holder, position, item)
+        }
 
         fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {}
 

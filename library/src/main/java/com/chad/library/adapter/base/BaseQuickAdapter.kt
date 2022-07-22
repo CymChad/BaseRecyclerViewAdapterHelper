@@ -167,7 +167,9 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * @param item     The item that needs to be displayed.
      * @param payloads payload info.
      */
-    protected open fun onBindViewHolder(holder: VH, position: Int, item: T, payloads: List<Any>) {}
+    protected open fun onBindViewHolder(holder: VH, position: Int, item: T, payloads: List<Any>) {
+        onBindViewHolder(holder, position, item)
+    }
 
     /**
      * Override this method and return your item size.
@@ -239,11 +241,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     final override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>
     ) {
-        if (payloads.isEmpty()) {
-            onBindViewHolder(holder, position)
-            return
-        }
-
         if (holder is EmptyLayoutVH) {
             holder.changeEmptyView(emptyView)
             return
