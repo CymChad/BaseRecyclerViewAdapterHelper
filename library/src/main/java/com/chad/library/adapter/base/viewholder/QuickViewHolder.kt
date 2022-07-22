@@ -26,7 +26,7 @@ open class QuickViewHolder(view: View) : RecyclerView.ViewHolder(view) {
      */
     private val views: SparseArray<View> = SparseArray()
 
-    fun <T : View> getView(@IdRes viewId: Int): T {
+   fun <T : View> getView(@IdRes viewId: Int): T {
         val view = getViewOrNull<T>(viewId)
         checkNotNull(view) { "No view found with id $viewId" }
         return view

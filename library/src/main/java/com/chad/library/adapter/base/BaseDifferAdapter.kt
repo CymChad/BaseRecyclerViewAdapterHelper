@@ -43,7 +43,7 @@ abstract class BaseDifferAdapter<T, VH : RecyclerView.ViewHolder>(
         mDiffer.submitList(items)
     }
 
-    final override var items: List<T>
+    final override var items: MutableList<T>
         get() = mDiffer.currentList
         set(value) {
             mDiffer.submitList(value)
@@ -60,49 +60,49 @@ abstract class BaseDifferAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 
     override operator fun set(position: Int, data: T) {
-        ArrayList(items).also {
+        items.toMutableList().also {
             it[position] = data
             submitList(it)
         }
     }
 
     override fun add(data: T) {
-        ArrayList(items).also {
+        items.toMutableList().also {
             it.add(data)
             submitList(it)
         }
     }
 
     override fun add(position: Int, data: T) {
-        ArrayList(items).also {
+        items.toMutableList().also {
             it.add(position, data)
             submitList(it)
         }
     }
 
     override fun addAll(newCollection: Collection<T>) {
-        ArrayList(items).also {
+        items.toMutableList().also {
             it.addAll(newCollection)
             submitList(it)
         }
     }
 
     override fun addAll(position: Int, newCollection: Collection<T>) {
-        ArrayList(items).also {
+        items.toMutableList().also {
             it.addAll(position, newCollection)
             submitList(it)
         }
     }
 
     override fun removeAt(position: Int) {
-        ArrayList(items).also {
+        items.toMutableList().also {
             it.removeAt(position)
             submitList(it)
         }
     }
 
     override fun remove(data: T) {
-        ArrayList(items).also {
+        items.toMutableList().also {
             it.remove(data)
             submitList(it)
         }
