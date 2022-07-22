@@ -23,6 +23,8 @@ abstract class LeadingLoadStateAdapter<VH: RecyclerView.ViewHolder> : LoadStateA
     var isLoadEnable = true
 
     /**
+     * Preload, the number of distances from the first item.
+     *
      * 预加载，距离首 item 的个数
      */
     var preloadSize = 0

@@ -13,7 +13,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
 /**
- * ViewHolder 基类
+ * Quick-use ViewHolder class
+ * 快速使用的 ViewHolder 类
  */
 open class QuickViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 

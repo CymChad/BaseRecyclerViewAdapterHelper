@@ -8,6 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.fullspan.FullSpanAdapterType
 
+/**
+ * grid layout manager.
+ * Used to achieve full span. Adapter needs to implement [FullSpanAdapterType] interface
+ *
+ * 网格布局 GridLayoutManager，用于实现满跨度，Adapter 需要实现 [FullSpanAdapterType] 接口
+ *
+ */
 class BrvahGridLayoutManager : GridLayoutManager {
 
     constructor(
