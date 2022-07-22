@@ -297,7 +297,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
         _recyclerView = null
-        clearOnViewAttachStateChangeListener()
     }
 
 
