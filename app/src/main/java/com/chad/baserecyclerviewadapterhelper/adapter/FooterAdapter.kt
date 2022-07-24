@@ -1,5 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.adapter
 
+import android.content.Context
 import android.view.ViewGroup
 import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.library.adapter.base.SingleItemAdapter
@@ -10,7 +11,7 @@ class FooterAdapter(
     private val click: (FooterAdapter) -> Unit
 ) : SingleItemAdapter<Any, QuickViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuickViewHolder {
+    override fun onCreateViewHolder(context: Context, parent: ViewGroup, viewType: Int): QuickViewHolder {
         return QuickViewHolder(R.layout.footer_view, parent).apply {
             itemView.setOnClickListener {
                 click.invoke(this@FooterAdapter)

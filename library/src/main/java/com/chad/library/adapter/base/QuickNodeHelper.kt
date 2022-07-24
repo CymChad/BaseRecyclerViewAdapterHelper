@@ -12,6 +12,10 @@ class QuickNodeHelper private constructor(config: ConcatAdapter.Config) {
     val adapter: RecyclerView.Adapter<RecyclerView.ViewHolder> get() = concatAdapter
 
     fun submitList(list: List<*>, isExpand: Boolean = false) {
+        concatAdapter.adapters.forEach {
+            concatAdapter.removeAdapter(it)
+        }
+
         if (isExpand) {
             for (any in list) {
                 if (any == null) continue

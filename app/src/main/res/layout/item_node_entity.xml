@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="80dp"
     android:layout_marginBottom="1dp"
-    android:background="#F7F7F7"
+    android:background="@android:color/white"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingRight="16dp">
 
     <ImageView
         android:id="@+id/iv_head"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:src="@mipmap/head_img_1" />
+        android:src="@mipmap/head_img" />
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -25,11 +25,11 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
+
     <ImageView
         android:id="@+id/iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|center"
-        android:paddingRight="16dp"
         android:src="@mipmap/arrow_r" />
 </LinearLayout>

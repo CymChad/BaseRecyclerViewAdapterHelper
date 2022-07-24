@@ -71,8 +71,8 @@ class HomeActivity : AppCompatActivity() {
             HomeEntity("LoadMore(Auto)", AutoLoadMoreRefreshUseActivity::class.java, R.mipmap.gv_pulltorefresh),
             HomeEntity("LoadMore", NoAutoAutoLoadMoreRefreshUseActivity::class.java, R.mipmap.gv_pulltorefresh),
 //                HomeEntity("DragAndSwipe", DragAndSwipeUseActivity::class.java, R.mipmap.gv_drag_and_swipe),
-            HomeEntity("UpFetch", UpFetchUseActivity::class.java, R.drawable.gv_up_fetch)
-
+            HomeEntity("UpFetch", UpFetchUseActivity::class.java, R.drawable.gv_up_fetch),
+//            HomeEntity("Node", NodeTreeUseActivity::class.java, R.mipmap.gv_expandable),
 
         )
 }
