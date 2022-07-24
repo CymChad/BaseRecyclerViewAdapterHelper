@@ -1,7 +1,5 @@
 package com.chad.baserecyclerviewadapterhelper.entity
 
-import com.chad.library.adapter.base.entity.SectionEntity
-
 /**
  * @author: limuyang
  * @date: 2019-12-06

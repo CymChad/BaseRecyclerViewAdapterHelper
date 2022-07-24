@@ -14,8 +14,6 @@
 */
 package com.chad.baserecyclerviewadapterhelper.entity;
 
-import com.chad.library.adapter.base.entity.MultiItemEntity;
-
 /**
  * 文 件 名: ClickEntity
  * 创 建 人: Allen
@@ -24,7 +22,7 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
  * 修改时间：
  * 修改备注：
  */
-public class ClickEntity implements MultiItemEntity {
+public class ClickEntity {
     public static final int CLICK_ITEM_VIEW = 1;
     public static final int CLICK_ITEM_CHILD_VIEW = 2;
     public static final int LONG_CLICK_ITEM_VIEW = 3;
@@ -35,7 +33,6 @@ public class ClickEntity implements MultiItemEntity {
         this.type = type;
     }
 
-    @Override
     public int getItemType() {
         return type;
     }

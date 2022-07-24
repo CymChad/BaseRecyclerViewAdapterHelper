@@ -24,8 +24,7 @@ internal class EmptyLayoutVH(private val emptyLayout:FrameLayout ): RecyclerView
 
         if (view.layoutParams == null) {
             view.layoutParams = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.WRAP_CONTENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT
+                FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT
             ).apply {
                 gravity = Gravity.CENTER
             }
