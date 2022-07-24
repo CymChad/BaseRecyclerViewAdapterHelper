@@ -28,7 +28,7 @@
         <activity android:name=".activity.multi.MultiItemDelegateUseActivity" />
         <activity android:name=".activity.multi.MultiItemProviderUseActivity" />
         <activity android:name=".activity.HeaderAndFooterUseActivity" />
-        <activity android:name=".activity.LoadMoreRefreshUseActivity" />
+        <activity android:name=".activity.loadmore.AutoLoadMoreRefreshUseActivity" />
         <activity android:name=".activity.SectionQuickUseActivity" />
         <activity android:name=".activity.EmptyViewUseActivity" />
         <activity android:name=".activity.ItemClickActivity" />
@@ -40,6 +40,7 @@
         <activity android:name=".activity.node.ChooseNodeUseTypeActivity" />
         <activity android:name=".activity.node.NodeTreeUseActivity" />
         <activity android:name=".activity.multi.BinderUseActivity" />
+        <activity android:name=".activity.loadmore.NoAutoAutoLoadMoreRefreshUseActivity" />
     </application>
 
 </manifest>

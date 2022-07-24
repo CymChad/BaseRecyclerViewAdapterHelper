@@ -1,13 +1,11 @@
-package com.chad.baserecyclerviewadapterhelper.activity;
+package com.chad.baserecyclerviewadapterhelper.activity.loadmore;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
-import android.widget.CompoundButton;
 
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -30,7 +28,7 @@ import java.util.List;
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-public class LoadMoreRefreshUseActivity extends BaseActivity {
+public class NoAutoAutoLoadMoreRefreshUseActivity extends BaseActivity {
 
     static class PageInfo {
         int page = 0;
@@ -50,7 +48,6 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
 
     private static final int PAGE_SIZE = 5;
 
-    private SwitchCompat switchCompat;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private LoadMoreAdapter mAdapter;
@@ -64,10 +61,9 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load_more);
 
-        setTitle("LoadMore Refresh Use");
+        setTitle("No Auto LoadMore Use");
         setBackBtn();
 
-        switchCompat = findViewById(R.id.autoLoadMoreSwitch);
         mRecyclerView = findViewById(R.id.rv_list);
         mSwipeRefreshLayout = findViewById(R.id.swipeLayout);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -75,7 +71,6 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
         initAdapter();
         addHeadView();
         initRefreshLayout();
-        initSwitch();
     }
 
     @Override
@@ -110,26 +105,12 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
                 return !mSwipeRefreshLayout.isRefreshing();
             }
         });
+        // 关闭"自动加载更多"
+        loadMoreAdapter.setAutoLoadMore(false);
 
 
         helper = new QuickAdapterHelper.Builder(mAdapter).setTrailingLoadStateAdapter(loadMoreAdapter).build();
 
-//        helper = new QuickAdapterHelper.Builder(mAdapter).setTrailingLoadStateAdapter(new OnLoadMoreListener() {
-//            @Override
-//            public boolean isCanLoadMore() {
-//                return !mSwipeRefreshLayout.isRefreshing();
-//            }
-//
-//            @Override
-//            public void loadMore() {
-//                request();
-//            }
-//
-//            @Override
-//            public void failRetry() {
-//                request();
-//            }
-//        }).build();
 
         mRecyclerView.setAdapter(helper.getAdapter());
     }
@@ -151,28 +132,6 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
             @Override
             public void onRefresh() {
                 refresh();
-            }
-        });
-    }
-
-    private void initSwitch() {
-        if (helper.getTrailingLoadStateAdapter() != null) {
-            switchCompat.setChecked(helper.getTrailingLoadStateAdapter().isAutoLoadMore());
-        }
-
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (helper.getTrailingLoadStateAdapter() != null) {
-                    helper.getTrailingLoadStateAdapter().setAutoLoadMore(isChecked);
-                }
-
-                if (isChecked) {
-                    switchCompat.setText("自动加载（开）");
-                } else {
-                    switchCompat.setText("自动加载（关）");
-                }
             }
         });
     }
@@ -205,8 +164,6 @@ public class LoadMoreRefreshUseActivity extends BaseActivity {
                     //不是第一页，则用add
                     mAdapter.addAll(data);
                 }
-
-                helper.getTrailingLoadStateAdapter().checkDisableLoadMoreIfNotFullPage();
 
                 if (pageInfo.page >= PAGE_SIZE) {
                     // 如果数据彻底加载完毕, 显示没有更多数据布局
