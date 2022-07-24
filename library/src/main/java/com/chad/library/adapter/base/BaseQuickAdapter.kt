@@ -246,6 +246,11 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             return
         }
 
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder as VH, position, getItem(position))
+            return
+        }
+
         onBindViewHolder(holder as VH, position, getItem(position), payloads)
     }
 

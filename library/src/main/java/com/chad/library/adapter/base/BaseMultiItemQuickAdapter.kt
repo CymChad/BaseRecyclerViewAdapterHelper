@@ -40,6 +40,10 @@ abstract class BaseMultiItemQuickAdapter<T>(items: MutableList<T> = mutableListO
     override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder, position: Int, item: T, payloads: List<Any>
     ) {
+        if (payloads.isEmpty()) {
+            viewHoldersClass[holder::class.java]?.onBind(holder, position, item)
+            return
+        }
         viewHoldersClass[holder::class.java]?.onBind(holder, position, item, payloads)
     }
 
