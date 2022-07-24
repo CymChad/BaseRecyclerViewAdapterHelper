@@ -21,6 +21,10 @@ abstract class SingleItemAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView
     }
 
     final override fun onBindViewHolder(holder: VH, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, mItem)
+            return
+        }
         onBindViewHolder(holder, mItem, payloads)
     }
 
