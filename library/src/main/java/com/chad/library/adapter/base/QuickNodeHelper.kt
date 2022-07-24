@@ -3,6 +3,13 @@ package com.chad.library.adapter.base
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 
+/**
+ * 请勿使用，暂未定版
+ *
+ * @constructor
+ *
+ * @param config
+ */
 class QuickNodeHelper private constructor(config: ConcatAdapter.Config) {
 
     private val concatAdapter = ConcatAdapter(config)

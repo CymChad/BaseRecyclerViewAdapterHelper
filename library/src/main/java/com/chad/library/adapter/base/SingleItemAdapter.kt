@@ -5,6 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
+/**
+ * 只有单个 item 情况下的 Adapter
+ *
+ * @param T 数据类型
+ * @param VH viewHolder类型
+ * @property mItem 数据
+ * @constructor Create empty Single item adapter
+ */
 abstract class SingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private var mItem: T? = null) : RecyclerView.Adapter<VH>() {
 
     private var mOnItemClickListener: OnItemClickListener<T>? = null

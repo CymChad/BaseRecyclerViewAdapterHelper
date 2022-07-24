@@ -17,6 +17,8 @@ import com.chad.library.adapter.base.loadState.LoadStateAdapter
 abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder> : LoadStateAdapter<VH>() {
 
     /**
+     * Trailing load state listener events
+     *
      * 加载更多的监听事件
      */
     var onTrailingListener: OnTrailingListener? = null
@@ -30,7 +32,9 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder> : LoadStat
     var isLoadEndDisplay: Boolean = true
 
     /**
-     * 是否打开自动加载更多
+     * Whether to turn on autoload more. Called when it must be initialized
+     *
+     * 是否打开自动加载更多，必须初始化后就调用，中途修改参数不生效。
      */
     var isAutoLoadMore = true
 
@@ -142,6 +146,11 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder> : LoadStat
                 llm.findFirstCompletelyVisibleItemPosition() != 0
     }
 
+    /**
+     * Set load state listener
+     * 设置监听事件
+     * @param listener
+     */
     fun setOnLoadMoreListener(listener: OnTrailingListener?) = apply {
         this.onTrailingListener = listener
     }
