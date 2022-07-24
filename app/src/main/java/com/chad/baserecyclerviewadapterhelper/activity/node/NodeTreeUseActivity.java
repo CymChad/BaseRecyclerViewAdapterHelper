@@ -37,12 +37,6 @@ public class NodeTreeUseActivity extends BaseActivity {
             public RecyclerView.Adapter<?> createAdapter(NodeEntity item) {
                 NodeEntityAdapter adapter = new NodeEntityAdapter(item);
 
-                adapter.setOnItemClickListener(new SingleItemAdapter.OnItemClickListener<NodeEntity>() {
-                    @Override
-                    public void onItemClick(@NonNull SingleItemAdapter<NodeEntity, ?> adapter, @NonNull View view, int position) {
-                        helper.expand();
-                    }
-                });
                 return adapter;
             }
 

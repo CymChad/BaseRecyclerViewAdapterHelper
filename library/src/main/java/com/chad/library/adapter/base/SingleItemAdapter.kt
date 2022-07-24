@@ -28,20 +28,12 @@ abstract class SingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private var mI
        return onCreateViewHolder(parent.context, parent, viewType).apply {
            mOnItemClickListener?.let {
                itemView.setOnClickListener { v ->
-                   val position = bindingAdapterPosition
-                   if (position == RecyclerView.NO_POSITION) {
-                       return@setOnClickListener
-                   }
-                   it.onItemClick(this@SingleItemAdapter, v, position)
+                   it.onItemClick(this@SingleItemAdapter, v, mItem)
                }
            }
            mOnItemLongClickListener?.let {
                itemView.setOnLongClickListener { v ->
-                   val position = bindingAdapterPosition
-                   if (position == RecyclerView.NO_POSITION) {
-                       return@setOnLongClickListener false
-                   }
-                   it.onItemLongClick(this@SingleItemAdapter, v, position)
+                   it.onItemLongClick(this@SingleItemAdapter, v, mItem)
                }
            }
        }
@@ -85,10 +77,10 @@ abstract class SingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private var mI
 
 
     fun interface OnItemClickListener<T> {
-        fun onItemClick(adapter: SingleItemAdapter<T, *>, view: View, position: Int)
+        fun onItemClick(adapter: SingleItemAdapter<T, *>, view: View, item: T?)
     }
 
     fun interface OnItemLongClickListener<T> {
-        fun onItemLongClick(adapter: SingleItemAdapter<T, *>, view: View, position: Int): Boolean
+        fun onItemLongClick(adapter: SingleItemAdapter<T, *>, view: View, item: T?): Boolean
     }
 }
