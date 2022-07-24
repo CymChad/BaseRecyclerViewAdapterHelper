@@ -29,11 +29,11 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     /**
      * 拖拽模块
      */
-    val draggableModule: BaseDraggableModule
-        get() {
-            checkNotNull(mDraggableModule) { "Please first implements DraggableModule" }
-            return mDraggableModule!!
-        }
+//    val draggableModule: BaseDraggableModule
+//        get() {
+//            checkNotNull(mDraggableModule) { "Please first implements DraggableModule" }
+//            return mDraggableModule!!
+//        }
 
     /********************************* Private property *****************************************/
     private var mLastPosition = -1
@@ -128,18 +128,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             field = value
         }
 
-    init {
-        checkModule()
-    }
-
-    /**
-     * 检查模块
-     */
-    private fun checkModule() {
-//        if (this is DraggableModule) {
-//            mDraggableModule = this.addDraggableModule(this)
-//        }
-    }
 
     protected abstract fun onCreateViewHolder(
         context: Context, parent: ViewGroup, viewType: Int
