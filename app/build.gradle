@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.chad.baserecyclerviewadapterhelper"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 32
         versionCode 9
         versionName "3.0"
@@ -46,7 +46,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     implementation project(path: ':library')
-    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.kyleduo.switchbutton:library:2.0.0'
