@@ -97,6 +97,10 @@ abstract class BaseDifferAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 
     override fun add(position: Int, data: T) {
+        if (position > items.size || position < 0) {
+            throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
+        }
+
         items.toMutableList().also {
             it.add(position, data)
             submitList(it)
@@ -111,6 +115,10 @@ abstract class BaseDifferAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 
     override fun addAll(position: Int, newCollection: Collection<T>) {
+        if (position > items.size || position < 0) {
+            throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
+        }
+
         items.toMutableList().also {
             it.addAll(position, newCollection)
             submitList(it)
@@ -118,6 +126,10 @@ abstract class BaseDifferAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 
     override fun removeAt(position: Int) {
+        if (position >= items.size) {
+            throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
+        }
+
         items.toMutableList().also {
             it.removeAt(position)
             submitList(it)
