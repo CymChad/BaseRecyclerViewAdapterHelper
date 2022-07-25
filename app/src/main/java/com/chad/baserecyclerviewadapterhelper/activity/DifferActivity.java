@@ -98,6 +98,9 @@ public class DifferActivity extends BaseActivity {
         removeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (2 >= mAdapter.getItems().size()) {
+                    return;
+                }
                 mAdapter.removeAt(2);
             }
         });
