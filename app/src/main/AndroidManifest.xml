@@ -22,24 +22,18 @@
         </activity>
 
         <activity android:name=".activity.HomeActivity" />
-        <activity android:name=".activity.multi.ChooseMultipleItemUseTypeActivity" />
         <activity android:name=".activity.AnimationUseActivity" />
-        <activity android:name=".activity.multi.MultiItemQuickUseActivity" />
-        <activity android:name=".activity.multi.MultiItemDelegateUseActivity" />
-        <activity android:name=".activity.multi.MultiItemProviderUseActivity" />
         <activity android:name=".activity.HeaderAndFooterUseActivity" />
         <activity android:name=".activity.loadmore.AutoLoadMoreRefreshUseActivity" />
-        <activity android:name=".activity.SectionQuickUseActivity" />
         <activity android:name=".activity.EmptyViewUseActivity" />
         <activity android:name=".activity.ItemClickActivity" />
         <activity android:name=".activity.DataBindingUseActivity" />
-        <activity android:name=".activity.DragAndSwipeUseActivity" />
+<!--        <activity android:name=".activity.DragAndSwipeUseActivity" />-->
         <activity android:name=".activity.UpFetchUseActivity" />
-        <activity android:name=".activity.node.NodeSectionUseActivity" />
+<!--        <activity android:name=".activity.node.NodeSectionUseActivity" />-->
         <activity android:name=".activity.DifferActivity" />
-        <activity android:name=".activity.node.ChooseNodeUseTypeActivity" />
+<!--        <activity android:name=".activity.node.ChooseNodeUseTypeActivity" />-->
         <activity android:name=".activity.node.NodeTreeUseActivity" />
-        <activity android:name=".activity.multi.BinderUseActivity" />
         <activity android:name=".activity.loadmore.NoAutoAutoLoadMoreRefreshUseActivity" />
     </application>
 
