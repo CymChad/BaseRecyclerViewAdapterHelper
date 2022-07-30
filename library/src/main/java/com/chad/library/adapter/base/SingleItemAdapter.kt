@@ -6,11 +6,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
 /**
+ * Adapter for single item
  * 只有单个 item 情况下的 Adapter
  *
- * @param T 数据类型
- * @param VH viewHolder类型
- * @property mItem 数据
+ * @param T 数据类型 type of data
+ * @param VH viewHolder类型 type of the viewHolder
+ * @property mItem 数据  data
  * @constructor Create empty Single item adapter
  */
 abstract class SingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private var mItem: T? = null) : RecyclerView.Adapter<VH>() {

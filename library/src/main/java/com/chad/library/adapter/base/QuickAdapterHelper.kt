@@ -12,11 +12,13 @@ class QuickAdapterHelper private constructor(
     val contentAdapter: BaseQuickAdapter<*, *>,
 
     /**
+     * Adapter for loading more at the head.
      * 首部"加载跟多"Adapter
      */
     val leadingLoadStateAdapter: LeadingLoadStateAdapter<*>?,
 
     /**
+     * Adapter for loading more at the tail.
      * 尾部"加载跟多"Adapter
      */
     val trailingLoadStateAdapter: TrailingLoadStateAdapter<*>?,
@@ -28,12 +30,14 @@ class QuickAdapterHelper private constructor(
     private val mFooterList = ArrayList<RecyclerView.Adapter<*>>(0)
 
     /**
+     * The adapter which is finally attached to the RecyclerView.
      * 最终设置给 RecyclerView 的 adapter
      */
     private val mAdapter = ConcatAdapter(config)
     val adapter: RecyclerView.Adapter<*> get() = mAdapter
 
     /**
+     * Loading state of the head.
      * 首部的加载状态
      */
     var leadingLoadState: LoadState
@@ -46,6 +50,7 @@ class QuickAdapterHelper private constructor(
         }
 
     /**
+     * Loading state of the tail.
      * 尾部的加载状态
      */
     var trailingLoadState: LoadState
@@ -174,11 +179,13 @@ class QuickAdapterHelper private constructor(
     }
 
     /**
+     * get header list, which can not be modified
      * 获取 header list，不可对list进行设置
      */
     val headerList: List<RecyclerView.Adapter<*>> get() = mHeaderList
 
     /**
+     * get footer list, which can not be modified
      *  获取 footer list，不可对list进行设置
      */
     val footerList: List<RecyclerView.Adapter<*>> get() = mFooterList
