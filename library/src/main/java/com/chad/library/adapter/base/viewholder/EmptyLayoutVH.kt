@@ -8,6 +8,7 @@ import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 
 /**
+ * An emptyState viewHolder. (For internal use only)
  * 内部使用的空状态ViewHolder
  *
  * @property emptyLayout

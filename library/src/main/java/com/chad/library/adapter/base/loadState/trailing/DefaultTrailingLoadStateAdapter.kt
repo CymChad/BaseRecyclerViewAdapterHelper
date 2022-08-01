@@ -31,10 +31,12 @@ internal class DefaultTrailingLoadStateAdapter: TrailingLoadStateAdapter<Default
         return TrailingLoadStateVH(parent).apply {
             viewBinding.loadMoreLoadFailView.setOnClickListener {
                 // 失败重试点击事件
+                // retry when loaded failed.
                 invokeFailRetry()
             }
             viewBinding.loadMoreLoadCompleteView.setOnClickListener {
                 // 加载更多，手动点击事件
+                // manual click to load more.
                 invokeLoadMore()
             }
         }

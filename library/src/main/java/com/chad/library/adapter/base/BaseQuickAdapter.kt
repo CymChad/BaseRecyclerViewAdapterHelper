@@ -64,6 +64,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
 
     /**
+     * Function to judge if the viewHolder is EmptyLayoutVH.
      * 判断 ViewHolder 是否是 EmptyLayoutVH
      * @receiver RecyclerView.ViewHolder
      * @return Boolean
@@ -71,7 +72,9 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     inline val RecyclerView.ViewHolder.isEmptyViewHolder: Boolean
         get() = this is EmptyLayoutVH
 
-    /** 是否使用空布局 */
+    /** 是否使用空布局
+     *  Whether to use empty layout.
+     * */
     var isEmptyViewEnable = false
         set(value) {
             val oldDisplayEmptyLayout = displayEmptyView()
@@ -90,6 +93,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         }
 
     /**
+     * Empty view. Attention please: take effect when [items] is empty array.
      * 空视图，注意：[items]为空数组才会生效
      */
     var emptyView: View? = null
@@ -110,16 +114,19 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         }
 
     /**
+     * Whether enable animation.
      * 是否打开动画
      */
     var animationEnable: Boolean = false
 
     /**
+     * Whether the animation executed only the first time.
      * 动画是否仅第一次执行
      */
     var isAnimationFirstOnly = true
 
     /**
+     * Set custom animation.
      * 设置自定义动画
      */
     var itemAnimation: ItemAnimator? = null
@@ -459,6 +466,8 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 
     /**
+     * start executing animation
+     * override this method to execute more actions
      * 开始执行动画方法
      * 可以重写此方法，实行更多行为
      *
@@ -470,6 +479,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 
     /**
+     * use preset animations
      * 使用内置默认动画设置
      * @param animationType AnimationType
      */

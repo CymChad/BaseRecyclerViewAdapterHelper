@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
 /**
+ * MultiItemType layout.
  * 多类型布局
  *
  */
@@ -48,6 +49,7 @@ abstract class BaseMultiItemQuickAdapter<T>(items: MutableList<T> = mutableListO
     }
 
     /**
+     * Call this function to add multiTypeItems.
      * 调用此方法，设置多布局
      * @param type Int
      * @param listener Int

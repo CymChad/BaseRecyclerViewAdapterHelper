@@ -7,7 +7,7 @@ import com.chad.library.adapter.base.fullspan.FullSpanAdapterType
 
 /**
  * Load state adapter
- * 加载状态的夫类，"加载更多"、"向上加载"都继承于此
+ * 加载状态的父类，"加载更多"、"向上加载"都继承于此
  *
  */
 abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>(),
