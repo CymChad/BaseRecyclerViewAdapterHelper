@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 
 /**
+ * In development! Please don't use it.
  * 请勿使用，暂未定版
  *
  * @constructor

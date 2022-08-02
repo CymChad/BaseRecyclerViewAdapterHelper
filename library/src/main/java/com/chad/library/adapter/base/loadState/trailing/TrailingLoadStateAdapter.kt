@@ -51,6 +51,7 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder> : LoadStat
     var preloadSize = 0
 
     /**
+     * A flag to determine if you can load when content doesn't fill the screen.
      * 不满一屏时，是否可以继续加载的标记位
      */
     private var mNextLoadEnable: Boolean = true
@@ -67,11 +68,13 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder> : LoadStat
     }
 
     /**
+     * Executing loading.
      * 执行加载的操作
      */
     private fun loadAction() {
         if (!isAutoLoadMore || onTrailingListener?.isAllowLoading() == false) {
             // 不允许进行加载更多（例如：正在进行下拉刷新）
+            // Loading more is forbidden at the moment.(eg: when pulling down to refresh)
             return
         }
 
@@ -84,6 +87,7 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder> : LoadStat
 
             if (recyclerView.isComputingLayout) {
                 // 如果 RecyclerView 当前正在计算布局，则延迟执行，避免崩溃
+                // To avoid crash. Delay to load more if the recyclerview is computingLayout.
                 recyclerView.post {
                     invokeLoadMore()
                 }

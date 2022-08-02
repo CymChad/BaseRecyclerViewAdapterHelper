@@ -11,6 +11,7 @@ import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
+ * A viewHolder quick to use when the project enabled ViewDataBinding.
  * ViewDataBinding 快速使用的 ViewHolder
  * @param <DB> ViewDataBinding
  */

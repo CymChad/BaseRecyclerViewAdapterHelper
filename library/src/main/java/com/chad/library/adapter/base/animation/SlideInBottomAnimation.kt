@@ -6,6 +6,7 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 
 /**
+ * An animation to let items slide in from the bottom.(Using a DecelerateInterpolator with 1.3 factor.) Default duration is 400ms.
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 class SlideInBottomAnimation @JvmOverloads constructor(
