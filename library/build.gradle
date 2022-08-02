@@ -8,8 +8,6 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 32
-        versionCode 1
-        versionName "1.0"
     }
     buildTypes {
         release {
@@ -30,13 +28,13 @@ android {
         jvmTarget = "1.8"
     }
 
-    lintOptions {
-        abortOnError false
-    }
 
     buildFeatures {
         viewBinding = true
         dataBinding = true
+    }
+    lint {
+        abortOnError false
     }
 }
 
