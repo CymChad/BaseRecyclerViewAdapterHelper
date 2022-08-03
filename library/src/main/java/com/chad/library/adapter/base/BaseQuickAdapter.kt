@@ -26,15 +26,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
-    /**
-     * 拖拽模块
-     */
-//    val draggableModule: BaseDraggableModule
-//        get() {
-//            checkNotNull(mDraggableModule) { "Please first implements DraggableModule" }
-//            return mDraggableModule!!
-//        }
-
     /********************************* Private property *****************************************/
     private var mLastPosition = -1
     private var mOnItemClickListener: OnItemClickListener<T>? = null
