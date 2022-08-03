@@ -647,7 +647,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     fun getOnItemLongClickListener(): OnItemLongClickListener<T>? = mOnItemLongClickListener
     fun addOnItemChildClickListener(@IdRes id: Int, listener: OnItemChildClickListener<T>) = apply {
-        mOnItemChildClickArray[id] = listener
+        mOnItemChildClickArray.put(id, listener)
     }
 
     fun removeOnItemChildClickListener(@IdRes id: Int) = apply {
@@ -656,7 +656,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     fun addOnItemChildLongClickListener(@IdRes id: Int, listener: OnItemChildLongClickListener<T>) =
         apply {
-            mOnItemChildLongClickArray[id] = listener
+            mOnItemChildLongClickArray.put(id, listener)
         }
 
     fun removeOnItemChildLongClickListener(@IdRes id: Int) = apply {

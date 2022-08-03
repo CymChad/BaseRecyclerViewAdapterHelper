@@ -9,15 +9,15 @@ plugins {
     signing
 }
 
-val versionName = "4.0.0-alpha1"
+val versionName = "4.0.0-alpha2"
 
 
 android {
-    compileSdk = 31
+    compileSdk = 30
 
     defaultConfig {
         minSdk = 16
-        targetSdk = 31
+        targetSdk = 30
     }
 
 
