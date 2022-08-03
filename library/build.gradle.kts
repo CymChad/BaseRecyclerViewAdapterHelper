@@ -65,7 +65,6 @@ dependencies {
 }
 
 
-//第 1 处
 var signingKeyId = ""//签名的密钥后8位
 var signingPassword = ""//签名设置的密码
 var secretKeyRingFile = ""//生成的secring.gpg文件目录
@@ -104,15 +103,29 @@ afterEvaluate {
 
                 pom {
                     name.value("BaseRecyclerViewAdapterHelper")
+                    description.value("Powerful and flexible RecyclerAdapter")
                     url.value("https://github.com/CymChad/BaseRecyclerViewAdapterHelper")
-//
+
+                    licenses {
+                        license {
+                            //协议类型
+                            name.value("The MIT License")
+                            url.value("https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/LICENSE")
+                        }
+                    }
+
                     developers {
                         developer {
-                            //第 4 处
-                            id.value("limuyang2")//你的sonatype用户名
-                            name.value("limuyang2")//你的sonatype用户名
-                            email.value("limuyang2@hotmail.com")//你的sonatype注册邮箱
+                            id.value("limuyang2")
+                            name.value("limuyang")
+                            email.value("limuyang2@hotmail.com")
                         }
+                    }
+
+                    scm {
+                        connection.value("scm:git@github.com/CymChad/BaseRecyclerViewAdapterHelper.git")
+                        developerConnection.value("scm:git@github.com/CymChad/BaseRecyclerViewAdapterHelper.git")
+                        url.value("https://github.com/CymChad/BaseRecyclerViewAdapterHelper")
                     }
                 }
             }
