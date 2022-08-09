@@ -12,12 +12,14 @@ import com.chad.library.adapter.base.loadState.LoadStateAdapter
 abstract class LeadingLoadStateAdapter<VH: RecyclerView.ViewHolder> : LoadStateAdapter<VH>() {
 
     /**
+     * A listener for loading more.
      * 加载更多的监听事件
      */
     var onLeadingListener: OnLeadingListener? = null
         private set
 
     /**
+     * Whether enable loading.
      * 是否开启加载功能
      */
     var isLoadEnable = true
@@ -39,6 +41,7 @@ abstract class LeadingLoadStateAdapter<VH: RecyclerView.ViewHolder> : LoadStateA
     }
 
     /**
+     * Action of loading more.
      * 加载更多执行的操作
      */
     private fun loadAction() {
@@ -49,6 +52,7 @@ abstract class LeadingLoadStateAdapter<VH: RecyclerView.ViewHolder> : LoadStateA
 
             if (recyclerView.isComputingLayout) {
                 // 如果 RecyclerView 当前正在计算布局，则延迟执行，避免崩溃
+                // To avoid crash. Delay to load more if the recyclerview is computingLayout.
                 recyclerView.post {
                     invokeLoad()
                 }
@@ -79,6 +83,7 @@ abstract class LeadingLoadStateAdapter<VH: RecyclerView.ViewHolder> : LoadStateA
     interface OnLeadingListener {
 
         /**
+         * Executing loading.
          * "加载更多"执行逻辑
          */
         fun onLoad()

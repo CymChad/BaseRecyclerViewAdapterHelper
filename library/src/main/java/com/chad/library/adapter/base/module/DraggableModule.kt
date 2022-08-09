@@ -22,11 +22,13 @@ import java.util.*
  */
 
 /**
+ * If you need a function of dragging item, you need to implement the interface with [BaseQuickAdapter].
  * 需要【拖拽】功能的，[BaseQuickAdapter]继承此接口
  */
 interface DraggableModule {
     /**
      * 重写此方法，返回自定义模块
+     * override the method to provide a custom module.
      * @param baseQuickAdapter BaseQuickAdapter<*, *>
      * @return BaseExpandableModule
      */
@@ -123,10 +125,16 @@ open class BaseDraggableModule(private val baseQuickAdapter: BaseQuickAdapter<*,
 
     /************************* Drag *************************/
 
+    /**
+     * Callback when item dragging start if you have registered a listener.
+     */
     open fun onItemDragStart(viewHolder: RecyclerView.ViewHolder) {
         mOnItemDragListener?.onItemDragStart(viewHolder, getViewHolderPosition(viewHolder))
     }
 
+    /**
+     * Callback when item is moving.
+     */
     open fun onItemDragMoving(source: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder) {
         val from = getViewHolderPosition(source)
         val to = getViewHolderPosition(target)
@@ -145,6 +153,9 @@ open class BaseDraggableModule(private val baseQuickAdapter: BaseQuickAdapter<*,
         mOnItemDragListener?.onItemDragMoving(source, from, target, to)
     }
 
+    /**
+     * Callback when item dragging end.
+     */
     open fun onItemDragEnd(viewHolder: RecyclerView.ViewHolder) {
         mOnItemDragListener?.onItemDragEnd(viewHolder, getViewHolderPosition(viewHolder))
     }
@@ -185,6 +196,7 @@ open class BaseDraggableModule(private val baseQuickAdapter: BaseQuickAdapter<*,
     }
 
     /**
+     * Set a listener of dragging.
      * 设置监听
      * @param onItemDragListener OnItemDragListener?
      */
@@ -192,6 +204,9 @@ open class BaseDraggableModule(private val baseQuickAdapter: BaseQuickAdapter<*,
         this.mOnItemDragListener = onItemDragListener
     }
 
+    /**
+     * Set a listener of swiping.
+     */
     override fun setOnItemSwipeListener(onItemSwipeListener: OnItemSwipeListener?) {
         this.mOnItemSwipeListener = onItemSwipeListener
     }
