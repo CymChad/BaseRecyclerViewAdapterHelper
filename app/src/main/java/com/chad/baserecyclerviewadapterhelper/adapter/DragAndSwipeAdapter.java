@@ -11,12 +11,12 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.module.DraggableModule;
 import com.chad.library.adapter.base.viewholder.QuickViewHolder;
 
-public class DragAndSwipeAdapter extends BaseQuickAdapter<String, QuickViewHolder> implements DraggableModule {
+public class DragAndSwipeAdapter extends BaseQuickAdapter<String, QuickViewHolder> {
 
     @NonNull
     @Override
     protected QuickViewHolder onCreateViewHolder(@NonNull Context context, @NonNull ViewGroup parent, int viewType) {
-        return new QuickViewHolder(R.layout.item_draggable_view , parent);
+        return new QuickViewHolder(R.layout.item_draggable_view, parent);
     }
 
     @Override

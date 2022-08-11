@@ -18,6 +18,8 @@ import com.chad.baserecyclerviewadapterhelper.adapter.DragAndSwipeAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.QuickAdapterHelper;
+import com.chad.library.adapter.base.dragswipe.DragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 import com.chad.library.adapter.base.viewholder.QuickViewHolder;
@@ -25,10 +27,13 @@ import com.chad.library.adapter.base.viewholder.QuickViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
+import kotlin.LazyThreadSafetyMode;
+
 public class DragAndSwipeUseActivity extends BaseActivity {
 
     private RecyclerView mRecyclerView;
     private DragAndSwipeAdapter mAdapter;
+    private QuickAdapterHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +61,7 @@ public class DragAndSwipeUseActivity extends BaseActivity {
                     v.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                         @Override
                         public void onAnimationUpdate(ValueAnimator animation) {
-                            holder.itemView.setBackgroundColor((int)animation.getAnimatedValue());
+                            holder.itemView.setBackgroundColor((int) animation.getAnimatedValue());
                         }
                     });
                     v.setDuration(300);
@@ -81,7 +86,7 @@ public class DragAndSwipeUseActivity extends BaseActivity {
                     v.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                         @Override
                         public void onAnimationUpdate(ValueAnimator animation) {
-                            holder.itemView.setBackgroundColor((int)animation.getAnimatedValue());
+                            holder.itemView.setBackgroundColor((int) animation.getAnimatedValue());
                         }
                     });
                     v.setDuration(300);
@@ -90,44 +95,21 @@ public class DragAndSwipeUseActivity extends BaseActivity {
             }
         };
 
-        // 侧滑监听
-        OnItemSwipeListener onItemSwipeListener = new OnItemSwipeListener() {
-            @Override
-            public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int pos) {
-                Log.d(TAG, "view swiped start: " + pos);
-                QuickViewHolder holder = ((QuickViewHolder) viewHolder);
-            }
-
-            @Override
-            public void clearView(RecyclerView.ViewHolder viewHolder, int pos) {
-                Log.d(TAG, "View reset: " + pos);
-                QuickViewHolder holder = ((QuickViewHolder) viewHolder);
-            }
-
-            @Override
-            public void onItemSwiped(RecyclerView.ViewHolder viewHolder, int pos) {
-                Log.d(TAG, "View Swiped: " + pos);
-            }
-
-            @Override
-            public void onItemSwipeMoving(Canvas canvas, RecyclerView.ViewHolder viewHolder, float dX, float dY, boolean isCurrentlyActive) {
-                canvas.drawColor(ContextCompat.getColor(DragAndSwipeUseActivity.this, R.color.color_light_blue));
-            }
-        };
 
         List<String> mData = generateData(50);
         mAdapter = new DragAndSwipeAdapter();
-
-//        mAdapter.getDraggableModule().setSwipeEnabled(true);
-//        mAdapter.getDraggableModule().setDragEnabled(true);
-//        mAdapter.getDraggableModule().setOnItemDragListener(listener);
-//        mAdapter.getDraggableModule().setOnItemSwipeListener(onItemSwipeListener);
-//        mAdapter.getDraggableModule().getItemTouchHelperCallback().setSwipeMoveFlags(ItemTouchHelper.START | ItemTouchHelper.END);
-        //mAdapter.getDraggableModule().getItemTouchHelperCallback().setDragMoveFlags(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.UP | ItemTouchHelper.DOWN);
-        mRecyclerView.setAdapter(mAdapter);
-
-
+        helper = new QuickAdapterHelper.Builder(mAdapter)
+                .build();
+        mRecyclerView.setAdapter(helper.getAdapter());
+        mAdapter.submitList(mData);
+        DragAndSwipeCallback swipeCallback = new DragAndSwipeCallback();
+        swipeCallback.baseQuickAdapter = mAdapter;
+        swipeCallback.attachToRecyclerView(mRecyclerView);
         mAdapter.setOnItemClickListener((BaseQuickAdapter.OnItemClickListener) (adapter, view, position) -> Tips.show("点击了：" + position));
+        mAdapter.setOnItemLongClickListener((adapter, view, position) -> {
+            swipeCallback.startDrag(position);
+            return false;
+        });
     }
 
     private List<String> generateData(int size) {

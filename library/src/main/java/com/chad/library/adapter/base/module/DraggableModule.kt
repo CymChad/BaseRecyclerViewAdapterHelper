@@ -55,7 +55,7 @@ open class BaseDraggableModule(private val baseQuickAdapter: BaseQuickAdapter<*,
     }
 
     private fun initItemTouch() {
-        itemTouchHelperCallback = DragAndSwipeCallback(this)
+        itemTouchHelperCallback = DragAndSwipeCallback()
         itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
     }
 

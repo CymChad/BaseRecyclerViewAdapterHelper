@@ -28,7 +28,7 @@
         <activity android:name=".activity.EmptyViewUseActivity" />
         <activity android:name=".activity.ItemClickActivity" />
         <activity android:name=".activity.DataBindingUseActivity" />
-<!--        <activity android:name=".activity.DragAndSwipeUseActivity" />-->
+        <activity android:name=".activity.DragAndSwipeUseActivity" />
         <activity android:name=".activity.UpFetchUseActivity" />
 <!--        <activity android:name=".activity.node.NodeSectionUseActivity" />-->
         <activity android:name=".activity.DifferActivity" />
