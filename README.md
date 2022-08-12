@@ -12,11 +12,16 @@ Please feel free to use this. (Welcome to **Star** and **Fork**)
 ​    
 **New version 3.x release, Written using `kotlin` and `AndroidX`**, Support `java` use. Fixed many legacy issues, strengthened support for DataBinding, and ‘multi-layout’ is more flexible.
 
-**新版3.x版已发布，使用`kotlin`和`AndroidX`编写**，支持`java`使用。解决了许多遗留问题，增强了对DataBinding的支持，并且“多重布局”更加灵活。
+**新版4.x.x已发布 alpha 版本，完美兼容`ConcatAdapter`，解决了许多遗留问题，拆分了功能模块，BaseAdapter更加简介干净。“多类型布局”更加灵活。
+v4版本已经上传 maven 中央仓库，不需要再引入三方仓库配置了。欢迎尝试。
+```
+implementation "io.github.cymchad:BaseRecyclerViewAdapterHelper:4.0.0-alpha2"
+```
+
 
 Of course, you can continue to use the [2.x](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/tree/2.x) version.
 
-当然，你也可以继续使用[2.x](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/tree/2.x) 版本。
+当然，你也可以继续使用[2.x](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/tree/2.x) 版本、[3.x.x]([https://github.com/CymChad/BaseRecyclerViewAdapterHelper/tree/2.x](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/0-BaseRecyclerViewAdapterHelper.md))版本。
 
 # Document
 - English Writing ...
