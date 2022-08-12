@@ -19,7 +19,7 @@ implementation "io.github.cymchad:BaseRecyclerViewAdapterHelper:4.0.0-alpha2"
 
 Of course, you can continue to use the [2.x](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/tree/2.x) version.
 
-当然，你也可以继续使用[2.x](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/tree/2.x) 版本、[3.x.x]([https://github.com/CymChad/BaseRecyclerViewAdapterHelper/tree/2.x](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/0-BaseRecyclerViewAdapterHelper.md))版本。
+当然，你也可以继续使用[2.x](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/tree/2.x) 版本、[3.x.x](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/0-BaseRecyclerViewAdapterHelper.md)版本。
 
 # Document
 - English Writing ...
