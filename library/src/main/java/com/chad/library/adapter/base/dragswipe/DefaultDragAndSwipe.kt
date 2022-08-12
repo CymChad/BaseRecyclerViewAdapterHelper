@@ -10,32 +10,41 @@ import java.util.*
 /**
  * @author yangfeng
  * @date 2022/7/27
+ * 默认的 拖拽类，可进行自定义，适配带有头布局的
  */
-open class DragAndSwipeCallback : ItemTouchHelper.Callback() {
+open class DefaultDragAndSwipe : ItemTouchHelper.Callback(), DragAndSwipeImpl {
 
-    var dragMoveFlags =
+    private var _dragMoveFlags =
         ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-    var swipeMoveFlags = ItemTouchHelper.END
-    private var mRecyclerView: RecyclerView? = null
-    private var mItemTouchHelper: ItemTouchHelper? = null
+    private var _swipeMoveFlags = ItemTouchHelper.END
+    private var recyclerView: RecyclerView? = null
+    private var _itemTouchHelper: ItemTouchHelper? = null
     private var mOnItemDragListener: OnItemDragListener? = null
 
     /**
      * 绑定RecyclerView
      */
-    fun attachToRecyclerView(@Nullable recyclerView: RecyclerView) {
-        if (this.mRecyclerView == recyclerView) return
-        mRecyclerView = recyclerView
-        if (null == mItemTouchHelper) {
-            mItemTouchHelper = ItemTouchHelper(this)
-            mItemTouchHelper?.attachToRecyclerView(recyclerView)
+    override fun attachToRecyclerView(@Nullable recyclerView: RecyclerView) {
+        if (this.recyclerView == recyclerView) return
+        this.recyclerView = recyclerView
+        if (null == _itemTouchHelper) {
+            _itemTouchHelper = ItemTouchHelper(this)
+            _itemTouchHelper?.attachToRecyclerView(recyclerView)
         }
+    }
+
+    override fun setDragMoveFlags(dragMoveFlags: Int) {
+        _dragMoveFlags = dragMoveFlags
+    }
+
+    override fun setSwipeMoveFlags(swipeMoveFlags: Int) {
+        _swipeMoveFlags = swipeMoveFlags
     }
 
     /**
      * 设置拖拽的监听
      */
-    fun setItemDragListener(onItemDragListener: OnItemDragListener? = null) {
+    override fun setItemDragListener(onItemDragListener: OnItemDragListener?) {
         this.mOnItemDragListener = onItemDragListener
     }
 
@@ -54,7 +63,7 @@ open class DragAndSwipeCallback : ItemTouchHelper.Callback() {
     /**
      * 必传
      */
-    lateinit var baseQuickAdapter: BaseQuickAdapter<*, *>
+    private lateinit var mBaseQuickAdapter: BaseQuickAdapter<*, *>
 
     /**
      * 是否可拖动或左右滑动
@@ -69,7 +78,7 @@ open class DragAndSwipeCallback : ItemTouchHelper.Callback() {
         if (isEmptyView(viewHolder)) {
             return makeMovementFlags(0, 0)
         }
-        return makeMovementFlags(dragMoveFlags, swipeMoveFlags)
+        return makeMovementFlags(_dragMoveFlags, _swipeMoveFlags)
     }
 
     override fun onMove(
@@ -109,7 +118,7 @@ open class DragAndSwipeCallback : ItemTouchHelper.Callback() {
      */
     private fun dataSwap(fromPosition: Int, toPosition: Int) {
         if (inRange(fromPosition) && inRange(toPosition)) {
-            val data = baseQuickAdapter.items
+            val data = mBaseQuickAdapter.items
             if (fromPosition < toPosition) {
                 for (i in fromPosition until toPosition) {
                     Collections.swap(data, i, i + 1)
@@ -120,20 +129,24 @@ open class DragAndSwipeCallback : ItemTouchHelper.Callback() {
                     Collections.swap(data, i, i - 1)
                 }
             }
-            baseQuickAdapter.notifyItemMoved(fromPosition, toPosition)
+            mBaseQuickAdapter.notifyItemMoved(fromPosition, toPosition)
         }
     }
 
-    fun startDrag(holder: RecyclerView.ViewHolder) {
-        mItemTouchHelper?.startDrag(holder)
+    override fun startDrag(holder: RecyclerView.ViewHolder) {
+        _itemTouchHelper?.startDrag(holder)
+    }
+
+    override fun setBaseQuickAdapter(baseQuickAdapter: BaseQuickAdapter<*, *>) {
+        mBaseQuickAdapter = baseQuickAdapter
     }
 
     /**
      * 启动拖拽
      */
-    fun startDrag(position: Int) {
-        val holder = mRecyclerView?.findViewHolderForAdapterPosition(position) ?: return
-        mItemTouchHelper?.startDrag(holder)
+    override fun startDrag(position: Int) {
+        val holder = recyclerView?.findViewHolderForAdapterPosition(position) ?: return
+        _itemTouchHelper?.startDrag(holder)
     }
 
     /**
@@ -147,7 +160,7 @@ open class DragAndSwipeCallback : ItemTouchHelper.Callback() {
      * 防止数组下标越界
      */
     private fun inRange(position: Int): Boolean {
-        val size = baseQuickAdapter.items.size
+        val size = mBaseQuickAdapter.items.size
         return position in 0 until size
     }
 

@@ -35,9 +35,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     private var onViewAttachStateChangeListeners: MutableList<OnViewAttachStateChangeListener>? =
         null
 
-    //    private var mUpFetchModule: BaseUpFetchModule? = null
-    private var mDraggableModule: BaseDraggableModule? = null
-
     private var _recyclerView: RecyclerView? = null
 
     val recyclerView: RecyclerView
@@ -277,8 +274,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         _recyclerView = recyclerView
-
-        mDraggableModule?.attachToRecyclerView(recyclerView)
     }
 
     @CallSuper

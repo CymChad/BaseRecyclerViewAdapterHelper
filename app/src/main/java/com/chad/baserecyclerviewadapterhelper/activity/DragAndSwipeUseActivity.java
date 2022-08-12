@@ -17,21 +17,18 @@ import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.QuickAdapterHelper;
-import com.chad.library.adapter.base.dragswipe.DragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.chad.library.adapter.base.viewholder.QuickViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import kotlin.LazyThreadSafetyMode;
 
 public class DragAndSwipeUseActivity extends BaseActivity {
 
     private RecyclerView mRecyclerView;
     private DragAndSwipeAdapter mAdapter;
     private QuickAdapterHelper helper;
-    DragAndSwipeCallback swipeCallback = new DragAndSwipeCallback();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,16 +94,16 @@ public class DragAndSwipeUseActivity extends BaseActivity {
         List<String> mData = generateData(50);
         mAdapter = new DragAndSwipeAdapter();
         helper = new QuickAdapterHelper.Builder(mAdapter)
+                .setItemDragListener(listener)
+                .attachToDragAndSwipe(mRecyclerView,
+                        ItemTouchHelper.UP | ItemTouchHelper.DOWN,
+                        ItemTouchHelper.END)
                 .build();
         mRecyclerView.setAdapter(helper.getAdapter());
         mAdapter.submitList(mData);
-        swipeCallback.setItemDragListener(listener);
-        swipeCallback.setDragMoveFlags(ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
-        swipeCallback.baseQuickAdapter = mAdapter;
-        swipeCallback.attachToRecyclerView(mRecyclerView);
         mAdapter.setOnItemClickListener((BaseQuickAdapter.OnItemClickListener) (adapter, view, position) -> Tips.show("点击了：" + position));
         mAdapter.setOnItemLongClickListener((adapter, view, position) -> {
-            swipeCallback.startDrag(position);
+            helper.startDrag(position);
             Vibrator vib = (Vibrator) getSystemService(Service.VIBRATOR_SERVICE);  //震动70毫秒
             vib.vibrate(70);
             return false;

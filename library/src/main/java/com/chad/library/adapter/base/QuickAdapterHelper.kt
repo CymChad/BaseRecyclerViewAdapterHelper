@@ -1,7 +1,12 @@
 package com.chad.library.adapter.base
 
+import androidx.annotation.Nullable
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.chad.library.adapter.base.dragswipe.DefaultDragAndSwipe
+import com.chad.library.adapter.base.dragswipe.DragAndSwipeImpl
+import com.chad.library.adapter.base.listener.OnItemDragListener
 import com.chad.library.adapter.base.loadState.LoadState
 import com.chad.library.adapter.base.loadState.leading.DefaultLeadingLoadStateAdapter
 import com.chad.library.adapter.base.loadState.leading.LeadingLoadStateAdapter
@@ -23,7 +28,9 @@ class QuickAdapterHelper private constructor(
      */
     val trailingLoadStateAdapter: TrailingLoadStateAdapter<*>?,
 
-    config: ConcatAdapter.Config
+    config: ConcatAdapter.Config,
+
+    private var dragAndSwipe: DragAndSwipeImpl? = null
 ) {
 
     private val mHeaderList = ArrayList<RecyclerView.Adapter<*>>(0)
@@ -200,12 +207,28 @@ class QuickAdapterHelper private constructor(
         mFooterList.remove(a)
     }
 
+    /**
+     * 拖拽
+     */
+    fun startDrag(position: Int) = apply {
+        dragAndSwipe?.startDrag(position)
+    }
+
+    /**
+     * 拖拽
+     */
+    fun startDrag(holder: RecyclerView.ViewHolder) = apply {
+        dragAndSwipe?.startDrag(holder)
+    }
+
     class Builder(private val contentAdapter: BaseQuickAdapter<*, *>) {
 
         private var leadingLoadStateAdapter: LeadingLoadStateAdapter<*>? = null
         private var trailingLoadStateAdapter: TrailingLoadStateAdapter<*>? = null
 
         private var config: ConcatAdapter.Config = ConcatAdapter.Config.DEFAULT
+
+        var dragAndSwipeImpl: DragAndSwipeImpl? = null
 
         /**
          * 尾部"加载更多"Adapter
@@ -240,12 +263,67 @@ class QuickAdapterHelper private constructor(
             this.config = config
         }
 
+        /**
+         * 设置自定义的拖拽
+         * 一定要优先于 attachToDragAndSwipe 方法设置
+         */
+        fun setDragAndSwipe(dragAndSwipeImpl: DragAndSwipeImpl) = apply {
+            this.dragAndSwipeImpl = dragAndSwipeImpl
+        }
+
+        /**
+         * 绑定 DragAndSwipe
+         */
+        fun attachToDragAndSwipe(
+            @Nullable recyclerView: RecyclerView,
+            dragMoveFlags: Int = ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT,
+            swipeMoveFlags: Int = ItemTouchHelper.END
+        ) = apply {
+            checkDragAndSwipeCallback()
+            dragAndSwipeImpl?.setBaseQuickAdapter(contentAdapter)
+            dragAndSwipeImpl?.attachToRecyclerView(recyclerView)
+            dragAndSwipeImpl?.setDragMoveFlags(dragMoveFlags)
+            dragAndSwipeImpl?.setSwipeMoveFlags(swipeMoveFlags)
+        }
+
+
+        fun setItemDragListener(mOnItemDragListener: OnItemDragListener? = null) = apply {
+            checkDragAndSwipeCallback()
+            dragAndSwipeImpl?.setItemDragListener(mOnItemDragListener)
+        }
+
+        /**
+         * 设置拖拽的方向
+         */
+        fun setDragMoveFlags(dragMoveFlags: Int) = apply {
+            checkDragAndSwipeCallback()
+            dragAndSwipeImpl?.setDragMoveFlags(dragMoveFlags)
+        }
+
+        /**
+         * 设置滑动的方向
+         */
+        fun setSwipeMoveFlags(swipeMoveFlags: Int) {
+            checkDragAndSwipeCallback()
+            dragAndSwipeImpl?.setSwipeMoveFlags(swipeMoveFlags)
+        }
+
+        /**
+         * 检查DragAndSwipe 是否设置，如果没有，就用默认的
+         */
+        fun checkDragAndSwipeCallback() {
+            if (null == dragAndSwipeImpl) {
+                dragAndSwipeImpl = DefaultDragAndSwipe()
+            }
+        }
+
         fun build(): QuickAdapterHelper {
             return QuickAdapterHelper(
                 contentAdapter,
                 leadingLoadStateAdapter,
                 trailingLoadStateAdapter,
-                config
+                config,
+                dragAndSwipeImpl
             )
         }
 
