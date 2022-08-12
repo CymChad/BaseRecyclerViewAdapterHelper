@@ -1,14 +1,12 @@
 package com.chad.baserecyclerviewadapterhelper.activity;
 
 import android.animation.ValueAnimator;
-import android.graphics.Canvas;
+import android.app.Service;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.Log;
-import android.view.View;
 
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +19,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.QuickAdapterHelper;
 import com.chad.library.adapter.base.dragswipe.DragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
-import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 import com.chad.library.adapter.base.viewholder.QuickViewHolder;
 
 import java.util.ArrayList;
@@ -34,6 +31,7 @@ public class DragAndSwipeUseActivity extends BaseActivity {
     private RecyclerView mRecyclerView;
     private DragAndSwipeAdapter mAdapter;
     private QuickAdapterHelper helper;
+    DragAndSwipeCallback swipeCallback = new DragAndSwipeCallback();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,12 +100,15 @@ public class DragAndSwipeUseActivity extends BaseActivity {
                 .build();
         mRecyclerView.setAdapter(helper.getAdapter());
         mAdapter.submitList(mData);
-        DragAndSwipeCallback swipeCallback = new DragAndSwipeCallback();
+        swipeCallback.setItemDragListener(listener);
+        swipeCallback.setDragMoveFlags(ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         swipeCallback.baseQuickAdapter = mAdapter;
         swipeCallback.attachToRecyclerView(mRecyclerView);
         mAdapter.setOnItemClickListener((BaseQuickAdapter.OnItemClickListener) (adapter, view, position) -> Tips.show("点击了：" + position));
         mAdapter.setOnItemLongClickListener((adapter, view, position) -> {
             swipeCallback.startDrag(position);
+            Vibrator vib = (Vibrator) getSystemService(Service.VIBRATOR_SERVICE);  //震动70毫秒
+            vib.vibrate(70);
             return false;
         });
     }
@@ -120,3 +121,5 @@ public class DragAndSwipeUseActivity extends BaseActivity {
         return data;
     }
 }
+
+

@@ -63,17 +63,3 @@ class HomeAdapter(data: MutableList<HomeEntity>) : BaseMultiItemQuickAdapter<Hom
         private const val SECTION_TYPE = 1
     }
 }
-
-class HomeTopHeaderAdapter : RecyclerView.Adapter<HomeTopHeaderAdapter.VH>() , FullSpanAdapterType {
-    class VH(view: View) : RecyclerView.ViewHolder(view)
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        return VH(LayoutInflater.from(parent.context).inflate(R.layout.top_view, parent, false))
-    }
-
-    override fun onBindViewHolder(holder: VH, position: Int) {
-    }
-
-    override fun getItemCount(): Int = 1
-
-}
