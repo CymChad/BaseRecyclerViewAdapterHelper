@@ -10,8 +10,6 @@ Please feel free to use this. (Welcome to **Star** and **Fork**)
 
 
 ​    
-**New version 3.x release, Written using `kotlin` and `AndroidX`**, Support `java` use. Fixed many legacy issues, strengthened support for DataBinding, and ‘multi-layout’ is more flexible.
-
 **新版4.x.x已发布 alpha 版本，完美兼容`ConcatAdapter`，解决了许多遗留问题，拆分了功能模块，BaseAdapter更加简介干净。“多类型布局”更加灵活。
 v4版本已经上传 maven 中央仓库，不需要再引入三方仓库配置了。欢迎尝试。
 ```
