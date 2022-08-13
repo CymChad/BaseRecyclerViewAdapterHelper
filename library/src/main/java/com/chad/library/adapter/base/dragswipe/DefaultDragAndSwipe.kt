@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.listener.OnItemDragListener
+import com.chad.library.adapter.base.listener.OnItemSwipeListener
 import java.util.*
 
 /**
@@ -20,6 +21,7 @@ open class DefaultDragAndSwipe : ItemTouchHelper.Callback(), DragAndSwipeImpl {
     private var recyclerView: RecyclerView? = null
     private var _itemTouchHelper: ItemTouchHelper? = null
     private var mOnItemDragListener: OnItemDragListener? = null
+//    private var mOnItemSwipeListener: OnItemSwipeListener? = null
 
     /**
      * 绑定RecyclerView
@@ -105,7 +107,8 @@ open class DefaultDragAndSwipe : ItemTouchHelper.Callback(), DragAndSwipeImpl {
 
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-
+        val position = getViewHolderPosition(viewHolder)
+        mBaseQuickAdapter.removeAt(position)
     }
 
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {

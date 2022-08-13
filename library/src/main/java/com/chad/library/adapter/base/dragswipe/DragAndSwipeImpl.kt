@@ -18,9 +18,10 @@ interface DragAndSwipeImpl {
 
     fun attachToRecyclerView(@Nullable recyclerView: RecyclerView)
 
+    fun setBaseQuickAdapter(baseQuickAdapter: BaseQuickAdapter<*, *>)
+
     fun startDrag(position: Int)
 
     fun startDrag(holder: RecyclerView.ViewHolder)
 
-    fun setBaseQuickAdapter(baseQuickAdapter: BaseQuickAdapter<*, *>)
 }

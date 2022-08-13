@@ -97,7 +97,7 @@ public class DragAndSwipeUseActivity extends BaseActivity {
                 .setItemDragListener(listener)
                 .attachToDragAndSwipe(mRecyclerView,
                         ItemTouchHelper.UP | ItemTouchHelper.DOWN,
-                        ItemTouchHelper.END)
+                        ItemTouchHelper.END|ItemTouchHelper.START)
                 .build();
         mRecyclerView.setAdapter(helper.getAdapter());
         mAdapter.submitList(mData);
