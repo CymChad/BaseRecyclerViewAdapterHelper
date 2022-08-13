@@ -1,5 +1,6 @@
 package com.chad.library.adapter.base.dragswipe
 
+import android.graphics.Canvas
 import androidx.annotation.Nullable
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -15,13 +16,17 @@ import java.util.*
  */
 open class DefaultDragAndSwipe : ItemTouchHelper.Callback(), DragAndSwipeImpl {
 
-    private var _dragMoveFlags =
-        ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-    private var _swipeMoveFlags = ItemTouchHelper.END
+    private var _dragMoveFlags = ItemTouchHelper.ACTION_STATE_IDLE
+    private var _swipeMoveFlags = ItemTouchHelper.ACTION_STATE_IDLE
     private var recyclerView: RecyclerView? = null
     private var _itemTouchHelper: ItemTouchHelper? = null
     private var mOnItemDragListener: OnItemDragListener? = null
-//    private var mOnItemSwipeListener: OnItemSwipeListener? = null
+    private var mOnItemSwipeListener: OnItemSwipeListener? = null
+
+    private var _isLongPressDragEnabled: Boolean = true
+
+    private var _isItemViewSwipeEnabled: Boolean = true
+
 
     /**
      * 绑定RecyclerView
@@ -50,8 +55,11 @@ open class DefaultDragAndSwipe : ItemTouchHelper.Callback(), DragAndSwipeImpl {
         this.mOnItemDragListener = onItemDragListener
     }
 
+    override fun setItemSwipeListener(onItemSwipeListener: OnItemSwipeListener?) {
+        this.mOnItemSwipeListener = onItemSwipeListener
+    }
+
     override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
-        super.onSelectedChanged(viewHolder, actionState)
         when (actionState) {
             ItemTouchHelper.ACTION_STATE_DRAG -> {
                 mOnItemDragListener?.onItemDragStart(
@@ -59,7 +67,14 @@ open class DefaultDragAndSwipe : ItemTouchHelper.Callback(), DragAndSwipeImpl {
                     getViewHolderPosition(viewHolder)
                 )
             }
+            ItemTouchHelper.ACTION_STATE_SWIPE -> {
+                mOnItemSwipeListener?.onItemSwipeStart(
+                    viewHolder,
+                    getViewHolderPosition(viewHolder)
+                )
+            }
         }
+        super.onSelectedChanged(viewHolder, actionState)
     }
 
     /**
@@ -109,11 +124,39 @@ open class DefaultDragAndSwipe : ItemTouchHelper.Callback(), DragAndSwipeImpl {
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val position = getViewHolderPosition(viewHolder)
         mBaseQuickAdapter.removeAt(position)
+        mOnItemSwipeListener?.onItemSwiped(viewHolder, position)
+    }
+
+    override fun isLongPressDragEnabled(): Boolean {
+        return _isLongPressDragEnabled
+    }
+
+    override fun isItemViewSwipeEnabled(): Boolean {
+        return _isItemViewSwipeEnabled
+    }
+
+    override fun onChildDraw(
+        c: Canvas,
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        dX: Float,
+        dY: Float,
+        actionState: Int,
+        isCurrentlyActive: Boolean
+    ) {
+        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+        when (actionState) {
+            ItemTouchHelper.ACTION_STATE_SWIPE -> {
+                mOnItemSwipeListener?.onItemSwipeMoving(c, viewHolder, dX, dY, isCurrentlyActive)
+            }
+        }
     }
 
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
         super.clearView(recyclerView, viewHolder)
-        mOnItemDragListener?.onItemDragEnd(viewHolder, getViewHolderPosition(viewHolder))
+        val position = getViewHolderPosition(viewHolder)
+        mOnItemDragListener?.onItemDragEnd(viewHolder, position)
+        mOnItemSwipeListener?.clearView(viewHolder, position)
     }
 
     /**
@@ -136,12 +179,23 @@ open class DefaultDragAndSwipe : ItemTouchHelper.Callback(), DragAndSwipeImpl {
         }
     }
 
-    override fun startDrag(holder: RecyclerView.ViewHolder) {
-        _itemTouchHelper?.startDrag(holder)
-    }
-
     override fun setBaseQuickAdapter(baseQuickAdapter: BaseQuickAdapter<*, *>) {
         mBaseQuickAdapter = baseQuickAdapter
+    }
+
+    override fun setLongPressDragEnabled(isLongPressDragEnabled: Boolean) {
+        _isLongPressDragEnabled = isLongPressDragEnabled
+    }
+
+    override fun setItemViewSwipeEnabled(isItemViewSwipeEnabled: Boolean) {
+        _isItemViewSwipeEnabled = isItemViewSwipeEnabled
+    }
+
+    /**
+     * 启动拖拽
+     */
+    override fun startDrag(holder: RecyclerView.ViewHolder) {
+        _itemTouchHelper?.startDrag(holder)
     }
 
     /**
@@ -150,6 +204,21 @@ open class DefaultDragAndSwipe : ItemTouchHelper.Callback(), DragAndSwipeImpl {
     override fun startDrag(position: Int) {
         val holder = recyclerView?.findViewHolderForAdapterPosition(position) ?: return
         _itemTouchHelper?.startDrag(holder)
+    }
+
+    /**
+     * 启动侧滑
+     */
+    override fun startSwipe(holder: RecyclerView.ViewHolder) {
+        _itemTouchHelper?.startSwipe(holder)
+    }
+
+    /**
+     * 启动侧滑
+     */
+    override fun startSwipe(position: Int) {
+        val holder = recyclerView?.findViewHolderForAdapterPosition(position) ?: return
+        _itemTouchHelper?.startSwipe(holder)
     }
 
     /**
@@ -170,5 +239,6 @@ open class DefaultDragAndSwipe : ItemTouchHelper.Callback(), DragAndSwipeImpl {
     private fun getViewHolderPosition(viewHolder: RecyclerView.ViewHolder?): Int {
         return viewHolder?.bindingAdapterPosition ?: RecyclerView.NO_POSITION
     }
+
 
 }

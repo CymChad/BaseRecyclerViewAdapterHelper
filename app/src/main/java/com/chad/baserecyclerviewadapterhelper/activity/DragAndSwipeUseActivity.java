@@ -2,10 +2,12 @@ package com.chad.baserecyclerviewadapterhelper.activity;
 
 import android.animation.ValueAnimator;
 import android.app.Service;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
+
 
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,6 +20,7 @@ import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.QuickAdapterHelper;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
+import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 import com.chad.library.adapter.base.viewholder.QuickViewHolder;
 
 import java.util.ArrayList;
@@ -45,20 +48,16 @@ public class DragAndSwipeUseActivity extends BaseActivity {
         OnItemDragListener listener = new OnItemDragListener() {
             @Override
             public void onItemDragStart(RecyclerView.ViewHolder viewHolder, int pos) {
+                Vibrator vib = (Vibrator) getSystemService(Service.VIBRATOR_SERVICE);  //震动70毫秒
+                vib.vibrate(70);
                 Log.d(TAG, "drag start");
                 final QuickViewHolder holder = ((QuickViewHolder) viewHolder);
-
                 // 开始时，item背景色变化，demo这里使用了一个动画渐变，使得自然
                 int startColor = Color.WHITE;
                 int endColor = Color.rgb(245, 245, 245);
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     ValueAnimator v = ValueAnimator.ofArgb(startColor, endColor);
-                    v.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                        @Override
-                        public void onAnimationUpdate(ValueAnimator animation) {
-                            holder.itemView.setBackgroundColor((int) animation.getAnimatedValue());
-                        }
-                    });
+                    v.addUpdateListener(animation -> holder.itemView.setBackgroundColor((int) animation.getAnimatedValue()));
                     v.setDuration(300);
                     v.start();
                 }
@@ -78,34 +77,57 @@ public class DragAndSwipeUseActivity extends BaseActivity {
                 int endColor = Color.WHITE;
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     ValueAnimator v = ValueAnimator.ofArgb(startColor, endColor);
-                    v.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                        @Override
-                        public void onAnimationUpdate(ValueAnimator animation) {
-                            holder.itemView.setBackgroundColor((int) animation.getAnimatedValue());
-                        }
-                    });
+                    v.addUpdateListener(animation -> holder.itemView.setBackgroundColor((int) animation.getAnimatedValue()));
                     v.setDuration(300);
                     v.start();
                 }
             }
         };
 
+        OnItemSwipeListener swipeListener = new OnItemSwipeListener() {
+            @Override
+            public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int pos) {
+                Log.e("yyyyy", "onItemSwipeStart");
+            }
+
+            @Override
+            public void clearView(RecyclerView.ViewHolder viewHolder, int pos) {
+                Log.e("yyyyy", "clearView");
+            }
+
+            @Override
+            public void onItemSwiped(RecyclerView.ViewHolder viewHolder, int pos) {
+                Log.e("yyyyy", "onItemSwiped");
+            }
+
+            @Override
+            public void onItemSwipeMoving(Canvas canvas, RecyclerView.ViewHolder viewHolder, float dX, float dY, boolean isCurrentlyActive) {
+                Log.e("yyyyy", "onItemSwipeMoving");
+            }
+        };
 
         List<String> mData = generateData(50);
         mAdapter = new DragAndSwipeAdapter();
         helper = new QuickAdapterHelper.Builder(mAdapter)
                 .setItemDragListener(listener)
+                .setItemSwipeListener(swipeListener)
+                .setLongPressDragEnabled(false)//关闭默认的长按拖拽功能，通过自定义长按事件进行拖拽
                 .attachToDragAndSwipe(mRecyclerView,
                         ItemTouchHelper.UP | ItemTouchHelper.DOWN,
-                        ItemTouchHelper.END|ItemTouchHelper.START)
+                        ItemTouchHelper.START | ItemTouchHelper.END)
                 .build();
         mRecyclerView.setAdapter(helper.getAdapter());
         mAdapter.submitList(mData);
         mAdapter.setOnItemClickListener((BaseQuickAdapter.OnItemClickListener) (adapter, view, position) -> Tips.show("点击了：" + position));
         mAdapter.setOnItemLongClickListener((adapter, view, position) -> {
+            /**
+             * 长按默认可拖动，可不进行设置此方法
+             * 此方法可以做特殊使用进行调用
+             * 如：长按此条position对应的item，触发 position+1 对应的item
+             * 此处使用，关闭了默认长按拖拽功能
+             */
             helper.startDrag(position);
-            Vibrator vib = (Vibrator) getSystemService(Service.VIBRATOR_SERVICE);  //震动70毫秒
-            vib.vibrate(70);
+
             return false;
         });
     }
