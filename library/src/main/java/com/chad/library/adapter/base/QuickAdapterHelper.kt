@@ -286,7 +286,7 @@ class QuickAdapterHelper private constructor(
 
         /**
          * 设置自定义的拖拽
-         * 一定要优先于 attachToDragAndSwipe 方法设置
+         * 一定要优先于含有 checkDragAndSwipeCallback的方法设置
          */
         fun setDragAndSwipe(dragAndSwipeImpl: DragAndSwipeImpl) = apply {
             this.dragAndSwipeImpl = dragAndSwipeImpl
