@@ -74,22 +74,22 @@ var ossrhPassword = "" //sonatype密码
 
 val localProperties: File = project.rootProject.file("local.properties")
 
-//if (localProperties.exists()) {
-//    println("Found secret props file, loading props")
-//    val properties = Properties()
-//
-//    InputStreamReader(FileInputStream(localProperties), Charsets.UTF_8).use { reader ->
-//        properties.load(reader)
-//    }
-//    signingKeyId = properties.getProperty("signing.keyId")
-//    signingPassword = properties.getProperty("signing.password")
-//    secretKeyRingFile = properties.getProperty("signing.secretKeyRingFile")
-//    ossrhUsername = properties.getProperty("ossrhUsername")
-//    ossrhPassword = properties.getProperty("ossrhPassword")
-//
-//} else {
-//    println("No props file, loading env vars")
-//}
+if (localProperties.exists()) {
+    println("Found secret props file, loading props")
+    val properties = Properties()
+
+    InputStreamReader(FileInputStream(localProperties), Charsets.UTF_8).use { reader ->
+        properties.load(reader)
+    }
+    signingKeyId = properties.getProperty("signing.keyId")
+    signingPassword = properties.getProperty("signing.password")
+    secretKeyRingFile = properties.getProperty("signing.secretKeyRingFile")
+    ossrhUsername = properties.getProperty("ossrhUsername")
+    ossrhPassword = properties.getProperty("ossrhPassword")
+
+} else {
+    println("No props file, loading env vars")
+}
 
 afterEvaluate {
 
@@ -146,16 +146,16 @@ afterEvaluate {
 
 }
 
-//gradle.taskGraph.whenReady {
-//    if (allTasks.any { it is Sign }) {
-//
-//        allprojects {
-//            extra["signing.keyId"] = signingKeyId
-//            extra["signing.secretKeyRingFile"] = secretKeyRingFile
-//            extra["signing.password"] = signingPassword
-//        }
-//    }
-//}
+gradle.taskGraph.whenReady {
+    if (allTasks.any { it is Sign }) {
+
+        allprojects {
+            extra["signing.keyId"] = signingKeyId
+            extra["signing.secretKeyRingFile"] = secretKeyRingFile
+            extra["signing.password"] = signingPassword
+        }
+    }
+}
 
 signing {
     sign(publishing.publications)
