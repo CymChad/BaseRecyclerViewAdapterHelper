@@ -84,8 +84,7 @@ open class DefaultDragAndSwipe : ItemTouchHelper.Callback(), DragAndSwipeImpl {
 
     /**
      * 是否可拖动或左右滑动
-     * 当含有列表头或者尾时，进行重写 makeMovementFlags(0, 0)
-     * 不进行拖动或滑动操作
+     * 可根据viewHolder获取对应的条目对某条，不进行拖动或滑动操作。返回值设置为 makeMovementFlags(0, 0) 即可
      */
     override fun getMovementFlags(
         recyclerView: RecyclerView,

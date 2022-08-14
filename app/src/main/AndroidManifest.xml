@@ -4,25 +4,31 @@
     package="com.chad.baserecyclerviewadapterhelper">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="BRVAH"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name=".MyApplication"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.WelcomeActivity" android:exported="true">
+        <activity
+            android:name=".activity.DragAndSwipeUseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.DefaultDragAndSwipeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.WelcomeActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".activity.HomeActivity" />
         <activity android:name=".activity.AnimationUseActivity" />
         <activity android:name=".activity.HeaderAndFooterUseActivity" />
@@ -30,11 +36,9 @@
         <activity android:name=".activity.EmptyViewUseActivity" />
         <activity android:name=".activity.ItemClickActivity" />
         <activity android:name=".activity.DataBindingUseActivity" />
-        <activity android:name=".activity.DragAndSwipeUseActivity" />
-        <activity android:name=".activity.UpFetchUseActivity" />
-<!--        <activity android:name=".activity.node.NodeSectionUseActivity" />-->
-        <activity android:name=".activity.DifferActivity" />
-<!--        <activity android:name=".activity.node.ChooseNodeUseTypeActivity" />-->
+        <activity android:name=".activity.ManualDragAndSwipeUseActivity" />
+        <activity android:name=".activity.UpFetchUseActivity" /> <!-- <activity android:name=".activity.node.NodeSectionUseActivity" /> -->
+        <activity android:name=".activity.DifferActivity" /> <!-- <activity android:name=".activity.node.ChooseNodeUseTypeActivity" /> -->
         <activity android:name=".activity.node.NodeTreeUseActivity" />
         <activity android:name=".activity.loadmore.NoAutoAutoLoadMoreRefreshUseActivity" />
     </application>
