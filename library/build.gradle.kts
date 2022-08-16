@@ -61,7 +61,7 @@ android {
 dependencies {
     implementation("androidx.annotation:annotation:1.3.0")
 
-    implementation("androidx.recyclerview:recyclerview:1.3.0-beta01")
+    implementation("androidx.recyclerview:recyclerview:1.3.0-beta02")
 }
 
 
