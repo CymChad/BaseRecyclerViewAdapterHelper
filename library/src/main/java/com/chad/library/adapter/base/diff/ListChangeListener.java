@@ -1,6 +1,6 @@
 package com.chad.library.adapter.base.diff;
 
-import androidx.annotation.NonNull;
+import android.support.annotation.NonNull;
 
 import java.util.List;
 

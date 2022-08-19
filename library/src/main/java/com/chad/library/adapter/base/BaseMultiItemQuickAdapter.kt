@@ -1,8 +1,8 @@
 package com.chad.library.adapter.base
 
+import android.support.annotation.LayoutRes
 import android.util.SparseIntArray
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 

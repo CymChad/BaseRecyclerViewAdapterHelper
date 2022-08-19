@@ -1,8 +1,9 @@
 package com.chad.library.adapter.base.viewholder
 
+import android.databinding.DataBindingUtil
+import android.databinding.ViewDataBinding
 import android.view.View
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
+
 
 /**
  * 方便 DataBinding 的使用

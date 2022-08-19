@@ -1,11 +1,10 @@
 package com.chad.library.adapter.base.dragswipe;
 
 import android.graphics.Canvas;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.R;
 import com.chad.library.adapter.base.BaseQuickAdapter;

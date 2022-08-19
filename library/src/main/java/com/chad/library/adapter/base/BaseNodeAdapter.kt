@@ -1,13 +1,13 @@
 package com.chad.library.adapter.base
 
-import androidx.annotation.IntRange
-import androidx.recyclerview.widget.DiffUtil
+import android.support.v7.util.DiffUtil
 import com.chad.library.adapter.base.entity.node.BaseExpandNode
 import com.chad.library.adapter.base.entity.node.BaseNode
 import com.chad.library.adapter.base.entity.node.ExpandableNodeFooterImpl
 import com.chad.library.adapter.base.entity.node.NodeFooterImp
 import com.chad.library.adapter.base.provider.BaseItemProvider
 import com.chad.library.adapter.base.provider.BaseNodeProvider
+import android.support.annotation.IntRange;
 
 abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null) :
     BaseProviderMultiAdapter<BaseNode>(null) {

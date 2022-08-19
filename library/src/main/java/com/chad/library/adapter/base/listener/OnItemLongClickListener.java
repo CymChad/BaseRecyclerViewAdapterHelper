@@ -1,8 +1,7 @@
 package com.chad.library.adapter.base.listener;
 
+import android.support.annotation.NonNull;
 import android.view.View;
-
-import androidx.annotation.NonNull;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 

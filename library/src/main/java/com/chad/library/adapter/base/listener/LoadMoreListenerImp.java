@@ -1,6 +1,7 @@
 package com.chad.library.adapter.base.listener;
 
-import androidx.annotation.Nullable;
+
+import android.support.annotation.Nullable;
 
 /**
  * @author: limuyang

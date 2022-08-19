@@ -1,6 +1,6 @@
 package com.chad.library.adapter.base
 
-import androidx.annotation.LayoutRes
+import android.support.annotation.LayoutRes
 import com.chad.library.adapter.base.entity.SectionEntity
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 

@@ -1,7 +1,7 @@
 package com.chad.library.adapter.base.module
 
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.StaggeredGridLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.listener.LoadMoreListenerImp
 import com.chad.library.adapter.base.listener.OnLoadMoreListener
