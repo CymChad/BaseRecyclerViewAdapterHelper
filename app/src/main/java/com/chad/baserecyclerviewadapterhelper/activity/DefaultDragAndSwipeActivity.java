@@ -9,16 +9,19 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
 
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.adapter.DragAndSwipeAdapter;
+import com.chad.baserecyclerviewadapterhelper.adapter.HomeTopHeaderAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.QuickAdapterHelper;
+import com.chad.library.adapter.base.dragswipe.DefaultDragAndSwipe;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 import com.chad.library.adapter.base.viewholder.QuickViewHolder;
@@ -35,7 +38,10 @@ public class DefaultDragAndSwipeActivity extends BaseActivity {
     private RecyclerView mRecyclerView;
     private DragAndSwipeAdapter mAdapter;
     private QuickAdapterHelper helper;
-
+    DefaultDragAndSwipe defaultDragAndSwipe = new DefaultDragAndSwipe.Builder()
+            .setDragMoveFlags(ItemTouchHelper.UP | ItemTouchHelper.DOWN)
+            .setSwipeMoveFlags(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT)
+            .build();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,15 +118,13 @@ public class DefaultDragAndSwipeActivity extends BaseActivity {
         List<String> mData = generateData(50);
         mAdapter = new DragAndSwipeAdapter();
         helper = new QuickAdapterHelper.Builder(mAdapter)
-                .setItemDragListener(listener)
-                .setItemSwipeListener(swipeListener)
-                .attachToDragAndSwipe(mRecyclerView,
-                        ItemTouchHelper.UP | ItemTouchHelper.DOWN
-                                | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT,
-                        ItemTouchHelper.START | ItemTouchHelper.END)
                 .build();
         mRecyclerView.setAdapter(helper.getAdapter());
         mAdapter.submitList(mData);
+        defaultDragAndSwipe.attachToRecyclerView(mRecyclerView)
+                .setAdapterImpl(mAdapter)
+                .setItemDragListener(listener)
+                .setItemSwipeListener(swipeListener);
         mAdapter.setOnItemClickListener((BaseQuickAdapter.OnItemClickListener) (adapter, view, position) -> Tips.show("点击了：" + position));
     }
 

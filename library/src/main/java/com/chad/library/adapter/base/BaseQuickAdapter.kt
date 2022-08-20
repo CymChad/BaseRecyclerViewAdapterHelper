@@ -12,7 +12,6 @@ import androidx.annotation.IntRange
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.chad.library.adapter.base.animation.*
-import com.chad.library.adapter.base.module.BaseDraggableModule
 import com.chad.library.adapter.base.viewholder.EmptyLayoutVH
 
 /**

@@ -5,13 +5,16 @@ import android.content.Context;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.module.DraggableModule;
+import com.chad.library.adapter.base.dragswipe.DragAndSwipeAdapterImpl;
 import com.chad.library.adapter.base.viewholder.QuickViewHolder;
 
-public class DragAndSwipeAdapter extends BaseQuickAdapter<String, QuickViewHolder> {
+import java.util.List;
+
+public class DragAndSwipeAdapter extends BaseQuickAdapter<String, QuickViewHolder> implements DragAndSwipeAdapterImpl {
 
     @NonNull
     @Override
@@ -35,5 +38,18 @@ public class DragAndSwipeAdapter extends BaseQuickAdapter<String, QuickViewHolde
                 break;
         }
         holder.setText(R.id.tv, item);
+    }
+
+
+    @NonNull
+    @Override
+    public RecyclerView.Adapter<?> getDragAndSwipeAdapter() {
+        return this;
+    }
+
+    @NonNull
+    @Override
+    public List<?> getDragAndSwipeData() {
+        return getItems();
     }
 }

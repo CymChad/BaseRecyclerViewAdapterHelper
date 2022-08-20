@@ -14,25 +14,24 @@ import java.util.*
  * @date 2022/7/27
  * 默认的 拖拽类，可进行自定义，适配带有头布局的
  */
-open class DefaultDragAndSwipe : ItemTouchHelper.Callback(), DragAndSwipeImpl {
+open class DefaultDragAndSwipe(
+    var _dragMoveFlags: Int = ItemTouchHelper.ACTION_STATE_IDLE,
+    var _swipeMoveFlags: Int = ItemTouchHelper.ACTION_STATE_IDLE,
+    var _isLongPressDragEnabled: Boolean = true,
+    var _isItemViewSwipeEnabled: Boolean = true
+) : ItemTouchHelper.Callback(), DragAndSwipeImpl {
 
-    private var _dragMoveFlags = ItemTouchHelper.ACTION_STATE_IDLE
-    private var _swipeMoveFlags = ItemTouchHelper.ACTION_STATE_IDLE
-    private var recyclerView: RecyclerView? = null
     private var _itemTouchHelper: ItemTouchHelper? = null
     private var mOnItemDragListener: OnItemDragListener? = null
     private var mOnItemSwipeListener: OnItemSwipeListener? = null
-
-    private var _isLongPressDragEnabled: Boolean = true
-
-    private var _isItemViewSwipeEnabled: Boolean = true
-
+    private var recyclerView: RecyclerView? = null
+    private var _adapterImpl: DragAndSwipeAdapterImpl? = null
 
     /**
      * 绑定RecyclerView
      */
-    override fun attachToRecyclerView(@Nullable recyclerView: RecyclerView) {
-        if (this.recyclerView == recyclerView) return
+    override fun attachToRecyclerView(@Nullable recyclerView: RecyclerView) = apply {
+        if (this.recyclerView == recyclerView) return this
         this.recyclerView = recyclerView
         if (null == _itemTouchHelper) {
             _itemTouchHelper = ItemTouchHelper(this)
@@ -40,22 +39,22 @@ open class DefaultDragAndSwipe : ItemTouchHelper.Callback(), DragAndSwipeImpl {
         }
     }
 
-    override fun setDragMoveFlags(dragMoveFlags: Int) {
+    override fun setDragMoveFlags(dragMoveFlags: Int) = apply {
         _dragMoveFlags = dragMoveFlags
     }
 
-    override fun setSwipeMoveFlags(swipeMoveFlags: Int) {
+    override fun setSwipeMoveFlags(swipeMoveFlags: Int) = apply {
         _swipeMoveFlags = swipeMoveFlags
     }
 
     /**
      * 设置拖拽的监听
      */
-    override fun setItemDragListener(onItemDragListener: OnItemDragListener?) {
+    override fun setItemDragListener(onItemDragListener: OnItemDragListener?) = apply {
         this.mOnItemDragListener = onItemDragListener
     }
 
-    override fun setItemSwipeListener(onItemSwipeListener: OnItemSwipeListener?) {
+    override fun setItemSwipeListener(onItemSwipeListener: OnItemSwipeListener?) = apply {
         this.mOnItemSwipeListener = onItemSwipeListener
     }
 
@@ -76,11 +75,6 @@ open class DefaultDragAndSwipe : ItemTouchHelper.Callback(), DragAndSwipeImpl {
         }
         super.onSelectedChanged(viewHolder, actionState)
     }
-
-    /**
-     * 必传
-     */
-    private lateinit var mBaseQuickAdapter: BaseQuickAdapter<*, *>
 
     /**
      * 是否可拖动或左右滑动
@@ -115,14 +109,17 @@ open class DefaultDragAndSwipe : ItemTouchHelper.Callback(), DragAndSwipeImpl {
         y: Int
     ) {
         super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y)
-        dataSwap(fromPos, toPos)
-        mOnItemDragListener?.onItemDragMoving(viewHolder, fromPos, target, toPos)
+        val fromPosition = getViewHolderPosition(viewHolder)
+        val toPosition = getViewHolderPosition(target)
+        dataSwap(fromPosition, toPosition)
+        mOnItemDragListener?.onItemDragMoving(viewHolder, fromPosition, target, toPosition)
     }
 
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val position = getViewHolderPosition(viewHolder)
-        mBaseQuickAdapter.removeAt(position)
+        _adapterImpl?.getDragAndSwipeData()?.removeAt(position)
+        _adapterImpl?.getDragAndSwipeAdapter()?.notifyItemRemoved(position)
         mOnItemSwipeListener?.onItemSwiped(viewHolder, position)
     }
 
@@ -163,60 +160,59 @@ open class DefaultDragAndSwipe : ItemTouchHelper.Callback(), DragAndSwipeImpl {
      */
     private fun dataSwap(fromPosition: Int, toPosition: Int) {
         if (inRange(fromPosition) && inRange(toPosition)) {
-            val data = mBaseQuickAdapter.items
-            if (fromPosition < toPosition) {
-                for (i in fromPosition until toPosition) {
-                    Collections.swap(data, i, i + 1)
-                }
-            } else {
-                val toP = toPosition + 1
-                for (i in fromPosition downTo toP) {
-                    Collections.swap(data, i, i - 1)
-                }
+            val data = _adapterImpl?.getDragAndSwipeData()
+            if (inRange(fromPosition) && inRange(toPosition)) {
+                Collections.swap(data, fromPosition, toPosition)
+                _adapterImpl?.getDragAndSwipeAdapter()?.notifyItemMoved(fromPosition, toPosition)
             }
-            mBaseQuickAdapter.notifyItemMoved(fromPosition, toPosition)
         }
     }
 
-    override fun setBaseQuickAdapter(baseQuickAdapter: BaseQuickAdapter<*, *>) {
-        mBaseQuickAdapter = baseQuickAdapter
+    override fun setAdapterImpl(adapterImpl: DragAndSwipeAdapterImpl) = apply {
+        this._adapterImpl = adapterImpl
     }
 
-    override fun setLongPressDragEnabled(isLongPressDragEnabled: Boolean) {
+    override fun setLongPressDragEnabled(isLongPressDragEnabled: Boolean) = apply {
         _isLongPressDragEnabled = isLongPressDragEnabled
     }
 
-    override fun setItemViewSwipeEnabled(isItemViewSwipeEnabled: Boolean) {
+    override fun setItemViewSwipeEnabled(isItemViewSwipeEnabled: Boolean) = apply {
         _isItemViewSwipeEnabled = isItemViewSwipeEnabled
     }
 
     /**
-     * 启动拖拽
+     * 拖拽
+     * 长按默认可拖动，可不进行设置此方法
+     * 此方法可以做特殊使用进行调用
+     * 如：长按此条position对应的item，触发 position+1 对应的item
      */
-    override fun startDrag(holder: RecyclerView.ViewHolder) {
+    override fun startDrag(holder: RecyclerView.ViewHolder) = apply {
         _itemTouchHelper?.startDrag(holder)
     }
 
     /**
-     * 启动拖拽
+     * 拖拽
+     * 长按默认可拖动，可不进行设置此方法
+     * 此方法可以做特殊使用进行调用
+     * 如：长按此条position对应的item，触发 position+1 对应的item
      */
-    override fun startDrag(position: Int) {
-        val holder = recyclerView?.findViewHolderForAdapterPosition(position) ?: return
+    override fun startDrag(position: Int) = apply {
+        val holder = recyclerView?.findViewHolderForAdapterPosition(position) ?: return this
         _itemTouchHelper?.startDrag(holder)
     }
 
     /**
      * 启动侧滑
      */
-    override fun startSwipe(holder: RecyclerView.ViewHolder) {
+    override fun startSwipe(holder: RecyclerView.ViewHolder) = apply {
         _itemTouchHelper?.startSwipe(holder)
     }
 
     /**
      * 启动侧滑
      */
-    override fun startSwipe(position: Int) {
-        val holder = recyclerView?.findViewHolderForAdapterPosition(position) ?: return
+    override fun startSwipe(position: Int) = apply {
+        val holder = recyclerView?.findViewHolderForAdapterPosition(position) ?: return this
         _itemTouchHelper?.startSwipe(holder)
     }
 
@@ -231,7 +227,7 @@ open class DefaultDragAndSwipe : ItemTouchHelper.Callback(), DragAndSwipeImpl {
      * 防止数组下标越界
      */
     private fun inRange(position: Int): Boolean {
-        val size = mBaseQuickAdapter.items.size
+        val size = _adapterImpl?.getDragAndSwipeData()?.size ?: -1
         return position in 0 until size
     }
 
@@ -239,5 +235,54 @@ open class DefaultDragAndSwipe : ItemTouchHelper.Callback(), DragAndSwipeImpl {
         return viewHolder?.bindingAdapterPosition ?: RecyclerView.NO_POSITION
     }
 
+    class Builder {
+
+        private var _dragMoveFlags = ItemTouchHelper.ACTION_STATE_IDLE
+        private var _swipeMoveFlags = ItemTouchHelper.ACTION_STATE_IDLE
+
+        private var _isLongPressDragEnabled: Boolean = true
+
+        private var _isItemViewSwipeEnabled: Boolean = true
+
+
+        /**
+         * 设置拖拽的flag
+         */
+        fun setDragMoveFlags(dragMoveFlags: Int) = apply {
+            this._dragMoveFlags = dragMoveFlags
+        }
+
+        /**
+         * 设置滑动的flag
+         */
+        fun setSwipeMoveFlags(swipeMoveFlags: Int) = apply {
+            this._swipeMoveFlags = swipeMoveFlags
+        }
+
+        /**
+         * 是否默认开启拖拽
+         * 默认开启
+         */
+        fun setLongPressDragEnabled(isLongPressDragEnabled: Boolean) = apply {
+            this._isLongPressDragEnabled = isLongPressDragEnabled
+        }
+
+        /**
+         * 是否开启侧滑
+         * 默认开启
+         */
+        fun setItemViewSwipeEnabled(isItemViewSwipeEnabled: Boolean) = apply {
+            this._isItemViewSwipeEnabled = isItemViewSwipeEnabled
+        }
+
+        fun build(): DefaultDragAndSwipe {
+            return DefaultDragAndSwipe(
+                _dragMoveFlags,
+                _swipeMoveFlags,
+                _isLongPressDragEnabled,
+                _isItemViewSwipeEnabled
+            )
+        }
+    }
 
 }

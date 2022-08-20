@@ -29,9 +29,7 @@ class QuickAdapterHelper private constructor(
      */
     val trailingLoadStateAdapter: TrailingLoadStateAdapter<*>?,
 
-    config: ConcatAdapter.Config,
-
-    private var dragAndSwipe: DragAndSwipeImpl? = null
+    config: ConcatAdapter.Config
 ) {
 
     private val mHeaderList = ArrayList<RecyclerView.Adapter<*>>(0)
@@ -179,7 +177,7 @@ class QuickAdapterHelper private constructor(
      *
      * 清空 footer
      */
-    fun clearfooter() = apply {
+    fun clearFooter() = apply {
         mFooterList.forEach {
             mAdapter.removeAdapter(it)
         }
@@ -202,44 +200,9 @@ class QuickAdapterHelper private constructor(
         if (a == contentAdapter) {
             return@apply
         }
-
         mAdapter.removeAdapter(a)
         mHeaderList.remove(a)
         mFooterList.remove(a)
-    }
-
-    /**
-     * 拖拽
-     * 长按默认可拖动，可不进行设置此方法
-     * 此方法可以做特殊使用进行调用
-     * 如：长按此条position对应的item，触发 position+1 对应的item
-     */
-    fun startDrag(position: Int) = apply {
-        dragAndSwipe?.startDrag(position)
-    }
-
-    /**
-     * 拖拽
-     * 长按默认可拖动，可不进行设置此方法
-     * 此方法可以做特殊使用进行调用
-     * 如：长按此条position对应的item，触发 position+1 对应的item
-     */
-    fun startDrag(holder: RecyclerView.ViewHolder) = apply {
-        dragAndSwipe?.startDrag(holder)
-    }
-
-    /**
-     * 侧滑
-     */
-    fun startSwipe(position: Int) = apply {
-        dragAndSwipe?.startSwipe(position)
-    }
-
-    /**
-     * 侧滑
-     */
-    fun startSwipe(holder: RecyclerView.ViewHolder) = apply {
-        dragAndSwipe?.startSwipe(holder)
     }
 
     class Builder(private val contentAdapter: BaseQuickAdapter<*, *>) {
@@ -248,8 +211,6 @@ class QuickAdapterHelper private constructor(
         private var trailingLoadStateAdapter: TrailingLoadStateAdapter<*>? = null
 
         private var config: ConcatAdapter.Config = ConcatAdapter.Config.DEFAULT
-
-        var dragAndSwipeImpl: DragAndSwipeImpl? = null
 
         /**
          * 尾部"加载更多"Adapter
@@ -284,98 +245,12 @@ class QuickAdapterHelper private constructor(
             this.config = config
         }
 
-        /**
-         * 设置自定义的拖拽
-         * 一定要优先于含有 checkDragAndSwipeCallback的方法设置
-         */
-        fun setDragAndSwipe(dragAndSwipeImpl: DragAndSwipeImpl) = apply {
-            this.dragAndSwipeImpl = dragAndSwipeImpl
-        }
-
-        /**
-         * 绑定 DragAndSwipe
-         * recyclerView
-         * dragMoveFlags 拖动的flag
-         * swipeMoveFlags 侧滑的flag
-         */
-        fun attachToDragAndSwipe(
-            @Nullable recyclerView: RecyclerView,
-            dragMoveFlags: Int = ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT,
-            swipeMoveFlags: Int = ItemTouchHelper.END
-        ) = apply {
-            checkDragAndSwipeCallback()
-            dragAndSwipeImpl?.setBaseQuickAdapter(contentAdapter)
-            dragAndSwipeImpl?.attachToRecyclerView(recyclerView)
-            dragAndSwipeImpl?.setDragMoveFlags(dragMoveFlags)
-            dragAndSwipeImpl?.setSwipeMoveFlags(swipeMoveFlags)
-        }
-
-        /**
-         * 设置的拖动的监听
-         */
-        fun setItemDragListener(onItemDragListener: OnItemDragListener? = null) = apply {
-            checkDragAndSwipeCallback()
-            dragAndSwipeImpl?.setItemDragListener(onItemDragListener)
-        }
-
-        /**
-         * 设置侧滑的监听
-         */
-        fun setItemSwipeListener(onItemSwipeListener: OnItemSwipeListener? = null) = apply {
-            checkDragAndSwipeCallback()
-            dragAndSwipeImpl?.setItemSwipeListener(onItemSwipeListener)
-        }
-
-        /**
-         * 设置拖拽的flag
-         */
-        fun setDragMoveFlags(dragMoveFlags: Int) = apply {
-            checkDragAndSwipeCallback()
-            dragAndSwipeImpl?.setDragMoveFlags(dragMoveFlags)
-        }
-
-        /**
-         * 设置滑动的flag
-         */
-        fun setSwipeMoveFlags(swipeMoveFlags: Int) = apply {
-            checkDragAndSwipeCallback()
-            dragAndSwipeImpl?.setSwipeMoveFlags(swipeMoveFlags)
-        }
-
-        /**
-         * 是否默认开启拖拽
-         * 默认开启
-         */
-        fun setLongPressDragEnabled(isLongPressDragEnabled: Boolean) = apply {
-            checkDragAndSwipeCallback()
-            dragAndSwipeImpl?.setLongPressDragEnabled(isLongPressDragEnabled)
-        }
-
-        /**
-         * 是否开启侧滑
-         * 默认开启
-         */
-        fun setItemViewSwipeEnabled(isItemViewSwipeEnabled: Boolean) = apply {
-            checkDragAndSwipeCallback()
-            dragAndSwipeImpl?.setItemViewSwipeEnabled(isItemViewSwipeEnabled)
-        }
-
-        /**
-         * 检查默认的 DragAndSwipe 是否设置，如果没有，就用默认的
-         */
-        fun checkDragAndSwipeCallback() {
-            if (null == dragAndSwipeImpl) {
-                dragAndSwipeImpl = DefaultDragAndSwipe()
-            }
-        }
-
         fun build(): QuickAdapterHelper {
             return QuickAdapterHelper(
                 contentAdapter,
                 leadingLoadStateAdapter,
                 trailingLoadStateAdapter,
-                config,
-                dragAndSwipeImpl
+                config
             )
         }
 
