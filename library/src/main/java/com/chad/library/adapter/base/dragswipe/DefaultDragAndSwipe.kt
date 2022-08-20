@@ -118,9 +118,11 @@ open class DefaultDragAndSwipe(
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val position = getViewHolderPosition(viewHolder)
-        _adapterImpl?.getDragAndSwipeData()?.removeAt(position)
-        _adapterImpl?.getDragAndSwipeAdapter()?.notifyItemRemoved(position)
-        mOnItemSwipeListener?.onItemSwiped(viewHolder, position)
+        if (inRange(position)) {
+            _adapterImpl?.getDragAndSwipeData()?.removeAt(position)
+            _adapterImpl?.getDragAndSwipeAdapter()?.notifyItemRemoved(position)
+            mOnItemSwipeListener?.onItemSwiped(viewHolder, position)
+        }
     }
 
     override fun isLongPressDragEnabled(): Boolean {
@@ -227,7 +229,7 @@ open class DefaultDragAndSwipe(
      * 防止数组下标越界
      */
     private fun inRange(position: Int): Boolean {
-        val size = _adapterImpl?.getDragAndSwipeData()?.size ?: -1
+        val size = _adapterImpl?.getDragAndSwipeData()?.size ?: RecyclerView.NO_POSITION
         return position in 0 until size
     }
 
