@@ -161,11 +161,9 @@ open class DefaultDragAndSwipe(
      */
     private fun dataSwap(fromPosition: Int, toPosition: Int) {
         if (inRange(fromPosition) && inRange(toPosition)) {
-            val data = _adapterImpl?.getDragAndSwipeData()
-            if (inRange(fromPosition) && inRange(toPosition)) {
-                Collections.swap(data, fromPosition, toPosition)
-                _adapterImpl?.getDragAndSwipeAdapter()?.notifyItemMoved(fromPosition, toPosition)
-            }
+            val data = _adapterImpl?.getDragAndSwipeData() ?: return
+            Collections.swap(data, fromPosition, toPosition)
+            _adapterImpl?.getDragAndSwipeAdapter()?.notifyItemMoved(fromPosition, toPosition)
         }
     }
 
