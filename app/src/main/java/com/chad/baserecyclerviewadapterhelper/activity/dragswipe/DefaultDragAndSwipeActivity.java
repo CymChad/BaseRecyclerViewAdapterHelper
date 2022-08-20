@@ -3,7 +3,6 @@ package com.chad.baserecyclerviewadapterhelper.activity.dragswipe;
 
 import android.animation.ValueAnimator;
 import android.app.Service;
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Build;
@@ -65,11 +64,11 @@ public class DefaultDragAndSwipeActivity extends BaseActivity {
                  */
                 if (Build.VERSION.SDK_INT >= 31) {
                     // android 12 及以上使用新的 VibratorManager，创建 EFFECT_TICK 轻微震动（需要线性震动马达硬件支持）
-                    VibratorManager manager = (VibratorManager) getSystemService(Context.VIBRATOR_MANAGER_SERVICE);
+                    VibratorManager manager = getSystemService(VibratorManager.class);
                     manager.getDefaultVibrator().vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK));
                 } else if (Build.VERSION.SDK_INT >= 29) {
                     // android 10 及以上使用原 Vibrator，创建 EFFECT_TICK 轻微震动（需要线性震动马达硬件支持）
-                    Vibrator vib = (Vibrator) getSystemService(Service.VIBRATOR_SERVICE);
+                    Vibrator vib = (Vibrator) getSystemService(Vibrator.class);
                     vib.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK));
                 } else {
                     // 10 以下的系统，没有系统 API 驱动线性震动马达，只能创建普通震动
