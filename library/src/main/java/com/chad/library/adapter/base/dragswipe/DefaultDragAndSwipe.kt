@@ -1,7 +1,6 @@
 package com.chad.library.adapter.base.dragswipe
 
 import android.graphics.Canvas
-import androidx.annotation.Nullable
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -30,7 +29,7 @@ open class DefaultDragAndSwipe(
     /**
      * 绑定RecyclerView
      */
-    override fun attachToRecyclerView(@Nullable recyclerView: RecyclerView) = apply {
+    override fun attachToRecyclerView(recyclerView: RecyclerView) = apply {
         if (this.recyclerView == recyclerView) return this
         this.recyclerView = recyclerView
         if (null == _itemTouchHelper) {

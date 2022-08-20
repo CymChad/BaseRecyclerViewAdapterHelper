@@ -1,8 +1,6 @@
 package com.chad.library.adapter.base.dragswipe
 
-import androidx.annotation.Nullable
 import androidx.recyclerview.widget.RecyclerView
-import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.listener.OnItemDragListener
 import com.chad.library.adapter.base.listener.OnItemSwipeListener
 
@@ -10,6 +8,11 @@ import com.chad.library.adapter.base.listener.OnItemSwipeListener
  * 方便自定义 DragAndSwipeCallback
  */
 interface DragAndSwipeImpl {
+
+    /**
+     * 绑定recyclerView
+     */
+    fun attachToRecyclerView(recyclerView: RecyclerView): DefaultDragAndSwipe
 
     /**
      * 设置拖动的flag
@@ -30,11 +33,6 @@ interface DragAndSwipeImpl {
      * 设置侧滑的监听
      */
     fun setItemSwipeListener(onItemSwipeListener: OnItemSwipeListener?): DefaultDragAndSwipe
-
-    /**
-     * 绑定recyclerView
-     */
-    fun attachToRecyclerView(@Nullable recyclerView: RecyclerView): DefaultDragAndSwipe
 
     /**
      * 设置adapter
