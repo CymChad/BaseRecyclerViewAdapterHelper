@@ -15,10 +15,10 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".activity.DragAndSwipeUseActivity"
+            android:name=".activity.dragswipe.DragAndSwipeUseActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.DefaultDragAndSwipeActivity"
+            android:name=".activity.dragswipe.DefaultDragAndSwipeActivity"
             android:exported="false" />
         <activity
             android:name=".activity.WelcomeActivity"
@@ -36,10 +36,9 @@
         <activity android:name=".activity.EmptyViewUseActivity" />
         <activity android:name=".activity.ItemClickActivity" />
         <activity android:name=".activity.DataBindingUseActivity" />
-        <activity android:name=".activity.ManualDragAndSwipeUseActivity" />
+        <activity android:name=".activity.dragswipe.ManualDragAndSwipeUseActivity" />
         <activity android:name=".activity.UpFetchUseActivity" /> <!-- <activity android:name=".activity.node.NodeSectionUseActivity" /> -->
         <activity android:name=".activity.DifferActivity" /> <!-- <activity android:name=".activity.node.ChooseNodeUseTypeActivity" /> -->
-        <activity android:name=".activity.node.NodeTreeUseActivity" />
         <activity android:name=".activity.loadmore.NoAutoAutoLoadMoreRefreshUseActivity" />
     </application>
 

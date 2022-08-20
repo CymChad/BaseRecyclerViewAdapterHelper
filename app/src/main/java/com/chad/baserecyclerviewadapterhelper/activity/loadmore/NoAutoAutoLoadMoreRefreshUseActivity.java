@@ -26,7 +26,7 @@ import java.util.List;
 
 
 /**
- * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+ * 不进行自动加载更多
  */
 public class NoAutoAutoLoadMoreRefreshUseActivity extends BaseActivity {
 
@@ -105,7 +105,9 @@ public class NoAutoAutoLoadMoreRefreshUseActivity extends BaseActivity {
                 return !mSwipeRefreshLayout.isRefreshing();
             }
         });
-        // 关闭"自动加载更多"
+        //——————————————————————
+        // 关闭"自动加载更多"，需要在初始化的时候进行设置，使用期间不可更改
+        //——————————————————————
         loadMoreAdapter.setAutoLoadMore(false);
 
 

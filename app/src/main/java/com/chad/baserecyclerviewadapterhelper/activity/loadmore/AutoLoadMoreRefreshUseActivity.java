@@ -25,7 +25,7 @@ import java.util.List;
 
 
 /**
- * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+ * 自动加载更多
  */
 public class AutoLoadMoreRefreshUseActivity extends BaseActivity {
 

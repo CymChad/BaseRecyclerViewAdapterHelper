@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.chad.baserecyclerviewadapterhelper.R
+import com.chad.baserecyclerviewadapterhelper.activity.dragswipe.DragAndSwipeUseActivity
 import com.chad.baserecyclerviewadapterhelper.activity.loadmore.AutoLoadMoreRefreshUseActivity
 import com.chad.baserecyclerviewadapterhelper.activity.loadmore.NoAutoAutoLoadMoreRefreshUseActivity
 import com.chad.baserecyclerviewadapterhelper.adapter.HomeAdapter

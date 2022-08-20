@@ -1,13 +1,7 @@
 package com.chad.library.adapter.base
 
-import androidx.annotation.Nullable
 import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.chad.library.adapter.base.dragswipe.DefaultDragAndSwipe
-import com.chad.library.adapter.base.dragswipe.DragAndSwipeImpl
-import com.chad.library.adapter.base.listener.OnItemDragListener
-import com.chad.library.adapter.base.listener.OnItemSwipeListener
 import com.chad.library.adapter.base.loadState.LoadState
 import com.chad.library.adapter.base.loadState.leading.DefaultLeadingLoadStateAdapter
 import com.chad.library.adapter.base.loadState.leading.LeadingLoadStateAdapter
