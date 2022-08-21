@@ -1,4 +1,4 @@
-package com.chad.baserecyclerviewadapterhelper.adapter.diffUtil
+package com.chad.baserecyclerviewadapterhelper.adapter
 
 import android.content.Context
 import android.view.ViewGroup
@@ -11,7 +11,7 @@ import com.chad.library.adapter.base.dragswipe.DragAndSwipeAdapterImpl
 /**
  * kotlin方式集成案例
  */
-class DragAndSwipeAdapter2 : BaseQuickAdapter<String, QuickViewHolder>(),
+open class HeaderDragAndSwipeAdapter : BaseQuickAdapter<String, QuickViewHolder>(),
     DragAndSwipeAdapterImpl {
 
     override fun onCreateViewHolder(

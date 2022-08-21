@@ -19,6 +19,7 @@ import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.adapter.DragAndSwipeAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
+import com.chad.baserecyclerviewadapterhelper.utils.VibratorUtils;
 import com.chad.library.adapter.base.QuickAdapterHelper;
 import com.chad.library.adapter.base.dragswipe.DefaultDragAndSwipe;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
@@ -59,24 +60,7 @@ public class ManualDragAndSwipeUseActivity extends BaseActivity {
         OnItemDragListener listener = new OnItemDragListener() {
             @Override
             public void onItemDragStart(RecyclerView.ViewHolder viewHolder, int pos) {
-                /*
-                 * 轻微的震动提醒
-                 */
-                if (Build.VERSION.SDK_INT >= 31) {
-                    // android 12 及以上使用新的 VibratorManager，创建 EFFECT_TICK 轻微震动（需要线性震动马达硬件支持）
-                    VibratorManager manager = getSystemService(VibratorManager.class);
-                    manager.getDefaultVibrator().vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK));
-                } else if (Build.VERSION.SDK_INT >= 29) {
-                    // android 10 及以上使用原 Vibrator，创建 EFFECT_TICK 轻微震动（需要线性震动马达硬件支持）
-                    Vibrator vib = (Vibrator) getSystemService(Vibrator.class);
-                    vib.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK));
-                } else {
-                    // 10 以下的系统，没有系统 API 驱动线性震动马达，只能创建普通震动
-                    Vibrator vib = (Vibrator) getSystemService(Service.VIBRATOR_SERVICE);  //震动70毫秒
-                    vib.vibrate(70);
-                }
-
-
+                VibratorUtils.INSTANCE.vibrate(getApplicationContext());
                 Log.d(TAG, "drag start");
                 final QuickViewHolder holder = ((QuickViewHolder) viewHolder);
                 // 开始时，item背景色变化，demo这里使用了一个动画渐变，使得自然

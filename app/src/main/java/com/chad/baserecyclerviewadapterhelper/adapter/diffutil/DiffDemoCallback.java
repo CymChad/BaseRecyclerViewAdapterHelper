@@ -1,4 +1,4 @@
-package com.chad.baserecyclerviewadapterhelper.adapter.diffUtil;
+package com.chad.baserecyclerviewadapterhelper.adapter.diffutil;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;

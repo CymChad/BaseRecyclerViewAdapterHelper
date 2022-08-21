@@ -1,4 +1,4 @@
-package com.chad.baserecyclerviewadapterhelper.adapter.diffUtil;
+package com.chad.baserecyclerviewadapterhelper.adapter.diffutil;
 
 import android.content.Context;
 import android.view.ViewGroup;

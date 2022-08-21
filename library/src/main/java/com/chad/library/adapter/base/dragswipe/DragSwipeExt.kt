@@ -18,7 +18,7 @@ inline fun DefaultDragAndSwipe.setItemDragListener(
     ) -> Unit) = { source, from, target, to -> },
     crossinline onItemDragEnd: ((viewHolder: RecyclerView.ViewHolder?, pos: Int) -> Unit) = { viewHolder, pos -> },
 
-    ) {
+    ) = apply {
     val listener = object : OnItemDragListener {
         override fun onItemDragStart(viewHolder: RecyclerView.ViewHolder?, pos: Int) {
             onItemDragStart.invoke(viewHolder, pos)
@@ -54,7 +54,7 @@ inline fun DefaultDragAndSwipe.setItemSwipeListener(
     ) -> Unit) = { canvas, viewHolder, dX, dY, isCurrentlyActive -> },
     crossinline onItemSwiped: ((viewHolder: RecyclerView.ViewHolder?, pos: Int) -> Unit) = { viewHolder, pos -> },
     crossinline clearView: ((viewHolder: RecyclerView.ViewHolder?, pos: Int) -> Unit) = { viewHolder, pos -> }
-) {
+) = apply {
     val listener = object : OnItemSwipeListener {
         override fun onItemSwipeStart(viewHolder: RecyclerView.ViewHolder?, pos: Int) {
             onItemSwipeStart.invoke(viewHolder, pos)
