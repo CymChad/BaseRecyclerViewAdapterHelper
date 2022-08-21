@@ -618,11 +618,15 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      */
     private val mutableItems: MutableList<T>
         get() {
-            return if (items is MutableList) {
-                items as MutableList<T>
-            } else {
-                ArrayList(items).also {
-                    items = it
+            return when (items) {
+                is ArrayList -> {
+                    items as ArrayList
+                }
+                is MutableList -> {
+                    items as MutableList
+                }
+                else -> {
+                    items.toMutableList()
                 }
             }
         }

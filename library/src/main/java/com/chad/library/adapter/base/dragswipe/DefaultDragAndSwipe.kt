@@ -7,6 +7,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.listener.OnItemDragListener
 import com.chad.library.adapter.base.listener.OnItemSwipeListener
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * @author yangfeng
@@ -14,10 +15,10 @@ import java.util.*
  * 默认的 拖拽类，可进行自定义，适配带有头布局的
  */
 open class DefaultDragAndSwipe(
-    var _dragMoveFlags: Int = ItemTouchHelper.ACTION_STATE_IDLE,
-    var _swipeMoveFlags: Int = ItemTouchHelper.ACTION_STATE_IDLE,
-    var _isLongPressDragEnabled: Boolean = true,
-    var _isItemViewSwipeEnabled: Boolean = true
+   private var _dragMoveFlags: Int = ItemTouchHelper.ACTION_STATE_IDLE,
+   private var _swipeMoveFlags: Int = ItemTouchHelper.ACTION_STATE_IDLE,
+   private var _isLongPressDragEnabled: Boolean = true,
+   private var _isItemViewSwipeEnabled: Boolean = true
 ) : ItemTouchHelper.Callback(), DragAndSwipeImpl {
 
     private var _itemTouchHelper: ItemTouchHelper? = null
@@ -25,6 +26,24 @@ open class DefaultDragAndSwipe(
     private var mOnItemSwipeListener: OnItemSwipeListener? = null
     private var recyclerView: RecyclerView? = null
     private var _adapterImpl: DragAndSwipeAdapterImpl? = null
+
+    /**
+     * items 转化为 MutableList
+     */
+    private val mutableItems: MutableList<*>?
+        get() {
+            return when (val items = _adapterImpl?.getDragAndSwipeData()) {
+                is ArrayList -> {
+                    items
+                }
+                is MutableList -> {
+                    items
+                }
+                else -> {
+                    items?.toMutableList()
+                }
+            }
+        }
 
     /**
      * 绑定RecyclerView
@@ -118,7 +137,7 @@ open class DefaultDragAndSwipe(
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val position = getViewHolderPosition(viewHolder)
         if (inRange(position)) {
-            _adapterImpl?.getDragAndSwipeData()?.removeAt(position)
+            mutableItems?.removeAt(position)
             _adapterImpl?.getDragAndSwipeAdapter()?.notifyItemRemoved(position)
             mOnItemSwipeListener?.onItemSwiped(viewHolder, position)
         }

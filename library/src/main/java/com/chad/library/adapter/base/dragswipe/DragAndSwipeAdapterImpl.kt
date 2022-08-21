@@ -11,5 +11,5 @@ interface DragAndSwipeAdapterImpl {
     /**
      * 获取adapter的数据源，可进行数据的删除与交换操作
      */
-    fun getDragAndSwipeData(): MutableList<*>
+    fun getDragAndSwipeData(): List<*>
 }
