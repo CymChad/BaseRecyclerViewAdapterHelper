@@ -103,8 +103,8 @@ class QuickAdapterHelper private constructor(
 
     /**
      * Add header Adapter.
-     *
      * 添加首部 header Adapter
+     *
      * @param headerAdapter Adapter<*>
      * @return QuickAdapterHelper
      */
@@ -127,7 +127,6 @@ class QuickAdapterHelper private constructor(
 
     /**
      * Clear header.
-     *
      * 清空 header
      */
     fun clearHeader() = apply {
@@ -139,8 +138,8 @@ class QuickAdapterHelper private constructor(
 
     /**
      * Add footer adapter
-     *
      * 添加脚部 footer adapter
+     *
      * @param footerAdapter Adapter<*>
      * @return QuickAdapterHelper
      */
@@ -168,7 +167,6 @@ class QuickAdapterHelper private constructor(
 
     /**
      * Clear footer.
-     *
      * 清空 footer
      */
     fun clearFooter() = apply {
@@ -223,6 +221,11 @@ class QuickAdapterHelper private constructor(
             }
         )
 
+        /**
+         * 首部"加载更多"Adapter
+         *
+         * @param loadStateAdapter
+         */
         fun setLeadingLoadStateAdapter(loadStateAdapter: LeadingLoadStateAdapter<*>?) = apply {
             this.leadingLoadStateAdapter = loadStateAdapter
         }
@@ -235,6 +238,11 @@ class QuickAdapterHelper private constructor(
             }
         )
 
+        /**
+         * 设置 ConcatAdapter 的配置
+         *
+         * @param config
+         */
         fun setConfig(config: ConcatAdapter.Config) = apply {
             this.config = config
         }

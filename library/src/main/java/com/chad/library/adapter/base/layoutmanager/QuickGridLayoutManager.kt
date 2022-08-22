@@ -18,8 +18,7 @@ import com.chad.library.adapter.base.fullspan.FullSpanAdapterType
 class QuickGridLayoutManager : GridLayoutManager {
 
     constructor(
-        context: Context, attrs: AttributeSet?, defStyleAttr: Int,
-        defStyleRes: Int
+        context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int
     ) : super(context, attrs, defStyleAttr, defStyleRes)
 
     constructor(context: Context, spanCount: Int) : super(context, spanCount)
@@ -48,6 +47,11 @@ class QuickGridLayoutManager : GridLayoutManager {
         fullSpanSizeLookup.originalSpanSizeLookup = spanSizeLookup
     }
 
+    /**
+     * 处理全部跨度item的情况
+     *
+     * @constructor Create empty Full span size lookup
+     */
     private inner class FullSpanSizeLookup : SpanSizeLookup() {
 
         var originalSpanSizeLookup: SpanSizeLookup? = null
