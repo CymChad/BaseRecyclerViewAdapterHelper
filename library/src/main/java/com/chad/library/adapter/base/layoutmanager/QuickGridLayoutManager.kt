@@ -15,7 +15,7 @@ import com.chad.library.adapter.base.fullspan.FullSpanAdapterType
  * 网格布局 GridLayoutManager，用于实现满跨度，Adapter 需要实现 [FullSpanAdapterType] 接口
  *
  */
-class BrvahGridLayoutManager : GridLayoutManager {
+class QuickGridLayoutManager : GridLayoutManager {
 
     constructor(
         context: Context, attrs: AttributeSet?, defStyleAttr: Int,
@@ -29,10 +29,13 @@ class BrvahGridLayoutManager : GridLayoutManager {
         @RecyclerView.Orientation orientation: Int, reverseLayout: Boolean
     ) : super(context, spanCount, orientation, reverseLayout)
 
+    private val fullSpanSizeLookup = FullSpanSizeLookup()
+
     private var adapter: RecyclerView.Adapter<*>? = null
 
     init {
-        spanSizeLookup = FullSpanSizeLookup()
+        fullSpanSizeLookup.originalSpanSizeLookup = spanSizeLookup
+        super.setSpanSizeLookup(fullSpanSizeLookup)
     }
 
     override fun onAdapterChanged(
@@ -41,7 +44,13 @@ class BrvahGridLayoutManager : GridLayoutManager {
         adapter = newAdapter
     }
 
+    override fun setSpanSizeLookup(spanSizeLookup: SpanSizeLookup?) {
+        fullSpanSizeLookup.originalSpanSizeLookup = spanSizeLookup
+    }
+
     private inner class FullSpanSizeLookup : SpanSizeLookup() {
+
+        var originalSpanSizeLookup: SpanSizeLookup? = null
 
         override fun getSpanSize(position: Int): Int {
             val adapter = adapter ?: return 1
@@ -59,10 +68,10 @@ class BrvahGridLayoutManager : GridLayoutManager {
                         if (wrappedAdapter.isFullSpanItem(type)) {
                             spanCount
                         } else {
-                            1
+                            originalSpanSizeLookup?.getSpanSize(pair.second) ?: 1
                         }
                     }
-                    else -> 1
+                    else -> originalSpanSizeLookup?.getSpanSize(pair.second) ?: 1
                 }
             } else {
                 return when (adapter) {
@@ -75,14 +84,12 @@ class BrvahGridLayoutManager : GridLayoutManager {
                         if (adapter.isFullSpanItem(type)) {
                             spanCount
                         } else {
-                            1
+                            originalSpanSizeLookup?.getSpanSize(position) ?: 1
                         }
                     }
-                    else -> 1
+                    else -> originalSpanSizeLookup?.getSpanSize(position) ?: 1
                 }
             }
         }
-
-
     }
 }
