@@ -1,17 +1,20 @@
 package com.chad.library.adapter.base
 
-import androidx.annotation.IntRange
-import androidx.recyclerview.widget.DiffUtil
+import android.support.v7.util.DiffUtil
 import com.chad.library.adapter.base.entity.node.BaseExpandNode
 import com.chad.library.adapter.base.entity.node.BaseNode
+import com.chad.library.adapter.base.entity.node.ExpandableNodeFooterImpl
 import com.chad.library.adapter.base.entity.node.NodeFooterImp
 import com.chad.library.adapter.base.provider.BaseItemProvider
 import com.chad.library.adapter.base.provider.BaseNodeProvider
+import android.support.annotation.IntRange;
 
-abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
-    : BaseProviderMultiAdapter<BaseNode>(null) {
+abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null) :
+    BaseProviderMultiAdapter<BaseNode>(null) {
 
     private val fullSpanNodeTypeSet = HashSet<Int>()
+
+    private val expandableFooterTypeSet = HashSet<Int>()
 
     init {
         if (!nodeList.isNullOrEmpty()) {
@@ -42,9 +45,14 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
      * 添加脚部 node provider
      * 铺满一行或者一列
      * @param provider BaseItemProvider
+     * @param expandable 是否跟随内容展开收起
      */
-    fun addFooterNodeProvider(provider: BaseNodeProvider) {
-        addFullSpanNodeProvider(provider)
+    fun addFooterNodeProvider(provider: BaseNodeProvider, expandable: Boolean = false) {
+        if (expandable)
+            expandableFooterTypeSet.add(provider.itemViewType)
+        else
+            fullSpanNodeTypeSet.add(provider.itemViewType)
+        addItemProvider(provider)
     }
 
     /**
@@ -60,7 +68,9 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
     }
 
     override fun isFixedViewType(type: Int): Boolean {
-        return super.isFixedViewType(type) || fullSpanNodeTypeSet.contains(type)
+        return if (expandableFooterTypeSet.contains(type))
+            false
+        else super.isFixedViewType(type) || fullSpanNodeTypeSet.contains(type)
     }
 
     override fun setNewInstance(list: MutableList<BaseNode>?) {
@@ -370,7 +380,10 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
      * @param isExpanded Boolean? 如果不需要改变状态，设置为null。true 为展开，false 为收起
      * @return MutableList<BaseNode>
      */
-    private fun flatData(list: Collection<BaseNode>, isExpanded: Boolean? = null): MutableList<BaseNode> {
+    private fun flatData(
+        list: Collection<BaseNode>,
+        isExpanded: Boolean? = null,
+    ): MutableList<BaseNode> {
         val newList = ArrayList<BaseNode>()
 
         for (element in list) {
@@ -398,6 +411,9 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
 
             if (element is NodeFooterImp) {
                 element.footerNode?.let {
+                    if (element is ExpandableNodeFooterImpl && element.isExpandable) {
+                        return@let
+                    }
                     newList.add(it)
                 }
             }
@@ -415,11 +431,13 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
      * @param animate Boolean
      * @param notify Boolean
      */
-    private fun collapse(@IntRange(from = 0) position: Int,
-                         isChangeChildCollapse: Boolean = false,
-                         animate: Boolean = true,
-                         notify: Boolean = true,
-                         parentPayload: Any? = null): Int {
+    private fun collapse(
+        @IntRange(from = 0) position: Int,
+        isChangeChildCollapse: Boolean = false,
+        animate: Boolean = true,
+        notify: Boolean = true,
+        parentPayload: Any? = null,
+    ): Int {
         val node = this.data[position]
 
         if (node is BaseExpandNode && node.isExpanded) {
@@ -431,6 +449,11 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
                 return 0
             }
             val items = flatData(node.childNode!!, if (isChangeChildCollapse) false else null)
+            if (node is ExpandableNodeFooterImpl && node.isExpandable) {
+                node.footerNode?.let {
+                    items.add(it)
+                }
+            }
             val size = items.size
             this.data.removeAll(items)
             if (notify) {
@@ -455,11 +478,13 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
      * @param animate Boolean
      * @param notify Boolean
      */
-    private fun expand(@IntRange(from = 0) position: Int,
-                       isChangeChildExpand: Boolean = false,
-                       animate: Boolean = true,
-                       notify: Boolean = true,
-                       parentPayload: Any? = null): Int {
+    private fun expand(
+        @IntRange(from = 0) position: Int,
+        isChangeChildExpand: Boolean = false,
+        animate: Boolean = true,
+        notify: Boolean = true,
+        parentPayload: Any? = null,
+    ): Int {
         val node = this.data[position]
 
         if (node is BaseExpandNode && !node.isExpanded) {
@@ -471,6 +496,11 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
                 return 0
             }
             val items = flatData(node.childNode!!, if (isChangeChildExpand) true else null)
+            if (node is ExpandableNodeFooterImpl && node.isExpandable) {
+                node.footerNode?.let {
+                    items.add(it)
+                }
+            }
             val size = items.size
             this.data.addAll(position + 1, items)
             if (notify) {
@@ -493,10 +523,12 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
      * @param notify Boolean
      */
     @JvmOverloads
-    fun collapse(@IntRange(from = 0) position: Int,
-                 animate: Boolean = true,
-                 notify: Boolean = true,
-                 parentPayload: Any? = null): Int {
+    fun collapse(
+        @IntRange(from = 0) position: Int,
+        animate: Boolean = true,
+        notify: Boolean = true,
+        parentPayload: Any? = null,
+    ): Int {
         return collapse(position, false, animate, notify, parentPayload)
     }
 
@@ -507,10 +539,12 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
      * @param notify Boolean
      */
     @JvmOverloads
-    fun expand(@IntRange(from = 0) position: Int,
-               animate: Boolean = true,
-               notify: Boolean = true,
-               parentPayload: Any? = null): Int {
+    fun expand(
+        @IntRange(from = 0) position: Int,
+        animate: Boolean = true,
+        notify: Boolean = true,
+        parentPayload: Any? = null,
+    ): Int {
         return expand(position, false, animate, notify, parentPayload)
     }
 
@@ -521,10 +555,12 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
      * @param notify Boolean
      */
     @JvmOverloads
-    fun expandOrCollapse(@IntRange(from = 0) position: Int,
-                         animate: Boolean = true,
-                         notify: Boolean = true,
-                         parentPayload: Any? = null): Int {
+    fun expandOrCollapse(
+        @IntRange(from = 0) position: Int,
+        animate: Boolean = true,
+        notify: Boolean = true,
+        parentPayload: Any? = null,
+    ): Int {
         val node = this.data[position]
         if (node is BaseExpandNode) {
             return if (node.isExpanded) {
@@ -537,18 +573,22 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
     }
 
     @JvmOverloads
-    fun expandAndChild(@IntRange(from = 0) position: Int,
-                       animate: Boolean = true,
-                       notify: Boolean = true,
-                       parentPayload: Any? = null): Int {
+    fun expandAndChild(
+        @IntRange(from = 0) position: Int,
+        animate: Boolean = true,
+        notify: Boolean = true,
+        parentPayload: Any? = null,
+    ): Int {
         return expand(position, true, animate, notify, parentPayload)
     }
 
     @JvmOverloads
-    fun collapseAndChild(@IntRange(from = 0) position: Int,
-                         animate: Boolean = true,
-                         notify: Boolean = true,
-                         parentPayload: Any? = null): Int {
+    fun collapseAndChild(
+        @IntRange(from = 0) position: Int,
+        animate: Boolean = true,
+        notify: Boolean = true,
+        parentPayload: Any? = null,
+    ): Int {
         return collapse(position, true, animate, notify, parentPayload)
     }
 
@@ -561,13 +601,15 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
      * @param notify Boolean
      */
     @JvmOverloads
-    fun expandAndCollapseOther(@IntRange(from = 0) position: Int,
-                               isExpandedChild: Boolean = false,
-                               isCollapseChild: Boolean = true,
-                               animate: Boolean = true,
-                               notify: Boolean = true,
-                               expandPayload: Any? = null,
-                               collapsePayload: Any? = null) {
+    fun expandAndCollapseOther(
+        @IntRange(from = 0) position: Int,
+        isExpandedChild: Boolean = false,
+        isCollapseChild: Boolean = true,
+        animate: Boolean = true,
+        notify: Boolean = true,
+        expandPayload: Any? = null,
+        collapsePayload: Any? = null,
+    ) {
 
         val expandCount = expand(position, isExpandedChild, animate, notify, expandPayload)
         if (expandCount == 0) {

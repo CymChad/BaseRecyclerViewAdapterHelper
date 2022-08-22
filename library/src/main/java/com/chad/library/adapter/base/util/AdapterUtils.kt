@@ -1,9 +1,9 @@
 package com.chad.library.adapter.base.util
 
+import android.support.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
 
 /**
  * 扩展方法，用于获取View

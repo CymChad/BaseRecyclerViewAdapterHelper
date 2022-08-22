@@ -1,6 +1,6 @@
 package com.chad.library.adapter.base.diff
 
-import androidx.recyclerview.widget.ListUpdateCallback
+import android.support.v7.util.ListUpdateCallback
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 class BrvahListUpdateCallback(private val mAdapter: BaseQuickAdapter<*, *>) : ListUpdateCallback {

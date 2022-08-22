@@ -4,13 +4,12 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 26
 
     defaultConfig {
         applicationId "com.chad.baserecyclerviewadapterhelper"
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 26
         versionCode 9
         versionName "3.0"
     }
@@ -46,9 +45,10 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation project(path: ':library')
     implementation 'com.google.android.material:material:1.2.1'
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+
     implementation 'com.kyleduo.switchbutton:library:2.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation 'com.android.support:recyclerview-v7:26.0.0'
+    implementation 'com.android.support:appcompat-v7:26.0.0'
+    implementation 'com.android.support:cardview-v7:26.0.0'
+    implementation 'com.android.support:design:26.0.0'
 }

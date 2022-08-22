@@ -1,7 +1,7 @@
 package com.chad.library.adapter.base.binder
 
+import android.support.annotation.LayoutRes
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
 import com.chad.library.adapter.base.util.getItemView
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 

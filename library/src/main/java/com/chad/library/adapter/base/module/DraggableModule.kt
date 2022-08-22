@@ -1,12 +1,12 @@
 package com.chad.library.adapter.base.module
 
 import android.graphics.Canvas
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnLongClickListener
 import android.view.View.OnTouchListener
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.R
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.dragswipe.DragAndSwipeCallback

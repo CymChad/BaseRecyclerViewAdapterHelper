@@ -1,8 +1,8 @@
 package com.chad.library.adapter.base.binder
 
+import android.databinding.ViewDataBinding
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.ViewDataBinding
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
 /**

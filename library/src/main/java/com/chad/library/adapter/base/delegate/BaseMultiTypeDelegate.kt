@@ -1,7 +1,7 @@
 package com.chad.library.adapter.base.delegate
 
+import android.support.annotation.LayoutRes
 import android.util.SparseIntArray
-import androidx.annotation.LayoutRes
 
 /**
  * help you to achieve multi type easily

@@ -1,7 +1,7 @@
 package com.chad.library.adapter.base.diff
 
-import androidx.annotation.RestrictTo
-import androidx.recyclerview.widget.DiffUtil
+import android.support.annotation.RestrictTo
+import android.support.v7.util.DiffUtil
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 

@@ -1,10 +1,10 @@
 package com.chad.library.adapter.base.provider
 
 import android.content.Context
+import android.support.annotation.IdRes
+import android.support.annotation.LayoutRes
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.IdRes
-import androidx.annotation.LayoutRes
 import com.chad.library.adapter.base.BaseProviderMultiAdapter
 import com.chad.library.adapter.base.util.getItemView
 import com.chad.library.adapter.base.viewholder.BaseViewHolder

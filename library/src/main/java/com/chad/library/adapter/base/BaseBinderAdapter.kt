@@ -1,11 +1,11 @@
 package com.chad.library.adapter.base
 
 import android.annotation.SuppressLint
+import android.support.v7.util.DiffUtil
+import android.support.v7.widget.RecyclerView
 import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.binder.BaseItemBinder
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
@@ -121,7 +121,7 @@ open class BaseBinderAdapter(list: MutableList<Any>? = null) : BaseQuickAdapter<
             //如果没有设置点击监听，则回调给 itemProvider
             //Callback to itemProvider if no click listener is set
             viewHolder.itemView.setOnClickListener {
-                var position = viewHolder.bindingAdapterPosition
+                var position = viewHolder.layoutPosition
                 if (position == RecyclerView.NO_POSITION) {
                     return@setOnClickListener
                 }
@@ -137,7 +137,7 @@ open class BaseBinderAdapter(list: MutableList<Any>? = null) : BaseQuickAdapter<
             //如果没有设置长按监听，则回调给itemProvider
             // If you do not set a long press listener, callback to the itemProvider
             viewHolder.itemView.setOnLongClickListener {
-                var position = viewHolder.bindingAdapterPosition
+                var position = viewHolder.adapterPosition
                 if (position == RecyclerView.NO_POSITION) {
                     return@setOnLongClickListener false
                 }
@@ -160,7 +160,7 @@ open class BaseBinderAdapter(list: MutableList<Any>? = null) : BaseQuickAdapter<
                         it.isClickable = true
                     }
                     it.setOnClickListener { v ->
-                        var position: Int = viewHolder.bindingAdapterPosition
+                        var position: Int = viewHolder.adapterPosition
                         if (position == RecyclerView.NO_POSITION) {
                             return@setOnClickListener
                         }
@@ -179,7 +179,7 @@ open class BaseBinderAdapter(list: MutableList<Any>? = null) : BaseQuickAdapter<
                         it.isLongClickable = true
                     }
                     it.setOnLongClickListener { v ->
-                        var position: Int = viewHolder.bindingAdapterPosition
+                        var position: Int = viewHolder.adapterPosition
                         if (position == RecyclerView.NO_POSITION) {
                             return@setOnLongClickListener false
                         }
