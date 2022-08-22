@@ -170,7 +170,7 @@ open class BaseDraggableModule(private val baseQuickAdapter: BaseQuickAdapter<*,
 
     open fun onItemSwipeClear(viewHolder: RecyclerView.ViewHolder) {
         if (isSwipeEnabled) {
-            mOnItemSwipeListener?.clearView(viewHolder, getViewHolderPosition(viewHolder))
+            mOnItemSwipeListener?.onItemSwipeEnd(viewHolder, getViewHolderPosition(viewHolder))
         }
     }
 
