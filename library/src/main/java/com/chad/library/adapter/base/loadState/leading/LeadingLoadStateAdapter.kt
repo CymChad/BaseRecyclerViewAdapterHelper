@@ -80,6 +80,15 @@ abstract class LeadingLoadStateAdapter<VH: RecyclerView.ViewHolder> : LoadStateA
         this.onLeadingListener = listener
     }
 
+    override fun toString(): String {
+        return """
+            LeadingLoadStateAdapter ->
+            [isLoadEnable: $isLoadEnable],
+            [preloadSize: $preloadSize],
+            [loadState: $loadState]
+        """.trimIndent()
+    }
+
     interface OnLeadingListener {
 
         /**

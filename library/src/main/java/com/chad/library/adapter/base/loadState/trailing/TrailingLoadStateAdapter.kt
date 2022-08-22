@@ -159,6 +159,17 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder> : LoadStat
         this.onTrailingListener = listener
     }
 
+    override fun toString(): String {
+        return """
+            TrailingLoadStateAdapter ->
+            [isLoadEndDisplay: $isLoadEndDisplay],
+            [isAutoLoadMore: $isAutoLoadMore],
+            [isDisableLoadMoreIfNotFullPage: $isDisableLoadMoreIfNotFullPage],
+            [preloadSize: $preloadSize],
+            [loadState: $loadState]
+        """.trimIndent()
+    }
+
     interface OnTrailingListener {
 
         /**
