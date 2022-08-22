@@ -4,14 +4,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
 import com.chad.baserecyclerviewadapterhelper.databinding.ItemNodeEntityBinding
 import com.chad.baserecyclerviewadapterhelper.entity.NodeEntity
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.QuickAdapterHelper
-import com.chad.library.adapter.base.SingleItemAdapter
+import com.chad.library.adapter.base.BaseSingleItemAdapter
 
-class NodeEntityAdapter(item: NodeEntity?) : SingleItemAdapter<NodeEntity, NodeEntityAdapter.VH>(item) {
+class NodeEntityAdapter(item: NodeEntity?) : BaseSingleItemAdapter<NodeEntity, NodeEntityAdapter.VH>(item) {
 
     class VH(val viewBinding: ItemNodeEntityBinding) : RecyclerView.ViewHolder(viewBinding.root)
 

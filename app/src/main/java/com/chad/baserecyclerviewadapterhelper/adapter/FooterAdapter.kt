@@ -3,13 +3,13 @@ package com.chad.baserecyclerviewadapterhelper.adapter
 import android.content.Context
 import android.view.ViewGroup
 import com.chad.baserecyclerviewadapterhelper.R
-import com.chad.library.adapter.base.SingleItemAdapter
+import com.chad.library.adapter.base.BaseSingleItemAdapter
 import com.chad.library.adapter.base.viewholder.QuickViewHolder
 
 class FooterAdapter(
     private val isDelete: Boolean,
     private val click: (FooterAdapter) -> Unit
-) : SingleItemAdapter<Any, QuickViewHolder>() {
+) : BaseSingleItemAdapter<Any, QuickViewHolder>() {
 
     override fun onCreateViewHolder(context: Context, parent: ViewGroup, viewType: Int): QuickViewHolder {
         return QuickViewHolder(R.layout.footer_view, parent).apply {

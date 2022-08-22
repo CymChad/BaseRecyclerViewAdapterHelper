@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
  * @property mItem 数据  data
  * @constructor Create empty Single item adapter
  */
-abstract class SingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private var mItem: T? = null) : RecyclerView.Adapter<VH>() {
+abstract class BaseSingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private var mItem: T? = null) : RecyclerView.Adapter<VH>() {
 
     private var mOnItemClickListener: OnItemClickListener<T>? = null
     private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
@@ -37,12 +37,12 @@ abstract class SingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private var mI
        return onCreateViewHolder(parent.context, parent, viewType).apply {
            mOnItemClickListener?.let {
                itemView.setOnClickListener { v ->
-                   it.onItemClick(this@SingleItemAdapter, v, mItem)
+                   it.onItemClick(this@BaseSingleItemAdapter, v, mItem)
                }
            }
            mOnItemLongClickListener?.let {
                itemView.setOnLongClickListener { v ->
-                   it.onItemLongClick(this@SingleItemAdapter, v, mItem)
+                   it.onItemLongClick(this@BaseSingleItemAdapter, v, mItem)
                }
            }
        }
@@ -86,10 +86,10 @@ abstract class SingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private var mI
 
 
     fun interface OnItemClickListener<T> {
-        fun onItemClick(adapter: SingleItemAdapter<T, *>, view: View, item: T?)
+        fun onItemClick(adapter: BaseSingleItemAdapter<T, *>, view: View, item: T?)
     }
 
     fun interface OnItemLongClickListener<T> {
-        fun onItemLongClick(adapter: SingleItemAdapter<T, *>, view: View, item: T?): Boolean
+        fun onItemLongClick(adapter: BaseSingleItemAdapter<T, *>, view: View, item: T?): Boolean
     }
 }
