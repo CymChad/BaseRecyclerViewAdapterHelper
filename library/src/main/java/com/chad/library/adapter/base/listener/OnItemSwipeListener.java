@@ -19,7 +19,7 @@ public interface OnItemSwipeListener {
      *
      * @param pos If the view is swiped, pos will be negative.
      */
-    void clearView(RecyclerView.ViewHolder viewHolder, int pos);
+    void onItemSwipeEnd(RecyclerView.ViewHolder viewHolder, int pos);
 
     /**
      * Called when item is swiped, the view is going to be removed from the adapter.

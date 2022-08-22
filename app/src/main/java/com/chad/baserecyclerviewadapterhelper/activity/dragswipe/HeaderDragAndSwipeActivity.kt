@@ -120,16 +120,16 @@ class HeaderDragAndSwipeActivity : BaseActivity() {
                 )
                 .setItemSwipeListener(
                     onItemSwipeStart = { viewHolder, pos ->
-                        Log.e("yyyyy", "onItemSwipeStart")
+                        Log.d(TAG, "onItemSwipeStart")
                     },
                     onItemSwipeMoving = { canvas, viewHolder, dX, dY, isCurrentlyActive ->
-                        Log.e("yyyyy", "onItemSwipeMoving")
+                        Log.d(TAG, "onItemSwipeMoving")
                     },
                     onItemSwiped = { viewHolder, pos ->
-                        Log.e("yyyyy", "onItemSwiped")
+                        Log.d(TAG,  "onItemSwiped")
                     },
-                    clearView = { viewHolder, pos ->
-                        Log.e("yyyyy", "clearView")
+                    onItemSwipeEnd = { viewHolder, pos ->
+                        Log.d(TAG, "onItemSwipeEnd")
                     }
                 )
         }

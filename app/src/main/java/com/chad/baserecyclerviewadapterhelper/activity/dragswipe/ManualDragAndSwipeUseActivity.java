@@ -98,22 +98,22 @@ public class ManualDragAndSwipeUseActivity extends BaseActivity {
         OnItemSwipeListener swipeListener = new OnItemSwipeListener() {
             @Override
             public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int pos) {
-                Log.e("yyyyy", "onItemSwipeStart");
+                Log.d(TAG, "onItemSwipeStart");
             }
 
             @Override
-            public void clearView(RecyclerView.ViewHolder viewHolder, int pos) {
-                Log.e("yyyyy", "clearView");
+            public void onItemSwipeEnd(RecyclerView.ViewHolder viewHolder, int pos) {
+                Log.d(TAG, "onItemSwipeEnd");
             }
 
             @Override
             public void onItemSwiped(RecyclerView.ViewHolder viewHolder, int pos) {
-                Log.e("yyyyy", "onItemSwiped");
+                Log.d(TAG,  "onItemSwiped");
             }
 
             @Override
             public void onItemSwipeMoving(Canvas canvas, RecyclerView.ViewHolder viewHolder, float dX, float dY, boolean isCurrentlyActive) {
-                Log.e("yyyyy", "onItemSwipeMoving");
+                Log.d(TAG, "onItemSwipeMoving");
             }
         };
 

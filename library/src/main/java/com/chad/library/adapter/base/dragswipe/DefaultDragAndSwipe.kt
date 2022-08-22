@@ -16,10 +16,10 @@ import kotlin.collections.ArrayList
  * 默认的 拖拽类，可进行自定义，适配带有头布局的
  */
 open class DefaultDragAndSwipe(
-   private var _dragMoveFlags: Int = ItemTouchHelper.ACTION_STATE_IDLE,
-   private var _swipeMoveFlags: Int = ItemTouchHelper.ACTION_STATE_IDLE,
-   private var _isLongPressDragEnabled: Boolean = true,
-   private var _isItemViewSwipeEnabled: Boolean = true
+    private var _dragMoveFlags: Int = ItemTouchHelper.ACTION_STATE_IDLE,
+    private var _swipeMoveFlags: Int = ItemTouchHelper.ACTION_STATE_IDLE,
+    private var _isLongPressDragEnabled: Boolean = true,
+    private var _isItemViewSwipeEnabled: Boolean = true
 ) : ItemTouchHelper.Callback(), DragAndSwipeImpl {
 
     private var _itemTouchHelper: ItemTouchHelper? = null
@@ -27,6 +27,17 @@ open class DefaultDragAndSwipe(
     private var mOnItemSwipeListener: OnItemSwipeListener? = null
     private var recyclerView: RecyclerView? = null
     private var _adapterImpl: DragAndSwipeAdapterImpl? = null
+    private var isDrag = false
+    private var isSwipe = false
+
+
+    val adapterImpl: DragAndSwipeAdapterImpl
+        get() {
+            checkNotNull(_adapterImpl) {
+                "Please set _adapterImpl"
+            }
+            return _adapterImpl!!
+        }
 
     /**
      * items 转化为 MutableList
@@ -80,12 +91,14 @@ open class DefaultDragAndSwipe(
     override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
         when (actionState) {
             ItemTouchHelper.ACTION_STATE_DRAG -> {
+                isDrag = true
                 mOnItemDragListener?.onItemDragStart(
                     viewHolder,
                     getViewHolderPosition(viewHolder)
                 )
             }
             ItemTouchHelper.ACTION_STATE_SWIPE -> {
+                isSwipe = true
                 mOnItemSwipeListener?.onItemSwipeStart(
                     viewHolder,
                     getViewHolderPosition(viewHolder)
@@ -172,14 +185,20 @@ open class DefaultDragAndSwipe(
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
         super.clearView(recyclerView, viewHolder)
         val position = getViewHolderPosition(viewHolder)
-        mOnItemDragListener?.onItemDragEnd(viewHolder, position)
-        mOnItemSwipeListener?.clearView(viewHolder, position)
+        if (isSwipe) {
+            mOnItemSwipeListener?.onItemSwipeEnd(viewHolder, position)
+            isSwipe = false
+        }
+        if (isDrag) {
+            mOnItemDragListener?.onItemDragEnd(viewHolder, position)
+            isDrag = false
+        }
     }
 
     /**
      * 进行位置的切换
      */
-    private fun dataSwap(fromPosition: Int, toPosition: Int) {
+    open fun dataSwap(fromPosition: Int, toPosition: Int) {
         if (inRange(fromPosition) && inRange(toPosition)) {
             val data = _adapterImpl?.getDragAndSwipeData() ?: return
             Collections.swap(data, fromPosition, toPosition)
@@ -253,6 +272,7 @@ open class DefaultDragAndSwipe(
     private fun getViewHolderPosition(viewHolder: RecyclerView.ViewHolder?): Int {
         return viewHolder?.bindingAdapterPosition ?: RecyclerView.NO_POSITION
     }
+
 
     class Builder {
 
