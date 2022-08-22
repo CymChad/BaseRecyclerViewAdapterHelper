@@ -39,7 +39,6 @@ open class QuickDragAndSwipe : ItemTouchHelper.Callback() {
     private var isDrag = false
     private var isSwipe = false
 
-
     val adapterImpl: DragAndSwipeAdapterImpl
         get() {
             checkNotNull(_adapterImpl) {
@@ -47,6 +46,8 @@ open class QuickDragAndSwipe : ItemTouchHelper.Callback() {
             }
             return _adapterImpl!!
         }
+
+    val itemTouchHelper: ItemTouchHelper get() = _itemTouchHelper
 
     /**
      * 绑定RecyclerView
