@@ -615,6 +615,13 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         removeAt(index)
     }
 
+    /**
+     * Item swap
+     * 数据交换
+     *
+     * @param fromPosition
+     * @param toPosition
+     */
     open fun swap(fromPosition: Int, toPosition: Int) {
         val size = items.size
         if (fromPosition in 0 until size && toPosition in 0 until size) {
