@@ -2,6 +2,7 @@ package com.chad.library.adapter.base
 
 import androidx.recyclerview.widget.*
 import androidx.recyclerview.widget.AsyncListDiffer.ListListener
+import java.util.*
 
 /**
  * Base differ adapter
@@ -140,6 +141,16 @@ abstract class BaseDifferAdapter<T, VH : RecyclerView.ViewHolder>(
         items.toMutableList().also {
             it.remove(data)
             submitList(it)
+        }
+    }
+
+    override fun swap(fromPosition: Int, toPosition: Int) {
+        val size = items.size
+        if (fromPosition in 0 until size || toPosition in 0 until size) {
+            items.toMutableList().also {
+                Collections.swap(it, fromPosition, toPosition)
+                submitList(it)
+            }
         }
     }
 }

@@ -5,16 +5,13 @@ import android.content.Context;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.dragswipe.DragAndSwipeAdapterImpl;
+import com.chad.library.adapter.base.dragswipe.listener.DragAndSwipeDataCallback;
 import com.chad.library.adapter.base.viewholder.QuickViewHolder;
 
-import java.util.List;
-
-public class DragAndSwipeAdapter extends BaseQuickAdapter<String, QuickViewHolder> implements DragAndSwipeAdapterImpl {
+public class DragAndSwipeAdapter extends BaseQuickAdapter<String, QuickViewHolder> implements DragAndSwipeDataCallback {
 
     @NonNull
     @Override
@@ -40,16 +37,13 @@ public class DragAndSwipeAdapter extends BaseQuickAdapter<String, QuickViewHolde
         holder.setText(R.id.tv, item);
     }
 
-
-    @NonNull
     @Override
-    public RecyclerView.Adapter<?> getDragAndSwipeAdapter() {
-        return this;
+    public void dataSwap(int fromPosition, int toPosition) {
+        swap(fromPosition, toPosition);
     }
 
-    @NonNull
     @Override
-    public List<?> getDragAndSwipeData() {
-        return getItems();
+    public void dataRemoveAt(int position) {
+        removeAt(position);
     }
 }

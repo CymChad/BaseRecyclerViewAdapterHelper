@@ -74,7 +74,7 @@ class HeaderDragAndSwipeActivity : BaseActivity() {
                     })
                 .build().addHeader(HomeTopHeaderAdapter())
             headerDragAndSwipe.attachToRecyclerView(mRVDragAndSwipe)
-                .setAdapterImpl(this)
+                .setDataCallback(this)
                 .setItemDragListener(
                     onItemDragStart = { viewHolder, pos ->
                         Log.d(TAG, "drag start")

@@ -44,6 +44,7 @@
         <activity android:name=".activity.UpFetchUseActivity" /> <!-- <activity android:name=".activity.node.NodeSectionUseActivity" /> -->
         <activity android:name=".activity.DifferActivity" /> <!-- <activity android:name=".activity.node.ChooseNodeUseTypeActivity" /> -->
         <activity android:name=".activity.loadmore.NoAutoAutoLoadMoreRefreshUseActivity" />
+        <activity android:name=".activity.dragswipe.DragAndSwipeDifferActivity" />
     </application>
 
 </manifest>

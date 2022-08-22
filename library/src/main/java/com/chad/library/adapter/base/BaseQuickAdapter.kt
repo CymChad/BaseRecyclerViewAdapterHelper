@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.chad.library.adapter.base.animation.*
 import com.chad.library.adapter.base.viewholder.EmptyLayoutVH
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Base Class
@@ -611,6 +613,14 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         val index = items.indexOf(data)
         if (index == -1) return
         removeAt(index)
+    }
+
+    open fun swap(fromPosition: Int, toPosition: Int) {
+        val size = items.size
+        if (fromPosition in 0 until size && toPosition in 0 until size) {
+            Collections.swap(items, fromPosition, toPosition)
+            notifyItemMoved(fromPosition, toPosition)
+        }
     }
 
     /**

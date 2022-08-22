@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,8 +18,8 @@ import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.baserecyclerviewadapterhelper.utils.VibratorUtils;
 import com.chad.library.adapter.base.QuickAdapterHelper;
 import com.chad.library.adapter.base.dragswipe.QuickDragAndSwipe;
-import com.chad.library.adapter.base.listener.OnItemDragListener;
-import com.chad.library.adapter.base.listener.OnItemSwipeListener;
+import com.chad.library.adapter.base.dragswipe.listener.OnItemDragListener;
+import com.chad.library.adapter.base.dragswipe.listener.OnItemSwipeListener;
 import com.chad.library.adapter.base.viewholder.QuickViewHolder;
 
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class ManualDragAndSwipeUseActivity extends BaseActivity {
         // 拖拽监听
         OnItemDragListener listener = new OnItemDragListener() {
             @Override
-            public void onItemDragStart(RecyclerView.ViewHolder viewHolder, int pos) {
+            public void onItemDragStart(@NonNull RecyclerView.ViewHolder viewHolder, int pos) {
                 VibratorUtils.INSTANCE.vibrate(getApplicationContext());
                 Log.d(TAG, "drag start");
                 final QuickViewHolder holder = ((QuickViewHolder) viewHolder);
@@ -69,12 +70,12 @@ public class ManualDragAndSwipeUseActivity extends BaseActivity {
             }
 
             @Override
-            public void onItemDragMoving(RecyclerView.ViewHolder source, int from, RecyclerView.ViewHolder target, int to) {
+            public void onItemDragMoving(@NonNull RecyclerView.ViewHolder source, int from, @NonNull RecyclerView.ViewHolder target, int to) {
                 Log.d(TAG, "move from: " + source.getBindingAdapterPosition() + " to: " + target.getBindingAdapterPosition());
             }
 
             @Override
-            public void onItemDragEnd(RecyclerView.ViewHolder viewHolder, int pos) {
+            public void onItemDragEnd(@NonNull RecyclerView.ViewHolder viewHolder, int pos) {
                 Log.d(TAG, "drag end");
                 final QuickViewHolder holder = ((QuickViewHolder) viewHolder);
                 // 结束时，item背景色变化，demo这里使用了一个动画渐变，使得自然
@@ -118,7 +119,7 @@ public class ManualDragAndSwipeUseActivity extends BaseActivity {
         mRecyclerView.setAdapter(helper.getAdapter());
         mAdapter.submitList(mData);
         quickDragAndSwipe.attachToRecyclerView(mRecyclerView)
-                .setAdapterImpl(mAdapter)
+                .setDataCallback(mAdapter)
                 .setItemDragListener(listener)
                 .setItemSwipeListener(swipeListener);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {

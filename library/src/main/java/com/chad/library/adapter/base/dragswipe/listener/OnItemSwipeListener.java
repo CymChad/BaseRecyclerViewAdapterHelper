@@ -1,4 +1,4 @@
-package com.chad.library.adapter.base.listener;
+package com.chad.library.adapter.base.dragswipe.listener;
 
 import android.graphics.Canvas;
 

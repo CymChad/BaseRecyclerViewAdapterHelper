@@ -30,6 +30,7 @@ public class DragAndSwipeUseActivity extends BaseActivity {
         homeItemData.add(new HomeEntity("Default Drag And Swipe", DefaultDragAndSwipeActivity.class, R.mipmap.gv_drag_and_swipe, ""));
         homeItemData.add(new HomeEntity("Manual Drag And Swipe", ManualDragAndSwipeUseActivity.class, R.mipmap.gv_drag_and_swipe, ""));
         homeItemData.add(new HomeEntity("Head Drag And Swipe", HeaderDragAndSwipeActivity.class, R.mipmap.gv_drag_and_swipe, ""));
+        homeItemData.add(new HomeEntity("Diff Drag And Swipe", DragAndSwipeDifferActivity.class, R.mipmap.gv_drag_and_swipe, ""));
 
         /*
          * RV适配器

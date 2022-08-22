@@ -2,17 +2,16 @@ package com.chad.baserecyclerviewadapterhelper.adapter
 
 import android.content.Context
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
 import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.QuickViewHolder
-import com.chad.library.adapter.base.dragswipe.DragAndSwipeAdapterImpl
+import com.chad.library.adapter.base.dragswipe.listener.DragAndSwipeDataCallback
 
 /**
  * kotlin方式集成案例
  */
 open class HeaderDragAndSwipeAdapter : BaseQuickAdapter<String, QuickViewHolder>(),
-    DragAndSwipeAdapterImpl {
+    DragAndSwipeDataCallback {
 
     override fun onCreateViewHolder(
         context: Context,
@@ -32,12 +31,11 @@ open class HeaderDragAndSwipeAdapter : BaseQuickAdapter<String, QuickViewHolder>
         holder.setText(R.id.tv, item)
     }
 
-    override fun getDragAndSwipeAdapter(): RecyclerView.Adapter<*> {
-        return this
+    override fun dataSwap(fromPosition: Int, toPosition: Int) {
+        swap(fromPosition, toPosition)
     }
 
-    override fun getDragAndSwipeData(): List<*> {
-        return items
+    override fun dataRemoveAt(position: Int) {
+        removeAt(position)
     }
-
 }

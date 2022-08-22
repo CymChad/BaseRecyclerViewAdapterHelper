@@ -3,11 +3,10 @@ package com.chad.library.adapter.base.dragswipe
 import android.graphics.Canvas
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.chad.library.adapter.base.listener.OnItemDragListener
-import com.chad.library.adapter.base.listener.OnItemSwipeListener
+import com.chad.library.adapter.base.dragswipe.listener.DragAndSwipeDataCallback
+import com.chad.library.adapter.base.dragswipe.listener.OnItemDragListener
+import com.chad.library.adapter.base.dragswipe.listener.OnItemSwipeListener
 import com.chad.library.adapter.base.viewholder.EmptyLayoutVH
-import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * @author yangfeng
@@ -35,16 +34,16 @@ open class QuickDragAndSwipe : ItemTouchHelper.Callback() {
 
     private var mOnItemDragListener: OnItemDragListener? = null
     private var mOnItemSwipeListener: OnItemSwipeListener? = null
-    private var _adapterImpl: DragAndSwipeAdapterImpl? = null
+    private var _dataCallback: DragAndSwipeDataCallback? = null
     private var isDrag = false
     private var isSwipe = false
 
-    val adapterImpl: DragAndSwipeAdapterImpl
+    val dataCallback: DragAndSwipeDataCallback
         get() {
-            checkNotNull(_adapterImpl) {
+            checkNotNull(_dataCallback) {
                 "Please set _adapterImpl"
             }
-            return _adapterImpl!!
+            return _dataCallback!!
         }
 
     val itemTouchHelper: ItemTouchHelper get() = _itemTouchHelper
@@ -187,18 +186,23 @@ open class QuickDragAndSwipe : ItemTouchHelper.Callback() {
         super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y)
         val fromPosition = getViewHolderPosition(viewHolder)
         val toPosition = getViewHolderPosition(target)
-        dataSwap(fromPosition, toPosition)
+
+        if (fromPosition == RecyclerView.NO_POSITION || toPosition == RecyclerView.NO_POSITION) return
+
+        // 进行位置的切换
+        _dataCallback?.dataSwap(fromPosition, toPosition)
         mOnItemDragListener?.onItemDragMoving(viewHolder, fromPosition, target, toPosition)
     }
 
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val position = getViewHolderPosition(viewHolder)
-        if (inRange(position)) {
-            mutableItems?.removeAt(position)
-            _adapterImpl?.getDragAndSwipeAdapter()?.notifyItemRemoved(position)
+
+        if (position == RecyclerView.NO_POSITION) return
+            // 删除数据
+            _dataCallback?.dataRemoveAt(position)
+
             mOnItemSwipeListener?.onItemSwiped(viewHolder, position)
-        }
     }
 
     override fun isLongPressDragEnabled(): Boolean {
@@ -239,17 +243,6 @@ open class QuickDragAndSwipe : ItemTouchHelper.Callback() {
         }
     }
 
-    /**
-     * 进行位置的切换
-     */
-    open fun dataSwap(fromPosition: Int, toPosition: Int) {
-        if (inRange(fromPosition) && inRange(toPosition)) {
-            val data = _adapterImpl?.getDragAndSwipeData() ?: return
-            Collections.swap(data, fromPosition, toPosition)
-            _adapterImpl?.getDragAndSwipeAdapter()?.notifyItemMoved(fromPosition, toPosition)
-        }
-    }
-
     /********************************************************/
     /*                 private method                       */
     /********************************************************/
@@ -261,35 +254,10 @@ open class QuickDragAndSwipe : ItemTouchHelper.Callback() {
         return viewHolder is EmptyLayoutVH
     }
 
-    /**
-     * 防止数组下标越界
-     */
-    private fun inRange(position: Int): Boolean {
-        val size = _adapterImpl?.getDragAndSwipeData()?.size ?: RecyclerView.NO_POSITION
-        return position in 0 until size
-    }
 
     private fun getViewHolderPosition(viewHolder: RecyclerView.ViewHolder?): Int {
         return viewHolder?.bindingAdapterPosition ?: RecyclerView.NO_POSITION
     }
-
-    /**
-     * items 转化为 MutableList
-     */
-    private val mutableItems: MutableList<*>?
-        get() {
-            return when (val items = _adapterImpl?.getDragAndSwipeData()) {
-                is ArrayList -> {
-                    items
-                }
-                is MutableList -> {
-                    items
-                }
-                else -> {
-                    items?.toMutableList()
-                }
-            }
-        }
 
     /********************************************************/
     /*                       Listener                       */
@@ -306,8 +274,8 @@ open class QuickDragAndSwipe : ItemTouchHelper.Callback() {
         this.mOnItemSwipeListener = onItemSwipeListener
     }
 
-    fun setAdapterImpl(adapterImpl: DragAndSwipeAdapterImpl) = apply {
-        this._adapterImpl = adapterImpl
+    fun setDataCallback(callback: DragAndSwipeDataCallback) = apply {
+        this._dataCallback = callback
     }
 
 }

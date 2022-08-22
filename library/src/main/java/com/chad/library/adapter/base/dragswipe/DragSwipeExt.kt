@@ -2,8 +2,8 @@ package com.chad.library.adapter.base.dragswipe
 
 import android.graphics.Canvas
 import androidx.recyclerview.widget.RecyclerView
-import com.chad.library.adapter.base.listener.OnItemDragListener
-import com.chad.library.adapter.base.listener.OnItemSwipeListener
+import com.chad.library.adapter.base.dragswipe.listener.OnItemDragListener
+import com.chad.library.adapter.base.dragswipe.listener.OnItemSwipeListener
 
 /**
  * 使用拖拽方式的拓展函数
@@ -11,29 +11,30 @@ import com.chad.library.adapter.base.listener.OnItemSwipeListener
 inline fun QuickDragAndSwipe.setItemDragListener(
     crossinline onItemDragStart: ((viewHolder: RecyclerView.ViewHolder?, pos: Int) -> Unit) = { _, _ -> },
     crossinline onItemDragMoving: ((
-        source: RecyclerView.ViewHolder?,
+        source: RecyclerView.ViewHolder,
         from: Int,
-        target: RecyclerView.ViewHolder?,
+        target: RecyclerView.ViewHolder,
         to: Int
     ) -> Unit) = { _, _, _, _ -> },
-    crossinline onItemDragEnd: ((viewHolder: RecyclerView.ViewHolder?, pos: Int) -> Unit) = { _, _ -> },
+    crossinline onItemDragEnd: ((viewHolder: RecyclerView.ViewHolder, pos: Int) -> Unit) = { _, _ -> },
 
     ) = apply {
-    val listener = object : OnItemDragListener {
+    val listener = object :
+        OnItemDragListener {
         override fun onItemDragStart(viewHolder: RecyclerView.ViewHolder?, pos: Int) {
             onItemDragStart.invoke(viewHolder, pos)
         }
 
         override fun onItemDragMoving(
-            source: RecyclerView.ViewHolder?,
+            source: RecyclerView.ViewHolder,
             from: Int,
-            target: RecyclerView.ViewHolder?,
+            target: RecyclerView.ViewHolder,
             to: Int
         ) {
             onItemDragMoving.invoke(source, from, target, to)
         }
 
-        override fun onItemDragEnd(viewHolder: RecyclerView.ViewHolder?, pos: Int) {
+        override fun onItemDragEnd(viewHolder: RecyclerView.ViewHolder, pos: Int) {
             onItemDragEnd.invoke(viewHolder, pos)
         }
     }
@@ -55,7 +56,8 @@ inline fun QuickDragAndSwipe.setItemSwipeListener(
     crossinline onItemSwiped: ((viewHolder: RecyclerView.ViewHolder?, pos: Int) -> Unit) = { _, _ -> },
     crossinline onItemSwipeEnd: ((viewHolder: RecyclerView.ViewHolder?, pos: Int) -> Unit) = { _, _ -> }
 ) = apply {
-    val listener = object : OnItemSwipeListener {
+    val listener = object :
+        OnItemSwipeListener {
         override fun onItemSwipeStart(viewHolder: RecyclerView.ViewHolder?, pos: Int) {
             onItemSwipeStart.invoke(viewHolder, pos)
         }
