@@ -3,12 +3,12 @@ package com.chad.baserecyclerviewadapterhelper.activity.dragswipe
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.baserecyclerviewadapterhelper.adapter.HeaderDragAndSwipeAdapter
-import com.chad.library.adapter.base.dragswipe.DefaultDragAndSwipe
+import com.chad.library.adapter.base.dragswipe.QuickDragAndSwipe
 
 /**
  * 重写拖拽类，根据itemType 设置某个类型的是否允许拖拽
  */
-class HeaderDragAndSwipe : DefaultDragAndSwipe() {
+class HeaderDragAndSwipe : QuickDragAndSwipe() {
 
     override fun getMovementFlags(
         recyclerView: RecyclerView,

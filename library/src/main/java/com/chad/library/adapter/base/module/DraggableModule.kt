@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.R
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.dragswipe.DefaultDragAndSwipe
+import com.chad.library.adapter.base.dragswipe.QuickDragAndSwipe
 import com.chad.library.adapter.base.listener.DraggableListenerImp
 import com.chad.library.adapter.base.listener.OnItemDragListener
 import com.chad.library.adapter.base.listener.OnItemSwipeListener
@@ -43,7 +43,7 @@ open class BaseDraggableModule(private val baseQuickAdapter: BaseQuickAdapter<*,
     var isSwipeEnabled = false
     var toggleViewId = NO_TOGGLE_VIEW
     lateinit var itemTouchHelper: ItemTouchHelper
-    lateinit var itemTouchHelperCallback: DefaultDragAndSwipe
+    lateinit var itemTouchHelperCallback: QuickDragAndSwipe
 
     protected var mOnToggleViewTouchListener: OnTouchListener? = null
     protected var mOnToggleViewLongClickListener: OnLongClickListener? = null
@@ -55,7 +55,7 @@ open class BaseDraggableModule(private val baseQuickAdapter: BaseQuickAdapter<*,
     }
 
     private fun initItemTouch() {
-        itemTouchHelperCallback = DefaultDragAndSwipe()
+        itemTouchHelperCallback = QuickDragAndSwipe()
         itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
     }
 

@@ -1,14 +1,9 @@
 package com.chad.baserecyclerviewadapterhelper.activity.dragswipe;
 
 import android.animation.ValueAnimator;
-import android.app.Service;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
-import android.os.VibratorManager;
 import android.util.Log;
 
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -21,7 +16,7 @@ import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.baserecyclerviewadapterhelper.utils.VibratorUtils;
 import com.chad.library.adapter.base.QuickAdapterHelper;
-import com.chad.library.adapter.base.dragswipe.DefaultDragAndSwipe;
+import com.chad.library.adapter.base.dragswipe.QuickDragAndSwipe;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 import com.chad.library.adapter.base.viewholder.QuickViewHolder;
@@ -38,12 +33,11 @@ public class ManualDragAndSwipeUseActivity extends BaseActivity {
     private DragAndSwipeAdapter mAdapter;
     private QuickAdapterHelper helper;
 
-    DefaultDragAndSwipe defaultDragAndSwipe = new DefaultDragAndSwipe.Builder()
+    QuickDragAndSwipe quickDragAndSwipe = new QuickDragAndSwipe()
             .setDragMoveFlags(ItemTouchHelper.UP | ItemTouchHelper.DOWN)
             .setSwipeMoveFlags(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT)
             .setItemViewSwipeEnabled(false)
-            .setLongPressDragEnabled(false)//关闭默认的长按拖拽功能，通过自定义长按事件进行拖拽
-            .build();
+            .setLongPressDragEnabled(false);//关闭默认的长按拖拽功能，通过自定义长按事件进行拖拽
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,13 +117,13 @@ public class ManualDragAndSwipeUseActivity extends BaseActivity {
                 .build();
         mRecyclerView.setAdapter(helper.getAdapter());
         mAdapter.submitList(mData);
-        defaultDragAndSwipe.attachToRecyclerView(mRecyclerView)
+        quickDragAndSwipe.attachToRecyclerView(mRecyclerView)
                 .setAdapterImpl(mAdapter)
                 .setItemDragListener(listener)
                 .setItemSwipeListener(swipeListener);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
             Tips.show("点击了：" + position + "，侧滑可进行删除" + position);
-            defaultDragAndSwipe.startSwipe(position);
+            quickDragAndSwipe.startSwipe(position);
         });
         mAdapter.setOnItemLongClickListener((adapter, view, position) -> {
             /*
@@ -139,7 +133,7 @@ public class ManualDragAndSwipeUseActivity extends BaseActivity {
              * 此处使用，关闭了默认长按拖拽功能
              */
             Tips.show("长按了：" + position + "，现在拖动可进行变换位置");
-            defaultDragAndSwipe.startDrag(position);
+            quickDragAndSwipe.startDrag(position);
             return false;
         });
     }

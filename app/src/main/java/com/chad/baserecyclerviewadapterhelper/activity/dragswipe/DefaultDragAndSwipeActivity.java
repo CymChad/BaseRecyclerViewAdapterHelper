@@ -2,14 +2,9 @@ package com.chad.baserecyclerviewadapterhelper.activity.dragswipe;
 
 
 import android.animation.ValueAnimator;
-import android.app.Service;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
-import android.os.VibratorManager;
 import android.util.Log;
 
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -23,7 +18,7 @@ import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.baserecyclerviewadapterhelper.utils.VibratorUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.QuickAdapterHelper;
-import com.chad.library.adapter.base.dragswipe.DefaultDragAndSwipe;
+import com.chad.library.adapter.base.dragswipe.QuickDragAndSwipe;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 import com.chad.library.adapter.base.viewholder.QuickViewHolder;
@@ -40,10 +35,9 @@ public class DefaultDragAndSwipeActivity extends BaseActivity {
     private RecyclerView mRecyclerView;
     private DragAndSwipeAdapter mAdapter;
     private QuickAdapterHelper helper;
-    DefaultDragAndSwipe defaultDragAndSwipe = new DefaultDragAndSwipe.Builder()
+    QuickDragAndSwipe quickDragAndSwipe = new QuickDragAndSwipe()
             .setDragMoveFlags(ItemTouchHelper.UP | ItemTouchHelper.DOWN)
-            .setSwipeMoveFlags(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT)
-            .build();
+            .setSwipeMoveFlags(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +117,7 @@ public class DefaultDragAndSwipeActivity extends BaseActivity {
                 .build();
         mRecyclerView.setAdapter(helper.getAdapter());
         mAdapter.submitList(mData);
-        defaultDragAndSwipe.attachToRecyclerView(mRecyclerView)
+        quickDragAndSwipe.attachToRecyclerView(mRecyclerView)
                 .setAdapterImpl(mAdapter)
                 .setItemDragListener(listener)
                 .setItemSwipeListener(swipeListener);

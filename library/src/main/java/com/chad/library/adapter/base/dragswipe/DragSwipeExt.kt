@@ -8,15 +8,15 @@ import com.chad.library.adapter.base.listener.OnItemSwipeListener
 /**
  * 使用拖拽方式的拓展函数
  */
-inline fun DefaultDragAndSwipe.setItemDragListener(
-    crossinline onItemDragStart: ((viewHolder: RecyclerView.ViewHolder?, pos: Int) -> Unit) = { viewHolder, pos -> },
+inline fun QuickDragAndSwipe.setItemDragListener(
+    crossinline onItemDragStart: ((viewHolder: RecyclerView.ViewHolder?, pos: Int) -> Unit) = { _, _ -> },
     crossinline onItemDragMoving: ((
         source: RecyclerView.ViewHolder?,
         from: Int,
         target: RecyclerView.ViewHolder?,
         to: Int
-    ) -> Unit) = { source, from, target, to -> },
-    crossinline onItemDragEnd: ((viewHolder: RecyclerView.ViewHolder?, pos: Int) -> Unit) = { viewHolder, pos -> },
+    ) -> Unit) = { _, _, _, _ -> },
+    crossinline onItemDragEnd: ((viewHolder: RecyclerView.ViewHolder?, pos: Int) -> Unit) = { _, _ -> },
 
     ) = apply {
     val listener = object : OnItemDragListener {
@@ -43,17 +43,17 @@ inline fun DefaultDragAndSwipe.setItemDragListener(
 /**
  * 滑动删除的拓展函数
  */
-inline fun DefaultDragAndSwipe.setItemSwipeListener(
-    crossinline onItemSwipeStart: ((viewHolder: RecyclerView.ViewHolder?, pos: Int) -> Unit) = { viewHolder, pos -> },
+inline fun QuickDragAndSwipe.setItemSwipeListener(
+    crossinline onItemSwipeStart: ((viewHolder: RecyclerView.ViewHolder?, pos: Int) -> Unit) = { _, _ -> },
     crossinline onItemSwipeMoving: ((
         canvas: Canvas?,
         viewHolder: RecyclerView.ViewHolder?,
         dX: Float,
         dY: Float,
         isCurrentlyActive: Boolean
-    ) -> Unit) = { canvas, viewHolder, dX, dY, isCurrentlyActive -> },
-    crossinline onItemSwiped: ((viewHolder: RecyclerView.ViewHolder?, pos: Int) -> Unit) = { viewHolder, pos -> },
-    crossinline onItemSwipeEnd: ((viewHolder: RecyclerView.ViewHolder?, pos: Int) -> Unit) = { viewHolder, pos -> }
+    ) -> Unit) = { _, _, _, _, _ -> },
+    crossinline onItemSwiped: ((viewHolder: RecyclerView.ViewHolder?, pos: Int) -> Unit) = { _, _ -> },
+    crossinline onItemSwipeEnd: ((viewHolder: RecyclerView.ViewHolder?, pos: Int) -> Unit) = { _, _ -> }
 ) = apply {
     val listener = object : OnItemSwipeListener {
         override fun onItemSwipeStart(viewHolder: RecyclerView.ViewHolder?, pos: Int) {
