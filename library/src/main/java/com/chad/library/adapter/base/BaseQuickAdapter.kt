@@ -626,7 +626,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
                     items as MutableList
                 }
                 else -> {
-                    items.toMutableList()
+                    items.toMutableList().apply { items = this }
                 }
             }
         }
