@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.listener.OnItemDragListener
 import com.chad.library.adapter.base.listener.OnItemSwipeListener
+import com.chad.library.adapter.base.viewholder.EmptyLayoutVH
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -238,7 +239,7 @@ open class DefaultDragAndSwipe(
      * 是否是空布局
      */
     private fun isEmptyView(viewHolder: RecyclerView.ViewHolder): Boolean {
-        return viewHolder.itemViewType == BaseQuickAdapter.EMPTY_VIEW
+        return viewHolder is EmptyLayoutVH
     }
 
     /**
