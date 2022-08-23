@@ -48,7 +48,8 @@ class HeaderDragAndSwipeActivity : BaseActivity() {
     var headerDragAndSwipe = HeaderDragAndSwipe()
         .setDragMoveFlags(ItemTouchHelper.UP or ItemTouchHelper.DOWN)
         .setSwipeMoveFlags(ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
-    private var mAdapter: HeaderDragAndSwipeAdapter? = null
+
+    private val mAdapter: HeaderDragAndSwipeAdapter = HeaderDragAndSwipeAdapter()
     private var helper: QuickAdapterHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,82 +58,81 @@ class HeaderDragAndSwipeActivity : BaseActivity() {
         setBackBtn()
         setTitle("Head Drag And Swipe")
         mRVDragAndSwipe.layoutManager = LinearLayoutManager(this);
-        mAdapter = HeaderDragAndSwipeAdapter().apply {
-            helper = QuickAdapterHelper.Builder(this)
-                .setTrailingLoadStateAdapter(
-                    object : TrailingLoadStateAdapter.OnTrailingListener {
-                        override fun onLoad() {
-                            loadMore()
-                        }
-
-                        override fun onFailRetry() {
-                        }
-
-                        override fun isAllowLoading(): Boolean {
-                            return true
-                        }
-                    })
-                .build().addHeader(HomeTopHeaderAdapter())
-            headerDragAndSwipe.attachToRecyclerView(mRVDragAndSwipe)
-                .setDataCallback(this)
-                .setItemDragListener(
-                    onItemDragStart = { viewHolder, pos ->
-                        Log.d(TAG, "drag start")
-                        vibrate(applicationContext)
-                        val holder = viewHolder as QuickViewHolder
-                        // 开始时，item背景色变化，demo这里使用了一个动画渐变，使得自然
-                        val startColor = Color.WHITE
-                        val endColor = Color.rgb(245, 245, 245)
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            ValueAnimator.ofArgb(startColor, endColor).apply {
-                                addUpdateListener { animation: ValueAnimator ->
-                                    holder.itemView.setBackgroundColor(
-                                        animation.animatedValue as Int
-                                    )
-                                }
-                                duration = 300
-                                start()
-                            }
-                        }
-                    },
-                    onItemDragMoving = { source, from, target, to ->
-                        Log.d(TAG, "move from: $from  to:  $to")
-                    },
-                    onItemDragEnd = { viewHolder, pos ->
-                        Log.d(TAG, "drag end")
-                        val holder = viewHolder as QuickViewHolder
-                        // 结束时，item背景色变化，demo这里使用了一个动画渐变，使得自然
-                        val startColor = Color.rgb(245, 245, 245)
-                        val endColor = Color.WHITE
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            ValueAnimator.ofArgb(startColor, endColor).apply {
-                                addUpdateListener { animation: ValueAnimator ->
-                                    holder.itemView.setBackgroundColor(
-                                        animation.animatedValue as Int
-                                    )
-                                }
-                                duration = 300
-                                start()
-                            }
-                        }
+        helper = QuickAdapterHelper.Builder(mAdapter)
+            .setTrailingLoadStateAdapter(
+                object : TrailingLoadStateAdapter.OnTrailingListener {
+                    override fun onLoad() {
+                        loadMore()
                     }
 
-                )
-                .setItemSwipeListener(
-                    onItemSwipeStart = { viewHolder, pos ->
-                        Log.d(TAG, "onItemSwipeStart")
-                    },
-                    onItemSwipeMoving = { canvas, viewHolder, dX, dY, isCurrentlyActive ->
-                        Log.d(TAG, "onItemSwipeMoving")
-                    },
-                    onItemSwiped = { viewHolder, pos ->
-                        Log.d(TAG,  "onItemSwiped")
-                    },
-                    onItemSwipeEnd = { viewHolder, pos ->
-                        Log.d(TAG, "onItemSwipeEnd")
+                    override fun onFailRetry() {
                     }
-                )
-        }
+
+                    override fun isAllowLoading(): Boolean {
+                        return true
+                    }
+                })
+            .build().addHeader(HomeTopHeaderAdapter())
+
+        headerDragAndSwipe.attachToRecyclerView(mRVDragAndSwipe)
+            .setDataCallback(mAdapter)
+            .setItemDragListener(
+                onItemDragStart = { viewHolder, pos ->
+                    Log.d(TAG, "drag start")
+                    vibrate(applicationContext)
+                    val holder = viewHolder as QuickViewHolder
+                    // 开始时，item背景色变化，demo这里使用了一个动画渐变，使得自然
+                    val startColor = Color.WHITE
+                    val endColor = Color.rgb(245, 245, 245)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        ValueAnimator.ofArgb(startColor, endColor).apply {
+                            addUpdateListener { animation: ValueAnimator ->
+                                holder.itemView.setBackgroundColor(
+                                    animation.animatedValue as Int
+                                )
+                            }
+                            duration = 300
+                            start()
+                        }
+                    }
+                },
+                onItemDragMoving = { source, from, target, to ->
+                    Log.d(TAG, "move from: $from  to:  $to")
+                },
+                onItemDragEnd = { viewHolder, pos ->
+                    Log.d(TAG, "drag end")
+                    val holder = viewHolder as QuickViewHolder
+                    // 结束时，item背景色变化，demo这里使用了一个动画渐变，使得自然
+                    val startColor = Color.rgb(245, 245, 245)
+                    val endColor = Color.WHITE
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        ValueAnimator.ofArgb(startColor, endColor).apply {
+                            addUpdateListener { animation: ValueAnimator ->
+                                holder.itemView.setBackgroundColor(
+                                    animation.animatedValue as Int
+                                )
+                            }
+                            duration = 300
+                            start()
+                        }
+                    }
+                }
+
+            )
+            .setItemSwipeListener(
+                onItemSwipeStart = { viewHolder, pos ->
+                    Log.d(TAG, "onItemSwipeStart")
+                },
+                onItemSwipeMoving = { canvas, viewHolder, dX, dY, isCurrentlyActive ->
+                    Log.d(TAG, "onItemSwipeMoving")
+                },
+                onItemSwiped = { viewHolder, pos ->
+                    Log.d(TAG, "onItemSwiped")
+                },
+                onItemSwipeEnd = { viewHolder, pos ->
+                    Log.d(TAG, "onItemSwipeEnd")
+                }
+            )
         mRVDragAndSwipe.adapter = helper?.adapter
         loadMore()
     }
@@ -142,9 +142,9 @@ class HeaderDragAndSwipeActivity : BaseActivity() {
         Request(pageInfo.page, object : RequestCallBack {
             override fun success(data: List<String>) {
                 if (pageInfo.page == 0) {
-                    mAdapter?.submitList(data)
+                    mAdapter.submitList(data)
                 } else {
-                    mAdapter?.addAll(data)
+                    mAdapter.addAll(data)
                 }
                 helper?.trailingLoadStateAdapter?.checkDisableLoadMoreIfNotFullPage()
                 helper?.trailingLoadState = NotLoading(false)
