@@ -4,7 +4,6 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 28
-    buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion 14
@@ -21,7 +20,7 @@ android {
         }
     }
     compileOptions {
-        kotlinOptions.freeCompilerArgs += ['-module-name', "com.github.CymChad.brvah"]
+        kotlinOptions.freeCompilerArgs += ['-module-name', "com.github.CymChad.brvah", "-Xjvm-default=all"]
     }
 
     lintOptions {
@@ -43,9 +42,7 @@ task sourcesJar(type: Jar) {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.annotation:annotation:1.2.0'
 
-    compileOnly 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
 }

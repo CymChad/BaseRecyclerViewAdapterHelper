@@ -4,13 +4,12 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "com.chad.baserecyclerviewadapterhelper"
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 31
         versionCode 9
         versionName "3.0"
     }
