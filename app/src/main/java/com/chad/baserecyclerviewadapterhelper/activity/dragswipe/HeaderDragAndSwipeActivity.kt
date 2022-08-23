@@ -8,8 +8,8 @@ import android.util.Log
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.baserecyclerviewadapterhelper.R
-import com.chad.baserecyclerviewadapterhelper.adapter.HeaderDragAndSwipeAdapter
-import com.chad.baserecyclerviewadapterhelper.adapter.HomeTopHeaderAdapter
+import com.chad.baserecyclerviewadapterhelper.activity.dragswipe.adapter.HeaderDragAndSwipeAdapter
+import com.chad.baserecyclerviewadapterhelper.activity.home.adapter.HomeTopHeaderAdapter
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity
 import com.chad.baserecyclerviewadapterhelper.utils.VibratorUtils.vibrate
 import com.chad.library.adapter.base.QuickAdapterHelper

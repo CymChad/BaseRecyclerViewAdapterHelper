@@ -1,7 +1,7 @@
 package com.chad.baserecyclerviewadapterhelper.data;
 
 
-import com.chad.baserecyclerviewadapterhelper.entity.DiffUtilDemoEntity;
+import com.chad.baserecyclerviewadapterhelper.entity.DiffEntity;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;
 
 import java.util.ArrayList;
@@ -62,10 +62,10 @@ public class DataServer {
     }
 
 
-    public static List<DiffUtilDemoEntity> getDiffUtilDemoEntities() {
-        List<DiffUtilDemoEntity> list = new ArrayList<>();
+    public static List<DiffEntity> getDiffUtilDemoEntities() {
+        List<DiffEntity> list = new ArrayList<>();
         for (int i = 0; i < 10; i++){
-            list.add(new DiffUtilDemoEntity(
+            list.add(new DiffEntity(
                     i,
                     "Item " + i,
                     "This item " + i + " content",

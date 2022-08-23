@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.chad.baserecyclerviewadapterhelper.R;
-import com.chad.baserecyclerviewadapterhelper.adapter.CustomLoadMoreAdapter;
-import com.chad.baserecyclerviewadapterhelper.adapter.HeaderAdapter;
-import com.chad.baserecyclerviewadapterhelper.adapter.LoadMoreAdapter;
+import com.chad.baserecyclerviewadapterhelper.activity.loadmore.adapter.CustomLoadMoreAdapter;
+import com.chad.baserecyclerviewadapterhelper.activity.headerfooter.adapter.HeaderAdapter;
+import com.chad.baserecyclerviewadapterhelper.activity.loadmore.adapter.LoadMoreAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
 import com.chad.baserecyclerviewadapterhelper.entity.Status;

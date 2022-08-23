@@ -2,7 +2,7 @@ package com.chad.baserecyclerviewadapterhelper.activity.dragswipe
 
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.chad.baserecyclerviewadapterhelper.adapter.HeaderDragAndSwipeAdapter
+import com.chad.baserecyclerviewadapterhelper.activity.dragswipe.adapter.HeaderDragAndSwipeAdapter
 import com.chad.library.adapter.base.dragswipe.QuickDragAndSwipe
 
 /**

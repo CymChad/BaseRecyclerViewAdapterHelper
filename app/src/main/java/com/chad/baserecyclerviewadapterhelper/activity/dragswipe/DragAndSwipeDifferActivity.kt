@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.baserecyclerviewadapterhelper.R
-import com.chad.baserecyclerviewadapterhelper.adapter.DiffDragAndSwipeAdapter
+import com.chad.baserecyclerviewadapterhelper.activity.dragswipe.adapter.DiffDragAndSwipeAdapter
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity
 import com.chad.baserecyclerviewadapterhelper.data.DataServer
 import com.chad.baserecyclerviewadapterhelper.utils.VibratorUtils.vibrate
@@ -27,7 +27,8 @@ import com.chad.library.adapter.base.viewholder.QuickViewHolder
 class DragAndSwipeDifferActivity : BaseActivity() {
     private lateinit var mRecyclerView: RecyclerView
 
-    private var mAdapter: DiffDragAndSwipeAdapter = DiffDragAndSwipeAdapter()
+    private var mAdapter: DiffDragAndSwipeAdapter =
+        DiffDragAndSwipeAdapter()
 
     var quickDragAndSwipe = QuickDragAndSwipe()
         .setDragMoveFlags(ItemTouchHelper.UP or ItemTouchHelper.DOWN)
