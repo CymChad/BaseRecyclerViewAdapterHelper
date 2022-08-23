@@ -28,18 +28,12 @@ abstract class BaseMultiItemQuickAdapter<T>(items: MutableList<T> = mutableListO
         return listener.onCreate(parent.context, parent, viewType)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, item: T) {
-//        for ((clazz, listener) in viewHoldersClass) {
-//            if (holder::class.java.isAssignableFrom(clazz)) {
-//                listener.onBind(holder, position, item)
-//                return
-//            }
-//        }
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, item: T?) {
         viewHoldersClass[holder::class.java]?.onBind(holder, position, item)
     }
 
     override fun onBindViewHolder(
-        holder: RecyclerView.ViewHolder, position: Int, item: T, payloads: List<Any>
+        holder: RecyclerView.ViewHolder, position: Int, item: T?, payloads: List<Any>
     ) {
         if (payloads.isEmpty()) {
             viewHoldersClass[holder::class.java]?.onBind(holder, position, item)
@@ -102,9 +96,9 @@ abstract class BaseMultiItemQuickAdapter<T>(items: MutableList<T> = mutableListO
     interface OnMultiItemAdapterListener<T, V : RecyclerView.ViewHolder> {
         fun onCreate(context: Context, parent: ViewGroup, viewType: Int): V
 
-        fun onBind(holder: V, position: Int, item: T)
+        fun onBind(holder: V, position: Int, item: T?)
 
-        fun onBind(holder: V, position: Int, item: T, payloads: List<Any>) {
+        fun onBind(holder: V, position: Int, item: T?, payloads: List<Any>) {
             onBind(holder, position, item)
         }
 

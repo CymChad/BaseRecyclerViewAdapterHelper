@@ -1,101 +1,81 @@
-package com.chad.baserecyclerviewadapterhelper.activity.emptyview;
+package com.chad.baserecyclerviewadapterhelper.activity.emptyview
 
-import android.os.Bundle;
-import android.view.View;
+import android.os.Bundle
+import android.view.View
+import com.chad.baserecyclerviewadapterhelper.R
+import com.chad.baserecyclerviewadapterhelper.activity.emptyview.adapter.EmptyViewAdapter
+import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity
+import com.chad.baserecyclerviewadapterhelper.data.DataServer
+import com.chad.baserecyclerviewadapterhelper.databinding.ActivityEmptyViewUseBinding
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+class EmptyViewUseActivity : BaseViewBindingActivity<ActivityEmptyViewUseBinding>() {
 
-import com.chad.baserecyclerviewadapterhelper.R;
-import com.chad.baserecyclerviewadapterhelper.activity.emptyview.adapter.EmptyViewAdapter;
-import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
-import com.chad.baserecyclerviewadapterhelper.data.DataServer;
+    private val mAdapter = EmptyViewAdapter()
 
-public class EmptyViewUseActivity extends BaseActivity {
+    private var mError = true
+    private var mNoData = true
 
-    private RecyclerView mRecyclerView;
-    private final EmptyViewAdapter mAdapter = new EmptyViewAdapter();
-    private boolean mError = true;
-    private boolean mNoData = true;
+    override fun initBinding(): ActivityEmptyViewUseBinding =
+        ActivityEmptyViewUseBinding.inflate(layoutInflater)
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_empty_view_use);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-        setBackBtn();
-        setTitle("EmptyView Use");
+        viewBinding.titleBar.title = "EmptyView Use"
+        viewBinding.titleBar.setOnBackListener { finish() }
 
-        findViewById(R.id.btn_reset).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                reset();
-            }
-        });
+        viewBinding.btnReset.setOnClickListener { reset() }
 
-        mRecyclerView = findViewById(R.id.rv_list);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setAdapter(mAdapter);
+        viewBinding.rvList.adapter = mAdapter
 
         // 打开空布局功能
-        mAdapter.setEmptyViewEnable(true);
+        mAdapter.isEmptyViewEnable = true
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        onRefresh();
+    override fun onStart() {
+        super.onStart()
+        onRefresh()
     }
 
-    private void reset() {
-        mError = true;
-        mNoData = true;
-        mAdapter.submitList(null);
-        onRefresh();
+    private fun reset() {
+        mError = true
+        mNoData = true
+        mAdapter.submitList(null)
+        onRefresh()
     }
 
-    private View getEmptyDataView() {
-        View notDataView = getLayoutInflater().inflate(R.layout.empty_view, mRecyclerView, false);
-        notDataView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onRefresh();
-            }
-        });
-        return notDataView;
-    }
+    private val emptyDataView: View
+        get() {
+            val notDataView = layoutInflater.inflate(R.layout.empty_view, viewBinding.rvList, false)
+            notDataView.setOnClickListener { onRefresh() }
+            return notDataView
+        }
 
-    private View getErrorView() {
-        View errorView = getLayoutInflater().inflate(R.layout.error_view, mRecyclerView, false);
-        errorView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onRefresh();
-            }
-        });
-        return errorView;
-    }
+    private val errorView: View
+        get() {
+            val errorView = layoutInflater.inflate(R.layout.error_view, viewBinding.rvList, false)
+            errorView.setOnClickListener { onRefresh() }
+            return errorView
+        }
 
-    private void onRefresh() {
+    private fun onRefresh() {
         // 方式一：直接传入 layout id
-        mAdapter.setEmptyViewLayout(this, R.layout.loading_view);
+        mAdapter.setEmptyViewLayout(this, R.layout.loading_view)
 
-        mRecyclerView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (mError) {
-                    // 方式二：传入View
-                    mAdapter.setEmptyView(getErrorView());
-                    mError = false;
+        viewBinding.rvList.postDelayed({
+            if (mError) {
+                // 方式二：传入View
+                mAdapter.emptyView = errorView
+
+                mError = false
+            } else {
+                if (mNoData) {
+                    mAdapter.emptyView = emptyDataView
+                    mNoData = false
                 } else {
-                    if (mNoData) {
-                        mAdapter.setEmptyView(getEmptyDataView());
-                        mNoData = false;
-                    } else {
-                        mAdapter.submitList(DataServer.getSampleData(10));
-                    }
+                    mAdapter.submitList(DataServer.getSampleData(10))
                 }
             }
-        }, 1000);
+        }, 1000)
     }
 }

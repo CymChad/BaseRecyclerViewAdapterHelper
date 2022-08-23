@@ -1,15 +1,14 @@
 package com.chad.baserecyclerviewadapterhelper.activity.differ;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.annotation.NonNull;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.activity.differ.adapter.DiffUtilAdapter;
-import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
+import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity;
 import com.chad.baserecyclerviewadapterhelper.data.DataServer;
+import com.chad.baserecyclerviewadapterhelper.databinding.ActivityDiffutilBinding;
 import com.chad.baserecyclerviewadapterhelper.entity.DiffEntity;
 
 import java.util.ArrayList;
@@ -19,27 +18,25 @@ import java.util.List;
  * Created by limuyang
  * Date: 2019/7/14O
  */
-public class DifferActivity extends BaseActivity {
-    private RecyclerView mRecyclerView;
-    private Button itemChangeBtn;
-    private Button removeBtn;
-    private Button addBtn;
+public final class DifferActivity extends BaseViewBindingActivity<ActivityDiffutilBinding> {
 
-    private DiffUtilAdapter mAdapter;
+    private final DiffUtilAdapter mAdapter = new DiffUtilAdapter();
 
+    @NonNull
+    @Override
+    public ActivityDiffutilBinding initBinding() {
+        return ActivityDiffutilBinding.inflate(getLayoutInflater());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_diffutil);
-        setBackBtn();
-        setTitle("DiffUtil Use");
 
+        getViewBinding().titleBar.setTitle("DiffUtil Use");
+        getViewBinding().titleBar.setOnBackListener(v -> finish());
 
-        findView();
         initRv();
         initClick();
-
     }
 
     @Override
@@ -47,70 +44,47 @@ public class DifferActivity extends BaseActivity {
         super.onStart();
 
         // 增加延迟，模拟网络加载
-        mRecyclerView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.submitList(DataServer.getDiffUtilDemoEntities());
-            }
-        }, 1500);
+        getViewBinding().diffRv.postDelayed(() -> mAdapter.submitList(DataServer.getDiffUtilDemoEntities()), 1500);
     }
 
-    private void findView() {
-        mRecyclerView = findViewById(R.id.diff_rv);
-        itemChangeBtn = findViewById(R.id.item_change_btn);
-        removeBtn = findViewById(R.id.btn_remove);
-        addBtn = findViewById(R.id.btn_add);
-    }
 
     private void initRv() {
-        mAdapter = new DiffUtilAdapter();
         // 打开空布局功能
         mAdapter.setEmptyViewEnable(true);
         // 传入 空布局 layout id
         mAdapter.setEmptyViewLayout(this, R.layout.loading_view);
 
-        mRecyclerView.setAdapter(mAdapter);
+        getViewBinding().diffRv.setAdapter(mAdapter);
     }
 
     private int idAdd = 0;
 
     private void initClick() {
-        itemChangeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                List<DiffEntity> newData = getNewList();
-                mAdapter.submitList(newData);
-            }
+        getViewBinding().btnChange.setOnClickListener(v -> {
+            List<DiffEntity> newData = getNewList();
+            mAdapter.submitList(newData);
         });
 
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAdapter.add(2, new DiffEntity(
-                        1111111 + idAdd,
-                        "add - 😊😊Item " + 1111111 + idAdd,
-                        "Item " + 0 + " content have change (notifyItemChanged)",
-                        "06-12"));
-                idAdd++;
-            }
+        getViewBinding().btnAdd.setOnClickListener(v -> {
+            mAdapter.add(2, new DiffEntity(
+                    1111111 + idAdd,
+                    "add - 😊😊Item " + 1111111 + idAdd,
+                    "Item " + 0 + " content have change (notifyItemChanged)",
+                    "06-12"));
+            idAdd++;
         });
 
-        removeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (2 >= mAdapter.getItems().size()) {
-                    return;
-                }
-                mAdapter.removeAt(2);
+        getViewBinding().btnRemove.setOnClickListener(v -> {
+            if (2 >= mAdapter.getItems().size()) {
+                return;
             }
+            mAdapter.removeAt(2);
         });
     }
 
 
     /**
      * get new data
-     *
-     * @return
      */
     private List<DiffEntity> getNewList() {
         List<DiffEntity> list = new ArrayList<>();

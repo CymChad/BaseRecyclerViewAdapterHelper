@@ -1,111 +1,79 @@
-package com.chad.baserecyclerviewadapterhelper.activity.animation;
+package com.chad.baserecyclerviewadapterhelper.activity.animation
 
-import android.os.Bundle;
-import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.chad.baserecyclerviewadapterhelper.R;
-import com.chad.baserecyclerviewadapterhelper.activity.animation.adapter.AnimationAdapter;
-import com.chad.baserecyclerviewadapterhelper.animator.CustomAnimation1;
-import com.chad.baserecyclerviewadapterhelper.animator.CustomAnimation2;
-import com.chad.baserecyclerviewadapterhelper.animator.CustomAnimation3;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.jaredrummler.materialspinner.MaterialSpinner;
-import com.kyleduo.switchbutton.SwitchButton;
+import android.os.Bundle
+import com.chad.baserecyclerviewadapterhelper.activity.animation.adapter.AnimationAdapter
+import com.chad.baserecyclerviewadapterhelper.animator.CustomAnimation1
+import com.chad.baserecyclerviewadapterhelper.animator.CustomAnimation2
+import com.chad.baserecyclerviewadapterhelper.animator.CustomAnimation3
+import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity
+import com.chad.baserecyclerviewadapterhelper.databinding.ActivityAnimationUseBinding
+import com.chad.library.adapter.base.BaseQuickAdapter
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
- * <p>
+ *
+ *
  * modify by AllenCoder
  */
-public class AnimationUseActivity extends AppCompatActivity {
-    private RecyclerView mRecyclerView;
-    private AnimationAdapter mAnimationAdapter;
+class AnimationUseActivity : BaseViewBindingActivity<ActivityAnimationUseBinding>() {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_adapter_use);
-        mRecyclerView = findViewById(R.id.rv_list);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        initAdapter();
-        initMenu();
-        initView();
+    private val mAnimationAdapter: AnimationAdapter = AnimationAdapter().apply {
+        // 打开 Adapter 的动画
+        animationEnable = true
+        // 是否是首次显示时候加载动画
+        isAnimationFirstOnly = false
     }
 
-    private void initView() {
-        ImageView mImgBtn = findViewById(R.id.img_back);
-        mImgBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                finish();
+    override fun initBinding(): ActivityAnimationUseBinding {
+        return ActivityAnimationUseBinding.inflate(layoutInflater)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewBinding.titleBar.title = "Animation Use"
+        viewBinding.titleBar.setOnBackListener { finish() }
+
+        viewBinding.rv.adapter = mAnimationAdapter
+
+        initMenu()
+    }
+
+    /**
+     * Init menu
+     * 初始化下拉菜单
+     */
+    private fun initMenu() {
+        viewBinding.spinner.setItems(
+            "AlphaIn",
+            "ScaleIn",
+            "SlideInBottom",
+            "SlideInLeft",
+            "SlideInRight",
+            "Custom1",
+            "Custom2",
+            "Custom3"
+        )
+        viewBinding.spinner.setOnItemSelectedListener { _, position, _, _ ->
+            when (position) {
+                0 -> mAnimationAdapter.setItemAnimation(BaseQuickAdapter.AnimationType.AlphaIn)
+                1 -> mAnimationAdapter.setItemAnimation(BaseQuickAdapter.AnimationType.ScaleIn)
+                2 -> mAnimationAdapter.setItemAnimation(BaseQuickAdapter.AnimationType.SlideInBottom)
+                3 -> mAnimationAdapter.setItemAnimation(BaseQuickAdapter.AnimationType.SlideInLeft)
+                4 -> mAnimationAdapter.setItemAnimation(BaseQuickAdapter.AnimationType.SlideInRight)
+                5 -> mAnimationAdapter.itemAnimation = CustomAnimation1()
+                6 -> mAnimationAdapter.itemAnimation = CustomAnimation2()
+                7 -> mAnimationAdapter.itemAnimation = CustomAnimation3()
+                else -> {}
             }
-        });
-    }
+            mAnimationAdapter.notifyDataSetChanged()
 
-    private void initAdapter() {
-        mAnimationAdapter = new AnimationAdapter();
-        mAnimationAdapter.setAnimationEnable(true);
+        }
 
-        mRecyclerView.setAdapter(mAnimationAdapter);
-    }
-
-    private void initMenu() {
-        MaterialSpinner spinner = findViewById(R.id.spinner);
-        spinner.setItems("AlphaIn", "ScaleIn", "SlideInBottom", "SlideInLeft", "SlideInRight", "Custom1", "Custom2", "Custom3");
-        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
-
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                switch (position) {
-                    case 0:
-                        mAnimationAdapter.setItemAnimation(BaseQuickAdapter.AnimationType.AlphaIn);
-                        break;
-                    case 1:
-                        mAnimationAdapter.setItemAnimation(BaseQuickAdapter.AnimationType.ScaleIn);
-                        break;
-                    case 2:
-                        mAnimationAdapter.setItemAnimation(BaseQuickAdapter.AnimationType.SlideInBottom);
-                        break;
-                    case 3:
-                        mAnimationAdapter.setItemAnimation(BaseQuickAdapter.AnimationType.SlideInLeft);
-                        break;
-                    case 4:
-                        mAnimationAdapter.setItemAnimation(BaseQuickAdapter.AnimationType.SlideInRight);
-                        break;
-                    case 5:
-                        mAnimationAdapter.setItemAnimation(new CustomAnimation1());
-                        break;
-                    case 6:
-                        mAnimationAdapter.setItemAnimation(new CustomAnimation2());
-                        break;
-                    case 7:
-                        mAnimationAdapter.setItemAnimation(new CustomAnimation3());
-                        break;
-                    default:
-                        break;
-                }
-                mRecyclerView.setAdapter(mAnimationAdapter);
-            }
-        });
         //init firstOnly state
-        mAnimationAdapter.setAnimationFirstOnly(false);
-        SwitchButton switchButton = findViewById(R.id.switch_button);
-        switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
-                mAnimationAdapter.setAnimationFirstOnly(isChecked);
-                mAnimationAdapter.notifyDataSetChanged();
-            }
-        });
-
+        viewBinding.switchButton.setOnCheckedChangeListener { _, isChecked ->
+            mAnimationAdapter.isAnimationFirstOnly = isChecked
+            mAnimationAdapter.notifyDataSetChanged()
+        }
     }
-
-
 }

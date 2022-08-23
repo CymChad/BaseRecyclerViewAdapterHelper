@@ -77,14 +77,11 @@ public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity> {
         }
     }
 
-
+    /**
+     * 构造方法
+     */
     public ItemClickAdapter(List<ClickEntity> data) {
         super(data);
-//        addItemType(ClickEntity.CLICK_ITEM_VIEW, R.layout.item_click_view);
-//        addItemType(ClickEntity.CLICK_ITEM_CHILD_VIEW, R.layout.item_click_childview);
-//        addItemType(ClickEntity.LONG_CLICK_ITEM_VIEW, R.layout.item_long_click_view);
-//        addItemType(ClickEntity.LONG_CLICK_ITEM_CHILD_VIEW, R.layout.item_long_click_childview);
-//        addItemType(ClickEntity.NEST_CLICK_ITEM_CHILD_VIEW, R.layout.item_nest_click);
 
         addItemType(ClickEntity.CLICK_ITEM_VIEW, ItemViewVH.class, new OnMultiItemAdapterListener<ClickEntity, ItemViewVH>() {
 

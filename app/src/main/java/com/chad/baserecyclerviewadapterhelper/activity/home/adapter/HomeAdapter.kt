@@ -1,16 +1,14 @@
-package com.chad.baserecyclerviewadapterhelper.adapter
+package com.chad.baserecyclerviewadapterhelper.activity.home.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.baserecyclerviewadapterhelper.databinding.DefSectionHeadBinding
 import com.chad.baserecyclerviewadapterhelper.databinding.HomeItemViewBinding
 import com.chad.baserecyclerviewadapterhelper.entity.HomeEntity
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
-import com.chad.library.adapter.base.fullspan.FullSpanAdapterType
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
@@ -29,7 +27,8 @@ class HomeAdapter(data: MutableList<HomeEntity>) : BaseMultiItemQuickAdapter<Hom
                 return ItemVH(viewBinding)
             }
 
-            override fun onBind(holder: ItemVH, position: Int, item: HomeEntity) {
+            override fun onBind(holder: ItemVH, position: Int, item: HomeEntity?) {
+                if (item == null) return
                 holder.viewBinding.textView.text = item.name
                 holder.viewBinding.icon.setImageResource(item.imageResource)
             }
@@ -40,7 +39,9 @@ class HomeAdapter(data: MutableList<HomeEntity>) : BaseMultiItemQuickAdapter<Hom
                 return HeaderVH(viewBinding)
             }
 
-            override fun onBind(holder: HeaderVH, position: Int, item: HomeEntity) {
+            override fun onBind(holder: HeaderVH, position: Int, item: HomeEntity?) {
+                if (item == null) return
+
                 holder.viewBinding.more.visibility = View.GONE
                 holder.viewBinding.header.text = item.sectionTitle
             }

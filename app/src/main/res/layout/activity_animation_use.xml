@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/bg">
 
+    <com.chad.baserecyclerviewadapterhelper.widget.BRVAHToolbar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
@@ -12,12 +17,6 @@
         android:paddingLeft="@dimen/dp_10"
         android:paddingRight="@dimen/dp_10">
 
-        <ImageView
-            android:id="@+id/img_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:src="@mipmap/back" />
 
         <com.jaredrummler.materialspinner.MaterialSpinner
             android:id="@+id/spinner"
@@ -60,9 +59,10 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_list"
+        android:id="@+id/rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fadingEdge="none" />
+        android:fadingEdge="none"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 </LinearLayout>

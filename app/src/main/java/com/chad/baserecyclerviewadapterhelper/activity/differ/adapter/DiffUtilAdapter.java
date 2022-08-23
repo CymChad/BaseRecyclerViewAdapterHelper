@@ -10,16 +10,10 @@ import com.chad.baserecyclerviewadapterhelper.entity.DiffEntity;
 import com.chad.library.adapter.base.BaseDifferAdapter;
 import com.chad.library.adapter.base.viewholder.QuickViewHolder;
 
-import java.util.List;
-
 /**
  * Create adapter
  */
 public class DiffUtilAdapter extends BaseDifferAdapter<DiffEntity, QuickViewHolder> {
-
-    public DiffUtilAdapter(List<DiffEntity> list) {
-        super(new DiffEntityCallback(), list);
-    }
 
     public DiffUtilAdapter() {
         super(new DiffEntityCallback());

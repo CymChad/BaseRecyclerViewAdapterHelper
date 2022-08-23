@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.databinding.ItemMovieBinding;
@@ -29,12 +30,13 @@ public class DataBindingAdapter extends BaseQuickAdapter<Movie, DataBindingHolde
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull DataBindingHolder<ItemMovieBinding> holder, int position, Movie item) {
+    protected void onBindViewHolder(@NonNull DataBindingHolder<ItemMovieBinding> holder, int position, @Nullable Movie item) {
+        if (item == null) return;
+
         // 获取 Binding
         ItemMovieBinding binding = holder.getBinding();
         binding.setMovie(item);
         binding.setPresenter(mPresenter);
         binding.executePendingBindings();
     }
-
 }

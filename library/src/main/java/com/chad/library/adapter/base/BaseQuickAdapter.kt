@@ -137,7 +137,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * @param holder A fully initialized helper.
      * @param item   The item that needs to be displayed.
      */
-    protected abstract fun onBindViewHolder(holder: VH, position: Int, item: T)
+    protected abstract fun onBindViewHolder(holder: VH, position: Int, item: T?)
 
     /**
      * Optional implementation this method and use the helper to adapt the view to the given item.
@@ -151,7 +151,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * @param item     The item that needs to be displayed.
      * @param payloads payload info.
      */
-    protected open fun onBindViewHolder(holder: VH, position: Int, item: T, payloads: List<Any>) {
+    protected open fun onBindViewHolder(holder: VH, position: Int, item: T?, payloads: List<Any>) {
         onBindViewHolder(holder, position, item)
     }
 
@@ -405,7 +405,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * data set.
      * @return The data at the specified position.
      */
-    fun getItem(@IntRange(from = 0) position: Int): T = items[position]
+    fun getItem(@IntRange(from = 0) position: Int): T? = items.getOrNull(position)
 
     /**
      * 如果返回 -1，表示不存在

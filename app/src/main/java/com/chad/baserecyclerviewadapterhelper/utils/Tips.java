@@ -11,11 +11,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/**
- * @author: limuyang
- * @date: 2019-11-29
- * @Description:
- */
 public class Tips {
 
     /**
@@ -32,7 +27,7 @@ public class Tips {
      * @param duration 显示时间长短
      */
     public static void show(String message, int duration) {
-        Toast toast = new Toast(Utils.getContext());
+        Toast toast = new Toast(AppUtils.INSTANCE.getApp());
         toast.setDuration(duration);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.setView(createTextToastView(message));
@@ -56,13 +51,13 @@ public class Tips {
         drawable.getPaint().setFlags(Paint.ANTI_ALIAS_FLAG);
 
         // 创建View
-        FrameLayout layout = new FrameLayout(Utils.getContext());
+        FrameLayout layout = new FrameLayout(AppUtils.INSTANCE.getApp());
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout.setLayoutParams(layoutParams);
         layout.setPadding(dp2px(16), dp2px(12), dp2px(16), dp2px(12));
         layout.setBackground(drawable);
 
-        TextView textView = new TextView(Utils.getContext());
+        TextView textView = new TextView(AppUtils.INSTANCE.getApp());
         textView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
         textView.setTextSize(15);
         textView.setText(message);
@@ -75,7 +70,7 @@ public class Tips {
     }
 
     private static int dp2px(float dpValue) {
-        final float scale = Utils.getContext().getResources().getDisplayMetrics().density;
+        final float scale = AppUtils.INSTANCE.getApp().getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
 }

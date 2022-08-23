@@ -14,7 +14,7 @@ import com.chad.baserecyclerviewadapterhelper.activity.emptyview.EmptyViewUseAct
 import com.chad.baserecyclerviewadapterhelper.activity.headerfooter.HeaderAndFooterUseActivity
 import com.chad.baserecyclerviewadapterhelper.activity.loadmore.AutoLoadMoreRefreshUseActivity
 import com.chad.baserecyclerviewadapterhelper.activity.loadmore.NoAutoAutoLoadMoreRefreshUseActivity
-import com.chad.baserecyclerviewadapterhelper.adapter.HomeAdapter
+import com.chad.baserecyclerviewadapterhelper.activity.home.adapter.HomeAdapter
 import com.chad.baserecyclerviewadapterhelper.activity.home.adapter.HomeTopHeaderAdapter
 import com.chad.baserecyclerviewadapterhelper.databinding.ActivityHomeBinding
 import com.chad.baserecyclerviewadapterhelper.entity.HomeEntity

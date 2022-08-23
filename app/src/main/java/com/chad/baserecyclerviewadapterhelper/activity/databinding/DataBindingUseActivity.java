@@ -2,12 +2,12 @@ package com.chad.baserecyclerviewadapterhelper.activity.databinding;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.activity.databinding.adapter.DataBindingAdapter;
-import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
+import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity;
+import com.chad.baserecyclerviewadapterhelper.databinding.ActivityUniversalRecyclerBinding;
 import com.chad.baserecyclerviewadapterhelper.entity.Movie;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 
@@ -16,33 +16,31 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * @author: limuyang
- * @date: 2019-12-05
- * @Description:
+ * @author  limuyang
+ * @date  2019-12-05
+ * @description
  */
-public class DataBindingUseActivity extends BaseActivity {
+public final class DataBindingUseActivity extends BaseViewBindingActivity<ActivityUniversalRecyclerBinding> {
 
     private final DataBindingAdapter adapter = new DataBindingAdapter();
+
+    @NonNull
+    @Override
+    public ActivityUniversalRecyclerBinding initBinding() {
+        return ActivityUniversalRecyclerBinding.inflate(getLayoutInflater());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_universal_recycler);
 
-        setTitle("DataBinding Use");
-        setBackBtn();
+        getViewBinding().titleBar.setTitle("DataBinding Use");
+        getViewBinding().titleBar.setOnBackListener(v -> finish());
 
-        final RecyclerView mRecyclerView = findViewById(R.id.rv);
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setAdapter(adapter);
+        getViewBinding().rv.setLayoutManager(new LinearLayoutManager(this));
+        getViewBinding().rv.setAdapter(adapter);
 
-        //demo 添加的 Header
-        //Header 是自行添加进去的 View，所以 Adapter 不管理 Header 的 DataBinding。
-        //请在外部自行完成数据的绑定
-//        View view = getLayoutInflater().inflate(R.layout.head_view, null, false);
-//        view.findViewById(R.id.iv).setVisibility(View.GONE);
-//        adapter.addHeaderView(view);
 
         //item 点击事件
         adapter.setOnItemClickListener((adapter, view, position) -> Tips.show("onItemClick: " + position));

@@ -1,22 +1,21 @@
-package com.chad.baserecyclerviewadapterhelper.activity.animation.adapter;
+package com.chad.baserecyclerviewadapterhelper.activity.animation.adapter
 
-import android.content.Context;
-import android.text.TextPaint;
-import android.text.style.ClickableSpan;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-
-import com.chad.baserecyclerviewadapterhelper.R;
-import com.chad.baserecyclerviewadapterhelper.data.DataServer;
-import com.chad.baserecyclerviewadapterhelper.entity.Status;
-import com.chad.baserecyclerviewadapterhelper.utils.ClickableMovementMethod;
-import com.chad.baserecyclerviewadapterhelper.utils.SpannableStringUtils;
-import com.chad.baserecyclerviewadapterhelper.utils.Tips;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.viewholder.QuickViewHolder;
+import android.content.Context
+import android.text.TextPaint
+import android.text.style.ClickableSpan
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.text.buildSpannedString
+import androidx.core.text.inSpans
+import com.chad.baserecyclerviewadapterhelper.R
+import com.chad.baserecyclerviewadapterhelper.data.DataServer
+import com.chad.baserecyclerviewadapterhelper.entity.Status
+import com.chad.baserecyclerviewadapterhelper.utils.ClickableMovementMethod
+import com.chad.baserecyclerviewadapterhelper.utils.Tips
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.viewholder.QuickViewHolder
 
 /**
  * 文 件 名: AnimationAdapter
@@ -26,53 +25,49 @@ import com.chad.library.adapter.base.viewholder.QuickViewHolder;
  * 修改时间：
  * 修改备注：
  */
-public class AnimationAdapter extends BaseQuickAdapter<Status, QuickViewHolder> {
-
-    public AnimationAdapter() {
-        super(DataServer.getSampleData(100));
+class AnimationAdapter :
+    BaseQuickAdapter<Status, QuickViewHolder>(DataServer.getSampleData(100)) {
+    override fun onCreateViewHolder(
+        context: Context,
+        parent: ViewGroup,
+        viewType: Int
+    ): QuickViewHolder {
+        return QuickViewHolder(R.layout.layout_animation, parent)
     }
 
-    @NonNull
-    @Override
-    protected QuickViewHolder onCreateViewHolder(@NonNull Context context, @NonNull ViewGroup parent, int viewType) {
-        return new QuickViewHolder(R.layout.layout_animation , parent);
+    override fun onBindViewHolder(holder: QuickViewHolder, position: Int, item: Status?) {
+        when (holder.layoutPosition % 3) {
+            0 -> holder.setImageResource(R.id.img, R.mipmap.animation_img1)
+            1 -> holder.setImageResource(R.id.img, R.mipmap.animation_img2)
+            2 -> holder.setImageResource(R.id.img, R.mipmap.animation_img3)
+            else -> {}
+        }
+        holder.setText(R.id.tweetName, "Hoteis in Rio de Janeiro")
+        val msg =
+            "\"He was one of Australia's most of distinguished artistes, renowned for his portraits\""
+
+
+
+        holder.getView<TextView>(R.id.tweetText).text = buildSpannedString {
+            append(msg)
+            inSpans(clickableSpan) {
+                append("landscapes and nedes")
+            }
+        }
+        holder.getView<TextView>(R.id.tweetText).movementMethod = ClickableMovementMethod.getInstance()
+        holder.getView<TextView>(R.id.tweetText).isFocusable = false
+        holder.getView<TextView>(R.id.tweetText).isClickable = false
+        holder.getView<TextView>(R.id.tweetText).isLongClickable = false
     }
 
-    @Override
-    protected void onBindViewHolder(@NonNull QuickViewHolder holder, int position, Status item) {
-        switch (holder.getLayoutPosition() % 3) {
-            case 0:
-                holder.setImageResource(R.id.img, R.mipmap.animation_img1);
-                break;
-            case 1:
-                holder.setImageResource(R.id.img, R.mipmap.animation_img2);
-                break;
-            case 2:
-                holder.setImageResource(R.id.img, R.mipmap.animation_img3);
-                break;
-            default:
-                break;
+    private val clickableSpan: ClickableSpan = object : ClickableSpan() {
+        override fun onClick(widget: View) {
+            Tips.show("事件触发了 landscapes and nedes")
         }
-        holder.setText(R.id.tweetName, "Hoteis in Rio de Janeiro");
-        String msg = "\"He was one of Australia's most of distinguished artistes, renowned for his portraits\"";
-        ((TextView) holder.getView(R.id.tweetText)).setText(SpannableStringUtils.getBuilder(msg).append("landscapes and nedes").setClickSpan(clickableSpan).create());
-        ((TextView) holder.getView(R.id.tweetText)).setMovementMethod(ClickableMovementMethod.getInstance());
-        ((TextView) holder.getView(R.id.tweetText)).setFocusable(false);
-        ((TextView) holder.getView(R.id.tweetText)).setClickable(false);
-        ((TextView) holder.getView(R.id.tweetText)).setLongClickable(false);
+
+        override fun updateDrawState(ds: TextPaint) {
+            ds.color = ContextCompat.getColor(context, R.color.clickspan_color)
+            ds.isUnderlineText = true
+        }
     }
-
-
-    private final ClickableSpan clickableSpan = new ClickableSpan() {
-        @Override
-        public void onClick(@NonNull View widget) {
-            Tips.show("事件触发了 landscapes and nedes");
-        }
-
-        @Override
-        public void updateDrawState(TextPaint ds) {
-            ds.setColor(getContext().getResources().getColor(R.color.clickspan_color));
-            ds.setUnderlineText(true);
-        }
-    };
 }

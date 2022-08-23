@@ -5,6 +5,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <com.chad.baserecyclerviewadapterhelper.widget.BRVAHToolbar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/diff_rv"
         android:layout_width="match_parent"
@@ -20,7 +25,7 @@
         android:paddingTop="4dp">
 
         <Button
-            android:id="@+id/item_change_btn"
+            android:id="@+id/btn_change"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:background="@drawable/touch_bg"
