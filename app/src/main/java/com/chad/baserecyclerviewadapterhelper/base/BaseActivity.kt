@@ -16,8 +16,8 @@ abstract class BaseActivity2(@LayoutRes layoutRes: Int = 0) : AppCompatActivity(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (contentView != null) {
-            setContentView(contentView!!)
+        contentView?.let {
+            setContentView(it)
         }
 
         if (Build.VERSION.SDK_INT >= 21) {
