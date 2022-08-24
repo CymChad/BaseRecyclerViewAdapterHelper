@@ -8,12 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chad.baserecyclerviewadapterhelper.databinding.DefSectionHeadBinding
 import com.chad.baserecyclerviewadapterhelper.databinding.HomeItemViewBinding
 import com.chad.baserecyclerviewadapterhelper.entity.HomeEntity
-import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
+import com.chad.library.adapter.base.BaseMultiItemAdapter
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-class HomeAdapter(data: MutableList<HomeEntity>) : BaseMultiItemQuickAdapter<HomeEntity>(data) {
+class HomeAdapter(data: MutableList<HomeEntity>) : BaseMultiItemAdapter<HomeEntity>(data) {
 
     class ItemVH(val viewBinding: HomeItemViewBinding) : RecyclerView.ViewHolder(viewBinding.root)
 

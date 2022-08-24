@@ -12,14 +12,14 @@ import com.chad.baserecyclerviewadapterhelper.databinding.ItemClickViewBinding;
 import com.chad.baserecyclerviewadapterhelper.databinding.ItemLongClickChildviewBinding;
 import com.chad.baserecyclerviewadapterhelper.databinding.ItemLongClickViewBinding;
 import com.chad.baserecyclerviewadapterhelper.entity.ClickEntity;
-import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
+import com.chad.library.adapter.base.BaseMultiItemAdapter;
 
 import java.util.List;
 
 /**
  *
  */
-public class ItemClickAdapter extends BaseMultiItemQuickAdapter<ClickEntity> {
+public class ItemClickAdapter extends BaseMultiItemAdapter<ClickEntity> {
 
     static class ItemViewVH extends RecyclerView.ViewHolder {
 

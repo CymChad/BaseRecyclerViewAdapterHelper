@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
  * 多类型布局
  *
  */
-abstract class BaseMultiItemQuickAdapter<T>(items: MutableList<T> = mutableListOf<T>()) :
+abstract class BaseMultiItemAdapter<T>(items: MutableList<T> = mutableListOf<T>()) :
     BaseQuickAdapter<T, RecyclerView.ViewHolder>(items) {
 
     private val typeViewHolders = SparseArray<OnMultiItemAdapterListener<T, RecyclerView.ViewHolder>>(1)
