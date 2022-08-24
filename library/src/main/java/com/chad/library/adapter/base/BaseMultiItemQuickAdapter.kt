@@ -59,6 +59,11 @@ abstract class BaseMultiItemQuickAdapter<T>(items: MutableList<T> = mutableListO
         viewHoldersClass[holderClazz] = listener
     }
 
+    /**
+     * 设置 ItemViewType 的监听，根据不同数据类型，返回不同的type值
+     *
+     * @param listener
+     */
     fun onItemViewType(listener: OnItemViewTypeListener<T>?) = apply {
         this.onItemViewTypeListener = listener
     }
@@ -116,6 +121,13 @@ abstract class BaseMultiItemQuickAdapter<T>(items: MutableList<T> = mutableListO
     }
 
     fun interface OnItemViewTypeListener<T> {
+        /**
+         * 根据不同数据类型，返回不同的type值
+         *
+         * @param position
+         * @param list
+         * @return
+         */
         fun onItemViewType(position: Int, list: List<T>): Int
     }
 }

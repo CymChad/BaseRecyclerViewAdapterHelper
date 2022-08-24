@@ -2,7 +2,6 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'kotlin-android-extensions'
 }
 
 android {
@@ -12,8 +11,8 @@ android {
         applicationId "com.chad.baserecyclerviewadapterhelper"
         minSdkVersion 19
         targetSdkVersion 33
-        versionCode 9
-        versionName "3.0"
+        versionCode 10
+        versionName "4.0"
     }
     buildTypes {
         release {

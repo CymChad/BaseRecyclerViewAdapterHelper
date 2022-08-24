@@ -10,19 +10,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.activity.home.adapter.HomeAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity;
-import com.chad.baserecyclerviewadapterhelper.databinding.ActivityDragAndSwipeUseBinding;
+import com.chad.baserecyclerviewadapterhelper.databinding.ActivityUniversalRecyclerBinding;
 import com.chad.baserecyclerviewadapterhelper.entity.HomeEntity;
 
 import java.util.ArrayList;
 
 
-public class DragAndSwipeUseActivity extends BaseViewBindingActivity<ActivityDragAndSwipeUseBinding> {
+public class DragAndSwipeUseActivity extends BaseViewBindingActivity<ActivityUniversalRecyclerBinding> {
     private final ArrayList<HomeEntity> homeItemData = new ArrayList<>();
 
     @NonNull
     @Override
-    public ActivityDragAndSwipeUseBinding initBinding() {
-        return ActivityDragAndSwipeUseBinding.inflate(getLayoutInflater());
+    public ActivityUniversalRecyclerBinding initBinding() {
+        return ActivityUniversalRecyclerBinding.inflate(getLayoutInflater());
     }
 
     @Override

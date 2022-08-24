@@ -14,7 +14,8 @@
 
         <activity
             android:name=".activity.WelcomeActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/WelcomeTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
