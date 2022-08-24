@@ -9,13 +9,13 @@ import android.util.Log
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.baserecyclerviewadapterhelper.activity.dragswipe.adapter.DiffDragAndSwipeAdapter
-import com.chad.baserecyclerviewadapterhelper.base.BaseActivity
+import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity
 import com.chad.baserecyclerviewadapterhelper.data.DataServer
+import com.chad.baserecyclerviewadapterhelper.databinding.ActivityUniversalRecyclerBinding
 import com.chad.baserecyclerviewadapterhelper.utils.VibratorUtils.vibrate
-import com.chad.library.adapter.base.dragswipe.listener.DragAndSwipeDataCallback
 import com.chad.library.adapter.base.dragswipe.QuickDragAndSwipe
+import com.chad.library.adapter.base.dragswipe.listener.DragAndSwipeDataCallback
 import com.chad.library.adapter.base.dragswipe.listener.OnItemDragListener
 import com.chad.library.adapter.base.dragswipe.listener.OnItemSwipeListener
 import com.chad.library.adapter.base.viewholder.QuickViewHolder
@@ -23,35 +23,34 @@ import com.chad.library.adapter.base.viewholder.QuickViewHolder
 /**
  * Created by limuyang
  * Date: 2019/7/14O
+ *
+ * DiffAdapter DragAndSwipe
  */
-class DragAndSwipeDifferActivity : BaseActivity() {
-    private lateinit var mRecyclerView: RecyclerView
+class DragAndSwipeDifferActivity : BaseViewBindingActivity<ActivityUniversalRecyclerBinding>() {
 
-    private var mAdapter: DiffDragAndSwipeAdapter =
-        DiffDragAndSwipeAdapter()
+    private var mAdapter: DiffDragAndSwipeAdapter = DiffDragAndSwipeAdapter()
 
     var quickDragAndSwipe = QuickDragAndSwipe()
         .setDragMoveFlags(ItemTouchHelper.UP or ItemTouchHelper.DOWN)
         .setSwipeMoveFlags(ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
 
+    override fun initBinding(): ActivityUniversalRecyclerBinding =
+        ActivityUniversalRecyclerBinding.inflate(layoutInflater)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_universal_recycler)
-        setBackBtn()
-        setTitle("Diff Drag Swipe Use")
-        findView()
+
+        viewBinding.titleBar.title = "Diff Drag Swipe Use"
+        viewBinding.titleBar.setOnBackListener { finish() }
+
+        viewBinding.rv.layoutManager = LinearLayoutManager(this)
         initRv()
 
         initDrag()
     }
 
-    private fun findView() {
-        mRecyclerView = findViewById(R.id.rv)
-        mRecyclerView.layoutManager = LinearLayoutManager(this)
-    }
-
     private fun initRv() {
-        mRecyclerView.adapter = mAdapter
+        viewBinding.rv.adapter = mAdapter
 
         mAdapter.submitList(DataServer.getDiffUtilDemoEntities())
     }
@@ -87,8 +86,7 @@ class DragAndSwipeDifferActivity : BaseActivity() {
                 to: Int
             ) {
                 Log.d(
-                    TAG,
-                    "move from: " + source.bindingAdapterPosition + " to: " + target.bindingAdapterPosition
+                    TAG, "move from: " + source.bindingAdapterPosition + " to: " + target.bindingAdapterPosition
                 )
             }
 
@@ -138,7 +136,7 @@ class DragAndSwipeDifferActivity : BaseActivity() {
 
 
 
-        quickDragAndSwipe.attachToRecyclerView(mRecyclerView)
+        quickDragAndSwipe.attachToRecyclerView(viewBinding.rv)
             .setDataCallback(object : DragAndSwipeDataCallback {
                 override fun dataSwap(fromPosition: Int, toPosition: Int) {
                     mAdapter.swap(fromPosition, toPosition)
@@ -150,5 +148,9 @@ class DragAndSwipeDifferActivity : BaseActivity() {
             })
             .setItemDragListener(listener)
             .setItemSwipeListener(swipeListener)
+    }
+
+    companion object {
+        private const val TAG = "Diff Drag Swipe Use"
     }
 }

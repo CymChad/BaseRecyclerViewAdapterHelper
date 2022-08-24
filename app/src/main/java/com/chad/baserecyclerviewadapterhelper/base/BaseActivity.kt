@@ -11,6 +11,7 @@ import com.chad.baserecyclerviewadapterhelper.utils.statusBarLightMode
 
 abstract class BaseActivity2(@LayoutRes layoutRes: Int = 0) : AppCompatActivity(layoutRes) {
 
+
     protected open val contentView: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

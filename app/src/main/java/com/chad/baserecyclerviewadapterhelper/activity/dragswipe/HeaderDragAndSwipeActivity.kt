@@ -7,10 +7,10 @@ import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.baserecyclerviewadapterhelper.activity.dragswipe.adapter.HeaderDragAndSwipeAdapter
 import com.chad.baserecyclerviewadapterhelper.activity.home.adapter.HomeTopHeaderAdapter
-import com.chad.baserecyclerviewadapterhelper.base.BaseActivity
+import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity
+import com.chad.baserecyclerviewadapterhelper.databinding.ActivityUniversalRecyclerBinding
 import com.chad.baserecyclerviewadapterhelper.utils.VibratorUtils.vibrate
 import com.chad.library.adapter.base.QuickAdapterHelper
 import com.chad.library.adapter.base.dragswipe.setItemDragListener
@@ -18,16 +18,13 @@ import com.chad.library.adapter.base.dragswipe.setItemSwipeListener
 import com.chad.library.adapter.base.loadState.LoadState.NotLoading
 import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
 import com.chad.library.adapter.base.viewholder.QuickViewHolder
-import kotlinx.android.synthetic.main.activity_header_drag_and_swipe.*
 import kotlinx.coroutines.*
 
 /**
  * 带头部局以及带加载下一页的，拖拽demo
  */
-class HeaderDragAndSwipeActivity : BaseActivity() {
-    companion object {
-        private val PAGE_SIZE = 20
-    }
+class HeaderDragAndSwipeActivity : BaseViewBindingActivity<ActivityUniversalRecyclerBinding>() {
+
 
     private val pageInfo = PageInfo()
 
@@ -50,14 +47,20 @@ class HeaderDragAndSwipeActivity : BaseActivity() {
         .setSwipeMoveFlags(ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
 
     private val mAdapter: HeaderDragAndSwipeAdapter = HeaderDragAndSwipeAdapter()
-    private var helper: QuickAdapterHelper? = null
+    private lateinit var helper: QuickAdapterHelper
+
+    override fun initBinding(): ActivityUniversalRecyclerBinding =
+        ActivityUniversalRecyclerBinding.inflate(layoutInflater)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_header_drag_and_swipe)
-        setBackBtn()
-        setTitle("Head Drag And Swipe")
-        mRVDragAndSwipe.layoutManager = LinearLayoutManager(this);
+
+        viewBinding.titleBar.title = "Head Drag And Swipe"
+        viewBinding.titleBar.setOnBackListener { finish() }
+
+        viewBinding.rv.layoutManager = LinearLayoutManager(this)
+
+
         helper = QuickAdapterHelper.Builder(mAdapter)
             .setTrailingLoadStateAdapter(
                 object : TrailingLoadStateAdapter.OnTrailingListener {
@@ -74,7 +77,7 @@ class HeaderDragAndSwipeActivity : BaseActivity() {
                 })
             .build().addHeader(HomeTopHeaderAdapter())
 
-        headerDragAndSwipe.attachToRecyclerView(mRVDragAndSwipe)
+        headerDragAndSwipe.attachToRecyclerView(viewBinding.rv)
             .setDataCallback(mAdapter)
             .setItemDragListener(
                 onItemDragStart = { viewHolder, pos ->
@@ -133,7 +136,7 @@ class HeaderDragAndSwipeActivity : BaseActivity() {
                     Log.d(TAG, "onItemSwipeEnd")
                 }
             )
-        mRVDragAndSwipe.adapter = helper?.adapter
+        viewBinding.rv.adapter = helper.adapter
         loadMore()
     }
 
@@ -147,7 +150,7 @@ class HeaderDragAndSwipeActivity : BaseActivity() {
                     mAdapter.addAll(data)
                 }
 
-                helper?.trailingLoadState = NotLoading(false)
+                helper.trailingLoadState = NotLoading(false)
                 // page加一
                 pageInfo.nextPage()
             }
@@ -157,7 +160,7 @@ class HeaderDragAndSwipeActivity : BaseActivity() {
             }
 
             override fun end() {
-                helper?.trailingLoadState = NotLoading(true)
+                helper.trailingLoadState = NotLoading(true)
             }
         }).loadMore()
     }
@@ -176,7 +179,7 @@ class HeaderDragAndSwipeActivity : BaseActivity() {
                     delay(1500)
                 }
                 withContext(Dispatchers.Main) {
-                    var size = PAGE_SIZE
+                    val size = PAGE_SIZE
                     if (mPage == 3) {
                         mCallBack.end()
                     } else {
@@ -217,5 +220,10 @@ class HeaderDragAndSwipeActivity : BaseActivity() {
          * 模拟加载结束
          */
         fun end()
+    }
+
+    companion object {
+        private const val PAGE_SIZE = 20
+        private const val TAG = "Default Drag And Swipe"
     }
 }

@@ -1,43 +1,30 @@
-package com.chad.baserecyclerviewadapterhelper.activity.dragswipe.adapter;
+package com.chad.baserecyclerviewadapterhelper.activity.dragswipe.adapter
 
-import android.content.Context;
-import android.view.ViewGroup;
-
-import androidx.annotation.NonNull;
-
-import com.chad.baserecyclerviewadapterhelper.R;
-import com.chad.baserecyclerviewadapterhelper.activity.differ.adapter.DiffEntityCallback;
-import com.chad.baserecyclerviewadapterhelper.entity.DiffEntity;
-import com.chad.library.adapter.base.BaseDifferAdapter;
-import com.chad.library.adapter.base.viewholder.QuickViewHolder;
-
-import java.util.List;
+import android.content.Context
+import android.view.ViewGroup
+import com.chad.baserecyclerviewadapterhelper.R
+import com.chad.baserecyclerviewadapterhelper.activity.differ.adapter.DiffEntityCallback
+import com.chad.baserecyclerviewadapterhelper.entity.DiffEntity
+import com.chad.library.adapter.base.BaseDifferAdapter
+import com.chad.library.adapter.base.viewholder.QuickViewHolder
 
 /**
  * Create adapter
  */
-public class DiffDragAndSwipeAdapter extends BaseDifferAdapter<DiffEntity, QuickViewHolder> {
+class DiffDragAndSwipeAdapter :
+    BaseDifferAdapter<DiffEntity, QuickViewHolder>(DiffEntityCallback()) {
 
-    public DiffDragAndSwipeAdapter(List<DiffEntity> list) {
-        super(new DiffEntityCallback(), list);
+    override fun onCreateViewHolder(
+        context: Context, parent: ViewGroup, viewType: Int
+    ): QuickViewHolder {
+        return QuickViewHolder(R.layout.layout_animation, parent)
     }
 
-    public DiffDragAndSwipeAdapter() {
-        super(new DiffEntityCallback());
+    override fun onBindViewHolder(
+        holder: QuickViewHolder, position: Int, item: DiffEntity?
+    ) {
+        holder.setText(R.id.tweetName, item!!.title)
+            .setText(R.id.tweetText, item.content)
+            .setText(R.id.tweetDate, item.date)
     }
-
-
-    @NonNull
-    @Override
-    protected QuickViewHolder onCreateViewHolder(@NonNull Context context, @NonNull ViewGroup parent, int viewType) {
-        return new QuickViewHolder(R.layout.layout_animation, parent);
-    }
-
-    @Override
-    protected void onBindViewHolder(@NonNull QuickViewHolder holder, int position, DiffEntity item) {
-        holder.setText(R.id.tweetName, item.getTitle())
-                .setText(R.id.tweetText, item.getContent())
-                .setText(R.id.tweetDate, item.getDate());
-    }
-
 }
