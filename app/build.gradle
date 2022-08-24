@@ -28,7 +28,7 @@ android {
     }
 
     compileOptions {
-        kotlinOptions.freeCompilerArgs += ["-Xjvm-default=all"]
+//        kotlinOptions.freeCompilerArgs += ["-Xjvm-default=all"]
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
