@@ -97,7 +97,7 @@ class NoAutoAutoLoadMoreRefreshUseActivity : BaseViewBindingActivity<ActivityLoa
         headerAdapter.setOnItemClickListener { _, _, _ ->
             addHeadView()
         }
-        helper.addHeader(headerAdapter)
+        helper.addBeforeAdapter(headerAdapter)
     }
 
     private fun initRefreshLayout() {

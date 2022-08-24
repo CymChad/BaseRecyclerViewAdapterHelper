@@ -29,7 +29,6 @@ class HeaderAndFooterUseActivity : BaseViewBindingActivity<ActivityUniversalRecy
 
 
         val adapter = HeaderAndFooterAdapter(DataServer.getSampleData(PAGE_SIZE))
-        adapter.animationEnable = true
         adapter.setOnItemClickListener { _, _, position ->
             Tips.show("position: $position")
         }
@@ -42,7 +41,7 @@ class HeaderAndFooterUseActivity : BaseViewBindingActivity<ActivityUniversalRecy
         viewBinding.rv.adapter = helper.adapter
         addHeader()
 
-        helper.addFooter(
+        helper.addAfterAdapter(
             FooterAdapter(false).setOnItemClickListener { _, _, _ ->
                 addFooter()
             }
@@ -50,7 +49,7 @@ class HeaderAndFooterUseActivity : BaseViewBindingActivity<ActivityUniversalRecy
     }
 
     private fun addHeader() {
-        helper.addHeader(HeaderAdapter().apply {
+        helper.addBeforeAdapter(0, HeaderAdapter().apply {
             setOnItemClickListener { _, _, _ ->
                 addHeader()
             }
@@ -58,7 +57,7 @@ class HeaderAndFooterUseActivity : BaseViewBindingActivity<ActivityUniversalRecy
     }
 
     private fun addFooter() {
-        helper.addFooter(FooterAdapter(true).setOnItemClickListener{ adapter, _, _ ->
+        helper.addAfterAdapter(FooterAdapter(true).setOnItemClickListener{ adapter, _, _ ->
             helper.removeAdapter(adapter)
         })
     }

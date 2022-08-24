@@ -75,7 +75,8 @@ class HeaderDragAndSwipeActivity : BaseViewBindingActivity<ActivityUniversalRecy
                         return true
                     }
                 })
-            .build().addHeader(HomeTopHeaderAdapter())
+            .build()
+            .addBeforeAdapter(HomeTopHeaderAdapter())
 
         headerDragAndSwipe.attachToRecyclerView(viewBinding.rv)
             .setDataCallback(mAdapter)

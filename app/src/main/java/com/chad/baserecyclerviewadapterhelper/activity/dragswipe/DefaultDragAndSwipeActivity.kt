@@ -14,7 +14,6 @@ import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity
 import com.chad.baserecyclerviewadapterhelper.databinding.ActivityUniversalRecyclerBinding
 import com.chad.baserecyclerviewadapterhelper.utils.Tips
 import com.chad.baserecyclerviewadapterhelper.utils.VibratorUtils.vibrate
-import com.chad.library.adapter.base.QuickAdapterHelper
 import com.chad.library.adapter.base.dragswipe.QuickDragAndSwipe
 import com.chad.library.adapter.base.dragswipe.listener.OnItemDragListener
 import com.chad.library.adapter.base.dragswipe.listener.OnItemSwipeListener
@@ -27,7 +26,6 @@ import com.chad.library.adapter.base.viewholder.QuickViewHolder
 class DefaultDragAndSwipeActivity : BaseViewBindingActivity<ActivityUniversalRecyclerBinding>() {
 
     private val mAdapter: DragAndSwipeAdapter = DragAndSwipeAdapter()
-    private val helper: QuickAdapterHelper = QuickAdapterHelper.Builder(mAdapter).build()
 
     private val quickDragAndSwipe = QuickDragAndSwipe()
         .setDragMoveFlags(ItemTouchHelper.UP or ItemTouchHelper.DOWN)
@@ -42,7 +40,7 @@ class DefaultDragAndSwipeActivity : BaseViewBindingActivity<ActivityUniversalRec
         viewBinding.titleBar.setOnBackListener { finish() }
 
         viewBinding.rv.layoutManager = LinearLayoutManager(this)
-        viewBinding.rv.adapter = helper.adapter
+        viewBinding.rv.adapter = mAdapter
 
         val mData = generateData(50)
         mAdapter.submitList(mData)

@@ -94,10 +94,10 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder>(
         }
     }
 
-    internal fun checkPreload(listSize: Int, currentPosition: Int) {
-        if (currentPosition > listSize - 1) return
+    internal fun checkPreload(itemCount: Int, currentPosition: Int) {
+        if (currentPosition > itemCount - 1) return
 
-        if (listSize - currentPosition - 1 <= preloadSize) {
+        if (itemCount - currentPosition - 1 <= preloadSize) {
             loadAction()
         }
     }

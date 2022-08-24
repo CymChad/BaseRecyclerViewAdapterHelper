@@ -26,8 +26,8 @@ class QuickAdapterHelper private constructor(
     config: ConcatAdapter.Config
 ) {
 
-    private val mHeaderList = ArrayList<RecyclerView.Adapter<*>>(0)
-    private val mFooterList = ArrayList<RecyclerView.Adapter<*>>(0)
+    private val mBeforeList = ArrayList<BaseQuickAdapter<*, *>>(0)
+    private val mAfterList = ArrayList<BaseQuickAdapter<*, *>>(0)
 
     /**
      * The adapter which is finally attached to the RecyclerView.
@@ -62,21 +62,26 @@ class QuickAdapterHelper private constructor(
                 ?: LoadState.NotLoading(endOfPaginationReached = false)
         }
 
+    private var firstAdapterOnViewAttachChangeListener: BaseQuickAdapter.OnViewAttachStateChangeListener? =
+        null
+    private var lastAdapterOnViewAttachChangeListener: BaseQuickAdapter.OnViewAttachStateChangeListener? =
+        null
+
     init {
         leadingLoadStateAdapter?.let {
             mAdapter.addAdapter(it)
 
-            contentAdapter.addOnViewAttachStateChangeListener(object :
-                BaseQuickAdapter.OnViewAttachStateChangeListener {
+            firstAdapterOnViewAttachChangeListener =
+                object : BaseQuickAdapter.OnViewAttachStateChangeListener {
 
-                override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
-                    leadingLoadStateAdapter.checkPreload(holder.bindingAdapterPosition)
-                }
+                    override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
+                        leadingLoadStateAdapter.checkPreload(holder.bindingAdapterPosition)
+                    }
 
-                override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
+                    override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
 
-                }
-            })
+                    }
+                }.apply { contentAdapter.addOnViewAttachStateChangeListener(this) }
         }
 
         mAdapter.addAdapter(contentAdapter)
@@ -84,119 +89,188 @@ class QuickAdapterHelper private constructor(
         trailingLoadStateAdapter?.let {
             mAdapter.addAdapter(it)
 
-            contentAdapter.addOnViewAttachStateChangeListener(object :
-                BaseQuickAdapter.OnViewAttachStateChangeListener {
+            lastAdapterOnViewAttachChangeListener =
+                object : BaseQuickAdapter.OnViewAttachStateChangeListener {
 
-                override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
-                    trailingLoadStateAdapter.checkPreload(
-                        contentAdapter.items.size,
-                        holder.bindingAdapterPosition
-                    )
-                }
+                    override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
+                        trailingLoadStateAdapter.checkPreload(
+                            holder.bindingAdapter?.itemCount ?: 0,
+                            holder.bindingAdapterPosition
+                        )
+                    }
 
-                override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
+                    override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
 
-                }
-            })
+                    }
+                }.apply { contentAdapter.addOnViewAttachStateChangeListener(this) }
         }
     }
 
     /**
-     * Add header Adapter.
-     * 添加首部 header Adapter
+     * Add Adapter before [contentAdapter].
+     * 在 [contentAdapter] 之前添加 Adapter
      *
-     * @param headerAdapter Adapter<*>
-     * @return QuickAdapterHelper
+     * @param adapter Adapter<*>
      */
-    fun addHeader(headerAdapter: RecyclerView.Adapter<*>) = apply {
-        addHeader(mHeaderList.size, headerAdapter)
+    fun addBeforeAdapter(adapter: BaseQuickAdapter<*, *>) = apply {
+        addBeforeAdapter(mBeforeList.size, adapter)
     }
 
-    fun addHeader(index: Int, headerAdapter: RecyclerView.Adapter<*>) = apply {
-        if (index < 0 || index > mHeaderList.size) throw IndexOutOfBoundsException("Index must be between 0 and ${mHeaderList.size}. Given:${index}")
+    /**
+     * Add Adapter before [contentAdapter].
+     * 在 [contentAdapter] 之前添加 Adapter
+     *
+     * @param index
+     * @param adapter
+     */
+    fun addBeforeAdapter(index: Int, adapter: BaseQuickAdapter<*, *>) = apply {
+        if (index < 0 || index > mBeforeList.size) throw IndexOutOfBoundsException("Index must be between 0 and ${mBeforeList.size}. Given:${index}")
 
-        val startIndex = if (leadingLoadStateAdapter == null) {
-            0
+        if (index == 0) {
+            firstAdapterOnViewAttachChangeListener?.let {
+                if (mBeforeList.isEmpty()) {
+                    contentAdapter.removeOnViewAttachStateChangeListener(it)
+                } else {
+                    mBeforeList.first().removeOnViewAttachStateChangeListener(it)
+                }
+                adapter.addOnViewAttachStateChangeListener(it)
+            }
+        }
+
+        val realIndex = if (leadingLoadStateAdapter == null) {
+            index
         } else {
-            1
+            index + 1
         }
 
-        mAdapter.addAdapter(startIndex + index, headerAdapter)
-        mHeaderList.add(headerAdapter)
+        mAdapter.addAdapter(realIndex, adapter)
+        mBeforeList.add(adapter)
     }
 
     /**
-     * Clear header.
-     * 清空 header
+     * Clear all Before Adapters.
+     * 清空全部的  Before Adapters
      */
-    fun clearHeader() = apply {
-        mHeaderList.forEach {
+    fun clearBeforeAdapters() = apply {
+        mBeforeList.forEach {
             mAdapter.removeAdapter(it)
+            firstAdapterOnViewAttachChangeListener?.let { listener ->
+                it.removeOnViewAttachStateChangeListener(listener)
+            }
         }
-        mHeaderList.clear()
+        mBeforeList.clear()
     }
 
     /**
-     * Add footer adapter
-     * 添加脚部 footer adapter
+     * Add Adapter after [contentAdapter].
+     * 在 [contentAdapter] 之后添加 Adapter
      *
      * @param footerAdapter Adapter<*>
-     * @return QuickAdapterHelper
      */
-    fun addFooter(footerAdapter: RecyclerView.Adapter<*>) = apply {
+    fun addAfterAdapter(adapter: BaseQuickAdapter<*, *>) = apply {
+
+        lastAdapterOnViewAttachChangeListener?.let {
+            if (mAfterList.isEmpty()) {
+                contentAdapter.removeOnViewAttachStateChangeListener(it)
+            } else {
+                mAfterList.last().removeOnViewAttachStateChangeListener(it)
+            }
+            adapter.addOnViewAttachStateChangeListener(it)
+        }
+
         if (trailingLoadStateAdapter == null) {
-            mAdapter.addAdapter(footerAdapter)
+            mAdapter.addAdapter(adapter)
         } else {
-            mAdapter.addAdapter(mAdapter.adapters.size - 1, footerAdapter)
+            mAdapter.addAdapter(mAdapter.adapters.size - 1, adapter)
         }
-        mFooterList.add(footerAdapter)
-    }
-
-    fun addFooter(index: Int, footerAdapter: RecyclerView.Adapter<*>) = apply {
-        if (index < 0 || index > mFooterList.size) throw IndexOutOfBoundsException("Index must be between 0 and ${mFooterList.size}. Given:${index}")
-
-        val realIndex = if (trailingLoadStateAdapter == null) {
-            mAdapter.adapters.size - mFooterList.size + index
-        } else {
-            mAdapter.adapters.size - 1 - mFooterList.size + index
-        }
-
-        mAdapter.addAdapter(realIndex, footerAdapter)
-        mFooterList.add(footerAdapter)
+        mAfterList.add(adapter)
     }
 
     /**
-     * Clear footer.
-     * 清空 footer
+     * Add Adapter after [contentAdapter].
+     * 在 [contentAdapter] 之后添加 Adapter
+     *
+     * @param index
+     * @param footerAdapter
      */
-    fun clearFooter() = apply {
-        mFooterList.forEach {
-            mAdapter.removeAdapter(it)
-        }
-        mFooterList.clear()
-    }
+    fun addAfterAdapter(index: Int, adapter: BaseQuickAdapter<*, *>) = apply {
+        if (index < 0 || index > mAfterList.size) throw IndexOutOfBoundsException("Index must be between 0 and ${mAfterList.size}. Given:${index}")
 
-    /**
-     * get header list, which can not be modified
-     * 获取 header list，不可对list进行设置
-     */
-    val headerList: List<RecyclerView.Adapter<*>> get() = mHeaderList
-
-    /**
-     * get footer list, which can not be modified
-     *  获取 footer list，不可对list进行设置
-     */
-    val footerList: List<RecyclerView.Adapter<*>> get() = mFooterList
-
-    fun removeAdapter(a: RecyclerView.Adapter<*>) = apply {
-        if (a == contentAdapter) {
+        if (index == mAfterList.size) {
+            addAfterAdapter(adapter)
             return@apply
         }
-        mAdapter.removeAdapter(a)
-        mHeaderList.remove(a)
-        mFooterList.remove(a)
+
+        val realIndex = if (trailingLoadStateAdapter == null) {
+            mAdapter.adapters.size - mAfterList.size + index
+        } else {
+            mAdapter.adapters.size - 1 - mAfterList.size + index
+        }
+
+        mAdapter.addAdapter(realIndex, adapter)
+        mAfterList.add(adapter)
     }
 
+    /**
+     * Clear AfterList.
+     * 清空  AfterList
+     */
+    fun clearAfterAdapters() = apply {
+        mAfterList.forEach {
+            mAdapter.removeAdapter(it)
+            lastAdapterOnViewAttachChangeListener?.let { listener ->
+                it.removeOnViewAttachStateChangeListener(listener)
+            }
+        }
+        mAfterList.clear()
+    }
+
+    /**
+     * Get Adapter List before [contentAdapter]
+     * 获取 [contentAdapter] 之前的 AdapterList
+     */
+    val beforeAdapterList: List<BaseQuickAdapter<*, *>> get() = mBeforeList
+
+    /**
+     * Get Adapter List after [contentAdapter]
+     * 获取 [contentAdapter] 之后的 AdapterList
+     */
+    val afterAdapterList: List<BaseQuickAdapter<*, *>> get() = mAfterList
+
+    fun removeAdapter(adapter: BaseQuickAdapter<*, *>) = apply {
+        if (adapter == contentAdapter) {
+            return@apply
+        }
+        mAdapter.removeAdapter(adapter)
+        mBeforeList.remove(adapter)
+        mAfterList.remove(adapter)
+
+        firstAdapterOnViewAttachChangeListener?.let {
+            adapter.removeOnViewAttachStateChangeListener(it)
+            if (mBeforeList.isEmpty()) {
+                contentAdapter.addOnViewAttachStateChangeListener(it)
+            } else {
+                mBeforeList.first().addOnViewAttachStateChangeListener(it)
+            }
+        }
+
+        lastAdapterOnViewAttachChangeListener?.let {
+            adapter.removeOnViewAttachStateChangeListener(it)
+            if (mAfterList.isEmpty()) {
+                contentAdapter.addOnViewAttachStateChangeListener(it)
+            } else {
+                mAfterList.last().addOnViewAttachStateChangeListener(it)
+            }
+        }
+    }
+
+    /**
+     * Builder
+     * 通过 "向前加载"、"向后加载"、主要内容Adapter，构建 [QuickAdapterHelper]
+     *
+     * @property contentAdapter 主要内容的 Adapter
+     * @constructor Create empty Builder
+     */
     class Builder(private val contentAdapter: BaseQuickAdapter<*, *>) {
 
         private var leadingLoadStateAdapter: LeadingLoadStateAdapter<*>? = null

@@ -80,6 +80,9 @@ class AutoLoadMoreRefreshUseActivity : BaseViewBindingActivity<ActivityLoadMoreB
                     return !viewBinding.refreshLayout.isRefreshing
                 }
             }).build()
+
+        // 设置预加载，请调用以下方法
+        // helper.trailingLoadStateAdapter?.preloadSize = 1
         viewBinding.rvList.adapter = helper.adapter
     }
 
@@ -88,7 +91,7 @@ class AutoLoadMoreRefreshUseActivity : BaseViewBindingActivity<ActivityLoadMoreB
         headerAdapter.setOnItemClickListener { _, _, _ ->
             addHeadView()
         }
-        helper.addHeader(headerAdapter)
+        helper.addBeforeAdapter(0, headerAdapter)
     }
 
     private fun initRefreshLayout() {

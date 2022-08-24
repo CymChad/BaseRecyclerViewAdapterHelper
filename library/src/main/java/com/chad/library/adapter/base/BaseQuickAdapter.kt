@@ -683,6 +683,9 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         if (onViewAttachStateChangeListeners == null) {
             onViewAttachStateChangeListeners = ArrayList()
         }
+
+        if (onViewAttachStateChangeListeners?.contains(listener) == true) return
+
         onViewAttachStateChangeListeners?.add(listener)
     }
 

@@ -34,7 +34,7 @@ class HomeActivity : AppCompatActivity() {
     private val helper by lazy(LazyThreadSafetyMode.NONE) {
         QuickAdapterHelper.Builder(homeAdapter)
             .build()
-            .addHeader(HomeTopHeaderAdapter())
+            .addBeforeAdapter(HomeTopHeaderAdapter())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
