@@ -7,16 +7,11 @@ import com.chad.library.adapter.base.BaseSingleItemAdapter
 import com.chad.library.adapter.base.viewholder.QuickViewHolder
 
 class FooterAdapter(
-    private val isDelete: Boolean,
-    private val click: (FooterAdapter) -> Unit
+    private val isDelete: Boolean
 ) : BaseSingleItemAdapter<Any, QuickViewHolder>() {
 
     override fun onCreateViewHolder(context: Context, parent: ViewGroup, viewType: Int): QuickViewHolder {
-        return QuickViewHolder(R.layout.footer_view, parent).apply {
-            itemView.setOnClickListener {
-                click.invoke(this@FooterAdapter)
-            }
-        }
+        return QuickViewHolder(R.layout.footer_view, parent)
     }
 
     override fun onBindViewHolder(holder: QuickViewHolder, item: Any?) {

@@ -14,16 +14,17 @@ import androidx.recyclerview.widget.RecyclerView
  * @property mItem 数据  data
  * @constructor Create empty Single item adapter
  */
-abstract class BaseSingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private var mItem: T? = null) : RecyclerView.Adapter<VH>() {
+abstract class BaseSingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private var mItem: T? = null) :
+    RecyclerView.Adapter<VH>() {
 
-    private var mOnItemClickListener: OnItemClickListener<T>? = null
-    private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
+    private var mOnItemClickListener: ((BaseSingleItemAdapter<T, *>, view: View, item: T?) -> Unit)? = null
+    private var mOnItemLongClickListener: ((BaseSingleItemAdapter<T, *>, view: View, item: T?) -> Boolean)? = null
 
     protected abstract fun onCreateViewHolder(
         context: Context, parent: ViewGroup, viewType: Int
     ): VH
 
-    protected  abstract fun onBindViewHolder(holder: VH, item: T?)
+    protected abstract fun onBindViewHolder(holder: VH, item: T?)
 
     open fun onBindViewHolder(holder: VH, item: T?, payloads: MutableList<Any>) {
         onBindViewHolder(holder, item)
@@ -34,18 +35,18 @@ abstract class BaseSingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private va
     }
 
     final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-       return onCreateViewHolder(parent.context, parent, viewType).apply {
-           mOnItemClickListener?.let {
-               itemView.setOnClickListener { v ->
-                   it.onItemClick(this@BaseSingleItemAdapter, v, mItem)
-               }
-           }
-           mOnItemLongClickListener?.let {
-               itemView.setOnLongClickListener { v ->
-                   it.onItemLongClick(this@BaseSingleItemAdapter, v, mItem)
-               }
-           }
-       }
+        return onCreateViewHolder(parent.context, parent, viewType).apply {
+            mOnItemClickListener?.let {
+                itemView.setOnClickListener { v ->
+                    it(this@BaseSingleItemAdapter, v, mItem)
+                }
+            }
+            mOnItemLongClickListener?.let {
+                itemView.setOnLongClickListener { v ->
+                    it(this@BaseSingleItemAdapter, v, mItem)
+                }
+            }
+        }
     }
 
     final override fun onBindViewHolder(holder: VH, position: Int) {
@@ -72,24 +73,17 @@ abstract class BaseSingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private va
             notifyItemChanged(0)
         }
 
-    fun setOnItemClickListener(listener: OnItemClickListener<T>?) {
-        this.mOnItemClickListener = listener
-    }
+    fun setOnItemClickListener(listener: ((BaseSingleItemAdapter<T, *>, view: View, item: T?) -> Unit)?) =
+        apply {
+            this.mOnItemClickListener = listener
+        }
 
-    fun getOnItemClickListener(): OnItemClickListener<T>? = mOnItemClickListener
+    fun getOnItemClickListener() = mOnItemClickListener
 
-    fun setOnItemLongClickListener(listener: OnItemLongClickListener<T>?) {
+    fun setOnItemLongClickListener(listener: ((BaseSingleItemAdapter<T, *>, view: View, item: T?) -> Boolean)?) {
         this.mOnItemLongClickListener = listener
     }
 
-    fun getOnItemLongClickListener(): OnItemLongClickListener<T>? = mOnItemLongClickListener
+    fun getOnItemLongClickListener() = mOnItemLongClickListener
 
-
-    fun interface OnItemClickListener<T> {
-        fun onItemClick(adapter: BaseSingleItemAdapter<T, *>, view: View, item: T?)
-    }
-
-    fun interface OnItemLongClickListener<T> {
-        fun onItemLongClick(adapter: BaseSingleItemAdapter<T, *>, view: View, item: T?): Boolean
-    }
 }

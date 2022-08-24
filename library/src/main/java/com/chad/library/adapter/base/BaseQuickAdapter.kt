@@ -723,10 +723,10 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 }
 
-typealias OnItemClickListener<T> = (adapter: BaseQuickAdapter<T, *>, view: View, position: Int) -> Unit?
+typealias OnItemClickListener<T> = (adapter: BaseQuickAdapter<T, *>, view: View, position: Int) -> Unit
 
 typealias OnItemLongClickListener<T> = (adapter: BaseQuickAdapter<T, *>, view: View, position: Int) -> Boolean
 
-typealias OnItemChildClickListener<T> = (adapter: BaseQuickAdapter<T, *>, view: View, position: Int) -> Unit?
+typealias OnItemChildClickListener<T> = (adapter: BaseQuickAdapter<T, *>, view: View, position: Int) -> Unit
 
 typealias OnItemChildLongClickListener<T> = (adapter: BaseQuickAdapter<T, *>, view: View, position: Int) -> Boolean

@@ -43,18 +43,22 @@ class HeaderAndFooterUseActivity : BaseViewBindingActivity<ActivityUniversalRecy
         addHeader()
 
         helper.addFooter(
-            FooterAdapter(false) {
+            FooterAdapter(false).setOnItemClickListener { _, _, _ ->
                 addFooter()
             }
         )
     }
 
     private fun addHeader() {
-        helper.addHeader(HeaderAdapter { addHeader() })
+        helper.addHeader(HeaderAdapter().apply {
+            setOnItemClickListener { _, _, _ ->
+                addHeader()
+            }
+        })
     }
 
     private fun addFooter() {
-        helper.addFooter(FooterAdapter(true) { adapter ->
+        helper.addFooter(FooterAdapter(true).setOnItemClickListener{ adapter, _, _ ->
             helper.removeAdapter(adapter)
         })
     }
