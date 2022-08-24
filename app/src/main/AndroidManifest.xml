@@ -1,19 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.chad.baserecyclerviewadapterhelper" >
+    package="com.chad.baserecyclerviewadapterhelper">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".MyApplication"
-        android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="BRVAH"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning" >
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".activity.WelcomeActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activity.home.HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.animation.AnimationUseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.headerfooter.HeaderAndFooterUseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.loadmore.AutoLoadMoreRefreshUseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.emptyview.EmptyViewUseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.itemclick.ItemClickActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.databinding.DataBindingUseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.dragswipe.ManualDragAndSwipeUseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.upfetch.UpFetchUseActivity"
+            android:exported="false" /> <!-- <activity android:name=".activity.node.NodeSectionUseActivity" /> -->
+        <activity
+            android:name=".activity.differ.DifferActivity"
+            android:exported="false" /> <!-- <activity android:name=".activity.node.ChooseNodeUseTypeActivity" /> -->
+        <activity
+            android:name=".activity.loadmore.NoAutoAutoLoadMoreRefreshUseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.dragswipe.DragAndSwipeDifferActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.dragswipe.HeaderDragAndSwipeActivity"
             android:exported="false" />
@@ -24,27 +68,6 @@
         <activity
             android:name=".activity.dragswipe.DefaultDragAndSwipeActivity"
             android:exported="false" />
-        <activity
-            android:name=".activity.WelcomeActivity"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".activity.home.HomeActivity" />
-        <activity android:name=".activity.animation.AnimationUseActivity" />
-        <activity android:name=".activity.headerfooter.HeaderAndFooterUseActivity" />
-        <activity android:name=".activity.loadmore.AutoLoadMoreRefreshUseActivity" />
-        <activity android:name=".activity.emptyview.EmptyViewUseActivity" />
-        <activity android:name=".activity.itemclick.ItemClickActivity" />
-        <activity android:name=".activity.databinding.DataBindingUseActivity" />
-        <activity android:name=".activity.dragswipe.ManualDragAndSwipeUseActivity" />
-        <activity android:name=".activity.upfetch.UpFetchUseActivity" /> <!-- <activity android:name=".activity.node.NodeSectionUseActivity" /> -->
-        <activity android:name=".activity.differ.DifferActivity" /> <!-- <activity android:name=".activity.node.ChooseNodeUseTypeActivity" /> -->
-        <activity android:name=".activity.loadmore.NoAutoAutoLoadMoreRefreshUseActivity" />
-        <activity android:name=".activity.dragswipe.DragAndSwipeDifferActivity" />
     </application>
 
 </manifest>

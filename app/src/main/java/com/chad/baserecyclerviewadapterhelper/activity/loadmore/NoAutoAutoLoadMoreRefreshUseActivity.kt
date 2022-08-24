@@ -121,6 +121,7 @@ class NoAutoAutoLoadMoreRefreshUseActivity : BaseViewBindingActivity<ActivityLoa
                 viewBinding.refreshLayout.isRefreshing = false
                 if (pageInfo.isFirstPage) {
                     // 如果是加载的第一页数据，用 submitList()
+                    // If it is the first page of data loaded, use submitList().
                     mAdapter.submitList(data)
                 } else {
                     //不是第一页，则用add
@@ -162,7 +163,7 @@ class NoAutoAutoLoadMoreRefreshUseActivity : BaseViewBindingActivity<ActivityLoa
 
         override fun run() {
             try {
-                sleep(1800) // 模拟网络延迟
+                sleep(1000) // 模拟网络延迟
             } catch (ignored: InterruptedException) {
             }
             if (mPage == 2 && mFirstError) {

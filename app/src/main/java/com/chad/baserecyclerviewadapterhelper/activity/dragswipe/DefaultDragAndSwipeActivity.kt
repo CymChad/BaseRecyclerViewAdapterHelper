@@ -1,139 +1,148 @@
-package com.chad.baserecyclerviewadapterhelper.activity.dragswipe;
+package com.chad.baserecyclerviewadapterhelper.activity.dragswipe
 
-
-import android.animation.ValueAnimator;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.chad.baserecyclerviewadapterhelper.R;
-import com.chad.baserecyclerviewadapterhelper.activity.dragswipe.adapter.DragAndSwipeAdapter;
-import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
-import com.chad.baserecyclerviewadapterhelper.utils.Tips;
-import com.chad.baserecyclerviewadapterhelper.utils.VibratorUtils;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.QuickAdapterHelper;
-import com.chad.library.adapter.base.dragswipe.QuickDragAndSwipe;
-import com.chad.library.adapter.base.dragswipe.listener.OnItemDragListener;
-import com.chad.library.adapter.base.dragswipe.listener.OnItemSwipeListener;
-import com.chad.library.adapter.base.viewholder.QuickViewHolder;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.animation.ValueAnimator
+import android.graphics.Canvas
+import android.graphics.Color
+import android.os.Build
+import android.os.Bundle
+import android.util.Log
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.chad.baserecyclerviewadapterhelper.activity.dragswipe.adapter.DragAndSwipeAdapter
+import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity
+import com.chad.baserecyclerviewadapterhelper.databinding.ActivityUniversalRecyclerBinding
+import com.chad.baserecyclerviewadapterhelper.utils.Tips
+import com.chad.baserecyclerviewadapterhelper.utils.VibratorUtils.vibrate
+import com.chad.library.adapter.base.QuickAdapterHelper
+import com.chad.library.adapter.base.dragswipe.QuickDragAndSwipe
+import com.chad.library.adapter.base.dragswipe.listener.OnItemDragListener
+import com.chad.library.adapter.base.dragswipe.listener.OnItemSwipeListener
+import com.chad.library.adapter.base.viewholder.QuickViewHolder
 
 /**
  * 默认实现拖动与侧滑效果
  * Drag and Drag effects are implemented by default
  */
-public class DefaultDragAndSwipeActivity extends BaseActivity {
+class DefaultDragAndSwipeActivity : BaseViewBindingActivity<ActivityUniversalRecyclerBinding>() {
 
-    private RecyclerView mRecyclerView;
-    private DragAndSwipeAdapter mAdapter;
-    private QuickAdapterHelper helper;
-    QuickDragAndSwipe quickDragAndSwipe = new QuickDragAndSwipe()
-            .setDragMoveFlags(ItemTouchHelper.UP | ItemTouchHelper.DOWN)
-            .setSwipeMoveFlags(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+    private val mAdapter: DragAndSwipeAdapter = DragAndSwipeAdapter()
+    private val helper: QuickAdapterHelper = QuickAdapterHelper.Builder(mAdapter).build()
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_universal_recycler);
+    private val quickDragAndSwipe = QuickDragAndSwipe()
+        .setDragMoveFlags(ItemTouchHelper.UP or ItemTouchHelper.DOWN)
+        .setSwipeMoveFlags(ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
 
-        setBackBtn();
-        setTitle("Default Drag And Swipe");
+    override fun initBinding(): ActivityUniversalRecyclerBinding =
+        ActivityUniversalRecyclerBinding.inflate(layoutInflater)
 
-        mRecyclerView = findViewById(R.id.rv);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewBinding.titleBar.title = "Default Drag And Swipe"
+        viewBinding.titleBar.setOnBackListener { finish() }
+
+        viewBinding.rv.layoutManager = LinearLayoutManager(this)
+        viewBinding.rv.adapter = helper.adapter
+
+        val mData = generateData(50)
+        mAdapter.submitList(mData)
 
         // 拖拽监听
-        OnItemDragListener listener = new OnItemDragListener() {
-            @Override
-            public void onItemDragStart(@NonNull RecyclerView.ViewHolder viewHolder, int pos) {
-                VibratorUtils.INSTANCE.vibrate(getApplicationContext());
-                Log.d(TAG, "drag start");
-                final QuickViewHolder holder = ((QuickViewHolder) viewHolder);
+        val listener: OnItemDragListener = object : OnItemDragListener {
+            override fun onItemDragStart(viewHolder: RecyclerView.ViewHolder?, pos: Int) {
+                vibrate(applicationContext)
+                Log.d(TAG, "drag start")
+                val holder = viewHolder as QuickViewHolder? ?: return
                 // 开始时，item背景色变化，demo这里使用了一个动画渐变，使得自然
-                int startColor = Color.WHITE;
-                int endColor = Color.rgb(245, 245, 245);
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                    ValueAnimator v = ValueAnimator.ofArgb(startColor, endColor);
-                    v.addUpdateListener(animation -> holder.itemView.setBackgroundColor((int) animation.getAnimatedValue()));
-                    v.setDuration(300);
-                    v.start();
+                val startColor = Color.WHITE
+                val endColor = Color.rgb(245, 245, 245)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    val v = ValueAnimator.ofArgb(startColor, endColor)
+                    v.addUpdateListener { animation: ValueAnimator ->
+                        holder.itemView.setBackgroundColor(
+                            animation.animatedValue as Int
+                        )
+                    }
+                    v.duration = 300
+                    v.start()
                 }
             }
 
-            @Override
-            public void onItemDragMoving(@NonNull RecyclerView.ViewHolder source, int from, @NonNull RecyclerView.ViewHolder target, int to) {
-                Log.d(TAG, "move from: " + source.getBindingAdapterPosition() + " to: " + target.getBindingAdapterPosition());
+            override fun onItemDragMoving(
+                source: RecyclerView.ViewHolder,
+                from: Int,
+                target: RecyclerView.ViewHolder,
+                to: Int
+            ) {
+                Log.d(
+                    TAG,
+                    "move from: " + source.bindingAdapterPosition + " to: " + target.bindingAdapterPosition
+                )
             }
 
-            @Override
-            public void onItemDragEnd(@NonNull RecyclerView.ViewHolder viewHolder, int pos) {
-                Log.d(TAG, "drag end");
-                final QuickViewHolder holder = ((QuickViewHolder) viewHolder);
+            override fun onItemDragEnd(viewHolder: RecyclerView.ViewHolder, pos: Int) {
+                Log.d(TAG, "drag end")
+                val holder = viewHolder as QuickViewHolder
                 // 结束时，item背景色变化，demo这里使用了一个动画渐变，使得自然
-                int startColor = Color.rgb(245, 245, 245);
-                int endColor = Color.WHITE;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                    ValueAnimator v = ValueAnimator.ofArgb(startColor, endColor);
-                    v.addUpdateListener(animation -> holder.itemView.setBackgroundColor((int) animation.getAnimatedValue()));
-                    v.setDuration(300);
-                    v.start();
+                val startColor = Color.rgb(245, 245, 245)
+                val endColor = Color.WHITE
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    val v = ValueAnimator.ofArgb(startColor, endColor)
+                    v.addUpdateListener { animation: ValueAnimator ->
+                        holder.itemView.setBackgroundColor(
+                            animation.animatedValue as Int
+                        )
+                    }
+                    v.duration = 300
+                    v.start()
                 }
             }
-        };
-
-        OnItemSwipeListener swipeListener = new OnItemSwipeListener() {
-            @Override
-            public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int pos) {
-                Log.d(TAG, "onItemSwipeStart");
+        }
+        val swipeListener: OnItemSwipeListener = object : OnItemSwipeListener {
+            override fun onItemSwipeStart(viewHolder: RecyclerView.ViewHolder, pos: Int) {
+                Log.d(TAG, "onItemSwipeStart")
             }
 
-            @Override
-            public void onItemSwipeEnd(RecyclerView.ViewHolder viewHolder, int pos) {
-                Log.d(TAG,  "onItemSwipeEnd");
+            override fun onItemSwipeEnd(viewHolder: RecyclerView.ViewHolder, pos: Int) {
+                Log.d(TAG, "onItemSwipeEnd")
             }
 
-            @Override
-            public void onItemSwiped(RecyclerView.ViewHolder viewHolder, int pos) {
-                Log.d(TAG,  "onItemSwiped");
+            override fun onItemSwiped(viewHolder: RecyclerView.ViewHolder, pos: Int) {
+                Log.d(TAG, "onItemSwiped")
             }
 
-            @Override
-            public void onItemSwipeMoving(Canvas canvas, RecyclerView.ViewHolder viewHolder, float dX, float dY, boolean isCurrentlyActive) {
-                Log.d(TAG, "onItemSwipeMoving");
+            override fun onItemSwipeMoving(
+                canvas: Canvas,
+                viewHolder: RecyclerView.ViewHolder,
+                dX: Float,
+                dY: Float,
+                isCurrentlyActive: Boolean
+            ) {
+                Log.d(TAG, "onItemSwipeMoving")
             }
-        };
-
-        List<String> mData = generateData(50);
-        mAdapter = new DragAndSwipeAdapter();
-        helper = new QuickAdapterHelper.Builder(mAdapter)
-                .build();
-        mRecyclerView.setAdapter(helper.getAdapter());
-        mAdapter.submitList(mData);
+        }
 
         // 滑动事件
-        quickDragAndSwipe.attachToRecyclerView(mRecyclerView)
-                .setDataCallback(mAdapter)
-                .setItemDragListener(listener)
-                .setItemSwipeListener(swipeListener);
+        quickDragAndSwipe.attachToRecyclerView(viewBinding.rv)
+            .setDataCallback(mAdapter)
+            .setItemDragListener(listener)
+            .setItemSwipeListener(swipeListener)
 
         // 点击事件
-        mAdapter.setOnItemClickListener((BaseQuickAdapter.OnItemClickListener) (adapter, view, position) -> Tips.show("点击了：" + position));
+        mAdapter.setOnItemClickListener { adapter, view, position ->
+            Tips.show("点击了：$position")
+        }
     }
 
-    private List<String> generateData(int size) {
-        ArrayList<String> data = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            data.add("item " + i);
+    private fun generateData(size: Int): List<String> {
+        val data = ArrayList<String>(size)
+        for (i in 0 until size) {
+            data.add("item $i")
         }
-        return data;
+        return data
+    }
+
+    companion object {
+        private const val TAG = "Default Drag And Swipe"
     }
 }

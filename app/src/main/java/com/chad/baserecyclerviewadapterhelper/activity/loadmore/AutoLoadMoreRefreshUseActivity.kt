@@ -113,11 +113,15 @@ class AutoLoadMoreRefreshUseActivity : BaseViewBindingActivity<ActivityLoadMoreB
                 viewBinding.refreshLayout.isRefreshing = false
                 if (pageInfo.isFirstPage) {
                     // 如果是加载的第一页数据，用 submitList()
+                    // If it is the first page of data loaded, use submitList().
                     mAdapter.submitList(data)
                 } else {
                     //不是第一页，则用add
                     mAdapter.addAll(data)
                 }
+
+                // 如果在数据不满足一屏时，暂停加载更多，请调用下面方法
+                // helper.trailingLoadStateAdapter?.checkDisableLoadMoreIfNotFullPage()
 
                 if (pageInfo.page >= PAGE_SIZE) {
                     /*
@@ -154,7 +158,7 @@ class AutoLoadMoreRefreshUseActivity : BaseViewBindingActivity<ActivityLoadMoreB
 
         override fun run() {
             try {
-                sleep(1800) // 模拟网络延迟
+                sleep(800) // 模拟网络延迟
             } catch (ignored: InterruptedException) {
             }
             if (mPage == 2 && mFirstError) {

@@ -7,13 +7,14 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.activity.dragswipe.adapter.DragAndSwipeAdapter;
-import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
+import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity;
+import com.chad.baserecyclerviewadapterhelper.databinding.ActivityUniversalRecyclerBinding;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.baserecyclerviewadapterhelper.utils.VibratorUtils;
 import com.chad.library.adapter.base.QuickAdapterHelper;
@@ -29,7 +30,9 @@ import java.util.List;
  * 手动实现拖动与侧滑效果
  * Manual drag and Drag effects
  */
-public class ManualDragAndSwipeUseActivity extends BaseActivity {
+public class ManualDragAndSwipeUseActivity extends BaseViewBindingActivity<ActivityUniversalRecyclerBinding> {
+
+    private final String TAG = "Manual Drag And Swipe";
 
     private DragAndSwipeAdapter mAdapter;
     private QuickAdapterHelper helper;
@@ -40,24 +43,30 @@ public class ManualDragAndSwipeUseActivity extends BaseActivity {
             .setItemViewSwipeEnabled(false)
             .setLongPressDragEnabled(false);//关闭默认的长按拖拽功能，通过自定义长按事件进行拖拽
 
+    @NonNull
+    @Override
+    public ActivityUniversalRecyclerBinding initBinding() {
+        return ActivityUniversalRecyclerBinding.inflate(getLayoutInflater());
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_universal_recycler);
 
-        setBackBtn();
-        setTitle("Manual Drag And Swipe");
+        getViewBinding().titleBar.setTitle("Manual Drag And Swipe");
+        getViewBinding().titleBar.setOnBackListener(v -> finish());
 
-        RecyclerView mRecyclerView = findViewById(R.id.rv);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        getViewBinding().rv.setLayoutManager(new LinearLayoutManager(this));
 
         // 拖拽监听
         OnItemDragListener listener = new OnItemDragListener() {
             @Override
-            public void onItemDragStart(@NonNull RecyclerView.ViewHolder viewHolder, int pos) {
+            public void onItemDragStart(@Nullable RecyclerView.ViewHolder viewHolder, int pos) {
                 VibratorUtils.INSTANCE.vibrate(getApplicationContext());
                 Log.d(TAG, "drag start");
                 final QuickViewHolder holder = ((QuickViewHolder) viewHolder);
+                if (holder == null) return;
                 // 开始时，item背景色变化，demo这里使用了一个动画渐变，使得自然
                 int startColor = Color.WHITE;
                 int endColor = Color.rgb(245, 245, 245);
@@ -116,9 +125,9 @@ public class ManualDragAndSwipeUseActivity extends BaseActivity {
         mAdapter = new DragAndSwipeAdapter();
         helper = new QuickAdapterHelper.Builder(mAdapter)
                 .build();
-        mRecyclerView.setAdapter(helper.getAdapter());
+        getViewBinding().rv.setAdapter(helper.getAdapter());
         mAdapter.submitList(mData);
-        quickDragAndSwipe.attachToRecyclerView(mRecyclerView)
+        quickDragAndSwipe.attachToRecyclerView(getViewBinding().rv)
                 .setDataCallback(mAdapter)
                 .setItemDragListener(listener)
                 .setItemSwipeListener(swipeListener);
