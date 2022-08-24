@@ -23,7 +23,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
  * @date: 2019-12-04
  * @Description:
  */
-public class LoadMoreAdapter extends BaseQuickAdapter<Status, LoadMoreAdapter.VH> {
+public class RecyclerViewAdapter extends BaseQuickAdapter<Status, RecyclerViewAdapter.VH> {
 
     static class VH extends RecyclerView.ViewHolder {
 

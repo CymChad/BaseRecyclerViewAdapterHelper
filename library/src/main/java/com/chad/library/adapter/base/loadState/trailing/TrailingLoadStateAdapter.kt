@@ -1,9 +1,7 @@
 package com.chad.library.adapter.base.loadState.trailing
 
 import androidx.annotation.CallSuper
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.chad.library.adapter.base.loadState.LoadState
 import com.chad.library.adapter.base.loadState.LoadStateAdapter
 
@@ -27,7 +25,7 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder> : LoadStat
     /**
      * Whether to display "Loading end" after all data is loaded.
      *
-     * 所有数据加载完毕后，是否显示"加载结束"
+     * 所有数据加载完毕后，是否显示"加载结束"，必须初始化后就调用，中途修改参数不生效。
      */
     var isLoadEndDisplay: Boolean = true
 
@@ -39,22 +37,12 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder> : LoadStat
     var isAutoLoadMore = true
 
     /**
-     * 当自动加载更多开启，并且数据不满一屏时，是否关闭自动加载更多。默认为 false
-     */
-    var isDisableLoadMoreIfNotFullPage = false
-
-    /**
      * Preload, the number of items from the tail.
      *
      * 预加载，距离尾部 item 的个数
      */
     var preloadSize = 0
 
-    /**
-     * A flag to determine if you can load when content doesn't fill the screen.
-     * 不满一屏时，是否可以继续加载的标记位
-     */
-    private var mNextLoadEnable: Boolean = true
 
     override fun displayLoadStateAsItem(loadState: LoadState): Boolean {
         return super.displayLoadStateAsItem(loadState)
@@ -75,10 +63,6 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder> : LoadStat
         if (!isAutoLoadMore || onTrailingListener?.isAllowLoading() == false) {
             // 不允许进行加载更多（例如：正在进行下拉刷新）
             // Loading more is forbidden at the moment.(eg: when pulling down to refresh)
-            return
-        }
-
-        if (!mNextLoadEnable) {
             return
         }
 
@@ -116,40 +100,6 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder> : LoadStat
         onTrailingListener?.onFailRetry()
     }
 
-    fun checkDisableLoadMoreIfNotFullPage() {
-        if (!isDisableLoadMoreIfNotFullPage) {
-            return
-        }
-        // 先把标记位设置为false
-        mNextLoadEnable = false
-        val recyclerView = this.recyclerView ?: return
-        val manager = recyclerView.layoutManager ?: return
-        if (manager is LinearLayoutManager) {
-            recyclerView.post {
-                if (isFullScreen(manager)) {
-                    mNextLoadEnable = true
-                }
-            }
-        } else if (manager is StaggeredGridLayoutManager) {
-            recyclerView.post {
-                // TODO
-//                val positions = IntArray(manager.spanCount)
-//                manager.findLastCompletelyVisibleItemPositions(positions)
-//                val pos = getTheBiggestNumber(positions) + 1
-//                if (pos != baseQuickAdapter.itemCount) {
-//                    mNextLoadEnable = true
-//                }
-            }
-        }
-    }
-
-    private fun isFullScreen(llm: LinearLayoutManager): Boolean {
-        val adapter = recyclerView?.adapter ?: return true
-
-        return (llm.findLastCompletelyVisibleItemPosition() + 1) != adapter.itemCount ||
-                llm.findFirstCompletelyVisibleItemPosition() != 0
-    }
-
     /**
      * Set load state listener
      * 设置监听事件
@@ -164,7 +114,6 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder> : LoadStat
             TrailingLoadStateAdapter ->
             [isLoadEndDisplay: $isLoadEndDisplay],
             [isAutoLoadMore: $isAutoLoadMore],
-            [isDisableLoadMoreIfNotFullPage: $isDisableLoadMoreIfNotFullPage],
             [preloadSize: $preloadSize],
             [loadState: $loadState]
         """.trimIndent()

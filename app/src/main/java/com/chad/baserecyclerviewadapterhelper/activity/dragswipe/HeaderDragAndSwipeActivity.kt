@@ -146,7 +146,7 @@ class HeaderDragAndSwipeActivity : BaseActivity() {
                 } else {
                     mAdapter.addAll(data)
                 }
-                helper?.trailingLoadStateAdapter?.checkDisableLoadMoreIfNotFullPage()
+
                 helper?.trailingLoadState = NotLoading(false)
                 // page加一
                 pageInfo.nextPage()
