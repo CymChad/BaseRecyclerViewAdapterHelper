@@ -165,7 +165,7 @@ class QuickAdapterHelper private constructor(
      * Add Adapter after [contentAdapter].
      * 在 [contentAdapter] 之后添加 Adapter
      *
-     * @param footerAdapter Adapter<*>
+     * @param adapter Adapter<*>
      */
     fun addAfterAdapter(adapter: BaseQuickAdapter<*, *>) = apply {
 
@@ -191,7 +191,7 @@ class QuickAdapterHelper private constructor(
      * 在 [contentAdapter] 之后添加 Adapter
      *
      * @param index
-     * @param footerAdapter
+     * @param adapter
      */
     fun addAfterAdapter(index: Int, adapter: BaseQuickAdapter<*, *>) = apply {
         if (index < 0 || index > mAfterList.size) throw IndexOutOfBoundsException("Index must be between 0 and ${mAfterList.size}. Given:${index}")
