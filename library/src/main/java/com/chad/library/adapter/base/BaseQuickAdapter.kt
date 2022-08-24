@@ -245,7 +245,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     /**
      * Called when a view created by this holder has been attached to a window.
      * simple to solve item will layout using all
-     * [setStaggeredGridFullSpan]
+     * [asStaggeredGridFullSpan]
      *
      * @param holder
      */
@@ -254,7 +254,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         super.onViewAttachedToWindow(holder)
 
         if (isFullSpanItem(getItemViewType(holder.bindingAdapterPosition))) {
-            setStaggeredGridFullSpan(holder)
+            holder.asStaggeredGridFullSpan()
         } else {
             runAnimator(holder)
         }
@@ -347,7 +347,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * @param position
      */
     protected open fun onItemClick(v: View, position: Int) {
-        mOnItemClickListener?.onItemClick(this, v, position)
+        mOnItemClickListener?.invoke(this, v, position)
     }
 
     /**
@@ -359,15 +359,15 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * @return
      */
     protected open fun onItemLongClick(v: View, position: Int): Boolean {
-        return mOnItemLongClickListener?.onItemLongClick(this, v, position) ?: false
+        return mOnItemLongClickListener?.invoke(this, v, position) ?: false
     }
 
     protected open fun onItemChildClick(v: View, position: Int) {
-        mOnItemChildClickArray.get(v.id)?.onItemChildClick(this, v, position)
+        mOnItemChildClickArray.get(v.id)?.invoke(this, v, position)
     }
 
     protected open fun onItemChildLongClick(v: View, position: Int): Boolean {
-        return mOnItemChildLongClickArray.get(v.id)?.onItemChildLongClick(this, v, position)
+        return mOnItemChildLongClickArray.get(v.id)?.invoke(this, v, position)
             ?: false
     }
 
@@ -379,8 +379,8 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      *
      * @param holder True if this item should traverse all spans.
      */
-    protected fun setStaggeredGridFullSpan(holder: RecyclerView.ViewHolder) {
-        val layoutParams = holder.itemView.layoutParams
+    protected fun RecyclerView.ViewHolder.asStaggeredGridFullSpan() {
+        val layoutParams = this.itemView.layoutParams
         if (layoutParams is StaggeredGridLayoutManager.LayoutParams) {
             layoutParams.isFullSpan = true
         }
@@ -650,17 +650,18 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     /************************************** Set Listener ****************************************/
 
-
-    fun setOnItemClickListener(listener: OnItemClickListener<T>?) {
+    fun setOnItemClickListener(listener: OnItemClickListener<T>?) = apply {
         this.mOnItemClickListener = listener
     }
 
     fun getOnItemClickListener(): OnItemClickListener<T>? = mOnItemClickListener
-    fun setOnItemLongClickListener(listener: OnItemLongClickListener<T>?) {
+
+    fun setOnItemLongClickListener(listener: OnItemLongClickListener<T>?)  = apply {
         this.mOnItemLongClickListener = listener
     }
 
     fun getOnItemLongClickListener(): OnItemLongClickListener<T>? = mOnItemLongClickListener
+
     fun addOnItemChildClickListener(@IdRes id: Int, listener: OnItemChildClickListener<T>) = apply {
         mOnItemChildClickArray.put(id, listener)
     }
@@ -700,26 +701,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         AlphaIn, ScaleIn, SlideInBottom, SlideInLeft, SlideInRight
     }
 
-    fun interface OnItemClickListener<T> {
-        fun onItemClick(adapter: BaseQuickAdapter<T, *>, view: View, position: Int)
-    }
-
-    fun interface OnItemLongClickListener<T> {
-        fun onItemLongClick(adapter: BaseQuickAdapter<T, *>, view: View, position: Int): Boolean
-    }
-
-    fun interface OnItemChildClickListener<T> {
-        fun onItemChildClick(adapter: BaseQuickAdapter<T, *>, view: View, position: Int)
-    }
-
-    fun interface OnItemChildLongClickListener<T> {
-        fun onItemChildLongClick(
-            adapter: BaseQuickAdapter<T, *>,
-            view: View,
-            position: Int
-        ): Boolean
-    }
-
     interface OnViewAttachStateChangeListener {
 
         /**
@@ -737,5 +718,15 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         const val EMPTY_VIEW = 0x10000555
 
         internal const val EMPTY_PAYLOAD = 0
+
+
     }
 }
+
+typealias OnItemClickListener<T> = (adapter: BaseQuickAdapter<T, *>, view: View, position: Int) -> Unit?
+
+typealias OnItemLongClickListener<T> = (adapter: BaseQuickAdapter<T, *>, view: View, position: Int) -> Boolean
+
+typealias OnItemChildClickListener<T> = (adapter: BaseQuickAdapter<T, *>, view: View, position: Int) -> Unit?
+
+typealias OnItemChildLongClickListener<T> = (adapter: BaseQuickAdapter<T, *>, view: View, position: Int) -> Boolean

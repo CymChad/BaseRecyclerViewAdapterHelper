@@ -134,6 +134,7 @@ public class ManualDragAndSwipeUseActivity extends BaseViewBindingActivity<Activ
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
             Tips.show("点击了：" + position + "，侧滑可进行删除" + position);
             quickDragAndSwipe.startSwipe(position);
+            return null;
         });
         mAdapter.setOnItemLongClickListener((adapter, view, position) -> {
             /*
