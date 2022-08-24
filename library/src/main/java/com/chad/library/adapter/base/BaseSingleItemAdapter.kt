@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 abstract class BaseSingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private var mItem: T? = null) :
     RecyclerView.Adapter<VH>() {
 
-    private var mOnItemClickListener: ((BaseSingleItemAdapter<T, *>, view: View, item: T?) -> Unit)? = null
-    private var mOnItemLongClickListener: ((BaseSingleItemAdapter<T, *>, view: View, item: T?) -> Boolean)? = null
+    private var mOnItemClickListener: ((BaseSingleItemAdapter<T, *>, View, T?) -> Unit)? = null
+    private var mOnItemLongClickListener: ((BaseSingleItemAdapter<T, *>, View, T?) -> Boolean)? = null
 
     protected abstract fun onCreateViewHolder(
         context: Context, parent: ViewGroup, viewType: Int
@@ -73,14 +73,14 @@ abstract class BaseSingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private va
             notifyItemChanged(0)
         }
 
-    fun setOnItemClickListener(listener: ((BaseSingleItemAdapter<T, *>, view: View, item: T?) -> Unit)?) =
+    fun setOnItemClickListener(listener: ((adapter: BaseSingleItemAdapter<T, *>, view: View, item: T?) -> Unit)?) =
         apply {
             this.mOnItemClickListener = listener
         }
 
     fun getOnItemClickListener() = mOnItemClickListener
 
-    fun setOnItemLongClickListener(listener: ((BaseSingleItemAdapter<T, *>, view: View, item: T?) -> Boolean)?) {
+    fun setOnItemLongClickListener(listener: ((adapter: BaseSingleItemAdapter<T, *>, view: View, item: T?) -> Boolean)?) {
         this.mOnItemLongClickListener = listener
     }
 

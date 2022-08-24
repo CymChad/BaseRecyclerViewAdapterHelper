@@ -84,7 +84,10 @@ class AutoLoadMoreRefreshUseActivity : BaseViewBindingActivity<ActivityLoadMoreB
     }
 
     private fun addHeadView() {
-        val headerAdapter = HeaderAdapter { addHeadView() }
+        val headerAdapter = HeaderAdapter()
+        headerAdapter.setOnItemClickListener { _, _, _ ->
+            addHeadView()
+        }
         helper.addHeader(headerAdapter)
     }
 
