@@ -13,7 +13,7 @@ import com.chad.library.databinding.BrvahTrailingLoadMoreBinding
  *
  * 默认实现的尾部"加载更多" Adapter
  */
-internal class DefaultTrailingLoadStateAdapter: TrailingLoadStateAdapter<DefaultTrailingLoadStateAdapter.TrailingLoadStateVH>() {
+internal class DefaultTrailingLoadStateAdapter(isLoadEndDisplay: Boolean = true): TrailingLoadStateAdapter<DefaultTrailingLoadStateAdapter.TrailingLoadStateVH>(isLoadEndDisplay) {
 
     /**
      * Default implementation of "load more" ViewHolder
