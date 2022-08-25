@@ -9,7 +9,7 @@ import com.chad.baserecyclerviewadapterhelper.databinding.LayoutAnimationBinding
 import com.chad.baserecyclerviewadapterhelper.entity.Status
 import com.chad.library.adapter.base.BaseQuickAdapter
 
-class EmptyViewAdapter : BaseQuickAdapter<Status?, EmptyViewAdapter.VH>() {
+class EmptyViewAdapter : BaseQuickAdapter<Status, EmptyViewAdapter.VH>() {
 
     class VH(
         parent: ViewGroup,
