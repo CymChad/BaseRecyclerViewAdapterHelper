@@ -18,7 +18,7 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder>(
     /**
      * Whether to display "Loading end" after all data is loaded.
      *
-     * 所有数据加载完毕后，是否显示"加载结束"，必须初始化后就调用，中途修改参数不生效。
+     * 所有数据加载完毕后，是否显示"加载结束"，必须初始化时传递，中途无法修改参数。
      */
     val isLoadEndDisplay: Boolean = true
 ) :

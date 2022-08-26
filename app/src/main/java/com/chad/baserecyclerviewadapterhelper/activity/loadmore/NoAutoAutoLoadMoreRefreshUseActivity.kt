@@ -83,7 +83,7 @@ class NoAutoAutoLoadMoreRefreshUseActivity : BaseViewBindingActivity<ActivityLoa
             }
         })
         //——————————————————————————————————————————————————————————
-        // 关闭"自动加载更多"，需要在初始化的时候进行设置，使用期间不可更改
+        // 关闭"自动加载更多"
         //——————————————————————————————————————————————————————————
         loadMoreAdapter.isAutoLoadMore = false
         helper = QuickAdapterHelper.Builder(mAdapter)
