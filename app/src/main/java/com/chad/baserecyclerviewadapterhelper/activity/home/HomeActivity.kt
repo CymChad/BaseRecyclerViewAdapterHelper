@@ -15,6 +15,7 @@ import com.chad.baserecyclerviewadapterhelper.activity.home.adapter.HomeTopHeade
 import com.chad.baserecyclerviewadapterhelper.activity.itemclick.ItemClickActivity
 import com.chad.baserecyclerviewadapterhelper.activity.loadmore.AutoLoadMoreRefreshUseActivity
 import com.chad.baserecyclerviewadapterhelper.activity.loadmore.NoAutoAutoLoadMoreRefreshUseActivity
+import com.chad.baserecyclerviewadapterhelper.activity.scene.GroupDemoActivity
 import com.chad.baserecyclerviewadapterhelper.activity.upfetch.UpFetchUseActivity
 import com.chad.baserecyclerviewadapterhelper.databinding.ActivityHomeBinding
 import com.chad.baserecyclerviewadapterhelper.entity.HomeEntity
@@ -68,17 +69,15 @@ class HomeActivity : AppCompatActivity() {
             HomeEntity("DataBinding", DataBindingUseActivity::class.java, R.mipmap.gv_databinding),
             HomeEntity("DiffUtil", DifferActivity::class.java, R.mipmap.gv_databinding),
 
-//                HomeEntity(sectionTitle = "Adapter 类型"),
-//                HomeEntity("MultipleItem", ChooseMultipleItemUseTypeActivity::class.java, R.mipmap.gv_multipleltem),
-//                HomeEntity("Quick Section", SectionQuickUseActivity::class.java, R.mipmap.gv_section),
-//                HomeEntity("Node", ChooseNodeUseTypeActivity::class.java, R.mipmap.gv_expandable),
 //
             HomeEntity(sectionTitle = "功能模块"),
             HomeEntity("LoadMore(Auto)", AutoLoadMoreRefreshUseActivity::class.java, R.mipmap.gv_pulltorefresh),
             HomeEntity("LoadMore", NoAutoAutoLoadMoreRefreshUseActivity::class.java, R.mipmap.gv_pulltorefresh),
-                HomeEntity("DragAndSwipe", DragAndSwipeUseActivity::class.java, R.mipmap.gv_drag_and_swipe),
+            HomeEntity("DragAndSwipe", DragAndSwipeUseActivity::class.java, R.mipmap.gv_drag_and_swipe),
             HomeEntity("UpFetch", UpFetchUseActivity::class.java, R.drawable.gv_up_fetch),
-//            HomeEntity("Node", NodeTreeUseActivity::class.java, R.mipmap.gv_expandable),
 
+
+            HomeEntity(sectionTitle = "场景演示"),
+            HomeEntity("Group", GroupDemoActivity::class.java, R.mipmap.gv_animation),
         )
 }

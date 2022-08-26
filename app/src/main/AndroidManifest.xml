@@ -69,6 +69,7 @@
         <activity
             android:name=".activity.dragswipe.DefaultDragAndSwipeActivity"
             android:exported="false" />
+        <activity android:name=".activity.scene.GroupDemoActivity" />
     </application>
 
 </manifest>

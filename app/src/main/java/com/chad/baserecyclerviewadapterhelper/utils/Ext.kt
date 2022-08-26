@@ -14,3 +14,12 @@ inline var Window.statusBarLightMode: Boolean
     get() {
         return WindowCompat.getInsetsController(this, decorView).isAppearanceLightStatusBars
     }
+
+
+/**
+ * dp 转 px
+ */
+inline val Int.dp: Int
+    get() {
+        return (this * AppUtils.app.resources.displayMetrics.density + 0.5f).toInt()
+    }
