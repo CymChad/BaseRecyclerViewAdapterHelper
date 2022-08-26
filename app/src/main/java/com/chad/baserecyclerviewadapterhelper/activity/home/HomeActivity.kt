@@ -78,6 +78,6 @@ class HomeActivity : AppCompatActivity() {
 
 
             HomeEntity(sectionTitle = "场景演示"),
-            HomeEntity("Group", GroupDemoActivity::class.java, R.mipmap.gv_animation),
+            HomeEntity("Group（ConcatAdapter）", GroupDemoActivity::class.java, R.mipmap.gv_animation),
         )
 }

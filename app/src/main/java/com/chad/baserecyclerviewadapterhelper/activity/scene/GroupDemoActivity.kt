@@ -28,7 +28,7 @@ class GroupDemoActivity : BaseViewBindingActivity<ActivityUniversalRecyclerBindi
         super.onCreate(savedInstanceState)
         window.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.bg)))
 
-        viewBinding.titleBar.title = "Group Scene"
+        viewBinding.titleBar.title = "Group Scene（ConcatAdapter）"
         viewBinding.titleBar.setOnBackListener { finish() }
 
         viewBinding.rv.layoutManager = LinearLayoutManager(this)
