@@ -258,6 +258,7 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
                 return
             }
             val parentIndex = this.data.indexOf(parentNode)
+
             val pos = parentIndex + 1 + childIndex
             addData(pos, newData)
         }
@@ -370,7 +371,7 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
      * @param isExpanded Boolean? 如果不需要改变状态，设置为null。true 为展开，false 为收起
      * @return MutableList<BaseNode>
      */
-    private fun flatData(list: Collection<BaseNode>, isExpanded: Boolean? = null): MutableList<BaseNode> {
+    private  fun  flatData(list: Collection<BaseNode>, isExpanded: Boolean? = null): MutableList<BaseNode> {
         val newList = ArrayList<BaseNode>()
 
         for (element in list) {
