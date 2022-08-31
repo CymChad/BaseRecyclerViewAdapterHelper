@@ -199,10 +199,10 @@ open class QuickDragAndSwipe : ItemTouchHelper.Callback() {
         val position = getViewHolderPosition(viewHolder)
 
         if (position == RecyclerView.NO_POSITION) return
-            // 删除数据
-            _dataCallback?.dataRemoveAt(position)
+        // 删除数据
+        _dataCallback?.dataRemoveAt(position)
 
-            mOnItemSwipeListener?.onItemSwiped(viewHolder, position)
+        mOnItemSwipeListener?.onItemSwiped(viewHolder, position)
     }
 
     override fun isLongPressDragEnabled(): Boolean {
