@@ -106,17 +106,17 @@ public class ManualDragAndSwipeUseActivity extends BaseViewBindingActivity<Activ
             }
 
             @Override
-            public void onItemSwipeEnd(RecyclerView.ViewHolder viewHolder, int pos) {
+            public void onItemSwipeEnd(@NonNull RecyclerView.ViewHolder viewHolder, int pos) {
                 Log.d(TAG, "onItemSwipeEnd");
             }
 
             @Override
-            public void onItemSwiped(RecyclerView.ViewHolder viewHolder, int pos) {
+            public void onItemSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int pos) {
                 Log.d(TAG,  "onItemSwiped");
             }
 
             @Override
-            public void onItemSwipeMoving(Canvas canvas, RecyclerView.ViewHolder viewHolder, float dX, float dY, boolean isCurrentlyActive) {
+            public void onItemSwipeMoving(@NonNull Canvas canvas, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, boolean isCurrentlyActive) {
                 Log.d(TAG, "onItemSwipeMoving");
             }
         };

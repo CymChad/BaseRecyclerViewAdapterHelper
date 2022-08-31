@@ -2,6 +2,8 @@ package com.chad.library.adapter.base.dragswipe.listener;
 
 import android.graphics.Canvas;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
@@ -11,7 +13,7 @@ public interface OnItemSwipeListener {
     /**
      * Called when the swipe action start.
      */
-    void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int pos);
+    void onItemSwipeStart(@Nullable RecyclerView.ViewHolder viewHolder, int pos);
 
     /**
      * Called when the swipe action is over.
@@ -19,12 +21,12 @@ public interface OnItemSwipeListener {
      *
      * @param pos If the view is swiped, pos will be negative.
      */
-    void onItemSwipeEnd(RecyclerView.ViewHolder viewHolder, int pos);
+    void onItemSwipeEnd(@NonNull RecyclerView.ViewHolder viewHolder, int pos);
 
     /**
      * Called when item is swiped, the view is going to be removed from the adapter.
      */
-    void onItemSwiped(RecyclerView.ViewHolder viewHolder, int pos);
+    void onItemSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int pos);
 
     /**
      * Draw on the empty edge when swipe moving
@@ -37,5 +39,5 @@ public interface OnItemSwipeListener {
      * @param isCurrentlyActive True if this view is currently being controlled by the user or
      *                          false it is simply animating back to its original state.
      */
-    void onItemSwipeMoving(Canvas canvas, RecyclerView.ViewHolder viewHolder, float dX, float dY, boolean isCurrentlyActive);
+    void onItemSwipeMoving(@NonNull Canvas canvas, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, boolean isCurrentlyActive);
 }
