@@ -101,17 +101,17 @@ public class ManualDragAndSwipeUseActivity extends BaseViewBindingActivity<Activ
 
         OnItemSwipeListener swipeListener = new OnItemSwipeListener() {
             @Override
-            public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int pos) {
+            public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int bindingAdapterPosition) {
                 Log.d(TAG, "onItemSwipeStart");
             }
 
             @Override
-            public void onItemSwipeEnd(@NonNull RecyclerView.ViewHolder viewHolder, int pos) {
+            public void onItemSwipeEnd(@NonNull RecyclerView.ViewHolder viewHolder, int bindingAdapterPosition) {
                 Log.d(TAG, "onItemSwipeEnd");
             }
 
             @Override
-            public void onItemSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int pos) {
+            public void onItemSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction, int bindingAdapterPosition) {
                 Log.d(TAG,  "onItemSwiped");
             }
 

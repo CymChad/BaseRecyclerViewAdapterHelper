@@ -13,7 +13,7 @@ public interface OnItemSwipeListener {
     /**
      * Called when the swipe action start.
      */
-    void onItemSwipeStart(@Nullable RecyclerView.ViewHolder viewHolder, int pos);
+    void onItemSwipeStart(@Nullable RecyclerView.ViewHolder viewHolder, int bindingAdapterPosition);
 
     /**
      * Called when the swipe action is over.
@@ -21,12 +21,12 @@ public interface OnItemSwipeListener {
      *
      * @param pos If the view is swiped, pos will be negative.
      */
-    void onItemSwipeEnd(@NonNull RecyclerView.ViewHolder viewHolder, int pos);
+    void onItemSwipeEnd(@NonNull RecyclerView.ViewHolder viewHolder, int bindingAdapterPosition);
 
     /**
      * Called when item is swiped, the view is going to be removed from the adapter.
      */
-    void onItemSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int pos);
+    void onItemSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction, int bindingAdapterPosition);
 
     /**
      * Draw on the empty edge when swipe moving

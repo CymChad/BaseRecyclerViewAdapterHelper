@@ -130,7 +130,7 @@ class HeaderDragAndSwipeActivity : BaseViewBindingActivity<ActivityUniversalRecy
                 onItemSwipeMoving = { canvas, viewHolder, dX, dY, isCurrentlyActive ->
                     Log.d(TAG, "onItemSwipeMoving")
                 },
-                onItemSwiped = { viewHolder, pos ->
+                onItemSwiped = { viewHolder, _, pos ->
                     Log.d(TAG, "onItemSwiped")
                 },
                 onItemSwipeEnd = { viewHolder, pos ->

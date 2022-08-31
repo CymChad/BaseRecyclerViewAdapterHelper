@@ -97,15 +97,15 @@ class DefaultDragAndSwipeActivity : BaseViewBindingActivity<ActivityUniversalRec
             }
         }
         val swipeListener: OnItemSwipeListener = object : OnItemSwipeListener {
-            override fun onItemSwipeStart(viewHolder: RecyclerView.ViewHolder?, pos: Int) {
+            override fun onItemSwipeStart(viewHolder: RecyclerView.ViewHolder?, bindingAdapterPosition: Int) {
                 Log.d(TAG, "onItemSwipeStart")
             }
 
-            override fun onItemSwipeEnd(viewHolder: RecyclerView.ViewHolder, pos: Int) {
+            override fun onItemSwipeEnd(viewHolder: RecyclerView.ViewHolder, bindingAdapterPosition: Int) {
                 Log.d(TAG, "onItemSwipeEnd")
             }
 
-            override fun onItemSwiped(viewHolder: RecyclerView.ViewHolder, pos: Int) {
+            override fun onItemSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int, bindingAdapterPosition: Int) {
                 Log.d(TAG, "onItemSwiped")
             }
 
