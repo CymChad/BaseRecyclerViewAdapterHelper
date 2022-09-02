@@ -29,7 +29,7 @@ Of course, you can continue to use the [2.x](https://github.com/CymChad/BaseRecy
 (由于各位项目成员工作较为繁忙，请各位同学谅解)
 
 ## 4.x Demo
-![wiki](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki)
+[wiki](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki)
 
 
 # proguard-rules.pro
