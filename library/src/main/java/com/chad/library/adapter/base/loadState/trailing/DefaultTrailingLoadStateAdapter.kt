@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.R
 import com.chad.library.adapter.base.loadState.LoadState
-import com.chad.library.databinding.BrvahTrailingLoadMoreBinding
 
 /**
  * Default trailing load state adapter
@@ -22,19 +21,22 @@ internal class DefaultTrailingLoadStateAdapter(isLoadEndDisplay: Boolean = true)
      */
     internal class TrailingLoadStateVH(
         parent: ViewGroup,
-        val viewBinding: BrvahTrailingLoadMoreBinding = BrvahTrailingLoadMoreBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
-        )
-    ) : RecyclerView.ViewHolder(viewBinding.root)
+        view: View = LayoutInflater.from(parent.context).inflate(R.layout.brvah_trailing_load_more, parent, false)
+    ) : RecyclerView.ViewHolder(view) {
+        val loadCompleteView: View = itemView.findViewById(R.id.load_more_load_complete_view)
+        val loadingView: View = itemView.findViewById(R.id.load_more_loading_view)
+        val loadFailView: View = itemView.findViewById(R.id.load_more_load_fail_view)
+        val loadEndView: View = itemView.findViewById(R.id.load_more_load_end_view)
+    }
 
     override fun onCreateViewHolder( parent: ViewGroup, loadState: LoadState): TrailingLoadStateVH {
         return TrailingLoadStateVH(parent).apply {
-            viewBinding.loadMoreLoadFailView.setOnClickListener {
+            loadFailView.setOnClickListener {
                 // 失败重试点击事件
                 // retry when loaded failed.
                 invokeFailRetry()
             }
-            viewBinding.loadMoreLoadCompleteView.setOnClickListener {
+            loadCompleteView.setOnClickListener {
                 // 加载更多，手动点击事件
                 // manual click to load more.
                 invokeLoadMore()
@@ -51,34 +53,34 @@ internal class DefaultTrailingLoadStateAdapter(isLoadEndDisplay: Boolean = true)
         when (loadState) {
             is LoadState.NotLoading -> {
                 if (loadState.endOfPaginationReached) {
-                    holder.viewBinding.loadMoreLoadCompleteView.visibility = View.GONE
-                    holder.viewBinding.loadMoreLoadingView.visibility = View.GONE
-                    holder.viewBinding.loadMoreLoadFailView.visibility = View.GONE
-                    holder.viewBinding.loadMoreLoadEndView.visibility = View.VISIBLE
+                    holder.loadCompleteView.visibility = View.GONE
+                    holder.loadingView.visibility = View.GONE
+                    holder.loadFailView.visibility = View.GONE
+                    holder.loadEndView.visibility = View.VISIBLE
                 } else {
-                    holder.viewBinding.loadMoreLoadCompleteView.visibility = View.VISIBLE
-                    holder.viewBinding.loadMoreLoadingView.visibility = View.GONE
-                    holder.viewBinding.loadMoreLoadFailView.visibility = View.GONE
-                    holder.viewBinding.loadMoreLoadEndView.visibility = View.GONE
+                    holder.loadCompleteView.visibility = View.VISIBLE
+                    holder.loadingView.visibility = View.GONE
+                    holder.loadFailView.visibility = View.GONE
+                    holder.loadEndView.visibility = View.GONE
                 }
             }
             is LoadState.Loading -> {
-                holder.viewBinding.loadMoreLoadCompleteView.visibility = View.GONE
-                holder.viewBinding.loadMoreLoadingView.visibility = View.VISIBLE
-                holder.viewBinding.loadMoreLoadFailView.visibility = View.GONE
-                holder.viewBinding.loadMoreLoadEndView.visibility = View.GONE
+                holder.loadCompleteView.visibility = View.GONE
+                holder.loadingView.visibility = View.VISIBLE
+                holder.loadFailView.visibility = View.GONE
+                holder.loadEndView.visibility = View.GONE
             }
             is LoadState.Error -> {
-                holder.viewBinding.loadMoreLoadCompleteView.visibility = View.GONE
-                holder.viewBinding.loadMoreLoadingView.visibility = View.GONE
-                holder.viewBinding.loadMoreLoadFailView.visibility = View.VISIBLE
-                holder.viewBinding.loadMoreLoadEndView.visibility = View.GONE
+                holder.loadCompleteView.visibility = View.GONE
+                holder.loadingView.visibility = View.GONE
+                holder.loadFailView.visibility = View.VISIBLE
+                holder.loadEndView.visibility = View.GONE
             }
             is LoadState.None -> {
-                holder.viewBinding.loadMoreLoadCompleteView.visibility = View.GONE
-                holder.viewBinding.loadMoreLoadingView.visibility = View.GONE
-                holder.viewBinding.loadMoreLoadFailView.visibility = View.GONE
-                holder.viewBinding.loadMoreLoadEndView.visibility = View.GONE
+                holder.loadCompleteView.visibility = View.GONE
+                holder.loadingView.visibility = View.GONE
+                holder.loadFailView.visibility = View.GONE
+                holder.loadEndView.visibility = View.GONE
             }
         }
     }

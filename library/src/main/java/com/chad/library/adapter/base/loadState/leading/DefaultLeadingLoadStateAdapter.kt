@@ -4,15 +4,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.chad.library.R
 import com.chad.library.adapter.base.loadState.LoadState
-import com.chad.library.databinding.BrvahLeadingLoadMoreBinding
 
 /**
  * Default leading load state adapter
  *
  * 默认实现的尾部"向上加载更多" Adapter
  */
-internal class DefaultLeadingLoadStateAdapter :LeadingLoadStateAdapter<DefaultLeadingLoadStateAdapter.LeadingLoadStateVH>() {
+internal class DefaultLeadingLoadStateAdapter :
+    LeadingLoadStateAdapter<DefaultLeadingLoadStateAdapter.LeadingLoadStateVH>() {
 
     /**
      * Default ViewHolder
@@ -21,10 +22,11 @@ internal class DefaultLeadingLoadStateAdapter :LeadingLoadStateAdapter<DefaultLe
      */
     internal class LeadingLoadStateVH(
         parent: ViewGroup,
-        val viewBinding: BrvahLeadingLoadMoreBinding = BrvahLeadingLoadMoreBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
-        )
-    ) : RecyclerView.ViewHolder(viewBinding.root)
+        view: View = LayoutInflater.from(parent.context)
+            .inflate(R.layout.brvah_leading_load_more, parent, false)
+    ) : RecyclerView.ViewHolder(view) {
+        val loadingProgress: View = itemView.findViewById(R.id.loading_progress)
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): LeadingLoadStateVH {
@@ -33,9 +35,11 @@ internal class DefaultLeadingLoadStateAdapter :LeadingLoadStateAdapter<DefaultLe
 
     override fun onBindViewHolder(holder: LeadingLoadStateVH, loadState: LoadState) {
         if (loadState is LoadState.Loading) {
-            holder.viewBinding.loadingProgress.visibility = View.VISIBLE
+            holder.loadingProgress.visibility = View.VISIBLE
         } else {
-            holder.viewBinding.loadingProgress.visibility = View.GONE
+            holder.loadingProgress.visibility = View.GONE
         }
     }
+
+    override fun getStateViewType(loadState: LoadState): Int = R.layout.brvah_leading_load_more
 }
