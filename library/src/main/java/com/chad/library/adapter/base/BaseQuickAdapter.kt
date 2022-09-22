@@ -347,7 +347,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * @param position
      */
     protected open fun onItemClick(v: View, position: Int) {
-        mOnItemClickListener?.invoke(this, v, position)
+        mOnItemClickListener?.onClick(this, v, position)
     }
 
     /**
@@ -359,15 +359,15 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * @return
      */
     protected open fun onItemLongClick(v: View, position: Int): Boolean {
-        return mOnItemLongClickListener?.invoke(this, v, position) ?: false
+        return mOnItemLongClickListener?.onLongClick(this, v, position) ?: false
     }
 
     protected open fun onItemChildClick(v: View, position: Int) {
-        mOnItemChildClickArray.get(v.id)?.invoke(this, v, position)
+        mOnItemChildClickArray.get(v.id)?.onItemClick(this, v, position)
     }
 
     protected open fun onItemChildLongClick(v: View, position: Int): Boolean {
-        return mOnItemChildLongClickArray.get(v.id)?.invoke(this, v, position)
+        return mOnItemChildLongClickArray.get(v.id)?.onItemLongClick(this, v, position)
             ?: false
     }
 
@@ -717,19 +717,27 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder)
     }
 
+
+    fun interface OnItemClickListener<T> {
+        fun onClick(adapter: BaseQuickAdapter<T, *>, view: View, position: Int)
+    }
+
+    fun interface OnItemLongClickListener<T> {
+        fun onLongClick(adapter: BaseQuickAdapter<T, *>, view: View, position: Int): Boolean
+    }
+
+    fun interface OnItemChildClickListener<T> {
+        fun onItemClick(adapter: BaseQuickAdapter<T, *>, view: View, position: Int)
+    }
+
+    fun interface OnItemChildLongClickListener<T> {
+        fun onItemLongClick(adapter: BaseQuickAdapter<T, *>, view: View, position: Int): Boolean
+    }
+
+
     companion object {
         const val EMPTY_VIEW = 0x10000555
 
         internal const val EMPTY_PAYLOAD = 0
-
-
     }
 }
-
-typealias OnItemClickListener<T> = (adapter: BaseQuickAdapter<T, *>, view: View, position: Int) -> Unit
-
-typealias OnItemLongClickListener<T> = (adapter: BaseQuickAdapter<T, *>, view: View, position: Int) -> Boolean
-
-typealias OnItemChildClickListener<T> = (adapter: BaseQuickAdapter<T, *>, view: View, position: Int) -> Unit
-
-typealias OnItemChildLongClickListener<T> = (adapter: BaseQuickAdapter<T, *>, view: View, position: Int) -> Boolean

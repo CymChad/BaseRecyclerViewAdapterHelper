@@ -45,7 +45,6 @@ public final class DataBindingUseActivity extends BaseViewBindingActivity<Activi
         //item 点击事件
         adapter.setOnItemClickListener((movieBaseQuickAdapter, view, position) -> {
             Tips.show("onItemClick: " + position);
-            return null;
         });
 
         //设置数据

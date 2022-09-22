@@ -52,7 +52,6 @@ public class DragAndSwipeUseActivity extends BaseViewBindingActivity<ActivityUni
             if (!item.isSection()) {
                 startActivity(new Intent(DragAndSwipeUseActivity.this, item.getActivity()));
             }
-            return null;
         });
     }
 }
