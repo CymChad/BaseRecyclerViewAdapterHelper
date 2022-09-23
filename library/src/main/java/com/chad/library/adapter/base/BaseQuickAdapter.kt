@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.chad.library.adapter.base.animation.*
 import com.chad.library.adapter.base.viewholder.EmptyLayoutVH
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Base Class
@@ -295,7 +294,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
                 if (position == RecyclerView.NO_POSITION) {
                     return@setOnClickListener
                 }
-                onItemClick(v, position)
+                onItemClick(viewHolder, v, position)
             }
         }
         mOnItemLongClickListener?.let {
@@ -304,7 +303,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
                 if (position == RecyclerView.NO_POSITION) {
                     return@setOnLongClickListener false
                 }
-                onItemLongClick(v, position)
+                onItemLongClick(viewHolder, v, position)
             }
         }
 
@@ -318,7 +317,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
                     if (position == RecyclerView.NO_POSITION) {
                         return@setOnClickListener
                     }
-                    onItemChildClick(v, position)
+                    onItemChildClick(viewHolder, v, position)
                 }
             }
         }
@@ -333,7 +332,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
                     if (position == RecyclerView.NO_POSITION) {
                         return@setOnLongClickListener false
                     }
-                    onItemChildLongClick(v, position)
+                    onItemChildLongClick(viewHolder, v, position)
                 }
             }
         }
@@ -343,32 +342,38 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * override this method if you want to override click event logic
      *
      * 如果你想重新实现 item 点击事件逻辑，请重写此方法
+     * @param viewHolder
      * @param v
      * @param position
      */
-    protected open fun onItemClick(v: View, position: Int) {
-        mOnItemClickListener?.onClick(this, v, position)
+    protected open fun onItemClick(viewHolder: VH, v: View, position: Int) {
+        mOnItemClickListener?.onClick(getBindingAdapter(viewHolder), v, position)
     }
 
     /**
      * override this method if you want to override longClick event logic
      *
      * 如果你想重新实现 item 长按事件逻辑，请重写此方法
+     * @param viewHolder
      * @param v
      * @param position
      * @return
      */
-    protected open fun onItemLongClick(v: View, position: Int): Boolean {
-        return mOnItemLongClickListener?.onLongClick(this, v, position) ?: false
+    protected open fun onItemLongClick(viewHolder: VH, v: View, position: Int): Boolean {
+        return mOnItemLongClickListener?.onLongClick(getBindingAdapter(viewHolder), v, position) ?: false
     }
 
-    protected open fun onItemChildClick(v: View, position: Int) {
-        mOnItemChildClickArray.get(v.id)?.onItemClick(this, v, position)
+    protected open fun onItemChildClick(viewHolder: VH, v: View, position: Int) {
+        mOnItemChildClickArray.get(v.id)?.onItemClick(getBindingAdapter(viewHolder), v, position)
     }
 
-    protected open fun onItemChildLongClick(v: View, position: Int): Boolean {
-        return mOnItemChildLongClickArray.get(v.id)?.onItemLongClick(this, v, position)
+    protected open fun onItemChildLongClick(viewHolder: VH, v: View, position: Int): Boolean {
+        return mOnItemChildLongClickArray.get(v.id)?.onItemLongClick(getBindingAdapter(viewHolder), v, position)
             ?: false
+    }
+
+    private fun getBindingAdapter(viewHolder: VH): BaseQuickAdapter<T, *> {
+        return (viewHolder.bindingAdapter as? BaseQuickAdapter<T, *>) ?: this
     }
 
     /**
@@ -656,7 +661,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     fun getOnItemClickListener(): OnItemClickListener<T>? = mOnItemClickListener
 
-    fun setOnItemLongClickListener(listener: OnItemLongClickListener<T>?)  = apply {
+    fun setOnItemLongClickListener(listener: OnItemLongClickListener<T>?) = apply {
         this.mOnItemLongClickListener = listener
     }
 
