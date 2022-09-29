@@ -1,12 +1,10 @@
 package com.chad.library.adapter.base.diff
 
-import androidx.annotation.RestrictTo
 import androidx.recyclerview.widget.DiffUtil
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
 class BrvahAsyncDifferConfig<T>(
-        @RestrictTo(RestrictTo.Scope.LIBRARY)
         val mainThreadExecutor: Executor?,
         val backgroundThreadExecutor: Executor,
         val diffCallback: DiffUtil.ItemCallback<T>) {

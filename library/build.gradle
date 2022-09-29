@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-//apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
@@ -23,16 +22,6 @@ android {
         kotlinOptions.freeCompilerArgs += ['-module-name', "com.github.CymChad.brvah", "-Xjvm-default=all"]
     }
 
-    lintOptions {
-        abortOnError false
-    }
-
-    viewBinding {
-        enabled = true
-    }
-    buildFeatures {
-        dataBinding = true
-    }
 }
 
 // 打包源码jar
@@ -43,6 +32,6 @@ task sourcesJar(type: Jar) {
 
 dependencies {
     implementation 'androidx.annotation:annotation:1.2.0'
-
+    implementation 'androidx.databinding:databinding-runtime:4.2.2'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
 }
