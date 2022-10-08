@@ -55,7 +55,7 @@ android {
 dependencies {
     implementation("androidx.annotation:annotation:1.4.0")
 
-    implementation("androidx.recyclerview:recyclerview:1.3.0-beta02")
+    implementation("androidx.recyclerview:recyclerview:1.3.0-rc01")
 
     implementation("androidx.databinding:databinding-runtime:4.2.2")
 }
