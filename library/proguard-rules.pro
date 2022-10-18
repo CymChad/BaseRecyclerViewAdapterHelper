@@ -25,10 +25,3 @@
      <init>(...);
 }
 -keep class com.chad.library.adapter.base.viewholder.BaseDataBindingHolder {*;}
-
-#-keepattributes InnerClasses
-#
-#-keep class androidx.** {*;}
-#-keep public class * extends androidx.**
-#-keep interface androidx.** {*;}
-#-dontwarn androidx.**
