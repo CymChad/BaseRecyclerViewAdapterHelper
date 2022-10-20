@@ -130,6 +130,7 @@ open class BaseBinderAdapter(list: MutableList<Any>? = null) : BaseQuickAdapter<
                 val itemViewType = viewHolder.itemViewType
                 val binder = getItemBinder(itemViewType)
 
+                val item = data.getOrNull(position) ?: return@setOnClickListener
                 binder.onClick(viewHolder, it, data[position], position)
             }
         }
@@ -145,7 +146,9 @@ open class BaseBinderAdapter(list: MutableList<Any>? = null) : BaseQuickAdapter<
 
                 val itemViewType = viewHolder.itemViewType
                 val binder = getItemBinder(itemViewType)
-                binder.onLongClick(viewHolder, it, data[position], position)
+
+                val item = data.getOrNull(position) ?: return@setOnLongClickListener false
+                binder.onLongClick(viewHolder, it, item, position)
             }
         }
     }
@@ -165,7 +168,8 @@ open class BaseBinderAdapter(list: MutableList<Any>? = null) : BaseQuickAdapter<
                             return@setOnClickListener
                         }
                         position -= headerLayoutCount
-                        provider.onChildClick(viewHolder, v, data[position], position)
+                        val item = data.getOrNull(position) ?: return@setOnClickListener
+                        provider.onChildClick(viewHolder, v, item, position)
                     }
                 }
             }
@@ -184,7 +188,8 @@ open class BaseBinderAdapter(list: MutableList<Any>? = null) : BaseQuickAdapter<
                             return@setOnLongClickListener false
                         }
                         position -= headerLayoutCount
-                        provider.onChildLongClick(viewHolder, v, data[position], position)
+                        val item = data.getOrNull(position) ?: return@setOnLongClickListener false
+                        provider.onChildLongClick(viewHolder, v, item, position)
                     }
                 }
             }
