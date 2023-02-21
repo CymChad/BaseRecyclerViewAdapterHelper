@@ -25,6 +25,8 @@ Of course, you can continue to use the [2.x](https://github.com/CymChad/BaseRecy
 # Document
 - English Writing ...
 - [3.0版本 中文](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/0-BaseRecyclerViewAdapterHelper.md)
+- [4.0版本 中文](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki)
+
 
 (由于各位项目成员工作较为繁忙，请各位同学谅解)
 
