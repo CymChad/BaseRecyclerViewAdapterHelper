@@ -36,4 +36,10 @@ public class UpFetchAdapter extends BaseQuickAdapter<Movie, BaseViewHolder> impl
                 break;
         }
     }
+    
+    @NotNull
+    @Override
+    public BaseUpFetchModule addUpFetchModule(@NotNull BaseQuickAdapter<?, ?> baseQuickAdapter) {
+        return new BaseUpFetchModule(baseQuickAdapter);
+    }
 }
