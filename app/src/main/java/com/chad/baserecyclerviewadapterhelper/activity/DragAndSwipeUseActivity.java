@@ -128,9 +128,9 @@ public class DragAndSwipeUseActivity extends BaseActivity {
         mRecyclerView.setAdapter(mAdapter);
 
 
-        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new OnItemClickListener<String, BaseViewHolder>() {
             @Override
-            public void onItemClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
+            public void onItemClick(@NonNull BaseQuickAdapter<String, BaseViewHolder> adapter, @NonNull View view, int position) {
                 Tips.show("点击了：" + position);
             }
         });

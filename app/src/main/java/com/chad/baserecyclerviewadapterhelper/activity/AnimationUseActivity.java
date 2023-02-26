@@ -18,6 +18,7 @@ import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.kyleduo.switchbutton.SwitchButton;
 
@@ -58,11 +59,11 @@ public class AnimationUseActivity extends AppCompatActivity {
         int mFirstPageItemCount = 3;
 //        mAnimationAdapter.setNotDoAnimationCount(mFirstPageItemCount);
         mAnimationAdapter.addChildClickViewIds(R.id.img, R.id.tweetName, R.id.tweetText);
-        mAnimationAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
+        mAnimationAdapter.setOnItemChildClickListener(new OnItemChildClickListener<Status, BaseViewHolder>() {
             @Override
-            public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
+            public void onItemChildClick(@NonNull BaseQuickAdapter<Status, BaseViewHolder> adapter, @NonNull View view, int position) {
                 String content = null;
-                Status status = (Status) adapter.getItem(position);
+                Status status = adapter.getItem(position);
                 switch (view.getId()) {
                     case R.id.img:
                         content = "img:" + status.getUserAvatar();

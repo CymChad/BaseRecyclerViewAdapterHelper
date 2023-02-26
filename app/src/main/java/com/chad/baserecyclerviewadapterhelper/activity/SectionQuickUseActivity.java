@@ -18,6 +18,7 @@ import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
 import java.util.List;
 
@@ -43,9 +44,9 @@ public class SectionQuickUseActivity extends BaseActivity {
         mData = DataServer.getSectionData();
         SectionQuickAdapter adapter = new SectionQuickAdapter(R.layout.item_section_content, R.layout.def_section_head, mData);
 
-        adapter.setOnItemClickListener(new OnItemClickListener() {
+        adapter.setOnItemClickListener(new OnItemClickListener<MySection,BaseViewHolder>() {
             @Override
-            public void onItemClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
+            public void onItemClick(@NonNull BaseQuickAdapter<MySection,BaseViewHolder> adapter, @NonNull View view, int position) {
                 MySection mySection = mData.get(position);
                 if (mySection.isHeader()) {
                     Tips.show((String) mySection.getObject());
@@ -55,9 +56,9 @@ public class SectionQuickUseActivity extends BaseActivity {
                 }
             }
         });
-        adapter.setOnItemChildClickListener(new OnItemChildClickListener() {
+        adapter.setOnItemChildClickListener(new OnItemChildClickListener<MySection,BaseViewHolder>() {
             @Override
-            public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
+            public void onItemChildClick(@NonNull BaseQuickAdapter<MySection,BaseViewHolder> adapter, @NonNull View view, int position) {
                 Tips.show("onItemChildClick: " + position);
             }
         });

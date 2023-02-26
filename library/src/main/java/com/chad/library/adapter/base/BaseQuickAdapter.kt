@@ -133,10 +133,10 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
     private var mLastPosition = -1
 
     private var mSpanSizeLookup: GridSpanSizeLookup? = null
-    private var mOnItemClickListener: OnItemClickListener? = null
-    private var mOnItemLongClickListener: OnItemLongClickListener? = null
-    private var mOnItemChildClickListener: OnItemChildClickListener? = null
-    private var mOnItemChildLongClickListener: OnItemChildLongClickListener? = null
+    private var mOnItemClickListener: OnItemClickListener<T,VH>? = null
+    private var mOnItemLongClickListener: OnItemLongClickListener<T, VH>? = null
+    private var mOnItemChildClickListener: OnItemChildClickListener<T,VH>? = null
+    private var mOnItemChildLongClickListener: OnItemChildLongClickListener<T,VH>? = null
     private var mUpFetchModule: BaseUpFetchModule? = null
     private var mDraggableModule: BaseDraggableModule? = null
     internal var mLoadMoreModule: BaseLoadMoreModule? = null
@@ -1335,27 +1335,27 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
         this.mSpanSizeLookup = spanSizeLookup
     }
 
-    fun setOnItemClickListener(listener: OnItemClickListener?) {
+    fun setOnItemClickListener(listener: OnItemClickListener<T,VH>?) {
         this.mOnItemClickListener = listener
     }
 
-    fun setOnItemLongClickListener(listener: OnItemLongClickListener?) {
+    fun setOnItemLongClickListener(listener: OnItemLongClickListener<T,VH>?) {
         this.mOnItemLongClickListener = listener
     }
 
-    fun setOnItemChildClickListener(listener: OnItemChildClickListener?) {
+    fun setOnItemChildClickListener(listener: OnItemChildClickListener<T,VH>?) {
         this.mOnItemChildClickListener = listener
     }
 
-    fun setOnItemChildLongClickListener(listener: OnItemChildLongClickListener?) {
+    fun setOnItemChildLongClickListener(listener: OnItemChildLongClickListener<T,VH>?) {
         this.mOnItemChildLongClickListener = listener
     }
 
-    fun getOnItemClickListener(): OnItemClickListener? = mOnItemClickListener
+    fun getOnItemClickListener(): OnItemClickListener<T,VH>? = mOnItemClickListener
 
-    fun getOnItemLongClickListener(): OnItemLongClickListener? = mOnItemLongClickListener
+    fun getOnItemLongClickListener(): OnItemLongClickListener<T,VH>? = mOnItemLongClickListener
 
-    fun getOnItemChildClickListener(): OnItemChildClickListener? = mOnItemChildClickListener
+    fun getOnItemChildClickListener(): OnItemChildClickListener<T,VH>? = mOnItemChildClickListener
 
-    fun getOnItemChildLongClickListener(): OnItemChildLongClickListener? = mOnItemChildLongClickListener
+    fun getOnItemChildLongClickListener(): OnItemChildLongClickListener<T,VH>? = mOnItemChildLongClickListener
 }

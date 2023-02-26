@@ -12,8 +12,9 @@ import com.chad.baserecyclerviewadapterhelper.databinding.ActivityHomeBinding
 import com.chad.baserecyclerviewadapterhelper.entity.HomeEntity
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.listener.OnItemClickListener
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
-class HomeActivity : AppCompatActivity(), OnItemClickListener {
+class HomeActivity : AppCompatActivity(), OnItemClickListener<HomeEntity, BaseViewHolder> {
 
     private lateinit var binding: ActivityHomeBinding
 
@@ -30,8 +31,8 @@ class HomeActivity : AppCompatActivity(), OnItemClickListener {
         }
     }
 
-    override fun onItemClick(adapter: BaseQuickAdapter<*, *>, view: View, position: Int) {
-        val item = adapter.data[position] as HomeEntity
+    override fun onItemClick(adapter: BaseQuickAdapter<HomeEntity, BaseViewHolder>, view: View, position: Int) {
+        val item = adapter.data[position]
         if (!item.isHeader) {
             startActivity(Intent(this@HomeActivity, item.activity))
         }

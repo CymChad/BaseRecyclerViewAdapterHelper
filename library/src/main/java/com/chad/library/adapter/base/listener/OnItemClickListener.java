@@ -5,6 +5,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
 /**
  * @author: limuyang
@@ -12,7 +13,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
  * @Description: Interface definition for a callback to be invoked when an item in this
  * RecyclerView itemView has been clicked.
  */
-public interface OnItemClickListener {
+public interface OnItemClickListener<T, VH extends BaseViewHolder>  {
     /**
      * Callback method to be invoked when an item in this RecyclerView has
      * been clicked.
@@ -22,5 +23,5 @@ public interface OnItemClickListener {
      *                 will be a view provided by the adapter)
      * @param position The position of the view in the adapter.
      */
-    void onItemClick(@NonNull BaseQuickAdapter<?,?> adapter, @NonNull View view, int position);
+    void onItemClick(@NonNull BaseQuickAdapter<T, VH>  adapter, @NonNull View view, int position);
 }

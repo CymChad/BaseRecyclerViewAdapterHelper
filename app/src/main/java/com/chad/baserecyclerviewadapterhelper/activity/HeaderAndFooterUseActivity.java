@@ -11,9 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.adapter.HeaderAndFooterAdapter;
 import com.chad.baserecyclerviewadapterhelper.base.BaseActivity;
+import com.chad.baserecyclerviewadapterhelper.entity.Status;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
@@ -100,9 +102,9 @@ public class HeaderAndFooterUseActivity extends BaseActivity {
         adapter = new HeaderAndFooterAdapter(PAGE_SIZE);
         adapter.setAnimationEnable(true);
 
-        adapter.setOnItemClickListener(new OnItemClickListener() {
+        adapter.setOnItemClickListener(new OnItemClickListener<Status, BaseViewHolder>() {
             @Override
-            public void onItemClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
+            public void onItemClick(@NonNull BaseQuickAdapter<Status, BaseViewHolder> adapter, @NonNull View view, int position) {
                 Tips.show(String.valueOf(position));
             }
 
