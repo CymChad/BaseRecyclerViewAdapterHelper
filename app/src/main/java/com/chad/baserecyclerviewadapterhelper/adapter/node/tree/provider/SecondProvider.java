@@ -40,7 +40,8 @@ public class SecondProvider extends BaseNodeProvider {
         if (entity.isExpanded()) {
             getAdapter().collapse(position);
         } else {
-            getAdapter().expandAndCollapseOther(position);
+            getAdapter().expand(position);
+//            getAdapter().expandAndCollapseOther(position);
         }
     }
 }

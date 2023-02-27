@@ -29,5 +29,17 @@ public class ChooseNodeUseTypeActivity extends BaseActivity {
             }
         });
 
+        findViewById(R.id.card_view3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ChooseNodeUseTypeActivity.this, NotdeNTreeUserActivity.class));
+            }
+        });
+
+
+
+
+
+
     }
 }
