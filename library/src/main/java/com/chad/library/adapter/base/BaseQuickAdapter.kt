@@ -1325,8 +1325,8 @@ abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
             setNewInstance(list)
             return
         }
-        diffResult.dispatchUpdatesTo(BrvahListUpdateCallback(this))
         this.data = list
+        diffResult.dispatchUpdatesTo(BrvahListUpdateCallback(this))
     }
 
     /************************************** Set Listener ****************************************/
