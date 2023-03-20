@@ -70,6 +70,7 @@
             android:name=".activity.dragswipe.DefaultDragAndSwipeActivity"
             android:exported="false" />
         <activity android:name=".activity.scene.GroupDemoActivity" />
+        <activity android:name=".activity.treenode.TreeNodeActivity" />
     </application>
 
 </manifest>

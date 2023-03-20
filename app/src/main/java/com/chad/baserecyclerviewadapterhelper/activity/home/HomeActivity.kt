@@ -16,6 +16,7 @@ import com.chad.baserecyclerviewadapterhelper.activity.itemclick.ItemClickActivi
 import com.chad.baserecyclerviewadapterhelper.activity.loadmore.AutoLoadMoreRefreshUseActivity
 import com.chad.baserecyclerviewadapterhelper.activity.loadmore.NoAutoAutoLoadMoreRefreshUseActivity
 import com.chad.baserecyclerviewadapterhelper.activity.scene.GroupDemoActivity
+import com.chad.baserecyclerviewadapterhelper.activity.treenode.TreeNodeActivity
 import com.chad.baserecyclerviewadapterhelper.activity.upfetch.UpFetchUseActivity
 import com.chad.baserecyclerviewadapterhelper.databinding.ActivityHomeBinding
 import com.chad.baserecyclerviewadapterhelper.entity.HomeEntity
@@ -79,5 +80,6 @@ class HomeActivity : AppCompatActivity() {
 
             HomeEntity(sectionTitle = "场景演示"),
             HomeEntity("Group（ConcatAdapter）", GroupDemoActivity::class.java, R.mipmap.gv_animation),
+            HomeEntity("Tree Node", TreeNodeActivity::class.java, R.mipmap.gv_expandable),
         )
 }
