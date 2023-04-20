@@ -47,7 +47,7 @@ class HomeAdapter(data: MutableList<HomeEntity>) : BaseMultiItemAdapter<HomeEnti
             }
 
             override fun isFullSpanItem(itemType: Int): Boolean {
-                return true;
+                return true
             }
 
         }).onItemViewType { position, list ->
