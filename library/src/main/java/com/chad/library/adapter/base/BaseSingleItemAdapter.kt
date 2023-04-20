@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 /**
  * Adapter for single item
- * 只有单个 item 情况下的 Adapter
+ * 只有单个/一个 item 情况下的 Adapter
  *
  * @param T 数据类型 type of data
  * @param VH viewHolder类型 type of the viewHolder
@@ -56,11 +56,11 @@ abstract class BaseSingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private va
         throw RuntimeException("Please use setItem()")
     }
 
-    override fun addAll(newCollection: Collection<T>) {
+    override fun addAll(collection: Collection<T>) {
         throw RuntimeException("Please use setItem()")
     }
 
-    override fun addAll(position: Int, newCollection: Collection<T>) {
+    override fun addAll(position: Int, collection: Collection<T>) {
         throw RuntimeException("Please use setItem()")
     }
 

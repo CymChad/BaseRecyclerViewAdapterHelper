@@ -108,20 +108,20 @@ abstract class BaseDifferAdapter<T, VH : RecyclerView.ViewHolder>(
         }
     }
 
-    override fun addAll(newCollection: Collection<T>) {
+    override fun addAll(collection: Collection<T>) {
         items.toMutableList().also {
-            it.addAll(newCollection)
+            it.addAll(collection)
             submitList(it)
         }
     }
 
-    override fun addAll(position: Int, newCollection: Collection<T>) {
+    override fun addAll(position: Int, collection: Collection<T>) {
         if (position > items.size || position < 0) {
             throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
 
         items.toMutableList().also {
-            it.addAll(position, newCollection)
+            it.addAll(position, collection)
             submitList(it)
         }
     }

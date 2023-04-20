@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.annotation.*
+import androidx.annotation.CallSuper
+import androidx.annotation.IdRes
 import androidx.annotation.IntRange
+import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.chad.library.adapter.base.animation.*
@@ -546,10 +548,10 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 
     /**
-     * add one new data
-     * 添加一条新数据
+     * add one new data，not null.
+     * 添加一条新数据，不可为 null。
      */
-    open fun add(@NonNull data: T) {
+    open fun add(data: T) {
         if (displayEmptyView()) {
             // 如果之前在显示空布局，需要先移除
             notifyItemRemoved(0)
@@ -563,9 +565,9 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * 在指定位置添加数据
      *
      * @param position the insert position
-     * @param newCollection  the new data collection
+     * @param collection  the new data collection
      */
-    open fun addAll(@IntRange(from = 0) position: Int, newCollection: Collection<T>) {
+    open fun addAll(@IntRange(from = 0) position: Int, collection: Collection<T>) {
         if (position > items.size || position < 0) {
             throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
@@ -574,20 +576,22 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             // 如果之前在显示空布局，需要先移除
             notifyItemRemoved(0)
         }
-        mutableItems.addAll(position, newCollection)
-        notifyItemRangeInserted(position, newCollection.size)
+        mutableItems.addAll(position, collection)
+        notifyItemRangeInserted(position, collection.size)
     }
 
-
-    open fun addAll(@NonNull newCollection: Collection<T>) {
+    /**
+     * 添加一组数据，不可为 null。
+     */
+    open fun addAll(collection: Collection<T>) {
         if (displayEmptyView()) {
             // 如果之前在显示空布局，需要先移除
             notifyItemRemoved(0)
         }
 
         val oldSize = items.size
-        mutableItems.addAll(newCollection)
-        notifyItemRangeInserted(oldSize, newCollection.size)
+        mutableItems.addAll(collection)
+        notifyItemRangeInserted(oldSize, collection.size)
     }
 
     /**
