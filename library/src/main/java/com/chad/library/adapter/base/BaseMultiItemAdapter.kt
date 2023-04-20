@@ -14,8 +14,6 @@ abstract class BaseMultiItemAdapter<T>(items: List<T> = mutableListOf<T>()) :
     BaseQuickAdapter<T, RecyclerView.ViewHolder>(items) {
 
     private val typeViewHolders = SparseArray<OnMultiItemAdapterListener<T, RecyclerView.ViewHolder>>(1)
-    private val viewHoldersClass =
-        HashMap<Class<*>, OnMultiItemAdapterListener<T, RecyclerView.ViewHolder>>(1)
 
     private var onItemViewTypeListener: OnItemViewTypeListener<T>? = null
 
@@ -29,17 +27,20 @@ abstract class BaseMultiItemAdapter<T>(items: List<T> = mutableListOf<T>()) :
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, item: T?) {
-        viewHoldersClass[holder::class.java]?.onBind(holder, position, item)
+        val realViewType = getItemViewType(position, items)
+        typeViewHolders.get(realViewType)?.onBind(holder, position, item)
     }
 
     override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder, position: Int, item: T?, payloads: List<Any>
     ) {
         if (payloads.isEmpty()) {
-            viewHoldersClass[holder::class.java]?.onBind(holder, position, item)
+            onBindViewHolder(holder, position, item)
             return
         }
-        viewHoldersClass[holder::class.java]?.onBind(holder, position, item, payloads)
+
+        val realViewType = getItemViewType(position, items)
+        typeViewHolders.get(realViewType)?.onBind(holder, position, item)
     }
 
     /**
@@ -56,7 +57,6 @@ abstract class BaseMultiItemAdapter<T>(items: List<T> = mutableListOf<T>()) :
         type: Int, holderClazz: Class<V>, listener: OnMultiItemAdapterListener<T, V>
     ) = apply {
         typeViewHolders.put(type, listener as OnMultiItemAdapterListener<T, RecyclerView.ViewHolder>)
-        viewHoldersClass[holderClazz] = listener
     }
 
     /**
@@ -75,21 +75,28 @@ abstract class BaseMultiItemAdapter<T>(items: List<T> = mutableListOf<T>()) :
 
     override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
         super.onViewAttachedToWindow(holder)
-        viewHoldersClass[holder::class.java]?.onViewAttachedToWindow(holder)
+
+        val realViewType = getItemViewType(holder.bindingAdapterPosition, items)
+        typeViewHolders.get(realViewType)?.onViewAttachedToWindow(holder)
     }
 
     override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
         super.onViewDetachedFromWindow(holder)
-        viewHoldersClass[holder::class.java]?.onViewDetachedFromWindow(holder)
+
+        val realViewType = getItemViewType(holder.bindingAdapterPosition, items)
+        typeViewHolders.get(realViewType)?.onViewDetachedFromWindow(holder)
     }
 
     override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
         super.onViewRecycled(holder)
-        viewHoldersClass[holder::class.java]?.onViewRecycled(holder)
+
+        val realViewType = getItemViewType(holder.bindingAdapterPosition, items)
+        typeViewHolders.get(realViewType)?.onViewRecycled(holder)
     }
 
     override fun onFailedToRecycleView(holder: RecyclerView.ViewHolder): Boolean {
-        return viewHoldersClass[holder::class.java]?.onFailedToRecycleView(holder) ?: super.onFailedToRecycleView(holder)
+        val realViewType = getItemViewType(holder.bindingAdapterPosition, items)
+        return typeViewHolders.get(realViewType)?.onFailedToRecycleView(holder) ?: super.onFailedToRecycleView(holder)
     }
 
     override fun isFullSpanItem(itemType: Int): Boolean {

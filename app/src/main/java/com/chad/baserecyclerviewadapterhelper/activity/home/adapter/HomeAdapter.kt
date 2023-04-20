@@ -60,7 +60,7 @@ class HomeAdapter(data: MutableList<HomeEntity>) : BaseMultiItemAdapter<HomeEnti
     }
 
     companion object {
-        private const val ITEM_TYPE = 0
-        private const val SECTION_TYPE = 1
+        private const val ITEM_TYPE = 10
+        private const val SECTION_TYPE = 11
     }
 }
