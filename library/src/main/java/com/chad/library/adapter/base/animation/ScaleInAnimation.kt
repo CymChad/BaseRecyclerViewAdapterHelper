@@ -1,24 +1,32 @@
 package com.chad.library.adapter.base.animation
 
 import android.animation.Animator
+import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 
 /**
+ * An animation to scale item in, changing item's scaleX and scaleY from default 0.5f to 1.0f in default 300ms.(Using a DecelerateInterpolator with default factor.)
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-class ScaleInAnimation @JvmOverloads constructor(private val mFrom: Float = DEFAULT_SCALE_FROM) : BaseAnimation {
+class ScaleInAnimation @JvmOverloads constructor(
+    private val duration: Long = 300,
+    private val mFrom: Float = DEFAULT_SCALE_FROM) : ItemAnimator {
 
-    override fun animators(view: View): Array<Animator> {
+    private val interpolator = DecelerateInterpolator()
+
+    override fun animator(view: View): Animator {
         val scaleX = ObjectAnimator.ofFloat(view, "scaleX", mFrom, 1f)
-        scaleX.duration = 300L
-        scaleX.interpolator = DecelerateInterpolator()
 
         val scaleY = ObjectAnimator.ofFloat(view, "scaleY", mFrom, 1f)
-        scaleY.duration = 300L
-        scaleY.interpolator = DecelerateInterpolator()
-        return arrayOf(scaleX, scaleY)
+
+        val animatorSet = AnimatorSet()
+        animatorSet.duration = duration
+        animatorSet.interpolator = interpolator
+        animatorSet.play(scaleX).with(scaleY)
+
+        return animatorSet
     }
 
     companion object {

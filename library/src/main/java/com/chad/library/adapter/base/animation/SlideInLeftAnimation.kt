@@ -6,13 +6,19 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 
 /**
+ * An animation to let items slide in from the left.(Using a DecelerateInterpolator with 1.8 factor.) Default duration is 400ms.
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-class SlideInLeftAnimation : BaseAnimation {
-    override fun animators(view: View): Array<Animator> {
+class SlideInLeftAnimation @JvmOverloads constructor(
+    private val duration: Long = 400L,
+) : ItemAnimator {
+
+    private val interpolator = DecelerateInterpolator(1.8f)
+
+    override fun animator(view: View): Animator {
         val animator = ObjectAnimator.ofFloat(view, "translationX", -view.rootView.width.toFloat(), 0f)
-        animator.duration = 400L
-        animator.interpolator = DecelerateInterpolator(1.8f)
-        return arrayOf(animator)
+        animator.duration = duration
+        animator.interpolator = interpolator
+        return animator
     }
 }

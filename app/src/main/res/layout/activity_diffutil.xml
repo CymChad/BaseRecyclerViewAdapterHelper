@@ -5,6 +5,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <com.chad.baserecyclerviewadapterhelper.widget.BRVAHToolbar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/diff_rv"
         android:layout_width="match_parent"
@@ -20,7 +25,7 @@
         android:paddingTop="4dp">
 
         <Button
-            android:id="@+id/item_change_btn"
+            android:id="@+id/btn_change"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:background="@drawable/touch_bg"
@@ -31,7 +36,7 @@
             android:textAllCaps="false" />
 
         <Button
-            android:id="@+id/notify_change_btn"
+            android:id="@+id/btn_add"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginLeft="16dp"
@@ -39,7 +44,19 @@
             android:background="@drawable/touch_bg"
             android:paddingLeft="6dp"
             android:paddingRight="6dp"
-            android:text="Item 0 notifyItemChanged (payload) "
+            android:text="Item add"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_remove"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="16dp"
+            android:textColor="@color/new_text_color"
+            android:background="@drawable/touch_bg"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:text="Item remove"
             android:textAllCaps="false" />
 
     </LinearLayout>

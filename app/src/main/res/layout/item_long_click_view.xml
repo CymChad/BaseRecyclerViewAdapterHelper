@@ -20,20 +20,20 @@
         android:src="@mipmap/click_head_img_0"/>
 
     <Button
-        android:id="@+id/btn"
+        android:id="@+id/btn_long"
         android:layout_width="85dp"
         android:layout_height="33dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="15dp"
+        android:layout_alignParentBottom="true"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
+        android:layout_marginBottom="15dp"
         android:background="@drawable/touch_bg"
         android:gravity="center"
         android:text="长按我"
 
-        android:textColor="@color/txt_color"/>
+        android:textColor="@color/txt_color" />
 
     <TextView
         android:id="@+id/tv"
