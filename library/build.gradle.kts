@@ -9,15 +9,14 @@ plugins {
     signing
 }
 
-val versionName = "4.0.0-beta04"
+val versionName = "4.0.0-beta05"
 
 
 android {
-    compileSdk = 30
+    compileSdk = 31
 
     defaultConfig {
         minSdk = 16
-        targetSdk = 30
     }
 
 
@@ -34,12 +33,13 @@ android {
             add("com.github.CymChad.brvah")
             add("-Xjvm-default=all")
         }
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
+    namespace = "com.chad.library"
 
 
     publishing {
@@ -53,11 +53,11 @@ android {
 
 
 dependencies {
-    implementation("androidx.annotation:annotation:1.4.0")
+    implementation("androidx.annotation:annotation:1.6.0")
 
-    implementation("androidx.recyclerview:recyclerview:1.3.0-rc01")
+    implementation("androidx.recyclerview:recyclerview:1.3.0")
 
-    implementation("androidx.databinding:databinding-runtime:4.2.2")
+    implementation("androidx.databinding:databinding-runtime:8.0.0")
 }
 
 
