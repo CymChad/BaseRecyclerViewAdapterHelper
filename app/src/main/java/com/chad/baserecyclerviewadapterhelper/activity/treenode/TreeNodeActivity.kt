@@ -54,7 +54,7 @@ class TreeNodeActivity : BaseViewBindingActivity<ActivityUniversalRecyclerBindin
 
         mAdapter.setOnItemLongClickListener { adapter, view, position ->
             val item = mAdapter.getItem(position) ?: return@setOnItemLongClickListener false
-            mAdapter.addNode(item.parentNode!!, getChildNodeIndex(item), getChildNode(item), 1)
+            mAdapter.addNode(item.parentNode!!,  getChildNode(item), getChildNodeIndex(item),1)
             true
         }
 

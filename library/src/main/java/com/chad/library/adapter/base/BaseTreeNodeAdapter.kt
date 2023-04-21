@@ -67,20 +67,22 @@ abstract class BaseTreeNodeAdapter : BaseMultiItemAdapter<BaseNode>() {
     /**
      * 添加节点
      * [parentNode] 添加node的父node。
-     * [childIndex] 添加的node所在的位置
      * [childNode] 要添加的节点
+     * [childIndex] 添加的node所在的位置,默认最后位置添加
      * [expandDepth] 如果你新添加的节点存在多个嵌套的子节点，设置展开节点的深度， <= 0 全部不展开
      */
+    @JvmOverloads
     fun addNode(
         parentNode: BaseNode,
-        childIndex: Int,
         childNode: BaseNode,
+        childIndex: Int = Int.MAX_VALUE,
         expandDepth: Int = Int.MAX_VALUE
     ) {
         childNode.parentNode = parentNode
         parentNode.childNodes?.let {
-            if (childIndex > it.size) throw IndexOutOfBoundsException("child size ${it.size}, position $childIndex")
-            it.add(childIndex, childNode)
+            //如果下标大于列表个数,就末尾添加
+            val index = if (childIndex > it.size) it.size else childIndex
+            it.add(index, childNode)
             //计算node在adapter中的位置
             val parentIndex = items.indexOf(parentNode)
 
@@ -91,14 +93,19 @@ abstract class BaseTreeNodeAdapter : BaseMultiItemAdapter<BaseNode>() {
 
             val newIndex = parentIndex + 1 + fixSize
 
-            depthNodes(childNode, expandDepth, onFind = object : DepthFindCallBack {
-                override fun accept(deep: Int, node: BaseNode) {
-                    node.isExpand = deep > 0 && !node.childNodes.isNullOrEmpty()
-                }
-            }).reversed().forEach { newNode ->
-                super.add(newIndex, newNode)
-            }
+            val depthNodes =
+                depthNodes(childNode, expandDepth, onFind = object : DepthFindCallBack {
+                    override fun accept(deep: Int, node: BaseNode) {
+                        node.isExpand = deep > 0 && !node.childNodes.isNullOrEmpty()
+                    }
+                })
 
+            //只有当父节点是展开状态的时候添加新的节点
+            if (parentNode.isExpand) {
+                depthNodes.reversed().forEach { newNode ->
+                    super.add(newIndex, newNode)
+                }
+            }
         }
     }
 
@@ -155,7 +162,7 @@ abstract class BaseTreeNodeAdapter : BaseMultiItemAdapter<BaseNode>() {
     override fun add(position: Int, data: BaseNode) {
         val childSize = rootNode.childNodes?.size ?: 0
         if (position > childSize) throw IndexOutOfBoundsException("root node child size ${childSize}, position $position")
-        addNode(rootNode, position, data)
+        addNode(rootNode, data, position)
     }
 
     /**
@@ -166,7 +173,7 @@ abstract class BaseTreeNodeAdapter : BaseMultiItemAdapter<BaseNode>() {
         if (position > childSize) throw IndexOutOfBoundsException("root node child size ${childSize}, position $position")
 
         newCollection.forEachIndexed { index, newNode ->
-            addNode(rootNode, position + index, newNode)
+            addNode(rootNode, newNode, position + index)
         }
 
     }
