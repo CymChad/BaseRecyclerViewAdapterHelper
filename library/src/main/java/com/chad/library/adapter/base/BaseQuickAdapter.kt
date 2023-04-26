@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.chad.library.adapter.base.animation.*
 import com.chad.library.adapter.base.viewholder.EmptyLayoutVH
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Base Class
