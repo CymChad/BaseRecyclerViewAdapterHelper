@@ -40,7 +40,7 @@ abstract class BaseMultiItemAdapter<T>(items: List<T> = mutableListOf<T>()) :
         }
 
         val realViewType = getItemViewType(position, items)
-        typeViewHolders.get(realViewType)?.onBind(holder, position, item)
+        typeViewHolders.get(realViewType)?.onBind(holder, position, item, payloads)
     }
 
     /**
