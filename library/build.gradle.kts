@@ -9,7 +9,7 @@ plugins {
     signing
 }
 
-val versionName = "4.0.0-beta07"
+val versionName = "4.0.0-beta08"
 
 
 android {
@@ -33,11 +33,11 @@ android {
             add("com.github.CymChad.brvah")
             add("-Xjvm-default=all")
         }
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "11"
     }
     namespace = "com.chad.library"
 
