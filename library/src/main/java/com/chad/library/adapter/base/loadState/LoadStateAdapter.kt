@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.fullspan.FullSpanAdapterType
 
 /**
- * Load state adapter
+ * Load state Adapter
  * 加载状态的父类，"加载更多"、"向上加载"都继承于此
  *
  */
