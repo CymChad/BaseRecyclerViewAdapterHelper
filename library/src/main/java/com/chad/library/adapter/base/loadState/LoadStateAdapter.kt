@@ -79,7 +79,7 @@ abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ada
     /**
      * Called to create a ViewHolder for the given LoadState.
      *
-     * 调用此方法，为给定的 LoadState 创建一个 ViewHolder。
+     * 调用此方法，为 LoadState 创建 ViewHolder。
      *
      * @param parent The ViewGroup into which the new View will be added after it is bound to
      *               an adapter position.
@@ -104,7 +104,7 @@ abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ada
 
     /**
      * Override this method to use different view types per LoadState.
-     * 重写此方法以对每个 LoadState 使用不同的视图类型。
+     * 重写此方法以对每个 LoadState 使用不同的 View 类型。
      *
      * By default, this LoadStateAdapter only uses a single view type.
      */
