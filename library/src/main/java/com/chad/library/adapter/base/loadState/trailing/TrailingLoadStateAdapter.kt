@@ -183,7 +183,7 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder>(
     interface OnTrailingListener {
 
         /**
-         * "加载更多"执行逻辑
+         * "加载更多"执行的逻辑
          */
         fun onLoad()
 
@@ -194,7 +194,7 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder>(
 
         /**
          * Whether to allow loading.
-         * 是否允许进行加载
+         * 是否允许进行加载更多（例如下拉刷新时，就不应该进行加载更多）
          */
         fun isAllowLoading(): Boolean = true
     }
