@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.SparseArray
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import java.lang.ref.WeakReference
 
 /**
  * MultiItemType layout.
@@ -13,7 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 abstract class BaseMultiItemAdapter<T>(items: List<T> = mutableListOf<T>()) :
     BaseQuickAdapter<T, RecyclerView.ViewHolder>(items) {
 
-    private val typeViewHolders = SparseArray<OnMultiItemAdapterListener<T, RecyclerView.ViewHolder>>(1)
+    private val typeViewHolders =
+        SparseArray<OnMultiItemAdapterListener<T, RecyclerView.ViewHolder>>(1)
 
     private var onItemViewTypeListener: OnItemViewTypeListener<T>? = null
 
@@ -56,7 +58,12 @@ abstract class BaseMultiItemAdapter<T>(items: List<T> = mutableListOf<T>()) :
     fun <V : RecyclerView.ViewHolder> addItemType(
         type: Int, holderClazz: Class<V>, listener: OnMultiItemAdapterListener<T, V>
     ) = apply {
-        typeViewHolders.put(type, listener as OnMultiItemAdapterListener<T, RecyclerView.ViewHolder>)
+        if (listener is OnMultiItem) {
+            listener.weakRv = WeakReference(this)
+        }
+        typeViewHolders.put(
+            type, listener as OnMultiItemAdapterListener<T, RecyclerView.ViewHolder>
+        )
     }
 
     /**
@@ -96,7 +103,8 @@ abstract class BaseMultiItemAdapter<T>(items: List<T> = mutableListOf<T>()) :
 
     override fun onFailedToRecycleView(holder: RecyclerView.ViewHolder): Boolean {
         val realViewType = getItemViewType(holder.bindingAdapterPosition, items)
-        return typeViewHolders.get(realViewType)?.onFailedToRecycleView(holder) ?: super.onFailedToRecycleView(holder)
+        return typeViewHolders.get(realViewType)?.onFailedToRecycleView(holder)
+            ?: super.onFailedToRecycleView(holder)
     }
 
     override fun isFullSpanItem(itemType: Int): Boolean {
@@ -125,6 +133,13 @@ abstract class BaseMultiItemAdapter<T>(items: List<T> = mutableListOf<T>()) :
         fun isFullSpanItem(itemType: Int): Boolean {
             return false
         }
+    }
+
+    abstract class OnMultiItem<T, V : RecyclerView.ViewHolder> : OnMultiItemAdapterListener<T, V> {
+        internal var weakRv : WeakReference<BaseMultiItemAdapter<T>>? = null
+
+        val recyclerView: BaseMultiItemAdapter<T>?
+            get() = weakRv?.get()
     }
 
     fun interface OnItemViewTypeListener<T> {
