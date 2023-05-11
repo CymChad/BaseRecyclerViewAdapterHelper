@@ -140,6 +140,9 @@ abstract class BaseMultiItemAdapter<T>(items: List<T> = mutableListOf<T>()) :
 
         val recyclerView: BaseMultiItemAdapter<T>?
             get() = weakRv?.get()
+
+        val context: Context?
+            get() = weakRv?.get()?.context
     }
 
     fun interface OnItemViewTypeListener<T> {
