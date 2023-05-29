@@ -39,7 +39,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
     private val mOnItemChildClickArray = SparseArray<OnItemChildClickListener<T>>(3)
     private val mOnItemChildLongClickArray = SparseArray<OnItemChildLongClickListener<T>>(3)
-    private var onViewAttachStateChangeListeners: MutableList<OnViewAttachStateChangeListener>? =
+    private var mOnViewAttachStateChangeListeners: MutableList<OnViewAttachStateChangeListener>? =
         null
 
     private var _recyclerView: RecyclerView? = null
@@ -265,14 +265,14 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             runAnimator(holder)
         }
 
-        onViewAttachStateChangeListeners?.forEach {
+        mOnViewAttachStateChangeListeners?.forEach {
             it.onViewAttachedToWindow(holder)
         }
     }
 
     @CallSuper
     override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
-        onViewAttachStateChangeListeners?.forEach {
+        mOnViewAttachStateChangeListeners?.forEach {
             it.onViewDetachedFromWindow(holder)
         }
     }
@@ -673,21 +673,21 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 
     fun addOnViewAttachStateChangeListener(listener: OnViewAttachStateChangeListener) {
-        if (onViewAttachStateChangeListeners == null) {
-            onViewAttachStateChangeListeners = ArrayList()
+        if (mOnViewAttachStateChangeListeners == null) {
+            mOnViewAttachStateChangeListeners = ArrayList()
         }
 
-        if (onViewAttachStateChangeListeners?.contains(listener) == true) return
+        if (mOnViewAttachStateChangeListeners?.contains(listener) == true) return
 
-        onViewAttachStateChangeListeners?.add(listener)
+        mOnViewAttachStateChangeListeners?.add(listener)
     }
 
     fun removeOnViewAttachStateChangeListener(listener: OnViewAttachStateChangeListener) {
-        onViewAttachStateChangeListeners?.remove(listener)
+        mOnViewAttachStateChangeListeners?.remove(listener)
     }
 
     fun clearOnViewAttachStateChangeListener() {
-        onViewAttachStateChangeListeners?.clear()
+        mOnViewAttachStateChangeListeners?.clear()
     }
 
     /**
