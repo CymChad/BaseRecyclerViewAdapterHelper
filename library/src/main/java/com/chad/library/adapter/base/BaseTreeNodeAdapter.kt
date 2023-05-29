@@ -14,8 +14,6 @@ package com.chad.library.adapter.base
  *
  *  使用方式和[BaseMultiItemAdapter]一致。
  *
- *  要注意的是，目前每个不同类型的节点，ViewHolder不能相同
- *
  * @author Dboy233
  */
 abstract class BaseTreeNodeAdapter : BaseMultiItemAdapter<BaseNode>() {
@@ -37,6 +35,7 @@ abstract class BaseTreeNodeAdapter : BaseMultiItemAdapter<BaseNode>() {
     init {
         //已经实现此方法
         onItemViewType { position, list ->
+            if(position==-1)return@onItemViewType -1
             list[position].nodeType
         }
     }
@@ -62,6 +61,18 @@ abstract class BaseTreeNodeAdapter : BaseMultiItemAdapter<BaseNode>() {
         node.parentNode = rootNode
 
         super.addAll(newNodes)
+    }
+
+    @JvmOverloads
+    fun addNodes(
+        parentNode: BaseNode,
+        childNodes: List<BaseNode>,
+        childIndex: Int = Int.MAX_VALUE,
+        expandDepth: Int = Int.MAX_VALUE
+    ){
+        for (childNode in childNodes) {
+            addNode(parentNode,childNode,childIndex,expandDepth)
+        }
     }
 
     /**
@@ -255,27 +266,38 @@ abstract class BaseTreeNodeAdapter : BaseMultiItemAdapter<BaseNode>() {
                 node.parentNode = item
                 //查找子节点的深层节点并反转，因为添加位置是从当前position开始。
                 //这里的depth-1是因为此时的node已经身处第一层了,向下查找层级就要排除自己这一层
-                depthNodes(node, depth - 1, object : DepthFindCallBack {
+                val needExpandNode = depthNodes(node, depth - 1, object : DepthFindCallBack {
                     override fun accept(deep: Int, node: BaseNode) {
                         //当前的深度必须大于0。因为等于0属于最后一层。最后一层没有展开的资格。
                         //当上一个条件成立，
                         //那么他必须有子节点才能展开。否则不允许。
                         node.isExpand = deep > 0 && !node.childNodes.isNullOrEmpty()
                     }
-                }).reversed().forEach { deepNode ->
-                    //将当前需要展开的节点位置添加
-                    super.add(position + 1, deepNode)
+                }).reversed()
+
+                if (needExpandNode.isNotEmpty()) {
+                    needExpandNode.forEach { deepNode ->
+                        //将当前需要展开的节点位置添加
+                        mutableItems.add(position+1,deepNode)
+                    }
+                    //所有位置一起刷新
+                    notifyItemRangeInserted(position+1,needExpandNode.size)
                 }
             }
         } else {
             //遍历最近子节点
-            item.childNodes?.forEachIndexed { i, node ->
-                //对节点的父节点赋值。每次都要确保其不为null才行
-                node.parentNode = item
-                //不展开子节点，子节点的展开状态为false
-                node.isExpand = false
-                //将当前节点添加
-                super.add(position + i + 1, node)
+            val needExpandNode = item.childNodes
+            if (!needExpandNode.isNullOrEmpty()) {
+                needExpandNode.forEachIndexed { _, node ->
+                    //对节点的父节点赋值。每次都要确保其不为null才行
+                    node.parentNode = item
+                    //不展开子节点，子节点的展开状态为false
+                    node.isExpand = false
+                    //将当前节点添加
+                    mutableItems.add(position+1,node)
+                }
+                //所有位置一起刷新
+                notifyItemRangeInserted(position+1,needExpandNode.size)
             }
         }
         //当然自己也要刷新一下
@@ -300,8 +322,10 @@ abstract class BaseTreeNodeAdapter : BaseMultiItemAdapter<BaseNode>() {
         internalDetachedInspect(item, needRemoveItem)
         //倒着移除每一个item
         for (i in position + needRemoveItem.size downTo position + 1) {
-            super.removeAt(i)
+            mutableItems.removeAt(i)
         }
+        //因为不涉及空布局的相关内容，所以当所有item全部折叠之后，一起刷新。
+        notifyItemRangeRemoved(position+1,needRemoveItem.size)
         notifyItemChanged(position)
     }
 

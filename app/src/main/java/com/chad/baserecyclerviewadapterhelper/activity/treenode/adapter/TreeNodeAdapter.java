@@ -2,13 +2,9 @@ package com.chad.baserecyclerviewadapterhelper.activity.treenode.adapter;
 
 import android.content.Context;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.chad.baserecyclerviewadapterhelper.R;
-import com.chad.baserecyclerviewadapterhelper.entity.FileNodeEntity;
-import com.chad.baserecyclerviewadapterhelper.entity.FolderNodeEntity;
 import com.chad.baserecyclerviewadapterhelper.entity.MyNodeEntity;
 import com.chad.library.adapter.base.BaseNode;
 import com.chad.library.adapter.base.BaseTreeNodeAdapter;
@@ -24,84 +20,74 @@ public class TreeNodeAdapter extends BaseTreeNodeAdapter implements DragAndSwipe
 
     public final static int TYPE_FILE = 2;
 
+    public final static int TYPE_LOAD_MORE = 3;
 
-
-    private static class VHFolder extends QuickViewHolder {
-        public VHFolder(int resId, @NonNull ViewGroup parent) {
-            super(resId, parent);
-        }
-    }
-
-    private static class VHFile extends QuickViewHolder {
-
-        public VHFile(int resId, @NonNull ViewGroup parent) {
-            super(resId, parent);
-        }
-    }
 
     public TreeNodeAdapter() {
-
-        addItemType(TYPE_FILE, VHFile.class, new OnMultiItemAdapterListener<BaseNode, VHFile>() {
+        addItemType(TYPE_FILE, new OnMultiItemAdapterListener<BaseNode, QuickViewHolder>() {
             @NonNull
             @Override
-            public VHFile onCreate(@NonNull Context context, @NonNull ViewGroup parent, int viewType) {
-                return new VHFile(R.layout.item_file, parent);
+            public QuickViewHolder onCreate(@NonNull Context context, @NonNull ViewGroup parent,
+                    int viewType) {
+                return new QuickViewHolder(R.layout.item_file, parent);
             }
 
             @Override
-            public void onBind(@NonNull VHFile holder, int position, @Nullable BaseNode item) {
+            public void onBind(@NonNull QuickViewHolder holder, int position,
+                    @Nullable BaseNode item) {
                 if (item instanceof MyNodeEntity) {
                     holder.setText(R.id.tv, ((MyNodeEntity) item).getName())
                             .setText(R.id.sub_tv, ((MyNodeEntity) item).getTime().toString());
                 }
-
-//                if (item instanceof FileNodeEntity) {
-//                    holder.setText(R.id.tv, ((FileNodeEntity) item).getName())
-//                            .setText(R.id.sub_tv, ((FileNodeEntity) item).getTime().toString());
-//                }
-
             }
-        }).addItemType(TYPE_FOLDER, VHFolder.class, new OnMultiItemAdapterListener<BaseNode, VHFolder>() {
+        }).addItemType(TYPE_FOLDER, new OnMultiItemAdapterListener<BaseNode, QuickViewHolder>() {
             @NonNull
             @Override
-            public VHFolder onCreate(@NonNull Context context, @NonNull ViewGroup parent, int viewType) {
-                return new VHFolder(R.layout.item_folder, parent);
+            public QuickViewHolder onCreate(@NonNull Context context, @NonNull ViewGroup parent,
+                    int viewType) {
+                return new QuickViewHolder(R.layout.item_folder, parent);
             }
 
             @Override
-            public void onBind(@NonNull VHFolder holder, int position, @Nullable BaseNode item) {
-                if (item instanceof MyNodeEntity){
+            public void onBind(@NonNull QuickViewHolder holder, int position,
+                    @Nullable BaseNode item) {
+                if (item==null) {
+                    return;
+                }
+                if (item instanceof MyNodeEntity) {
                     holder.setText(R.id.tv, ((MyNodeEntity) item).getName());
                 }
-
-//                if (item instanceof FolderNodeEntity) {
-//                    holder.setText(R.id.tv, ((FolderNodeEntity) item).getName());
-//                }
-
-
 
                 int angle = item.isExpand() ? 0 : -90;
                 holder.getView(R.id.iv).setRotation(angle);
 
                 int nodeDeep = getNodeDepth(item);
                 switch (nodeDeep) {
-                    case 2:
-                        holder.setImageResource(R.id.iv_head, R.mipmap.head_img1);
-                        break;
-                    case 3:
-                        holder.setImageResource(R.id.iv_head, R.mipmap.head_img2);
-                        break;
-                    default:
-                        holder.setImageResource(R.id.iv_head, R.mipmap.head_img0);
-                        break;
+                    case 2 -> holder.setImageResource(R.id.iv_head, R.mipmap.head_img1);
+                    case 3 -> holder.setImageResource(R.id.iv_head, R.mipmap.head_img2);
+                    default -> holder.setImageResource(R.id.iv_head, R.mipmap.head_img0);
                 }
+            }
+        });
+
+        //加载更多
+        addItemType(TYPE_LOAD_MORE, new OnMultiItemAdapterListener<BaseNode, QuickViewHolder>() {
+            @Override
+            public void onBind(@NonNull QuickViewHolder holder, int position,
+                    @Nullable BaseNode item) {
+            }
+            @NonNull
+            @Override
+            public QuickViewHolder onCreate(@NonNull Context context, @NonNull ViewGroup parent,
+                    int viewType) {
+                return new QuickViewHolder(R.layout.view_load_more,parent);
             }
         });
     }
 
     @Override
     public void dataSwap(int fromPosition, int toPosition) {
-        swap(fromPosition,toPosition);
+        swap(fromPosition, toPosition);
     }
 
     @Override
