@@ -59,7 +59,7 @@ abstract class BaseMultiItemAdapter<T>(items: List<T> = mutableListOf<T>()) :
         type: Int, holderClazz: Class<V>, listener: OnMultiItemAdapterListener<T, V>
     ) = apply {
         if (listener is OnMultiItem) {
-            listener.weakRv = WeakReference(this)
+            listener.weakA = WeakReference(this)
         }
         typeViewHolders.put(
             type, listener as OnMultiItemAdapterListener<T, RecyclerView.ViewHolder>
@@ -135,14 +135,22 @@ abstract class BaseMultiItemAdapter<T>(items: List<T> = mutableListOf<T>()) :
         }
     }
 
+    /**
+     * 如果需要一些属性，例如：adapter、context，则使用此抽象类.
+     * 如果不需要，则可以直接实现[OnMultiItemAdapterListener]接口.
+     *
+     * @param T
+     * @param V
+     * @constructor Create empty On multi item
+     */
     abstract class OnMultiItem<T, V : RecyclerView.ViewHolder> : OnMultiItemAdapterListener<T, V> {
-        internal var weakRv : WeakReference<BaseMultiItemAdapter<T>>? = null
+        internal var weakA : WeakReference<BaseMultiItemAdapter<T>>? = null
 
-        val recyclerView: BaseMultiItemAdapter<T>?
-            get() = weakRv?.get()
+        val adapter: BaseMultiItemAdapter<T>?
+            get() = weakA?.get()
 
         val context: Context?
-            get() = weakRv?.get()?.context
+            get() = weakA?.get()?.context
     }
 
     fun interface OnItemViewTypeListener<T> {
