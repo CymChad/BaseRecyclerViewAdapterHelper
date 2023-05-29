@@ -37,12 +37,8 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     private var mLastPosition = -1
     private var mOnItemClickListener: OnItemClickListener<T>? = null
     private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
-    private val mOnItemChildClickArray by lazy(LazyThreadSafetyMode.NONE) {
-        SparseArray<OnItemChildClickListener<T>>(2)
-    }
-    private val mOnItemChildLongClickArray by lazy(LazyThreadSafetyMode.NONE) {
-        SparseArray<OnItemChildLongClickListener<T>>(2)
-    }
+    private var mOnItemChildClickArray :SparseArray<OnItemChildClickListener<T>>? = null
+    private var mOnItemChildLongClickArray :SparseArray<OnItemChildLongClickListener<T>>? = null
     private var mOnViewAttachStateChangeListeners: MutableList<OnViewAttachStateChangeListener>? =
         null
 
@@ -318,36 +314,37 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             }
         }
 
+        mOnItemChildClickArray?.let {
+            for (i in 0 until it.size()) {
+                val id = it.keyAt(i)
 
-        for (i in 0 until mOnItemChildClickArray.size()) {
-            val id = mOnItemChildClickArray.keyAt(i)
-
-            viewHolder.itemView.findViewById<View>(id)?.let { childView ->
-                childView.setOnClickListener { v ->
-                    val position = viewHolder.bindingAdapterPosition
-                    if (position == RecyclerView.NO_POSITION) {
-                        return@setOnClickListener
+                viewHolder.itemView.findViewById<View>(id)?.let { childView ->
+                    childView.setOnClickListener { v ->
+                        val position = viewHolder.bindingAdapterPosition
+                        if (position == RecyclerView.NO_POSITION) {
+                            return@setOnClickListener
+                        }
+                        onItemChildClick(v, position)
                     }
-                    onItemChildClick(v, position)
                 }
             }
         }
 
+        mOnItemChildLongClickArray?.let {
+            for (i in 0 until it.size()) {
+                val id = it.keyAt(i)
 
-        for (i in 0 until mOnItemChildLongClickArray.size()) {
-            val id = mOnItemChildLongClickArray.keyAt(i)
-
-            viewHolder.itemView.findViewById<View>(id)?.let { childView ->
-                childView.setOnLongClickListener { v ->
-                    val position = viewHolder.bindingAdapterPosition
-                    if (position == RecyclerView.NO_POSITION) {
-                        return@setOnLongClickListener false
+                viewHolder.itemView.findViewById<View>(id)?.let { childView ->
+                    childView.setOnLongClickListener { v ->
+                        val position = viewHolder.bindingAdapterPosition
+                        if (position == RecyclerView.NO_POSITION) {
+                            return@setOnLongClickListener false
+                        }
+                        onItemChildLongClick(v, position)
                     }
-                    onItemChildLongClick(v, position)
                 }
             }
         }
-
 
     }
 
@@ -375,11 +372,11 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 
     protected open fun onItemChildClick(v: View, position: Int) {
-        mOnItemChildClickArray.get(v.id)?.onItemClick(this, v, position)
+        mOnItemChildClickArray?.get(v.id)?.onItemClick(this, v, position)
     }
 
     protected open fun onItemChildLongClick(v: View, position: Int): Boolean {
-        return mOnItemChildLongClickArray.get(v.id)?.onItemLongClick(this, v, position)
+        return mOnItemChildLongClickArray?.get(v.id)?.onItemLongClick(this, v, position)
             ?: false
     }
 
@@ -662,20 +659,26 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     fun getOnItemLongClickListener(): OnItemLongClickListener<T>? = mOnItemLongClickListener
 
     fun addOnItemChildClickListener(@IdRes id: Int, listener: OnItemChildClickListener<T>) = apply {
-        mOnItemChildClickArray.put(id, listener)
+        if (mOnItemChildClickArray == null) {
+            mOnItemChildClickArray = SparseArray<OnItemChildClickListener<T>>(2)
+        }
+        mOnItemChildClickArray!!.put(id, listener)
     }
 
     fun removeOnItemChildClickListener(@IdRes id: Int) = apply {
-        mOnItemChildClickArray.remove(id)
+        mOnItemChildClickArray?.remove(id)
     }
 
     fun addOnItemChildLongClickListener(@IdRes id: Int, listener: OnItemChildLongClickListener<T>) =
         apply {
-            mOnItemChildLongClickArray.put(id, listener)
+            if (mOnItemChildLongClickArray == null) {
+                mOnItemChildLongClickArray = SparseArray<OnItemChildLongClickListener<T>>(2)
+            }
+            mOnItemChildLongClickArray!!.put(id, listener)
         }
 
     fun removeOnItemChildLongClickListener(@IdRes id: Int) = apply {
-        mOnItemChildLongClickArray.remove(id)
+        mOnItemChildLongClickArray?.remove(id)
     }
 
     fun addOnViewAttachStateChangeListener(listener: OnViewAttachStateChangeListener) {
@@ -683,9 +686,9 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             mOnViewAttachStateChangeListeners = ArrayList()
         }
 
-        if (mOnViewAttachStateChangeListeners?.contains(listener) == true) return
+        if (mOnViewAttachStateChangeListeners!!.contains(listener)) return
 
-        mOnViewAttachStateChangeListeners?.add(listener)
+        mOnViewAttachStateChangeListeners!!.add(listener)
     }
 
     fun removeOnViewAttachStateChangeListener(listener: OnViewAttachStateChangeListener) {
