@@ -11,7 +11,7 @@ import java.lang.ref.WeakReference
  * 多类型布局
  *
  */
-abstract class BaseMultiItemAdapter<T>(items: List<T> = mutableListOf<T>()) :
+abstract class BaseMultiItemAdapter<T>(items: List<T> = emptyList()) :
     BaseQuickAdapter<T, RecyclerView.ViewHolder>(items) {
 
     private val typeViewHolders =
