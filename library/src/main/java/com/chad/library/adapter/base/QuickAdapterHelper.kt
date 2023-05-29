@@ -34,7 +34,7 @@ class QuickAdapterHelper private constructor(
      * 最终设置给 RecyclerView 的 adapter
      */
     private val mAdapter = ConcatAdapter(config)
-    val adapter: RecyclerView.Adapter<*> get() = mAdapter
+    val adapter: ConcatAdapter get() = mAdapter
 
     /**
      * Loading state of the head.
