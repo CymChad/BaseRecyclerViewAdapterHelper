@@ -65,6 +65,7 @@ class ItemClickActivity : BaseViewBindingActivity<ActivityUniversalRecyclerBindi
         }
         adapter.addOnItemChildClickListener(R.id.iv_num_add) { adapter, view, position ->
             Tips.show("onItemChildClick:  add $position")
+            adapter.removeAt(position)
         }
 
         // 设置子 view 长按事件

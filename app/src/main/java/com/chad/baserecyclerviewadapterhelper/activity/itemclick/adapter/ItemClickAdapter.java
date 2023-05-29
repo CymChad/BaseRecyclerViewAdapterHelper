@@ -83,7 +83,7 @@ public class ItemClickAdapter extends BaseMultiItemAdapter<ClickEntity> {
     public ItemClickAdapter(List<ClickEntity> data) {
         super(data);
 
-        addItemType(ClickEntity.CLICK_ITEM_VIEW, ItemViewVH.class, new OnMultiItemAdapterListener<ClickEntity, ItemViewVH>() {
+        addItemType(ClickEntity.CLICK_ITEM_VIEW, new OnMultiItemAdapterListener<ClickEntity, ItemViewVH>() {
 
             @NonNull
             @Override
@@ -94,7 +94,14 @@ public class ItemClickAdapter extends BaseMultiItemAdapter<ClickEntity> {
             @Override
             public void onBind(@NonNull ItemViewVH holder, int position, ClickEntity item) {
             }
-        }).addItemType(ClickEntity.CLICK_ITEM_CHILD_VIEW, ItemChildVH.class, new OnMultiItemAdapterListener<ClickEntity, ItemChildVH>() {
+
+            @Override
+            public void onViewDetachedFromWindow(@NonNull RecyclerView.ViewHolder holder) {
+                if (holder instanceof ItemViewVH) {
+                    System.out.println("---------------------- >> onViewDetachedFromWindow ItemViewVH");
+                }
+            }
+        }).addItemType(ClickEntity.CLICK_ITEM_CHILD_VIEW, new OnMultiItemAdapterListener<ClickEntity, ItemChildVH>() {
 
             @NonNull
             @Override
@@ -105,7 +112,7 @@ public class ItemClickAdapter extends BaseMultiItemAdapter<ClickEntity> {
             @Override
             public void onBind(@NonNull ItemChildVH holder, int position, ClickEntity item) {
             }
-        }).addItemType(ClickEntity.LONG_CLICK_ITEM_VIEW, ItemLongClickVH.class, new OnMultiItemAdapterListener<ClickEntity, ItemLongClickVH>() {
+        }).addItemType(ClickEntity.LONG_CLICK_ITEM_VIEW, new OnMultiItemAdapterListener<ClickEntity, ItemLongClickVH>() {
 
             @NonNull
             @Override
@@ -116,7 +123,7 @@ public class ItemClickAdapter extends BaseMultiItemAdapter<ClickEntity> {
             @Override
             public void onBind(@NonNull ItemLongClickVH holder, int position, ClickEntity item) {
             }
-        }).addItemType(ClickEntity.LONG_CLICK_ITEM_CHILD_VIEW, ItemChildLongClickVH.class, new OnMultiItemAdapterListener<ClickEntity, ItemChildLongClickVH>() {
+        }).addItemType(ClickEntity.LONG_CLICK_ITEM_CHILD_VIEW, new OnMultiItemAdapterListener<ClickEntity, ItemChildLongClickVH>() {
 
             @NonNull
             @Override
@@ -130,7 +137,6 @@ public class ItemClickAdapter extends BaseMultiItemAdapter<ClickEntity> {
         }).onItemViewType(new OnItemViewTypeListener<ClickEntity>() {
             @Override
             public int onItemViewType(int position, @NonNull List<? extends ClickEntity> list) {
-                System.out.println("------------------------>> " + position);
                 return list.get(position).getItemType();
             }
         });

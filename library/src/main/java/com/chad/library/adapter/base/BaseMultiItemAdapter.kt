@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.SparseArray
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.chad.library.R
 import java.lang.ref.WeakReference
 
 /**
@@ -25,7 +26,9 @@ abstract class BaseMultiItemAdapter<T>(items: List<T> = emptyList()) :
         val listener = typeViewHolders.get(viewType)
             ?: throw IllegalArgumentException("ViewType: $viewType not found onViewHolderListener，please use addItemType() first!")
 
-        return listener.onCreate(parent.context, parent, viewType)
+        return listener.onCreate(parent.context, parent, viewType).apply {
+            itemView.setTag(R.id.BaseQuickAdapter_key_multi, listener)
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, item: T?) {
@@ -48,21 +51,17 @@ abstract class BaseMultiItemAdapter<T>(items: List<T> = emptyList()) :
     /**
      * Call this function to add multiTypeItems.
      * 调用此方法，设置多布局
-     * @param type Int
+     * @param itemViewType Int
      * @param listener Int
      */
-    inline fun <reified V : RecyclerView.ViewHolder> addItemType(
-        type: Int, listener: OnMultiItemAdapterListener<T, V>
-    ) = addItemType(type, V::class.java, listener)
-
     fun <V : RecyclerView.ViewHolder> addItemType(
-        type: Int, holderClazz: Class<V>, listener: OnMultiItemAdapterListener<T, V>
+        itemViewType: Int, listener: OnMultiItemAdapterListener<T, V>
     ) = apply {
         if (listener is OnMultiItem) {
             listener.weakA = WeakReference(this)
         }
         typeViewHolders.put(
-            type, listener as OnMultiItemAdapterListener<T, RecyclerView.ViewHolder>
+            itemViewType, listener as OnMultiItemAdapterListener<T, RecyclerView.ViewHolder>
         )
     }
 
@@ -83,28 +82,25 @@ abstract class BaseMultiItemAdapter<T>(items: List<T> = emptyList()) :
     override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
         super.onViewAttachedToWindow(holder)
 
-        val realViewType = getItemViewType(holder.bindingAdapterPosition, items)
-        typeViewHolders.get(realViewType)?.onViewAttachedToWindow(holder)
+        (holder.itemView.getTag(R.id.BaseQuickAdapter_key_multi) as OnMultiItemAdapterListener<T, RecyclerView.ViewHolder>)
+            .onViewAttachedToWindow(holder)
     }
 
     override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
         super.onViewDetachedFromWindow(holder)
-
-        val realViewType = getItemViewType(holder.bindingAdapterPosition, items)
-        typeViewHolders.get(realViewType)?.onViewDetachedFromWindow(holder)
+        (holder.itemView.getTag(R.id.BaseQuickAdapter_key_multi) as OnMultiItemAdapterListener<T, RecyclerView.ViewHolder>)
+            .onViewDetachedFromWindow(holder)
     }
 
     override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
         super.onViewRecycled(holder)
-
-        val realViewType = getItemViewType(holder.bindingAdapterPosition, items)
-        typeViewHolders.get(realViewType)?.onViewRecycled(holder)
+        (holder.itemView.getTag(R.id.BaseQuickAdapter_key_multi) as OnMultiItemAdapterListener<T, RecyclerView.ViewHolder>)
+            .onViewRecycled(holder)
     }
 
     override fun onFailedToRecycleView(holder: RecyclerView.ViewHolder): Boolean {
-        val realViewType = getItemViewType(holder.bindingAdapterPosition, items)
-        return typeViewHolders.get(realViewType)?.onFailedToRecycleView(holder)
-            ?: super.onFailedToRecycleView(holder)
+        return (holder.itemView.getTag(R.id.BaseQuickAdapter_key_multi) as OnMultiItemAdapterListener<T, RecyclerView.ViewHolder>)
+            .onFailedToRecycleView(holder)
     }
 
     override fun isFullSpanItem(itemType: Int): Boolean {
@@ -144,7 +140,7 @@ abstract class BaseMultiItemAdapter<T>(items: List<T> = emptyList()) :
      * @constructor Create empty On multi item
      */
     abstract class OnMultiItem<T, V : RecyclerView.ViewHolder> : OnMultiItemAdapterListener<T, V> {
-        internal var weakA : WeakReference<BaseMultiItemAdapter<T>>? = null
+        internal var weakA: WeakReference<BaseMultiItemAdapter<T>>? = null
 
         val adapter: BaseMultiItemAdapter<T>?
             get() = weakA?.get()
