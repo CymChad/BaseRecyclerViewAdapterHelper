@@ -37,8 +37,12 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     private var mLastPosition = -1
     private var mOnItemClickListener: OnItemClickListener<T>? = null
     private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
-    private val mOnItemChildClickArray = SparseArray<OnItemChildClickListener<T>>(2)
-    private val mOnItemChildLongClickArray = SparseArray<OnItemChildLongClickListener<T>>(2)
+    private val mOnItemChildClickArray by lazy(LazyThreadSafetyMode.NONE) {
+        SparseArray<OnItemChildClickListener<T>>(2)
+    }
+    private val mOnItemChildLongClickArray by lazy(LazyThreadSafetyMode.NONE) {
+        SparseArray<OnItemChildLongClickListener<T>>(2)
+    }
     private var mOnViewAttachStateChangeListeners: MutableList<OnViewAttachStateChangeListener>? =
         null
 
