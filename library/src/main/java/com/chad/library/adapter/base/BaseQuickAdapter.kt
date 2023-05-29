@@ -12,10 +12,15 @@ import androidx.annotation.IdRes
 import androidx.annotation.IntRange
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.chad.library.adapter.base.animation.*
+import com.chad.library.adapter.base.animation.AlphaInAnimation
+import com.chad.library.adapter.base.animation.ItemAnimator
+import com.chad.library.adapter.base.animation.ScaleInAnimation
+import com.chad.library.adapter.base.animation.SlideInBottomAnimation
+import com.chad.library.adapter.base.animation.SlideInLeftAnimation
+import com.chad.library.adapter.base.animation.SlideInRightAnimation
+import com.chad.library.adapter.base.util.asStaggeredGridFullSpan
 import com.chad.library.adapter.base.viewholder.EmptyLayoutVH
-import java.util.*
+import java.util.Collections
 
 /**
  * Base Class
@@ -370,21 +375,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     protected open fun onItemChildLongClick(v: View, position: Int): Boolean {
         return mOnItemChildLongClickArray.get(v.id)?.onItemLongClick(this, v, position)
             ?: false
-    }
-
-    /**
-     * When set to true, the item will layout using all span area. That means, if orientation
-     * is vertical, the view will have full width; if orientation is horizontal, the view will
-     * have full height.
-     * if the hold view use StaggeredGridLayoutManager they should using all span area
-     *
-     * @param holder True if this item should traverse all spans.
-     */
-    protected fun RecyclerView.ViewHolder.asStaggeredGridFullSpan() {
-        val layoutParams = this.itemView.layoutParams
-        if (layoutParams is StaggeredGridLayoutManager.LayoutParams) {
-            layoutParams.isFullSpan = true
-        }
     }
 
 

@@ -21,6 +21,14 @@ class ItemClickActivity : BaseViewBindingActivity<ActivityUniversalRecyclerBindi
             add(ClickEntity(ClickEntity.CLICK_ITEM_CHILD_VIEW))
             add(ClickEntity(ClickEntity.LONG_CLICK_ITEM_VIEW))
             add(ClickEntity(ClickEntity.LONG_CLICK_ITEM_CHILD_VIEW))
+            add(ClickEntity(ClickEntity.LONG_CLICK_ITEM_CHILD_VIEW))
+            add(ClickEntity(ClickEntity.LONG_CLICK_ITEM_CHILD_VIEW))
+            add(ClickEntity(ClickEntity.LONG_CLICK_ITEM_CHILD_VIEW))
+            add(ClickEntity(ClickEntity.LONG_CLICK_ITEM_CHILD_VIEW))
+            add(ClickEntity(ClickEntity.LONG_CLICK_ITEM_CHILD_VIEW))
+            add(ClickEntity(ClickEntity.LONG_CLICK_ITEM_CHILD_VIEW))
+            add(ClickEntity(ClickEntity.LONG_CLICK_ITEM_CHILD_VIEW))
+            add(ClickEntity(ClickEntity.LONG_CLICK_ITEM_CHILD_VIEW))
         }
         // 创建Adapter
         ItemClickAdapter(data)

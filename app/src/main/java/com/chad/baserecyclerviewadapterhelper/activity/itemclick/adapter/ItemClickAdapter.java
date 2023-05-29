@@ -130,6 +130,7 @@ public class ItemClickAdapter extends BaseMultiItemAdapter<ClickEntity> {
         }).onItemViewType(new OnItemViewTypeListener<ClickEntity>() {
             @Override
             public int onItemViewType(int position, @NonNull List<? extends ClickEntity> list) {
+                System.out.println("------------------------>> " + position);
                 return list.get(position).getItemType();
             }
         });
