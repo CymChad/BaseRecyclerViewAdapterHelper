@@ -37,8 +37,8 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     private var mLastPosition = -1
     private var mOnItemClickListener: OnItemClickListener<T>? = null
     private var mOnItemLongClickListener: OnItemLongClickListener<T>? = null
-    private var mOnItemChildClickArray :SparseArray<OnItemChildClickListener<T>>? = null
-    private var mOnItemChildLongClickArray :SparseArray<OnItemChildLongClickListener<T>>? = null
+    private var mOnItemChildClickArray: SparseArray<OnItemChildClickListener<T>>? = null
+    private var mOnItemChildLongClickArray: SparseArray<OnItemChildLongClickListener<T>>? = null
     private var mOnViewAttachStateChangeListeners: MutableList<OnViewAttachStateChangeListener>? =
         null
 
