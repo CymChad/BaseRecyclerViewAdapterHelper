@@ -121,7 +121,7 @@ class QuickAdapterHelper private constructor(
      * Add Adapter before [contentAdapter].
      * 在 [contentAdapter] 之前添加 Adapter
      *
-     * @param index
+     * @param index 相对于 [contentAdapter] 的位置索引
      * @param adapter
      */
     fun addBeforeAdapter(index: Int, adapter: BaseQuickAdapter<*, *>) = apply {
@@ -214,7 +214,7 @@ class QuickAdapterHelper private constructor(
 
     /**
      * Clear AfterList.
-     * 清空  AfterList
+     * 清空 AfterList
      */
     fun clearAfterAdapters() = apply {
         mAfterList.forEach {
@@ -269,7 +269,7 @@ class QuickAdapterHelper private constructor(
      * Builder
      * 通过 "向前加载"、"向后加载"、主要内容Adapter，构建 [QuickAdapterHelper]
      *
-     * @property contentAdapter 主要内容的 Adapter
+     * @property contentAdapter 展示内容的 Adapter
      * @constructor Create empty Builder
      */
     class Builder(private val contentAdapter: BaseQuickAdapter<*, *>) {

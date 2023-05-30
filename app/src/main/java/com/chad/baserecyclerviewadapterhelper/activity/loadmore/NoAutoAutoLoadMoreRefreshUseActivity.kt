@@ -82,6 +82,15 @@ class NoAutoAutoLoadMoreRefreshUseActivity : BaseViewBindingActivity<ActivityLoa
                 return !viewBinding.refreshLayout.isRefreshing
             }
         })
+
+        //——————————————————————————————————————————————————————————
+        // 可选，监听加载状态的变化。
+        //——————————————————————————————————————————————————————————
+        loadMoreAdapter.addLoadStateListener { previousState, currentState ->
+            // 你的业务逻辑
+            println("----------- previousState: $previousState   -   currentState: $currentState ")
+        }
+
         //——————————————————————————————————————————————————————————
         // 关闭"自动加载更多"
         //——————————————————————————————————————————————————————————

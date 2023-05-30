@@ -105,6 +105,7 @@ class AutoLoadMoreRefreshUseActivity : BaseViewBindingActivity<ActivityLoadMoreB
     private fun refresh() {
         // 下拉刷新，需要重置页数
         pageInfo.reset()
+        // 重置“加载更多”时状态
         helper.trailingLoadState = LoadState.None
         request()
     }

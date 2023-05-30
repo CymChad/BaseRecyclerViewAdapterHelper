@@ -14,7 +14,7 @@ sealed class LoadState(
     /**
      * There is currently no status.
      *
-     * 当前没有任何状态
+     * 当前没有任何状态（例如：初始化时，刷新数据时）
      */
     object None: LoadState(false) {
         override fun equals(other: Any?): Boolean {
