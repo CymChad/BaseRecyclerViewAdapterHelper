@@ -2,13 +2,10 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
     }
     buildTypes {
         release {
@@ -22,6 +19,13 @@ android {
         kotlinOptions.freeCompilerArgs += ['-module-name', "com.github.CymChad.brvah", "-Xjvm-default=all"]
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
 // 打包源码jar
@@ -32,6 +36,6 @@ task sourcesJar(type: Jar) {
 
 dependencies {
     implementation 'androidx.annotation:annotation:1.2.0'
-    implementation 'androidx.databinding:databinding-runtime:4.2.2'
+    implementation 'androidx.databinding:databinding-runtime:8.0.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
 }
