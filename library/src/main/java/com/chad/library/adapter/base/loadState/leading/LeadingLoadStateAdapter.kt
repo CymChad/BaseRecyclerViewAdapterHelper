@@ -31,6 +31,8 @@ abstract class LeadingLoadStateAdapter<VH: RecyclerView.ViewHolder> : LoadStateA
      */
     var preloadSize = 0
 
+    private var mDelayNextLoadFlag: Boolean = false
+
     override fun displayLoadStateAsItem(loadState: LoadState): Boolean {
         return loadState is LoadState.Loading
     }
@@ -47,13 +49,17 @@ abstract class LeadingLoadStateAdapter<VH: RecyclerView.ViewHolder> : LoadStateA
     private fun loadAction() {
         if (!isLoadEnable || onLeadingListener?.isAllowLoading() == false) return
 
+        if (mDelayNextLoadFlag) return
+
         if (loadState is LoadState.NotLoading && !loadState.endOfPaginationReached) {
             val recyclerView = recyclerView ?: return
 
             if (recyclerView.isComputingLayout) {
                 // 如果 RecyclerView 当前正在计算布局，则延迟执行，避免崩溃
                 // To avoid crash. Delay to load more if the recyclerview is computingLayout.
+                mDelayNextLoadFlag = true
                 recyclerView.post {
+                    mDelayNextLoadFlag = false
                     invokeLoad()
                 }
                 return
