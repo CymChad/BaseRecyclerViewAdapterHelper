@@ -20,11 +20,11 @@ implementation "io.github.cymchad:BaseRecyclerViewAdapterHelper:4.0.0-beta05"
 
 Of course, you can continue to use the [2.x](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/tree/2.x) version.
 
-当然，你也可以继续使用[2.x](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/tree/2.x) 版本、[3.x.x](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/0-BaseRecyclerViewAdapterHelper.md)版本。
+当然，你也可以继续使用[2.x](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/tree/2.x) 版本、[3.x.x](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/3.x/readme/0-BaseRecyclerViewAdapterHelper.md)版本。
 
 # Document
 - English Writing ...
-- [3.0版本 中文](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/master/readme/0-BaseRecyclerViewAdapterHelper.md)
+- [3.0版本 中文](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/3.x/readme/0-BaseRecyclerViewAdapterHelper.md)
 - [4.0版本 中文](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki)
 
 
