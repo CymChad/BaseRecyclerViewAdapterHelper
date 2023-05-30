@@ -7,7 +7,8 @@ import android.view.animation.LinearInterpolator
 
 /**
  * An animation to fade item in, changing alpha from default 0f to 1.0f at a uniform rate in default 300ms.
- * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+ *
+ * item 淡入显示的动画
  */
 class AlphaInAnimation @JvmOverloads constructor(
     private val duration: Long = 300,

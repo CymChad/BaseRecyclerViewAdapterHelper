@@ -56,7 +56,7 @@ fun <T, VH : RecyclerView.ViewHolder> BaseQuickAdapter<T, VH>.setOnDebouncedItem
 })
 
 /**
- * 去除点 Child View 击抖动的点击方法
+ * 去除 Child View 点击抖动的点击方法
  *
  * @param time 间隔时间，单位：毫秒
  * @param block

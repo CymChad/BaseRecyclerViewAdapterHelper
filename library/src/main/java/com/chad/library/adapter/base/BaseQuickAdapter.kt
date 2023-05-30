@@ -394,6 +394,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     /**
      * Get the data item associated with the specified position in the data set.
+     * 获取与数据集中指定位置的数据项。如果未找到数据，则返回 null
      *
      * @param position Position of the item whose data we want within the adapter's
      * data set.
@@ -402,7 +403,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     fun getItem(@IntRange(from = 0) position: Int): T? = items.getOrNull(position)
 
     /**
-     * 如果返回 -1，表示不存在
+     * 获取对应item数据的索引。如果返回 -1，表示不存在
      * @param item T?
      * @return Int
      */
@@ -422,9 +423,9 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 
     /**
-     * 是否需要显示空状态布局
+     * 判断是否需要显示“空状态”布局
      */
-    fun displayEmptyView/*?*/(list: List<T> = items): Boolean {
+    fun displayEmptyView(list: List<T> = items): Boolean {
         if (emptyView == null || !isEmptyViewEnable) return false
         return list.isEmpty()
     }
@@ -605,6 +606,11 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         }
     }
 
+    /**
+     * 删除数据
+     *
+     * @param data
+     */
     open fun remove(data: T) {
         val index = items.indexOf(data)
         if (index == -1) return
@@ -613,7 +619,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     /**
      * Item swap
-     * 数据交换
+     * 数据位置交换
      *
      * @param fromPosition
      * @param toPosition

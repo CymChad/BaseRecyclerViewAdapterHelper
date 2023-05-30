@@ -32,11 +32,20 @@ abstract class BaseSingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private va
         return 1
     }
 
+    /**
+     * 设置 item 数据（payload 方式）
+     *
+     * @param t
+     * @param payload
+     */
     fun setItem(t: T?, payload: Any?) {
         mItem = t
         notifyItemChanged(0, payload)
     }
 
+    /**
+     * 获取/设置 item 数据
+     */
     var item: T?
         get() = mItem
         set(value) {

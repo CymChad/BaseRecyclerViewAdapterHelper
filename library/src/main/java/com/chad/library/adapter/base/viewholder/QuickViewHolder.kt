@@ -24,6 +24,7 @@ open class QuickViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     /**
      * Views indexed with their IDs
+     * 记录找到的 view
      */
     private val views: SparseArray<View> = SparseArray()
 
