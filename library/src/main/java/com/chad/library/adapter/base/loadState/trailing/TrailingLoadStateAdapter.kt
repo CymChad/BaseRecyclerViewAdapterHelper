@@ -21,8 +21,7 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder>(
      * 所有数据加载完毕后，是否显示"加载结束"，必须初始化时传递，中途无法修改参数。
      */
     val isLoadEndDisplay: Boolean = true
-) :
-    LoadStateAdapter<VH>() {
+) : LoadStateAdapter<VH>() {
 
     /**
      * Trailing load state listener events
@@ -50,7 +49,9 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder>(
      * A flag to determine if you can load when content doesn't fill the screen.
      * 不满一屏时，是否可以继续加载的标记位
      */
-    private var mNextLoadEnable: Boolean = true
+    private var mNotFullPageNextLoadFlag: Boolean = false
+
+    private var mDelayNextLoadFlag: Boolean = false
 
     override fun displayLoadStateAsItem(loadState: LoadState): Boolean {
         return super.displayLoadStateAsItem(loadState)
@@ -74,7 +75,7 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder>(
             return
         }
 
-        if (!mNextLoadEnable) {
+        if (mNotFullPageNextLoadFlag || mDelayNextLoadFlag) {
             return
         }
 
@@ -84,7 +85,9 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder>(
             if (recyclerView.isComputingLayout) {
                 // 如果 RecyclerView 当前正在计算布局，则延迟执行，避免崩溃
                 // To avoid crash. Delay to load more if the recyclerview is computingLayout.
+                mDelayNextLoadFlag = true
                 recyclerView.post {
+                    mDelayNextLoadFlag = false
                     invokeLoadMore()
                 }
                 return
@@ -114,18 +117,18 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder>(
 
     /**
      * Call this method, Check disable load more if not full page.
-     * 调用此方法，当数据不满足一屏幕的时候，暂停加载更多
+     * 调用此方法，当数据不满足一屏幕的时候，暂停加载更多。应在提交数据 notify 后马上调用。
      */
     fun checkDisableLoadMoreIfNotFullPage() {
         // 先把标记位设置为false
-        mNextLoadEnable = false
+        mNotFullPageNextLoadFlag = true
         val recyclerView = this.recyclerView ?: return
         val manager = recyclerView.layoutManager ?: return
 
         if (manager is LinearLayoutManager) {
             recyclerView.post {
                 if (isFullScreen()) {
-                    mNextLoadEnable = true
+                    mNotFullPageNextLoadFlag = false
                 }
             }
         } else if (manager is StaggeredGridLayoutManager) {
@@ -134,7 +137,7 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder>(
                 manager.findLastCompletelyVisibleItemPositions(positions)
                 val pos = getTheBiggestNumber(positions) + 1
                 if (pos != recyclerView.adapter?.itemCount) {
-                    mNextLoadEnable = true
+                    mNotFullPageNextLoadFlag = false
                 }
             }
         }
