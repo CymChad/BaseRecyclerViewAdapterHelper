@@ -27,7 +27,7 @@ allprojects {
 仅支持`AndroidX`
 ```
 dependencies {
-    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.12'
+    implementation "io.github.cymchad:BaseRecyclerViewAdapterHelper:3.0.13"
 }
 ```
 
