@@ -17,6 +17,7 @@
 allprojects {
     repositories {
         ...
+        // 3.0.13 及以后版本不再需要
         maven { url 'https://jitpack.io' }
     }
 }
