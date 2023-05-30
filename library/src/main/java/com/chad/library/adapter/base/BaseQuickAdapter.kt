@@ -629,7 +629,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     /**
      * items 转化为 MutableList
      */
-    private val mutableItems: MutableList<T>
+    internal val mutableItems: MutableList<T>
         get() {
             return when (items) {
                 is ArrayList -> {
