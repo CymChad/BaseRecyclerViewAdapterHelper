@@ -8,6 +8,7 @@ import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity
 import com.chad.baserecyclerviewadapterhelper.databinding.ActivityUniversalRecyclerBinding
 import com.chad.baserecyclerviewadapterhelper.entity.ClickEntity
 import com.chad.baserecyclerviewadapterhelper.utils.Tips
+import com.chad.library.adapter.base.util.addOnDebouncedChildClick
 import com.chad.library.adapter.base.util.setOnDebouncedItemClick
 
 /**
@@ -71,6 +72,11 @@ class ItemClickActivity : BaseViewBindingActivity<ActivityUniversalRecyclerBindi
         adapter.addOnItemChildClickListener(R.id.iv_num_add) { adapter, view, position ->
             Tips.show("onItemChildClick:  add $position")
             adapter.removeAt(position)
+        }
+
+        // 添加子 view 的点击事件(去除点击抖动的扩展方法)
+        adapter.addOnDebouncedChildClick(R.id.btn) { adapter, view, position ->
+            Tips.show("onItemChildClick: $position")
         }
 
         // 设置子 view 长按事件
