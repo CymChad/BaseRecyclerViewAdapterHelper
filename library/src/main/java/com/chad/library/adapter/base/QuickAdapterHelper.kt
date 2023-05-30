@@ -7,6 +7,7 @@ import com.chad.library.adapter.base.loadState.leading.DefaultLeadingLoadStateAd
 import com.chad.library.adapter.base.loadState.leading.LeadingLoadStateAdapter
 import com.chad.library.adapter.base.loadState.trailing.DefaultTrailingLoadStateAdapter
 import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
+import java.util.Collections
 
 class QuickAdapterHelper private constructor(
     val contentAdapter: BaseQuickAdapter<*, *>,
@@ -229,13 +230,13 @@ class QuickAdapterHelper private constructor(
      * Get Adapter List before [contentAdapter]
      * 获取 [contentAdapter] 之前的 AdapterList
      */
-    val beforeAdapterList: List<BaseQuickAdapter<*, *>> get() = mBeforeList
+    val beforeAdapterList: List<BaseQuickAdapter<*, *>> get() = Collections.unmodifiableList(mBeforeList)
 
     /**
      * Get Adapter List after [contentAdapter]
      * 获取 [contentAdapter] 之后的 AdapterList
      */
-    val afterAdapterList: List<BaseQuickAdapter<*, *>> get() = mAfterList
+    val afterAdapterList: List<BaseQuickAdapter<*, *>> get() = Collections.unmodifiableList(mAfterList)
 
     fun removeAdapter(adapter: BaseQuickAdapter<*, *>) = apply {
         if (adapter == contentAdapter) {
