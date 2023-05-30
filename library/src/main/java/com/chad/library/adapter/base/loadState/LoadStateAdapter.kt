@@ -23,6 +23,8 @@ abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ada
     var loadState: LoadState = LoadState.None
         set(loadState) {
             if (field != loadState) {
+                val oldState = field
+
                 val oldItem = displayLoadStateAsItem(field)
                 val newItem = displayLoadStateAsItem(loadState)
 
@@ -34,6 +36,10 @@ abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ada
                     notifyItemChanged(0)
                 }
                 field = loadState
+
+                loadStateListeners.forEach {
+                    it.loadState(oldState, loadState)
+                }
             }
         }
 
@@ -49,6 +55,8 @@ abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ada
 
     var recyclerView: RecyclerView? = null
         private set
+
+    private val loadStateListeners = ArrayList<LoadStateListener>(0)
 
     final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         return onCreateViewHolder(parent, loadState)
@@ -123,4 +131,15 @@ abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ada
         return loadState is LoadState.Loading || loadState is LoadState.Error
     }
 
+    fun addLoadStateListener(listener: LoadStateListener) {
+        loadStateListeners.add(listener)
+    }
+
+    fun removeLoadStateListener(listener: LoadStateListener) {
+        loadStateListeners.remove(listener)
+    }
+
+    fun interface LoadStateListener {
+        fun loadState(previousState: LoadState, currentState: LoadState)
+    }
 }
