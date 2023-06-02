@@ -156,19 +156,20 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
         if (position >= data.size) {
             return 0
         }
-        // 记录被移除的item数量
-        var removeCount = 0
 
-        // 先移除子项
-        removeCount = removeChildAt(position)
+        // 记录被移除的item数量,先移除子项
+        var removeCount = removeChildAt(position)
+        val node = this.data[position]
+
+        // 是否存在移除的脚部
+        val isRemoveFooter = node is NodeFooterImp && node.footerNode != null
 
         // 移除node自己
         this.data.removeAt(position)
         removeCount += 1
 
-        val node = this.data[position]
         // 移除脚部
-        if (node is NodeFooterImp && node.footerNode != null) {
+        if (isRemoveFooter) {
             this.data.removeAt(position)
             removeCount += 1
         }
