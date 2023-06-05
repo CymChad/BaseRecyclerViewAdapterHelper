@@ -15,7 +15,7 @@ import com.chad.library.adapter.base.fullspan.FullSpanAdapterType
  * 网格布局 GridLayoutManager，用于实现满跨度，Adapter 需要实现 [FullSpanAdapterType] 接口
  *
  */
-class QuickGridLayoutManager : GridLayoutManager {
+open class QuickGridLayoutManager : GridLayoutManager {
 
     constructor(
         context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int
