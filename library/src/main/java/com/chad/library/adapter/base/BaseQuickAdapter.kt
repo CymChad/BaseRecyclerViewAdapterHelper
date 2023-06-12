@@ -231,13 +231,13 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     final override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>
     ) {
-        if (holder is EmptyLayoutVH) {
-            holder.changeEmptyView(emptyView)
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position)
             return
         }
 
-        if (payloads.isEmpty()) {
-            onBindViewHolder(holder as VH, position, getItem(position))
+        if (holder is EmptyLayoutVH) {
+            holder.changeEmptyView(emptyView)
             return
         }
 
