@@ -7,7 +7,7 @@ import java.util.*
 /**
  * Base differ adapter
  *
- * 使用 Differ 的父类
+ * 使用 Differ 的父类。异步执行 Diff 计算，不会有性能问题。
  *
  * @param T 数据类型
  * @param VH ViewHolder 类型
@@ -57,7 +57,7 @@ abstract class BaseDifferAdapter<T, VH : RecyclerView.ViewHolder>(
     final override var items: List<T>
         get() = mDiffer.currentList
         set(value) {
-            mDiffer.submitList(value)
+            mDiffer.submitList(value, null)
         }
 
     /**
@@ -79,6 +79,13 @@ abstract class BaseDifferAdapter<T, VH : RecyclerView.ViewHolder>(
         mDiffer.submitList(list, null)
     }
 
+    /**
+     * Submit list
+     * 提交数据集
+     *
+     * @param list
+     * @param commitCallback 数据异步提交完成以后的回掉
+     */
     fun submitList(list: List<T>?, commitCallback: Runnable?) {
         mDiffer.submitList(list, commitCallback)
     }
