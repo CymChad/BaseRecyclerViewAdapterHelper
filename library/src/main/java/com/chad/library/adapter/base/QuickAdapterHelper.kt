@@ -144,8 +144,9 @@ class QuickAdapterHelper private constructor(
             index + 1
         }
 
-        mAdapter.addAdapter(realIndex, adapter)
-        mBeforeList.add(adapter)
+       if (mAdapter.addAdapter(realIndex, adapter)) {
+           mBeforeList.add(adapter)
+       }
     }
 
     /**
@@ -179,12 +180,15 @@ class QuickAdapterHelper private constructor(
             adapter.addOnViewAttachStateChangeListener(it)
         }
 
-        if (trailingLoadStateAdapter == null) {
+        val isTure = if (trailingLoadStateAdapter == null) {
             mAdapter.addAdapter(adapter)
         } else {
             mAdapter.addAdapter(mAdapter.adapters.size - 1, adapter)
         }
-        mAfterList.add(adapter)
+
+        if (isTure) {
+            mAfterList.add(adapter)
+        }
     }
 
     /**
@@ -208,8 +212,9 @@ class QuickAdapterHelper private constructor(
             mAdapter.adapters.size - 1 - mAfterList.size + index
         }
 
-        mAdapter.addAdapter(realIndex, adapter)
-        mAfterList.add(adapter)
+        if(mAdapter.addAdapter(realIndex, adapter)) {
+            mAfterList.add(adapter)
+        }
     }
 
     /**
