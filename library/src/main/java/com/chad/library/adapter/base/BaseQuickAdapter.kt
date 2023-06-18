@@ -549,8 +549,9 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             // 如果之前在显示空布局，需要先移除
             notifyItemRemoved(0)
         }
-        mutableItems.add(data)
-        notifyItemInserted(items.size - 1)
+        if (mutableItems.add(data)) {
+            notifyItemInserted(items.size - 1)
+        }
     }
 
     /**
@@ -569,8 +570,9 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             // 如果之前在显示空布局，需要先移除
             notifyItemRemoved(0)
         }
-        mutableItems.addAll(position, collection)
-        notifyItemRangeInserted(position, collection.size)
+        if (mutableItems.addAll(position, collection)) {
+            notifyItemRangeInserted(position, collection.size)
+        }
     }
 
     /**
@@ -583,8 +585,9 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         }
 
         val oldSize = items.size
-        mutableItems.addAll(collection)
-        notifyItemRangeInserted(oldSize, collection.size)
+        if (mutableItems.addAll(collection)) {
+            notifyItemRangeInserted(oldSize, collection.size)
+        }
     }
 
     /**
