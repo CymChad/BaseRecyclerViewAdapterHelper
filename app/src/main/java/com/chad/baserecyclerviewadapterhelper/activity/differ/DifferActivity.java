@@ -67,8 +67,8 @@ public final class DifferActivity extends BaseViewBindingActivity<ActivityDiffut
 
         getViewBinding().btnAdd.setOnClickListener(v -> {
             mAdapter.add(2, new DiffEntity(
-                    1111111 + idAdd,
-                    "add - 😊😊Item " + 1111111 + idAdd,
+                    1000 + idAdd,
+                    "add - 😊😊Item " + 1000 + idAdd,
                     "Item " + 0 + " content have change (notifyItemChanged)",
                     "06-12"));
             idAdd++;
