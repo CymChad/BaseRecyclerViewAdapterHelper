@@ -63,16 +63,17 @@ class EmptyViewUseActivity : BaseViewBindingActivity<ActivityEmptyViewUseBinding
         mAdapter.setEmptyViewLayout(this, R.layout.loading_view)
 
         viewBinding.rvList.postDelayed({
-            if (mError) {
+            if (mError) { // 模拟网络错误
                 // 方式二：传入View
                 mAdapter.emptyView = errorView
 
                 mError = false
             } else {
-                if (mNoData) {
+                if (mNoData) { // 模拟接口没有数据
                     mAdapter.emptyView = emptyDataView
                     mNoData = false
                 } else {
+                    // 模拟正常数据返回
                     mAdapter.submitList(DataServer.getSampleData(10))
                 }
             }
