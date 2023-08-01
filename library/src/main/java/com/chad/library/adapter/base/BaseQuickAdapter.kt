@@ -249,6 +249,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 
     /**
+     * 当 ViewHolder 视图已附加到窗口时调用。
      * Called when a view created by this holder has been attached to a window.
      * simple to solve item will layout using all
      * [asStaggeredGridFullSpan]
