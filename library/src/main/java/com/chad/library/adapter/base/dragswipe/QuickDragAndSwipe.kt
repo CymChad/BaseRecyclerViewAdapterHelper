@@ -190,7 +190,7 @@ open class QuickDragAndSwipe : ItemTouchHelper.Callback() {
         if (fromPosition == RecyclerView.NO_POSITION || toPosition == RecyclerView.NO_POSITION) return
 
         // 进行位置的切换
-        _dataCallback?.dataSwap(fromPosition, toPosition)
+        _dataCallback?.dataMove(fromPosition, toPosition)
         mOnItemDragListener?.onItemDragMoving(viewHolder, fromPosition, target, toPosition)
     }
 

@@ -623,15 +623,30 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     /**
      * Item swap
-     * 数据位置交换
+     * 数据位置交换。这里单纯的只是两个数据交换位置。（注意⚠️，这里移动后的数据顺序与 [move] 不同)
      *
      * @param fromPosition
      * @param toPosition
      */
     open fun swap(fromPosition: Int, toPosition: Int) {
-        val size = items.size
-        if (fromPosition in 0 until size && toPosition in 0 until size) {
+        if (fromPosition in items.indices && toPosition in items.indices) {
             Collections.swap(items, fromPosition, toPosition)
+            notifyItemChanged(fromPosition)
+            notifyItemChanged(toPosition)
+        }
+    }
+
+    /**
+     * Move Item
+     * item 位置的移动。（注意⚠️，这里移动后的数据顺序与 [swap] 不同)
+     *
+     * @param fromPosition
+     * @param toPosition
+     */
+    open fun move(fromPosition: Int, toPosition: Int) {
+        if (fromPosition in items.indices && toPosition in items.indices) {
+            val e = mutableItems.removeAt(fromPosition)
+            mutableItems.add(toPosition, e)
             notifyItemMoved(fromPosition, toPosition)
         }
     }

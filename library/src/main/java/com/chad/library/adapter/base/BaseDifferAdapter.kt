@@ -152,10 +152,19 @@ abstract class BaseDifferAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 
     override fun swap(fromPosition: Int, toPosition: Int) {
-        val size = items.size
-        if (fromPosition in 0 until size || toPosition in 0 until size) {
+        if (fromPosition in items.indices || toPosition in items.indices) {
             items.toMutableList().also {
                 Collections.swap(it, fromPosition, toPosition)
+                submitList(it)
+            }
+        }
+    }
+
+    override fun move(fromPosition: Int, toPosition: Int) {
+        if (fromPosition in items.indices || toPosition in items.indices) {
+            items.toMutableList().also {
+                val e = it.removeAt(fromPosition)
+                it.add(toPosition, e)
                 submitList(it)
             }
         }

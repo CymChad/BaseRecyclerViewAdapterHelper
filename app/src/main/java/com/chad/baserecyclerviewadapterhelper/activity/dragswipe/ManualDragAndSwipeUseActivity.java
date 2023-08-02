@@ -16,7 +16,7 @@ import com.chad.baserecyclerviewadapterhelper.activity.dragswipe.adapter.DragAnd
 import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity;
 import com.chad.baserecyclerviewadapterhelper.databinding.ActivityUniversalRecyclerBinding;
 import com.chad.baserecyclerviewadapterhelper.utils.Tips;
-import com.chad.baserecyclerviewadapterhelper.utils.VibratorUtils;
+import com.chad.baserecyclerviewadapterhelper.utils.VibratorUtilsKt;
 import com.chad.library.adapter.base.QuickAdapterHelper;
 import com.chad.library.adapter.base.dragswipe.QuickDragAndSwipe;
 import com.chad.library.adapter.base.dragswipe.listener.OnItemDragListener;
@@ -63,7 +63,7 @@ public class ManualDragAndSwipeUseActivity extends BaseViewBindingActivity<Activ
         OnItemDragListener listener = new OnItemDragListener() {
             @Override
             public void onItemDragStart(@Nullable RecyclerView.ViewHolder viewHolder, int pos) {
-                VibratorUtils.INSTANCE.vibrate(getApplicationContext());
+                VibratorUtilsKt.vibrate(getApplicationContext());
                 Log.d(TAG, "drag start");
                 final QuickViewHolder holder = ((QuickViewHolder) viewHolder);
                 if (holder == null) return;

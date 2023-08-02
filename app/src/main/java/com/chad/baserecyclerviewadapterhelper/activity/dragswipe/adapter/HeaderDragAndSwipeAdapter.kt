@@ -31,8 +31,8 @@ open class HeaderDragAndSwipeAdapter : BaseQuickAdapter<String, QuickViewHolder>
         holder.setText(R.id.tv, item)
     }
 
-    override fun dataSwap(fromPosition: Int, toPosition: Int) {
-        swap(fromPosition, toPosition)
+    override fun dataMove(fromPosition: Int, toPosition: Int) {
+        move(fromPosition, toPosition)
     }
 
     override fun dataRemoveAt(position: Int) {
