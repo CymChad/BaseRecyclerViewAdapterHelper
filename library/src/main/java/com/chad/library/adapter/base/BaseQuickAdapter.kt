@@ -426,7 +426,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 
     /**
-     * 判断是否需要显示“空状态”布局
+     * 判断是否能显示“空状态”布局
      */
     fun displayEmptyView(list: List<T> = items): Boolean {
         if (emptyView == null || !isEmptyViewEnable) return false
