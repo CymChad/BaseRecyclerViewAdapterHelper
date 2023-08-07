@@ -205,7 +205,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         parent: ViewGroup, viewType: Int
     ): RecyclerView.ViewHolder {
         if (viewType == EMPTY_VIEW) {
-
             return EmptyLayoutVH(FrameLayout(parent.context).apply {
                 layoutParams = ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -404,11 +403,11 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     fun getItem(@IntRange(from = 0) position: Int): T? = items.getOrNull(position)
 
     /**
-     * 获取对应item数据的索引。如果返回 -1，表示不存在
-     * @param item T?
+     * 获取对应首个匹配的 item 数据的索引。如果返回 -1，表示不存在
+     * @param item T
      * @return Int
      */
-    fun getItemPosition(item: T?): Int {
+    fun itemIndexOfFirst(item: T): Int {
         return items.indexOfFirst { item == it }
     }
 
@@ -484,11 +483,10 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * @param list 新数据集
      */
     open fun submitList(list: List<T>?) {
+        val newList = list ?: emptyList()
         if (list === items) return
 
         mLastPosition = -1
-
-        val newList = list ?: emptyList()
 
         val oldDisplayEmptyLayout = displayEmptyView()
         val newDisplayEmptyLayout = displayEmptyView(newList)
