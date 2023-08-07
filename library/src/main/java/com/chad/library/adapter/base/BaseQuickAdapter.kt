@@ -44,6 +44,9 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     private var _recyclerView: RecyclerView? = null
 
+    /**
+     * 绑定此 Adapter 的 RecyclerView
+     */
     val recyclerView: RecyclerView
         get() {
             checkNotNull(_recyclerView) {
@@ -60,15 +63,17 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     /**
      * Function to judge if the viewHolder is EmptyLayoutVH.
-     * 判断 ViewHolder 是否是 EmptyLayoutVH
+     * 判断 ViewHolder 是否是 [EmptyLayoutVH]
+     *
      * @receiver RecyclerView.ViewHolder
      * @return Boolean
      */
     inline val RecyclerView.ViewHolder.isEmptyViewHolder: Boolean
         get() = this is EmptyLayoutVH
 
-    /** 是否使用空布局
+    /**
      *  Whether to use empty layout.
+     *  是否使用空布局。
      * */
     var isEmptyViewEnable = false
         set(value) {
@@ -138,7 +143,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     /**
      * Implement this method and use the helper to adapt the view to the given item.
      *
-     * 实现此方法，并使用 helper 完成 item 视图的操作
+     * 实现此方法，并使用 [holder] 完成 item 视图的操作
      *
      * @param holder A fully initialized helper.
      * @param item   The item that needs to be displayed.
@@ -279,13 +284,11 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     @CallSuper
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
         _recyclerView = recyclerView
     }
 
     @CallSuper
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView)
         _recyclerView = null
     }
 
@@ -561,6 +564,8 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * @param collection  the new data collection
      */
     open fun addAll(@IntRange(from = 0) position: Int, collection: Collection<T>) {
+        if (collection.isEmpty()) return
+
         if (position > items.size || position < 0) {
             throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
@@ -578,6 +583,8 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * 添加一组数据，不可为 null。
      */
     open fun addAll(collection: Collection<T>) {
+        if (collection.isEmpty()) return
+
         if (displayEmptyView()) {
             // 如果之前在显示空布局，需要先移除
             notifyItemRemoved(0)
@@ -655,8 +662,8 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     private val mutableItems: MutableList<T>
         get() {
             return when (items) {
-                is ArrayList -> {
-                    items as ArrayList
+                is java.util.ArrayList -> {
+                    items as java.util.ArrayList
                 }
                 is MutableList -> {
                     items as MutableList
