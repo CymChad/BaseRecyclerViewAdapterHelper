@@ -129,7 +129,7 @@ class NoAutoAutoLoadMoreRefreshUseActivity : BaseViewBindingActivity<ActivityLoa
     private fun request() {
 
         Request(pageInfo.page, object : RequestCallBack {
-            override fun success(data: List<Status?>) {
+            override fun success(data: List<Status>) {
                 viewBinding.refreshLayout.isRefreshing = false
                 if (pageInfo.isFirstPage) {
                     // 如果是加载的第一页数据，用 submitList()
@@ -211,7 +211,7 @@ class NoAutoAutoLoadMoreRefreshUseActivity : BaseViewBindingActivity<ActivityLoa
          *
          * @param data 数据
          */
-        fun success(data: List<Status?>)
+        fun success(data: List<Status>)
 
         /**
          * 模拟加载失败

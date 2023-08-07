@@ -13,7 +13,7 @@ import com.chad.library.adapter.base.BaseMultiItemAdapter
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
-class HomeAdapter(data: MutableList<HomeEntity>) : BaseMultiItemAdapter<HomeEntity>(data) {
+class HomeAdapter(data: List<HomeEntity>) : BaseMultiItemAdapter<HomeEntity>(data) {
 
     class ItemVH(val viewBinding: HomeItemViewBinding) : RecyclerView.ViewHolder(viewBinding.root)
 
