@@ -385,8 +385,8 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
 
     /**
-     * Is full span item
-     * 是否是完整跨度的item
+     * Is full span item (Only StaggeredGridLayoutManager)
+     * 是否是完整跨度的item（仅限于 StaggeredGridLayoutManager）
      *
      * @param itemType
      * @return

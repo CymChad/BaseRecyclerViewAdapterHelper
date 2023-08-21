@@ -106,6 +106,12 @@ abstract class BaseMultiItemAdapter<T>(items: List<T> = emptyList()) :
        return holder.itemView.getTag(R.id.BaseQuickAdapter_key_multi) as? OnMultiItemAdapterListener<T, RecyclerView.ViewHolder>
     }
 
+    /**
+     * 多类型布局 Adapter Listener
+     *
+     * @param T 数据类型
+     * @param V ViewHolder 类型
+     */
     interface OnMultiItemAdapterListener<T, V : RecyclerView.ViewHolder> {
         fun onCreate(context: Context, parent: ViewGroup, viewType: Int): V
 

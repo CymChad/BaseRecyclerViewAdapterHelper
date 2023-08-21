@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
  *
  * @param T 数据类型 type of data
  * @param VH viewHolder类型 type of the viewHolder
- * @property mItem 数据  data
- * @constructor Create empty Single item adapter
+ * @property mItem 数据 data
  */
 abstract class BaseSingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private var mItem: T? = null) :
     BaseQuickAdapter<Any?, VH>() {
