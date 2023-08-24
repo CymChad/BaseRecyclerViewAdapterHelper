@@ -44,6 +44,9 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     private var _recyclerView: RecyclerView? = null
 
+    /**
+     * 绑定此 Adapter 的 RecyclerView
+     */
     val recyclerView: RecyclerView
         get() {
             checkNotNull(_recyclerView) {
@@ -60,15 +63,17 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     /**
      * Function to judge if the viewHolder is EmptyLayoutVH.
-     * 判断 ViewHolder 是否是 EmptyLayoutVH
+     * 判断 ViewHolder 是否是 [EmptyLayoutVH]
+     *
      * @receiver RecyclerView.ViewHolder
      * @return Boolean
      */
     inline val RecyclerView.ViewHolder.isEmptyViewHolder: Boolean
         get() = this is EmptyLayoutVH
 
-    /** 是否使用空布局
+    /**
      *  Whether to use empty layout.
+     *  是否使用空布局。
      * */
     var isEmptyViewEnable = false
         set(value) {
@@ -138,7 +143,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     /**
      * Implement this method and use the helper to adapt the view to the given item.
      *
-     * 实现此方法，并使用 helper 完成 item 视图的操作
+     * 实现此方法，并使用 [holder] 完成 item 视图的操作
      *
      * @param holder A fully initialized helper.
      * @param item   The item that needs to be displayed.
@@ -205,7 +210,6 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         parent: ViewGroup, viewType: Int
     ): RecyclerView.ViewHolder {
         if (viewType == EMPTY_VIEW) {
-
             return EmptyLayoutVH(FrameLayout(parent.context).apply {
                 layoutParams = ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -231,13 +235,13 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     final override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>
     ) {
-        if (holder is EmptyLayoutVH) {
-            holder.changeEmptyView(emptyView)
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position)
             return
         }
 
-        if (payloads.isEmpty()) {
-            onBindViewHolder(holder as VH, position, getItem(position))
+        if (holder is EmptyLayoutVH) {
+            holder.changeEmptyView(emptyView)
             return
         }
 
@@ -249,6 +253,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 
     /**
+     * 当 ViewHolder 视图已附加到窗口时调用。
      * Called when a view created by this holder has been attached to a window.
      * simple to solve item will layout using all
      * [asStaggeredGridFullSpan]
@@ -279,13 +284,11 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     @CallSuper
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
         _recyclerView = recyclerView
     }
 
     @CallSuper
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView)
         _recyclerView = null
     }
 
@@ -382,8 +385,8 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
 
     /**
-     * Is full span item
-     * 是否是完整跨度的item
+     * Is full span item (Only StaggeredGridLayoutManager)
+     * 是否是完整跨度的item（仅限于 StaggeredGridLayoutManager）
      *
      * @param itemType
      * @return
@@ -403,11 +406,11 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     fun getItem(@IntRange(from = 0) position: Int): T? = items.getOrNull(position)
 
     /**
-     * 获取对应item数据的索引。如果返回 -1，表示不存在
-     * @param item T?
+     * 获取对应首个匹配的 item 数据的索引。如果返回 -1，表示不存在
+     * @param item T
      * @return Int
      */
-    fun getItemPosition(item: T?): Int {
+    fun itemIndexOfFirst(item: T): Int {
         return items.indexOfFirst { item == it }
     }
 
@@ -423,7 +426,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 
     /**
-     * 判断是否需要显示“空状态”布局
+     * 判断是否能显示“空状态”布局
      */
     fun displayEmptyView(list: List<T> = items): Boolean {
         if (emptyView == null || !isEmptyViewEnable) return false
@@ -483,11 +486,10 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * @param list 新数据集
      */
     open fun submitList(list: List<T>?) {
+        val newList = list ?: emptyList()
         if (list === items) return
 
         mLastPosition = -1
-
-        val newList = list ?: emptyList()
 
         val oldDisplayEmptyLayout = displayEmptyView()
         val newDisplayEmptyLayout = displayEmptyView(newList)
@@ -549,8 +551,9 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             // 如果之前在显示空布局，需要先移除
             notifyItemRemoved(0)
         }
-        mutableItems.add(data)
-        notifyItemInserted(items.size - 1)
+        if (mutableItems.add(data)) {
+            notifyItemInserted(items.size - 1)
+        }
     }
 
     /**
@@ -561,6 +564,8 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
      * @param collection  the new data collection
      */
     open fun addAll(@IntRange(from = 0) position: Int, collection: Collection<T>) {
+        if (collection.isEmpty()) return
+
         if (position > items.size || position < 0) {
             throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
@@ -569,22 +574,26 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             // 如果之前在显示空布局，需要先移除
             notifyItemRemoved(0)
         }
-        mutableItems.addAll(position, collection)
-        notifyItemRangeInserted(position, collection.size)
+        if (mutableItems.addAll(position, collection)) {
+            notifyItemRangeInserted(position, collection.size)
+        }
     }
 
     /**
      * 添加一组数据，不可为 null。
      */
     open fun addAll(collection: Collection<T>) {
+        if (collection.isEmpty()) return
+
         if (displayEmptyView()) {
             // 如果之前在显示空布局，需要先移除
             notifyItemRemoved(0)
         }
 
         val oldSize = items.size
-        mutableItems.addAll(collection)
-        notifyItemRangeInserted(oldSize, collection.size)
+        if (mutableItems.addAll(collection)) {
+            notifyItemRangeInserted(oldSize, collection.size)
+        }
     }
 
     /**
@@ -619,15 +628,30 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     /**
      * Item swap
-     * 数据位置交换
+     * 数据位置交换。这里单纯的只是两个数据交换位置。（注意⚠️，这里移动后的数据顺序与 [move] 不同)
      *
      * @param fromPosition
      * @param toPosition
      */
     open fun swap(fromPosition: Int, toPosition: Int) {
-        val size = items.size
-        if (fromPosition in 0 until size && toPosition in 0 until size) {
+        if (fromPosition in items.indices && toPosition in items.indices) {
             Collections.swap(items, fromPosition, toPosition)
+            notifyItemChanged(fromPosition)
+            notifyItemChanged(toPosition)
+        }
+    }
+
+    /**
+     * Move Item
+     * item 位置的移动。（注意⚠️，这里移动后的数据顺序与 [swap] 不同)
+     *
+     * @param fromPosition
+     * @param toPosition
+     */
+    open fun move(fromPosition: Int, toPosition: Int) {
+        if (fromPosition in items.indices && toPosition in items.indices) {
+            val e = mutableItems.removeAt(fromPosition)
+            mutableItems.add(toPosition, e)
             notifyItemMoved(fromPosition, toPosition)
         }
     }
@@ -638,8 +662,8 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     internal val mutableItems: MutableList<T>
         get() {
             return when (items) {
-                is ArrayList -> {
-                    items as ArrayList
+                is java.util.ArrayList -> {
+                    items as java.util.ArrayList
                 }
                 is MutableList -> {
                     items as MutableList

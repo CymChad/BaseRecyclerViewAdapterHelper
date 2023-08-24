@@ -7,6 +7,7 @@ import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.recyclerview.widget.RecyclerView
@@ -21,7 +22,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
  * @date: 2019-12-04
  * @Description:
  */
-class RecyclerViewAdapter : BaseQuickAdapter<Status?, RecyclerViewAdapter.VH>() {
+class RecyclerViewAdapter : BaseQuickAdapter<Status, RecyclerViewAdapter.VH>() {
     class VH(
         parent: ViewGroup,
         val viewBinding: LayoutAnimationBinding = LayoutAnimationBinding.inflate(
@@ -59,8 +60,7 @@ class RecyclerViewAdapter : BaseQuickAdapter<Status?, RecyclerViewAdapter.VH>() 
         }
 
         override fun updateDrawState(ds: TextPaint) {
-            ds.color =
-                context.resources.getColor(R.color.clickspan_color)
+            ds.color = ContextCompat.getColor(context, R.color.clickspan_color)
             ds.isUnderlineText = true
         }
     }

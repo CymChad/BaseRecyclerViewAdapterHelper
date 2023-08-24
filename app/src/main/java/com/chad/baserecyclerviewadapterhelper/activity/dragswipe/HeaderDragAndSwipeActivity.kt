@@ -11,14 +11,18 @@ import com.chad.baserecyclerviewadapterhelper.activity.dragswipe.adapter.HeaderD
 import com.chad.baserecyclerviewadapterhelper.activity.home.adapter.HomeTopHeaderAdapter
 import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity
 import com.chad.baserecyclerviewadapterhelper.databinding.ActivityUniversalRecyclerBinding
-import com.chad.baserecyclerviewadapterhelper.utils.VibratorUtils.vibrate
+import com.chad.baserecyclerviewadapterhelper.utils.vibrate
 import com.chad.library.adapter.base.QuickAdapterHelper
 import com.chad.library.adapter.base.dragswipe.setItemDragListener
 import com.chad.library.adapter.base.dragswipe.setItemSwipeListener
 import com.chad.library.adapter.base.loadState.LoadState.NotLoading
 import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
 import com.chad.library.adapter.base.viewholder.QuickViewHolder
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * 带头部局以及带加载下一页的，拖拽demo
@@ -83,7 +87,7 @@ class HeaderDragAndSwipeActivity : BaseViewBindingActivity<ActivityUniversalRecy
             .setItemDragListener(
                 onItemDragStart = { viewHolder, pos ->
                     Log.d(TAG, "drag start")
-                    vibrate(applicationContext)
+                    vibrate()
                     val holder = viewHolder as QuickViewHolder
                     // 开始时，item背景色变化，demo这里使用了一个动画渐变，使得自然
                     val startColor = Color.WHITE

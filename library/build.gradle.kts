@@ -9,7 +9,7 @@ plugins {
     signing
 }
 
-val versionName = "4.0.0-beta14"
+val versionName = "4.0.1"
 
 
 android {
@@ -60,6 +60,7 @@ dependencies {
     implementation("androidx.databinding:databinding-runtime:8.0.0")
 }
 
+//---------- maven upload info -----------------------------------
 
 var signingKeyId = ""//签名的密钥后8位
 var signingPassword = ""//签名设置的密码

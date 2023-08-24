@@ -9,6 +9,41 @@ import com.chad.library.adapter.base.loadState.trailing.DefaultTrailingLoadState
 import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
 import java.util.Collections
 
+/**
+ * 用于组合 Adapter 的帮助类，生成一个 [ConcatAdapter]。
+ *
+ * 结构如下:
+ *
+ *                            ConcatAdapter
+ * ｜-----------------------------------------------------------------｜
+ * ｜                                                                 ｜
+ * ｜         leadingLoadStateAdapter 或者 BeforeAdapter               ｜
+ * ｜                                                                 ｜
+ * ｜-----------------------------------------------------------------｜
+ * ｜                                                                 ｜
+ * ｜                                                                 ｜
+ * ｜                        contentAdapter                           ｜
+ * ｜                                                                 ｜
+ * ｜                                                                 ｜
+ * ｜-----------------------------------------------------------------｜
+ * ｜                                                                 ｜
+ * ｜         trailingLoadStateAdapter 或者 AfterAdapter               ｜
+ * ｜                                                                 ｜
+ * ｜-----------------------------------------------------------------｜
+ *
+ * 使用时，请获取此 Helper 提供的 Adapter：
+ * ```
+ * val helper = QuickAdapterHelper.Builder(...).build()
+ *
+ * recyclerView.adapter = helper.adapter
+ * ```
+ *
+ * @property contentAdapter
+ * @property leadingLoadStateAdapter
+ * @property trailingLoadStateAdapter
+ *
+ * @param config
+ */
 class QuickAdapterHelper private constructor(
     val contentAdapter: BaseQuickAdapter<*, *>,
 
@@ -35,6 +70,10 @@ class QuickAdapterHelper private constructor(
      * 最终设置给 RecyclerView 的 adapter
      */
     private val mAdapter = ConcatAdapter(config)
+
+    /**
+     * 获取 Adapter
+     */
     val adapter: ConcatAdapter get() = mAdapter
 
     /**
@@ -144,8 +183,9 @@ class QuickAdapterHelper private constructor(
             index + 1
         }
 
-        mAdapter.addAdapter(realIndex, adapter)
-        mBeforeList.add(adapter)
+       if (mAdapter.addAdapter(realIndex, adapter)) {
+           mBeforeList.add(adapter)
+       }
     }
 
     /**
@@ -179,12 +219,15 @@ class QuickAdapterHelper private constructor(
             adapter.addOnViewAttachStateChangeListener(it)
         }
 
-        if (trailingLoadStateAdapter == null) {
+        val isTure = if (trailingLoadStateAdapter == null) {
             mAdapter.addAdapter(adapter)
         } else {
             mAdapter.addAdapter(mAdapter.adapters.size - 1, adapter)
         }
-        mAfterList.add(adapter)
+
+        if (isTure) {
+            mAfterList.add(adapter)
+        }
     }
 
     /**
@@ -208,8 +251,9 @@ class QuickAdapterHelper private constructor(
             mAdapter.adapters.size - 1 - mAfterList.size + index
         }
 
-        mAdapter.addAdapter(realIndex, adapter)
-        mAfterList.add(adapter)
+        if(mAdapter.addAdapter(realIndex, adapter)) {
+            mAfterList.add(adapter)
+        }
     }
 
     /**

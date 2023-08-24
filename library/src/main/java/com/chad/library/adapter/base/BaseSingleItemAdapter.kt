@@ -8,11 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
  *
  * @param T 数据类型 type of data
  * @param VH viewHolder类型 type of the viewHolder
- * @property mItem 数据  data
- * @constructor Create empty Single item adapter
+ * @property mItem 数据 data
  */
 abstract class BaseSingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private var mItem: T? = null) :
-    BaseQuickAdapter<T, VH>() {
+    BaseQuickAdapter<Any?, VH>() {
 
     protected abstract fun onBindViewHolder(holder: VH, item: T?)
 
@@ -20,15 +19,15 @@ abstract class BaseSingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private va
         onBindViewHolder(holder, item)
     }
 
-    final override fun onBindViewHolder(holder: VH, position: Int, item: T?) {
+    final override fun onBindViewHolder(holder: VH, position: Int, item: Any?) {
         onBindViewHolder(holder, mItem)
     }
 
-    final override fun onBindViewHolder(holder: VH, position: Int, item: T?, payloads: List<Any>) {
-        onBindViewHolder(holder, item, payloads)
+    final override fun onBindViewHolder(holder: VH, position: Int, item: Any?, payloads: List<Any>) {
+        onBindViewHolder(holder, mItem, payloads)
     }
 
-    final override fun getItemCount(items: List<T>): Int {
+    final override fun getItemCount(items: List<Any?>): Int {
         return 1
     }
 
@@ -53,27 +52,27 @@ abstract class BaseSingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private va
             notifyItemChanged(0)
         }
 
-    override fun submitList(list: List<T>?) {
+    override fun submitList(list: List<Any?>?) {
         throw RuntimeException("Please use setItem()")
     }
 
-    override fun add(data: T) {
+    override fun add(data: Any?) {
         throw RuntimeException("Please use setItem()")
     }
 
-    override fun add(position: Int, data: T) {
+    override fun add(position: Int, data: Any?) {
         throw RuntimeException("Please use setItem()")
     }
 
-    override fun addAll(collection: Collection<T>) {
+    override fun addAll(collection: Collection<Any?>) {
         throw RuntimeException("Please use setItem()")
     }
 
-    override fun addAll(position: Int, collection: Collection<T>) {
+    override fun addAll(position: Int, collection: Collection<Any?>) {
         throw RuntimeException("Please use setItem()")
     }
 
-    override fun remove(data: T) {
+    override fun remove(data: Any?) {
         throw RuntimeException("Please use setItem()")
     }
 
@@ -81,7 +80,7 @@ abstract class BaseSingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private va
         throw RuntimeException("Please use setItem()")
     }
 
-    override fun set(position: Int, data: T) {
+    override fun set(position: Int, data: Any?) {
         throw RuntimeException("Please use setItem()")
     }
 }

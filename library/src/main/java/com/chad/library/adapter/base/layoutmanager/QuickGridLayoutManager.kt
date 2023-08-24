@@ -2,6 +2,7 @@ package com.chad.library.adapter.base.layoutmanager
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.annotation.CallSuper
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +16,7 @@ import com.chad.library.adapter.base.fullspan.FullSpanAdapterType
  * 网格布局 GridLayoutManager，用于实现满跨度，Adapter 需要实现 [FullSpanAdapterType] 接口
  *
  */
-class QuickGridLayoutManager : GridLayoutManager {
+open class QuickGridLayoutManager : GridLayoutManager {
 
     constructor(
         context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int
@@ -37,6 +38,7 @@ class QuickGridLayoutManager : GridLayoutManager {
         super.setSpanSizeLookup(fullSpanSizeLookup)
     }
 
+    @CallSuper
     override fun onAdapterChanged(
         oldAdapter: RecyclerView.Adapter<*>?, newAdapter: RecyclerView.Adapter<*>?
     ) {
@@ -49,8 +51,6 @@ class QuickGridLayoutManager : GridLayoutManager {
 
     /**
      * 处理全部跨度item的情况
-     *
-     * @constructor Create empty Full span size lookup
      */
     private inner class FullSpanSizeLookup : SpanSizeLookup() {
 
@@ -72,10 +72,10 @@ class QuickGridLayoutManager : GridLayoutManager {
                         if (wrappedAdapter.isFullSpanItem(type)) {
                             spanCount
                         } else {
-                            originalSpanSizeLookup?.getSpanSize(pair.second) ?: 1
+                            originalSpanSizeLookup?.getSpanSize(position) ?: 1
                         }
                     }
-                    else -> originalSpanSizeLookup?.getSpanSize(pair.second) ?: 1
+                    else -> originalSpanSizeLookup?.getSpanSize(position) ?: 1
                 }
             } else {
                 return when (adapter) {

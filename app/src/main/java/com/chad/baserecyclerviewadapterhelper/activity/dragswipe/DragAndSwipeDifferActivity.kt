@@ -13,7 +13,7 @@ import com.chad.baserecyclerviewadapterhelper.activity.dragswipe.adapter.DiffDra
 import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity
 import com.chad.baserecyclerviewadapterhelper.data.DataServer
 import com.chad.baserecyclerviewadapterhelper.databinding.ActivityUniversalRecyclerBinding
-import com.chad.baserecyclerviewadapterhelper.utils.VibratorUtils.vibrate
+import com.chad.baserecyclerviewadapterhelper.utils.vibrate
 import com.chad.library.adapter.base.dragswipe.QuickDragAndSwipe
 import com.chad.library.adapter.base.dragswipe.listener.DragAndSwipeDataCallback
 import com.chad.library.adapter.base.dragswipe.listener.OnItemDragListener
@@ -30,7 +30,7 @@ class DragAndSwipeDifferActivity : BaseViewBindingActivity<ActivityUniversalRecy
 
     private var mAdapter: DiffDragAndSwipeAdapter = DiffDragAndSwipeAdapter()
 
-    var quickDragAndSwipe = QuickDragAndSwipe()
+    private var quickDragAndSwipe = QuickDragAndSwipe()
         .setDragMoveFlags(ItemTouchHelper.UP or ItemTouchHelper.DOWN)
         .setSwipeMoveFlags(ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
 
@@ -61,7 +61,7 @@ class DragAndSwipeDifferActivity : BaseViewBindingActivity<ActivityUniversalRecy
         val listener: OnItemDragListener = object :
             OnItemDragListener {
             override fun onItemDragStart(viewHolder: RecyclerView.ViewHolder?, pos: Int) {
-                vibrate(applicationContext)
+                vibrate()
                 Log.d(TAG, "drag start")
                 val holder = viewHolder as QuickViewHolder
                 // 开始时，item背景色变化，demo这里使用了一个动画渐变，使得自然
@@ -138,7 +138,7 @@ class DragAndSwipeDifferActivity : BaseViewBindingActivity<ActivityUniversalRecy
 
         quickDragAndSwipe.attachToRecyclerView(viewBinding.rv)
             .setDataCallback(object : DragAndSwipeDataCallback {
-                override fun dataSwap(fromPosition: Int, toPosition: Int) {
+                override fun dataMove(fromPosition: Int, toPosition: Int) {
                     mAdapter.swap(fromPosition, toPosition)
                 }
 

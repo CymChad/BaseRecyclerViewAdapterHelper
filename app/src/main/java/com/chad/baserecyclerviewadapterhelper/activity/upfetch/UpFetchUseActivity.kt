@@ -71,6 +71,7 @@ class UpFetchUseActivity : BaseViewBindingActivity<ActivityUniversalRecyclerBind
 
         /*
          * get data from internet.
+         * 从网络获取数据
          */
         viewBinding.rv.postDelayed({
             mAdapter.addAll(0, genData())
