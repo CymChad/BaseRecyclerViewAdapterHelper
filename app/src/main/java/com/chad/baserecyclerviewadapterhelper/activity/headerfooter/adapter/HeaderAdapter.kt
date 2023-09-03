@@ -16,6 +16,4 @@ class HeaderAdapter : SimpleSingleItemAdapter<HeaderAdapter.VH>() {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.head_view, parent, false)
         return VH(view)
     }
-
-    override fun onBindViewHolder(holder: VH) {}
 }

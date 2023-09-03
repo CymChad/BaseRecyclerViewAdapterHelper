@@ -22,8 +22,6 @@ class HomeTopHeaderAdapter : SimpleSingleItemAdapter<HomeTopHeaderAdapter.VH>(),
         return VH(LayoutInflater.from(parent.context).inflate(R.layout.top_view, parent, false))
     }
 
-    override fun onBindViewHolder(holder: VH) {}
-
     override fun getItemViewType(position: Int, list: List<Any?>): Int {
         return HEAD_VIEWTYPE
     }

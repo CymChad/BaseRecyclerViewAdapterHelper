@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 abstract class SimpleSingleItemAdapter<VH : RecyclerView.ViewHolder>() :
     BaseSingleItemAdapter<Any?, VH>(null) {
 
-    protected abstract fun onBindViewHolder(holder: VH)
+    protected open fun onBindViewHolder(holder: VH) {}
     final override fun onBindViewHolder(holder: VH, item: Any?) {
         onBindViewHolder(holder)
     }
