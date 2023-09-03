@@ -22,7 +22,7 @@ class EmptyViewAdapter : BaseQuickAdapter<Status, EmptyViewAdapter.VH>() {
         return VH(parent)
     }
 
-     override fun onBindViewHolder(holder: VH, position: Int, item: Status?) {
+     override fun onBindViewHolder(holder: VH, position: Int, item: Status) {
         when (holder.layoutPosition % 3) {
             0 -> holder.binding.img.setImageResource(R.mipmap.animation_img1)
             1 -> holder.binding.img.setImageResource(R.mipmap.animation_img2)

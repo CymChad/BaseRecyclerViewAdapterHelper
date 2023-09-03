@@ -21,10 +21,8 @@ class DiffDragAndSwipeAdapter :
     }
 
     override fun onBindViewHolder(
-        holder: QuickViewHolder, position: Int, item: DiffEntity?
+        holder: QuickViewHolder, position: Int, item: DiffEntity
     ) {
-        if (item == null) return
-
         holder.setText(R.id.tweetName, item.title)
             .setText(R.id.tweetText, item.content)
             .setText(R.id.tweetDate, item.date)

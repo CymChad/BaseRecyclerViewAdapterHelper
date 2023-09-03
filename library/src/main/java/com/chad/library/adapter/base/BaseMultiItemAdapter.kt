@@ -31,12 +31,12 @@ abstract class BaseMultiItemAdapter<T>(items: List<T> = emptyList()) :
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, item: T?) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, item: T) {
         findListener(holder)?.onBind(holder, position, item)
     }
 
     override fun onBindViewHolder(
-        holder: RecyclerView.ViewHolder, position: Int, item: T?, payloads: List<Any>
+        holder: RecyclerView.ViewHolder, position: Int, item: T, payloads: List<Any>
     ) {
         if (payloads.isEmpty()) {
             onBindViewHolder(holder, position, item)
@@ -115,9 +115,9 @@ abstract class BaseMultiItemAdapter<T>(items: List<T> = emptyList()) :
     interface OnMultiItemAdapterListener<T, V : RecyclerView.ViewHolder> {
         fun onCreate(context: Context, parent: ViewGroup, viewType: Int): V
 
-        fun onBind(holder: V, position: Int, item: T?)
+        fun onBind(holder: V, position: Int, item: T)
 
-        fun onBind(holder: V, position: Int, item: T?, payloads: List<Any>) {
+        fun onBind(holder: V, position: Int, item: T, payloads: List<Any>) {
             onBind(holder, position, item)
         }
 
