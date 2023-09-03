@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.library.adapter.base.BaseSingleItemAdapter
 
-class HeaderAdapter: BaseSingleItemAdapter<Any, HeaderAdapter.VH>() {
+class HeaderAdapter: BaseSingleItemAdapter<Any?, HeaderAdapter.VH>(null) {
 
     class VH(view: View): RecyclerView.ViewHolder(view)
 

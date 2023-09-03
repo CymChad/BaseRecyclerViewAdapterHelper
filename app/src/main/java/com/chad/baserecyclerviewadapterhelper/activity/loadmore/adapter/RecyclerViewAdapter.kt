@@ -34,7 +34,7 @@ class RecyclerViewAdapter : BaseQuickAdapter<Status, RecyclerViewAdapter.VH>() {
         return VH(parent)
     }
 
-    protected override fun onBindViewHolder(holder: VH, position: Int, item: Status?) {
+    protected override fun onBindViewHolder(holder: VH, position: Int, item: Status) {
         when (holder.layoutPosition % 3) {
             0 -> holder.viewBinding.img.setImageResource(R.mipmap.animation_img1)
             1 -> holder.viewBinding.img.setImageResource(R.mipmap.animation_img2)

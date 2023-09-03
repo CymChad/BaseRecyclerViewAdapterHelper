@@ -21,7 +21,7 @@ class DiffDragAndSwipeAdapter :
     }
 
     override fun onBindViewHolder(
-        holder: QuickViewHolder, position: Int, item: DiffEntity?
+        holder: QuickViewHolder, position: Int, item: DiffEntity
     ) {
         if (item == null) return
 

@@ -35,7 +35,7 @@ class AnimationAdapter :
         return QuickViewHolder(R.layout.layout_animation, parent)
     }
 
-    override fun onBindViewHolder(holder: QuickViewHolder, position: Int, item: Status?) {
+    override fun onBindViewHolder(holder: QuickViewHolder, position: Int, item: Status) {
         when (holder.layoutPosition % 3) {
             0 -> holder.setImageResource(R.id.img, R.mipmap.animation_img1)
             1 -> holder.setImageResource(R.id.img, R.mipmap.animation_img2)

@@ -28,7 +28,7 @@ class GroupAdapter : BaseQuickAdapter<GroupDemoEntity.Group, GroupAdapter.VH>(){
         return VH(parent)
     }
 
-    override fun onBindViewHolder(holder: VH, position: Int, item: GroupDemoEntity.Group?) {
+    override fun onBindViewHolder(holder: VH, position: Int, item: GroupDemoEntity.Group) {
         if (item == null) return
 
         holder.binding.tvTitle.text = item.title

@@ -8,7 +8,7 @@ import com.chad.library.adapter.base.viewholder.QuickViewHolder
 
 class FooterAdapter(
     private val isDelete: Boolean
-) : BaseSingleItemAdapter<Any, QuickViewHolder>() {
+) : BaseSingleItemAdapter<Any?, QuickViewHolder>(null) {
 
     override fun onCreateViewHolder(context: Context, parent: ViewGroup, viewType: Int): QuickViewHolder {
         return QuickViewHolder(R.layout.footer_view, parent)
