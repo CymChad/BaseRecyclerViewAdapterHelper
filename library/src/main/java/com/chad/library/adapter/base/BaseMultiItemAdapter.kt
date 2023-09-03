@@ -115,9 +115,9 @@ abstract class BaseMultiItemAdapter<T>(items: List<T> = emptyList()) :
     interface OnMultiItemAdapterListener<T, V : RecyclerView.ViewHolder> {
         fun onCreate(context: Context, parent: ViewGroup, viewType: Int): V
 
-        fun onBind(holder: V, position: Int, item: T?)
+        fun onBind(holder: V, position: Int, item: T)
 
-        fun onBind(holder: V, position: Int, item: T?, payloads: List<Any>) {
+        fun onBind(holder: V, position: Int, item: T, payloads: List<Any>) {
             onBind(holder, position, item)
         }
 

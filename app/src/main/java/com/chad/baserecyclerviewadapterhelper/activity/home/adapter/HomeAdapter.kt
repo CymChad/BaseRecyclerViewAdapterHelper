@@ -27,8 +27,7 @@ class HomeAdapter(data: List<HomeEntity>) : BaseMultiItemAdapter<HomeEntity>(dat
                 return ItemVH(viewBinding)
             }
 
-            override fun onBind(holder: ItemVH, position: Int, item: HomeEntity?) {
-                if (item == null) return
+            override fun onBind(holder: ItemVH, position: Int, item: HomeEntity) {
                 holder.viewBinding.textView.text = item.name
                 holder.viewBinding.icon.setImageResource(item.imageResource)
             }
@@ -39,9 +38,7 @@ class HomeAdapter(data: List<HomeEntity>) : BaseMultiItemAdapter<HomeEntity>(dat
                 return HeaderVH(viewBinding)
             }
 
-            override fun onBind(holder: HeaderVH, position: Int, item: HomeEntity?) {
-                if (item == null) return
-
+            override fun onBind(holder: HeaderVH, position: Int, item: HomeEntity) {
                 holder.viewBinding.more.visibility = View.GONE
                 holder.viewBinding.header.text = item.sectionTitle
             }
