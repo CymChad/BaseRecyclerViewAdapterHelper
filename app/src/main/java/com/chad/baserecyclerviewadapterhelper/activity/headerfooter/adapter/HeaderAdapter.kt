@@ -6,18 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.baserecyclerviewadapterhelper.R
-import com.chad.library.adapter.base.BaseSingleItemAdapter
+import com.chad.library.adapter.base.SimpleSingleItemAdapter
 
-class HeaderAdapter: BaseSingleItemAdapter<Any?, HeaderAdapter.VH>(null) {
+class HeaderAdapter : SimpleSingleItemAdapter<HeaderAdapter.VH>() {
 
-    class VH(view: View): RecyclerView.ViewHolder(view)
+    class VH(view: View) : RecyclerView.ViewHolder(view)
 
     override fun onCreateViewHolder(context: Context, parent: ViewGroup, viewType: Int): VH {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.head_view, parent, false)
         return VH(view)
     }
 
-    override fun onBindViewHolder(holder: VH, item: Any?) {
-
-    }
+    override fun onBindViewHolder(holder: VH) {}
 }

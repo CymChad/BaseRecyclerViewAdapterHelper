@@ -2,6 +2,23 @@ package com.chad.library.adapter.base
 
 import androidx.recyclerview.widget.RecyclerView
 
+abstract class SimpleSingleItemAdapter<VH : RecyclerView.ViewHolder>() :
+    BaseSingleItemAdapter<Any?, VH>(null) {
+
+    protected abstract fun onBindViewHolder(holder: VH)
+    final override fun onBindViewHolder(holder: VH, item: Any?) {
+        onBindViewHolder(holder)
+    }
+
+    open fun onBindViewHolder(holder: VH, payloads: List<Any>) {
+        onBindViewHolder(holder)
+    }
+
+    final override fun onBindViewHolder(holder: VH, item: Any?, payloads: List<Any>) {
+        onBindViewHolder(holder, payloads)
+    }
+}
+
 /**
  * Adapter for single item
  * 只有单个/一个 item 情况下的 Adapter
@@ -10,7 +27,7 @@ import androidx.recyclerview.widget.RecyclerView
  * @param VH viewHolder类型 type of the viewHolder
  * @property mItem 数据 data
  */
-abstract class BaseSingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private var mItem:T) :
+abstract class BaseSingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private var mItem: T) :
     BaseQuickAdapter<T, VH>() {
 
     protected abstract fun onBindViewHolder(holder: VH, item: T)
