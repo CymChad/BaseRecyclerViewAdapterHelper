@@ -605,7 +605,8 @@ abstract class BaseNodeAdapter(nodeList: MutableList<BaseNode>? = null)
             data.size - 1 // 如果没有父节点，则为最外层
         } else {
             val dataSize = data[parentPosition].childNode?.size ?: 0
-            parentPosition + dataSize + expandCount // 如果有父节点，则为子节点，父节点 + 子节点数量 + 展开的数量
+            parentPosition + dataSize + expandCount -1
+        // 如果有父节点，则为子节点，父节点 + 子节点数量 + 展开的数量
         }
 
         //如果此 position 之后有 node
