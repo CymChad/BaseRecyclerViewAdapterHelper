@@ -689,10 +689,10 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     fun getOnItemLongClickListener(): OnItemLongClickListener<T>? = mOnItemLongClickListener
 
     fun addOnItemChildClickListener(@IdRes id: Int, listener: OnItemChildClickListener<T>) = apply {
-        if (mOnItemChildClickArray == null) {
-            mOnItemChildClickArray = SparseArray<OnItemChildClickListener<T>>(2)
-        }
-        mOnItemChildClickArray!!.put(id, listener)
+        mOnItemChildClickArray =
+            (mOnItemChildClickArray ?: SparseArray<OnItemChildClickListener<T>>(2)).apply {
+                put(id, listener)
+            }
     }
 
     fun removeOnItemChildClickListener(@IdRes id: Int) = apply {
@@ -711,14 +711,13 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         mOnItemChildLongClickArray?.remove(id)
     }
 
-    fun addOnViewAttachStateChangeListener(listener: OnViewAttachStateChangeListener) {
-        if (mOnViewAttachStateChangeListeners == null) {
-            mOnViewAttachStateChangeListeners = ArrayList()
-        }
-
-        if (mOnViewAttachStateChangeListeners!!.contains(listener)) return
-
-        mOnViewAttachStateChangeListeners!!.add(listener)
+    fun addOnViewAttachStateChangeListener(listener: OnViewAttachStateChangeListener) = apply {
+        mOnViewAttachStateChangeListeners =
+            (mOnViewAttachStateChangeListeners ?: ArrayList()).apply {
+                if (!this.contains(listener)) {
+                    this += listener
+                }
+            }
     }
 
     fun removeOnViewAttachStateChangeListener(listener: OnViewAttachStateChangeListener) {
