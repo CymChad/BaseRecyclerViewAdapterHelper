@@ -24,7 +24,7 @@ class HomeTopHeaderAdapter : BaseSingleItemAdapter<Any, HomeTopHeaderAdapter.VH>
     override fun onBindViewHolder(holder: VH, item: Any?) {
     }
 
-    override fun getItemViewType(position: Int, list: List<Any?>): Int {
+    override fun getItemViewType(position: Int, list: List<Any>): Int {
         return HEAD_VIEWTYPE
     }
 

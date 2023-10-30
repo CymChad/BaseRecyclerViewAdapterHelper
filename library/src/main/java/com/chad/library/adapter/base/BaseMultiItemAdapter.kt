@@ -12,7 +12,7 @@ import java.lang.ref.WeakReference
  * 多类型布局
  *
  */
-abstract class BaseMultiItemAdapter<T>(items: List<T> = emptyList()) :
+abstract class BaseMultiItemAdapter<T : Any>(items: List<T> = emptyList()) :
     BaseQuickAdapter<T, RecyclerView.ViewHolder>(items) {
 
     private val typeViewHolders =
@@ -142,7 +142,7 @@ abstract class BaseMultiItemAdapter<T>(items: List<T> = emptyList()) :
      * @param V
      * @constructor Create empty On multi item
      */
-    abstract class OnMultiItem<T, V : RecyclerView.ViewHolder> : OnMultiItemAdapterListener<T, V> {
+    abstract class OnMultiItem<T : Any, V : RecyclerView.ViewHolder> : OnMultiItemAdapterListener<T, V> {
         internal var weakA: WeakReference<BaseMultiItemAdapter<T>>? = null
 
         val adapter: BaseMultiItemAdapter<T>?

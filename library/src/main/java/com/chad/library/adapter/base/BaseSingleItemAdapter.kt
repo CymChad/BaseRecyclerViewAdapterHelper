@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
  * @param VH viewHolder类型 type of the viewHolder
  * @property mItem 数据 data
  */
-abstract class BaseSingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private var mItem: T? = null) :
-    BaseQuickAdapter<Any?, VH>() {
+abstract class BaseSingleItemAdapter<T : Any, VH : RecyclerView.ViewHolder>(private var mItem: T? = null) :
+    BaseQuickAdapter<Any, VH>() {
 
     protected abstract fun onBindViewHolder(holder: VH, item: T?)
 
@@ -27,7 +27,7 @@ abstract class BaseSingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private va
         onBindViewHolder(holder, mItem, payloads)
     }
 
-    final override fun getItemCount(items: List<Any?>): Int {
+    final override fun getItemCount(items: List<Any>): Int {
         return 1
     }
 
@@ -52,27 +52,27 @@ abstract class BaseSingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private va
             notifyItemChanged(0)
         }
 
-    override fun submitList(list: List<Any?>?) {
+    override fun submitList(list: List<Any>?) {
         throw RuntimeException("Please use setItem()")
     }
 
-    override fun add(data: Any?) {
+    override fun add(data: Any) {
         throw RuntimeException("Please use setItem()")
     }
 
-    override fun add(position: Int, data: Any?) {
+    override fun add(position: Int, data: Any) {
         throw RuntimeException("Please use setItem()")
     }
 
-    override fun addAll(collection: Collection<Any?>) {
+    override fun addAll(collection: Collection<Any>) {
         throw RuntimeException("Please use setItem()")
     }
 
-    override fun addAll(position: Int, collection: Collection<Any?>) {
+    override fun addAll(position: Int, collection: Collection<Any>) {
         throw RuntimeException("Please use setItem()")
     }
 
-    override fun remove(data: Any?) {
+    override fun remove(data: Any) {
         throw RuntimeException("Please use setItem()")
     }
 
@@ -80,7 +80,7 @@ abstract class BaseSingleItemAdapter<T, VH : RecyclerView.ViewHolder>(private va
         throw RuntimeException("Please use setItem()")
     }
 
-    override fun set(position: Int, data: Any?) {
+    override fun set(position: Int, data: Any) {
         throw RuntimeException("Please use setItem()")
     }
 }

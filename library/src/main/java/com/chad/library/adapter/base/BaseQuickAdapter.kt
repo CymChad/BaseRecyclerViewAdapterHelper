@@ -28,7 +28,7 @@ import java.util.Collections
  * @param VH : BaseViewHolder
  * @constructor layoutId, data(Can null parameters, the default is empty data)
  */
-abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
+abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
     open var items: List<T> = emptyList()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -742,19 +742,19 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 
 
-    fun interface OnItemClickListener<T> {
+    fun interface OnItemClickListener<T : Any> {
         fun onClick(adapter: BaseQuickAdapter<T, *>, view: View, position: Int)
     }
 
-    fun interface OnItemLongClickListener<T> {
+    fun interface OnItemLongClickListener<T : Any> {
         fun onLongClick(adapter: BaseQuickAdapter<T, *>, view: View, position: Int): Boolean
     }
 
-    fun interface OnItemChildClickListener<T> {
+    fun interface OnItemChildClickListener<T : Any> {
         fun onItemClick(adapter: BaseQuickAdapter<T, *>, view: View, position: Int)
     }
 
-    fun interface OnItemChildLongClickListener<T> {
+    fun interface OnItemChildLongClickListener<T : Any> {
         fun onItemLongClick(adapter: BaseQuickAdapter<T, *>, view: View, position: Int): Boolean
     }
 

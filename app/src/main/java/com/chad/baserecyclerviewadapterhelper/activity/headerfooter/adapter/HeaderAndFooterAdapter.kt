@@ -13,7 +13,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
 class HeaderAndFooterAdapter(list: List<Status>) :
-    BaseQuickAdapter<Status?, HeaderAndFooterAdapter.VH>(list) {
+    BaseQuickAdapter<Status, HeaderAndFooterAdapter.VH>(list) {
 
     class VH(var binding: ItemHeaderAndFooterBinding) : RecyclerView.ViewHolder(binding.root)
 

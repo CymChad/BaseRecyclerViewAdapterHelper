@@ -52,7 +52,7 @@ class DragAndSwipeDifferActivity : BaseViewBindingActivity<ActivityUniversalRecy
     private fun initRv() {
         viewBinding.rv.adapter = mAdapter
 
-        mAdapter.submitList(DataServer.getDiffUtilDemoEntities())
+        mAdapter.submitList(DataServer.diffUtilDemoEntities)
     }
 
 

@@ -14,7 +14,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
  * @date: 2019-12-06
  * @Description:
  */
-class UpFetchAdapter : BaseQuickAdapter<Movie?, UpFetchAdapter.VH>() {
+class UpFetchAdapter : BaseQuickAdapter<Movie, UpFetchAdapter.VH>() {
     class VH(
         parent: ViewGroup,
         val viewBinding: ItemHeaderAndFooterBinding = ItemHeaderAndFooterBinding.inflate(
