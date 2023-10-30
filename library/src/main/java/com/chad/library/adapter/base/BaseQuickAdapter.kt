@@ -701,10 +701,9 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     fun addOnItemChildLongClickListener(@IdRes id: Int, listener: OnItemChildLongClickListener<T>) =
         apply {
-            if (mOnItemChildLongClickArray == null) {
-                mOnItemChildLongClickArray = SparseArray<OnItemChildLongClickListener<T>>(2)
+            mOnItemChildLongClickArray = (mOnItemChildLongClickArray ?: SparseArray<OnItemChildLongClickListener<T>>(2)).apply {
+                put(id, listener)
             }
-            mOnItemChildLongClickArray!!.put(id, listener)
         }
 
     fun removeOnItemChildLongClickListener(@IdRes id: Int) = apply {
