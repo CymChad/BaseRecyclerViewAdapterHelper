@@ -19,7 +19,7 @@ import com.chad.library.adapter.base.animation.SlideInBottomAnimation
 import com.chad.library.adapter.base.animation.SlideInLeftAnimation
 import com.chad.library.adapter.base.animation.SlideInRightAnimation
 import com.chad.library.adapter.base.util.asStaggeredGridFullSpan
-import com.chad.library.adapter.base.viewholder.EmptyLayoutVH
+import com.chad.library.adapter.base.viewholder.StateLayoutVH
 import java.util.Collections
 
 /**
@@ -63,13 +63,13 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
 
     /**
      * Function to judge if the viewHolder is EmptyLayoutVH.
-     * 判断 ViewHolder 是否是 [EmptyLayoutVH]
+     * 判断 ViewHolder 是否是 [StateLayoutVH]
      *
      * @receiver RecyclerView.ViewHolder
      * @return Boolean
      */
     inline val RecyclerView.ViewHolder.isEmptyViewHolder: Boolean
-        get() = this is EmptyLayoutVH
+        get() = this is StateLayoutVH
 
     /**
      *  Whether to use empty layout.
@@ -210,12 +210,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
         parent: ViewGroup, viewType: Int
     ): RecyclerView.ViewHolder {
         if (viewType == EMPTY_VIEW) {
-            return EmptyLayoutVH(FrameLayout(parent.context).apply {
-                layoutParams = ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-                )
-            })
+            return StateLayoutVH(parent, emptyView)
         }
 
         return onCreateViewHolder(parent.context, parent, viewType).apply {
@@ -224,8 +219,7 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
     }
 
     final override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is EmptyLayoutVH) {
-            holder.changeEmptyView(emptyView)
+        if (holder is StateLayoutVH) {
             return
         }
 
@@ -240,8 +234,8 @@ abstract class BaseQuickAdapter<T, VH : RecyclerView.ViewHolder>(
             return
         }
 
-        if (holder is EmptyLayoutVH) {
-            holder.changeEmptyView(emptyView)
+        if (holder is StateLayoutVH) {
+            holder.changeStateView(emptyView)
             return
         }
 

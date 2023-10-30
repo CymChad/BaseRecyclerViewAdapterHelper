@@ -30,10 +30,7 @@ class EmptyViewUseActivity : BaseViewBindingActivity<ActivityEmptyViewUseBinding
 
         // 打开空布局功能
         mAdapter.isEmptyViewEnable = true
-    }
 
-    override fun onStart() {
-        super.onStart()
         onRefresh()
     }
 
