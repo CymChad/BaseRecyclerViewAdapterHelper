@@ -2,11 +2,13 @@ package com.chad.baserecyclerviewadapterhelper.activity.emptyview
 
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
 import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.baserecyclerviewadapterhelper.activity.emptyview.adapter.EmptyViewAdapter
 import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity
 import com.chad.baserecyclerviewadapterhelper.data.DataServer
 import com.chad.baserecyclerviewadapterhelper.databinding.ActivityEmptyViewUseBinding
+import com.chad.library.adapter.base.layoutmanager.QuickGridLayoutManager
 
 class EmptyViewUseActivity : BaseViewBindingActivity<ActivityEmptyViewUseBinding>() {
 
@@ -27,6 +29,7 @@ class EmptyViewUseActivity : BaseViewBindingActivity<ActivityEmptyViewUseBinding
         viewBinding.btnReset.setOnClickListener { reset() }
 
         viewBinding.rvList.adapter = mAdapter
+        viewBinding.rvList.layoutManager = QuickGridLayoutManager(this,2)
 
         // 打开空布局功能
         mAdapter.isEmptyViewEnable = true
@@ -43,14 +46,14 @@ class EmptyViewUseActivity : BaseViewBindingActivity<ActivityEmptyViewUseBinding
 
     private val emptyDataView: View
         get() {
-            val notDataView = layoutInflater.inflate(R.layout.empty_view, viewBinding.rvList, false)
+            val notDataView = layoutInflater.inflate(R.layout.empty_view, FrameLayout(this), false)
             notDataView.setOnClickListener { onRefresh() }
             return notDataView
         }
 
     private val errorView: View
         get() {
-            val errorView = layoutInflater.inflate(R.layout.error_view, viewBinding.rvList, false)
+            val errorView = layoutInflater.inflate(R.layout.error_view, FrameLayout(this), false)
             errorView.setOnClickListener { onRefresh() }
             return errorView
         }
