@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.chad.library.adapter.base.fullspan.FullSpanAdapterType
 
 /**
  * An emptyState viewHolder. (For internal use only)
@@ -22,7 +23,7 @@ internal class StateLayoutVH constructor(
         )
         setStateView(this, stateView)
     }
-) : RecyclerView.ViewHolder(stateLayout) {
+) : RecyclerView.ViewHolder(stateLayout), FullSpanAdapterType {
 
 
     fun changeStateView(stateView: View?) {
