@@ -75,7 +75,39 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
      *  Whether to use empty layout.
      *  是否使用空布局。
      * */
-    var isEmptyViewEnable = false
+    @Deprecated("使用 isStateViewEnable", ReplaceWith("isStateViewEnable"))
+    var isEmptyViewEnable
+        set(value) {
+            isStateViewEnable = value
+        }
+        get() = isStateViewEnable
+
+    /**
+     *  Whether to use state layout.
+     *  是否使用状态布局。
+     * */
+    var isStateViewEnable = false
+        set(value) {
+            val oldDisplayEmptyLayout = displayEmptyView()
+
+            field = value
+
+            val newDisplayEmptyLayout = displayEmptyView()
+
+            if (oldDisplayEmptyLayout && !newDisplayEmptyLayout) {
+                notifyItemRemoved(0)
+            } else if (newDisplayEmptyLayout && !oldDisplayEmptyLayout) {
+                notifyItemInserted(0)
+            } else if (oldDisplayEmptyLayout && newDisplayEmptyLayout) {
+                notifyItemChanged(0, EMPTY_PAYLOAD)
+            }
+        }
+
+    /**
+     * State view. Attention please: take effect when [items] is empty array.
+     * 状态视图，注意：[items]为空数组才会生效
+     */
+    var stateView: View? = null
         set(value) {
             val oldDisplayEmptyLayout = displayEmptyView()
 
@@ -96,22 +128,12 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
      * Empty view. Attention please: take effect when [items] is empty array.
      * 空视图，注意：[items]为空数组才会生效
      */
-    var emptyView: View? = null
+    @Deprecated("使用 stateView", ReplaceWith("stateView"))
+    var emptyView: View?
         set(value) {
-            val oldDisplayEmptyLayout = displayEmptyView()
-
-            field = value
-
-            val newDisplayEmptyLayout = displayEmptyView()
-
-            if (oldDisplayEmptyLayout && !newDisplayEmptyLayout) {
-                notifyItemRemoved(0)
-            } else if (newDisplayEmptyLayout && !oldDisplayEmptyLayout) {
-                notifyItemInserted(0)
-            } else if (oldDisplayEmptyLayout && newDisplayEmptyLayout) {
-                notifyItemChanged(0, EMPTY_PAYLOAD)
-            }
+            stateView = value
         }
+        get() = stateView
 
     /**
      * Whether enable animation.
@@ -210,7 +232,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
         parent: ViewGroup, viewType: Int
     ): RecyclerView.ViewHolder {
         if (viewType == EMPTY_VIEW) {
-            return StateLayoutVH(parent, emptyView)
+            return StateLayoutVH(parent, stateView)
         }
 
         return onCreateViewHolder(parent.context, parent, viewType).apply {
@@ -235,7 +257,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
         }
 
         if (holder is StateLayoutVH) {
-            holder.changeStateView(emptyView)
+            holder.changeStateView(stateView)
             return
         }
 
@@ -258,7 +280,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
     override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
         super.onViewAttachedToWindow(holder)
 
-        if (isFullSpanItem(getItemViewType(holder.bindingAdapterPosition))) {
+        if (holder is StateLayoutVH || isFullSpanItem(getItemViewType(holder.bindingAdapterPosition))) {
             holder.asStaggeredGridFullSpan()
         } else {
             runAnimator(holder)
@@ -386,7 +408,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
      * @return
      */
     open fun isFullSpanItem(itemType: Int): Boolean {
-        return itemType == EMPTY_VIEW
+        return false
     }
 
     /**
@@ -408,6 +430,15 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
         return items.indexOfFirst { item == it }
     }
 
+    /**
+     * Set state view layout
+     * 状态视图的布局id
+     *
+     * @param layoutResId
+     */
+    fun setStateViewLayout(context: Context, @LayoutRes layoutResId: Int) {
+        stateView = LayoutInflater.from(context).inflate(layoutResId, FrameLayout(context), false)
+    }
 
     /**
      * Set empty view layout
@@ -415,15 +446,16 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
      *
      * @param layoutResId
      */
+    @Deprecated("使用 setStateViewLayout()", replaceWith = ReplaceWith("setStateViewLayout(context, layoutResId)"))
     fun setEmptyViewLayout(context: Context, @LayoutRes layoutResId: Int) {
-        emptyView = LayoutInflater.from(context).inflate(layoutResId, FrameLayout(context), false)
+        setStateViewLayout(context, layoutResId)
     }
 
     /**
      * 判断是否能显示“空状态”布局
      */
     fun displayEmptyView(list: List<T> = items): Boolean {
-        if (emptyView == null || !isEmptyViewEnable) return false
+        if (stateView == null || !isStateViewEnable) return false
         return list.isEmpty()
     }
 

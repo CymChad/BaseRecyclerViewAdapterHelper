@@ -50,9 +50,9 @@ public final class DifferActivity extends BaseViewBindingActivity<ActivityDiffut
 
     private void initRv() {
         // 打开空布局功能
-        mAdapter.setEmptyViewEnable(true);
+        mAdapter.setStateViewEnable(true);
         // 传入 空布局 layout id
-        mAdapter.setEmptyViewLayout(this, R.layout.loading_view);
+        mAdapter.setStateViewLayout(this, R.layout.loading_view);
 
         getViewBinding().diffRv.setAdapter(mAdapter);
     }

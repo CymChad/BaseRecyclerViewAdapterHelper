@@ -3,6 +3,7 @@ package com.chad.baserecyclerviewadapterhelper.activity.emptyview
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.baserecyclerviewadapterhelper.activity.emptyview.adapter.EmptyViewAdapter
 import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity
@@ -29,10 +30,10 @@ class EmptyViewUseActivity : BaseViewBindingActivity<ActivityEmptyViewUseBinding
         viewBinding.btnReset.setOnClickListener { reset() }
 
         viewBinding.rvList.adapter = mAdapter
-        viewBinding.rvList.layoutManager = QuickGridLayoutManager(this,2)
+        viewBinding.rvList.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
         // 打开空布局功能
-        mAdapter.isEmptyViewEnable = true
+        mAdapter.isStateViewEnable = true
 
         onRefresh()
     }
@@ -65,12 +66,12 @@ class EmptyViewUseActivity : BaseViewBindingActivity<ActivityEmptyViewUseBinding
         viewBinding.rvList.postDelayed({
             if (mError) { // 模拟网络错误
                 // 方式二：传入View
-                mAdapter.emptyView = errorView
+                mAdapter.stateView = errorView
 
                 mError = false
             } else {
                 if (mNoData) { // 模拟接口没有数据
-                    mAdapter.emptyView = emptyDataView
+                    mAdapter.stateView = emptyDataView
                     mNoData = false
                 } else {
                     // 模拟正常数据返回
