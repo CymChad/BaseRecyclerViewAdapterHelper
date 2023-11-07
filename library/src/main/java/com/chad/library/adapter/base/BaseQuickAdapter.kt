@@ -513,7 +513,6 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
      */
     open fun submitList(list: List<T>?) {
         val newList = list ?: emptyList()
-        if (list === items) return
 
         mLastPosition = -1
 
