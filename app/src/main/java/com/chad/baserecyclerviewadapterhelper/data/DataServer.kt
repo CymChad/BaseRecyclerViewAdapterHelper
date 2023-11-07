@@ -1,5 +1,6 @@
 package com.chad.baserecyclerviewadapterhelper.data
 
+import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.baserecyclerviewadapterhelper.entity.DiffEntity
 import com.chad.baserecyclerviewadapterhelper.entity.Status
 
@@ -11,33 +12,27 @@ object DataServer {
         "https://avatars1.githubusercontent.com/u/7698209?v=3&s=460"
     const val CYM_CHAD = "CymChad"
     const val CHAY_CHAN = "ChayChan"
-    fun getSampleData(lenth: Int): List<Status> {
+    fun getSampleData(lenth: Int): MutableList<Status> {
         val list: MutableList<Status> = ArrayList()
         for (i in 0 until lenth) {
             val status = Status()
             status.userName = "Chad$i"
             status.createdAt = "04/05/$i"
             status.isRetweet = i % 2 == 0
-            status.userAvatar = "https://avatars1.githubusercontent.com/u/7698209?v=3&s=460"
+
+
+            status.userAvatar = when (i % 3) {
+                0 -> R.mipmap.animation_img1
+                1 -> R.mipmap.animation_img2
+                else -> R.mipmap.animation_img3
+            }
             status.text = "BaseRecyclerViewAdpaterHelper https://www.recyclerview.org"
             list.add(status)
         }
         return list
     }
 
-    fun addData(list: MutableList<Status>, dataSize: Int): List<Status> {
-        for (i in 0 until dataSize) {
-            val status = Status()
-            status.userName = "Chad$i"
-            status.createdAt = "04/05/$i"
-            status.isRetweet = i % 2 == 0
-            status.userAvatar = "https://avatars1.githubusercontent.com/u/7698209?v=3&s=460"
-            status.text =
-                "Powerful and flexible RecyclerAdapter https://github.com/CymChad/BaseRecyclerViewAdapterHelper"
-            list.add(status)
-        }
-        return list
-    }
+
 
     val strData: List<String>
         get() {

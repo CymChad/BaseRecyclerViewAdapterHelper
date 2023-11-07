@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.baserecyclerviewadapterhelper.databinding.LayoutAnimationBinding
 import com.chad.baserecyclerviewadapterhelper.entity.Status
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -22,14 +21,10 @@ class EmptyViewAdapter : BaseQuickAdapter<Status, EmptyViewAdapter.VH>() {
         return VH(parent)
     }
 
-     override fun onBindViewHolder(holder: VH, position: Int, item: Status?) {
-        when (holder.layoutPosition % 3) {
-            0 -> holder.binding.img.setImageResource(R.mipmap.animation_img1)
-            1 -> holder.binding.img.setImageResource(R.mipmap.animation_img2)
-            2 -> holder.binding.img.setImageResource(R.mipmap.animation_img3)
-            else -> {}
-        }
-        holder.binding.tweetName.text = "Hoteis in Rio de Janeiro"
+    override fun onBindViewHolder(holder: VH, position: Int, item: Status?) {
+        if (item == null) return
+        holder.binding.img.setImageResource(item.userAvatar)
+        holder.binding.tweetName.text = item.userName
         holder.binding.tweetText.text = "O ever youthful,O ever weeping"
     }
 

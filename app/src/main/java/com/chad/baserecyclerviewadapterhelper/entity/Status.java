@@ -7,7 +7,7 @@ public class Status {
     private boolean isRetweet;
     private String text;
     private String userName;
-    private String userAvatar;
+    private int userAvatar;
     private String createdAt;
 
     public boolean isRetweet() {
@@ -34,11 +34,11 @@ public class Status {
         this.userName = userName;
     }
 
-    public String getUserAvatar() {
+    public int getUserAvatar() {
         return userAvatar;
     }
 
-    public void setUserAvatar(String userAvatar) {
+    public void setUserAvatar(int userAvatar) {
         this.userAvatar = userAvatar;
     }
 

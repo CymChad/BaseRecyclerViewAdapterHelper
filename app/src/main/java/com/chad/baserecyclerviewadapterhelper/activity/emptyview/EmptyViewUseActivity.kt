@@ -9,7 +9,6 @@ import com.chad.baserecyclerviewadapterhelper.activity.emptyview.adapter.EmptyVi
 import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity
 import com.chad.baserecyclerviewadapterhelper.data.DataServer
 import com.chad.baserecyclerviewadapterhelper.databinding.ActivityEmptyViewUseBinding
-import com.chad.library.adapter.base.layoutmanager.QuickGridLayoutManager
 
 class EmptyViewUseActivity : BaseViewBindingActivity<ActivityEmptyViewUseBinding>() {
 
@@ -61,7 +60,7 @@ class EmptyViewUseActivity : BaseViewBindingActivity<ActivityEmptyViewUseBinding
 
     private fun onRefresh() {
         // 方式一：直接传入 layout id
-        mAdapter.setEmptyViewLayout(this, R.layout.loading_view)
+        mAdapter.setStateViewLayout(this, R.layout.loading_view)
 
         viewBinding.rvList.postDelayed({
             if (mError) { // 模拟网络错误
