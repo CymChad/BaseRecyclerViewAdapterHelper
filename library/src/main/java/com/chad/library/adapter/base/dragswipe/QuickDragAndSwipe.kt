@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.dragswipe.listener.DragAndSwipeDataCallback
 import com.chad.library.adapter.base.dragswipe.listener.OnItemDragListener
 import com.chad.library.adapter.base.dragswipe.listener.OnItemSwipeListener
-import com.chad.library.adapter.base.viewholder.EmptyLayoutVH
+import com.chad.library.adapter.base.viewholder.StateLayoutVH
 
 /**
  * @author yangfeng
@@ -251,7 +251,7 @@ open class QuickDragAndSwipe : ItemTouchHelper.Callback() {
      * 是否是空布局
      */
     private fun isEmptyView(viewHolder: RecyclerView.ViewHolder): Boolean {
-        return viewHolder is EmptyLayoutVH
+        return viewHolder is StateLayoutVH
     }
 
 

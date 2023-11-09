@@ -11,7 +11,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
  * @date 2023/5/29
  * @description
  */
-private abstract class DebouncedClickListener<T>(private val interval: Long) :
+private abstract class DebouncedClickListener<T : Any>(private val interval: Long) :
     BaseQuickAdapter.OnItemClickListener<T>, BaseQuickAdapter.OnItemChildClickListener<T> {
     private var mLastClickTime: Long = 0
 
@@ -46,7 +46,7 @@ private abstract class DebouncedClickListener<T>(private val interval: Long) :
  * @param block
  * @receiver
  */
-fun <T, VH : RecyclerView.ViewHolder> BaseQuickAdapter<T, VH>.setOnDebouncedItemClick(
+fun <T : Any, VH : RecyclerView.ViewHolder> BaseQuickAdapter<T, VH>.setOnDebouncedItemClick(
     time: Long = 500,
     block: BaseQuickAdapter.OnItemClickListener<T>
 ) = this.setOnItemClickListener(object : DebouncedClickListener<T>(time) {
@@ -62,7 +62,7 @@ fun <T, VH : RecyclerView.ViewHolder> BaseQuickAdapter<T, VH>.setOnDebouncedItem
  * @param block
  * @receiver
  */
-fun <T, VH : RecyclerView.ViewHolder> BaseQuickAdapter<T, VH>.addOnDebouncedChildClick(
+fun <T : Any, VH : RecyclerView.ViewHolder> BaseQuickAdapter<T, VH>.addOnDebouncedChildClick(
     @IdRes id: Int,
     time: Long = 500,
     block: BaseQuickAdapter.OnItemChildClickListener<T>

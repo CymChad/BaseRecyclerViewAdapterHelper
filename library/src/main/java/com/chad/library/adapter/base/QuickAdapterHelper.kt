@@ -22,7 +22,7 @@ import java.util.Collections
  * ｜-----------------------------------------------------------------｜
  * ｜                                                                 ｜
  * ｜                                                                 ｜
- * ｜                        contentAdapter                           ｜
+ * ｜                        contentAdapter（内容）                    ｜
  * ｜                                                                 ｜
  * ｜                                                                 ｜
  * ｜-----------------------------------------------------------------｜
@@ -184,7 +184,7 @@ class QuickAdapterHelper private constructor(
         }
 
        if (mAdapter.addAdapter(realIndex, adapter)) {
-           mBeforeList.add(adapter)
+           mBeforeList += adapter
        }
     }
 
@@ -226,7 +226,7 @@ class QuickAdapterHelper private constructor(
         }
 
         if (isTure) {
-            mAfterList.add(adapter)
+            mAfterList += adapter
         }
     }
 
@@ -252,7 +252,7 @@ class QuickAdapterHelper private constructor(
         }
 
         if(mAdapter.addAdapter(realIndex, adapter)) {
-            mAfterList.add(adapter)
+            mAfterList += adapter
         }
     }
 
@@ -287,8 +287,8 @@ class QuickAdapterHelper private constructor(
             return@apply
         }
         mAdapter.removeAdapter(adapter)
-        mBeforeList.remove(adapter)
-        mAfterList.remove(adapter)
+        mBeforeList -= adapter
+        mAfterList -= adapter
 
         firstAdapterOnViewAttachChangeListener?.let {
             adapter.removeOnViewAttachStateChangeListener(it)
@@ -366,6 +366,11 @@ class QuickAdapterHelper private constructor(
             this.config = config
         }
 
+        /**
+         * 构建并返回 QuickAdapterHelper
+         *
+         * @return
+         */
         fun build(): QuickAdapterHelper {
             return QuickAdapterHelper(
                 contentAdapter,
@@ -375,6 +380,22 @@ class QuickAdapterHelper private constructor(
             )
         }
 
+        /**
+         * 附加到指定的 RecyclerView 上，并返回 QuickAdapterHelper
+         *
+         * @param recyclerView
+         * @return
+         */
+        fun attachTo(recyclerView: RecyclerView): QuickAdapterHelper {
+            return QuickAdapterHelper(
+                contentAdapter,
+                leadingLoadStateAdapter,
+                trailingLoadStateAdapter,
+                config
+            ).apply {
+                recyclerView.adapter = this.adapter
+            }
+        }
     }
 }
 

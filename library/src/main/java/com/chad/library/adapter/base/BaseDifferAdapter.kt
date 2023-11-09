@@ -1,5 +1,6 @@
 package com.chad.library.adapter.base
 
+import androidx.annotation.IntRange
 import androidx.recyclerview.widget.*
 import androidx.recyclerview.widget.AsyncListDiffer.ListListener
 import java.util.*
@@ -12,7 +13,7 @@ import java.util.*
  * @param T 数据类型
  * @param VH ViewHolder 类型
  */
-abstract class BaseDifferAdapter<T, VH : RecyclerView.ViewHolder>(
+abstract class BaseDifferAdapter<T : Any, VH : RecyclerView.ViewHolder>(
     config: AsyncDifferConfig<T>, items: List<T>
 ) : BaseQuickAdapter<T, VH>() {
 

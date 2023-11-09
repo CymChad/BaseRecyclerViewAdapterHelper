@@ -45,6 +45,16 @@ open class QuickGridLayoutManager : GridLayoutManager {
         adapter = newAdapter
     }
 
+    override fun onAttachedToWindow(view: RecyclerView?) {
+        super.onAttachedToWindow(view)
+        adapter = view?.adapter
+    }
+
+    override fun onDetachedFromWindow(view: RecyclerView?, recycler: RecyclerView.Recycler?) {
+        super.onDetachedFromWindow(view, recycler)
+        adapter = null
+    }
+
     override fun setSpanSizeLookup(spanSizeLookup: SpanSizeLookup?) {
         fullSpanSizeLookup.originalSpanSizeLookup = spanSizeLookup
     }
