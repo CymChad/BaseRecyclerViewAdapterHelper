@@ -652,6 +652,37 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
     }
 
     /**
+     * 删除给定范围内的数据
+     *
+     * @param range Int 索引范围
+     */
+    open fun removeAtRange(range: kotlin.ranges.IntRange) {
+        if (range.isEmpty()) {
+            return
+        }
+        if (range.first >= items.size) {
+            throw IndexOutOfBoundsException("Range first position: ${range.first} - last position: ${range.last}. size:${items.size}")
+        }
+
+        val last = if (range.last >= items.size) {
+            items.size - 1
+        } else {
+            range.last
+        }
+
+        for (it in last downTo  range.first) {
+            mutableItems.removeAt(it)
+        }
+
+        notifyItemRangeRemoved(range.first, last - range.first + 1)
+
+        // 处理空视图的情况
+        if (displayEmptyView()) {
+            notifyItemInserted(0)
+        }
+    }
+
+    /**
      * Item swap
      * 数据位置交换。这里单纯的只是两个数据交换位置。（注意⚠️，这里移动后的数据顺序与 [move] 不同)
      *

@@ -152,6 +152,27 @@ abstract class BaseDifferAdapter<T : Any, VH : RecyclerView.ViewHolder>(
         }
     }
 
+    override fun removeAtRange(range: kotlin.ranges.IntRange) {
+        if (range.isEmpty()) {
+            return
+        }
+        if (range.first >= items.size) {
+            throw IndexOutOfBoundsException("Range first position: ${range.first} - last position: ${range.last}. size:${items.size}")
+        }
+
+        val last = if (range.last >= items.size) {
+            items.size - 1
+        } else {
+            range.last
+        }
+
+        val list = items.toMutableList()
+        for (it in last downTo  range.first) {
+            list.removeAt(it)
+        }
+        submitList(list)
+    }
+
     override fun swap(fromPosition: Int, toPosition: Int) {
         if (fromPosition in items.indices || toPosition in items.indices) {
             items.toMutableList().also {

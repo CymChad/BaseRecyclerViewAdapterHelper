@@ -76,6 +76,10 @@ abstract class BaseSingleItemAdapter<T : Any, VH : RecyclerView.ViewHolder>(priv
         throw RuntimeException("Please use setItem()")
     }
 
+    override fun removeAtRange(range: IntRange) {
+        throw RuntimeException("Please use setItem()")
+    }
+
     override fun removeAt(position: Int) {
         throw RuntimeException("Please use setItem()")
     }
