@@ -14,7 +14,7 @@ Please feel free to use this. (Welcome to **Star** and **Fork**)
 v4版本已经上传 maven 中央仓库，不需要再引入三方仓库配置了。欢迎尝试。
 **注意，4.0为非兼容升级，建议在新项目尝试**
 ```
-implementation "io.github.cymchad:BaseRecyclerViewAdapterHelper:4.0.1"
+implementation "io.github.cymchad:BaseRecyclerViewAdapterHelper4:4.1.0"
 ```
 
 
