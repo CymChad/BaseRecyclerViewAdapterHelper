@@ -7,7 +7,7 @@ import com.chad.baserecyclerviewadapterhelper.animator.CustomAnimation2
 import com.chad.baserecyclerviewadapterhelper.animator.CustomAnimation3
 import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity
 import com.chad.baserecyclerviewadapterhelper.databinding.ActivityAnimationUseBinding
-import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter4.BaseQuickAdapter
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper

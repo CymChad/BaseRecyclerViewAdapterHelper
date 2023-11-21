@@ -3,8 +3,8 @@ package com.chad.baserecyclerviewadapterhelper.activity.headerfooter.adapter
 import android.content.Context
 import android.view.ViewGroup
 import com.chad.baserecyclerviewadapterhelper.R
-import com.chad.library.adapter.base.BaseSingleItemAdapter
-import com.chad.library.adapter.base.viewholder.QuickViewHolder
+import com.chad.library.adapter4.BaseSingleItemAdapter
+import com.chad.library.adapter4.viewholder.QuickViewHolder
 
 class FooterAdapter(
     private val isDelete: Boolean

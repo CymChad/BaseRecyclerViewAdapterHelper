@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.baserecyclerviewadapterhelper.R
-import com.chad.library.adapter.base.BaseSingleItemAdapter
+import com.chad.library.adapter4.BaseSingleItemAdapter
 
 class HeaderAdapter: BaseSingleItemAdapter<Any, HeaderAdapter.VH>() {
 

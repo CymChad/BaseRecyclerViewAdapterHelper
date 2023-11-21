@@ -6,7 +6,7 @@ import android.animation.ObjectAnimator;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
-import com.chad.library.adapter.base.animation.ItemAnimator;
+import com.chad.library.adapter4.animation.ItemAnimator;
 
 import org.jetbrains.annotations.NotNull;
 

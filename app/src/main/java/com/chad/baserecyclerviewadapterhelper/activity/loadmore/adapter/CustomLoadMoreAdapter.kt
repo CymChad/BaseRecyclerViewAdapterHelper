@@ -5,8 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.baserecyclerviewadapterhelper.databinding.ViewLoadMoreBinding
-import com.chad.library.adapter.base.loadState.LoadState
-import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
+import com.chad.library.adapter4.loadState.LoadState
+import com.chad.library.adapter4.loadState.trailing.TrailingLoadStateAdapter
 
 /**
  * 自定义的"加载更多"。

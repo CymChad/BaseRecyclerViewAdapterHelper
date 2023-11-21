@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.baserecyclerviewadapterhelper.databinding.LayoutAnimationBinding
 import com.chad.baserecyclerviewadapterhelper.entity.Status
-import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter4.BaseQuickAdapter
 
 class EmptyViewAdapter : BaseQuickAdapter<Status, EmptyViewAdapter.VH>() {
 

@@ -11,7 +11,7 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="com.chad.library.adapter.base.layoutmanager.QuickGridLayoutManager"
+        app:layoutManager="com.chad.library.adapter4.layoutmanager.QuickGridLayoutManager"
         app:spanCount="2"
         tools:listitem="@layout/home_item_view" />
 

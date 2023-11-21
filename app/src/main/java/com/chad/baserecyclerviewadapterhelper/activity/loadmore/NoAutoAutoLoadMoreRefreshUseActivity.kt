@@ -14,9 +14,9 @@ import com.chad.baserecyclerviewadapterhelper.data.DataServer
 import com.chad.baserecyclerviewadapterhelper.databinding.ActivityLoadMoreBinding
 import com.chad.baserecyclerviewadapterhelper.entity.Status
 import com.chad.baserecyclerviewadapterhelper.utils.Tips
-import com.chad.library.adapter.base.QuickAdapterHelper
-import com.chad.library.adapter.base.loadState.LoadState
-import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter.OnTrailingListener
+import com.chad.library.adapter4.QuickAdapterHelper
+import com.chad.library.adapter4.loadState.LoadState
+import com.chad.library.adapter4.loadState.trailing.TrailingLoadStateAdapter.OnTrailingListener
 
 /**
  * 不进行自动加载更多

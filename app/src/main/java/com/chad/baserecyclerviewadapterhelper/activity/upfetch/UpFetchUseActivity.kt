@@ -6,10 +6,10 @@ import com.chad.baserecyclerviewadapterhelper.activity.upfetch.adapter.UpFetchAd
 import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity
 import com.chad.baserecyclerviewadapterhelper.databinding.ActivityUniversalRecyclerBinding
 import com.chad.baserecyclerviewadapterhelper.entity.Movie
-import com.chad.library.adapter.base.QuickAdapterHelper
-import com.chad.library.adapter.base.loadState.LoadState
-import com.chad.library.adapter.base.loadState.LoadState.NotLoading
-import com.chad.library.adapter.base.loadState.leading.LeadingLoadStateAdapter.OnLeadingListener
+import com.chad.library.adapter4.QuickAdapterHelper
+import com.chad.library.adapter4.loadState.LoadState
+import com.chad.library.adapter4.loadState.LoadState.NotLoading
+import com.chad.library.adapter4.loadState.leading.LeadingLoadStateAdapter.OnLeadingListener
 import java.util.*
 
 /**

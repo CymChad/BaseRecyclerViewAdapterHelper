@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.baserecyclerviewadapterhelper.databinding.ItemHeaderAndFooterBinding
 import com.chad.baserecyclerviewadapterhelper.entity.Status
-import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter4.BaseQuickAdapter
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper

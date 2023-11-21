@@ -9,7 +9,7 @@ import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity
 import com.chad.baserecyclerviewadapterhelper.data.DataServer
 import com.chad.baserecyclerviewadapterhelper.databinding.ActivityUniversalRecyclerBinding
 import com.chad.baserecyclerviewadapterhelper.utils.Tips
-import com.chad.library.adapter.base.QuickAdapterHelper
+import com.chad.library.adapter4.QuickAdapterHelper
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper

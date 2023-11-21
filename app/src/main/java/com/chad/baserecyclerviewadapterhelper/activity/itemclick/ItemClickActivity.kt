@@ -8,8 +8,8 @@ import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity
 import com.chad.baserecyclerviewadapterhelper.databinding.ActivityUniversalRecyclerBinding
 import com.chad.baserecyclerviewadapterhelper.entity.ClickEntity
 import com.chad.baserecyclerviewadapterhelper.utils.Tips
-import com.chad.library.adapter.base.util.addOnDebouncedChildClick
-import com.chad.library.adapter.base.util.setOnDebouncedItemClick
+import com.chad.library.adapter4.util.addOnDebouncedChildClick
+import com.chad.library.adapter4.util.setOnDebouncedItemClick
 
 /**
  * @author Allen

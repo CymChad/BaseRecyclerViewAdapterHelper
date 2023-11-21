@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chad.baserecyclerviewadapterhelper.databinding.DefSectionHeadBinding
 import com.chad.baserecyclerviewadapterhelper.databinding.HomeItemViewBinding
 import com.chad.baserecyclerviewadapterhelper.entity.HomeEntity
-import com.chad.library.adapter.base.BaseMultiItemAdapter
+import com.chad.library.adapter4.BaseMultiItemAdapter
 
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper

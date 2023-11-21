@@ -7,9 +7,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.chad.baserecyclerviewadapterhelper.R;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.dragswipe.listener.DragAndSwipeDataCallback;
-import com.chad.library.adapter.base.viewholder.QuickViewHolder;
+import com.chad.library.adapter4.BaseQuickAdapter;
+import com.chad.library.adapter4.dragswipe.listener.DragAndSwipeDataCallback;
+import com.chad.library.adapter4.viewholder.QuickViewHolder;
 
 public class DragAndSwipeAdapter extends BaseQuickAdapter<String, QuickViewHolder> implements DragAndSwipeDataCallback {
 

@@ -14,8 +14,8 @@ import com.chad.baserecyclerviewadapterhelper.data.DataServer
 import com.chad.baserecyclerviewadapterhelper.entity.Status
 import com.chad.baserecyclerviewadapterhelper.utils.ClickableMovementMethod
 import com.chad.baserecyclerviewadapterhelper.utils.Tips
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.viewholder.QuickViewHolder
+import com.chad.library.adapter4.BaseQuickAdapter
+import com.chad.library.adapter4.viewholder.QuickViewHolder
 
 /**
  * 文 件 名: AnimationAdapter

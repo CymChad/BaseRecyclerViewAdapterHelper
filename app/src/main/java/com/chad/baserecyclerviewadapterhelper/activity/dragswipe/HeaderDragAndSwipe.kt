@@ -3,7 +3,7 @@ package com.chad.baserecyclerviewadapterhelper.activity.dragswipe
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.baserecyclerviewadapterhelper.activity.dragswipe.adapter.HeaderDragAndSwipeAdapter
-import com.chad.library.adapter.base.dragswipe.QuickDragAndSwipe
+import com.chad.library.adapter4.dragswipe.QuickDragAndSwipe
 
 /**
  * 重写拖拽类，根据itemType 设置某个类型的是否允许拖拽

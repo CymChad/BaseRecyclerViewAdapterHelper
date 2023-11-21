@@ -11,7 +11,7 @@ import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.baserecyclerviewadapterhelper.databinding.ItemGroupTypeBinding
 import com.chad.baserecyclerviewadapterhelper.entity.GroupDemoEntity
 import com.chad.baserecyclerviewadapterhelper.utils.dp
-import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter4.BaseQuickAdapter
 
 /**
  * 每一组的Adapter

@@ -3,7 +3,6 @@ package com.chad.baserecyclerviewadapterhelper.activity.home
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.ConcatAdapter
 import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.baserecyclerviewadapterhelper.activity.animation.AnimationUseActivity
 import com.chad.baserecyclerviewadapterhelper.activity.databinding.DataBindingUseActivity
@@ -20,7 +19,7 @@ import com.chad.baserecyclerviewadapterhelper.activity.scene.GroupDemoActivity
 import com.chad.baserecyclerviewadapterhelper.activity.upfetch.UpFetchUseActivity
 import com.chad.baserecyclerviewadapterhelper.databinding.ActivityHomeBinding
 import com.chad.baserecyclerviewadapterhelper.entity.HomeEntity
-import com.chad.library.adapter.base.QuickAdapterHelper
+import com.chad.library.adapter4.QuickAdapterHelper
 
 class HomeActivity : AppCompatActivity() {
 

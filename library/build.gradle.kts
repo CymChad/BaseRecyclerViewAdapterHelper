@@ -9,7 +9,7 @@ plugins {
     signing
 }
 
-val versionName = "4.0.3"
+val versionName = "4.1.0"
 
 
 android {
@@ -95,7 +95,7 @@ afterEvaluate {
             create<MavenPublication>("release") {
                 from(components.findByName("release"))
                 groupId = "io.github.cymchad"
-                artifactId = "BaseRecyclerViewAdapterHelper"
+                artifactId = "BaseRecyclerViewAdapterHelper4"
                 version = versionName
 
                 pom {

@@ -3,9 +3,9 @@ package com.chad.baserecyclerviewadapterhelper.activity.dragswipe.adapter
 import android.content.Context
 import android.view.ViewGroup
 import com.chad.baserecyclerviewadapterhelper.R
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.viewholder.QuickViewHolder
-import com.chad.library.adapter.base.dragswipe.listener.DragAndSwipeDataCallback
+import com.chad.library.adapter4.BaseQuickAdapter
+import com.chad.library.adapter4.viewholder.QuickViewHolder
+import com.chad.library.adapter4.dragswipe.listener.DragAndSwipeDataCallback
 
 /**
  * kotlin方式集成案例

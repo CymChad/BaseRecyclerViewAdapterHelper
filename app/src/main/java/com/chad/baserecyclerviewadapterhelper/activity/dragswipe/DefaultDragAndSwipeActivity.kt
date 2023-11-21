@@ -14,10 +14,10 @@ import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity
 import com.chad.baserecyclerviewadapterhelper.databinding.ActivityUniversalRecyclerBinding
 import com.chad.baserecyclerviewadapterhelper.utils.Tips
 import com.chad.baserecyclerviewadapterhelper.utils.vibrate
-import com.chad.library.adapter.base.dragswipe.QuickDragAndSwipe
-import com.chad.library.adapter.base.dragswipe.listener.OnItemDragListener
-import com.chad.library.adapter.base.dragswipe.listener.OnItemSwipeListener
-import com.chad.library.adapter.base.viewholder.QuickViewHolder
+import com.chad.library.adapter4.dragswipe.QuickDragAndSwipe
+import com.chad.library.adapter4.dragswipe.listener.OnItemDragListener
+import com.chad.library.adapter4.dragswipe.listener.OnItemSwipeListener
+import com.chad.library.adapter4.viewholder.QuickViewHolder
 
 /**
  * 默认实现拖动与侧滑效果
