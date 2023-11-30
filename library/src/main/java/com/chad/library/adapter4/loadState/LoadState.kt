@@ -55,7 +55,10 @@ sealed class LoadState(
         }
 
         companion object {
+            @JvmStatic
             val Complete = NotLoading(endOfPaginationReached = true)
+
+            @JvmStatic
             val Incomplete = NotLoading(endOfPaginationReached = false)
         }
     }
