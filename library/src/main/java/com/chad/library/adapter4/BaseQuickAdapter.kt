@@ -401,14 +401,14 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
 
 
     /**
-     * Is full span item (Only StaggeredGridLayoutManager)
-     * 是否是完整跨度的item（仅限于 StaggeredGridLayoutManager）
+     * Is full span item
+     * 是否是完整跨度的item
      *
      * @param itemType
      * @return
      */
     open fun isFullSpanItem(itemType: Int): Boolean {
-        return false
+        return itemType == EMPTY_VIEW
     }
 
     /**
@@ -822,7 +822,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
 
 
     companion object {
-        const val EMPTY_VIEW = 0x10000555
+        const val EMPTY_VIEW = 0x01000555
 
         internal const val EMPTY_PAYLOAD = 0
     }
