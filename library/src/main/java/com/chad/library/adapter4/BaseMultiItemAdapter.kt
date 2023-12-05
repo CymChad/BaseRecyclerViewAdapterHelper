@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.SparseArray
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.chad.library.R
 import java.lang.ref.WeakReference
 
 /**

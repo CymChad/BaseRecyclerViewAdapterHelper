@@ -9,7 +9,7 @@ plugins {
     signing
 }
 
-val versionName = "4.1.1"
+val versionName = "4.1.2"
 
 
 android {
@@ -39,7 +39,7 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    namespace = "com.chad.library"
+    namespace = "com.chad.library.adapter4"
 
 
     publishing {
