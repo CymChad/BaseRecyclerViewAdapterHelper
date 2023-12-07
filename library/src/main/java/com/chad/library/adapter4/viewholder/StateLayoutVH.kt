@@ -14,7 +14,7 @@ import com.chad.library.adapter4.fullspan.FullSpanAdapterType
  * @property stateLayout
  * @constructor Create empty Empty layout v h
  */
-internal class StateLayoutVH constructor(
+internal class StateLayoutVH(
     parent: ViewGroup,
     stateView: View?,
     private val stateLayout: FrameLayout = FrameLayout(parent.context).apply {
@@ -35,6 +35,14 @@ internal class StateLayoutVH constructor(
             if (stateView == null) {
                 rootView.removeAllViews()
                 return
+            }
+
+            if (rootView.childCount == 1) {
+                val old = rootView.getChildAt(0)
+                if (old == stateView) {
+                    // 如果是同一个view，不进行操作
+                    return
+                }
             }
 
             stateView.parent.run {

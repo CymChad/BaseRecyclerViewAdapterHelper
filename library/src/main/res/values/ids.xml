@@ -6,4 +6,6 @@
     <item name="BaseQuickAdapter_databinding_support" type="id"/>
 
     <item name="BaseQuickAdapter_key_multi" type="id"/>
+
+    <item name="BaseQuickAdapter_empty_view" type="id"/>
 </resources>

@@ -242,6 +242,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
 
     final override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is StateLayoutVH) {
+            holder.changeStateView(stateView)
             return
         }
 
@@ -822,7 +823,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
 
 
     companion object {
-        const val EMPTY_VIEW = 0x01000555
+        val EMPTY_VIEW = R.id.BaseQuickAdapter_empty_view
 
         internal const val EMPTY_PAYLOAD = 0
     }
