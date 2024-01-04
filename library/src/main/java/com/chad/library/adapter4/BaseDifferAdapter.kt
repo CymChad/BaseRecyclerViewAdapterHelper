@@ -91,67 +91,111 @@ abstract class BaseDifferAdapter<T : Any, VH : RecyclerView.ViewHolder>(
     }
 
     override operator fun set(position: Int, data: T) {
-        items.toMutableList().also {
-            it[position] = data
-            submitList(it)
-        }
+        set(position, data, null)
     }
 
     override fun add(data: T) {
-        items.toMutableList().also {
-            it.add(data)
-            submitList(it)
-        }
+        add(data, null)
     }
 
     override fun add(position: Int, data: T) {
+        add(position, data, null)
+    }
+
+    override fun addAll(collection: Collection<T>) {
+        addAll(collection, null)
+    }
+
+    override fun addAll(position: Int, collection: Collection<T>) {
+        addAll(position, collection, null)
+    }
+
+    override fun removeAt(position: Int) {
+        removeAt(position, null)
+    }
+
+    override fun remove(data: T) {
+        remove(data, null)
+    }
+
+    override fun removeAtRange(range: IntRange) {
+        removeAtRange(range, null)
+    }
+
+    override fun swap(fromPosition: Int, toPosition: Int) {
+        swap(fromPosition, toPosition, null)
+    }
+
+    override fun move(fromPosition: Int, toPosition: Int) {
+        move(fromPosition, toPosition, null)
+    }
+
+
+    /**
+     * 带 Runnable
+     */
+    open fun set(position: Int, data: T, commitCallback: Runnable?) {
+        items.toMutableList().also {
+            it[position] = data
+            submitList(it, commitCallback)
+        }
+    }
+
+    open fun add(data: T, commitCallback: Runnable?) {
+        items.toMutableList().also {
+            it.add(data)
+            submitList(it, commitCallback)
+        }
+    }
+
+    open fun add(position: Int, data: T, commitCallback: Runnable?) {
         if (position > items.size || position < 0) {
             throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
 
         items.toMutableList().also {
             it.add(position, data)
-            submitList(it)
+            submitList(it, commitCallback)
         }
     }
 
-    override fun addAll(collection: Collection<T>) {
+    open fun addAll(collection: Collection<T>, commitCallback: Runnable?) {
         items.toMutableList().also {
             it.addAll(collection)
-            submitList(it)
+            submitList(it, commitCallback)
         }
     }
 
-    override fun addAll(position: Int, collection: Collection<T>) {
+    open fun addAll(position: Int, collection: Collection<T>, commitCallback: Runnable?) {
         if (position > items.size || position < 0) {
             throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
 
         items.toMutableList().also {
             it.addAll(position, collection)
-            submitList(it)
+            submitList(it, commitCallback)
         }
     }
 
-    override fun removeAt(position: Int) {
+    open fun removeAt(position: Int, commitCallback: Runnable?) {
         if (position >= items.size) {
             throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
 
         items.toMutableList().also {
             it.removeAt(position)
-            submitList(it)
+            submitList(it, commitCallback)
         }
     }
 
-    override fun remove(data: T) {
+    open fun remove(data: T, commitCallback: Runnable?) {
         items.toMutableList().also {
             it.remove(data)
-            submitList(it)
+            submitList(it, commitCallback)
         }
     }
 
-    override fun removeAtRange(range: kotlin.ranges.IntRange) {
+    open fun removeAtRange(range: IntRange, commitCallback: Runnable?) {
         if (range.isEmpty()) {
             return
         }
@@ -169,25 +213,29 @@ abstract class BaseDifferAdapter<T : Any, VH : RecyclerView.ViewHolder>(
         for (it in last downTo  range.first) {
             list.removeAt(it)
         }
-        submitList(list)
+        submitList(list, commitCallback)
     }
 
-    override fun swap(fromPosition: Int, toPosition: Int) {
+    open fun swap(fromPosition: Int, toPosition: Int, commitCallback: Runnable?) {
         if (fromPosition in items.indices || toPosition in items.indices) {
             items.toMutableList().also {
                 Collections.swap(it, fromPosition, toPosition)
-                submitList(it)
+                submitList(it, commitCallback)
             }
         }
     }
 
-    override fun move(fromPosition: Int, toPosition: Int) {
+    open fun move(fromPosition: Int, toPosition: Int, commitCallback: Runnable?) {
         if (fromPosition in items.indices || toPosition in items.indices) {
             items.toMutableList().also {
                 val e = it.removeAt(fromPosition)
                 it.add(toPosition, e)
-                submitList(it)
+                submitList(it, commitCallback)
             }
         }
     }
+
+
+
+
 }
