@@ -8,17 +8,9 @@ Please feel free to use this. (Welcome to **Star** and **Fork**)
 
 强大而灵活的RecyclerView Adapter（欢迎 **Star** 和 **Fork**）
 
-​    
-新版4.x.x已发布，完美兼容`ConcatAdapter`，解决了许多遗留问题，拆分了功能模块，BaseAdapter更加简洁干净。“多类型布局”更加灵活。向上、向下加载得到极大加强。
-v4版本已经上传 maven 中央仓库，不需要再引入三方仓库配置了。欢迎尝试。
-```
-implementation "io.github.cymchad:BaseRecyclerViewAdapterHelper4:4.1.4"
-```
+​
 
 
-Of course, you can continue to use the [2.x](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/tree/2.x) version.
-
-当然，你也可以继续使用[2.x](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/tree/2.x) 版本、[3.x](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/blob/3.x/readme/0-BaseRecyclerViewAdapterHelper.md)版本。
 
 # Document
 - English Writing ...
