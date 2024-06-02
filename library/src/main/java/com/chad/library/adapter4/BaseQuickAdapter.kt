@@ -125,6 +125,13 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
         }
 
     /**
+     * 是否使用状态布局的尺寸。
+     *
+     * Whether to use the dimensions of the state layout.
+     */
+    var isUseStateViewSize = false
+
+    /**
      * Empty view. Attention please: take effect when [items] is empty array.
      * 空视图，注意：[items]为空数组才会生效
      */
@@ -232,7 +239,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
         parent: ViewGroup, viewType: Int
     ): RecyclerView.ViewHolder {
         if (viewType == EMPTY_VIEW) {
-            return StateLayoutVH(parent, stateView)
+            return StateLayoutVH(parent, stateView, isUseStateViewSize)
         }
 
         return onCreateViewHolder(parent.context, parent, viewType).apply {
@@ -242,7 +249,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
 
     final override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is StateLayoutVH) {
-            holder.changeStateView(stateView)
+            holder.changeStateView(stateView, isUseStateViewSize)
             return
         }
 
@@ -258,7 +265,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
         }
 
         if (holder is StateLayoutVH) {
-            holder.changeStateView(stateView)
+            holder.changeStateView(stateView, isUseStateViewSize)
             return
         }
 

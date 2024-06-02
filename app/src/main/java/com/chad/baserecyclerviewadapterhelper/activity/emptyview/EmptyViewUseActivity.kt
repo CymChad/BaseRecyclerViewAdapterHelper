@@ -33,6 +33,7 @@ class EmptyViewUseActivity : BaseViewBindingActivity<ActivityEmptyViewUseBinding
 
         // 打开空布局功能
         mAdapter.isStateViewEnable = true
+        mAdapter.isUseStateViewSize = true
 
         onRefresh()
     }
