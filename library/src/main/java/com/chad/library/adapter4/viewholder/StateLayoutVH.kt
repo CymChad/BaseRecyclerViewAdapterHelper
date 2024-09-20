@@ -17,21 +17,22 @@ import com.chad.library.adapter4.fullspan.FullSpanAdapterType
 internal class StateLayoutVH(
     parent: ViewGroup,
     stateView: View?,
+    isUseStateViewSize: Boolean,
     private val stateLayout: FrameLayout = FrameLayout(parent.context).apply {
         layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
         )
-        setStateView(this, stateView)
+        setStateView(this, stateView, isUseStateViewSize)
     }
 ) : RecyclerView.ViewHolder(stateLayout), FullSpanAdapterType {
 
 
-    fun changeStateView(stateView: View?) {
-        setStateView(stateLayout, stateView)
+    fun changeStateView(stateView: View?, isUseStateViewSize: Boolean) {
+        setStateView(stateLayout, stateView, isUseStateViewSize)
     }
 
     companion object {
-        private fun setStateView(rootView: ViewGroup, stateView: View?) {
+        private fun setStateView(rootView: ViewGroup, stateView: View?, isUseStateViewSize: Boolean) {
             if (stateView == null) {
                 rootView.removeAllViews()
                 return
@@ -82,6 +83,13 @@ internal class StateLayoutVH(
                         rootView.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
                     }
                 }
+            }
+
+            if (isUseStateViewSize) {
+                val lp = rootView.layoutParams
+                lp.height = stateView.layoutParams.height
+                lp.width = stateView.layoutParams.width
+                rootView.layoutParams = lp
             }
 
             rootView.removeAllViews()
