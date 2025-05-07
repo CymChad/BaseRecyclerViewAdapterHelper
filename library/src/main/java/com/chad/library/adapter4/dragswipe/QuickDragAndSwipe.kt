@@ -38,6 +38,8 @@ open class QuickDragAndSwipe : ItemTouchHelper.Callback() {
     private var isDrag = false
     private var isSwipe = false
 
+    private var tempSwipedPosition = -1
+
     val dataCallback: DragAndSwipeDataCallback
         get() {
             checkNotNull(_dataCallback) {
@@ -199,6 +201,7 @@ open class QuickDragAndSwipe : ItemTouchHelper.Callback() {
         val position = viewHolder.bindingAdapterPosition
 
         if (position == RecyclerView.NO_POSITION) return
+        tempSwipedPosition = position
         // 删除数据
         _dataCallback?.dataRemoveAt(position)
 
@@ -232,14 +235,16 @@ open class QuickDragAndSwipe : ItemTouchHelper.Callback() {
 
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
         super.clearView(recyclerView, viewHolder)
-        val position = viewHolder.bindingAdapterPosition
         if (isSwipe) {
-            mOnItemSwipeListener?.onItemSwipeEnd(viewHolder, position)
             isSwipe = false
+            val position = tempSwipedPosition
+            tempSwipedPosition = -1
+            mOnItemSwipeListener?.onItemSwipeEnd(viewHolder, position)
         }
         if (isDrag) {
-            mOnItemDragListener?.onItemDragEnd(viewHolder, position)
             isDrag = false
+            val position = viewHolder.bindingAdapterPosition
+            mOnItemDragListener?.onItemDragEnd(viewHolder, position)
         }
     }
 
