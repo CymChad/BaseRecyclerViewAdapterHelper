@@ -34,7 +34,7 @@ private abstract class DebouncedClickListener<T : Any>(private val interval: Lon
         }
     }
 
-    protected abstract fun onSingleClick(adapter: BaseQuickAdapter<T, *>, view: View, position: Int)
+    abstract fun onSingleClick(adapter: BaseQuickAdapter<T, *>, view: View, position: Int)
 }
 
 
