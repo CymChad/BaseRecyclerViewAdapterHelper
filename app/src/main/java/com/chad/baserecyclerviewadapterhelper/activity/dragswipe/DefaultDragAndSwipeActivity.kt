@@ -85,16 +85,15 @@ class DefaultDragAndSwipeActivity : BaseViewBindingActivity<ActivityUniversalRec
                 // 结束时，item背景色变化，demo这里使用了一个动画渐变，使得自然
                 val startColor = Color.rgb(245, 245, 245)
                 val endColor = Color.WHITE
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    val v = ValueAnimator.ofArgb(startColor, endColor)
-                    v.addUpdateListener { animation: ValueAnimator ->
-                        holder.itemView.setBackgroundColor(
-                            animation.animatedValue as Int
-                        )
-                    }
-                    v.duration = 300
-                    v.start()
+                // 动画
+                val v = ValueAnimator.ofArgb(startColor, endColor)
+                v.addUpdateListener { animation: ValueAnimator ->
+                    holder.itemView.setBackgroundColor(
+                        animation.animatedValue as Int
+                    )
                 }
+                v.duration = 300
+                v.start()
 
                 mAdapter.items.forEach {
                     Log.d(
@@ -111,7 +110,7 @@ class DefaultDragAndSwipeActivity : BaseViewBindingActivity<ActivityUniversalRec
             }
 
             override fun onItemSwipeEnd(viewHolder: RecyclerView.ViewHolder, bindingAdapterPosition: Int) {
-                Log.d(TAG, "onItemSwipeEnd")
+                Log.d(TAG, "onItemSwipeEnd: " + bindingAdapterPosition)
             }
 
             override fun onItemSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int, bindingAdapterPosition: Int) {

@@ -40,7 +40,7 @@ public class ManualDragAndSwipeUseActivity extends BaseViewBindingActivity<Activ
     QuickDragAndSwipe quickDragAndSwipe = new QuickDragAndSwipe()
             .setDragMoveFlags(ItemTouchHelper.UP | ItemTouchHelper.DOWN)
             .setSwipeMoveFlags(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT)
-            .setItemViewSwipeEnabled(false)
+            .setItemViewSwipeEnabled(true)
             .setLongPressDragEnabled(false);//关闭默认的长按拖拽功能，通过自定义长按事件进行拖拽
 
     @NonNull
@@ -107,7 +107,7 @@ public class ManualDragAndSwipeUseActivity extends BaseViewBindingActivity<Activ
 
             @Override
             public void onItemSwipeEnd(@NonNull RecyclerView.ViewHolder viewHolder, int bindingAdapterPosition) {
-                Log.d(TAG, "onItemSwipeEnd");
+                Log.d(TAG, "onItemSwipeEnd " + bindingAdapterPosition);
             }
 
             @Override
