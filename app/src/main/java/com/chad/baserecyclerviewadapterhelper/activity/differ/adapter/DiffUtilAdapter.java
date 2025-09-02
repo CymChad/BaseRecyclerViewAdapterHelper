@@ -7,13 +7,13 @@ import androidx.annotation.NonNull;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.entity.DiffEntity;
-import com.chad.library.adapter4.BaseDifferAdapter;
+import com.chad.library.adapter4.BaseQuickAdapter;
 import com.chad.library.adapter4.viewholder.QuickViewHolder;
 
 /**
  * Create adapter
  */
-public class DiffUtilAdapter extends BaseDifferAdapter<DiffEntity, QuickViewHolder> {
+public class DiffUtilAdapter extends BaseQuickAdapter<DiffEntity, QuickViewHolder> {
 
     public DiffUtilAdapter() {
         super(new DiffEntityCallback());

@@ -11,6 +11,11 @@ import androidx.annotation.CallSuper
 import androidx.annotation.IdRes
 import androidx.annotation.IntRange
 import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.AdapterListUpdateCallback
+import androidx.recyclerview.widget.AsyncDifferConfig
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.AsyncListDiffer.ListListener
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter4.animation.AlphaInAnimation
 import com.chad.library.adapter4.animation.ItemAnimator
@@ -29,9 +34,17 @@ import java.util.Collections
  * @constructor layoutId, data(Can null parameters, the default is empty data)
  */
 abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
-    open var items: List<T> = emptyList()
+    private var _items: List<T> = emptyList(),
+    config: AsyncDifferConfig<T>? = null
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    constructor(diffCallback: DiffUtil.ItemCallback<T>) : this(emptyList(), diffCallback)
+
+    constructor(items: List<T>, diffCallback: DiffUtil.ItemCallback<T>) : this(
+        items, AsyncDifferConfig.Builder(diffCallback).build(),
+    )
+
+    constructor(config: AsyncDifferConfig<T>) : this(emptyList(), config)
 
     /********************************* Private property *****************************************/
     private var mLastPosition = -1
@@ -42,7 +55,27 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
     private var mOnViewAttachStateChangeListeners: MutableList<OnViewAttachStateChangeListener>? =
         null
 
+    private val mDiffer: AsyncListDiffer<T>? =
+        if (config == null)
+            null
+        else
+            AsyncListDiffer(AdapterListUpdateCallback(this), config)
+
+
     private var _recyclerView: RecyclerView? = null
+
+
+    var items: List<T>
+        get() {
+            return mDiffer?.currentList ?: _items
+        }
+        set(value) {
+            if (mDiffer != null) {
+                mDiffer.submitList(value, null)
+            } else {
+                _items = value
+            }
+        }
 
     /**
      * 绑定此 Adapter 的 RecyclerView
@@ -164,6 +197,29 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
             field = value
         }
 
+    init {
+        mDiffer?.let {
+            mDiffer.addListListener { previousList, currentList ->
+                val oldDisplayEmptyLayout = displayEmptyView(previousList)
+                val newDisplayEmptyLayout = displayEmptyView(currentList)
+
+                if (oldDisplayEmptyLayout && !newDisplayEmptyLayout) {
+                    notifyItemRemoved(0)
+                    recyclerView.scrollToPosition(0)
+                } else if (newDisplayEmptyLayout && !oldDisplayEmptyLayout) {
+                    notifyItemInserted(0)
+                } else if (oldDisplayEmptyLayout && newDisplayEmptyLayout) {
+                    notifyItemChanged(0, EMPTY_PAYLOAD)
+                }
+
+                this.onCurrentListChanged(previousList, currentList)
+            }
+
+            it.submitList(_items)
+        }
+    }
+
+
 
     protected abstract fun onCreateViewHolder(
         context: Context, parent: ViewGroup, viewType: Int
@@ -211,7 +267,8 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
 
     /**
      * Don't override this method.
-     * 不要重写此方法
+     *
+     * 不要重写此方法.
      *
      * @return Int
      */
@@ -225,6 +282,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
 
     /**
      * Don't override this method.
+     *
      * 不要重写此方法
      *
      * @param position Int
@@ -278,8 +336,10 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
 
     /**
      * 当 ViewHolder 视图已附加到窗口时调用。
+     *
      * Called when a view created by this holder has been attached to a window.
-     * simple to solve item will layout using all
+     * simple to solve item will layout using all.
+     *
      * [asStaggeredGridFullSpan]
      *
      * @param holder
@@ -376,9 +436,9 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
     }
 
     /**
-     * override this method if you want to override click event logic
+     * override this method if you want to override click event logic.
      *
-     * 如果你想重新实现 item 点击事件逻辑，请重写此方法
+     * 如果你想重新实现 item 点击事件逻辑，请重写此方法.
      * @param v
      * @param position
      */
@@ -387,9 +447,10 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
     }
 
     /**
-     * override this method if you want to override longClick event logic
+     * override this method if you want to override longClick event logic.
      *
-     * 如果你想重新实现 item 长按事件逻辑，请重写此方法
+     * 如果你想重新实现 item 长按事件逻辑，请重写此方法.
+     *
      * @param v
      * @param position
      * @return
@@ -409,8 +470,9 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
 
 
     /**
-     * Is full span item
-     * 是否是完整跨度的item
+     * Is full span item.
+     *
+     * 是否是完整跨度的item。
      *
      * @param itemType
      * @return
@@ -421,7 +483,8 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
 
     /**
      * Get the data item associated with the specified position in the data set.
-     * 获取与数据集中指定位置的数据项。如果未找到数据，则返回 null
+     *
+     * 获取与数据集中指定位置的数据项。如果未找到数据，则返回 null。
      *
      * @param position Position of the item whose data we want within the adapter's
      * data set.
@@ -439,8 +502,9 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
     }
 
     /**
-     * Set state view layout
-     * 状态视图的布局id
+     * Set state view layout.
+     *
+     * 状态视图的布局id.
      *
      * @param layoutResId
      */
@@ -449,8 +513,9 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
     }
 
     /**
-     * Set empty view layout
-     * 空视图的布局id
+     * Set empty view layout.
+     *
+     * 空视图的布局id。
      *
      * @param layoutResId
      */
@@ -468,7 +533,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
     }
 
     /**
-     * run animation when you want to show time
+     * Run animation when you want to show time.
      *
      * @param holder
      */
@@ -485,10 +550,11 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
     }
 
     /**
-     * start executing animation
-     * override this method to execute more actions
-     * 开始执行动画方法
-     * 可以重写此方法，实行更多行为
+     * Start executing animation.
+     * Override this method to execute more actions.
+     *
+     * 开始执行动画方法。
+     * 可以重写此方法，实行更多行为。
      *
      * @param anim
      * @param holder
@@ -499,7 +565,9 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
 
     /**
      * use preset animations
+     *
      * 使用内置默认动画设置
+     *
      * @param animationType AnimationType
      */
     fun setItemAnimation(animationType: AnimationType) {
@@ -513,34 +581,54 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
     }
 
     /**
+     * Only Differ use.
+     * (Optional) Override this method to monitor changes in the dataset before and after.
+     *
+     * 只有使用 Differ 时生效
+     * （可选）重写此方法，监听前后数据集变化.
+     *
+     * @param previousList 原数据集
+     * @param currentList 当前数据集
+     */
+    open fun onCurrentListChanged(previousList: List<T>, currentList: List<T>) {}
+
+    /**
      * setting up a new instance to data;
      *
      * 设置新的数据集合
      *
      * @param list 新数据集
      */
-    open fun submitList(list: List<T>?) {
-        val newList = list ?: emptyList()
+    @JvmOverloads
+    open fun submitList(list: List<T>?, commitCallback: Runnable? = null) {
+        if (mDiffer == null) {
+            val newList = list ?: emptyList()
 
-        mLastPosition = -1
+            mLastPosition = -1
 
-        val oldDisplayEmptyLayout = displayEmptyView()
-        val newDisplayEmptyLayout = displayEmptyView(newList)
+            val oldDisplayEmptyLayout = displayEmptyView()
+            val newDisplayEmptyLayout = displayEmptyView(newList)
 
-        if (oldDisplayEmptyLayout && !newDisplayEmptyLayout) {
-            items = newList
-            notifyItemRemoved(0)
-            notifyItemRangeInserted(0, newList.size)
-        } else if (newDisplayEmptyLayout && !oldDisplayEmptyLayout) {
-            notifyItemRangeRemoved(0, items.size)
-            items = newList
-            notifyItemInserted(0)
-        } else if (oldDisplayEmptyLayout && newDisplayEmptyLayout) {
-            items = newList
-            notifyItemChanged(0, EMPTY_PAYLOAD)
+            if (oldDisplayEmptyLayout && !newDisplayEmptyLayout) {
+                _items = newList
+                notifyItemRemoved(0)
+                notifyItemRangeInserted(0, newList.size)
+            } else if (newDisplayEmptyLayout && !oldDisplayEmptyLayout) {
+                notifyItemRangeRemoved(0, _items.size)
+                _items = newList
+                notifyItemInserted(0)
+            } else if (oldDisplayEmptyLayout && newDisplayEmptyLayout) {
+                _items = newList
+                notifyItemChanged(0, EMPTY_PAYLOAD)
+            } else {
+                _items = newList
+                notifyDataSetChanged()
+            }
+
+            commitCallback?.run()
         } else {
-            items = newList
-            notifyDataSetChanged()
+            // Diff的逻辑
+            mDiffer.submitList(list, commitCallback)
         }
     }
 
@@ -549,11 +637,26 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
      * 改变某一位置数据
      */
     open operator fun set(@IntRange(from = 0) position: Int, data: T) {
+        set(position, data, null)
+    }
+
+    open fun set(@IntRange(from = 0) position: Int, data: T, commitCallback: Runnable?) {
         if (position >= items.size) {
             throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
-        mutableItems[position] = data
-        notifyItemChanged(position)
+
+        if (mDiffer == null) {
+            mutableItems[position] = data
+            notifyItemChanged(position)
+
+            commitCallback?.run()
+        } else {
+            // Diff的逻辑
+            mDiffer.currentList.toMutableList().also {
+                it[position] = data
+                mDiffer.submitList(it, commitCallback)
+            }
+        }
     }
 
     /**
@@ -562,30 +665,52 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
      *
      * @param position
      */
-    open fun add(@IntRange(from = 0) position: Int, data: T) {
+    @JvmOverloads
+    open fun add(@IntRange(from = 0) position: Int, data: T, commitCallback: Runnable? = null) {
         if (position > items.size || position < 0) {
             throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
 
-        if (displayEmptyView()) {
-            // 如果之前在显示空布局，需要先移除
-            notifyItemRemoved(0)
+        if (mDiffer == null) {
+            if (displayEmptyView()) {
+                // 如果之前在显示空布局，需要先移除
+                notifyItemRemoved(0)
+            }
+            mutableItems.add(position, data)
+            notifyItemInserted(position)
+
+            commitCallback?.run()
+        } else {
+            // Diff的逻辑
+            mDiffer.currentList.toMutableList().also {
+                it.add(data)
+                mDiffer.submitList(it, commitCallback)
+            }
         }
-        mutableItems.add(position, data)
-        notifyItemInserted(position)
     }
 
     /**
      * add one new data，not null.
      * 添加一条新数据，不可为 null。
      */
-    open fun add(data: T) {
-        if (displayEmptyView()) {
-            // 如果之前在显示空布局，需要先移除
-            notifyItemRemoved(0)
-        }
-        if (mutableItems.add(data)) {
-            notifyItemInserted(items.size - 1)
+    @JvmOverloads
+    open fun add(data: T, commitCallback: Runnable? = null) {
+        if (mDiffer == null) {
+            if (displayEmptyView()) {
+                // 如果之前在显示空布局，需要先移除
+                notifyItemRemoved(0)
+            }
+            if (mutableItems.add(data)) {
+                notifyItemInserted(_items.size - 1)
+            }
+
+            commitCallback?.run()
+        } else {
+            // Diff的逻辑
+            mDiffer.currentList.toMutableList().also {
+                it.add(data)
+                mDiffer.submitList(it, commitCallback)
+            }
         }
     }
 
@@ -596,36 +721,64 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
      * @param position the insert position
      * @param collection  the new data collection
      */
-    open fun addAll(@IntRange(from = 0) position: Int, collection: Collection<T>) {
-        if (collection.isEmpty()) return
-
+    @JvmOverloads
+    open fun addAll(@IntRange(from = 0) position: Int, collection: Collection<T>, commitCallback: Runnable? = null) {
         if (position > items.size || position < 0) {
             throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
 
-        if (displayEmptyView()) {
-            // 如果之前在显示空布局，需要先移除
-            notifyItemRemoved(0)
+        if (collection.isEmpty()) {
+            commitCallback?.run()
+            return
         }
-        if (mutableItems.addAll(position, collection)) {
-            notifyItemRangeInserted(position, collection.size)
+
+        if (mDiffer == null) {
+            if (displayEmptyView()) {
+                // 如果之前在显示空布局，需要先移除
+                notifyItemRemoved(0)
+            }
+            if (mutableItems.addAll(position, collection)) {
+                notifyItemRangeInserted(position, collection.size)
+            }
+
+            commitCallback?.run()
+        } else {
+            // Diff的逻辑
+            mDiffer.currentList.toMutableList().also {
+                it.addAll(position, collection)
+                mDiffer.submitList(it, commitCallback)
+            }
         }
     }
 
     /**
      * 添加一组数据，不可为 null。
      */
-    open fun addAll(collection: Collection<T>) {
-        if (collection.isEmpty()) return
-
-        if (displayEmptyView()) {
-            // 如果之前在显示空布局，需要先移除
-            notifyItemRemoved(0)
+    @JvmOverloads
+    open fun addAll(collection: Collection<T>, commitCallback: Runnable? = null) {
+        if (collection.isEmpty()) {
+            commitCallback?.run()
+            return
         }
 
-        val oldSize = items.size
-        if (mutableItems.addAll(collection)) {
-            notifyItemRangeInserted(oldSize, collection.size)
+        if (mDiffer == null) {
+            if (displayEmptyView()) {
+                // 如果之前在显示空布局，需要先移除
+                notifyItemRemoved(0)
+            }
+
+            val oldSize = _items.size
+            if (mutableItems.addAll(collection)) {
+                notifyItemRangeInserted(oldSize, collection.size)
+            }
+
+            commitCallback?.run()
+        } else {
+            // Diff的逻辑
+            mDiffer.currentList.toMutableList().also {
+                it.addAll(collection)
+                mDiffer.submitList(it, commitCallback)
+            }
         }
     }
 
@@ -635,16 +788,27 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
      *
      * @param position
      */
-    open fun removeAt(@IntRange(from = 0) position: Int) {
+    @JvmOverloads
+    open fun removeAt(@IntRange(from = 0) position: Int, commitCallback: Runnable? = null) {
         if (position >= items.size) {
             throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
-        mutableItems.removeAt(position)
-        notifyItemRemoved(position)
 
-        // 处理空视图的情况
-        if (displayEmptyView()) {
-            notifyItemInserted(0)
+        if (mDiffer == null) {
+            mutableItems.removeAt(position)
+            notifyItemRemoved(position)
+
+            // 处理空视图的情况
+            if (displayEmptyView()) {
+                notifyItemInserted(0)
+            }
+
+            commitCallback?.run()
+        } else {
+            mDiffer.currentList.toMutableList().also {
+                it.removeAt(position)
+                mDiffer.submitList(it, commitCallback)
+            }
         }
     }
 
@@ -653,10 +817,20 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
      *
      * @param data
      */
-    open fun remove(data: T) {
-        val index = items.indexOf(data)
-        if (index == -1) return
-        removeAt(index)
+    @JvmOverloads
+    open fun remove(data: T, commitCallback: Runnable? = null) {
+        if (mDiffer == null) {
+            val index = _items.indexOf(data)
+            if (index == -1) return
+            removeAt(index)
+
+            commitCallback?.run()
+        } else {
+            mDiffer.currentList.toMutableList().also {
+                it.remove(data)
+                mDiffer.submitList(it, commitCallback)
+            }
+        }
     }
 
     /**
@@ -664,7 +838,8 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
      *
      * @param range Int 索引范围
      */
-    open fun removeAtRange(range: kotlin.ranges.IntRange) {
+    @JvmOverloads
+    open fun removeAtRange(range: kotlin.ranges.IntRange, commitCallback: Runnable? = null) {
         if (range.isEmpty()) {
             return
         }
@@ -678,15 +853,25 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
             range.last
         }
 
-        for (it in last downTo  range.first) {
-            mutableItems.removeAt(it)
-        }
+        if (mDiffer == null) {
+            for (it in last downTo range.first) {
+                mutableItems.removeAt(it)
+            }
 
-        notifyItemRangeRemoved(range.first, last - range.first + 1)
+            notifyItemRangeRemoved(range.first, last - range.first + 1)
 
-        // 处理空视图的情况
-        if (displayEmptyView()) {
-            notifyItemInserted(0)
+            // 处理空视图的情况
+            if (displayEmptyView()) {
+                notifyItemInserted(0)
+            }
+
+            commitCallback?.run()
+        } else {
+            val list = mDiffer.currentList.toMutableList()
+            for (it in last downTo  range.first) {
+                list.removeAt(it)
+            }
+            mDiffer.submitList(list, commitCallback)
         }
     }
 
@@ -697,11 +882,24 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
      * @param fromPosition
      * @param toPosition
      */
-    open fun swap(fromPosition: Int, toPosition: Int) {
-        if (fromPosition in items.indices && toPosition in items.indices) {
-            Collections.swap(items, fromPosition, toPosition)
-            notifyItemChanged(fromPosition)
-            notifyItemChanged(toPosition)
+    @JvmOverloads
+    open fun swap(fromPosition: Int, toPosition: Int, commitCallback: Runnable? = null) {
+        if (mDiffer == null) {
+            if (fromPosition in _items.indices && toPosition in _items.indices) {
+                Collections.swap(_items, fromPosition, toPosition)
+                notifyItemChanged(fromPosition)
+                notifyItemChanged(toPosition)
+
+                commitCallback?.run()
+            }
+        } else {
+            val list = mDiffer.currentList
+            if (fromPosition in list.indices || toPosition in list.indices) {
+                list.toMutableList().also {
+                    Collections.swap(it, fromPosition, toPosition)
+                    mDiffer.submitList(it, commitCallback)
+                }
+            }
         }
     }
 
@@ -712,28 +910,42 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
      * @param fromPosition
      * @param toPosition
      */
-    open fun move(fromPosition: Int, toPosition: Int) {
-        if (fromPosition in items.indices && toPosition in items.indices) {
-            val e = mutableItems.removeAt(fromPosition)
-            mutableItems.add(toPosition, e)
-            notifyItemMoved(fromPosition, toPosition)
+    @JvmOverloads
+    open fun move(fromPosition: Int, toPosition: Int, commitCallback: Runnable? = null) {
+        if (mDiffer == null) {
+            if (fromPosition in _items.indices && toPosition in _items.indices) {
+                val e = mutableItems.removeAt(fromPosition)
+                mutableItems.add(toPosition, e)
+                notifyItemMoved(fromPosition, toPosition)
+
+                commitCallback?.run()
+            }
+        } else {
+            val list = mDiffer.currentList
+            if (fromPosition in list.indices || toPosition in list.indices) {
+                list.toMutableList().also {
+                    val e = it.removeAt(fromPosition)
+                    it.add(toPosition, e)
+                    mDiffer.submitList(it, commitCallback)
+                }
+            }
         }
     }
 
     /**
-     * items 转化为 MutableList
+     * _items 转化为 MutableList
      */
     private val mutableItems: MutableList<T>
         get() {
-            return when (items) {
-                is java.util.ArrayList -> {
-                    items as java.util.ArrayList
+            return when (_items) {
+                is java.util.AbstractList -> {
+                    _items as java.util.AbstractList
                 }
                 is MutableList -> {
-                    items as MutableList
+                    _items as MutableList
                 }
                 else -> {
-                    items.toMutableList().apply { items = this }
+                    _items.toMutableList().apply { _items = this }
                 }
             }
         }

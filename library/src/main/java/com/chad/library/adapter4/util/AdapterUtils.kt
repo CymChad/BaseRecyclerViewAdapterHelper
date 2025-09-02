@@ -23,8 +23,7 @@ fun ViewGroup.getItemView(@LayoutRes layoutResId: Int): View {
  * 如果 ViewHolder 使用 StaggeredGridLayoutManager 布局，则铺满一行。
  */
 fun RecyclerView.ViewHolder.asStaggeredGridFullSpan() {
-    val layoutParams = this.itemView.layoutParams
-    if (layoutParams is StaggeredGridLayoutManager.LayoutParams) {
-        layoutParams.isFullSpan = true
+    if (this.itemView.layoutParams is StaggeredGridLayoutManager.LayoutParams) {
+        (this.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams).isFullSpan = true
     }
 }

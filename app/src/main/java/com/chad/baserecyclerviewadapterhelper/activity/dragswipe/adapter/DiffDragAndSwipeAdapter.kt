@@ -5,14 +5,14 @@ import android.view.ViewGroup
 import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.baserecyclerviewadapterhelper.activity.differ.adapter.DiffEntityCallback
 import com.chad.baserecyclerviewadapterhelper.entity.DiffEntity
-import com.chad.library.adapter4.BaseDifferAdapter
+import com.chad.library.adapter4.BaseQuickAdapter
 import com.chad.library.adapter4.viewholder.QuickViewHolder
 
 /**
  * Create adapter
  */
 class DiffDragAndSwipeAdapter :
-    BaseDifferAdapter<DiffEntity, QuickViewHolder>(DiffEntityCallback()) {
+    BaseQuickAdapter<DiffEntity, QuickViewHolder>(DiffEntityCallback()) {
 
     override fun onCreateViewHolder(
         context: Context, parent: ViewGroup, viewType: Int
