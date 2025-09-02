@@ -14,7 +14,6 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.AdapterListUpdateCallback
 import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.AsyncListDiffer.ListListener
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter4.animation.AlphaInAnimation
@@ -64,7 +63,9 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
 
     private var _recyclerView: RecyclerView? = null
 
-
+    /**
+     * Items data
+     */
     var items: List<T>
         get() {
             return mDiffer?.currentList ?: _items
@@ -73,7 +74,9 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
             if (mDiffer != null) {
                 mDiffer.submitList(value, null)
             } else {
+                val oldItems = _items
                 _items = value
+                onCurrentListChanged(oldItems, _items)
             }
         }
 
@@ -581,10 +584,8 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
     }
 
     /**
-     * Only Differ use.
      * (Optional) Override this method to monitor changes in the dataset before and after.
      *
-     * 只有使用 Differ 时生效
      * （可选）重写此方法，监听前后数据集变化.
      *
      * @param previousList 原数据集
@@ -609,6 +610,8 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
             val oldDisplayEmptyLayout = displayEmptyView()
             val newDisplayEmptyLayout = displayEmptyView(newList)
 
+            val oldItem = _items
+
             if (oldDisplayEmptyLayout && !newDisplayEmptyLayout) {
                 _items = newList
                 notifyItemRemoved(0)
@@ -625,6 +628,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
                 notifyDataSetChanged()
             }
 
+            onCurrentListChanged(oldItem, _items)
             commitCallback?.run()
         } else {
             // Diff的逻辑
