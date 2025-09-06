@@ -2,6 +2,7 @@ package com.chad.baserecyclerviewadapterhelper.data
 
 import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.baserecyclerviewadapterhelper.entity.DiffEntity
+import com.chad.baserecyclerviewadapterhelper.entity.NodeEntity
 import com.chad.baserecyclerviewadapterhelper.entity.Status
 
 /**
@@ -12,6 +13,7 @@ object DataServer {
         "https://avatars1.githubusercontent.com/u/7698209?v=3&s=460"
     const val CYM_CHAD = "CymChad"
     const val CHAY_CHAN = "ChayChan"
+
     fun getSampleData(lenth: Int): MutableList<Status> {
         val list: MutableList<Status> = ArrayList()
         for (i in 0 until lenth) {
@@ -33,7 +35,6 @@ object DataServer {
     }
 
 
-
     val strData: List<String>
         get() {
             val list: MutableList<String> = ArrayList()
@@ -46,6 +47,7 @@ object DataServer {
             }
             return list
         }
+
     @JvmStatic
     val diffUtilDemoEntities: List<DiffEntity>
         get() {
@@ -62,4 +64,37 @@ object DataServer {
             }
             return list
         }
+
+
+    fun getNodeData(): List<NodeEntity> {
+        val list = ArrayList<NodeEntity>()
+        for (i in 0..9) {
+            val node = if (i % 2 == 0) {
+                NodeEntity("Item $i", null)
+            } else {
+                val level2list = ArrayList<NodeEntity.Level2NodeEntity>()
+                for (n in 0..4) {
+                    val leve2Node = if (n % 2 == 0) {
+                        NodeEntity.Level2NodeEntity("Level 2 - Index $n", null)
+                    } else {
+                        val level3list = ArrayList<NodeEntity.Level2NodeEntity.Level3NodeEntity>()
+
+                        for (m in 0..4) {
+                            val level3Node =
+                                NodeEntity.Level2NodeEntity.Level3NodeEntity("Level 3 - Index $m")
+                            level3list.add(level3Node)
+                        }
+
+                        NodeEntity.Level2NodeEntity("Level 2 - Index $n", level3list)
+                    }
+                    level2list.add(leve2Node)
+                }
+
+                NodeEntity("Item $i", level2list)
+            }
+            list.add(node)
+        }
+
+        return list
+    }
 }

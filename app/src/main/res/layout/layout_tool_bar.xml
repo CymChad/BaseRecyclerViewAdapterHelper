@@ -2,9 +2,10 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:background="@color/spinner_bg"
-    tools:layout_height="44dp"
+    tools:layout_height="wrap_content"
+    tools:paddingVertical="12dp"
     tools:layout_width="match_parent"
-    tools:parentTag="RelativeLayout">
+    tools:parentTag="android.widget.LinearLayout">
 
     <ImageView
         android:id="@+id/iv_back"
