@@ -8,55 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/spinner_bg"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/dp_10"
-        android:paddingRight="@dimen/dp_10">
-
-
-        <com.jaredrummler.materialspinner.MaterialSpinner
-            android:id="@+id/spinner"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@null"
-            app:ms_background_color="@color/spinner_bg"
-            app:ms_hide_arrow="false"
-            app:ms_text_color="#ffffff" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/spinner_bg"
-            android:gravity="center|end">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="IsFirstOnly"
-                android:textColor="@color/new_text_color"
-                android:textSize="16sp" />
-
-            <com.kyleduo.switchbutton.SwitchButton
-                android:id="@+id/switch_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:textColor="@drawable/custom_text_state_color"
-                app:kswTextOff="false"
-                app:kswTextOn="true"
-                app:kswThumbColor="#555771"
-                app:kswThumbDrawable="@drawable/thumb_drawable"
-                app:kswTintColor="#00ddB6" />
-
-        </LinearLayout>
-    </LinearLayout>
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv"
