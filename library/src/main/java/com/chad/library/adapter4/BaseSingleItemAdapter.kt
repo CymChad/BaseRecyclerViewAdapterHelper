@@ -88,7 +88,7 @@ abstract class BaseSingleItemAdapter<T : Any, VH : RecyclerView.ViewHolder>(priv
         throw RuntimeException("Please use setItem()")
     }
 
-    override fun set(position: Int, data: Any, commitCallback: Runnable?) {
+    override fun set(position: Int, data: Any, payload: Any?, commitCallback: Runnable?) {
         throw RuntimeException("Please use setItem()")
     }
 }
