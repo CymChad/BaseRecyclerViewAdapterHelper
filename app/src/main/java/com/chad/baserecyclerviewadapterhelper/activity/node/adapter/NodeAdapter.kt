@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.baserecyclerviewadapterhelper.databinding.ItemNodeLevel1Binding
 import com.chad.baserecyclerviewadapterhelper.databinding.ItemNodeLevel2Binding
 import com.chad.baserecyclerviewadapterhelper.databinding.ItemNodeLevel3Binding
@@ -30,7 +31,7 @@ class NodeAdapter : BaseNodeAdapter<NodeAdapter>() {
             }
 
             is NodeEntity.Level2NodeEntity.Level3NodeEntity -> {
-                // 三级
+                // 三级 没有子node
                 return null
             }
 
@@ -72,6 +73,12 @@ class NodeAdapter : BaseNodeAdapter<NodeAdapter>() {
                 Level1Hodler(parent).apply {
                     itemView.setOnClickListener {
                         openOrClose(bindingAdapterPosition)
+
+                        if (isOpened(bindingAdapterPosition)) {
+                            viewBinding.ivArrow.setBackgroundResource(R.drawable.ic_node_down)
+                        } else {
+                            viewBinding.ivArrow.setBackgroundResource(R.drawable.ic_node_right)
+                        }
                     }
                 }
             }
@@ -80,6 +87,12 @@ class NodeAdapter : BaseNodeAdapter<NodeAdapter>() {
                 Level2Hodler(parent).apply {
                     itemView.setOnClickListener {
                         openOrClose(bindingAdapterPosition)
+
+                        if (isOpened(bindingAdapterPosition)) {
+                            viewBinding.ivArrow.setBackgroundResource(R.drawable.ic_node_down)
+                        } else {
+                            viewBinding.ivArrow.setBackgroundResource(R.drawable.ic_node_right)
+                        }
                     }
                 }
             }
@@ -111,12 +124,34 @@ class NodeAdapter : BaseNodeAdapter<NodeAdapter>() {
                 val nodeEntity = item as NodeEntity
 
                 holder.viewBinding.tvTitle.text = nodeEntity.title
+
+                // 设置箭头图标
+                if (nodeEntity.childNode.isNullOrEmpty()) {
+                    holder.viewBinding.ivArrow.setBackgroundResource(0)
+                } else {
+                    if (isOpened(item)) {
+                        holder.viewBinding.ivArrow.setBackgroundResource(R.drawable.ic_node_down)
+                    } else {
+                        holder.viewBinding.ivArrow.setBackgroundResource(R.drawable.ic_node_right)
+                    }
+                }
             }
 
             is Level2Hodler -> {
                 // 二级
                 val nodeEntity = item as NodeEntity.Level2NodeEntity
                 holder.viewBinding.tvTitle.text = nodeEntity.title
+
+                // 设置箭头图标
+                if (nodeEntity.childNode.isNullOrEmpty()) {
+                    holder.viewBinding.ivArrow.setBackgroundResource(0)
+                } else {
+                    if (isOpened(item)) {
+                        holder.viewBinding.ivArrow.setBackgroundResource(R.drawable.ic_node_down)
+                    } else {
+                        holder.viewBinding.ivArrow.setBackgroundResource(R.drawable.ic_node_right)
+                    }
+                }
             }
 
             is Level3Hodler -> {

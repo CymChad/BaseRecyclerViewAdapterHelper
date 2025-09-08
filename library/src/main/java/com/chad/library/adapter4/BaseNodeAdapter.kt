@@ -68,6 +68,35 @@ abstract class BaseNodeAdapter<T : Any> : BaseQuickAdapter<Any, RecyclerView.Vie
         super.submitList(list, commitCallback)
     }
 
+    private fun findLastChild(node: Any): Any {
+        if (openSet.contains(node)) {
+            val childList = getChildNodeList(items.indexOfFirst { it === node }, node)
+
+            return if (childList.isNullOrEmpty()) {
+                node
+            } else {
+                findLastChild(childList.last())
+            }
+        } else {
+            return node
+        }
+    }
+
+    private fun removeOpenFlag(list: List<Any>) {
+        list.forEach { c ->
+            if (openSet.contains(c)) {
+                val i = items.indexOfFirst { it === c }
+                if (i > -1) {
+                    val cList = getChildNodeList(i, c)
+                    if (!cList.isNullOrEmpty()) {
+                        removeOpenFlag(cList)
+                    }
+                }
+                openSet.remove(c)
+            }
+        }
+    }
+
     /**
      * 打开节点。
      *
@@ -79,7 +108,7 @@ abstract class BaseNodeAdapter<T : Any> : BaseQuickAdapter<Any, RecyclerView.Vie
      *
      * 是否成功。
      */
-    fun open(position: Int) : Boolean{
+    fun open(position: Int): Boolean {
         val item = items.getOrNull(position) ?: return false
 
         val child = getChildNodeList(position, item)
@@ -99,28 +128,35 @@ abstract class BaseNodeAdapter<T : Any> : BaseQuickAdapter<Any, RecyclerView.Vie
      *
      * @param position
      */
-    fun close(position: Int) {
-        val item = items.getOrNull(position) ?: return
+    fun close(position: Int): Boolean {
+        val item = items.getOrNull(position) ?: return false
 
         val childList = getChildNodeList(position, item)
-        if (childList != null) {
+        if (!childList.isNullOrEmpty()) {
             openSet.remove(item)
 
-            var count = 0
-            childList.forEach { c ->
-                if (openSet.contains(c)) {
-                    val i = items.indexOfFirst {
-                        it == c
-                    }
-                    if (i > -1) {
-                        count += getChildNodeList(i, c)?.size ?: 0
-                    }
-                    openSet.remove(c)
+            removeOpenFlag(childList)
+
+            val last = childList.last()
+            if (openSet.contains(last)) {
+                // 最后一个节点是打开的
+                val node = findLastChild(last)
+                val index = items.indexOfFirst { it === node }
+                if (index > -1 && index > position) {
+                    removeAtRange(IntRange(position + 1, index))
+                    return true
+                }
+            } else {
+                // 最后一个节点是关闭的
+                val index = items.indexOfFirst { it === last }
+                if (index > -1 && index > position) {
+                    removeAtRange(IntRange(position + 1, index))
+                    return true
                 }
             }
-
-            removeAtRange(IntRange(position + 1, childList.size + position + count))
         }
+
+        return false
     }
 
     /**
@@ -130,10 +166,10 @@ abstract class BaseNodeAdapter<T : Any> : BaseQuickAdapter<Any, RecyclerView.Vie
      *
      * @param position
      */
-    fun openOrClose(position: Int) {
-        val item = items.getOrNull(position) ?: return
+    fun openOrClose(position: Int): Boolean {
+        val item = items.getOrNull(position) ?: return false
 
-        if (openSet.contains(item)) {
+        return if (openSet.contains(item)) {
             close(position)
         } else {
             open(position)
@@ -149,5 +185,9 @@ abstract class BaseNodeAdapter<T : Any> : BaseQuickAdapter<Any, RecyclerView.Vie
      */
     fun isOpened(item: Any): Boolean {
         return openSet.contains(item)
+    }
+
+    fun isOpened(position: Int): Boolean {
+        return openSet.contains(items.getOrNull(position))
     }
 }

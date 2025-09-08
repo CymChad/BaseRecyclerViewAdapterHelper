@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:paddingHorizontal="15dp"
         android:paddingVertical="20dp">
 
@@ -21,6 +22,12 @@
             android:textSize="18sp"
             android:textStyle="bold"
             tools:text="index 1" />
+
+        <ImageView
+            android:id="@+id/iv_arrow"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            tools:src="@drawable/ic_node_down" />
 
     </LinearLayout>
 

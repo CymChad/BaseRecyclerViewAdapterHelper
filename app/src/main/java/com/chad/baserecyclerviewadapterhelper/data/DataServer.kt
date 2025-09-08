@@ -74,7 +74,7 @@ object DataServer {
             } else {
                 val level2list = ArrayList<NodeEntity.Level2NodeEntity>()
                 for (n in 0..4) {
-                    val leve2Node = if (n % 2 == 0) {
+                    val leve2Node = if (n % 2 != 0) {
                         NodeEntity.Level2NodeEntity("Level 2 - Index $n", null)
                     } else {
                         val level3list = ArrayList<NodeEntity.Level2NodeEntity.Level3NodeEntity>()
@@ -85,7 +85,7 @@ object DataServer {
                             level3list.add(level3Node)
                         }
 
-                        NodeEntity.Level2NodeEntity("Level 2 - Index $n", level3list)
+                        NodeEntity.Level2NodeEntity("Level 2 - Index $n with Child", level3list)
                     }
                     level2list.add(leve2Node)
                 }

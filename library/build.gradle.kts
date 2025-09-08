@@ -13,10 +13,14 @@ val versionName = "4.1.7"
 
 
 android {
+    namespace = "com.chad.library.adapter4"
+
     compileSdk = 31
 
     defaultConfig {
         minSdk = 16
+
+        consumerProguardFiles("proguard-rules.pro")
     }
 
 
@@ -39,7 +43,7 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    namespace = "com.chad.library.adapter4"
+
 
 
     publishing {
