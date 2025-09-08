@@ -92,7 +92,7 @@ abstract class BaseNodeAdapter : BaseQuickAdapter<Any, RecyclerView.ViewHolder>(
             if (isOpened(c)) {
                 val index = items.indexOfFirst { it === c }
                 if (index > -1) {
-                    openedArray.removeAt(index)
+                    openedArrayRemove(c)
 
                     val cList = getChildNodeList(index, c)
                     if (!cList.isNullOrEmpty()) {
@@ -100,6 +100,13 @@ abstract class BaseNodeAdapter : BaseQuickAdapter<Any, RecyclerView.ViewHolder>(
                     }
                 }
             }
+        }
+    }
+
+    private fun openedArrayRemove(item: Any) {
+        val index = openedArray.indexOfFirst { it === item }
+        if (index > -1) {
+            openedArray.removeAt(index)
         }
     }
 
@@ -146,10 +153,7 @@ abstract class BaseNodeAdapter : BaseQuickAdapter<Any, RecyclerView.ViewHolder>(
 
         val childList = getChildNodeList(position, item)
         if (!childList.isNullOrEmpty()) {
-            val index = openedArray.indexOfFirst { it === item }
-            if (index > -1) {
-                openedArray.removeAt(index)
-            }
+            openedArrayRemove(item)
 
             removeListOpenFlag(childList)
 

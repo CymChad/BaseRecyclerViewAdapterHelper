@@ -641,17 +641,22 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
      * 改变某一位置数据
      */
     open operator fun set(@IntRange(from = 0) position: Int, data: T) {
-        set(position, data, null)
+        set(position, data,null, null)
     }
 
-    open fun set(@IntRange(from = 0) position: Int, data: T, commitCallback: Runnable?) {
+    open fun set(
+        @IntRange(from = 0) position: Int,
+        data: T,
+        payload: Any? = null,
+        commitCallback: Runnable?,
+    ) {
         if (position >= items.size) {
             throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
 
         if (mDiffer == null) {
             mutableItems[position] = data
-            notifyItemChanged(position)
+            notifyItemChanged(position, payload)
 
             commitCallback?.run()
         } else {
