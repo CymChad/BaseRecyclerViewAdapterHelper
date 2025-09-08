@@ -1,6 +1,9 @@
 package com.chad.baserecyclerviewadapterhelper.activity.upfetch
 
 import android.os.Bundle
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.baserecyclerviewadapterhelper.activity.upfetch.adapter.UpFetchAdapter
 import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity
@@ -26,6 +29,11 @@ class UpFetchUseActivity : BaseViewBindingActivity<ActivityUniversalRecyclerBind
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ViewCompat.setOnApplyWindowInsetsListener(viewBinding.titleBar) { view, insets ->
+            val bar = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.updatePadding(top = bar.top)
+            insets
+        }
 
         viewBinding.titleBar.title = "UpFetch Use"
         viewBinding.titleBar.setOnBackListener { finish() }
