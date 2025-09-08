@@ -74,7 +74,7 @@ class NodeAdapter : BaseNodeAdapter<NodeAdapter>() {
                     itemView.setOnClickListener {
                         openOrClose(bindingAdapterPosition)
 
-                        if (isOpened(bindingAdapterPosition)) {
+                        if (isOpenedAt(bindingAdapterPosition)) {
                             viewBinding.ivArrow.setBackgroundResource(R.drawable.ic_node_down)
                         } else {
                             viewBinding.ivArrow.setBackgroundResource(R.drawable.ic_node_right)
@@ -88,7 +88,7 @@ class NodeAdapter : BaseNodeAdapter<NodeAdapter>() {
                     itemView.setOnClickListener {
                         openOrClose(bindingAdapterPosition)
 
-                        if (isOpened(bindingAdapterPosition)) {
+                        if (isOpenedAt(bindingAdapterPosition)) {
                             viewBinding.ivArrow.setBackgroundResource(R.drawable.ic_node_down)
                         } else {
                             viewBinding.ivArrow.setBackgroundResource(R.drawable.ic_node_right)

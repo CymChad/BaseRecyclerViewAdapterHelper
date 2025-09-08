@@ -187,7 +187,7 @@ abstract class BaseNodeAdapter<T : Any> : BaseQuickAdapter<Any, RecyclerView.Vie
         return openSet.contains(item)
     }
 
-    fun isOpened(position: Int): Boolean {
+    fun isOpenedAt(position: Int): Boolean {
         return openSet.contains(items.getOrNull(position))
     }
 }
