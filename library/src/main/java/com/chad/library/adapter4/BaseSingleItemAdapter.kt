@@ -52,39 +52,43 @@ abstract class BaseSingleItemAdapter<T : Any, VH : RecyclerView.ViewHolder>(priv
             notifyItemChanged(0)
         }
 
-    override fun submitList(list: List<Any>?) {
+    override fun submitList(list: List<Any>?, commitCallback: Runnable?) {
         throw RuntimeException("Please use setItem()")
     }
 
-    override fun add(data: Any) {
+    override fun add(data: Any, commitCallback: Runnable?) {
         throw RuntimeException("Please use setItem()")
     }
 
-    override fun add(position: Int, data: Any) {
+    override fun add(position: Int, data: Any, commitCallback: Runnable?) {
         throw RuntimeException("Please use setItem()")
     }
 
-    override fun addAll(collection: Collection<Any>) {
+    override fun addAll(collection: Collection<Any>, commitCallback: Runnable?) {
         throw RuntimeException("Please use setItem()")
     }
 
-    override fun addAll(position: Int, collection: Collection<Any>) {
+    override fun addAll(position: Int, collection: Collection<Any>, commitCallback: Runnable?) {
         throw RuntimeException("Please use setItem()")
     }
 
-    override fun remove(data: Any) {
+    override fun remove(data: Any, commitCallback: Runnable?) {
         throw RuntimeException("Please use setItem()")
     }
 
-    override fun removeAtRange(range: IntRange) {
+    override fun removeAtRange(range: IntRange, commitCallback: Runnable?) {
         throw RuntimeException("Please use setItem()")
     }
 
-    override fun removeAt(position: Int) {
+    override fun removeAt(position: Int, commitCallback: Runnable?) {
         throw RuntimeException("Please use setItem()")
     }
 
     override fun set(position: Int, data: Any) {
+        throw RuntimeException("Please use setItem()")
+    }
+
+    override fun set(position: Int, data: Any, commitCallback: Runnable?) {
         throw RuntimeException("Please use setItem()")
     }
 }

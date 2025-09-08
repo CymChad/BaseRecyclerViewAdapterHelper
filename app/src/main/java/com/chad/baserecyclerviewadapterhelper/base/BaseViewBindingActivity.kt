@@ -3,7 +3,7 @@ package com.chad.baserecyclerviewadapterhelper.base
 import android.view.View
 import androidx.viewbinding.ViewBinding
 
-abstract class BaseViewBindingActivity<V : ViewBinding> : BaseActivity2() {
+abstract class BaseViewBindingActivity<V : ViewBinding> : BaseActivity() {
 
     private var _viewBinding: V? = null
 

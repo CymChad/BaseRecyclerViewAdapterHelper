@@ -15,6 +15,7 @@ import com.chad.baserecyclerviewadapterhelper.activity.home.adapter.HomeTopHeade
 import com.chad.baserecyclerviewadapterhelper.activity.itemclick.ItemClickActivity
 import com.chad.baserecyclerviewadapterhelper.activity.loadmore.AutoLoadMoreRefreshUseActivity
 import com.chad.baserecyclerviewadapterhelper.activity.loadmore.NoAutoAutoLoadMoreRefreshUseActivity
+import com.chad.baserecyclerviewadapterhelper.activity.node.NodeActivity
 import com.chad.baserecyclerviewadapterhelper.activity.scene.GroupDemoActivity
 import com.chad.baserecyclerviewadapterhelper.activity.upfetch.UpFetchUseActivity
 import com.chad.baserecyclerviewadapterhelper.databinding.ActivityHomeBinding
@@ -68,7 +69,7 @@ class HomeActivity : AppCompatActivity() {
             HomeEntity("ItemClick", ItemClickActivity::class.java, R.mipmap.gv_item_click),
             HomeEntity("DataBinding", DataBindingUseActivity::class.java, R.mipmap.gv_databinding),
             HomeEntity("DiffUtil", DifferActivity::class.java, R.mipmap.gv_databinding),
-
+            HomeEntity("Multi-node", NodeActivity::class.java, R.mipmap.gv_databinding),
 //
             HomeEntity(sectionTitle = "功能模块"),
             HomeEntity("LoadMore(Auto)", AutoLoadMoreRefreshUseActivity::class.java, R.mipmap.gv_pulltorefresh),
