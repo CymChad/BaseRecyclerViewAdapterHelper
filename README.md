@@ -27,7 +27,7 @@ Of course, you can continue to use the [2.x](https://github.com/CymChad/BaseRecy
 
 (由于各位项目成员工作较为繁忙，请各位同学谅解)
 
-## v4 版本 Demo
+## v4 版本
 [wiki](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki)
 ```
 implementation("io.github.cymchad:BaseRecyclerViewAdapterHelper4:4.2.0")
