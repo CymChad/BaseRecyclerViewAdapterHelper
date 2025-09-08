@@ -17,7 +17,8 @@ import com.chad.library.adapter4.BaseNodeAdapter
  * @date 2025/9/5
  * @description
  */
-class NodeAdapter : BaseNodeAdapter<NodeAdapter>() {
+class NodeAdapter : BaseNodeAdapter() {
+
     override fun getChildNodeList(position: Int, parent: Any): List<Any>? {
         when (parent) {
             is NodeEntity -> {
@@ -40,6 +41,10 @@ class NodeAdapter : BaseNodeAdapter<NodeAdapter>() {
     }
 
     override fun isInitialOpen(position: Int, parent: Any): Boolean {
+        // 哪些数据需要默认展开
+        if (parent is NodeEntity) {
+            return parent.title == "Item 1"
+        }
         return false
     }
 
