@@ -1,8 +1,13 @@
 package com.chad.baserecyclerviewadapterhelper.activity.databinding;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.chad.baserecyclerviewadapterhelper.activity.databinding.adapter.DataBindingAdapter;
@@ -31,8 +36,22 @@ public final class DataBindingUseActivity extends BaseViewBindingActivity<Activi
     }
 
     @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ViewCompat.setOnApplyWindowInsetsListener(getViewBinding().titleBar, new OnApplyWindowInsetsListener() {
+            @Override
+            public @NonNull WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                Insets bar = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPaddingRelative(v.getPaddingStart(), bar.top + v.getPaddingTop(), v.getPaddingEnd(), v.getPaddingBottom());
+                return insets;
+            }
+        });
 
         getViewBinding().titleBar.setTitle("DataBinding Use");
         getViewBinding().titleBar.setOnBackListener(v -> finish());

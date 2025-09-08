@@ -1,8 +1,13 @@
 package com.chad.baserecyclerviewadapterhelper.activity.differ;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.chad.baserecyclerviewadapterhelper.R;
 import com.chad.baserecyclerviewadapterhelper.activity.differ.adapter.DiffUtilAdapter;
@@ -31,6 +36,14 @@ public final class DifferActivity extends BaseViewBindingActivity<ActivityDiffut
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ViewCompat.setOnApplyWindowInsetsListener(getViewBinding().titleBar, new OnApplyWindowInsetsListener() {
+            @Override
+            public @NonNull WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                Insets bar = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPaddingRelative(v.getPaddingStart(), bar.top + v.getPaddingTop(), v.getPaddingEnd(), v.getPaddingBottom());
+                return insets;
+            }
+        });
 
         getViewBinding().titleBar.setTitle("DiffUtil Use");
         getViewBinding().titleBar.setOnBackListener(v -> finish());

@@ -3,6 +3,9 @@ package com.chad.baserecyclerviewadapterhelper.activity.scene
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.baserecyclerviewadapterhelper.R
@@ -13,6 +16,7 @@ import com.chad.baserecyclerviewadapterhelper.entity.GroupDemoEntity
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
+import androidx.core.graphics.drawable.toDrawable
 
 
 class GroupDemoActivity : BaseViewBindingActivity<ActivityUniversalRecyclerBinding>() {
@@ -26,7 +30,13 @@ class GroupDemoActivity : BaseViewBindingActivity<ActivityUniversalRecyclerBindi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.bg)))
+        ViewCompat.setOnApplyWindowInsetsListener(viewBinding.titleBar) { view, insets ->
+            val bar = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.updatePadding(top = bar.top)
+            insets
+        }
+
+        window.setBackgroundDrawable(ContextCompat.getColor(this, R.color.bg).toDrawable())
 
         viewBinding.titleBar.title = "Group Scene（ConcatAdapter）"
         viewBinding.titleBar.setOnBackListener { finish() }

@@ -4,6 +4,9 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.baserecyclerviewadapterhelper.activity.headerfooter.adapter.HeaderAdapter
@@ -45,6 +48,11 @@ class AutoLoadMoreRefreshUseActivity : BaseViewBindingActivity<ActivityLoadMoreB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ViewCompat.setOnApplyWindowInsetsListener(viewBinding.titleBar) { view, insets ->
+            val bar = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.updatePadding(top = bar.top)
+            insets
+        }
 
         viewBinding.titleBar.title = "Auto LoadMore Use"
         viewBinding.titleBar.setOnBackListener { finish() }
