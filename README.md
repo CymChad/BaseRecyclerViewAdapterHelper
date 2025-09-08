@@ -29,7 +29,11 @@ Of course, you can continue to use the [2.x](https://github.com/CymChad/BaseRecy
 
 ## v4 版本 Demo
 [wiki](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki)
+```
+implementation("io.github.cymchad:BaseRecyclerViewAdapterHelper4:4.2.0")
+```
 
+## [demo](https://github.com/CymChad/BaseRecyclerViewAdapterHelper/tree/master/demo)
 
 # proguard-rules.pro
 > 此资源库自带混淆规则，并且会自动导入，正常情况下无需手动导入。
