@@ -9,16 +9,16 @@ import androidx.recyclerview.widget.RecyclerView
  *
  * 树节点类型列表适配器。
  *
- *
+ * Tree node type list adapter.
  */
-abstract class BaseNodeAdapter<T : Any> : BaseQuickAdapter<Any, RecyclerView.ViewHolder>() {
+abstract class BaseNodeAdapter : BaseQuickAdapter<Any, RecyclerView.ViewHolder>() {
 
     /**
      * 记录打开的节点。
      *
      * Set of open nodes.
      */
-    private val openSet = HashSet<Any>()
+    private val openedArray = ArrayList<Any>()
 
     /**
      * 获取子节点列表。
@@ -51,12 +51,17 @@ abstract class BaseNodeAdapter<T : Any> : BaseQuickAdapter<Any, RecyclerView.Vie
             val newList = ArrayList<Any>(list)
 
             var i = 0
-            val iterator = newList.iterator()
+            val iterator = newList.listIterator()
             while (iterator.hasNext()) {
                 val item = iterator.next()
                 // 根据条件添加新元素
                 if (isInitialOpen(i, item)) {
-                    newList.add(i, item)
+                    getChildNodeList(i, item)?.let {
+                        openedArray.add(item)
+                        it.forEach { child ->
+                            iterator.add(child)
+                        }
+                    }
                 }
                 i++
             }
@@ -69,7 +74,7 @@ abstract class BaseNodeAdapter<T : Any> : BaseQuickAdapter<Any, RecyclerView.Vie
     }
 
     private fun findLastChild(node: Any): Any {
-        if (openSet.contains(node)) {
+        if (isOpened(node)) {
             val childList = getChildNodeList(items.indexOfFirst { it === node }, node)
 
             return if (childList.isNullOrEmpty()) {
@@ -82,17 +87,18 @@ abstract class BaseNodeAdapter<T : Any> : BaseQuickAdapter<Any, RecyclerView.Vie
         }
     }
 
-    private fun removeOpenFlag(list: List<Any>) {
+    private fun removeListOpenFlag(list: List<Any>) {
         list.forEach { c ->
-            if (openSet.contains(c)) {
-                val i = items.indexOfFirst { it === c }
-                if (i > -1) {
-                    val cList = getChildNodeList(i, c)
+            if (isOpened(c)) {
+                val index = items.indexOfFirst { it === c }
+                if (index > -1) {
+                    openedArray.removeAt(index)
+
+                    val cList = getChildNodeList(index, c)
                     if (!cList.isNullOrEmpty()) {
-                        removeOpenFlag(cList)
+                        removeListOpenFlag(cList)
                     }
                 }
-                openSet.remove(c)
             }
         }
     }
@@ -113,7 +119,10 @@ abstract class BaseNodeAdapter<T : Any> : BaseQuickAdapter<Any, RecyclerView.Vie
 
         val child = getChildNodeList(position, item)
         if (child != null) {
-            openSet.add(item)
+            if (openedArray.firstOrNull { it === item } == null) {
+                openedArray.add(item)
+            }
+
             addAll(position + 1, child)
             return true
         }
@@ -127,18 +136,25 @@ abstract class BaseNodeAdapter<T : Any> : BaseQuickAdapter<Any, RecyclerView.Vie
      * Close node.
      *
      * @param position
+     * @return
+     * Is success.
+     *
+     * 是否成功。
      */
     fun close(position: Int): Boolean {
         val item = items.getOrNull(position) ?: return false
 
         val childList = getChildNodeList(position, item)
         if (!childList.isNullOrEmpty()) {
-            openSet.remove(item)
+            val index = openedArray.indexOfFirst { it === item }
+            if (index > -1) {
+                openedArray.removeAt(index)
+            }
 
-            removeOpenFlag(childList)
+            removeListOpenFlag(childList)
 
             val last = childList.last()
-            if (openSet.contains(last)) {
+            if (isOpened(last)) {
                 // 最后一个节点是打开的
                 val node = findLastChild(last)
                 val index = items.indexOfFirst { it === node }
@@ -164,12 +180,17 @@ abstract class BaseNodeAdapter<T : Any> : BaseQuickAdapter<Any, RecyclerView.Vie
      *
      * Open or close.
      *
-     * @param position
+     * @param position The data location of the adapter.
+     *                 adapter 的数据位置.
+     * @return
+     * Is success.
+     *
+     * 是否成功。
      */
     fun openOrClose(position: Int): Boolean {
         val item = items.getOrNull(position) ?: return false
 
-        return if (openSet.contains(item)) {
+        return if (isOpened(item)) {
             close(position)
         } else {
             open(position)
@@ -183,11 +204,12 @@ abstract class BaseNodeAdapter<T : Any> : BaseQuickAdapter<Any, RecyclerView.Vie
      *
      * @return
      */
-    fun isOpened(item: Any): Boolean {
-        return openSet.contains(item)
+    fun isOpened(item: Any?): Boolean {
+        if (item == null) return false
+        return openedArray.firstOrNull { it === item } != null
     }
 
-    fun isOpened(position: Int): Boolean {
-        return openSet.contains(items.getOrNull(position))
+    fun isOpenedAt(position: Int): Boolean {
+        return isOpened(items.getOrNull(position))
     }
 }

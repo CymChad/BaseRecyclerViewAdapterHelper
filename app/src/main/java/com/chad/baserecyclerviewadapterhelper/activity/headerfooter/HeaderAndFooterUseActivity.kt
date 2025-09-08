@@ -1,6 +1,9 @@
 package com.chad.baserecyclerviewadapterhelper.activity.headerfooter
 
 import android.os.Bundle
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.baserecyclerviewadapterhelper.activity.headerfooter.adapter.FooterAdapter
 import com.chad.baserecyclerviewadapterhelper.activity.headerfooter.adapter.HeaderAdapter
@@ -23,6 +26,11 @@ class HeaderAndFooterUseActivity : BaseViewBindingActivity<ActivityUniversalRecy
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ViewCompat.setOnApplyWindowInsetsListener(viewBinding.titleBar) { view, insets ->
+            val bar = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.updatePadding(top = bar.top)
+            insets
+        }
 
         viewBinding.titleBar.title = "Header And Footer Use"
         viewBinding.titleBar.setOnBackListener { finish() }

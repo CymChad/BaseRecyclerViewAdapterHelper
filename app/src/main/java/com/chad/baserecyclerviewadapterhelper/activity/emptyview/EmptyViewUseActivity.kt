@@ -3,6 +3,9 @@ package com.chad.baserecyclerviewadapterhelper.activity.emptyview
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.baserecyclerviewadapterhelper.activity.emptyview.adapter.EmptyViewAdapter
@@ -22,6 +25,11 @@ class EmptyViewUseActivity : BaseViewBindingActivity<ActivityEmptyViewUseBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ViewCompat.setOnApplyWindowInsetsListener(viewBinding.titleBar) { view, insets ->
+            val bar = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.updatePadding(top = bar.top)
+            insets
+        }
 
         viewBinding.titleBar.title = "EmptyView Use"
         viewBinding.titleBar.setOnBackListener { finish() }

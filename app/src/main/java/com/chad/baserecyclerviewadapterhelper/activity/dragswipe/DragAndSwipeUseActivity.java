@@ -3,8 +3,13 @@ package com.chad.baserecyclerviewadapterhelper.activity.dragswipe;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.chad.baserecyclerviewadapterhelper.R;
@@ -28,6 +33,14 @@ public class DragAndSwipeUseActivity extends BaseViewBindingActivity<ActivityUni
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ViewCompat.setOnApplyWindowInsetsListener(getViewBinding().titleBar, new OnApplyWindowInsetsListener() {
+            @Override
+            public @NonNull WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                Insets bar = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPaddingRelative(v.getPaddingStart(), bar.top + v.getPaddingTop(), v.getPaddingEnd(), v.getPaddingBottom());
+                return insets;
+            }
+        });
 
         getViewBinding().titleBar.setTitle("Drag And Swipe");
         getViewBinding().titleBar.setOnBackListener(v -> finish());

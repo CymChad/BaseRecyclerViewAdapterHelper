@@ -1,6 +1,9 @@
 package com.chad.baserecyclerviewadapterhelper.activity.itemclick
 
 import android.os.Bundle
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.baserecyclerviewadapterhelper.activity.itemclick.adapter.ItemClickAdapter
@@ -42,6 +45,12 @@ class ItemClickActivity : BaseViewBindingActivity<ActivityUniversalRecyclerBindi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ViewCompat.setOnApplyWindowInsetsListener(viewBinding.titleBar) { view, insets ->
+            val bar = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.updatePadding(top = bar.top)
+            insets
+        }
+
         viewBinding.titleBar.title = "Item Click Use"
         viewBinding.titleBar.setOnBackListener { finish() }
         viewBinding.rv.layoutManager = LinearLayoutManager(this)

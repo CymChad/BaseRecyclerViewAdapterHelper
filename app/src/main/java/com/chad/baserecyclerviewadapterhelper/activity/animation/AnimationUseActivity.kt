@@ -1,6 +1,9 @@
 package com.chad.baserecyclerviewadapterhelper.activity.animation
 
 import android.os.Bundle
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import com.chad.baserecyclerviewadapterhelper.activity.animation.adapter.AnimationAdapter
 import com.chad.baserecyclerviewadapterhelper.animator.CustomAnimation1
 import com.chad.baserecyclerviewadapterhelper.animator.CustomAnimation2
@@ -30,6 +33,12 @@ class AnimationUseActivity : BaseViewBindingActivity<ActivityAnimationUseBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        ViewCompat.setOnApplyWindowInsetsListener(viewBinding.titleBar) { view, insets ->
+            val bar = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.updatePadding(top = bar.top)
+            insets
+        }
 
         viewBinding.titleBar.title = "Animation Use"
         viewBinding.titleBar.setOnBackListener { finish() }
