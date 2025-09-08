@@ -78,12 +78,7 @@ class NodeAdapter : BaseNodeAdapter() {
                 Level1Hodler(parent).apply {
                     itemView.setOnClickListener {
                         openOrClose(bindingAdapterPosition)
-
-                        if (isOpenedAt(bindingAdapterPosition)) {
-                            viewBinding.ivArrow.setBackgroundResource(R.drawable.ic_node_down)
-                        } else {
-                            viewBinding.ivArrow.setBackgroundResource(R.drawable.ic_node_right)
-                        }
+                        notifyItemChanged(bindingAdapterPosition)
                     }
                 }
             }
@@ -92,12 +87,7 @@ class NodeAdapter : BaseNodeAdapter() {
                 Level2Hodler(parent).apply {
                     itemView.setOnClickListener {
                         openOrClose(bindingAdapterPosition)
-
-                        if (isOpenedAt(bindingAdapterPosition)) {
-                            viewBinding.ivArrow.setBackgroundResource(R.drawable.ic_node_down)
-                        } else {
-                            viewBinding.ivArrow.setBackgroundResource(R.drawable.ic_node_right)
-                        }
+                        notifyItemChanged(bindingAdapterPosition)
                     }
                 }
             }
