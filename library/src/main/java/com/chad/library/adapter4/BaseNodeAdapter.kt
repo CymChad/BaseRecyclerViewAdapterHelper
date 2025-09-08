@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
  *
  * 树节点类型列表适配器。
  *
- *
+ * Tree node type list adapter.
  */
 abstract class BaseNodeAdapter : BaseQuickAdapter<Any, RecyclerView.ViewHolder>() {
 
@@ -136,6 +136,10 @@ abstract class BaseNodeAdapter : BaseQuickAdapter<Any, RecyclerView.ViewHolder>(
      * Close node.
      *
      * @param position
+     * @return
+     * Is success.
+     *
+     * 是否成功。
      */
     fun close(position: Int): Boolean {
         val item = items.getOrNull(position) ?: return false
@@ -176,7 +180,12 @@ abstract class BaseNodeAdapter : BaseQuickAdapter<Any, RecyclerView.ViewHolder>(
      *
      * Open or close.
      *
-     * @param position
+     * @param position The data location of the adapter.
+     *                 adapter 的数据位置.
+     * @return
+     * Is success.
+     *
+     * 是否成功。
      */
     fun openOrClose(position: Int): Boolean {
         val item = items.getOrNull(position) ?: return false
