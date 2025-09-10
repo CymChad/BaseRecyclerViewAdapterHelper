@@ -121,13 +121,16 @@ abstract class BaseNodeAdapter : BaseQuickAdapter<Any, RecyclerView.ViewHolder>(
      *
      * 是否成功。
      */
-    fun open(position: Int): Boolean {
+    @JvmOverloads
+    fun open(position: Int, positionPayload: Any? = null): Boolean {
+        if (position < 0) return false
         val item = items.getOrNull(position) ?: return false
 
         val child = getChildNodeList(position, item)
         if (child != null) {
             if (openedArray.firstOrNull { it === item } == null) {
                 openedArray.add(item)
+                notifyItemChanged(position, positionPayload)
                 addAll(position + 1, child)
                 return true
             }
@@ -156,27 +159,21 @@ abstract class BaseNodeAdapter : BaseQuickAdapter<Any, RecyclerView.ViewHolder>(
         if (!childList.isNullOrEmpty()) {
             openedArrayRemove(item)
 
-
             val last = childList.last()
-            if (isOpened(last)) {
+            val index = if (isOpened(last)) {
                 // 最后一个节点是打开的
                 val node = findLastChild(last)
-                val index = items.indexOfFirst { it === node }
-                if (index > -1 && index > position) {
-                    removeListOpenFlag(childList)
-                    notifyItemChanged(position, positionPayload)
-                    removeAtRange(IntRange(position + 1, index))
-                    return true
-                }
+                items.indexOfFirst { it === node }
             } else {
                 // 最后一个节点是关闭的
-                val index = items.indexOfFirst { it === last }
-                if (index > -1 && index > position) {
-                    removeListOpenFlag(childList)
-                    notifyItemChanged(position, positionPayload)
-                    removeAtRange(IntRange(position + 1, index))
-                    return true
-                }
+                items.indexOfFirst { it === last }
+            }
+
+            if (index > -1 && index > position) {
+                removeListOpenFlag(childList)
+                notifyItemChanged(position, positionPayload)
+                removeAtRange(IntRange(position + 1, index))
+                return true
             }
         }
 
