@@ -37,5 +37,10 @@ class NodeActivity : BaseViewBindingActivity<ActivityNodeBinding>() {
         viewBinding.rv.adapter = adapter
 
         adapter.submitList(DataServer.getNodeData())
+
+
+        viewBinding.btnCloseAll.setOnClickListener {
+            adapter.closeAll()
+        }
     }
 }

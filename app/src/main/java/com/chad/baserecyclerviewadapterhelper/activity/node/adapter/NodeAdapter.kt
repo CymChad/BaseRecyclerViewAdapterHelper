@@ -78,7 +78,6 @@ class NodeAdapter : BaseNodeAdapter() {
                 Level1Hodler(parent).apply {
                     itemView.setOnClickListener {
                         openOrClose(bindingAdapterPosition)
-                        notifyItemChanged(bindingAdapterPosition)
                     }
                 }
             }
@@ -87,7 +86,6 @@ class NodeAdapter : BaseNodeAdapter() {
                 Level2Hodler(parent).apply {
                     itemView.setOnClickListener {
                         openOrClose(bindingAdapterPosition)
-                        notifyItemChanged(bindingAdapterPosition)
                     }
                 }
             }
