@@ -128,10 +128,9 @@ abstract class BaseNodeAdapter : BaseQuickAdapter<Any, RecyclerView.ViewHolder>(
         if (child != null) {
             if (openedArray.firstOrNull { it === item } == null) {
                 openedArray.add(item)
+                addAll(position + 1, child)
+                return true
             }
-
-            addAll(position + 1, child)
-            return true
         }
 
         return false
