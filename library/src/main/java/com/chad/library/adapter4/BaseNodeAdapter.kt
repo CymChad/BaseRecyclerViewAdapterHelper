@@ -148,14 +148,15 @@ abstract class BaseNodeAdapter : BaseQuickAdapter<Any, RecyclerView.ViewHolder>(
      *
      * 是否成功。
      */
-    fun close(position: Int): Boolean {
+    @JvmOverloads
+    fun close(position: Int, positionPayload: Any? = null): Boolean {
+        if (position < 0) return false
         val item = items.getOrNull(position) ?: return false
 
         val childList = getChildNodeList(position, item)
         if (!childList.isNullOrEmpty()) {
             openedArrayRemove(item)
 
-            removeListOpenFlag(childList)
 
             val last = childList.last()
             if (isOpened(last)) {
@@ -163,6 +164,8 @@ abstract class BaseNodeAdapter : BaseQuickAdapter<Any, RecyclerView.ViewHolder>(
                 val node = findLastChild(last)
                 val index = items.indexOfFirst { it === node }
                 if (index > -1 && index > position) {
+                    removeListOpenFlag(childList)
+                    notifyItemChanged(position, positionPayload)
                     removeAtRange(IntRange(position + 1, index))
                     return true
                 }
@@ -170,6 +173,8 @@ abstract class BaseNodeAdapter : BaseQuickAdapter<Any, RecyclerView.ViewHolder>(
                 // 最后一个节点是关闭的
                 val index = items.indexOfFirst { it === last }
                 if (index > -1 && index > position) {
+                    removeListOpenFlag(childList)
+                    notifyItemChanged(position, positionPayload)
                     removeAtRange(IntRange(position + 1, index))
                     return true
                 }
@@ -177,6 +182,18 @@ abstract class BaseNodeAdapter : BaseQuickAdapter<Any, RecyclerView.ViewHolder>(
         }
 
         return false
+    }
+
+    /**
+     * 关闭全部的节点
+     *
+     * Close all.
+     */
+    fun closeAll() {
+        openedArray.toMutableList().forEach { opened ->
+            close(items.indexOfFirst { it === opened })
+        }
+        openedArray.clear()
     }
 
     /**
