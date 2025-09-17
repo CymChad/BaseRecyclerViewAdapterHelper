@@ -61,7 +61,7 @@ dependencies {
 
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 
-    implementation("androidx.databinding:databinding-runtime:8.0.0")
+    compileOnly("androidx.databinding:databinding-runtime:8.0.0")
 }
 
 //---------- maven upload info -----------------------------------

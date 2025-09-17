@@ -29,8 +29,8 @@ import java.util.Collections
 /**
  * Base Class
  * @param T : type of data, 数据类型
- * @param VH : BaseViewHolder
- * @constructor layoutId, data(Can null parameters, the default is empty data)
+ * @param VH : ViewHolder
+ * @param config: Differ Config
  */
 abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
     private var _items: List<T> = emptyList(),
