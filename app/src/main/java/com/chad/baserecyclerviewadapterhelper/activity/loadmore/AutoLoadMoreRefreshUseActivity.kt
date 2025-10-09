@@ -51,6 +51,7 @@ class AutoLoadMoreRefreshUseActivity : BaseViewBindingActivity<ActivityLoadMoreB
         ViewCompat.setOnApplyWindowInsetsListener(viewBinding.titleBar) { view, insets ->
             val bar = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.updatePadding(top = bar.top)
+            viewBinding.rvList.updatePadding(bottom = bar.bottom)
             insets
         }
 
@@ -87,7 +88,10 @@ class AutoLoadMoreRefreshUseActivity : BaseViewBindingActivity<ActivityLoadMoreB
                 override fun isAllowLoading(): Boolean {
                     return !viewBinding.refreshLayout.isRefreshing
                 }
-            }).build()
+            })
+            .setTrailPreloadSize(0) // 预加载（默认值为0）
+            .isTrailAutoLoadMore(true) // 是否自动加载更多（默认为true）
+            .build()
 
         // 设置预加载，请调用以下方法
         // helper.trailingLoadStateAdapter?.preloadSize = 1

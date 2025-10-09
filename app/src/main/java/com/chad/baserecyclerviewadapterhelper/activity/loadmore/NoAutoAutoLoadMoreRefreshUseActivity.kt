@@ -52,6 +52,7 @@ class NoAutoAutoLoadMoreRefreshUseActivity : BaseViewBindingActivity<ActivityLoa
         ViewCompat.setOnApplyWindowInsetsListener(viewBinding.titleBar) { view, insets ->
             val bar = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.updatePadding(top = bar.top)
+            viewBinding.rvList.updatePadding(bottom = bar.bottom)
             insets
         }
 
