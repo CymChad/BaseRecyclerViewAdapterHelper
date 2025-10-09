@@ -9,7 +9,7 @@ plugins {
     signing
 }
 
-val versionName = "4.2.3"
+val versionName = "4.3.0"
 
 
 android {
@@ -145,6 +145,10 @@ afterEvaluate {
                     password = ossrhPassword
                 }
             }
+
+//            maven {
+//                setUrl("$rootDir/Repo")
+//            }
         }
 
     }
