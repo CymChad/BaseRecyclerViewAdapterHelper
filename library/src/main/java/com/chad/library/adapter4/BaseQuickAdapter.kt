@@ -648,7 +648,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
         @IntRange(from = 0) position: Int,
         data: T,
         payload: Any? = null,
-        commitCallback: Runnable?,
+        commitCallback: Runnable? = null,
     ) {
         if (position >= items.size) {
             throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
