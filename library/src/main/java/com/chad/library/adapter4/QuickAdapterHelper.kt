@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter4.loadState.LoadState
 import com.chad.library.adapter4.loadState.leading.DefaultLeadingLoadStateAdapter
 import com.chad.library.adapter4.loadState.leading.LeadingLoadStateAdapter
+import com.chad.library.adapter4.loadState.trailing.DefaultTrailingLoadStateAdapter
 import com.chad.library.adapter4.loadState.trailing.TrailingLoadStateAdapter
 import java.util.Collections
 
@@ -322,6 +323,12 @@ class QuickAdapterHelper private constructor(
 
         private var config: ConcatAdapter.Config = ConcatAdapter.Config.DEFAULT
 
+        private fun getTrailingLoadStateAdapter(): TrailingLoadStateAdapter<*> {
+            return trailingLoadStateAdapter ?: DefaultTrailingLoadStateAdapter().apply {
+                trailingLoadStateAdapter = this
+            }
+        }
+
         /**
          * 尾部"加载更多"Adapter
          * @param loadStateAdapter LoadStateAdapter<*>?
@@ -333,11 +340,39 @@ class QuickAdapterHelper private constructor(
 
         fun setTrailingLoadStateAdapter(
             loadMoreListener: TrailingLoadStateAdapter.OnTrailingListener?
-        ) = setTrailingLoadStateAdapter(
-            com.chad.library.adapter4.loadState.trailing.DefaultTrailingLoadStateAdapter().apply {
-                setOnLoadMoreListener(loadMoreListener)
+        ) = apply {
+            getTrailingLoadStateAdapter().setOnLoadMoreListener(loadMoreListener)
+        }
+
+        /**
+         * 设置“加载更多”的预加载。
+         *
+         * Preload, the number of items from the tail.
+         *
+         * @param size
+         */
+        fun setTrailPreloadSize(size: Int) = apply {
+            getTrailingLoadStateAdapter().preloadSize = size
+        }
+
+
+        /**
+         * 设置“加载更多”。是否打开自动加载更多
+         *
+         * Whether to turn on autoload more. Called when it must be initialized
+         *
+         * @param enable
+         */
+        fun isTrailAutoLoadMore(enable: Boolean) = apply {
+            getTrailingLoadStateAdapter().isAutoLoadMore = enable
+        }
+
+
+        private fun getLeadingLoadStateAdapter(): LeadingLoadStateAdapter<*> {
+            return leadingLoadStateAdapter ?: DefaultLeadingLoadStateAdapter().apply {
+                leadingLoadStateAdapter = this
             }
-        )
+        }
 
         /**
          * 首部"加载更多"Adapter
@@ -350,11 +385,9 @@ class QuickAdapterHelper private constructor(
 
         fun setLeadingLoadStateAdapter(
             loadListener: LeadingLoadStateAdapter.OnLeadingListener?
-        ) = setLeadingLoadStateAdapter(
-            DefaultLeadingLoadStateAdapter().apply {
-                setOnLeadingListener(loadListener)
-            }
-        )
+        ) = apply {
+            getLeadingLoadStateAdapter().setOnLeadingListener(loadListener)
+        }
 
         /**
          * 设置 ConcatAdapter 的配置

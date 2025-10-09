@@ -39,7 +39,9 @@ abstract class LeadingLoadStateAdapter<VH: RecyclerView.ViewHolder> : LoadStateA
 
     @CallSuper
     override fun onViewAttachedToWindow(holder: VH) {
-        loadAction()
+        if (preloadSize == 0) {
+            loadAction()
+        }
     }
 
     /**
@@ -71,7 +73,7 @@ abstract class LeadingLoadStateAdapter<VH: RecyclerView.ViewHolder> : LoadStateA
     internal fun checkPreload(currentPosition: Int) {
         if (currentPosition < 0) return
 
-        if (currentPosition <= preloadSize) {
+        if (preloadSize > 0 && currentPosition <= preloadSize) {
             loadAction()
         }
     }

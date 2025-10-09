@@ -61,7 +61,9 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder>(
 
     @CallSuper
     override fun onViewAttachedToWindow(holder: VH) {
-        loadAction()
+        if (preloadSize == 0) {
+            loadAction()
+        }
     }
 
     /**
@@ -100,7 +102,7 @@ abstract class TrailingLoadStateAdapter<VH : RecyclerView.ViewHolder>(
     internal fun checkPreload(itemCount: Int, currentPosition: Int) {
         if (currentPosition > itemCount - 1) return
 
-        if (itemCount - currentPosition - 1 <= preloadSize) {
+        if (preloadSize > 0 && itemCount - currentPosition - 1 <= preloadSize) {
             loadAction()
         }
     }
