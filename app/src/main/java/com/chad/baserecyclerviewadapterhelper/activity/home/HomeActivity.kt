@@ -2,6 +2,7 @@ package com.chad.baserecyclerviewadapterhelper.activity.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.baserecyclerviewadapterhelper.activity.animation.AnimationUseActivity
@@ -20,9 +21,10 @@ import com.chad.baserecyclerviewadapterhelper.activity.scene.GroupDemoActivity
 import com.chad.baserecyclerviewadapterhelper.activity.upfetch.UpFetchUseActivity
 import com.chad.baserecyclerviewadapterhelper.databinding.ActivityHomeBinding
 import com.chad.baserecyclerviewadapterhelper.entity.HomeEntity
+import com.chad.library.adapter4.BaseQuickAdapter
 import com.chad.library.adapter4.QuickAdapterHelper
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(), BaseQuickAdapter.OnItemClickListener<HomeEntity> {
 
     private lateinit var binding: ActivityHomeBinding
 
@@ -47,12 +49,25 @@ class HomeActivity : AppCompatActivity() {
         // 从 QuickAdapterHelper 获取 adapter，设置给 RecycleView
         binding.recyclerView.adapter = helper.adapter
 
-        // item 点击事件
-        homeAdapter.setOnItemClickListener { adapter, _, position ->
-            val item = adapter.items[position]
-            if (!item.isSection) {
-                startActivity(Intent(this@HomeActivity, item.activity))
-            }
+        // 设置点击事件
+        homeAdapter.setOnItemClickListener(this)
+    }
+
+    /**
+     * item 点击事件
+     *
+     * @param adapter
+     * @param view
+     * @param position
+     */
+    override fun onClick(
+        adapter: BaseQuickAdapter<HomeEntity, *>,
+        view: View,
+        position: Int,
+    ) {
+        val item = adapter.getItem(position)
+        if (!item.isSection) {
+            startActivity(Intent(this@HomeActivity, item.activity))
         }
     }
 
