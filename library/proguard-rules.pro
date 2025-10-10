@@ -26,6 +26,10 @@
 }
 -keep class com.chad.library.adapter.base.viewholder.BaseDataBindingHolder {*;}
 
+
+-keep class * {
+ @androidx.databinding.BindingAdapter <methods>;
+}
 #-keepattributes InnerClasses
 #
 #-keep class androidx.** {*;}
