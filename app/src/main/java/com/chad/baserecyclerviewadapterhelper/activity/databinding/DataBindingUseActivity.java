@@ -44,11 +44,11 @@ public final class DataBindingUseActivity extends BaseViewBindingActivity<Activi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ViewCompat.setOnApplyWindowInsetsListener(getViewBinding().titleBar, new OnApplyWindowInsetsListener() {
+        ViewCompat.setOnApplyWindowInsetsListener(getViewBinding().getRoot(), new OnApplyWindowInsetsListener() {
             @Override
             public @NonNull WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
                 Insets bar = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-                v.setPaddingRelative(v.getPaddingStart(), bar.top + v.getPaddingTop(), v.getPaddingEnd(), v.getPaddingBottom());
+                getViewBinding().titleBar.updateFakeBarHeight(bar.top);
                 return insets;
             }
         });

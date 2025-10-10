@@ -57,11 +57,11 @@ public class ManualDragAndSwipeUseActivity extends BaseViewBindingActivity<Activ
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ViewCompat.setOnApplyWindowInsetsListener(getViewBinding().titleBar, new OnApplyWindowInsetsListener() {
+        ViewCompat.setOnApplyWindowInsetsListener(getViewBinding().getRoot(), new OnApplyWindowInsetsListener() {
             @Override
             public @NonNull WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
                 Insets bar = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-                v.setPaddingRelative(0, bar.top, 0, 0);
+                getViewBinding().titleBar.updateFakeBarHeight(bar.top);
                 return insets;
             }
         });

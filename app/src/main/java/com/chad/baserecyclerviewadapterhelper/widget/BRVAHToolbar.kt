@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import com.chad.baserecyclerviewadapterhelper.R
 import com.chad.baserecyclerviewadapterhelper.databinding.LayoutToolBarBinding
@@ -26,13 +27,15 @@ class BRVAHToolbar @JvmOverloads constructor(
         }
 
     init {
-        orientation = HORIZONTAL
+        orientation = VERTICAL
         setBackgroundColor(ContextCompat.getColor(context, R.color.spinner_bg))
         elevation = context.dpF(10)
-
-        updatePadding(top = context.dp(12), bottom = context.dp(12))
     }
 
+
+    fun updateFakeBarHeight(h: Int) {
+        binding.fakeBar.updateLayoutParams { this.height = h }
+    }
 
     fun setOnBackListener(listener: OnClickListener) {
         binding.ivBack.setOnClickListener(listener)

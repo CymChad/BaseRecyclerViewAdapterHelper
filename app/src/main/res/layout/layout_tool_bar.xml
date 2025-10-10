@@ -3,39 +3,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:background="@color/spinner_bg"
     tools:layout_height="wrap_content"
-    tools:paddingVertical="12dp"
     tools:layout_width="match_parent"
     tools:parentTag="android.widget.LinearLayout">
 
-    <ImageView
-        android:id="@+id/iv_back"
+    <Space
+        android:id="@+id/fake_bar"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_centerVertical="true"
-        android:paddingStart="15dp"
-        android:paddingEnd="15dp"
-        android:scaleType="centerInside"
-        android:src="@mipmap/back" />
+        android:layout_height="0dp" />
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/iv_back"
-        android:gravity="center_vertical"
-        android:textColor="@color/white_text_color"
-        android:textSize="16sp"
-        tools:text="title" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="12dp"
+        android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/tv_title"
-        android:gravity="center_vertical"
-        android:text="Demo"
-        android:textColor="@color/gray_color"
-        android:textSize="12sp" />
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/back" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/iv_back"
+            android:gravity="center_vertical"
+            android:textColor="@color/white_text_color"
+            android:textSize="16sp"
+            tools:text="title" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/tv_title"
+            android:gravity="center_vertical"
+            android:text="Demo"
+            android:textColor="@color/gray_color"
+            android:textSize="12sp" />
+    </LinearLayout>
+
 
 </merge>

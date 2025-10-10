@@ -48,9 +48,9 @@ class AutoLoadMoreRefreshUseActivity : BaseViewBindingActivity<ActivityLoadMoreB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ViewCompat.setOnApplyWindowInsetsListener(viewBinding.titleBar) { view, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(viewBinding.root) { view, insets ->
             val bar = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.updatePadding(top = bar.top)
+            viewBinding.titleBar.updateFakeBarHeight(bar.top)
             viewBinding.rvList.updatePadding(bottom = bar.bottom)
             insets
         }
