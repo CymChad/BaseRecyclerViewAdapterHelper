@@ -26,7 +26,7 @@
 }
 -keep class com.chad.library.adapter.base.viewholder.BaseDataBindingHolder {*;}
 
-
+# Data binding混淆规则
 -keep class * {
  @androidx.databinding.BindingAdapter <methods>;
 }
