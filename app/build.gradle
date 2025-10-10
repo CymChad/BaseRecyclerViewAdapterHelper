@@ -12,8 +12,8 @@ android {
         applicationId "com.chad.baserecyclerviewadapterhelper"
         minSdk 23
         targetSdk 36
-        versionCode 20
-        versionName "4.1"
+        versionCode 21
+        versionName "4.3.2"
     }
     buildTypes {
         release {
