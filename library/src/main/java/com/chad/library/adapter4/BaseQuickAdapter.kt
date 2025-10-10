@@ -314,7 +314,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
             return
         }
 
-        onBindViewHolder(holder as VH, position, getItem(position))
+        onBindViewHolder(holder as VH, position, getItemOrNull(position))
     }
 
     final override fun onBindViewHolder(
@@ -330,7 +330,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
             return
         }
 
-        onBindViewHolder(holder as VH, position, getItem(position), payloads)
+        onBindViewHolder(holder as VH, position, getItemOrNull(position), payloads)
     }
 
     override fun getItemId(position: Int): Long {
@@ -487,13 +487,24 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
     /**
      * Get the data item associated with the specified position in the data set.
      *
+     * 获取与数据集中指定位置的数据项。
+     *
+     * @param position Position of the item whose data we want within the adapter's
+     * data set.
+     * @return The data at the specified position.
+     */
+    open fun getItem(@IntRange(from = 0) position: Int): T = items[position]
+
+    /**
+     * Get the data item associated with the specified position in the data set.
+     *
      * 获取与数据集中指定位置的数据项。如果未找到数据，则返回 null。
      *
      * @param position Position of the item whose data we want within the adapter's
      * data set.
      * @return The data at the specified position.
      */
-    fun getItem(@IntRange(from = 0) position: Int): T? = items.getOrNull(position)
+    open fun getItemOrNull(@IntRange(from = 0) position: Int): T? = items.getOrNull(position)
 
     /**
      * 获取对应首个匹配的 item 数据的索引。如果返回 -1，表示不存在
