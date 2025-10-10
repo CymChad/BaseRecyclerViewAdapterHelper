@@ -50,7 +50,9 @@ class UpFetchUseActivity : BaseViewBindingActivity<ActivityUniversalRecyclerBind
                 override fun isAllowLoading(): Boolean {
                     return true
                 }
-            }).build()
+            })
+            .setLeadPreloadSize(0) // 预加载（默认值为0）
+            .build()
         viewBinding.rv.adapter = helper.adapter
     }
 

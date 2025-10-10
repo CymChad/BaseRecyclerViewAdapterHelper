@@ -390,6 +390,17 @@ class QuickAdapterHelper private constructor(
         }
 
         /**
+         * 设置“向上加载”的预加载。
+         *
+         * Preload, the number of items from the leading.
+         *
+         * @param size
+         */
+        fun setLeadPreloadSize(size: Int) = apply {
+            getLeadingLoadStateAdapter().preloadSize = size
+        }
+
+        /**
          * 设置 ConcatAdapter 的配置
          *
          * @param config

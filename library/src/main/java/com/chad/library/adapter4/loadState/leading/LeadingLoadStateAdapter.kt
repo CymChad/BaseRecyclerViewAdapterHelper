@@ -73,7 +73,7 @@ abstract class LeadingLoadStateAdapter<VH: RecyclerView.ViewHolder> : LoadStateA
     internal fun checkPreload(currentPosition: Int) {
         if (currentPosition < 0) return
 
-        if (preloadSize > 0 && currentPosition <= preloadSize) {
+        if (currentPosition <= preloadSize) {
             loadAction()
         }
     }
