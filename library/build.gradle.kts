@@ -13,6 +13,8 @@ val versionName = "3.0.14"
 
 
 android {
+    namespace = "com.chad.library"
+
     compileSdk = 31
 
     defaultConfig {
@@ -41,7 +43,6 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    namespace = "com.chad.library"
 
 
     publishing {
@@ -55,9 +56,9 @@ android {
 
 
 dependencies {
-    implementation("androidx.annotation:annotation:1.5.0")
+    implementation("androidx.annotation:annotation:1.8.0")
 
-    implementation("androidx.recyclerview:recyclerview:1.2.1")
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
 
     implementation("androidx.databinding:databinding-runtime:8.0.0")
 }
@@ -69,24 +70,26 @@ var secretKeyRingFile = ""//生成的secring.gpg文件目录
 var ossrhUsername = ""//sonatype用户名
 var ossrhPassword = "" //sonatype密码
 
+try {
+    val localProperties: File = project.rootProject.file("local.properties")
 
-val localProperties: File = project.rootProject.file("local.properties")
+    if (localProperties.exists()) {
+        println("Found secret props file, loading props")
+        val properties = Properties()
 
-if (localProperties.exists()) {
-    println("Found secret props file, loading props")
-    val properties = Properties()
+        InputStreamReader(FileInputStream(localProperties), Charsets.UTF_8).use { reader ->
+            properties.load(reader)
+        }
+        signingKeyId = properties.getProperty("signing.keyId")
+        signingPassword = properties.getProperty("signing.password")
+        secretKeyRingFile = properties.getProperty("signing.secretKeyRingFile")
+        ossrhUsername = properties.getProperty("ossrhUsername")
+        ossrhPassword = properties.getProperty("ossrhPassword")
 
-    InputStreamReader(FileInputStream(localProperties), Charsets.UTF_8).use { reader ->
-        properties.load(reader)
+    } else {
+        println("No props file, loading env vars")
     }
-    signingKeyId = properties.getProperty("signing.keyId")
-    signingPassword = properties.getProperty("signing.password")
-    secretKeyRingFile = properties.getProperty("signing.secretKeyRingFile")
-    ossrhUsername = properties.getProperty("ossrhUsername")
-    ossrhPassword = properties.getProperty("ossrhPassword")
-
-} else {
-    println("No props file, loading env vars")
+} catch (_: Exception) {
 }
 
 afterEvaluate {
@@ -138,6 +141,10 @@ afterEvaluate {
                     password = ossrhPassword
                 }
             }
+
+//            maven {
+//                setUrl("$rootDir/Repo")
+//            }
         }
 
     }

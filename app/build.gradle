@@ -4,12 +4,14 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 33
+    namespace 'com.chad.baserecyclerviewadapterhelper'
+
+    compileSdkVersion 36
 
     defaultConfig {
         applicationId "com.chad.baserecyclerviewadapterhelper"
-        minSdkVersion 16
-        targetSdkVersion 33
+        minSdkVersion 21
+        targetSdkVersion 36
         versionCode 9
         versionName "3.0"
     }
@@ -27,11 +29,11 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 
     buildFeatures {
@@ -43,10 +45,10 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     implementation project(path: ':library')
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'com.google.android.material:material:1.13.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.kyleduo.switchbutton:library:2.1.0'
-    implementation 'androidx.recyclerview:recyclerview:1.3.0'
+    implementation 'androidx.recyclerview:recyclerview:1.4.0'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 }
