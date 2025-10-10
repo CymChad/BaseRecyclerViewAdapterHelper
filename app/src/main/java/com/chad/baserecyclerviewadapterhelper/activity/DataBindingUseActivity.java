@@ -3,6 +3,7 @@ package com.chad.baserecyclerviewadapterhelper.activity;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,7 +26,7 @@ import java.util.Random;
  */
 public class DataBindingUseActivity extends BaseActivity {
 
-    private DataBindingAdapter adapter = new DataBindingAdapter();
+    private final DataBindingAdapter adapter = new DataBindingAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class DataBindingUseActivity extends BaseActivity {
         //item 点击事件
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemClick(@NonNull BaseQuickAdapter<?,?> adapter, @NonNull View view, int position) {
                 Tips.show("onItemClick: " + position);
             }
         });

@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class DataBindingAdapter extends BaseQuickAdapter<Movie, BaseDataBindingHolder<ItemMovieBinding>> {
 
-    private MoviePresenter mPresenter = new MoviePresenter();
+    private final MoviePresenter mPresenter = new MoviePresenter();
 
     public DataBindingAdapter() {
         super(R.layout.item_movie);

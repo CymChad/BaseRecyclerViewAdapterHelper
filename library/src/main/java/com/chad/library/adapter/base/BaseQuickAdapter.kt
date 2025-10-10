@@ -39,9 +39,10 @@ import kotlin.collections.ArrayList
  * @param VH : BaseViewHolder
  * @constructor layoutId, data(Can null parameters, the default is empty data)
  */
-abstract class BaseQuickAdapter<T, VH : BaseViewHolder>
-@JvmOverloads constructor(@LayoutRes private val layoutResId: Int,
-                          data: MutableList<T>? = null)
+abstract class BaseQuickAdapter<T, VH : BaseViewHolder> @JvmOverloads constructor(
+    @LayoutRes private val layoutResId: Int,
+    data: MutableList<T>? = null,
+)
     : RecyclerView.Adapter<VH>() {
 
     companion object {
