@@ -36,7 +36,7 @@ public class ImgItemProvider extends BaseItemProvider<ProviderMultiEntity> {
 
     @Override
     public void convert(@NonNull BaseViewHolder helper, @Nullable ProviderMultiEntity data) {
-        if (helper.getAdapterPosition() % 2 == 0) {
+        if (helper.getBindingAdapterPosition() % 2 == 0) {
             helper.setImageResource(R.id.iv, R.mipmap.animation_img1);
         } else {
             helper.setImageResource(R.id.iv, R.mipmap.animation_img2);

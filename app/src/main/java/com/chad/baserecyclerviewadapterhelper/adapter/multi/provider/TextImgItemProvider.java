@@ -38,8 +38,8 @@ public class TextImgItemProvider extends BaseItemProvider<ProviderMultiEntity> {
 
     @Override
     public void convert(@NotNull BaseViewHolder helper, @Nullable ProviderMultiEntity data) {
-        helper.setText(R.id.tv, "CymChad " + helper.getAdapterPosition());
-        if (helper.getAdapterPosition() % 2 == 0) {
+        helper.setText(R.id.tv, "CymChad " + helper.getBindingAdapterPosition());
+        if (helper.getBindingAdapterPosition() % 2 == 0) {
             helper.setImageResource(R.id.iv, R.mipmap.animation_img1);
         } else {
             helper.setImageResource(R.id.iv, R.mipmap.animation_img2);
