@@ -55,10 +55,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
         null
 
     private val mDiffer: AsyncListDiffer<T>? =
-        if (config == null)
-            null
-        else
-            AsyncListDiffer(AdapterListUpdateCallback(this), config)
+        config?.let { AsyncListDiffer(AdapterListUpdateCallback(this), it) }
 
 
     private var _recyclerView: RecyclerView? = null
