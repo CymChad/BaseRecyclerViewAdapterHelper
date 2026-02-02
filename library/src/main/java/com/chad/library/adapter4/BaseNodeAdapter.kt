@@ -203,8 +203,6 @@ abstract class BaseNodeAdapter : BaseQuickAdapter<Any, RecyclerView.ViewHolder>(
                 close(position)
             }
         }
-        // 修复：不需要手动 clear，close() 方法内部已经会移除标记
-        // Fix: No need to manually clear, close() method already removes the flag
     }
 
     /**
