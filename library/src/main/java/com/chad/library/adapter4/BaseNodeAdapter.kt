@@ -98,6 +98,7 @@ abstract class BaseNodeAdapter : BaseQuickAdapter<Any, RecyclerView.ViewHolder>(
         commitCallback: Runnable? = null,
     ) {
         if (list.isNullOrEmpty()) {
+            openedSet.clear()
             super.submitList(list, commitCallback)
             return
         }
