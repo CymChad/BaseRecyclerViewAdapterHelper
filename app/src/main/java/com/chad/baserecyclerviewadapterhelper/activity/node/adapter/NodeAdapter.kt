@@ -40,12 +40,37 @@ class NodeAdapter : BaseNodeAdapter() {
         }
     }
 
-    override fun isInitialOpen(position: Int, parent: Any): Boolean {
+    override fun isInitialOpen(position: Int, item: Any): Boolean {
         // 哪些数据需要默认展开
-        if (parent is NodeEntity) {
-            return parent.title == "Item 1"
+        if (item is NodeEntity) {
+            return item.title == "Item 1"
+        } else if (item is NodeEntity.Level2NodeEntity) {
+            // 二级
+            return item.title.startsWith("Item 1", ignoreCase = true)
         }
         return false
+    }
+
+    override fun isSameNode(item1: Any, item2: Any): Boolean {
+        return when (item1) {
+            is NodeEntity if item2 is NodeEntity -> {
+                item1.title == item2.title
+            }
+
+            is NodeEntity.Level2NodeEntity if item2 is NodeEntity.Level2NodeEntity -> {
+                // 二级
+                item1.title == item2.title
+            }
+
+            is NodeEntity.Level2NodeEntity.Level3NodeEntity if item2 is NodeEntity.Level2NodeEntity.Level3NodeEntity -> {
+                // 三级
+                item1.title == item2.title
+            }
+
+            else -> {
+                false
+            }
+        }
     }
 
     override fun getItemViewType(position: Int, list: List<Any>): Int {

@@ -42,5 +42,11 @@ class NodeActivity : BaseViewBindingActivity<ActivityNodeBinding>() {
         viewBinding.btnCloseAll.setOnClickListener {
             adapter.closeAll()
         }
+        viewBinding.btnRef.setOnClickListener {
+            adapter.submitList(DataServer.getNodeData())
+        }
+        viewBinding.btnRefOnSave.setOnClickListener {
+            adapter.submitList(DataServer.getNodeData(),  clearOpenStates = true)
+        }
     }
 }
