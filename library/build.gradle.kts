@@ -9,7 +9,7 @@ plugins {
     signing
 }
 
-val versionName = "4.3.2"
+val versionName = "4.3.3"
 
 
 android {
@@ -18,7 +18,7 @@ android {
     compileSdk = 31
 
     defaultConfig {
-        minSdk = 16
+        minSdk = 19
 
         consumerProguardFiles("proguard-rules.pro")
     }
