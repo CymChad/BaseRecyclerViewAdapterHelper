@@ -73,6 +73,10 @@ abstract class BaseNodeAdapter : BaseQuickAdapter<Any, RecyclerView.ViewHolder>(
         return item1 === item2
     }
 
+    override fun submitList(list: List<Any>?, commitCallback: Runnable?) {
+        this.submitList(list, false, commitCallback)
+    }
+
     /**
      * 提交列表数据
      *
@@ -88,10 +92,6 @@ abstract class BaseNodeAdapter : BaseQuickAdapter<Any, RecyclerView.ViewHolder>(
      * Default is false, preserving user expanded states.
      * If set to true, will re-determine expanded states based on isInitialOpen.
      */
-    override fun submitList(list: List<Any>?, commitCallback: Runnable?) {
-        this.submitList(list, false, commitCallback)
-    }
-
     fun submitList(
         list: List<Any>?,
         clearOpenStates: Boolean,
