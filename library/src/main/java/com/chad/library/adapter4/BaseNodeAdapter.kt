@@ -82,14 +82,14 @@ abstract class BaseNodeAdapter : BaseQuickAdapter<Any, RecyclerView.ViewHolder>(
      *
      * @param list 数据列表 / Data list
      * @param commitCallback 回调 / Callback
-     * @param clearOpenStates 是否清空之前的展开状态
-     * 默认为 false，保留用户的展开状态。
+     * @param clearOpenStates 是否清空之前的展开状态。
+     * false，保留用户的展开状态。
      * 如果设置为 true，会重新根据 isInitialOpen 判断展开状态。
      *
      * Submit list data
      *
-     * @param clearOpenStates Whether to clear previous expanded states
-     * Default is false, preserving user expanded states.
+     * @param clearOpenStates Whether to clear previous expanded states.
+     * false, preserving user expanded states.
      * If set to true, will re-determine expanded states based on isInitialOpen.
      */
     fun submitList(
