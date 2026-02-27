@@ -3,7 +3,10 @@ package com.chad.library.adapter4
 import android.content.Context
 import android.util.SparseArray
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncDifferConfig
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.chad.library.adapter4.BaseQuickAdapter
 import java.lang.ref.WeakReference
 
 /**
@@ -11,8 +14,14 @@ import java.lang.ref.WeakReference
  * 多类型布局
  *
  */
-abstract class BaseMultiItemAdapter<T : Any>(items: List<T> = emptyList()) :
-    BaseQuickAdapter<T, RecyclerView.ViewHolder>(items) {
+abstract class BaseMultiItemAdapter<T : Any>(items: List<T> = emptyList(), config: AsyncDifferConfig<T>) :
+    BaseQuickAdapter<T, RecyclerView.ViewHolder>(items, config) {
+
+    constructor(diffCallback: DiffUtil.ItemCallback<T>) : this(emptyList(), diffCallback)
+
+    constructor(items: List<T>, diffCallback: DiffUtil.ItemCallback<T>) : this(
+        items, AsyncDifferConfig.Builder(diffCallback).build(),
+    )
 
     private val typeViewHolders =
         SparseArray<OnMultiItemAdapterListener<T, RecyclerView.ViewHolder>>(1)

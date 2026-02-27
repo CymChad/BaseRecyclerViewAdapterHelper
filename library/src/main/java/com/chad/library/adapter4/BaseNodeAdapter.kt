@@ -1,5 +1,7 @@
 package com.chad.library.adapter4
 
+import androidx.recyclerview.widget.AsyncDifferConfig
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
 /**
@@ -11,7 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
  *
  * Tree node type list adapter.
  */
-abstract class BaseNodeAdapter : BaseQuickAdapter<Any, RecyclerView.ViewHolder>() {
+abstract class BaseNodeAdapter(config: AsyncDifferConfig<Any>) : BaseQuickAdapter<Any, RecyclerView.ViewHolder>() {
+
+    constructor(diffCallback: DiffUtil.ItemCallback<Any>) : this(
+        AsyncDifferConfig.Builder(diffCallback).build()
+    )
 
     /**
      * 记录打开的节点。
