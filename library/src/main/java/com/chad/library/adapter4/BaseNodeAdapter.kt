@@ -13,11 +13,13 @@ import androidx.recyclerview.widget.RecyclerView
  *
  * Tree node type list adapter.
  */
-abstract class BaseNodeAdapter(config: AsyncDifferConfig<Any>) : BaseQuickAdapter<Any, RecyclerView.ViewHolder>() {
+abstract class BaseNodeAdapter(config: AsyncDifferConfig<Any>?) : BaseQuickAdapter<Any, RecyclerView.ViewHolder>(config = config) {
 
     constructor(diffCallback: DiffUtil.ItemCallback<Any>) : this(
         AsyncDifferConfig.Builder(diffCallback).build()
     )
+
+    constructor() : this(null)
 
     /**
      * 记录打开的节点。

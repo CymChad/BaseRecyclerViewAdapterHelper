@@ -14,7 +14,7 @@ import java.lang.ref.WeakReference
  * 多类型布局
  *
  */
-abstract class BaseMultiItemAdapter<T : Any>(items: List<T> = emptyList(), config: AsyncDifferConfig<T>) :
+abstract class BaseMultiItemAdapter<T : Any> (items: List<T>, config: AsyncDifferConfig<T>?) :
     BaseQuickAdapter<T, RecyclerView.ViewHolder>(items, config) {
 
     constructor(diffCallback: DiffUtil.ItemCallback<T>) : this(emptyList(), diffCallback)
@@ -22,6 +22,12 @@ abstract class BaseMultiItemAdapter<T : Any>(items: List<T> = emptyList(), confi
     constructor(items: List<T>, diffCallback: DiffUtil.ItemCallback<T>) : this(
         items, AsyncDifferConfig.Builder(diffCallback).build(),
     )
+
+    constructor(config: AsyncDifferConfig<T>?) : this(emptyList(), config)
+
+    constructor(items: List<T>) : this(items, null)
+
+    constructor() : this(emptyList(), null)
 
     private val typeViewHolders =
         SparseArray<OnMultiItemAdapterListener<T, RecyclerView.ViewHolder>>(1)

@@ -33,8 +33,8 @@ import java.util.Collections
  * @param config: Differ Config
  */
 abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
-    private var _items: List<T> = emptyList(),
-    config: AsyncDifferConfig<T>? = null
+    private var _items: List<T>,
+    config: AsyncDifferConfig<T>?
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     constructor(diffCallback: DiffUtil.ItemCallback<T>) : this(emptyList(), diffCallback)
@@ -43,7 +43,11 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
         items, AsyncDifferConfig.Builder(diffCallback).build(),
     )
 
-    constructor(config: AsyncDifferConfig<T>) : this(emptyList(), config)
+    constructor(config: AsyncDifferConfig<T>?) : this(emptyList(), config)
+
+    constructor(items: List<T>) : this(items, null)
+
+    constructor() : this(emptyList(), null)
 
     /********************************* Private property *****************************************/
     private var mLastPosition = -1
