@@ -9,7 +9,7 @@ plugins {
     signing
 }
 
-val versionName = "4.3.3"
+val versionName = "4.3.4"
 
 
 android {
