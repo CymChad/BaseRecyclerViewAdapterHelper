@@ -58,6 +58,31 @@ internal class StateLayoutVH(
                 ).apply {
                     gravity = Gravity.CENTER
                 }
+                rootView.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+                rootView.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+            }else{
+                if (
+                    stateView.layoutParams is FrameLayout.LayoutParams
+                    && ((stateView.layoutParams as FrameLayout.LayoutParams).gravity == Gravity.CENTER)
+                    && stateView.layoutParams.width == FrameLayout.LayoutParams.WRAP_CONTENT
+                    && stateView.layoutParams.height == FrameLayout.LayoutParams.WRAP_CONTENT){
+                    //兼容stateview.layoutParams原本为空，设置FrameLayout.LayoutParams并居中的情况
+                    rootView.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+                    rootView.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+                }else{
+                    //判断stateView宽度，如果不是MATCH_PARENT则把RootView的高度改为WRAP_CONTENT
+                    if (stateView.layoutParams.width == ViewGroup.LayoutParams.MATCH_PARENT){
+                        rootView.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+                    }else{
+                        rootView.layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
+                    }
+                    //判断stateView高度，如果不是MATCH_PARENT则把RootView的高度改为WRAP_CONTENT
+                    if (stateView.layoutParams.height == ViewGroup.LayoutParams.MATCH_PARENT){
+                        rootView.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+                    }else{
+                        rootView.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                    }
+                }
             }
 
             if (isUseStateViewSize) {
