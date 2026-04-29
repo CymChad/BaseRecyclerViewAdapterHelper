@@ -15,8 +15,3 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
-
-# Data binding混淆规则
--keep class * {
- @androidx.databinding.BindingAdapter <methods>;
-}
