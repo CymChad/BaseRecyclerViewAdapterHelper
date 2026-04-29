@@ -57,11 +57,11 @@ kotlin {
 
 
 dependencies {
-    implementation("androidx.annotation:annotation:1.8.0")
+    implementation(libs.androidx.annotation)
 
-    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation(libs.androidx.recyclerview)
 
-    compileOnly("androidx.databinding:databinding-runtime:8.0.0")
+    compileOnly(libs.androidx.databinding.runtime)
 }
 
 //---------- maven upload info -----------------------------------

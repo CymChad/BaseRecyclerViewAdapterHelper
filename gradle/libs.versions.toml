@@ -1,0 +1,35 @@
+[versions]
+agp = "9.2.0"
+kotlin = "2.3.21"
+ksp = "2.3.7"
+appcompat = "1.7.1"
+cardview = "1.0.0"
+core-ktx = "1.18.0"
+material = "1.13.0"
+recyclerview = "1.4.0"
+swiperefreshlayout = "1.2.0"
+annotation = "1.8.0"
+databinding-runtime = "8.0.0"
+moshi = "1.15.2"
+switchbutton = "2.1.0"
+material-spinner = "1.3.1"
+
+[libraries]
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
+androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
+androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
+androidx-databinding-runtime = { group = "androidx.databinding", name = "databinding-runtime", version.ref = "databinding-runtime" }
+google-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "moshi" }
+moshi-kotlin-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
+kyleduo-switchbutton = { group = "com.kyleduo.switchbutton", name = "library", version.ref = "switchbutton" }
+jaredrummler-material-spinner = { group = "com.jaredrummler", name = "material-spinner", version.ref = "material-spinner" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

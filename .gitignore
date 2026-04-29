@@ -5,7 +5,7 @@
 .DS_Store
 ehthumbs.db
 Thumbs.db
-
+.kotlin
 # Built application files
 *.apk
 *.ap_
