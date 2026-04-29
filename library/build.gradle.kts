@@ -4,7 +4,6 @@ import java.util.*
 
 plugins {
     id("com.android.library")
-    kotlin("android")
     `maven-publish`
     signing
 }
@@ -32,19 +31,9 @@ android {
 
 
     compileOptions {
-        kotlinOptions.freeCompilerArgs = ArrayList<String>().apply {
-            add("-module-name")
-            add("com.github.CymChad.brvah")
-            add("-Xjvm-default=all")
-        }
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-
-
 
     publishing {
         singleVariant("release") {
@@ -52,6 +41,17 @@ android {
             withSourcesJar()
             withJavadocJar()
         }
+    }
+}
+
+kotlin {
+    jvmToolchain(11)
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            "-module-name",
+            "com.github.CymChad.brvah",
+            "-Xjvm-default=all"
+        )
     }
 }
 
