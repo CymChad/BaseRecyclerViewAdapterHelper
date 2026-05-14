@@ -1,6 +1,6 @@
 import java.io.FileInputStream
 import java.io.InputStreamReader
-import java.util.*
+import java.util.Properties
 
 plugins {
     id("com.android.library")
@@ -30,11 +30,6 @@ android {
     }
 
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-
     publishing {
         singleVariant("release") {
             // if you don't want sources/javadoc, remove these lines
@@ -45,7 +40,7 @@ android {
 }
 
 kotlin {
-    jvmToolchain(11)
+    jvmToolchain(17)
     compilerOptions {
         freeCompilerArgs.addAll(
             "-module-name",
