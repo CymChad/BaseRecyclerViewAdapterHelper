@@ -8,13 +8,13 @@ plugins {
     signing
 }
 
-val versionName = "4.3.4"
+val versionName = "4.4.0"
 
 
 android {
     namespace = "com.chad.library.adapter4"
 
-    compileSdk = 31
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 19
