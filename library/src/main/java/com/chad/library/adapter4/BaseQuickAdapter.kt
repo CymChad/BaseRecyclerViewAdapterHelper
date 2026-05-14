@@ -208,7 +208,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
 
                 if (oldDisplayEmptyLayout && !newDisplayEmptyLayout) {
                     notifyItemRemoved(0)
-                    recyclerView.scrollToPosition(0)
+                    _recyclerView?.scrollToPosition(0)
                 } else if (newDisplayEmptyLayout && !oldDisplayEmptyLayout) {
                     notifyItemInserted(0)
                 } else if (oldDisplayEmptyLayout && newDisplayEmptyLayout) {
@@ -351,7 +351,8 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
     override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
         super.onViewAttachedToWindow(holder)
 
-        if (holder is StateLayoutVH || isFullSpanItem(getItemViewType(holder.bindingAdapterPosition))) {
+        val position = holder.bindingAdapterPosition
+        if (holder is StateLayoutVH || (position != RecyclerView.NO_POSITION && isFullSpanItem(getItemViewType(position)))) {
             holder.asStaggeredGridFullSpan()
         } else {
             runAnimator(holder)
@@ -661,7 +662,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
         payload: Any? = null,
         commitCallback: Runnable? = null,
     ) {
-        if (position >= items.size) {
+        if (position !in items.indices) {
             throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
 
@@ -810,7 +811,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
      */
     @JvmOverloads
     open fun removeAt(@IntRange(from = 0) position: Int, commitCallback: Runnable? = null) {
-        if (position >= items.size) {
+        if (position !in items.indices) {
             throw IndexOutOfBoundsException("position: ${position}. size:${items.size}")
         }
 
@@ -863,7 +864,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
         if (range.isEmpty()) {
             return
         }
-        if (range.first >= items.size) {
+        if (range.first !in items.indices) {
             throw IndexOutOfBoundsException("Range first position: ${range.first} - last position: ${range.last}. size:${items.size}")
         }
 
@@ -902,7 +903,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
     open fun swap(fromPosition: Int, toPosition: Int, commitCallback: Runnable? = null) {
         if (mDiffer == null) {
             if (fromPosition in _items.indices && toPosition in _items.indices) {
-                Collections.swap(_items, fromPosition, toPosition)
+                Collections.swap(mutableItems, fromPosition, toPosition)
                 notifyItemChanged(fromPosition)
                 notifyItemChanged(toPosition)
 
@@ -938,7 +939,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
             }
         } else {
             val list = mDiffer.currentList
-            if (fromPosition in list.indices || toPosition in list.indices) {
+            if (fromPosition in list.indices && toPosition in list.indices) {
                 list.toMutableList().also {
                     val e = it.removeAt(fromPosition)
                     it.add(toPosition, e)
@@ -953,16 +954,10 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
      */
     private val mutableItems: MutableList<T>
         get() {
-            return when (_items) {
-                is java.util.AbstractList -> {
-                    _items as java.util.AbstractList
-                }
-                is MutableList -> {
-                    _items as MutableList
-                }
-                else -> {
-                    _items.toMutableList().apply { _items = this }
-                }
+            return if (_items is ArrayList<T>) {
+                _items as ArrayList<T>
+            } else {
+                ArrayList(_items).apply { _items = this }
             }
         }
 

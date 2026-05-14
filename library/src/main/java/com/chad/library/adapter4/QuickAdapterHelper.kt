@@ -183,9 +183,9 @@ class QuickAdapterHelper private constructor(
             index + 1
         }
 
-       if (mAdapter.addAdapter(realIndex, adapter)) {
-           mBeforeList += adapter
-       }
+        if (mAdapter.addAdapter(realIndex, adapter)) {
+            mBeforeList.add(index, adapter)
+        }
     }
 
     /**
@@ -251,8 +251,8 @@ class QuickAdapterHelper private constructor(
             mAdapter.adapters.size - 1 - mAfterList.size + index
         }
 
-        if(mAdapter.addAdapter(realIndex, adapter)) {
-            mAfterList += adapter
+        if (mAdapter.addAdapter(realIndex, adapter)) {
+            mAfterList.add(index, adapter)
         }
     }
 
@@ -441,5 +441,4 @@ class QuickAdapterHelper private constructor(
         }
     }
 }
-
 
