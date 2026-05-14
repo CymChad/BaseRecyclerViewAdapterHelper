@@ -52,7 +52,7 @@
             android:background="@drawable/touch_bg"
             android:paddingLeft="6dp"
             android:paddingRight="6dp"
-            android:text="刷新数据(保留打开状态)"
+            android:text="刷新数据(保留展开/关闭状态)"
             android:textAllCaps="false"
             android:textColor="@color/new_text_color" />
 
@@ -64,7 +64,7 @@
             android:background="@drawable/touch_bg"
             android:paddingLeft="6dp"
             android:paddingRight="6dp"
-            android:text="刷新数据(不保留打开状态)"
+            android:text="刷新数据(重置默认展开)"
             android:textAllCaps="false"
             android:textColor="@color/new_text_color" />
 

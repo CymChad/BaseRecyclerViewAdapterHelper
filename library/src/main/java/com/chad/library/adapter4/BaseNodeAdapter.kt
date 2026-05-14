@@ -22,11 +22,57 @@ abstract class BaseNodeAdapter(config: AsyncDifferConfig<Any>?) : BaseQuickAdapt
     constructor() : this(null)
 
     /**
-     * 记录打开的节点。
-     *
-     * Set of open nodes.
+     * 以 isSameNode() 为匹配语义的节点集合，
+     * 避免 data class 的 equals/hashCode 导致不同逻辑节点被合并。
      */
-    private val openedSet = HashSet<Any>()
+    private inner class NodeSet {
+        private val nodes = mutableListOf<Any>()
+
+        fun contains(node: Any): Boolean = nodes.any { isSameNode(it, node) }
+
+        fun add(node: Any) {
+            nodes.removeAll { isSameNode(it, node) }
+            nodes.add(node)
+        }
+
+        fun remove(node: Any) {
+            nodes.removeAll { isSameNode(it, node) }
+        }
+
+        fun clear() = nodes.clear()
+
+        fun toList(): List<Any> = nodes.toList()
+
+        fun replaceAll(source: NodeSet) {
+            nodes.clear()
+            nodes.addAll(source.nodes)
+        }
+
+        fun migrateTo(allNewNodes: List<Any>, target: NodeSet) {
+            nodes.forEach { oldNode ->
+                allNewNodes.find { isSameNode(it, oldNode) }?.let { target.add(it) }
+            }
+        }
+    }
+
+    /**
+     * 记录打开的节点。
+     */
+    private val openedSet = NodeSet()
+
+    /**
+     * 记录用户通过单点 close() 明确关闭的节点，
+     * 阻止 submitList 时 isInitialOpen() 再次展开。
+     * closeAll() 不写入此集合。
+     */
+    private val closedSet = NodeSet()
+
+    /**
+     * 使用 isSameNode() 在 items 中查找节点位置。
+     */
+    private fun indexOfNode(node: Any): Int {
+        return items.indexOfFirst { isSameNode(it, node) }
+    }
 
     /**
      * 获取子节点列表。
@@ -63,15 +109,25 @@ abstract class BaseNodeAdapter(config: AsyncDifferConfig<Any>?) : BaseQuickAdapt
     abstract fun isInitialOpen(position: Int, item: Any): Boolean
 
     /**
-     * 判断两个节点是否是同一个逻辑节点
-     * 默认使用 === 比较引用
-     * 如果新数据是新的对象实例，子类应该重写此方法，提供自定义的节点匹配逻辑
-     * （例如根据节点 ID 或其他唯一标识符进行匹配）
+     * 判断两个节点是否是同一个逻辑节点。
      *
-     * Determine if two nodes are the same logical node
-     * By default uses === to compare references
+     * 注意：此方法必须能够唯一标识一个节点，即同一棵树中不应有两个不同的节点
+     * 被此方法判定为相同，否则它们会共享展开/关闭状态，导致行为异常。
+     * 例如，不应仅用 title 匹配，而应使用能区分不同分支节点的唯一标识符（如绝对路径或全局 ID）。
+     *
+     * 默认使用 === 比较引用。
+     * 如果新数据是新的对象实例，子类应该重写此方法，提供自定义的节点匹配逻辑。
+     *
+     * Determine if two nodes are the same logical node.
+     *
+     * Note: This method must uniquely identify a node within the tree.
+     * Two different nodes must never be considered equal, otherwise they will share
+     * expanded/collapsed state and cause unexpected behavior.
+     * Do not match by title alone — use a unique identifier (e.g. absolute path or global ID).
+     *
+     * By default uses === to compare references.
      * If the new data is a new object instance, subclasses should override this method
-     * to provide custom node matching logic (e.g., match by node ID or other unique identifier)
+     * to provide custom node matching logic.
      *
      * @param item1 节点1 / Node 1
      * @param item2 节点2 / Node 2
@@ -107,81 +163,42 @@ abstract class BaseNodeAdapter(config: AsyncDifferConfig<Any>?) : BaseQuickAdapt
     ) {
         if (list.isNullOrEmpty()) {
             openedSet.clear()
+            closedSet.clear()
             super.submitList(list, commitCallback)
             return
         }
 
-        // 处理展开状态
-        // Handle expanded states
         if (clearOpenStates) {
-            // 清空之前的展开状态，完全重新计算
-            // Clear previous expanded states and completely recalculate
             openedSet.clear()
+            closedSet.clear()
         } else {
-            // 保留展开状态：将旧数据的展开状态递归映射到新数据
-            // Preserve expanded states: recursively map old data's expanded states to new data
-            val oldOpenedSet = openedSet.toSet()
-            val newOpenedSet = HashSet<Any>()
-
-            // 递归遍历新数据的所有节点，包括子节点
-            // Recursively traverse all nodes in new data, including child nodes
-            val allNewNodes = ArrayList<Any>()
+            // 递归遍历新数据的所有节点（包括子节点）
+            val allNewNodes = mutableListOf<Any>()
             collectAllNodes(list, allNewNodes)
 
-            oldOpenedSet.forEach { oldNode ->
-                // 在所有新节点中查找匹配的节点（包括子节点）
-                // Find matching node in all new nodes (including child nodes)
-                val matchedNode = allNewNodes.find { isSameNode(it, oldNode) }
-                if (matchedNode != null) {
-                    // 找到匹配的节点，保留展开状态
-                    // Found matching node, preserve expanded state
-                    newOpenedSet.add(matchedNode)
-                }
-            }
-            openedSet.clear()
-            openedSet.addAll(newOpenedSet)
+            val newOpened = NodeSet()
+            val newClosed = NodeSet()
+            openedSet.migrateTo(allNewNodes, newOpened)
+            closedSet.migrateTo(allNewNodes, newClosed)
+
+            openedSet.replaceAll(newOpened)
+            closedSet.replaceAll(newClosed)
         }
 
         val newList = ArrayList<Any>(list)
 
-        // 使用索引遍历，动态处理新添加的元素
-        // Use index traversal to dynamically handle newly added elements
         var index = 0
         while (index < newList.size) {
             val item = newList[index]
 
-            // 只对不在 openedSet 中的节点使用 isInitialOpen 判断
-            // Only use isInitialOpen for nodes not in openedSet
-            if (!openedSet.contains(item)) {
-                if (isInitialOpen(index, item)) {
-                    getChildNodeList(index, item)?.let { children ->
-                        openedSet.add(item)
-
-                        // 在当前位置之后插入子节点
-                        // Insert child nodes after the current position
-                        var insertPosition = index + 1
-                        children.forEach { child ->
-                            newList.add(insertPosition, child)
-                            insertPosition++
-                        }
-                    }
-                }
-            } else {
-                // 节点已经在 openedSet 中（用户手动展开或之前保留的），需要添加子节点
-                // Node is already in openedSet (manually expanded by user or preserved), need to add child nodes
-                getChildNodeList(index, item)?.let { children ->
-                    // 在当前位置之后插入子节点
-                    // Insert child nodes after the current position
-                    var insertPosition = index + 1
-                    children.forEach { child ->
-                        newList.add(insertPosition, child)
-                        insertPosition++
-                    }
+            if (openedSet.contains(item)) {
+                appendChildren(newList, index, item)
+            } else if (!closedSet.contains(item) && isInitialOpen(index, item)) {
+                if (appendChildren(newList, index, item)) {
+                    openedSet.add(item)
                 }
             }
 
-            // 继续遍历，包括新添加的子节点
-            // Continue traversing, including newly added child nodes
             index++
         }
 
@@ -200,13 +217,30 @@ abstract class BaseNodeAdapter(config: AsyncDifferConfig<Any>?) : BaseQuickAdapt
         nodes.forEach { node ->
             result.add(node)
 
-            // 递归收集子节点
-            // Recursively collect child nodes
             val children = getChildNodeList(result.size - 1, node)
             if (!children.isNullOrEmpty()) {
                 collectAllNodes(children, result)
             }
         }
+    }
+
+    /**
+     * 将 item 的非空 children 插入到 list 的 position + 1 位置。
+     * @return 是否有子节点被插入
+     */
+    private fun appendChildren(
+        list: MutableList<Any>,
+        position: Int,
+        item: Any,
+    ): Boolean {
+        val children = getChildNodeList(position, item) ?: return false
+        if (children.isEmpty()) return false
+        var insertPos = position + 1
+        children.forEach { child ->
+            list.add(insertPos, child)
+            insertPos++
+        }
+        return true
     }
 
     /**
@@ -219,7 +253,7 @@ abstract class BaseNodeAdapter(config: AsyncDifferConfig<Any>?) : BaseQuickAdapt
      */
     private fun findLastChild(node: Any): Any {
         if (isOpened(node)) {
-            val childList = getChildNodeList(items.indexOfFirst { it === node }, node)
+            val childList = getChildNodeList(indexOfNode(node), node)
 
             return if (childList.isNullOrEmpty()) {
                 node
@@ -235,17 +269,14 @@ abstract class BaseNodeAdapter(config: AsyncDifferConfig<Any>?) : BaseQuickAdapt
      * 移除列表中所有节点的打开标记（递归）
      * 注意：此方法需要在从 items 中移除节点列表之前调用
      *
-     * Remove open flags for all nodes in the list (recursive)
-     * Note: This method should be called before removing the node list from items
-     *
      * @param list 节点列表 / The node list
      */
     private fun removeListOpenFlag(list: List<Any>) {
         list.forEach { c ->
-            if (isOpened(c)) {
+            if (openedSet.contains(c)) {
                 openedSet.remove(c)
 
-                val cList = getChildNodeList(items.indexOfFirst { it === c }, c)
+                val cList = getChildNodeList(indexOfNode(c), c)
                 if (!cList.isNullOrEmpty()) {
                     removeListOpenFlag(cList)
                 }
@@ -255,8 +286,6 @@ abstract class BaseNodeAdapter(config: AsyncDifferConfig<Any>?) : BaseQuickAdapt
 
     /**
      * 打开节点。
-     *
-     * Open node.
      *
      * @param position 节点位置 / Node position
      * @param positionPayload 用于刷新的 payload / Payload for refresh
@@ -268,23 +297,46 @@ abstract class BaseNodeAdapter(config: AsyncDifferConfig<Any>?) : BaseQuickAdapt
         val item = items.getOrNull(position) ?: return false
 
         val child = getChildNodeList(position, item)
-        if (child != null) {
-            // 使用 HashSet 的 contains 方法，性能 O(1)
-            if (!openedSet.contains(item)) {
-                openedSet.add(item)
-                notifyItemChanged(position, positionPayload)
-                addAll(position + 1, child)
-                return true
+        if (child.isNullOrEmpty()) return false
+        if (openedSet.contains(item)) return false
+
+        openedSet.add(item)
+        closedSet.remove(item)
+        notifyItemChanged(position, positionPayload)
+        addAll(position + 1, collectVisibleChildren(position, child))
+        return true
+    }
+
+    /**
+     * 收集节点展开后应可见的所有子孙节点。
+     * 对已在 openedSet 中的子节点，递归加入其子树。
+     * 不触发 isInitialOpen()，避免点击展开引入默认展开副作用。
+     *
+     * @param parentPosition 父节点在 items 中的位置
+     * @param children 直接子节点列表
+     * @return 应插入的可见节点列表
+     */
+    private fun collectVisibleChildren(
+        parentPosition: Int,
+        children: List<Any>,
+    ): List<Any> {
+        val result = mutableListOf<Any>()
+        children.forEach { child ->
+            result.add(child)
+            if (openedSet.contains(child)) {
+                // childPosition = child 在插入完成后在 items 中的预期位置
+                val childPosition = parentPosition + result.size
+                val grandChildren = getChildNodeList(childPosition, child)
+                if (!grandChildren.isNullOrEmpty()) {
+                    result.addAll(collectVisibleChildren(childPosition, grandChildren))
+                }
             }
         }
-
-        return false
+        return result
     }
 
     /**
      * 关闭节点。
-     *
-     * Close node.
      *
      * @param position 节点位置 / Node position
      * @param positionPayload 用于刷新的 payload / Payload for refresh
@@ -292,51 +344,52 @@ abstract class BaseNodeAdapter(config: AsyncDifferConfig<Any>?) : BaseQuickAdapt
      */
     @JvmOverloads
     fun close(position: Int, positionPayload: Any? = null): Boolean {
+        return closeInternal(position, positionPayload, recordClosed = true)
+    }
+
+    private fun closeInternal(
+        position: Int,
+        positionPayload: Any?,
+        recordClosed: Boolean,
+    ): Boolean {
         if (position < 0) return false
         val item = items.getOrNull(position) ?: return false
 
         val childList = getChildNodeList(position, item)
-        if (!childList.isNullOrEmpty()) {
-            // 先移除打开标记
+        if (childList.isNullOrEmpty()) return false
+
+        if (!openedSet.contains(item)) return false
+
+        val last = childList.last()
+        val index = if (openedSet.contains(last)) {
+            indexOfNode(findLastChild(last))
+        } else {
+            indexOfNode(last)
+        }
+
+        if (index > -1 && index > position) {
             openedSet.remove(item)
-
-            val last = childList.last()
-            val index = if (isOpened(last)) {
-                // 最后一个节点是打开的，需要递归找到最后的子节点
-                // The last node is opened, need to recursively find the last child
-                val node = findLastChild(last)
-                items.indexOfFirst { it === node }
-            } else {
-                // 最后一个节点是关闭的
-                // The last node is closed
-                items.indexOfFirst { it === last }
+            if (recordClosed) {
+                closedSet.add(item)
             }
-
-            if (index > -1 && index > position) {
-                // 在移除前，先清除所有子节点的打开标记
-                // Before removing, clear open flags for all child nodes
-                removeListOpenFlag(childList)
-                notifyItemChanged(position, positionPayload)
-                removeAtRange(IntRange(position + 1, index))
-                return true
-            }
+            removeListOpenFlag(childList)
+            notifyItemChanged(position, positionPayload)
+            removeAtRange(IntRange(position + 1, index))
+            return true
         }
 
         return false
     }
 
     /**
-     * 关闭全部的节点
-     *
-     * Close all.
+     * 关闭全部的节点。
+     * 不写入 closedSet，下次 submitList 时 isInitialOpen() 仍可生效。
      */
     fun closeAll() {
-        // 创建副本遍历，避免并发修改异常
-        // Create a copy for iteration to avoid concurrent modification exception
         openedSet.toList().forEach { opened ->
-            val position = items.indexOfFirst { it === opened }
+            val position = indexOfNode(opened)
             if (position >= 0) {
-                close(position)
+                closeInternal(position, null, recordClosed = false)
             }
         }
     }

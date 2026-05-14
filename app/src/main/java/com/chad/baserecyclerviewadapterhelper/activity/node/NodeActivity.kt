@@ -3,7 +3,6 @@ package com.chad.baserecyclerviewadapterhelper.activity.node
 import android.os.Bundle
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
 import com.chad.baserecyclerviewadapterhelper.activity.node.adapter.NodeAdapter
 import com.chad.baserecyclerviewadapterhelper.base.BaseViewBindingActivity
 import com.chad.baserecyclerviewadapterhelper.data.DataServer
@@ -46,7 +45,7 @@ class NodeActivity : BaseViewBindingActivity<ActivityNodeBinding>() {
             adapter.submitList(DataServer.getNodeData())
         }
         viewBinding.btnRefOnSave.setOnClickListener {
-            adapter.submitList(DataServer.getNodeData(),  clearOpenStates = true)
+            adapter.submitList(DataServer.getNodeData(), clearOpenStates = true)
         }
     }
 }
