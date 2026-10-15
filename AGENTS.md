@@ -26,7 +26,7 @@ Use Kotlin for new code unless working in an existing Java file. Follow Android/
 Keep resources lowercase with underscores, for example `brvah_trailing_load_more.xml`. Avoid unrelated formatting churn in mixed Java/Kotlin files.
 
 ## Testing Guidelines
-No test directories are currently checked in. Add unit tests under `module/src/test` and Android tests under `module/src/androidTest` when changing behavior. Name tests after the unit under test and expected behavior, for example `BaseDifferAdapterTest`. Run `./gradlew test` before submitting logic changes, and use `connectedAndroidTest` for RecyclerView or UI behavior that needs Android runtime coverage.
+Library JVM tests are under `library/src/test` and use Robolectric. Add unit tests under `module/src/test` and Android tests under `module/src/androidTest` when changing behavior. Name tests after the unit under test and expected behavior, for example `BaseDifferAdapterTest`. Run `./gradlew test` before submitting logic changes, and use `connectedAndroidTest` for RecyclerView or UI behavior that needs Android runtime coverage.
 
 ## Commit & Pull Request Guidelines
 Recent history uses Conventional Commit-style messages, often scoped, such as `fix(adapter): ...`, `refactor(loadState): ...`, and `docs(README): ...`. Keep commits focused and use scopes that match affected areas.
