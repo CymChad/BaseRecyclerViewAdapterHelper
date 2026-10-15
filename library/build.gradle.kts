@@ -16,6 +16,10 @@ android {
 
     compileSdk = 35
 
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
+
     defaultConfig {
         minSdk = 19
 
@@ -57,6 +61,9 @@ dependencies {
     implementation(libs.androidx.recyclerview)
 
     compileOnly(libs.androidx.databinding.runtime)
+
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.robolectric:robolectric:4.16.1")
 }
 
 //---------- maven upload info -----------------------------------

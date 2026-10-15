@@ -27,7 +27,7 @@ Common commands (run from repo root):
 ./gradlew clean
 ```
 
-There is **no test source set** — there are no unit or instrumented tests in either module. Verify changes by compiling and/or running the demo app.
+Library JVM tests use Robolectric and run with `./gradlew :library:testDebugUnitTest`. There are no instrumented tests. Compile affected modules and use the demo app for changes that require device/UI verification.
 
 ### Publishing / versioning
 - Library version lives in `library/build.gradle.kts` as `val versionName` (currently `4.4.1`). The `:app` `versionName` (`4.3.2`) is independent — update them separately.

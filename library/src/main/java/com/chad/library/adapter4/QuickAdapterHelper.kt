@@ -200,6 +200,9 @@ class QuickAdapterHelper private constructor(
             }
         }
         mBeforeList.clear()
+        firstAdapterOnViewAttachChangeListener?.let {
+            contentAdapter.addOnViewAttachStateChangeListener(it)
+        }
     }
 
     /**
@@ -268,6 +271,9 @@ class QuickAdapterHelper private constructor(
             }
         }
         mAfterList.clear()
+        lastAdapterOnViewAttachChangeListener?.let {
+            contentAdapter.addOnViewAttachStateChangeListener(it)
+        }
     }
 
     /**
