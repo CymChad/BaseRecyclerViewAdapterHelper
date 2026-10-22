@@ -52,9 +52,11 @@ kotlin {
 
 
 dependencies {
-    implementation(libs.androidx.annotation)
+    // RecyclerView / Annotation 类型出现在公开 API 签名与父类中，
+    // 必须使用 api，否则 Maven 消费者的编译 classpath 缺少该依赖（POM 为 runtime scope）
+    api(libs.androidx.annotation)
 
-    implementation(libs.androidx.recyclerview)
+    api(libs.androidx.recyclerview)
 
     compileOnly(libs.androidx.databinding.runtime)
 }
