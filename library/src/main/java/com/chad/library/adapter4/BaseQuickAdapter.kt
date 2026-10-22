@@ -109,7 +109,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
      * @receiver RecyclerView.ViewHolder
      * @return Boolean
      */
-    inline val RecyclerView.ViewHolder.isEmptyViewHolder: Boolean
+    val RecyclerView.ViewHolder.isEmptyViewHolder: Boolean
         get() = this is StateLayoutVH
 
     /**
