@@ -28,6 +28,8 @@ abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ada
                 val oldItem = displayLoadStateAsItem(field)
                 val newItem = displayLoadStateAsItem(loadState)
 
+                field = loadState
+
                 if (oldItem && !newItem) {
                     notifyItemRemoved(0)
                 } else if (newItem && !oldItem) {
@@ -35,7 +37,6 @@ abstract class LoadStateAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ada
                 } else if (oldItem && newItem) {
                     notifyItemChanged(0)
                 }
-                field = loadState
 
                 loadStateListeners.forEach {
                     it.loadState(oldState, loadState)
