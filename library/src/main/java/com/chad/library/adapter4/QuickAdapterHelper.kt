@@ -200,6 +200,11 @@ class QuickAdapterHelper private constructor(
             }
         }
         mBeforeList.clear()
+
+        // 清空后，监听器需要恢复至 contentAdapter，否则预加载失效
+        firstAdapterOnViewAttachChangeListener?.let {
+            contentAdapter.addOnViewAttachStateChangeListener(it)
+        }
     }
 
     /**
@@ -268,6 +273,11 @@ class QuickAdapterHelper private constructor(
             }
         }
         mAfterList.clear()
+
+        // 清空后，监听器需要恢复至 contentAdapter，否则预加载失效
+        lastAdapterOnViewAttachChangeListener?.let {
+            contentAdapter.addOnViewAttachStateChangeListener(it)
+        }
     }
 
     /**
