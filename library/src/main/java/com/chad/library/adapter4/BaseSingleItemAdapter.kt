@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
  * Adapter for single item
  * 只有单个/一个 item 情况下的 Adapter
  *
+ * 注意：不支持 stateView 状态布局（设置无效）。如需占位效果，请在 [onBindViewHolder] 中自行处理 [item] 为 null 的情况。
+ *
  * @param T 数据类型 type of data
  * @param VH viewHolder类型 type of the viewHolder
  * @property mItem 数据 data
@@ -30,6 +32,11 @@ abstract class BaseSingleItemAdapter<T : Any, VH : RecyclerView.ViewHolder>(priv
     final override fun getItemCount(items: List<Any>): Int {
         return 1
     }
+
+    /**
+     * BaseSingleItemAdapter 不支持状态布局（stateView）。
+     */
+    override fun displayEmptyView(list: List<Any>): Boolean = false
 
     /**
      * 设置 item 数据（payload 方式）
@@ -89,6 +96,14 @@ abstract class BaseSingleItemAdapter<T : Any, VH : RecyclerView.ViewHolder>(priv
     }
 
     override fun set(position: Int, data: Any, payload: Any?, commitCallback: Runnable?) {
+        throw RuntimeException("Please use setItem()")
+    }
+
+    override fun swap(fromPosition: Int, toPosition: Int, commitCallback: Runnable?) {
+        throw RuntimeException("Please use setItem()")
+    }
+
+    override fun move(fromPosition: Int, toPosition: Int, commitCallback: Runnable?) {
         throw RuntimeException("Please use setItem()")
     }
 }
