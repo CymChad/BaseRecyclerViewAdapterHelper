@@ -1,6 +1,6 @@
 [versions]
-agp = "9.2.1"
-kotlin = "2.3.21"
+agp = "9.4.1"
+kotlin = "2.4.21"
 ksp = "2.3.7"
 appcompat = "1.7.1"
 cardview = "1.0.0"
