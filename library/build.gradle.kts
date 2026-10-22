@@ -167,3 +167,27 @@ signing {
     sign(publishing.publications)
 }
 
+//---------- Central Portal 手动上传 ZIP -----------------------------------
+// 发布（构建+签名）到本地 Repo 目录后，将当前版本产物打包为一个 ZIP，不上传
+
+val bundleMavenCentral = tasks.register<Zip>("bundleMavenCentral") {
+    group = "publishing"
+    description = "将本地签名产物打包为 Central Portal 手动上传 ZIP，不上传"
+    dependsOn("publishReleasePublicationToMavenRepository")
+    archiveFileName.set("BaseRecyclerViewAdapterHelper4-$versionName.zip")
+    destinationDirectory.set(rootProject.layout.projectDirectory.dir("Repo"))
+    duplicatesStrategy = DuplicatesStrategy.FAIL
+    includeEmptyDirs = false
+    isPreserveFileTimestamps = false
+    isReproducibleFileOrder = true
+    from(rootProject.layout.projectDirectory.dir("Repo"))
+    include("io/**/$versionName/**")
+    exclude("**/maven-metadata.xml*")
+}
+
+tasks.register("publishAll") {
+    group = "publishing"
+    description = "构建、签名并打包为手动上传 ZIP（仅本地，不上传）"
+    dependsOn(bundleMavenCentral)
+}
+
